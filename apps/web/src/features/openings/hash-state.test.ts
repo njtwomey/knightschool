@@ -3,11 +3,9 @@ import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state'
 
 describe('openings hash state', () => {
   it('is the default state with an empty hash', () => {
-    expect(filterFromHash({})).toEqual({ query: '', role: 'all', side: 'all', scope: 'openings' });
+    expect(filterFromHash({})).toEqual({ query: '', role: 'all', side: 'all', scope: 'all' });
     expect(boardQueryFromHash({})).toEqual({ played: [], kind: 'both' });
-    expect(
-      hashFromState({ query: '', role: 'all', side: 'all', scope: 'openings' }, { played: [], kind: 'both' }),
-    ).toEqual({
+    expect(hashFromState({ query: '', role: 'all', side: 'all', scope: 'all' }, { played: [], kind: 'both' })).toEqual({
       q: undefined,
       role: undefined,
       side: undefined,
@@ -36,7 +34,7 @@ describe('openings hash state', () => {
       query: '',
       role: 'all',
       side: 'all',
-      scope: 'openings',
+      scope: 'all',
     });
     expect(boardQueryFromHash({ bm: 'e2e4.e2e4.e7e5', bk: 'nope' })).toMatchObject({ kind: 'both' });
     expect(boardQueryFromHash({ bm: 'e2e4.e2e4.e7e5' }).played.map((move) => move.san)).toEqual(['e4']);

@@ -13,7 +13,7 @@ export function filterFromHash(params: HashParams): CatalogFilter {
     query: params.q ?? '',
     role: ROLES.find((role) => role === params.role) ?? 'all',
     side: SIDES.find((side) => side === params.side) ?? 'all',
-    scope: SCOPES.find((scope) => scope === params.scope) ?? 'openings',
+    scope: SCOPES.find((scope) => scope === params.scope) ?? 'all',
   };
 }
 
@@ -39,7 +39,7 @@ export function hashFromState(filter: CatalogFilter, query: BoardQuery): Record<
     q: filter.query.trim() ? filter.query : undefined,
     role: filter.role === 'all' ? undefined : filter.role,
     side: filter.side === 'all' ? undefined : filter.side,
-    scope: filter.scope === 'openings' ? undefined : filter.scope,
+    scope: filter.scope === 'all' ? undefined : filter.scope,
     bm: query.played.length ? encodeMoves(query.played.map((move) => move.uci)) : undefined,
     bk: query.kind === 'both' ? undefined : query.kind,
   };
