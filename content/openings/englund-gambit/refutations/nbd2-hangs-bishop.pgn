@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Englund Gambit"]
+[Variation "Bishop Left Hanging"]
+[ECO "A40"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Refutes "1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Nbd2"]
+
+1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Nbd2? { Blocks the check with a developing move, but forgets that the queen on b4 also attacks the bishop on f4. [%cal Gb4f4] } 5... Qxf4 { Wins the bishop for free. } 6. g3 6... Qh6 7. Nc4 7... Bc5 *

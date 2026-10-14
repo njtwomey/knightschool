@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Rousseau Gambit"]
+[Variation "4.Ng5 Qxg5"]
+[ECO "C50"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Ng5"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Ng5? { Looks like it attacks f7, but the f-pawn has already moved, and the knight is left without a defender. } 4... Qxg5 { The pawn on f7 has left, so the queen sees all the way to g5 and takes the knight for free. } 5. O-O 5... f4 *

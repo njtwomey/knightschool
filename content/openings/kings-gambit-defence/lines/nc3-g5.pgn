@@ -1,0 +1,17 @@
+[Event "Knight School"]
+[Opening "King's Gambit Accepted"]
+[Variation "Fischer Defence, 4.Nc3"]
+[ECO "C34"]
+[Character "solid,sharp"]
+[Risk "medium"]
+[EarlyMate "white"]
+[Tricks "none"]
+[Themes "extra-pawn,open-lines"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 d6 4. Nc3 4... g5 { Same idea as before: the g5 pawn defends f4 and keeps the extra pawn. }
+5. d4 (5. h4 g4 6. Ng5 h6 7. Nxf7 Kxf7 8. d4)
+5... g4 { Kicks the knight. It cannot take on e5 because of ...dxe5. }
+6. Bxf4 6... gxf3 { Wins the knight for a pawn, though White's pieces become active and the black king is exposed. } 7. Qxf3 7... Nc6 { Develops with pressure on d4. }
+8. Bb5 8... Bd7 { Breaks the pin on c6 and gets a piece out. }
+9. O-O-O 9... Qh4 { Attacks the bishop on f4, which is guarded only by the queen, and eyes the e4 pawn. }
+10. Kb1 10... a6 { Forces White to decide about the bishop. Trading on c6 doubles Black's pawns but removes the pin. } 11. Bxc6 bxc6 12. h3 *

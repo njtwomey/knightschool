@@ -1,0 +1,18 @@
+[Event "Knight School"]
+[Opening "French Defence"]
+[Variation "Exchange Variation"]
+[ECO "C01"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "equal-structure,good-bishop"]
+
+1. e4 e6 2. d4 d5 3. exd5 { White simplifies the centre. The pawn structure becomes symmetrical, and White cannot count on an advantage from it. } 3... exd5 { Recaptures and frees the c8 bishop, which is no longer blocked by a pawn on e6. }
+4. Nf3 { Develops and watches e5. } ( 4. Bd3 Nc6 5. c3 Bd6 6. Ne2 Nge7 7. O-O O-O ) ( 4. c4 Nf6 5. Nc3 Be7 6. Nf3 O-O 7. Be2 dxc4 8. O-O Nc6 ) 4... Nf6 { Mirrors White's development. }
+5. Bd3 { Aims the bishop at the kingside. } 5... Bd6 { Develops the bishop, controls e5 and prepares to castle. }
+6. O-O O-O
+7. Bg5 { Pins the knight on f6 to the queen. } 7... Bg4 { Copies the pin. Now both sides have a knight pinned to its queen. }
+8. Nbd2 { Develops the last minor piece. } 8... Nbd7 { Develops and adds a defender to the knight on f6. }
+9. c3 { Prepares Qc2 and makes d4 solid. } 9... c6 { Supports the d5 pawn and makes room for the queen on c7. }
+10. Qc2 Qc7 { Develops the queen to a good diagonal. } *

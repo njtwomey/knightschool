@@ -1,0 +1,33 @@
+- id: why-nf3
+  line: 1. e4 e5 2. f4 exf4 3. Nf3
+  prompt: 'Black has a queen check on h4 here. What does 3.Nf3 do about it?'
+  accept:
+    - keywords: [[stop, prevent, block, cover, defend, guard, protect, h4]]
+      feedback: Yes. The knight covers h4, so ...Qh4+ is not possible and White's king stays put.
+    - keywords: [[develop, knight]]
+      partial: true
+      feedback: It does develop a knight, but the key point is stopping ...Qh4+.
+  reveal: The knight guards h4, so Black's queen cannot jump there with check.
+  examples:
+    match: [it stops Qh4+, it covers h4, prevents the queen check]
+    miss: [it attacks the queen, it castles, no idea]
+- id: falkbeer-d3
+  line: 1. e4 e5 2. f4 d5 3. exd5 e4 4. d3
+  prompt: 'Black has a pawn on e4 that cramps White. What is 4.d3 trying to do to it?'
+  accept:
+    - keywords: [[attack, challenge, undermine, remove, take, trade, exchange, break]]
+      feedback: Yes. The d-pawn challenges the e4 pawn so that White can take it and open the position.
+  reveal: 4.d3 challenges the pawn on e4. After dxe4 White is a pawn up and the cramping wedge is gone.
+  examples:
+    match: [it attacks the e4 pawn, challenges the pawn, it wants to take on e4]
+    miss: [it castles, it defends the king, it checks the king]
+- id: kieseritzky-ne5
+  line: 1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5
+  prompt: 'The g4 pawn kicked the knight. Name a square or pawn that the knight on e5 now attacks.'
+  accept:
+    - keywords: [[g4, f7]]
+      feedback: Yes. From e5 the knight hits the g4 pawn and f7, so White wins the pawn back or keeps the initiative.
+  reveal: The knight on e5 attacks g4 and f7. Taking on g4 wins the pawn back.
+  examples:
+    match: [the pawn on g4, it hits f7, g4 and f7]
+    miss: [the queen, the e4 pawn, no idea]

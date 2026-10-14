@@ -1,0 +1,33 @@
+- id: moscow-g5
+  line: 1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 e6 5. Bg5 h6 6. Bh4 dxc4 7. e4 g5
+  prompt: What does the pawn move 7...g5 attack?
+  accept:
+    - keywords: [[bishop, h4]]
+      feedback: Yes. The pawn attacks the bishop on h4 and wins space with it.
+    - keywords: [[pawn, g5]]
+      partial: true
+      feedback: Close. Name the piece on h4.
+  reveal: The pawn attacks the bishop on h4. After the bishop retreats to g3, Black plays ...b5 to keep the extra pawn.
+  examples:
+    match: [it attacks the bishop, the bishop on h4, it hits the bishop on h4]
+    miss: [the knight, the king, the pawn on e4, nothing]
+- id: meran-b5
+  line: 1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 e6 5. e3 Nbd7 6. Bd3 dxc4 7. Bxc4 b5
+  prompt: What does 7...b5 do to the bishop on c4?
+  accept:
+    - keywords: [[attack, drive, push, gain, away]]
+      feedback: Yes. The pawn attacks the bishop and drives it off the diagonal, gaining queenside space.
+  reveal: The pawn attacks the bishop, so it must leave c4. Black gains space and White loses a tempo.
+  examples:
+    match: [it attacks the bishop, it drives the bishop away, it kicks the bishop off c4]
+    miss: [it pins the bishop, it defends the knight, it castles, no idea]
+- id: meran-a6
+  line: 1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 e6 5. e3 Nbd7 6. Bd3 dxc4 7. Bxc4 b5 8. Bd3 a6
+  prompt: Which pawn does 8...a6 protect?
+  accept:
+    - keywords: [[b5]]
+      feedback: Yes. The pawn on b5 is protected, which allows ...c5 next.
+  reveal: It protects the pawn on b5. Black can then play ...c5 without leaving b5 hanging to the bishop on d3.
+  examples:
+    match: [the pawn on b5, b5, it defends b5]
+    miss: [the pawn on c6, the knight on d7, the bishop, nothing]

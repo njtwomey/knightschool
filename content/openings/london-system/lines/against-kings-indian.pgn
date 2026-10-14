@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Against the King's Indian setup"]
+[ECO "A48"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "space-advantage"]
+
+1. d4 Nf6 2. Bf4 g6 3. e3 Bg7 4. Nf3 O-O 5. Be2 d6 6. h3 { Gives the bishop on f4 a retreat to h2. } 6... c5 7. c3
+Nc6 8. O-O b6 9. Nbd2 Bb7 10. a4 *

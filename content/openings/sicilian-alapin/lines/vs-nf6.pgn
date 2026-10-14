@@ -1,0 +1,35 @@
+[Event "Knight School"]
+[Opening "Sicilian Alapin"]
+[Variation "Sicilian Defense: Alapin Variation, Smith-Morra Declined"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "d4-pawn-centre,piece-trades"]
+
+1. e4 { Takes space in the centre and opens lines for the queen and the f1 bishop. } 1... c5
+2. c3 { The Alapin. The pawn prepares d4, so that White can build a strong pair of pawns in the centre and take back with a pawn if Black captures. [%cal Gc3d4] }
+2... Nf6
+3. e5 { Kicks the knight at once. Black has to move it again, so White gains time. }
+3... Nd5
+4. d4 { Takes the centre now that the knight has gone. The c3 pawn will retake if Black captures on d4. }
+4... cxd4
+5. Nf3 { Develops and defends d4 at once. The pawn on e5 is also defended by the knight. }
+5... Nc6
+(5... e6 6. cxd4 d6 7. Bc4 Nb6 8. Bb3)
+6. cxd4 { Recaptures with the pawn, which restores the pair of centre pawns. }
+6... d6
+7. Bc4 { Hits the knight on d5 and attacks the f7 square. Black has to deal with it. }
+7... Nb6
+(7... dxe5 8. dxe5 Ndb4 9. O-O Qxd1 10. Rxd1)
+(7... e6 8. O-O a6 9. Qe2)
+8. Bb5 { Pressures the knight on c6, which is the piece guarding e5. After ...dxe5, White can win the pawn back with Nxe5. }
+8... dxe5
+9. Nxe5 { Takes back the pawn and eyes the knight on c6. }
+9... Bd7
+10. Nxd7 { Trades off a defender of the centre. }
+10... Qxd7
+11. Nc3 { Develops the last knight and covers d5 and e4. }
+11... e6
+12. O-O { Castles to safety and puts the king's rook towards the centre. } *

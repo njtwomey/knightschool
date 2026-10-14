@@ -1,0 +1,20 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Steinitz Defence"]
+[ECO "C62"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "d4-break,open-centre"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 { The Steinitz Defence: solid, but it leaves Black a little cramped. }
+( 3... Bc5 4. c3 Nf6 5. O-O O-O 6. d4 Bb6 7. Bg5 )
+( 3... f5 4. d3 fxe4 5. dxe4 Nf6 6. O-O Bc5 7. Nc3 )
+4. d4 { Claims the centre at once. Black has no easy way to hold the e5 pawn. } 4... Bd7
+5. Nc3 { Develops a piece and defends e4. } 5... Nf6
+6. Bxc6 { Takes the knight that pressures d4, and Black must recapture with the bishop. } 6... Bxc6
+7. Qd3 { Defends e4, which is attacked by the knight on f6 and the bishop on c6. } 7... exd4
+8. Nxd4 { Recaptures and opens the position for White's pieces. } 8... Be7
+9. O-O O-O
+10. Bg5 { Hits the knight on f6, Black's main defender of the centre, and brings out the last bishop. } *

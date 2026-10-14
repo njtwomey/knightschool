@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Elephant Gambit"]
+[Variation "Early Bishop Check"]
+[ECO "C40"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Refutes "1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Bb5+"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Bb5+? { A natural check, but it ignores the pawn that attacks the knight on f3. } 4... c6 { Attacks the bishop on b5 and keeps the pawn on e4 attacking the knight. White cannot save both pieces. [%cal Gc6b5,Ge4f3] }
+5. dxc6 5... bxc6 { Recapturing with the b-pawn keeps the attack on the bishop. } 6. Ba4 6... exf3 { Wins the knight. } 7. Qxf3 7... Nf6 *

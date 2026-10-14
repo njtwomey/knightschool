@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Rousseau Gambit"]
+[Variation "4.Nxe5 Nxe5 5.d4 Nxc4"]
+[ECO "C50"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5 Nxe5 5. d4"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5 4... Nxe5 5. d4? { The point of White's play: the pawn attacks the knight and seems to win it back. } 5... Nxc4 { But the knight simply takes the bishop first. White has lost two pieces for a pawn. } 6. O-O 6... d5 7. exd5 7... Qxd5 *

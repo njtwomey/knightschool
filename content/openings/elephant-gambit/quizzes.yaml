@@ -1,0 +1,30 @@
+- id: attack-on-knight
+  line: 1. e4 e5 2. Nf3 d5 3. exd5 e4
+  prompt: 'Which white piece does 3...e4 attack?'
+  accept:
+    - keywords: [[knight, f3, nf3]]
+      feedback: Yes. The pawn attacks the knight on f3, which gains Black a tempo.
+  reveal: The pawn on e4 attacks the knight on f3, so White has to spend a move saving it.
+  examples:
+    match: [the knight, the knight on f3, Nf3]
+    miss: [the queen, the bishop, no idea]
+- id: double-attack-c6
+  line: 1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Bb5+ c6
+  prompt: 'White checked with the bishop. Black blocked with ...c6, which attacks the bishop. Which other white piece is attacked?'
+  accept:
+    - keywords: [[knight, f3, nf3]]
+      feedback: Yes. The pawn on e4 still attacks the knight on f3, so White loses a piece.
+  reveal: The pawn on e4 still attacks the knight on f3, so White cannot save both the knight and the bishop.
+  examples:
+    match: [the knight on f3, knight, Nf3]
+    miss: [the queen, the rook, no idea]
+- id: punish-d3
+  line: 1. e4 e5 2. Nf3 d5 3. exd5 e4 4. d3
+  prompt: 'White played d3 and ignored the pawn on e4. How does Black win material?'
+  accept:
+    - keywords: [[exf3, f3, knight, take, capture]]
+      feedback: Yes. ...exf3 takes the knight, which was left attacked.
+  reveal: 4...exf3 wins the knight, because the pawn on e4 was still attacking it.
+  examples:
+    match: [exf3, take the knight, capture the knight on f3]
+    miss: [castle, play Qxd5, no idea]

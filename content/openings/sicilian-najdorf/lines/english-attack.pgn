@@ -1,0 +1,23 @@
+[Event "Knight School"]
+[Opening "Sicilian Najdorf"]
+[Variation "Sicilian Defense: Najdorf Variation, English Attack"]
+[ECO "B90"]
+[Character "sharp,positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "queenside-expansion,central-control"]
+
+1. e4 c5 { Black answers on the wing, so White cannot simply build a pair of pawns on d4 and e4. The c-pawn also eyes the d4 square. }
+2. Nf3 d6 { Guards e5, so a later ...Nf6 cannot be kicked away by e4-e5. It also opens the road for the c8 bishop. }
+3. d4 cxd4 { Trades Black's wing pawn for White's centre pawn. Black ends up with a central pawn that White does not have. }
+4. Nxd4 Nf6 { Develops and attacks the e4 pawn, so White has to spend a move defending it. }
+5. Nc3 a6 { The Najdorf move. It stops a white piece landing on b5 and prepares ...b5 to gain space on the queenside. }
+6. Be3 e5 { Kicks the knight off d4 and takes space in the centre. The cost is a hole on d5, which White's pieces would love to use. }
+7. Nb3 (7. Nf5 Bxf5 { Black removes the active knight before it can settle on f5. } 8. exf5 d5 { Black hits the centre while White's pieces are still at home. })
+7... Be6 { Develops, covers the d5 hole and hits the knight on b3 so White cannot rest. }
+8. f3 Be7 { Gets the king ready to castle and protects the knight on f6 from a later g4-g5. }
+9. Qd2 O-O 10. O-O-O (10. g4?! d5 { Hits the centre while White's king is still in the middle. } 11. exd5 Nxd5 { Black already has the better position, since White has not castled.})
+10... Nbd7 { Brings the last minor piece out. It also covers b6 and c5, so the queenside attack can start. }
+11. g4 b5 { The kings are on opposite wings, so both sides now race to attack. Black starts pushing pawns at White's king straight away. }
+12. g5 b4 { Hits the knight on c3 before the g5 pawn can take the knight on f6. } *

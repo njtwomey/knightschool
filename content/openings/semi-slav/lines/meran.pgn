@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Semi-Slav Defence"]
+[Variation "Meran Variation"]
+[ECO "D49"]
+[Character "sharp,positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "queenside-expansion,c5-break"]
+
+1. d4 d5 { Claims the centre at once and stops White playing e4 for free. } 2. c4 c6 { Supports d5 with a pawn, so Black can later take on c4 without losing the centre. } 3. Nf3 Nf6 { Develops and adds a second guard to d5. } 4. Nc3 e6 { The Semi-Slav move. Black guards d5 twice and keeps the c8 bishop behind the pawns for now. }
+5. e3 ( 5. cxd5 exd5 { Retakes with the e-pawn to free the f8 bishop, and Black gets a solid centre. } 6. Bg5 Be7 7. e3 O-O ) 5... Nbd7 { A third guard for d5, so Black can later take on c4 without leaving the centre weak. }
+6. Bd3 ( 6. Qc2 Bd6 { Develops the bishop, ready to castle, and eyes the h2 pawn. } 7. Bd3 O-O 8. O-O dxc4 9. Bxc4 b5 ) 6... dxc4 { Takes the pawn now, because the bishop on d3 needs a second move to take it back. }
+7. Bxc4 b5 { Drives the bishop away from c4 and wins space on the queenside. } 8. Bd3 a6 { Protects b5 and prepares ...c5. } 9. e4 c5 { Opens the centre before White can build up with e5 and f4. }
+10. e5 cxd4 { Black takes the pawn so that Nxb5 would be met by ...axb5. } 11. Nxb5 axb5 12. exf6 Qb6 { Defends b5 and gets ready to meet fxg7 with ...Bxg7. } *

@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Caro-Kann: Advance Variation"]
+[Variation "Advance, Short System"]
+[ECO "B12"]
+[Character "positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "space-advantage,c5-break"]
+
+1. e4 c6 2. d4 d5 3. e5 { Gains space and cramps Black's pieces. } 3... Bf5 { Black develops the bishop outside the pawn chain, the usual plan. }
+4. Nf3 { Defends d4 and develops. } 4... e6 5. Be2 { Keeps things simple: the bishop is safe and castling is next. }
+5... c5 { Hits the base of White's pawn chain. } ( 5... Nd7 6. O-O Ne7 7. c4 )
+6. Be3 { Defends d4 a second time, so ...cxd4 will not win a pawn. } 6... cxd4 7. Nxd4 Nc6 8. Nxf5 { Takes the bishop before it can retreat, so Black has to recapture with the pawn. } 8... exf5 9. O-O { Castles and keeps the pawn chain intact. } 9... Be7 10. Bb5 { Pins the knight to the king, so it cannot move without losing something. } *

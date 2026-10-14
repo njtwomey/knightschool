@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defence"]
+[Variation "Nc3 Variation"]
+[ECO "B01"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "good-bishop"]
+
+1. e4 d5 2. Nc3 dxe4 { Takes the pawn. White can win it back at once, so Black loses nothing. }
+3. Nxe4 Nf6 { Attacks the knight on e4 and develops. White must trade or retreat. }
+4. Nxf6+ exf6 { Recaptures towards the middle and opens the bishop on f8. }
+5. Bc4 ( 5. Bb5+ c6 6. Bc4 Be6 7. Bxe6 fxe6 ) 5... Be6 { Offers a bishop trade. That removes White's active bishop, which was aiming at f7. }
+6. Bxe6 fxe6 7. Qe2 Qd7 { Defends the pawn on e6, which the queen on e2 was attacking, and prepares long castling. }
+8. d4 Nc6 9. c3 O-O-O *

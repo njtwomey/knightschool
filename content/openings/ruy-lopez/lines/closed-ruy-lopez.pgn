@@ -1,0 +1,21 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Closed Variation"]
+[ECO "C84"]
+[Character "positional,solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "d4-break,e5-pressure"]
+
+1. e4 e5 2. Nf3 { Attacks the e5 pawn and develops a knight toward the centre. } 2... Nc6 { Defends the pawn. }
+3. Bb5 { Attacks the knight that defends e5. It is not a real pin yet, but if that knight ever disappears, White can take e5. [%cal Gb5c6,Gc6e5] } 3... a6
+4. Ba4 { Keeps the pin pressure on c6 and avoids ...axb5. } 4... Nf6 ( 4... d6 5. c3 Bd7 6. d4 Nge7 7. O-O Ng6 8. Re1 )
+5. O-O { Castles first. White does not need to rush after e5, because the king should be safe before the centre opens. } 5... Be7
+6. Re1 { Defends e4 so the knight on f6 can no longer win it, and supports a later e5. } 6... b5
+7. Bb3 { Retreats to a safe square where the bishop still eyes f7 and the a2-g8 diagonal. } 7... d6
+8. c3 { Prepares d4: the pawn on c3 supports it, and it gives the bishop on b3 a retreat on c2. } 8... O-O
+9. h3 { Stops ...Bg4, which would pin the knight on f3 and slow down d4. } 9... Na5 ( 9... Nb8 10. d4 Nbd7 11. Nbd2 Bb7 12. Bc2 ) ( 9... Bb7 10. d4 Re8 11. Nbd2 Bf8 12. a4 )
+10. Bc2 { Keeps the bishop aimed at the kingside after Black's knight attacks it. [%csl Gc2] } 10... c5
+11. d4 { The central break White has prepared for several moves. } 11... Qc7
+12. Nbd2 { Brings the last minor piece toward the centre and kingside, and defends e4. } *

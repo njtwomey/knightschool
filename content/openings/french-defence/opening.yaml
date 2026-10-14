@@ -1,0 +1,15 @@
+name: French Defence
+eco: C00
+side: black
+level: beginner
+summary: >-
+  Black builds a sturdy pawn chain with ...e6 and ...d5, then attacks White's centre with ...c5. You will practise one
+  clear answer to each of White's four main third moves.
+tags: [e4, semi-open, solid]
+family: french-defence
+lines:
+  - advance
+  - tarrasch
+  - exchange
+  - classical
+refutations: []

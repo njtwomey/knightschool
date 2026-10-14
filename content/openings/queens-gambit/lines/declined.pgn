@@ -1,0 +1,22 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Declined, Orthodox Defence"]
+[ECO "D63"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "bg5-pin,c-file-pressure"]
+
+1. d4 { Takes space in the centre and opens lines for the queen and the c1 bishop. } 1... d5
+2. c4 { Offers a pawn. If Black takes it, White gets a free centre; if not, White keeps pressure on d5. [%cal Gc4d5] } 2... e6
+3. Nc3 { Adds a second attacker on d5 and develops a piece. } 3... Nf6 ( 3... Be7 4. Nf3 { Develops the knight first; Bg5 will come next. } 4... Nf6 5. Bg5 O-O 6. e3 ) ( 3... c5 4. cxd5 { Takes first, so that after ...exd5 Black has an isolated d-pawn: a pawn with no friendly pawn beside it to protect it. } 4... exd5 5. Nf3 Nc6 6. g3 { Prepares Bg2 and castling, with the bishop aimed at d5. } )
+4. Bg5 { Pins the knight on f6 to the queen, so Black cannot easily take on c4 or play ...dxc4 and ...d4 ideas freely. [%cal Gg5f6,Gf6d8] } 4... Be7 { Unpins by moving the bishop behind the knight, so the knight is protected and free to move. }
+( 4... Nbd7 5. e3 c6 6. Nf3 Qa5 { The Cambridge Springs idea. The queen eyes the knight on c3 and sets up ...Ne4 and ...Bb4. } 7. Nd2 { Covers e4, and puts a knight between a pin on c3 and the king. } 7... Bb4 8. Qc2 { Guards the knight on c3 again, so the queen and bishop together cannot win it. } 8... O-O 9. Be2 )
+5. e3 { Opens the bishop on f1 and supports d4 and c4. } 5... O-O
+6. Nf3 { Develops and guards d4 and e5. } 6... Nbd7
+7. Rc1 { Puts the rook on the c-file, where it will press once Black plays ...c6 and ...dxc4. } 7... c6
+8. Bd3 { Aims the bishop at h7 and prepares to retake on c4 if the pawn is taken. } 8... dxc4
+9. Bxc4 { Develops with a gain of time, because Black spent a move taking the pawn. } 9... Nd5
+10. Bxe7 { Trades off the bishop that supported Black's freeing move. } 10... Qxe7
+11. O-O Nxc3 12. Rxc3 { The rook lands on the open c-file, and White keeps a small lead in space and development. } 12... e5 *

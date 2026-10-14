@@ -1,0 +1,15 @@
+name: Slav Defence
+eco: D10
+side: black
+level: beginner
+summary: >-
+  Black defends d5 with the c-pawn, so the bishop on c8 can leave before ...e6 closes it in. You will learn how to win
+  back the pawn on c4 and what to do against the Exchange and the quieter 3.Nc3.
+tags: [d4, closed, solid, against]
+family: queens-gambit
+against: "Queen's Gambit"
+lines:
+  - czech
+  - exchange
+  - quiet-e3
+refutations: []

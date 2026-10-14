@@ -1,0 +1,14 @@
+name: Sicilian Alapin
+eco: B22
+side: white
+level: beginner
+summary: >-
+  The Alapin plays 2.c3 against the Sicilian so that White can build a pawn pair on d4 and e4 without losing the d-pawn. You will learn the set-up against Black's three main replies, ...Nf6, ...d5 and ...e6.
+tags: [e4, semi-open, against, solid]
+family: sicilian-defence
+against: Sicilian Defence
+lines:
+  - vs-nf6
+  - vs-d5
+  - vs-e6
+refutations: []

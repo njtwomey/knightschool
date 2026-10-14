@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "French Defence"]
+[Variation "Tarrasch Variation"]
+[ECO "C05"]
+[Character "positional,solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "c5-break,f6-break"]
+
+1. e4 e6 2. d4 d5 3. Nd2 { The Tarrasch: the knight defends e4 but, unlike Nc3, cannot be pinned by ...Bb4. } 3... Nf6 { Attacks e4, and invites White to push e5. }
+4. e5 { Gains space and kicks the knight. } 4... Nfd7 { Retreats and attacks the e5 pawn from behind. }
+5. Bd3 { Develops the bishop toward the kingside. } ( 5. f4 c5 6. Ngf3 Nc6 7. c3 Be7 8. Bd3 O-O 9. O-O ) 5... c5 { Hits d4, the base of White's pawn chain. }
+6. c3 { Defends d4 with a pawn. } 6... Nc6 { Piles up on d4. }
+7. Ne2 { Adds another defender to d4. } 7... cxd4 { Opens the c-file and removes White's c3 pawn, so d4 has fewer defenders. } 8. cxd4 f6 { Attacks the head of White's pawn chain at e5. Without it, White's pawn on e5 would cramp Black for a long time. [%cal Gf6e5] }
+9. exf6 { Takes before Black can capture on e5. } 9... Nxf6 { Recaptures with a piece, which develops it and opens the f-file for the rook. } 10. Nf3 Bd6 { Develops the bishop to a good diagonal aimed at White's kingside. } 11. O-O O-O { Castles. The pieces are active, and the d4 pawn is a target for Black's knight and bishop. } *

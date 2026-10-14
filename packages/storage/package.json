@@ -1,0 +1,22 @@
+{
+  "name": "@knightschool/storage",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./testing": "./src/testing/memory.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate && tsx ../../scripts/db-bundle.ts && prettier --write src/migrations.generated.ts"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.11"
+  },
+  "dependencies": {
+    "@sqlite.org/sqlite-wasm": "3.53.4-build2",
+    "drizzle-orm": "^0.45.4",
+    "zod": "4.6.7",
+    "@knightschool/core": "workspace:*"
+  }
+}

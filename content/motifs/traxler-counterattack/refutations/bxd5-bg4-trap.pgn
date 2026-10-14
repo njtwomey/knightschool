@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Traxler Counterattack"]
+[Variation "8.Bxd5 Bg4"]
+[ECO "C57"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,queen-trap"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 Bc5 5. Nxf7 Bxf2+ 6. Kf1 Qe7 7. Nxh8 d5 8. Bxd5"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 Bc5 5. Nxf7 Bxf2+ 6. Kf1 Qe7 7. Nxh8 d5 8. Bxd5? { Takes the pawn, but the queen on d1 is now the target. } 8... Bg4 { Attacks the queen. If it leaves the d1 square, the bishop on f2 and the pin do the damage. [%cal Gg4d1] } 9. Kxf2 9... Bxd1 10. Rxd1 10... Ng4+ *

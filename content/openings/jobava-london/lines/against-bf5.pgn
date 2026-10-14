@@ -1,0 +1,19 @@
+[Event "Knight School"]
+[Opening "Jobava London System"]
+[Variation "Against 3...Bf5"]
+[ECO "D00"]
+[Character "sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "kingside-space"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4 Bf5
+4. f3 { Prepares g4, which will chase the bishop from f5, and also covers e4. } 4... e6
+5. g4 { Attacks the bishop on f5 and gains space on the kingside. } 5... Bg6
+6. h4 { Threatens h5, which would push the bishop to h7 and out of play. [%cal Gh4h5] } 6... h6
+7. Qd2 { Guards the bishop on f4 and readies queenside castling. }
+7... c6 ( 7... Nbd7?! 8. Nb5 { Threatens Nc7+, a fork of king and rook. } 8... Rc8 9. Nxa7 Ra8 10. Nb5 )
+8. O-O-O { The king goes to c1 and the rook to d1, away from the kingside pawns that are advancing. } 8... Nbd7
+9. h5 { Traps the bishop on the edge: it must go to h7. } 9... Bh7
+10. e3 { Supports the bishop on f4 and opens the f1 bishop. } *

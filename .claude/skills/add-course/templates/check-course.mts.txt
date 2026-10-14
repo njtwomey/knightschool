@@ -1,0 +1,49 @@
+// Builds a course from a SCRATCH directory (never touches content/openings) and prints what a learner will read.
+//   cp .claude/skills/add-course/templates/check-course.mts.txt "$SCRATCH/check-course.mts"
+//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" "$SCRATCH/<course-id>"
+// The directory name is the course id. Build errors are thrown with the file name. Exit 1 on error.
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { basename, join } from 'node:path';
+
+const root = process.env.KS_ROOT;
+const dir = process.argv[2];
+if (!root || !dir) throw new Error('Usage: KS_ROOT=<repo> tsx check-course.mts <course-dir>');
+const core = await import(join(root, 'packages/core/src/index.ts'));
+const { parse } = await import(join(root, 'node_modules/yaml/dist/index.js'));
+const { z } = await import(join(root, 'node_modules/zod/index.js'));
+
+const variants = (kind: 'lines' | 'refutations') =>
+  existsSync(join(dir, kind))
+    ? readdirSync(join(dir, kind))
+        .filter((f) => f.endsWith('.pgn'))
+        .sort()
+        .map((f) => ({
+          id: f.slice(0, -4),
+          kind: kind === 'lines' ? 'line' : 'refutation',
+          game: core.parsePgn(readFileSync(join(dir, kind, f), 'utf8'), `${kind}/${f}`),
+          source: `${kind}/${f}`,
+        }))
+    : [];
+try {
+  const manifest = core.OpeningManifest.parse(parse(readFileSync(join(dir, 'opening.yaml'), 'utf8')));
+  const quizPath = join(dir, 'quizzes.yaml');
+  const quizzes = existsSync(quizPath) ? z.array(core.QuizEntry).parse(parse(readFileSync(quizPath, 'utf8'))) : [];
+  const content = core.buildOpening(basename(dir), manifest, [...variants('lines'), ...variants('refutations')], quizzes);
+  for (const variant of content.opening.variants) {
+    console.log(`\n${variant.kind} ${variant.id}: ${variant.name}`);
+    core.lineSteps(content, variant.id).forEach((step: any, ply: number) => {
+      const n = `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}`;
+      const notes = core.explainMove(step.fromEpd, step.edge.uci, { edge: step.edge });
+      console.log(`  ${n} ${step.edge.san} (${step.ours ? 'you' : 'them'})${notes.length ? '' : step.ours ? '  [no note]' : ''}`);
+      for (const note of notes) console.log(`      ${note.source}: ${note.text}`);
+      const text = step.edge.annotation?.text ?? '';
+      if (text.length > 220) console.log(`      WARN ${text.length} characters; aim for under about 200`);
+    });
+  }
+  const cards = core.introductionOrder(content, 0);
+  console.log(`\nOK ${content.opening.id}: ${Object.keys(content.nodes).length} positions, ${cards.length} cards incl. ${content.quizzes.length} quizzes.`);
+  console.log('Not checked here: family/against against content/families.yaml, other courses. Run course:eval after moving it in.');
+} catch (error) {
+  console.error(`FAILED: ${error instanceof Error ? error.message : error}`);
+  process.exit(1);
+}

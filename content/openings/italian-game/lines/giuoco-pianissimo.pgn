@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Giuoco Pianissimo"]
+[ECO "C50"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "d4-break,f7-pressure"]
+
+1. e4 e5 2. Nf3 { Attacks e5 and develops a piece. } 2... Nc6 3. Bc4 { Points at f7, the weakest square in Black's
+camp. } 3... Bc5 4. c3 { Prepares d4 to take the centre. } 4... Nf6 5. d3 { Protects e4 and keeps everything calm. }
+5... d6 6. O-O O-O 7. Re1 a6 8. a4 Ba7 9. h3 { Stops ...Bg4 pinning the knight to the queen. } 9... h6 10. Nbd2 Re8 *

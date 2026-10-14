@@ -1,0 +1,24 @@
+[Event "Knight School"]
+[Opening "Sicilian English Attack"]
+[Variation "Sicilian Defense: Scheveningen Variation, English Attack, with f3"]
+[ECO "B90"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "opposite-castling,pawn-storm"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e6
+7. f3 { Guards e4 and clears the way for g4. The same set-up works against ...e6 as against ...e5. }
+7... b5
+(7... Be7 8. Qd2 O-O 9. O-O-O Nbd7 10. g4)
+(7... Nbd7 8. Qd2 { This reaches the main line by a different move order. } 8... b5 9. g4)
+8. Qd2 { Develops the queen and prepares long castling. It also keeps g4 in reserve for the pawn storm. }
+8... Nbd7
+9. g4 { The g-pawn starts its march. It threatens g5, which would drive the knight from f6. [%cal Gg4g5] }
+9... h6
+10. O-O-O { Brings the king to safety on the queenside, away from Black's pieces, and puts a rook on the d-file. }
+10... Bb7
+11. h4 { A second pawn joins the storm. It prepares g5: after ...hxg5 hxg5 the h-file opens for White's rook. }
+11... b4
+12. Na4 { The b4 pawn attacks the knight on c3, so it moves. From a4 it eyes c5 and b6. } *

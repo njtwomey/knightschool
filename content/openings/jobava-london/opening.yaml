@@ -1,0 +1,15 @@
+name: Jobava London System
+eco: D00
+side: white
+level: beginner
+summary: >-
+  White plays Nc3 and Bf4 against 1...d5, the Jobava set-up, and aims the bishop and knight at c7 and b7 with ideas
+  like Nb5, Qd2 and h3. You will practise meeting ...e6, ...c5, ...Bf5 and ...c6 with this sharp but simple plan.
+tags: [d4, closed, system]
+family: london-system
+lines:
+  - against-e6
+  - against-c5
+  - against-bf5
+  - against-c6
+refutations: []

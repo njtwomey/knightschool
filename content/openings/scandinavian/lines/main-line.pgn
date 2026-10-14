@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defence"]
+[Variation "Main Line, 3...Qa5"]
+[ECO "B01"]
+[Character "solid"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "early-queen"]
+[Themes "caro-kann-structure"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 { Develops and attacks the queen. } 3... Qa5 { Safe on a5, away from White's minor pieces. } 4. d4
+Nf6 5. Nf3 c6 { Gives the queen a retreat to c7. } 6. Bc4 Bf5 7. Bd2 e6 8. Qe2 Bb4 9. O-O-O Nbd7 *

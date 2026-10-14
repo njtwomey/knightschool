@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Rousseau Gambit"]
+[Variation "Rousseau Gambit: 4.d4 exd4"]
+[ECO "C50"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "central-break,tempo-gain"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. d4 4... exd4 { Black takes the centre pawn. White cannot recapture at once, and the e-file is now open. } 5. e5 { White pushes past the f5 pawn. } 5... d5 { Hits the bishop and challenges the new pawn. } 6. exd6 (6. Bb5 6... Bb4+ 7. c3 7... dxc3) (6. Bb3 6... Bb4+ 7. c3 7... dxc3) 6... Qxd6 7. O-O 7... Nf6 8. Re1+ 8... Be7 9. Bg5 9... Bd7 *

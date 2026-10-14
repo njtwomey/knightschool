@@ -1,0 +1,36 @@
+- id: nc3-tempo
+  line: 1. e4 d5 2. exd5 Qxd5 3. Nc3
+  prompt: What does 3.Nc3 do to Black's queen?
+  accept:
+    - keywords: [[attack, chase, tempo, hit]]
+      feedback: Yes. The knight attacks the queen, so White develops with tempo.
+  reveal: Nc3 develops a piece and attacks the queen, so Black must spend a move moving it.
+  showMove: Qa5
+  examples:
+    match: [it attacks the queen, chases the queen away]
+    miss: [it defends e4, it pins the queen]
+- id: bg4-pin
+  line: 1. e4 d5 2. exd5 Qxd5 3. Nf3 Nf6 4. d4 Bg4
+  prompt: What does 4...Bg4 pin?
+  accept:
+    - keywords: [[knight, f3, nf3], [queen, d1, qd1]]
+      all: true
+      feedback: Yes. The knight on f3 is pinned to the queen on d1.
+    - keywords: [[knight, f3, nf3]]
+      partial: true
+      feedback: Right piece. Say what stands behind it.
+  reveal: The bishop pins the knight on f3 to the queen on d1, so the knight cannot move freely.
+  examples:
+    match: [the knight on f3 to the queen, it pins Nf3 against the queen, the f3 knight is pinned to the queen on d1]
+    miss: [the pawn on d4, the bishop on e2, nothing]
+- id: nxd4-shot
+  line: 1. e4 d5 2. exd5 Qxd5 3. Nf3 Nf6 4. d4 Bg4 5. Be2 Nc6 6. Be3 e6 7. Nc3 Qd7 8. O-O O-O-O 9. h3 Bxf3 10. Bxf3
+  prompt: Black to move. Which pawn can Black win now, and how?
+  accept:
+    - keywords: [[d4, nxd4]]
+      feedback: Yes. Nxd4 wins the pawn, because after the trade nothing defends it enough.
+  reveal: Nxd4 wins a pawn. The knight on f3 used to help defend d4, and now it is gone.
+  showMove: Nxd4
+  examples:
+    match: [take d4 with the knight, Nxd4, win the d4 pawn]
+    miss: [castle, take on b7, no idea]

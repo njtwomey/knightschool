@@ -1,0 +1,25 @@
+- id: bg5-pin
+  line: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5
+  prompt: What is the bishop on g5 doing to the knight on f6?
+  accept:
+    - keywords: [[pin]]
+      feedback: Yes. The knight on f6 is pinned to the queen on d8.
+  reveal: The bishop pins the knight on f6 to the queen on d8, so the knight cannot move without losing the queen.
+  examples:
+    match: [it pins the knight, the knight is pinned to the queen]
+    miss: [it attacks the king, it is protected]
+- id: elephant-trap
+  line: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. cxd5 exd5 6. Nxd5
+  prompt: White just took a pawn on d5. Why is that a mistake?
+  accept:
+    - keywords: [[bb4, check, bishop], [queen, bxd8, d8, piece, lose]]
+      all: true
+      feedback: Yes. After 6...Nxd5 7.Bxd8 Bb4+ White's queen is lost and Black wins a piece.
+    - keywords: [[nxd5, pinned, pin, knight]]
+      partial: true
+      feedback: 'Close. Taking the knight is only the start: 7.Bxd8 Bb4+ wins White a piece.'
+  reveal: 6...Nxd5! 7.Bxd8 Bb4+ and White loses the queen for only a bishop, so Black ends up a piece ahead.
+  showMove: Nxd5
+  examples:
+    match: [Bb4 check wins the queen, Black plays Bb4 and White loses the queen]
+    miss: [it attacks the king, castles]

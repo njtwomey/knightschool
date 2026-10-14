@@ -1,0 +1,44 @@
+{
+  "name": "knightschool",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.11.2",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm content:build && pnpm engine:copy && pnpm --filter @knightschool/web dev",
+    "build": "pnpm content:build && pnpm engine:copy && pnpm --filter @knightschool/web build",
+    "preview": "pnpm --filter @knightschool/web preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "pnpm -r typecheck && tsc --noEmit -p scripts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "content:build": "tsx scripts/content-build.ts",
+    "db:generate": "pnpm --filter @knightschool/storage db:generate",
+    "engine:copy": "tsx scripts/copy-engine.ts",
+    "course:eval": "tsx scripts/course-eval.ts",
+    "analyse": "tsx scripts/analyse.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/node": "24.19.2",
+    "eslint": "9.39.5",
+    "eslint-plugin-boundaries": "7.2.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "prettier": "3.9.10",
+    "stockfish": "19.0.1",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.2",
+    "vitest": "4.1.11",
+    "yaml": "2.9.1",
+    "zod": "4.6.7"
+  },
+  "license": "MIT"
+}

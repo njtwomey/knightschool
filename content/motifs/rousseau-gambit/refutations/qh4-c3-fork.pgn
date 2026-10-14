@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Rousseau Gambit"]
+[Variation "4.Nxe5 Qh4 5.Nf3 Qxe4+ 6.Be2 Nd4 7.c3 Nc2+ fork"]
+[ECO "C50"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,fork"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5 Qh4 5. Nf3 Qxe4+ 6. Be2 Nd4 7. c3"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5 4... Qh4?! { A trickier try than the simple recapture. It hits e4 and f2 at once, but the engine prefers 4...Nxe5, so use this one for the trap. } 5. Nf3 5... Qxe4+ 6. Be2 6... Nd4 { Attacks the bishop and the knight on f3. White's best is to take the knight, but 7.c3 looks natural. [%cal Gd4e2,Gd4f3] } 7. c3? { Tries to kick the knight away, but forgets the c2 square. } 7... Nc2+ { The knight forks the king on e1 and the rook on a1. [%cal Gc2e1,Gc2a1] } 8. Kf1 8... Nxa1 { Wins the rook. Black is far ahead. } 9. d3 9... Qe6 *

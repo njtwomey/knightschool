@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Elephant Gambit"]
+[Variation "Knight to g5"]
+[ECO "C40"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Refutes "1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Ng5"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Ng5? { Dodges the pawn, but the knight lands on a square the black queen already covers along the diagonal from d8. [%cal Gd8g5] } 4... Qxg5 { Takes the knight for nothing. } 5. Nc3 5... Qe5 { Escapes the attack and keeps the queen centralised, while Black is a whole piece up. } 6. Qe2 6... Nf6 *

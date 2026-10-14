@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Elephant Gambit"]
+[Variation "3.Nxe5 dxe4 4.Qe2"]
+[ECO "C40"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "queen-pressure,open-lines"]
+
+1. e4 e5 2. Nf3 d5 3. Nxe5 { White takes the e5 pawn, which is the other way to answer the gambit. } 3... dxe4 { Black takes the e4 pawn straight back, so material is level and White's knight sits on e5 without much support. }
+4. Qe2 4... Qe7 { Attacks the knight on e5 and keeps the e-file under watch, so White cannot easily win back the e4 pawn. } 5. d4 5... exd3 { Takes the pawn en passant, opening the e-file for the queen and rook. }
+6. Nxd3 6... Bg4 { Attacks the queen on e2 and develops, forcing White to trade queens or give ground. } 7. Qxe7+ 7... Nxe7 { Recaptures with a piece, developing it. } 8. Nc3 8... Nbc6 { Develops the last knight and adds pressure on d4 and e5. } 9. h3 9... Bf5 { Keeps the bishop, which would be a good piece on f5, and challenges the knight on d3. } 10. Be3 10... O-O-O *

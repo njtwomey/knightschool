@@ -1,0 +1,17 @@
+[Event "Knight School"]
+[Opening "King's Indian Defence"]
+[Variation "Samisch Variation"]
+[ECO "E81"]
+[Character "sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "e5-break,queenside-attack"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. f3 { A solid pawn chain, supporting e4 and preparing Be3 and long castling. } 5... O-O
+6. Be3 e5 { Hits d4 straight away. Black fights for the centre before White's pieces are all out. }
+7. Nge2 ( 7. d5 Nh5 { Heads for f4 and prepares ...f5. } 8. Qd2 f5 9. O-O-O Na6 )
+( 7. dxe5 dxe5 8. Qxd8 Rxd8 9. Nd5 Nxd5 10. cxd5 c6 { Attacks the d5 pawn and opens the position for the bishop pair. } )
+7... c6 { Keeps knights out of d5 and prepares ...a6 and ...b5. } 8. Qd2 Nbd7 { Develops and defends e5. }
+9. O-O-O a6 { Prepares ...b5. White's king is on the queenside, so a pawn storm there is a real threat. }
+10. Kb1 b5 { The pawn storm starts. The pawn threatens to hit c4 and open lines against the king. } *

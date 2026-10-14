@@ -1,0 +1,33 @@
+- id: bf5-before-e6
+  line: 1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 dxc4 5. a4 Bf5
+  prompt: Why does Black develop the bishop to f5 before playing ...e6?
+  accept:
+    - keywords: [[block, closed, lock, locked, inside, behind, bad]]
+      feedback: Yes. After ...e6 the bishop on c8 would be shut in behind its own pawns.
+    - keywords: [[e4]]
+      partial: true
+      feedback: Close. That is a bonus. Name the problem ...e6 would cause for the bishop.
+  reveal: After ...e6 the bishop on c8 would be locked in behind its own pawns. On f5 it is outside the pawn chain and also stops e4.
+  examples:
+    match: [e6 would block the bishop in, the pawn on e6 would lock it in, otherwise it is shut in behind the pawns]
+    miss: [to castle, to develop, it attacks a pawn, no idea]
+- id: bd6-aim
+  line: 1. d4 d5 2. c4 c6 3. Nc3 Nf6 4. e3 Bf5 5. Nf3 e6 6. Nh4 Bg6 7. Nxg6 hxg6 8. Bd3 Bd6
+  prompt: Which pawn does 8...Bd6 aim at?
+  accept:
+    - keywords: [[h2]]
+      feedback: Yes. With the h-file open, a bishop sacrifice on h2 is a real threat.
+  reveal: The bishop aims at the pawn on h2. If White castles carelessly, ...Bxh2+ wins a pawn with check because the rook on h8 guards the bishop.
+  examples:
+    match: [the pawn on h2, h2, it eyes h2]
+    miss: [the knight on c3, d4, the king, nothing]
+- id: bxh2-check
+  line: 1. d4 d5 2. c4 c6 3. Nc3 Nf6 4. e3 Bf5 5. Nf3 e6 6. Nh4 Bg6 7. Nxg6 hxg6 8. Bd3 Bd6 9. O-O Bxh2+
+  prompt: Why can the white king not simply take the bishop on h2?
+  accept:
+    - keywords: [[rook, h8]]
+      feedback: Yes. The rook on h8 guards h2 along the open h-file, so Kxh2 would be illegal.
+  reveal: The rook on h8 protects the bishop along the open h-file. The king may not capture a protected piece, so it must go to h1.
+  examples:
+    match: [the rook on h8 protects it, the h8 rook guards the bishop, it is defended by the rook]
+    miss: [it is pinned, the queen guards it, the king is in check, no idea]

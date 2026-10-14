@@ -1,0 +1,15 @@
+name: Queen's Gambit Declined
+eco: D30
+side: black
+level: beginner
+summary: >-
+  Black answers c4 with e6 and keeps a pawn on d5, holding the centre without taking the gambit pawn. Solid and
+  classical, with clear plans for both sides.
+tags: [d4, closed, solid]
+lines:
+  - orthodox
+  - exchange
+refutations:
+  - elephant-trap
+family: queens-gambit
+against: "Queen's Gambit"

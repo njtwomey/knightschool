@@ -1,0 +1,37 @@
+- id: c5-idea
+  line: 1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3 e6 5. Bxc4 c5
+  prompt: What is the idea of 5...c5?
+  accept:
+    - keywords: [[d4, centre, center], [challenge, undermine, strike, break, pressure, open, attack]]
+      all: true
+      feedback: Yes. Black challenges White's centre and uses the pawn on c4 as payment for active pieces.
+    - keywords: [[d4, centre, center]]
+      partial: true
+      feedback: Close. Say what Black does to the pawn on d4.
+  reveal: It attacks the pawn on d4 at once. Black gives back the c4 pawn but breaks up White's centre and frees the pieces.
+  examples:
+    match: [it attacks the d4 pawn, it challenges the centre, a break against d4]
+    miss: [it develops a bishop, it castles, it protects the knight, it wins a pawn]
+- id: a6-idea
+  line: 1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3 e6 5. Bxc4 c5 6. O-O a6
+  prompt: What does 6...a6 prepare?
+  accept:
+    - keywords: [[b5]]
+      feedback: Yes. ...b5 will drive the bishop off c4 and win queenside space.
+  reveal: It prepares ...b5, which kicks the bishop away from c4. Without ...a6 the b5 pawn could be hit by a bishop check.
+  examples:
+    match: [it prepares b5, so that b5 can kick the bishop, a6 allows b5 next]
+    miss: [it castles, it attacks the bishop, it protects the knight, no idea]
+- id: queen-grab
+  line: 1. d4 d5 2. c4 dxc4 3. e4 e5 4. Nf3 exd4 5. Bxc4 Nc6 6. O-O Be6 7. Bxe6 fxe6 8. Qxd4
+  prompt: White took on d4 with the queen. What does Black win?
+  accept:
+    - keywords: [[queen]]
+      feedback: Yes. Nxd4 wins the queen, and White's recapture on d4 is met by Qxd4.
+    - keywords: [[knight, nxd4]]
+      partial: true
+      feedback: Close. Say which piece the knight captures.
+  reveal: The knight on c6 takes the queen on d4. If White recaptures with the knight, the black queen takes that too.
+  examples:
+    match: [the queen, Black wins the queen with Nxd4, the knight takes the queen]
+    miss: [a pawn, nothing, the bishop, it is fine]

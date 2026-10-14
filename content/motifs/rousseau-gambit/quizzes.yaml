@@ -1,0 +1,43 @@
+- id: nxe5-reply
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5 Nxe5 5. d4
+  prompt: "White's pawn on d4 attacks the knight on e5. What does Black play, and why does it work?"
+  accept:
+    - keywords: [[nxc4, c4, bishop, takes], [piece, bishop, free, wins, two]]
+      all: true
+      feedback: Yes. The knight takes the bishop on c4 first, so White has lost two pieces for a pawn.
+    - keywords: [[nxc4, c4]]
+      partial: true
+      feedback: Right move. Say what it wins.
+  reveal: Nxc4. The knight takes the bishop before the pawn can take the knight, and Black is a piece up.
+  showMove: Nxc4
+  examples:
+    match: [Nxc4 wins the bishop, the knight takes the bishop on c4 and wins a piece, take the bishop on c4 first]
+    miss: [Nf7, Bd6, Nxc4]
+- id: c2-fork
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5 Qh4 5. Nf3 Qxe4+ 6. Be2 Nd4 7. c3
+  prompt: 'White has just played 7.c3 to hit the knight. What does Black play, and what does it win?'
+  accept:
+    - keywords: [[nc2, c2, knight], [fork, king, rook, a1]]
+      all: true
+      feedback: Yes. The knight on c2 gives check and attacks the rook on a1 as well, so Black wins the rook.
+    - keywords: [[nc2, c2]]
+      partial: true
+      feedback: Right square. Say what it attacks.
+  reveal: Nc2+. The knight forks the king on e1 and the rook on a1, and wins the rook.
+  showMove: Nc2+
+  examples:
+    match: [Nc2 forks the king and rook, knight to c2 fork, Nc2+ wins the rook on a1]
+    miss: [Nxf3, queen takes e2, Nc2]
+- id: ng5-hangs
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Ng5
+  prompt: 'White hopes to hit f7 with 4.Ng5. Why does it fail here?'
+  accept:
+    - keywords: [[queen, qxg5, takes], [knight, g5, undefended, free, hang]]
+      all: true
+      feedback: Yes. The knight on g5 has no defender and the queen takes it.
+  reveal: The f-pawn has moved, so the queen sees g5 and takes the loose knight with Qxg5.
+  showMove: Qxg5
+  examples:
+    match:
+      [the queen takes the knight on g5, Qxg5 because the knight is undefended, the knight hangs and the queen takes it]
+    miss: [it attacks f7, Black castles, the bishop takes]

@@ -1,0 +1,15 @@
+name: Ruy Lopez
+eco: C60
+side: white
+level: club
+summary: >-
+  White pins the knight that guards Black's e5 pawn and builds a big centre with c3 and d4. You will learn the Closed
+  main line, the Open and Berlin answers, and how to meet the rarer third moves.
+tags: [e4, open, system]
+family: ruy-lopez
+lines:
+  - closed-ruy-lopez
+  - open-ruy-lopez
+  - berlin-defence
+  - rare-third-moves
+refutations: []

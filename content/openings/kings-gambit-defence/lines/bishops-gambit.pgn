@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "King's Gambit Accepted"]
+[Variation "Bishop's Gambit, 3...Qh4+"]
+[ECO "C33"]
+[Character "solid,sharp"]
+[Risk "medium"]
+[EarlyMate "white"]
+[Tricks "none"]
+[Themes "extra-pawn,castling-lost"]
+
+1. e4 e5 2. f4 exf4 3. Bc4 { White develops the bishop first, aiming at f7 and the king. } 3... Qh4+ { Check. White's king must move or block, so White loses the right to castle. }
+4. Kf1 4... Nf6 { Develops and hits e4, so White has to keep that pawn defended. } 5. Nf3 5... Qh6 { The knight attacks the queen, so she retreats along the diagonal to h6, where she still guards the f4 pawn. }
+6. Nc3 6... d6 { Opens the bishop on c8 and stops White pushing e5 with tempo. } 7. d4 7... Be7 { Develops, covers g5 and gets ready to castle. }
+8. Kg1 (8. e5 dxe5 9. Nxe5 Be6)
+8... O-O { The king is safe on the kingside, and White's king has lost the castling right. } 9. g3 9... Nh5 { Attacks the g3 pawn, which is the pawn attacking Black's f4 pawn, so Black can keep the extra pawn. } 10. Be2 *

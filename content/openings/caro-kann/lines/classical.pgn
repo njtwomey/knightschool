@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Classical Variation"]
+[ECO "B18"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "good-bishop"]
+
+1. e4 c6 2. d4 d5 3. Nc3 ( 3. Nd2 dxe4 4. Nxe4 { The same position as after 3. Nc3 dxe4 4. Nxe4. } ) 3... dxe4
+4. Nxe4 Bf5 { The bishop comes out before e6 blocks it in. } 5. Ng3 Bg6 6. h4 h6 { Keeps a square for the bishop if
+h5 comes. } 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 e6 11. Bd2 Ngf6 12. O-O-O Be7 *

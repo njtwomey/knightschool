@@ -1,0 +1,2 @@
+# Netlify and Cloudflare Pages: serve the app for any path, so /opening/caro-kann works on a refresh or a shared link.
+/*  /index.html  200

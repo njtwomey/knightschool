@@ -1,0 +1,32 @@
+[Event "Knight School"]
+[Opening "Sicilian English Attack"]
+[Variation "Sicilian Defense: Najdorf Variation, English Attack"]
+[ECO "B90"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "opposite-castling,pawn-storm"]
+
+1. e4 { Takes space in the centre and opens lines for the queen and the f1 bishop. } 1... c5
+2. Nf3 { Develops a piece and prepares d4, which is the whole idea of the Open Sicilian. } 2... d6
+3. d4 { Offers a pawn trade that gives White the lead in the centre and development. } 3... cxd4
+4. Nxd4 { Recaptures with a piece that now sits in the middle and eyes b5, f5 and e6. } 4... Nf6
+5. Nc3 { Develops and defends the e4 pawn that the black knight attacks. } 5... a6
+6. Be3 { Puts the bishop on a good diagonal that guards d4 and prepares f3, Qd2 and long castling. This is the start of the English Attack. [%csl Gd4] }
+6... e5
+7. Nb3 { The knight must leave d4. On b3 it is safe and still guards the queenside. }
+7... Be6
+(7... Be7 8. f3 { This reaches the main line by a different move order. } 8... Be6)
+8. f3 { Guards the e4 pawn, so Black has no pressure on it, and prepares the g-pawn advance. }
+8... Be7
+(8... Nbd7 9. Qd2 Be7 10. g4)
+9. Qd2 { Brings the queen out, connects with the e3 bishop and prepares castling on the queenside. }
+9... O-O
+10. O-O-O { White castles on the opposite side to Black. Now the pawns can march at Black's king without White's own king being in the way. }
+10... Nbd7
+11. g4 { Starts the pawn storm. The g-pawn is heading for g5 to harass the knight on f6. [%cal Gg4g5] }
+11... b5
+(11... Rc8 12. Kb1 { A useful king move off the c-file before Black can attack there. })
+12. g5 { Hits the knight on f6. If it leaves, White's pawns and pieces roll towards the king. }
+12... b4 *

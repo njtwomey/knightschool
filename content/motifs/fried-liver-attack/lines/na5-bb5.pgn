@@ -1,0 +1,18 @@
+[Event "Knight School"]
+[Opening "Fried Liver Attack"]
+[Variation "Two Knights: 5...Na5"]
+[ECO "C57"]
+[Character "solid,positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "development-lead,central-control"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 4... d5 5. exd5 5... Na5 { This is how Black avoids the Fried Liver. The knight attacks the bishop and does not recapture on d5, so the f7 sacrifice no longer works. }
+6. Bb5+ { The calm reply. The bishop escapes with check and keeps the extra pawn on d5. } 6... c6 { Black attacks the bishop and the pawn on d5. } (6... Bd7 { Black blocks with the bishop. } 7. Qe2 { Defends the bishop on b5, so after ...Bxb5 the queen recaptures and keeps the extra pawn. } 7... Be7 8. Nf3 8... Nxd5 9. Bxd7+ 9... Qxd7 10. Nxe5) (6... Nfd7 7. Ne6 7... fxe6 8. dxe6 8... Bd6 9. Bxd7+ 9... Bxd7 10. exd7+ 10... Qxd7) (6... Qd7 7. Bxd7+ 7... Bxd7 8. O-O 8... Bg4) (6... Nc6 7. dxc6 7... bxc6 8. Bxc6+ 8... Bd7 9. Bf3)
+7. dxc6 { Takes the pawn so Black cannot win it back with ...cxd5. } 7... bxc6 (7... Nxc6 8. O-O 8... h6 9. Nf3 9... Bd6 10. Bxc6+ 10... bxc6) (7... Ne4 8. cxb7+ 8... Bd7 9. Bxd7+ 9... Kxd7 10. Qg4+)
+8. Be2 { Retreats to a square where the bishop still guards the kingside. } 8... h6 { Kicks the knight on g5 before White can use it. } (8... Bd6 9. d3 9... Bc7 10. Ne4 10... Nd5) (8... Qd5 9. O-O 9... Be7 10. d3) (8... e4 9. d3 9... exd3 10. Qxd3 10... Be7 11. Nc3 11... O-O)
+9. Nf3 9... e4 { Black gains space and attacks the knight again. } (9... Qd4 10. Nxd4 10... exd4) (9... Bd6 10. d3 10... O-O 11. Nc3) (9... Bc5 10. d3 10... O-O 11. O-O)
+10. Ne5 { The knight lands on a strong square. It cannot be driven away easily, and it eyes f7 and c6. [%cal Ge5f7,Ge5c6] } 10... Bd6 (10... Bc5 11. O-O 11... Qd4 12. Ng4 12... Bxg4 13. Bxg4 13... e3) (10... Qd4 11. f4 11... Bc5 12. Rf1) (10... Nd5 11. d4 11... exd3 12. cxd3 12... Bd6) (10... Qc7 11. d4 11... exd3 12. Nxd3 12... Bd6) (10... Nd7 11. Nxd7 11... Bxd7 12. d3 12... Bf5) (10... Qd5 11. d4 11... exd3 12. Nxd3 12... Bd6 13. O-O)
+11. d4 11... exd3 (11... Bxe5 12. dxe5 12... Qxd1+ 13. Bxd1 13... Nd5) (11... O-O 12. O-O 12... c5 13. c3) (11... Qc7 12. Bd2 12... O-O 13. O-O) (11... Nd5 12. c4 12... Nb6 13. O-O)
+12. Nxd3 12... O-O *

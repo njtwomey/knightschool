@@ -1,0 +1,15 @@
+- id: qh5-idea # kebab-case, permanent
+  line: 1. e4 e5 2. Nc3 Nf6 3. Bc4 Nxe4 4. Qh5 # SAN from move 1: the position asked about
+  prompt: 'What is White threatening? Name the square.' # quote anything with a colon
+  accept: # first matching entry wins: specific first
+    - keywords: [[f7], [mate, queen, attack, bishop]] # groups of any-of words
+      all: true # every group must match (default false: any one group)
+      feedback: Yes. The queen and bishop both attack f7, and Qxf7 would be mate.
+    - keywords: [[f7]]
+      partial: true # close but incomplete: shows this feedback, graded as a miss
+      feedback: Close. Say why f7 matters.
+  reveal: The queen and the bishop both attack f7, so Qxf7 is checkmate unless Black defends it.
+  showMove: Nd6 # optional: SAN played on the board after a miss
+  examples: # checked at build time
+    match: [it threatens mate on f7, the queen and bishop attack f7, f7 is attacked twice]
+    miss: [it attacks the rook, castles, no idea]

@@ -1,0 +1,20 @@
+[Event "Knight School"]
+[Opening "King's Gambit"]
+[Variation "Accepted, Fischer Defence"]
+[ECO "C34"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "black"]
+[Tricks "none"]
+[Themes "centre-control,development-lead"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 d6 4. d4 { Builds the big centre that the gambit is for, and prepares Bxf4 to win the pawn back. [%csl Gd4,Ge4] }
+4... g5 (4... Nf6 5. Nc3 Be7 6. Bxf4)
+5. h4 { Attacks g5 again. The h-pawn is the key tool for opening the Black king. } 5... g4
+6. Ng1 { The knight cannot go to e5 because ...dxe5 wins it, so it retreats. It loses time, but it can come back to e2 and stays out of the pawn's way. }
+6... Qf6 7. Nc3 { Develops a piece and prepares Bb5+, which will harass Black's king. } 7... Ne7
+8. Bb5+ { Forces ...c6 (or ...Bd7). After ...c6 the d6 pawn has no pawn left to defend it. } 8... c6
+9. Bd3 { Aims at the f4 pawn and keeps the bishop safe from ...cxb5. } 9... Bh6
+10. Nge2 { Brings the retreated knight back to a good square, ready to recapture on f4. } 10... Nd7
+11. Qd2 { Protects the pawn on d4 and prepares to castle queenside. } 11... g3
+12. Nxg3 *

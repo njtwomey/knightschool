@@ -1,0 +1,79 @@
+import { parseGame } from '@mliebelt/pgn-parser';
+
+/** One move of a parsed PGN line, with the comment, NAGs and drawn shapes attached to it. */
+export type PgnMoveNode = {
+  san: string;
+  nags: number[]; // 2 = ?, 4 = ??, ...
+  comment?: string;
+  arrows: string[]; // 'Ge2e4'
+  circles: string[]; // 'Ge4'
+  /** Alternatives to this move: each is a line that starts from the position this move was played in. */
+  variations: PgnMoveNode[][];
+};
+
+export type PgnGame = {
+  tags: Record<string, string>;
+  moves: PgnMoveNode[];
+};
+
+type ParserMove = ReturnType<typeof parseGame>['moves'][number];
+
+function toNode(move: ParserMove): PgnMoveNode {
+  const diag = move.commentDiag;
+  const comment = (diag?.comment ?? move.commentAfter ?? '').replace(/\s+/g, ' ').trim();
+  return {
+    san: move.notation.notation,
+    nags: (move.nag ?? []).map((nag) => Number(nag.slice(1))),
+    ...(comment ? { comment } : {}),
+    arrows: [...(diag?.colorArrows ?? [])],
+    circles: [...(diag?.colorFields ?? [])],
+    variations: (move.variations ?? []).map((variation) => variation.map(toNode)),
+  };
+}
+
+/** Parses one game. Throws an Error naming `source` when the PGN is malformed. */
+export function parsePgn(text: string, source = 'pgn'): PgnGame {
+  let game: ReturnType<typeof parseGame>;
+  try {
+    game = parseGame(text);
+  } catch (error) {
+    throw new Error(`${source}: cannot parse PGN: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  const tags: Record<string, string> = {};
+  for (const [key, value] of Object.entries(game.tags ?? {})) {
+    if (key === 'messages' || key === 'Result') continue; // parser additions, not part of the file
+    tags[key] = String(value);
+  }
+  return { tags, moves: game.moves.map(toNode) };
+}
+
+function formatComment(node: PgnMoveNode): string {
+  const parts = [node.comment ?? ''];
+  if (node.arrows.length) parts.push(`[%cal ${node.arrows.join(',')}]`);
+  if (node.circles.length) parts.push(`[%csl ${node.circles.join(',')}]`);
+  return `{ ${parts.filter(Boolean).join(' ')} }`;
+}
+
+function writeLine(moves: PgnMoveNode[], startPly: number): string {
+  const out: string[] = [];
+  let needNumber = true;
+  moves.forEach((node, index) => {
+    const ply = startPly + index;
+    const number = Math.floor(ply / 2) + 1;
+    if (ply % 2 === 0) out.push(`${number}.`);
+    else if (needNumber) out.push(`${number}...`);
+    out.push(node.san);
+    for (const nag of node.nags) out.push(`$${nag}`);
+    const hasComment = Boolean(node.comment) || node.arrows.length > 0 || node.circles.length > 0;
+    if (hasComment) out.push(formatComment(node));
+    for (const variation of node.variations) out.push(`( ${writeLine(variation, ply)} )`);
+    needNumber = hasComment || node.variations.length > 0;
+  });
+  return out.join(' ');
+}
+
+/** Writes a game back to PGN text. Parsing the result gives the same moves, comments, NAGs and shapes. */
+export function writePgn(game: PgnGame): string {
+  const header = Object.entries(game.tags).map(([key, value]) => `[${key} "${value}"]`);
+  return `${header.join('\n')}\n\n${writeLine(game.moves, 0)} *\n`;
+}

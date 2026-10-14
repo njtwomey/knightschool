@@ -1,0 +1,14 @@
+name: King's Indian Defence
+eco: E60
+side: black
+level: club
+summary: >-
+  Black lets White build a big pawn centre, then attacks it with ...e5 while the bishop on g7 watches the long diagonal.
+  You will practise the standard set-ups against the Classical, Fianchetto and Samisch systems.
+tags: [d4, solid]
+family: kings-indian-defence
+lines:
+  - classical
+  - fianchetto
+  - samisch
+refutations: []

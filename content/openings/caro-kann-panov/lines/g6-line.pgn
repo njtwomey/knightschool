@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Caro-Kann: Panov Attack"]
+[Variation "Panov Attack, 5...g6"]
+[ECO "B14"]
+[Character "sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "queen-pressure"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. c4 Nf6 5. Nc3 g6 6. Qb3 { Hits d5 and b7 at the same time. } 6... Bg7 7. cxd5 { Takes, because d5 is now attacked too many times. } 7... O-O 8. Be2 *

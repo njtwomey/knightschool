@@ -1,0 +1,30 @@
+- id: check-and-bishop
+  line: 1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+
+  prompt: 'The queen gives check. Which white piece does it also attack?'
+  accept:
+    - keywords: [[bishop, f4, bf4]]
+      feedback: Yes. The queen attacks the bishop on f4 along the fourth rank, so a careless block loses it.
+  reveal: The queen on b4 attacks the bishop on f4 as well as giving check. Blocking with the wrong piece loses the bishop.
+  examples:
+    match: [the bishop, the bishop on f4, Bf4]
+    miss: [the knight, the rook, no idea]
+- id: pin-on-c3
+  line: 1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Bd2 Qxb2 6. Bc3
+  prompt: 'Black wins material with a bishop move. Which square does it go to?'
+  accept:
+    - keywords: [[bb4, b4]]
+      feedback: Yes. ...Bb4 pins the bishop on c3 to the king, so it cannot move without losing the rook.
+  reveal: 6...Bb4 pins the bishop on c3 against the king. The queen then takes the rook on a1.
+  examples:
+    match: [Bb4, bishop to b4, b4 pinning the bishop]
+    miss: [Qxa1, Nf6, no idea]
+- id: why-not-qxe5
+  line: 1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Nbd2
+  prompt: 'Why can Black not take the pawn on e5 with the queen here?'
+  accept:
+    - keywords: [[nxe5, knight, f3, take, capture, recapture]]
+      feedback: Yes. The knight on f3 attacks e5, so the queen would be captured.
+  reveal: The knight on f3 guards e5, so Qxe5 loses the queen. Black takes with the knight first.
+  examples:
+    match: [the knight on f3 takes the queen, Nxe5 wins the queen, the knight captures it]
+    miss: [it loses a pawn, the bishop pins it, no idea]

@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Englund Gambit"]
+[Variation "Bd2 Qxb2 Trap"]
+[ECO "A40"]
+[Character "tactical,gambit"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap,pin"]
+[Refutes "1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Bd2 Qxb2 6. Bc3"]
+
+1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Bd2 { The natural way to block the check. } 5... Qxb2 { Grabs a pawn and attacks the rook on a1 and the knight on b1. White's best reply is 6.Nc3, and then Black is in trouble, so this only works if White errs. [%cal Gb2a1,Gb2b1] }
+6. Bc3? { Attacks the queen, but walks into a pin. } (6. Nc3 Bb4 7. Rb1 Qa3 8. Rb3 Qa5)
+6... Bb4 { Pins the bishop on c3 to the king, since the king on e1 is behind it. If White now blocks with Qd2??, ...Bxc3 wins, and 8.Qxc3 even allows ...Qc1 mate. [%cal Gb4c3,Gb4e1] }
+7. Bxb4 7... Nxb4 { Takes the bishop and threatens ...Nc2+, which would fork the king and rook. } 8. Na3 8... Qxa3 *

@@ -1,0 +1,17 @@
+name: Rousseau Gambit
+eco: C50
+side: black
+level: club
+summary: >-
+  A sharp try in the Italian Game: after 3.Bc4 Black plays 3...f5, offering the e-pawn to open lines against White's
+  king. It is objectively dubious against best play, but it sets real traps, including a knight fork on c2.
+tags: [e4, open]
+lines:
+  - d3-nf6
+  - d4-exd4
+  - exf5-e4
+  - nxe5-nxe5
+refutations:
+  - ng5-qxg5
+  - nxe5-d4-nxc4
+  - qh4-c3-fork

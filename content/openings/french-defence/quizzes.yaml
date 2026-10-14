@@ -1,0 +1,42 @@
+- id: advance-d4
+  line: 1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6
+  prompt: Which white pawn are ...c5, ...Nc6 and ...Qb6 all aiming at?
+  accept:
+    - keywords: [[d4]]
+      feedback: Yes. Black piles up on d4 because it holds the whole white pawn chain together.
+    - keywords: [[chain, base, centre, center]]
+      partial: true
+      feedback: Close. Name the exact square of the pawn at the base of the chain.
+  reveal: They all hit d4, the base of White's pawn chain. If it falls, the pawn on e5 loses its support.
+  showMove: a3
+  examples:
+    match: [d4, the pawn on d4, d4 pawn]
+    miss: [e5, the king, no idea]
+- id: tarrasch-f6
+  line: 1. e4 e6 2. d4 d5 3. Nd2 Nf6 4. e5 Nfd7 5. Bd3 c5 6. c3 Nc6 7. Ne2 cxd4 8. cxd4 f6
+  prompt: Which white pawn does ...f6 attack?
+  accept:
+    - keywords: [[e5]]
+      feedback: Yes. ...f6 undermines the e5 pawn, which is cramping Black.
+  reveal: ...f6 attacks the pawn on e5. White's chain is cramping Black, and trading that pawn frees Black's pieces.
+  showMove: exf6
+  examples:
+    match: [e5, the e5 pawn, it hits e5]
+    miss: [d4, the knight, nothing]
+- id: classical-nfd7
+  line: 1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Be7 5. e5 Nfd7
+  prompt: Why does the knight retreat to d7 and not to e4 or g4?
+  accept:
+    - keywords: [[e5], [attack, pressure, target]]
+      all: true
+      feedback: Yes. From d7 the knight attacks the e5 pawn.
+    - keywords: [[e5]]
+      feedback: Yes. The knight on d7 puts pressure on e5.
+    - keywords: [[safe, retreat]]
+      partial: true
+      feedback: Close. It is safe there, but name the pawn it now pressures.
+  reveal: On d7 the knight is safe and puts pressure on the white pawn on e5.
+  showMove: Bxe7
+  examples:
+    match: [it attacks e5, to pressure the e5 pawn, hits e5]
+    miss: [it protects the king, no idea, it attacks the bishop]

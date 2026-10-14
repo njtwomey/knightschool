@@ -1,0 +1,17 @@
+name: Englund Gambit
+eco: A40
+side: black
+level: beginner
+summary: >-
+  Black answers 1.d4 with ...e5, offering a pawn to get quick play and some well-known traps. It is objectively dubious, so
+  play it for fun and to catch unprepared opponents, and know how to play the calm lines when they do not fall for it.
+tags: [d4, gambit]
+family: englund-gambit
+lines:
+  - bf4-nc3
+  - nbd2-nxe5
+  - qd5-f6
+refutations:
+  - bd2-qxb2
+  - qd2-grabs-b2
+  - nbd2-hangs-bishop

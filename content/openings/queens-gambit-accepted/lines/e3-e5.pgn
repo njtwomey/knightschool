@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit Accepted"]
+[Variation "Queen's Gambit Accepted, 3.e3 e5"]
+[ECO "D20"]
+[Character "sharp,positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "central-break"]
+
+1. d4 d5 2. c4 dxc4 3. e3 e5 { Strikes at d4 at once. White's e3 pawn blocks the bishop on c1, so the centre is harder to hold. }
+4. Bxc4 ( 4. dxe5 Qxd1+ { Trades queens, so White's king must move and cannot castle. } 5. Kxd1 Nc6 6. Bxc4 Nxe5 { Wins the pawn back with a comfortable game. } )
+4... exd4 { Breaks up White's centre. } 5. exd4 Nf6 { Develops against the d4 pawn, which has no pawn neighbours to protect it. }
+6. Nf3 Bd6 { Develops and aims at h2, and gets ready to castle. } 7. Nc3 O-O 8. O-O Nc6 { Adds a second attacker on d4. } *

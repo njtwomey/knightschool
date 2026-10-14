@@ -1,0 +1,36 @@
+- id: najdorf-a6-purpose
+  line: 1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6
+  prompt: 'What does 5...a6 stop White from doing? Name the square.'
+  accept:
+    - keywords: [[b5, nb5, bb5]]
+      feedback: Yes. The pawn on a6 covers b5, so no white piece can settle there and pester Black.
+  reveal: The a6 pawn covers b5, so a white knight or bishop cannot land there. It also prepares ...b5.
+  examples:
+    match: [it stops Nb5, it controls b5, stops a bishop or knight going to b5]
+    miss: [it defends the king, it attacks the centre, no idea, it prepares castling]
+- id: najdorf-be6-square
+  line: 1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6
+  prompt: "The bishop on e6 covers a key hole in Black's position. Which square?"
+  accept:
+    - keywords: [[d5]]
+      feedback: Yes. After ...e5 the d5 square has no black pawn to guard it, and the bishop stops a white knight landing there.
+  reveal: After ...e5, d5 has no pawn defending it. The bishop on e6 covers d5 and also hits the knight on b3.
+  examples:
+    match: [it covers d5, the d5 square, stops a knight going to d5]
+    miss: [it attacks f2, it castles, it protects the king, no idea]
+- id: najdorf-e6-sozin
+  line: 1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bc4 e6
+  prompt: 'Why is 6...e6 a good reply to the bishop on c4?'
+  accept:
+    - keywords: [[block, close, diagonal, f7]]
+      feedback: Yes. The e6 pawn blocks the bishop's diagonal, so f7 is no longer a target.
+  reveal: The pawn on e6 shuts the bishop's diagonal towards f7 and opens the bishop on f8.
+  examples:
+    match:
+      [
+        it blocks the diagonal of the bishop,
+        it protects f7 from the bishop,
+        the bishop on c4 is blocked from f7,
+        the pawn closes the diagonal,
+      ]
+    miss: [it attacks the queen, it develops the knight, no idea, it wins a pawn]

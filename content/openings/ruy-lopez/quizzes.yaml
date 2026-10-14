@@ -1,0 +1,47 @@
+- id: c3-idea
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3
+  prompt: What does the pawn move c3 prepare?
+  accept:
+    - keywords: [[d4], [centre, center, break]]
+      all: true
+      feedback: Yes. The pawn on c3 supports a strong d4, which takes over the centre.
+    - keywords: [[d4]]
+      feedback: Yes. c3 prepares d4, so White can take the centre.
+    - keywords: [[centre, center]]
+      partial: true
+      feedback: Close. Say which pawn move White is getting ready to play.
+  reveal: c3 supports the pawn push d4, which challenges e5 and takes over the centre. It also gives the bishop on b3 the square c2.
+  showMove: O-O
+  examples:
+    match: [it prepares d4, so that d4 can be played, d4 to take the centre]
+    miss: [it attacks the knight, it defends e4, no idea]
+- id: h3-idea
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3
+  prompt: Which Black move does h3 stop?
+  accept:
+    - keywords: [[bg4, bishop g4, g4]]
+      feedback: Yes. Without h3, ...Bg4 would pin the knight on f3 and hold back d4.
+  reveal: h3 takes the g4 square away from Black's bishop. A bishop on g4 would pin the f3 knight and make d4 harder to play.
+  showMove: Na5
+  examples:
+    match: [bg4, the bishop going to g4, ...Bg4 pin]
+    miss: [Nd4, castling, it attacks g5 knight]
+- id: berlin-endgame
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8
+  prompt: What lasting problem does Black have after the queen trade?
+  accept:
+    - keywords: [[castle, castling, king], [pawn, double, doubled, structure]]
+      all: true
+      feedback: Yes. Black has lost castling and has doubled pawns on the c-file.
+    - keywords: [[castle, castling]]
+      feedback: Yes. Black can no longer castle, so the king sits in the middle.
+    - keywords: [[double, doubled, doubling]]
+      feedback: Yes. The doubled c-pawns are a long-term weakness.
+    - keywords: [[pawn, king]]
+      partial: true
+      feedback: Close. Be more specific about the pawns or the king.
+  reveal: Black cannot castle and has doubled c-pawns, so White has the healthier structure and plays for a slow advantage.
+  showMove: Nc3
+  examples:
+    match: [Black cannot castle, doubled pawns, the king lost castling and the pawns are doubled]
+    miss: [Black is down a queen, mate threat, no idea]

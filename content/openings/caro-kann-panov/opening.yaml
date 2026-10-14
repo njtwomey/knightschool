@@ -1,0 +1,14 @@
+name: 'Caro-Kann: Panov Attack'
+eco: B14
+side: white
+level: beginner
+summary: >-
+  An open, active way to meet 1...c6: trade the centre pawns, then play against the isolated queen's pawn that results.
+tags: [e4, against, semi-open]
+family: caro-kann
+against: Caro-Kann Defence
+lines:
+  - main-line
+  - g6-line
+  - nc6-line
+refutations: []

@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Caro-Kann: Two Knights Attack"]
+[Variation "Two Knights, 3...dxe4"]
+[ECO "B11"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-pair,kingside-space"]
+
+1. e4 c6 2. Nc3 d5 3. Nf3 dxe4 { Black takes the pawn, so White takes it back with the knight. } 4. Nxe4 Bf5
+{ The bishop comes out before ...e6 shuts it in. } 5. Ng3 { Hits the bishop and points the knight at the kingside. } 5... Bg6
+6. h4 { Threatens h5, which would trap the bishop's retreat. } 6... h6 7. Ne5 { Challenges the bishop's diagonal and heads for g6. } 7... Bh7 *

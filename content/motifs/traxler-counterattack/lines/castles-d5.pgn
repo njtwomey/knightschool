@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Traxler Counterattack"]
+[Variation "Traxler: 5.O-O d5"]
+[ECO "C57"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "tempo-gain,central-break"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 4... Bc5 5. O-O (5. d3 5... O-O) (5. Nc3 5... O-O) (5. c3 5... O-O) (5. Nxh7? 5... Rxh7) (5. d4 5... d5 { Fights for the centre before White can use the pinned bishop. } 6. Bxd5 6... Nd4 7. Bxf7+ 7... Ke7 8. Bc4 8... b5 9. Be2) 5... d5 { Strikes at the bishop and the centre. Black's king can castle next, so f7 will be defended. [%cal Gd5c4] }
+6. exd5 (6. Bxd5?! 6... Nxd5 7. exd5 7... Qxd5) 6... Bg4 { Attacks the queen with tempo. White cannot play f3 because the pawn on f2 is pinned to the king by the bishop on c5. [%cal Gg4d1,Gc5g1] }
+7. Qe1 (7. Be2 7... Bxe2 8. Qxe2 8... Qxd5) (7. Nf3 7... Nd4 8. c3 8... Nxf3+ 9. gxf3 9... Bh3) 7... Nxd5 { Takes the pawn back and opens the e-file in front of the white queen. } 8. d4 8... Bxd4 9. Nc3 9... Bxc3 10. bxc3 10... Qd7 *

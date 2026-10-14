@@ -1,0 +1,43 @@
+- id: why-e5
+  line: 1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5
+  prompt: What is the point of 6...e5?
+  accept:
+    - keywords: [[d4, centre, center, challenge, undermine, contest, fight]]
+      feedback: Yes. The pawn hits d4 and starts the fight for the centre.
+  reveal: Black lets White build a big centre and then strikes at it. The e5 pawn attacks d4 and claims space.
+  examples:
+    match: [it challenges the centre, it attacks d4, to fight for the centre]
+    miss: [it develops the bishop, castles, no idea]
+- id: why-a5
+  line: 1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Nd2 a5
+  prompt: What does 9...a5 stop White from doing?
+  accept:
+    - keywords: [[b4]]
+      feedback: Yes. With the pawn on a5, b4 can be met by ...axb4, so White cannot expand easily.
+    - keywords: [[queenside, expand, expansion, space]]
+      partial: true
+      feedback: Close. Name the exact pawn move White wants.
+  reveal: It stops b4. White wants b4 and c5 on the queenside, but ...a5 makes that push costly.
+  examples:
+    match: [it stops b4, prevents b4, White cannot play b4]
+    miss: [it attacks the knight, it defends d6, to castle]
+- id: why-a6-b5
+  line: 1. d4 Nf6 2. c4 g6 3. Nf3 Bg7 4. g3 O-O 5. Bg2 d6 6. O-O Nc6 7. Nc3 a6
+  prompt: What does 7...a6 prepare?
+  accept:
+    - keywords: [[b5, rb8]]
+      feedback: Yes. Black wants ...Rb8 and ...b5 to hit White's c4 pawn.
+  reveal: It prepares ...Rb8 and ...b5, a pawn break that attacks the c4 pawn and opens the b-file.
+  examples:
+    match: [it prepares b5, to play Rb8 and b5, getting ready for b5]
+    miss: [it defends the knight, it castles, no idea]
+- id: why-storm
+  line: 1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. f3 O-O 6. Be3 e5 7. Nge2 c6 8. Qd2 Nbd7 9. O-O-O a6
+  prompt: Why is a queenside pawn storm with ...b5 a good plan here?
+  accept:
+    - keywords: [[king, castled, o-o-o, b1, c1]]
+      feedback: Yes. White's king sits on the queenside, so pawns thrown at it can open lines.
+  reveal: White has castled long, so the king is on the same side as Black's b-pawn and ...b5 aims straight at it.
+  examples:
+    match: [White's king is on the queenside, because White castled long, the king is on c1]
+    miss: [it protects the bishop, it develops a piece, no idea]

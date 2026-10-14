@@ -1,0 +1,15 @@
+name: Queen's Gambit
+eco: D06
+side: white
+level: beginner
+summary: >-
+  White offers the c-pawn to pull Black's d-pawn away from the centre, then develops quickly and builds a big pawn
+  centre. You will learn one clear plan against each of Black's three replies: declining with e6, taking with dxc4, and
+  the Slav with c6.
+tags: [d4, closed, solid]
+family: queens-gambit
+lines:
+  - declined
+  - accepted
+  - slav
+refutations: []

@@ -1,0 +1,15 @@
+name: Caro-Kann Defence
+eco: B12
+side: black
+level: beginner
+summary: >-
+  Black prepares d5 with c6, so the centre pawn is always defended. The light-squared bishop usually gets out before
+  e6, which keeps Black's position free of bad pieces.
+tags: [e4, semi-open, solid]
+family: caro-kann
+lines:
+  - classical
+  - advance
+  - exchange
+  - early-bc4
+refutations: []
