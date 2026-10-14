@@ -1,6 +1,6 @@
 import { getTableConfig } from 'drizzle-orm/sqlite-core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { attempt, at, card, evalLine, explorerEntry, guess, review, T0 } from './fixtures';
+import { attempt, at, card, evalLine, explorerEntry, guess, speed, review, T0 } from './fixtures';
 import { LATEST_SCHEMA_VERSION, migrate } from './migrate';
 import { MIGRATIONS } from './migrations.generated';
 import * as schema from './schema';
@@ -33,6 +33,7 @@ describe('migrations', () => {
       'quiz_attempts',
       'reviews',
       'settings',
+      'speed_attempts',
     ]);
     const version = await s.exec.execute("select value from meta where key = 'schema_version'", [], 'get');
     expect(Number(version.rows[0])).toBe(LATEST_SCHEMA_VERSION);
@@ -171,6 +172,13 @@ describe('quiz attempts, evals, settings, explorer', () => {
     expect(dump.tables.guessAttempts).toHaveLength(2);
   });
 
+  it('stores speed attempts and exports them', async () => {
+    await s.storage.speedAttempts.append(speed('s1'));
+    await s.storage.speedAttempts.append(speed('s2', { errors: 0, at: at(5) }));
+    expect((await s.storage.speedAttempts.since(at(1))).map((a) => [a.id, a.errors])).toEqual([['s2', 0]]);
+    expect((await exportJson(s)).tables.speedAttempts).toHaveLength(2);
+  });
+
   it('records a quiz answer, its review and the new schedule together', async () => {
     await s.storage.cards.save(card('quiz:t:one', { openingId: 't' }));
     await s.storage.quizAttempts.record(
@@ -237,6 +245,7 @@ describe('export and import', () => {
       reviews: 2,
       quizAttempts: 1,
       guessAttempts: 0,
+      speedAttempts: 0,
       evalCache: 2,
       settings: 1,
       explorerCache: 1,

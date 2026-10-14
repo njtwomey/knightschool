@@ -1,4 +1,12 @@
-import type { Card, EvalCache, ExplorerCache, GuessAttempt, QuizAttempt, Review } from '@knightschool/core/schema';
+import type {
+  Card,
+  EvalCache,
+  ExplorerCache,
+  GuessAttempt,
+  QuizAttempt,
+  Review,
+  SpeedAttempt,
+} from '@knightschool/core/schema';
 
 export const T0 = '2026-10-13T10:00:00.000Z';
 export const at = (minutes: number) => new Date(Date.parse(T0) + minutes * 60_000).toISOString();
@@ -50,6 +58,18 @@ export const guess = (id: string, over: Partial<GuessAttempt> = {}): GuessAttemp
   answer: 'caro kann',
   result: 'partial',
   msToAnswer: 4000,
+  ...over,
+});
+
+export const speed = (id: string, over: Partial<SpeedAttempt> = {}): SpeedAttempt => ({
+  id,
+  at: T0,
+  courseId: 'italian-game',
+  lineId: 'giuoco-pianissimo',
+  moves: 10,
+  errors: 1,
+  totalMs: 14000,
+  slowestMs: 3200,
   ...over,
 });
 

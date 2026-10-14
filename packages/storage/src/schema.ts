@@ -69,6 +69,22 @@ export const guessAttempts = sqliteTable(
   (table) => [index('guess_attempts_at_idx').on(table.at)],
 );
 
+/** Append-only. One row per line played in Speed. */
+export const speedAttempts = sqliteTable(
+  'speed_attempts',
+  {
+    id: text().primaryKey(),
+    at: text().notNull(),
+    courseId: text().notNull(),
+    lineId: text().notNull(),
+    moves: integer().notNull(),
+    errors: integer().notNull(),
+    totalMs: integer().notNull(),
+    slowestMs: integer().notNull(),
+  },
+  (table) => [index('speed_attempts_at_idx').on(table.at)],
+);
+
 /** One row per engine line (multipv 1 is the best move). */
 export const evalCache = sqliteTable(
   'eval_cache',

@@ -1,4 +1,4 @@
-import { BarChart3, CircleUser, LayoutDashboard, Library, Search, Settings, Telescope } from 'lucide-react';
+import { BarChart3, CircleUser, LayoutDashboard, Library, Search, Settings, Telescope, Timer } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
 import { SiteFooter } from '@/components/site-footer';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -18,6 +18,7 @@ import { OpeningPage } from '@/features/opening/opening-page';
 import { OpeningsPage } from '@/features/openings/openings-page';
 import { PlayPage } from '@/features/play/play-page';
 import { GuessPage } from '@/features/guess/guess-page';
+import { SpeedPage } from '@/features/speed/speed-page';
 import { ReviewPage } from '@/features/review/review-page';
 import { HomePage } from '@/features/home/home-page';
 import { ProfilePage } from '@/features/profile/profile-page';
@@ -80,6 +81,7 @@ export function App() {
           )}
           {link(to('/quiz'), 'Quiz', route.page === 'review', <Library aria-hidden />)}
           {link(to('/guess'), 'Guess', route.page === 'guess', <Telescope aria-hidden />)}
+          {link(to('/speed'), 'Speed', route.page === 'speed', <Timer aria-hidden />)}
         </nav>
         <div className="ml-auto flex items-center gap-1">
           <DropdownMenu>
@@ -131,6 +133,7 @@ export function App() {
         {route.page === 'play' && <PlayPage course={route.course} line={route.line} mode={route.mode} />}
         {route.page === 'review' && <ReviewPage />}
         {route.page === 'guess' && <GuessPage />}
+        {route.page === 'speed' && <SpeedPage />}
         {route.page === 'credits' && <CreditsPage />}
         {route.page === 'lab' && <LabPage />}
       </main>

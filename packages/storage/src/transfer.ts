@@ -1,4 +1,13 @@
-import { Card, EvalCache, ExplorerCache, GuessAttempt, QuizAttempt, Review, Setting } from '@knightschool/core/schema';
+import {
+  Card,
+  EvalCache,
+  ExplorerCache,
+  GuessAttempt,
+  QuizAttempt,
+  Review,
+  Setting,
+  SpeedAttempt,
+} from '@knightschool/core/schema';
 import { sql } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
@@ -16,6 +25,7 @@ export const Dump = z.object({
     reviews: z.array(Review),
     quizAttempts: z.array(QuizAttempt),
     guessAttempts: z.array(GuessAttempt).default([]), // older exports have none
+    speedAttempts: z.array(SpeedAttempt).default([]),
     evalCache: z.array(EvalCache),
     settings: z.array(Setting),
     explorerCache: z.array(ExplorerCache),
@@ -35,6 +45,7 @@ export async function exportJson({ db }: StorageInternals, now = new Date()): Pr
       reviews: await db.select().from(schema.reviews),
       quizAttempts: await db.select().from(schema.quizAttempts),
       guessAttempts: await db.select().from(schema.guessAttempts),
+      speedAttempts: await db.select().from(schema.speedAttempts),
       evalCache: await db.select().from(schema.evalCache),
       settings: await db.select().from(schema.settings),
       explorerCache: await db.select().from(schema.explorerCache),
@@ -68,6 +79,7 @@ export async function importJson(internals: StorageInternals, input: unknown): P
     ...t.reviews.map((row) => statementOf(db.insert(schema.reviews).values(row).onConflictDoNothing())),
     ...t.quizAttempts.map((row) => statementOf(db.insert(schema.quizAttempts).values(row).onConflictDoNothing())),
     ...t.guessAttempts.map((row) => statementOf(db.insert(schema.guessAttempts).values(row).onConflictDoNothing())),
+    ...t.speedAttempts.map((row) => statementOf(db.insert(schema.speedAttempts).values(row).onConflictDoNothing())),
     ...t.evalCache.map((row) =>
       statementOf(
         db
@@ -107,6 +119,7 @@ export async function importJson(internals: StorageInternals, input: unknown): P
     reviews: t.reviews.length,
     quizAttempts: t.quizAttempts.length,
     guessAttempts: t.guessAttempts.length,
+    speedAttempts: t.speedAttempts.length,
     evalCache: t.evalCache.length,
     settings: t.settings.length,
     explorerCache: t.explorerCache.length,

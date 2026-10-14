@@ -36,4 +36,12 @@ export const MIGRATIONS: Migration[] = [
       'CREATE INDEX `guess_attempts_at_idx` ON `guess_attempts` (`at`);',
     ],
   },
+  {
+    id: 3,
+    name: 'shallow_dagger',
+    statements: [
+      'CREATE TABLE `speed_attempts` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`at` text NOT NULL,\n\t`course_id` text NOT NULL,\n\t`line_id` text NOT NULL,\n\t`moves` integer NOT NULL,\n\t`errors` integer NOT NULL,\n\t`total_ms` integer NOT NULL,\n\t`slowest_ms` integer NOT NULL\n);',
+      'CREATE INDEX `speed_attempts_at_idx` ON `speed_attempts` (`at`);',
+    ],
+  },
 ];

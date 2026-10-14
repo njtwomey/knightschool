@@ -1,6 +1,6 @@
 import { Page } from '@/components/page';
 import { playUci, START_EPD } from '@knightschool/core';
-import { ArrowRight, Library, Search, Telescope } from 'lucide-react';
+import { ArrowRight, Library, Search, Telescope, Timer } from 'lucide-react';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { Button } from '@/components/ui/button';
@@ -196,13 +196,17 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-3" aria-label="What you can do">
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" aria-label="What you can do">
         <Feature href={to('/browse')} icon={<Search aria-hidden />} title="Browse what there is to learn">
           Openings, single lines and motifs like the Traxler and the Fried Liver. Search by name, or play the moves on a
           board.
         </Feature>
         <Feature href={to('/quiz')} icon={<Library aria-hidden />} title="Quiz yourself">
           Short sessions of the moves that are due, from every course you are learning.
+        </Feature>
+        <Feature href={to('/speed')} icon={<Timer aria-hidden />} title="Test your speed">
+          Play lines you know against the clock. The other side replies instantly, and you get your average time per
+          move.
         </Feature>
         <Feature href={to('/guess')} icon={<Telescope aria-hidden />} title="Name that opening">
           A position comes up. Say where it came from, and get half a point for the opening alone.

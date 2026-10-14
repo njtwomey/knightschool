@@ -27,6 +27,7 @@ describe('parseRoute', () => {
     ['/quiz', { page: 'review' }],
     ['/review', { page: 'review' }],
     ['/guess', { page: 'guess' }],
+    ['/speed', { page: 'speed' }],
     ['/overview', { page: 'profile', tab: 'overview' }],
     ['/profile', { page: 'profile', tab: 'overview' }],
     ['/profile/stats', { page: 'profile', tab: 'stats' }],

@@ -6,6 +6,7 @@ import type {
   QuizAttempt,
   Review,
   Setting,
+  SpeedAttempt,
 } from '@knightschool/core/schema';
 import { and, asc, count, eq, gt, gte, lte, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/sqlite-proxy';
@@ -44,6 +45,10 @@ export interface Storage {
   guessAttempts: {
     append(attempt: GuessAttempt): Promise<void>;
     since(at: string): Promise<GuessAttempt[]>;
+  };
+  speedAttempts: {
+    append(attempt: SpeedAttempt): Promise<void>;
+    since(at: string): Promise<SpeedAttempt[]>;
   };
   evals: {
     /** The engine lines (multipv 1, 2, 3) stored for exactly this position, depth and engine. */
@@ -170,6 +175,17 @@ export function createStorage(exec: SqlExecutor): StorageInternals {
           .from(schema.guessAttempts)
           .where(gte(schema.guessAttempts.at, at))
           .orderBy(asc(schema.guessAttempts.at)),
+    },
+    speedAttempts: {
+      async append(attempt) {
+        await db.insert(schema.speedAttempts).values(attempt).onConflictDoNothing();
+      },
+      since: (at) =>
+        db
+          .select()
+          .from(schema.speedAttempts)
+          .where(gte(schema.speedAttempts.at, at))
+          .orderBy(asc(schema.speedAttempts.at)),
     },
     evals: {
       get: (epd, depth, engine) =>

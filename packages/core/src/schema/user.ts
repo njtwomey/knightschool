@@ -55,6 +55,23 @@ export const GuessAttempt = z.object({
 });
 export type GuessAttempt = z.infer<typeof GuessAttempt>;
 
+/** One line played in "Speed": how long your moves took and how many you got wrong on the way. Append-only. */
+export const SpeedAttempt = z.object({
+  id: z.string(),
+  at: Instant,
+  courseId: z.string(),
+  lineId: z.string(),
+  /** Your moves in the line. */
+  moves: z.number().int(),
+  /** Wrong moves tried before the right ones. */
+  errors: z.number().int(),
+  /** Time from your turn starting to the right move, summed over your moves. */
+  totalMs: z.number().int(),
+  /** The slowest single move. */
+  slowestMs: z.number().int(),
+});
+export type SpeedAttempt = z.infer<typeof SpeedAttempt>;
+
 /** Engine results, so a line is measured once. cp and mate are from White's point of view. */
 export const EvalCache = z.object({
   epd: z.string(),

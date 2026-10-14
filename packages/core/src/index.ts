@@ -17,6 +17,7 @@ export * from './position';
 export * from './quiz';
 export * from './scheduler';
 export * from './search';
+export * from './speed';
 export * from './schema';
 export * from './stats';
 export * from './tags';

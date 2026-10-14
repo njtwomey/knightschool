@@ -10,6 +10,7 @@ export type Route =
   | { page: 'play'; course: string; line: string; mode: PlayMode }
   | { page: 'review' }
   | { page: 'guess' }
+  | { page: 'speed' }
   | { page: 'credits' }
   | { page: 'lab' }
   | { page: 'settings' };
@@ -45,6 +46,8 @@ export function parseRoute(pathname: string): Route {
       return { page: 'review' };
     case 'guess':
       return { page: 'guess' };
+    case 'speed':
+      return { page: 'speed' };
     case 'stats':
       return { page: 'profile', tab: 'stats' };
     case 'credits':

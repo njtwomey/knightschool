@@ -2,8 +2,10 @@ import { Page } from '@/components/page';
 import {
   accuracy,
   dailyCounts,
+  formatMs,
   guessSummary,
   mostMissed,
+  speedSummary,
   streak,
   type Missed,
   type OpeningContent,
@@ -26,6 +28,7 @@ type Loaded = {
   days: ReturnType<typeof dailyCounts>;
   missed: { text: string; course: string; entry: Missed }[];
   guess: ReturnType<typeof guessSummary>;
+  speed: ReturnType<typeof speedSummary>;
 };
 
 const DAYS = 14;
@@ -36,8 +39,9 @@ async function load(courseNames: Map<string, string>): Promise<Loaded> {
   const reviews = await storage.reviews.since('1970-01-01T00:00:00.000Z');
   const dayOf = (at: string) => localDay(new Date(at));
   const attempts = await storage.guessAttempts.since('1970-01-01T00:00:00.000Z');
+  const speedRuns = await storage.speedAttempts.since('1970-01-01T00:00:00.000Z');
   // A day counts toward the streak whether you reviewed moves or named openings.
-  const reviewDays = new Set([...reviews, ...attempts].map((entry) => dayOf(entry.at)));
+  const reviewDays = new Set([...reviews, ...attempts, ...speedRuns].map((entry) => dayOf(entry.at)));
 
   const contents = new Map<string, OpeningContent>();
   const missed = await Promise.all(
@@ -61,6 +65,7 @@ async function load(courseNames: Map<string, string>): Promise<Loaded> {
     days: dailyCounts(reviews, lastDays(DAYS, now), dayOf),
     missed,
     guess: guessSummary(attempts),
+    speed: speedSummary(speedRuns),
   };
 }
 
@@ -130,9 +135,25 @@ export function StatsPage() {
           </div>
         </section>
       )}
-      {data && data.total === 0 && data.guess.total === 0 && (
+      {data && data.speed.lines > 0 && (
+        <section className="grid gap-3" aria-label="Speed">
+          <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">Speed</h3>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <Tile label="Lines played" value={String(data.speed.lines)} />
+            <Tile
+              label="Average per move"
+              value={formatMs(data.speed.averageMs)}
+              note="your moves, against the clock"
+            />
+            <Tile label="Best line pace" value={formatMs(data.speed.bestLineMs)} />
+            <Tile label="Wrong moves" value={String(data.speed.errors)} />
+          </div>
+        </section>
+      )}
+      {data && data.total === 0 && data.guess.total === 0 && data.speed.lines === 0 && (
         <p className="py-8 text-center text-muted-foreground">
-          No answers yet. Practise a line, take the quiz or try Name That Opening and your numbers will appear here.
+          No answers yet. Practise a line, take the quiz, try Name That Opening or run a Speed test and your numbers
+          will appear here.
         </p>
       )}
       {data && data.total > 0 && (
