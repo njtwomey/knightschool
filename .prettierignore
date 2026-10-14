@@ -5,3 +5,4 @@ apps/web/public/content/
 apps/web/public/engine/
 content/**/*.pgn
 docs/PLAN.md
+docs/CURRICULUM.md
