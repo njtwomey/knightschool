@@ -1,0 +1,1 @@
+ALTER TABLE `speed_attempts` ADD `hints` integer DEFAULT 0 NOT NULL;

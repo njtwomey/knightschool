@@ -4,6 +4,7 @@ export type SpeedSummary = {
   lines: number;
   moves: number;
   errors: number;
+  hints: number;
   /** Mean time per move in milliseconds, or null before any move. */
   averageMs: number | null;
   /** The best (lowest) mean time of any one line, which is your pace on a good day. */
@@ -13,7 +14,7 @@ export type SpeedSummary = {
 
 /** How a set of speed lines went: the mean time per move, the best line's pace, and the mistakes. */
 export function speedSummary(
-  attempts: Pick<SpeedAttempt, 'moves' | 'errors' | 'totalMs' | 'slowestMs'>[],
+  attempts: (Pick<SpeedAttempt, 'moves' | 'errors' | 'totalMs' | 'slowestMs'> & { hints?: number })[],
 ): SpeedSummary {
   const moves = attempts.reduce((sum, attempt) => sum + attempt.moves, 0);
   const paces = attempts.filter((attempt) => attempt.moves > 0).map((attempt) => attempt.totalMs / attempt.moves);
@@ -21,6 +22,7 @@ export function speedSummary(
     lines: attempts.length,
     moves,
     errors: attempts.reduce((sum, attempt) => sum + attempt.errors, 0),
+    hints: attempts.reduce((sum, attempt) => sum + (attempt.hints ?? 0), 0),
     averageMs: moves === 0 ? null : attempts.reduce((sum, attempt) => sum + attempt.totalMs, 0) / moves,
     bestLineMs: paces.length === 0 ? null : Math.min(...paces),
     slowestMs: attempts.reduce((worst, attempt) => Math.max(worst, attempt.slowestMs), 0),

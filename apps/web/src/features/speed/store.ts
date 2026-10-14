@@ -17,6 +17,7 @@ export type LineResult = {
   lineName: string;
   moves: number;
   errors: number;
+  hints: number;
   totalMs: number;
   slowestMs: number;
 };
@@ -37,6 +38,9 @@ type SpeedState = {
   /** Time taken on each of your moves in this line, and the wrong tries so far. */
   times: number[];
   errors: number;
+  /** Hints asked for in this line, and how far the hint for the current move has gone: 1 marks the piece, 2 the move. */
+  hints: number;
+  hintLevel: 0 | 1 | 2;
   /** The last move you made and how long it took, shown big. */
   lastMs: number | null;
   badge: { square: string; kind: 'correct' | 'wrong' } | null;
@@ -45,6 +49,8 @@ type SpeedState = {
   load: () => Promise<void>;
   begin: () => void;
   submitMove: (uci: string) => boolean;
+  /** First press marks the piece to move, the second shows the move. Each press is counted. */
+  hint: () => void;
   stop: () => void;
 };
 
@@ -76,6 +82,8 @@ export const useSpeed = create<SpeedState>((set, get) => {
       stepIndex: nextOurs(queued.steps, 0),
       times: [],
       errors: 0,
+      hints: 0,
+      hintLevel: 0,
       lastMs: null,
       badge: null,
       turnStartedAt: performance.now(),
@@ -83,7 +91,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
   }
 
   function finishLine() {
-    const { queue, lineIndex, times, errors, results } = get();
+    const { queue, lineIndex, times, errors, hints, results } = get();
     const queued = queue[lineIndex]!;
     const totalMs = Math.round(times.reduce((sum, ms) => sum + ms, 0));
     const result: LineResult = {
@@ -93,6 +101,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
       lineName: queued.lineName,
       moves: times.length,
       errors,
+      hints,
       totalMs,
       slowestMs: Math.round(Math.max(0, ...times)),
     };
@@ -106,6 +115,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
           lineId: result.lineId,
           moves: result.moves,
           errors: result.errors,
+          hints: result.hints,
           totalMs: result.totalMs,
           slowestMs: result.slowestMs,
         }),
@@ -126,6 +136,8 @@ export const useSpeed = create<SpeedState>((set, get) => {
     turnStartedAt: 0,
     times: [],
     errors: 0,
+    hints: 0,
+    hintLevel: 0,
     lastMs: null,
     badge: null,
     results: [],
@@ -180,12 +192,19 @@ export const useSpeed = create<SpeedState>((set, get) => {
         times: [...times, ms],
         lastMs: ms,
         stepIndex: next,
+        hintLevel: 0,
         badge: { square: played.slice(2, 4), kind: 'correct' },
         turnStartedAt: performance.now(),
       });
       setTimeout(() => set({ badge: null }), 250);
       if (next >= queued.steps.length) finishLine();
       return true;
+    },
+
+    hint() {
+      const { phase, hintLevel, hints } = get();
+      if (phase !== 'playing' || hintLevel === 2) return;
+      set({ hintLevel: hintLevel === 0 ? 1 : 2, hints: hints + 1 });
     },
 
     stop() {

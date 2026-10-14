@@ -65,6 +65,8 @@ export const SpeedAttempt = z.object({
   moves: z.number().int(),
   /** Wrong moves tried before the right ones. */
   errors: z.number().int(),
+  /** Hints asked for (each costs nothing on the clock, but is counted). */
+  hints: z.number().int().default(0),
   /** Time from your turn starting to the right move, summed over your moves. */
   totalMs: z.number().int(),
   /** The slowest single move. */

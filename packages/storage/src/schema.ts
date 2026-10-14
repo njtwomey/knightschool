@@ -79,6 +79,7 @@ export const speedAttempts = sqliteTable(
     lineId: text().notNull(),
     moves: integer().notNull(),
     errors: integer().notNull(),
+    hints: integer().notNull().default(0),
     totalMs: integer().notNull(),
     slowestMs: integer().notNull(),
   },

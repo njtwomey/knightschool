@@ -7,6 +7,7 @@ describe('speedSummary', () => {
       lines: 0,
       moves: 0,
       errors: 0,
+      hints: 0,
       averageMs: null,
       bestLineMs: null,
       slowestMs: 0,
@@ -15,13 +16,14 @@ describe('speedSummary', () => {
 
   it('averages over moves, not over lines, and finds the best line', () => {
     const summary = speedSummary([
-      { moves: 4, errors: 1, totalMs: 8000, slowestMs: 3500 },
+      { moves: 4, errors: 1, hints: 2, totalMs: 8000, slowestMs: 3500 },
       { moves: 6, errors: 0, totalMs: 6000, slowestMs: 2000 },
     ]);
     expect(summary).toMatchObject({
       lines: 2,
       moves: 10,
       errors: 1,
+      hints: 2,
       averageMs: 1400,
       bestLineMs: 1000,
       slowestMs: 3500,

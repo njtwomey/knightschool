@@ -44,4 +44,9 @@ export const MIGRATIONS: Migration[] = [
       'CREATE INDEX `speed_attempts_at_idx` ON `speed_attempts` (`at`);',
     ],
   },
+  {
+    id: 4,
+    name: 'bouncy_jackal',
+    statements: ['ALTER TABLE `speed_attempts` ADD `hints` integer DEFAULT 0 NOT NULL;'],
+  },
 ];

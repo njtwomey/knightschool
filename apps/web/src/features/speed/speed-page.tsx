@@ -1,5 +1,5 @@
 import { formatMs, speedSummary } from '@knightschool/core';
-import { Play, RotateCcw, Timer } from 'lucide-react';
+import { Lightbulb, Play, RotateCcw, Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { BoardSettingsButton } from '@/components/board/board-settings';
@@ -37,7 +37,8 @@ const Big = ({ label, value }: { label: string; value: string }) => (
  */
 export function SpeedPage() {
   const state = useSpeed();
-  const { phase, queue, lineIndex, stepIndex, times, errors, lastMs, badge, results, turnStartedAt } = state;
+  const { phase, queue, lineIndex, stepIndex, times, errors, hints, hintLevel, lastMs, badge, results, turnStartedAt } =
+    state;
 
   useEffect(() => {
     void useSpeed.getState().load();
@@ -71,9 +72,11 @@ export function SpeedPage() {
   const epd = finished ? steps.at(-1)!.edge.to : steps[stepIndex]!.fromEpd;
   const previous = steps[Math.min(stepIndex, steps.length) - 1];
   const running = phase === 'playing';
+  const upNext = phase === 'between' ? queue[lineIndex + 1] : queued;
+  const expected = !finished ? steps[stepIndex]!.edge.uci : undefined;
   const soFar = speedSummary([
     ...results,
-    { moves: times.length, errors, totalMs: times.reduce((sum, ms) => sum + ms, 0), slowestMs: 0 },
+    { moves: times.length, errors, hints, totalMs: times.reduce((sum, ms) => sum + ms, 0), slowestMs: 0 },
   ]);
 
   return (
@@ -88,9 +91,26 @@ export function SpeedPage() {
           onMove={(uci) => useSpeed.getState().submitMove(uci)}
           lastMove={previous?.edge.uci}
           badge={badge}
+          hintSquare={running && expected && hintLevel >= 1 ? expected.slice(0, 2) : null}
+          arrows={
+            running && expected && hintLevel === 2
+              ? [
+                  {
+                    startSquare: expected.slice(0, 2),
+                    endSquare: expected.slice(2, 4),
+                    color: 'rgb(21 128 61 / 0.85)',
+                  },
+                ]
+              : []
+          }
         />
         <div className="flex items-center gap-2">
           <BoardSettingsButton />
+          {running && (
+            <Button variant="outline" onClick={() => useSpeed.getState().hint()} disabled={hintLevel === 2 || finished}>
+              <Lightbulb aria-hidden /> {hintLevel === 0 ? 'Hint' : 'Show the move'}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -113,7 +133,14 @@ export function SpeedPage() {
                 so every millisecond is yours. A wrong move is counted and the clock keeps running.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="grid gap-4">
+              <div className="grid gap-0.5 rounded-lg border bg-muted/40 p-3">
+                <p className="text-xs uppercase tracking-wide text-muted-foreground">First line</p>
+                <p className="text-lg font-semibold">{queued.lineName}</p>
+                <p className="text-sm text-muted-foreground">
+                  {queued.content.opening.name}, playing {side}. The other lines follow on their own.
+                </p>
+              </div>
               <Button size="lg" onClick={() => useSpeed.getState().begin()}>
                 <Play aria-hidden /> Start
               </Button>
@@ -123,27 +150,37 @@ export function SpeedPage() {
           <>
             <Card>
               <CardHeader>
-                <CardDescription>{queued.content.opening.name}</CardDescription>
-                <CardTitle className="text-5xl font-semibold tabular-nums">
-                  {phase === 'between' ? 'Line done' : formatMs(clock)}
+                <CardDescription>
+                  {phase === 'between' ? 'Up next' : `${queued.content.opening.name}, playing ${side}`}
+                </CardDescription>
+                <CardTitle className="text-2xl font-semibold leading-tight">
+                  {upNext?.lineName ?? queued.lineName}
                 </CardTitle>
+                <p className="text-5xl font-semibold tabular-nums">
+                  {phase === 'between' ? 'Get ready' : formatMs(clock)}
+                </p>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
                 {phase === 'between' ? (
                   <>
                     {results.at(-1) &&
-                      `${formatMs(results.at(-1)!.totalMs / Math.max(1, results.at(-1)!.moves))} per move. `}
-                    Next line coming up.
+                      `Last line: ${formatMs(results.at(-1)!.totalMs / Math.max(1, results.at(-1)!.moves))} per move. `}
+                    {upNext &&
+                      `${upNext.content.opening.name}, playing ${upNext.content.opening.side}. Starting in a moment.`}
                   </>
                 ) : (
-                  <>Your move as {side}. The other side answers at once.</>
+                  <>
+                    The other side answers at once. Use Hint if you are stuck: it is counted, and the clock keeps
+                    running.
+                  </>
                 )}
               </CardContent>
             </Card>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               <Big label="last move" value={formatMs(lastMs)} />
               <Big label="average so far" value={formatMs(soFar.averageMs)} />
               <Big label="wrong moves" value={String(soFar.errors)} />
+              <Big label="hints used" value={String(soFar.hints)} />
             </div>
           </>
         )}
@@ -165,10 +202,11 @@ function Summary() {
             : `${formatMs(summary.averageMs)} per move on average, over ${summary.moves} moves.`}
         </p>
       </header>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <Big label="average per move" value={formatMs(summary.averageMs)} />
         <Big label="best line pace" value={formatMs(summary.bestLineMs)} />
         <Big label="wrong moves" value={String(summary.errors)} />
+        <Big label="hints used" value={String(summary.hints)} />
       </div>
       <Card>
         <CardContent className="pt-6">
@@ -179,6 +217,7 @@ function Summary() {
                 <TableHead className="text-right">Per move</TableHead>
                 <TableHead className="text-right">Slowest</TableHead>
                 <TableHead className="text-right">Wrong</TableHead>
+                <TableHead className="text-right">Hints</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -193,6 +232,7 @@ function Summary() {
                   </TableCell>
                   <TableCell className="text-right tabular-nums">{formatMs(result.slowestMs)}</TableCell>
                   <TableCell className="text-right tabular-nums">{result.errors}</TableCell>
+                  <TableCell className="text-right tabular-nums">{result.hints}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

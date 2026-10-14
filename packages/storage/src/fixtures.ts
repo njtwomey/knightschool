@@ -68,6 +68,7 @@ export const speed = (id: string, over: Partial<SpeedAttempt> = {}): SpeedAttemp
   lineId: 'giuoco-pianissimo',
   moves: 10,
   errors: 1,
+  hints: 0,
   totalMs: 14000,
   slowestMs: 3200,
   ...over,
