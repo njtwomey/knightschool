@@ -1,0 +1,40 @@
+- id: qga-early-e5
+  line: 1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3 e5
+  prompt: 'Black has pushed ...e5 and left it undefended. Which capture wins a pawn safely?'
+  accept:
+    - keywords: [[nxe5, ne5]]
+      feedback: Yes. Nxe5 wins the pawn, and the knight can return to c4 for the other pawn too.
+    - keywords: [[knight], [e5]]
+      all: true
+      feedback: Yes. The knight takes the pawn on e5, and the pawn on d4 stays safe because the queen guards it.
+    - keywords: [[dxe5, bxc4]]
+      partial: true
+      feedback: Close. A different capture wins more.
+  reveal: 5.Nxe5 wins a pawn and keeps the d4 pawn guarded by the queen. If 5...Nbd7 then 6.Nxc4 wins the second pawn back.
+  showMove: Nxe5
+  examples:
+    match: [Nxe5, the knight takes e5, knight captures on e5]
+    miss: [Bxc4, dxe5, castle, no idea]
+- id: albin-no-e3
+  line: 1. d4 d5 2. c4 e5 3. dxe5 d4
+  prompt: 'The pawn on d4 can be attacked by 4.e3. After 4.e3, which Black move wins by force?'
+  accept:
+    - keywords: [[bb4, b4]]
+      feedback: Yes. After 4...Bb4+ 5.Bd2 dxe3 White cannot take the bishop on b4 because of ...exf2+ and ...fxg1=N+.
+    - keywords: [[bishop, check]]
+      partial: true
+      feedback: Close. Say which square the bishop checks from.
+  reveal: 4.e3 Bb4+ 5.Bd2 dxe3 6.Bxb4 exf2+ 7.Ke2 fxg1=N+ wins for Black. Play 4.Nf3 instead.
+  examples:
+    match: [Bb4+, the bishop checks from b4, Bb4 check]
+    miss: [Qh4, Nf6, no idea, Nc6]
+- id: slav-a4
+  line: 1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 dxc4 5. a4
+  prompt: 'What does 5.a4 stop Black from playing?'
+  accept:
+    - keywords: [[b5, b-pawn]]
+      feedback: Yes. Without ...b5 Black cannot guard the pawn on c4, so White wins it back.
+  reveal: 5.a4 stops ...b5. With the pawn on a4, ...b5 would lose a pawn to axb5, so Black cannot hold the c4 pawn.
+  examples:
+    match: [b5, it stops b5, the pawn push b5]
+    miss: [e5, Bf5, it attacks the knight, no idea]

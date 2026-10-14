@@ -19,6 +19,8 @@ export type AppBoardProps = {
   onMove?: (uci: string) => boolean;
   /** UCI of the last move, highlighted. */
   lastMove?: string;
+  /** Colour of the last-move highlight: yellow by default, red to point out the opponent's move being answered. */
+  lastMoveTone?: 'yellow' | 'red';
   arrows?: BoardArrow[];
   /** A tick or cross on a square, for right and wrong answers. */
   badge?: { square: string; kind: 'correct' | 'wrong' } | null;
@@ -36,6 +38,7 @@ export type AppBoardProps = {
 };
 
 const YELLOW = 'rgb(245 230 60 / 0.5)';
+const RED = 'rgb(239 68 68 / 0.55)';
 const DOT = 'rgb(0 0 0 / 0.2)';
 
 /** Four corner brackets around a square, drawn in SVG so they scale with the board. */
@@ -83,6 +86,7 @@ function AppBoardView({
   interactive = true,
   onMove,
   lastMove,
+  lastMoveTone = 'yellow',
   arrows = [],
   badge = null,
   hintSquare = null,
@@ -118,8 +122,8 @@ function AppBoardView({
     styles[square] = { ...styles[square], backgroundColor: background };
   };
   if (lastMove) {
-    mark(lastMove.slice(0, 2), YELLOW);
-    mark(lastMove.slice(2, 4), YELLOW);
+    mark(lastMove.slice(0, 2), lastMoveTone === 'red' ? RED : YELLOW);
+    mark(lastMove.slice(2, 4), lastMoveTone === 'red' ? RED : YELLOW);
   }
   if (selected) mark(selected, YELLOW);
 
@@ -166,7 +170,9 @@ function AppBoardView({
             const isHover = prefs.hover && interactive && hovered === square;
             return (
               <div className="relative size-full">
-                {children}
+                {/* Drawn here, not through the library's square styles, which the light and dark colours override. */}
+                {styles[square] && <div className="pointer-events-none absolute inset-0" style={styles[square]} />}
+                <div className="relative size-full">{children}</div>
                 {prefs.legalMoves && target === false && (
                   <div className="pointer-events-none absolute inset-0 grid place-items-center">
                     <div className="size-[28%] rounded-full" style={{ backgroundColor: DOT }} />

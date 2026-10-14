@@ -33,6 +33,9 @@ const found = (needle: string, haystack: string) =>
   haystack.includes(needle) || (needle.length > 3 && needle.endsWith('s') && haystack.includes(needle.slice(0, -1)));
 const matchesAll = (needles: string[], haystack: string) => needles.every((needle) => found(needle, haystack));
 
+/** Whether every word of a search is found in some text, with the same forgiveness as the course search. */
+export const matchesText = (query: string, text: string) => matchesAll(words(query), fold(text));
+
 /** Courses in the order to study them, from content/curriculum.yaml. */
 export const inStudyOrder = (courses: OpeningIndexEntry[]) => [...courses].sort((a, b) => a.order - b.order);
 

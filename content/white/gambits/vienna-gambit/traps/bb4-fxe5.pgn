@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Game: Vienna Gambit, 3...Bb4"]
+[ECO "C25"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "fork,trap"]
+[Themes "double-attack"]
+[Refutes "1. e4 e5 2. Nc3 Nf6 3. f4 Bb4"]
+[Kind "for-us"]
+
+1. e4 e5 2. Nc3 Nf6 3. f4 Bb4? { Pins the knight on c3, but the pin does not stop White taking on e5 with a pawn that attacks Black's knight. } 4. fxe5 { Takes the pawn and kicks the knight. } 4... Bxc3 5. bxc3 { Recaptures; the knight on f6 is still attacked. } 5... Nxe4 6. Qg4 { A double attack: the queen hits the knight on e4 and the pawn on g7. White is a pawn up with more to come. } 6... Ng5 7. d4 { Builds the centre and chases the knight again. White has an extra pawn and the open f-file against the king. } *

@@ -64,6 +64,11 @@ lines: # teaching order; the first is the main line
     opponent: '3...Nf6'
     kind: sideline
     alternative: true # shown and playable, never drilled: a second answer to a position another line answers
+    section: "King's Gambit" # optional: group the course page by this heading instead of main / sideline / trap
+  - file: kings-gambit-declined
+    from: e5-open-games # optional: take lines/kings-gambit-declined.pgn from that course (same side only)
+    opponent: '2.f4'
+    kind: gambit # a reused line is shown here and never drilled: its home course drills it
 traps:
   - file: blackburne-shilling
     opponent: '3...Nd4'

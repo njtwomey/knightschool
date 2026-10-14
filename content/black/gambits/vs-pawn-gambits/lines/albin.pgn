@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Albin Countergambit"]
+[ECO "D08"]
+[Character "sharp,tactical"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "counter-gambit,passed-pawn"]
+[Kind "gambit"]
+
+1. d4 d5 2. c4 e5 { The Albin: Black gives the queen's gambit pawn a very different answer, attacking the centre with a pawn. }
+3. dxe5 d4 { The d-pawn cramps White and becomes a long-term thorn. }
+4. Nf3 Nc6 { Adds an attacker to e5 and develops. }
+5. g3 Nge7 { Heads for g6 to win the e5 pawn back, and keeps the bishop free to go to g4 or e6 later. }
+6. Bg2 Ng6 { Attacks e5 and covers the knight's route to the kingside. White cannot hold the extra pawn for free. } *

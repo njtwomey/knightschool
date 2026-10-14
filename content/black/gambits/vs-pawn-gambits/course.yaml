@@ -1,0 +1,77 @@
+name: Pawn Gambits (as Black)
+eco: C30
+side: black
+opening: pawn-gambits
+tier: 3
+trigger: ''
+summary: >-
+  The same gambits as the White courses, seen from Black's chair. Most lines here are borrowed from the Open Games and
+  Queen's Gambit Declined courses and are drilled there; they are gathered by gambit so you can read them side by side. The
+  Falkbeer and Albin lines are gambits Black plays. For the Rousseau Gambit see its own course.
+plans:
+  - Take the pawn only when you know how to give it back; otherwise decline calmly and develop.
+  - Fight for the centre with a pawn (Falkbeer, Albin) when White's lead in development is not yet dangerous.
+  - Count White's developing moves against the pawn you took before you grab a second one.
+motifs: [decline-the-gambit, develop-first]
+tags: [e4, d4, gambit]
+lines:
+  - file: kings-gambit-declined
+    from: e5-open-games
+    section: "King's Gambit"
+    opponent: '2.f4'
+    kind: gambit
+  - file: kings-gambit-fischer
+    from: e5-open-games
+    section: "King's Gambit"
+    opponent: '2.f4'
+    kind: gambit
+  - file: vienna-gambit
+    from: e5-open-games
+    section: Vienna Gambit
+    opponent: '3.f4'
+    kind: gambit
+  - file: danish-gambit-declined
+    from: e5-open-games
+    section: Danish, Scotch and Göring gambits
+    opponent: '2.d4 exd4 3.c3'
+    kind: gambit
+  - file: scotch-gambit
+    from: e5-open-games
+    section: Danish, Scotch and Göring gambits
+    opponent: '3.d4 exd4 4.Bc4'
+    kind: gambit
+  - file: goring-gambit
+    from: e5-open-games
+    section: Danish, Scotch and Göring gambits
+    opponent: '3.d4 exd4 4.c3'
+    kind: gambit
+  - file: evans-gambit
+    from: e5-open-games
+    section: Evans Gambit
+    opponent: '4.b4'
+    kind: gambit
+  - file: orthodox
+    from: qgd
+    section: Queen's Gambit
+    opponent: '3.Nc3'
+    kind: main
+  - file: exchange
+    from: qgd
+    section: Queen's Gambit
+    opponent: '4.cxd5'
+    kind: main
+  - file: cambridge-springs
+    from: qgd
+    section: Queen's Gambit
+    opponent: '5.Nf3'
+    kind: sideline
+  - file: falkbeer
+    section: Gambits Black can play
+    opponent: '2.f4'
+    kind: gambit
+    alternative: true
+  - file: albin
+    section: Gambits Black can play
+    opponent: '2.c4'
+    kind: gambit
+    alternative: true

@@ -1,10 +1,12 @@
 import { roleOf, type LineHit, type OpeningGroup } from '@knightschool/core';
 import { BookOpen, Target } from 'lucide-react';
 import { BoardThumb } from '@/components/board/board-thumb';
+import { Hint } from '@/components/hint';
 import { Badge } from '@/components/ui/badge';
 import { IconAction } from '@/features/browse/icon-action';
 import { buildHash } from '@/router/hash';
 import { to } from '@/router/location';
+import { ROLE_HINT, SIDE_HINT, TRAP_HINT, WEIGHT_HINT } from './explanations';
 
 /** A variation found by search, drawn like an opening: its board, name and where it lives. Click to see it on the board. */
 export function VariationCard({ hit, openings }: { hit: LineHit; openings: OpeningGroup[] }) {
@@ -32,24 +34,32 @@ export function VariationCard({ hit, openings }: { hit: LineHit; openings: Openi
             </>
           )}
         </p>
-        <div className="flex flex-wrap gap-1">
-          <Badge variant="outline" className="px-1.5 py-0 text-[11px] font-normal">
-            as {course.side}
-          </Badge>
-          {role === 'against' && (
-            <Badge variant="secondary" className="px-1.5 py-0 text-[11px] font-normal">
-              against it
+        <div className="relative z-10 flex flex-wrap gap-1">
+          <Hint text={SIDE_HINT[course.side]}>
+            <Badge variant="outline" className="px-1.5 py-0 text-[11px] font-normal">
+              as {course.side}
             </Badge>
+          </Hint>
+          {role === 'against' && (
+            <Hint text={ROLE_HINT.against}>
+              <Badge variant="secondary" className="px-1.5 py-0 text-[11px] font-normal">
+                against it
+              </Badge>
+            </Hint>
           )}
           {line.weight && line.weight !== 'main' && (
-            <Badge variant="secondary" className="px-1.5 py-0 text-[11px] font-normal">
-              {line.weight}
-            </Badge>
+            <Hint text={WEIGHT_HINT[line.weight]}>
+              <Badge variant="secondary" className="px-1.5 py-0 text-[11px] font-normal">
+                {line.weight}
+              </Badge>
+            </Hint>
           )}
           {line.kind === 'refutation' && (
-            <Badge variant="secondary" className="px-1.5 py-0 text-[11px] font-normal">
-              {line.whose === 'against-us' ? 'trap to avoid' : 'trap'}
-            </Badge>
+            <Hint text={line.whose === 'against-us' ? TRAP_HINT['against-us'] : TRAP_HINT['for-us']}>
+              <Badge variant="secondary" className="px-1.5 py-0 text-[11px] font-normal">
+                {line.whose === 'against-us' ? 'trap to avoid' : 'trap'}
+              </Badge>
+            </Hint>
           )}
         </div>
       </div>

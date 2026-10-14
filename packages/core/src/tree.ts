@@ -19,7 +19,14 @@ import {
   type Variant,
 } from './schema/content';
 
-export type VariantSource = { id: string; kind: Variant['kind']; game: PgnGame; source: string };
+export type VariantSource = {
+  id: string;
+  kind: Variant['kind'];
+  game: PgnGame;
+  source: string;
+  /** Read from another course's folder (`from:` in course.yaml), so its [Kind] header is that course's view. */
+  reused?: boolean;
+};
 
 /** `#/play/<course>/all/...` practises every branch, so no line may use this id. */
 export const RESERVED_LINE_ID = 'all';
@@ -86,16 +93,26 @@ export function buildOpening(
   } catch {
     throw new Error(`${id}: the trigger "${manifest.trigger}" is not a legal sequence of moves from the start`);
   }
-  const listing = new Map<string, { opponent: string; weight?: LineKind; whose?: TrapKind; alternative: boolean }>();
+  const listing = new Map<
+    string,
+    { opponent: string; weight?: LineKind; whose?: TrapKind; alternative: boolean; section?: string }
+  >();
   for (const line of manifest.lines)
-    listing.set(line.file, { opponent: line.opponent, weight: line.kind, alternative: line.alternative });
+    listing.set(line.file, {
+      opponent: line.opponent,
+      weight: line.kind,
+      alternative: line.alternative || byId.get(line.file)?.reused === true,
+      section: line.section,
+    });
   for (const trap of manifest.traps)
-    listing.set(trap.file, { opponent: trap.opponent, whose: trap.kind, alternative: false });
+    listing.set(trap.file, { opponent: trap.opponent, whose: trap.kind, alternative: false, section: trap.section });
 
   const ourSide = manifest.side;
   const nodes = new Map<string, MutableNode>();
   const mainLine = new Set<string>(); // `${from}>${san}` for the main line of the first line
-  const alternativeIds = new Set(manifest.lines.filter((line) => line.alternative).map((line) => line.file));
+  const alternativeIds = new Set(
+    manifest.lines.filter((line) => line.alternative || byId.get(line.file)?.reused === true).map((line) => line.file),
+  );
   const metas: Variant[] = [];
 
   const nodeAt = (epd: string, ply: number): MutableNode => {
@@ -116,7 +133,7 @@ export function buildOpening(
     const header = parseVariantHeader(variant.game.tags, variant.source);
     const declared = listing.get(variantId)!;
     const expectedKind = declared.weight ?? declared.whose;
-    if (header.kind !== undefined && header.kind !== expectedKind) {
+    if (!variant.reused && header.kind !== undefined && header.kind !== expectedKind) {
       throw new Error(
         `${variant.source}: [Kind "${header.kind}"] does not match course.yaml, which says ${expectedKind}`,
       );
@@ -184,6 +201,7 @@ export function buildOpening(
       weight: listed_.weight,
       whose: listed_.whose,
       alternative: listed_.alternative,
+      section: listed_.section,
     });
   }
 

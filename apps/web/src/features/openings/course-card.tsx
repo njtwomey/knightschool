@@ -9,9 +9,11 @@ import {
 import { ArrowRight } from 'lucide-react';
 import { BoardThumb } from '@/components/board/board-thumb';
 import { Badge } from '@/components/ui/badge';
+import { Hint } from '@/components/hint';
 import { Progress } from '@/components/ui/progress';
 import { percent } from '@/features/courses/progress';
 import { to } from '@/router/location';
+import { ECO_HINT, PRACTICE_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from './explanations';
 
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
 
@@ -49,19 +51,32 @@ export function CourseCard({
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <h3 className="text-base font-semibold leading-tight">{course.name}</h3>
-          {course.eco && <Badge variant="outline">{course.eco}</Badge>}
+          {course.eco && (
+            <Hint text={ECO_HINT}>
+              <Badge variant="outline">{course.eco}</Badge>
+            </Hint>
+          )}
         </div>
         <p className="line-clamp-2 text-sm text-muted-foreground">{plainText(course.summary)}</p>
         <div className="flex flex-wrap gap-1 text-xs">
-          <Badge variant={course.tier === 1 ? 'default' : 'secondary'} className="px-1.5 py-0 text-[11px] font-normal">
-            {TIER[course.tier]}
-          </Badge>
-          <Badge variant="outline" className="px-1.5 py-0 text-[11px] font-normal">
-            you play {course.side}
-          </Badge>
-          <Badge variant="outline" className="px-1.5 py-0 text-[11px] font-normal">
-            {role === 'play' ? 'playing it' : `against ${opening?.name ?? 'it'}`}
-          </Badge>
+          <Hint text={TIER_HINT[course.tier]}>
+            <Badge
+              variant={course.tier === 1 ? 'default' : 'secondary'}
+              className="px-1.5 py-0 text-[11px] font-normal"
+            >
+              {TIER[course.tier]}
+            </Badge>
+          </Hint>
+          <Hint text={SIDE_HINT[course.side]}>
+            <Badge variant="outline" className="px-1.5 py-0 text-[11px] font-normal">
+              you play {course.side}
+            </Badge>
+          </Hint>
+          <Hint text={ROLE_HINT[role]}>
+            <Badge variant="outline" className="px-1.5 py-0 text-[11px] font-normal">
+              {role === 'play' ? 'playing it' : `against ${opening?.name ?? 'it'}`}
+            </Badge>
+          </Hint>
         </div>
         {reason && reason.kind !== 'name' && (
           <p className="text-xs text-foreground">
@@ -86,13 +101,21 @@ export function CourseCard({
           </p>
         )}
         <div className="mt-auto grid gap-1.5">
-          <Progress value={percent(progress.learned, progress.total)} aria-label={`${course.name} progress`} />
+          {progress.total > 0 && (
+            <Hint text={PRACTICE_HINT.progress}>
+              <Progress value={percent(progress.learned, progress.total)} aria-label={`${course.name} progress`} />
+            </Hint>
+          )}
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>
-              {started ? `${progress.learned} of ${progress.total} moves learned` : `${progress.total} moves to learn`}
+              {progress.total === 0
+                ? 'Reading only: drilled in other courses'
+                : started
+                  ? `${progress.learned} of ${progress.total} moves learned`
+                  : `${progress.total} moves to learn`}
             </span>
             <span className="flex items-center gap-1 font-medium text-foreground">
-              {started ? 'Continue' : 'Start'}{' '}
+              {started ? 'Continue' : progress.total === 0 ? 'Read' : 'Start'}{' '}
               <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
             </span>
           </div>

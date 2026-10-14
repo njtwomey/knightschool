@@ -1,0 +1,30 @@
+[Event "Knight School"]
+[Opening "King's Gambit Accepted"]
+[Variation "King's Gambit Accepted: Kieseritzky Gambit, Berlin Defense"]
+[ECO "C39"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "both"]
+[Tricks "trap"]
+[Themes "open-f-file,centre-pawns"]
+[Kind "main"]
+
+1. e4 { Takes the centre and opens lines for the queen and the bishop on f1. } 1... e5 2. f4 { The King's Gambit. White offers the f-pawn so that Black's e-pawn leaves the centre, then White takes the centre with d4 and gets the open f-file. }
+2... exf4
+3. Nf3 { Develops, covers h4 so that ...Qh4+ is not check, and aims for d4 and Bxf4 to win the pawn back. }
+3... g5 { Black holds on to the extra pawn by guarding f4 with the g-pawn. This is the most common reply. }
+4. h4 { Attacks the g5 pawn. If it is traded or driven off, nothing guards f4 and White gets the pawn back with a strong bishop. }
+4... g4
+5. Ne5 { The knight must move because the g4 pawn attacks it. On e5 it hits g4 and f7, and Black's d-pawn can only chase it after another move. }
+5... Nf6 ( 5... d6 6. Nxg4 { Takes the g4 pawn, so White has the pawn back. If the bishop takes the knight, the queen takes the bishop. } 6... Nc6 7. Nc3 { Develops and prepares d4 and Bxf4. } )
+6. d4 { Builds a centre and opens the bishop on c1 so it can take the pawn on f4. }
+6... d6 ( 6... d5 7. Bxf4 { Takes the pawn back with the bishop aimed at b8. } 7... Nh5 8. Bg5 { Attacks the queen on d8, so Black has to spend a move on it while its knight is stuck on h5. } )
+7. Nd3 { The black pawn attacked the knight, so it retreats with a threat to take on f4. }
+7... Nxe4
+8. Bxf4 { White has the pawn back. The bishop is active and Black's g4 pawn is cut off from help. }
+8... Bg7 ( 8... Qe7 9. Be2 { Develops and blocks the e-file, so Black's queen has no check on the king. } 9... Nc6 10. Nc3 { Trades or drives off the strong knight on e4. } )
+9. Nc3 { Attacks the knight on e4. If it stays, Nxe4 wins it, so Black has to trade. }
+9... Nxc3
+10. bxc3 { Retakes towards the centre and keeps the d4 pawn guarded. It also opens the b-file for a rook. }
+10... O-O
+11. Be2 { Develops and aims at g4, the advanced pawn that is hard for Black to hold. Plan: win the g4 pawn, castle, and use the open f-file. The engine rates Black about a pawn better, which is the price of the gambit. If Black leaves the book, develop and take the centre before attacking. } 11... f5 *

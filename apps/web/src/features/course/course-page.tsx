@@ -12,6 +12,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { Hint } from '@/components/hint';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { loadSearchIndex } from '@/data/content';
@@ -28,6 +29,7 @@ import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState, to } from '@/router/location';
 import { MotifChip } from '@/features/glossary/motif-chip';
 import { useGlossary } from '@/features/glossary/use-glossary';
+import { ECO_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/features/openings/explanations';
 import { LinesTable } from './lines-table';
 
 function isTyping(target: EventTarget | null) {
@@ -132,12 +134,22 @@ export function CoursePage({ courseId }: { courseId: string }) {
           <header className="grid gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-3xl font-semibold tracking-tight">{course.name}</h2>
-              {course.eco && <Badge variant="outline">{course.eco}</Badge>}
-              <Badge variant="secondary">you play {course.side}</Badge>
-              <Badge variant={role === 'play' ? 'default' : 'outline'}>
-                {role === 'play' ? 'playing it' : `playing against ${opening?.name ?? 'it'}`}
-              </Badge>
-              <Badge variant="outline">{TIER_NAME[course.tier]}</Badge>
+              {course.eco && (
+                <Hint text={ECO_HINT}>
+                  <Badge variant="outline">{course.eco}</Badge>
+                </Hint>
+              )}
+              <Hint text={SIDE_HINT[course.side]}>
+                <Badge variant="secondary">you play {course.side}</Badge>
+              </Hint>
+              <Hint text={ROLE_HINT[role]}>
+                <Badge variant={role === 'play' ? 'default' : 'outline'}>
+                  {role === 'play' ? 'playing it' : `playing against ${opening?.name ?? 'it'}`}
+                </Badge>
+              </Hint>
+              <Hint text={TIER_HINT[course.tier]}>
+                <Badge variant="outline">{TIER_NAME[course.tier]}</Badge>
+              </Hint>
               <span className="ml-auto">
                 <EnrolButton openingId={courseId} />
               </span>
@@ -162,12 +174,18 @@ export function CoursePage({ courseId }: { courseId: string }) {
                 ))}
               </p>
             )}
-            <div className="grid max-w-md gap-1">
-              <Progress value={percent(progress.learned, progress.total)} aria-label="Course progress" />
-              <p className="text-xs text-muted-foreground">
-                {progress.learned} of {progress.total} moves learned
+            {progress.total === 0 ? (
+              <p className="max-w-md text-xs text-muted-foreground">
+                A reading course: its lines are drilled in the courses they come from, so there is nothing to quiz here.
               </p>
-            </div>
+            ) : (
+              <div className="grid max-w-md gap-1">
+                <Progress value={percent(progress.learned, progress.total)} aria-label="Course progress" />
+                <p className="text-xs text-muted-foreground">
+                  {progress.learned} of {progress.total} moves learned
+                </p>
+              </div>
+            )}
           </header>
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:items-start">

@@ -117,6 +117,25 @@ export function planIntroductions(
   return chosen.map((definition, i) => newCard(definition, new Date(now.getTime() - (chosen.length - i))));
 }
 
+/**
+ * Free practice: a random handful of questions from the given courses, whether or not they are being learned. The
+ * cards are made fresh and are never saved, so nothing here touches the review schedule. `random` is injectable for tests.
+ */
+export function freePractice(
+  contents: OpeningContent[],
+  size = SESSION_SIZE,
+  options: CardOptions = {},
+  random: () => number = Math.random,
+  now = new Date(),
+): Card[] {
+  const pool = contents.flatMap((content) => introductionOrder(content, { ...options, includeRare: true }));
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j]!, pool[i]!];
+  }
+  return pool.slice(0, size).map((definition) => newCard(definition, now));
+}
+
 /** The cards to study now: seen cards first (most overdue first), then new ones in the order introduced. */
 export function planSession(due: Card[], size = SESSION_SIZE): Card[] {
   const byDue = (a: Card, b: Card) => a.due.localeCompare(b.due) || a.id.localeCompare(b.id);

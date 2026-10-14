@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "King's Gambit Declined"]
+[Variation "King's Gambit Declined: Falkbeer Countergambit, Charousek Variation"]
+[ECO "C32"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "open-d-file,queen-trap"]
+[Refutes "1. e4 e5 2. f4 d5 3. exd5 e4 4. d3 Nf6 5. dxe4 Nxe4 6. Nf3 Qxd5"]
+[Kind "for-us"]
+
+1. e4 e5 2. f4 d5 3. exd5 e4 4. d3 Nf6 5. dxe4 Nxe4 6. Nf3 Qxd5? { Takes the pawn, but the d-file is open and the white queen on d1 stares at d5. } 7. Qxd5 { Nothing defends the black queen, so White wins it for nothing. } 7... Nf6 *

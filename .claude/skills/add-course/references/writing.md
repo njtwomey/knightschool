@@ -2,7 +2,7 @@
 
 ## Choosing lines
 
-- A beginner (about 1000 to 1600) is the audience. Two to four lines per course. First line = the most common reply with
+- A beginner (about 1000 to 1600) is the audience. Four to ten lines per course (a gambit course five to nine). First line = the most common reply with
   the clearest plan. List every reply the opponent is likely to try (the every-branch drill plays them).
 - Lines stop around move 10 to 12, after exchanges finish and the plan is visible. Do not end mid-capture.
 - Prefer the move that is easier to explain and harder to misplay. Never write a move you cannot give a reason for.
@@ -39,6 +39,14 @@ Rules:
 | `Greedy.` (on `Nxe5?`)              | Does not say what it costs    | `Grabs a pawn and walks into ...Qg5, which hits the knight and g2 at once.` |
 
 Read the result with `check-course.mts` (it prints the author and generated notes for every move).
+
+## Position links
+
+In any comment, course summary or plan, `[f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -)` shows as dotted
+bold text; hovering (or tapping) it puts that position on the board with a ring around the square. Use two to four where the
+words refer to a square or position that is hard to picture ("the Fried Liver", "...Qg5"). Make the target with
+`pnpm fen "1. e4 e5 2. Nf3 Nc6 3. Bc4"` (an EPD or FEN). The text outside the link must still read as plain English, because
+searching and course cards show it without the link.
 
 ## Quizzes (quizzes.yaml)
 

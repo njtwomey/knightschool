@@ -1,0 +1,20 @@
+[Event "Knight School"]
+[Opening "King's Gambit Accepted"]
+[Variation "King's Gambit Accepted: Cunningham Defense, McCormick Defense"]
+[ECO "C35"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "e5-pawn,centre-pawns"]
+[Kind "sideline"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 Be7 { The Cunningham Defence: the bishop eyes h4 to give check, which would stop White castling. }
+4. Bc4 { Aims at f7, the weak point next to Black's king, and gets ready to castle. }
+4... Nf6 ( 4... Bh4+ 5. g3 { Blocks the check. Taking the bishop with the knight lets Black win material back with ...Qxh4+. } 5... fxg3 6. O-O { Gives up a pawn to get the rook and queen into play against Black's uncastled king. } )
+5. e5 { Attacks the knight on f6 with a pawn, which gains space and a tempo. }
+5... Nh5
+6. Nc3 { Develops and prepares d4 and Nd5. Black's knight on h5 is far from the rest of its pieces. }
+6... d6
+7. d4 { Builds the centre and attacks d6. Black must stop the pawns from rolling forward. }
+7... O-O 8. O-O { Castles into safety and keeps the f1 rook ready for the open f-file. } 8... Bg4 9. h3 { Asks the bishop on g4 what it will do, since it is not safe there. Plan: castle, trade on d6, and push the centre pawns. If Black leaves the book, count the attackers on the f4 pawn before you take it. } 9... Be6 *

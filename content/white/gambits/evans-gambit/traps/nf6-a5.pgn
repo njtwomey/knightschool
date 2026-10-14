@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Evans Gambit"]
+[Variation "Italian Game: Evans Gambit Declined, Nf6 mistake"]
+[ECO "C51"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "trapped-bishop"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bb6 5. a4 Nf6"]
+[Kind "for-us"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bb6 5. a4 Nf6? { Develops a piece but ignores the threat of a5. } 6. a5 { Attacks the bishop, which has no safe square: a7 is blocked by its own pawn and c5 is covered by the b-pawn. } 6... Bxf2+ { Black gets a pawn for the piece at best. } 7. Kxf2 Nxe4+ 8. Kg1 d5 *

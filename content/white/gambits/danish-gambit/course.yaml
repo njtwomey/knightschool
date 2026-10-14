@@ -1,0 +1,57 @@
+name: Danish Gambit
+eco: C21
+side: white
+opening: pawn-gambits
+tier: 2
+trigger: '1. e4 e5 2. d4 exd4 3. c3'
+summary: >-
+  White gives up two pawns with [3.c3](rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq -) to get both bishops
+  pointing at Black's king and a big lead in development. You learn what to play when Black takes the pawns, when Black
+  hands one back with ...d5, and how to meet the other replies.
+plans:
+  - Develop at top speed. Bring the bishops to c4 and b2, then knights to c3 and f3, and castle by move ten.
+  - Aim the bishops at the king. The one on b2 hits g7 along the long diagonal and the one on c4 hits f7.
+  - Win a pawn back where you can, and trade queens only when it wins a pawn or ends the danger.
+  - If Black plays ...d5 and returns the pawn, take on d5, retake on d4 and you are fine with a good centre.
+  - Look for the shot Bxf7+ whenever Black's king is still in the middle and f7 is only guarded by the king.
+motifs: [f7-weakness, pawn-chain, give-back-material, hanging-piece, remove-the-defender, queen-trap]
+tags: [e4, open, gambit]
+lines:
+  - file: accepted-nf6
+    opponent: '3...dxc3 4.Bc4 cxb2 5.Bxb2 Nf6'
+    kind: main
+    section: If Black takes the pawns
+  - file: accepted-schlechter-d5
+    opponent: '5...d5'
+    kind: sideline
+    section: If Black takes the pawns
+  - file: accepted-qe7
+    opponent: '5...Qe7'
+    kind: sideline
+    section: If Black takes the pawns
+  - file: accepted-nxc3
+    opponent: '3...dxc3'
+    kind: sideline
+    alternative: true
+    section: If Black takes the pawns
+  - file: declined-d5
+    opponent: '3...d5'
+    kind: main
+    section: If Black declines
+  - file: declined-nf6
+    opponent: '3...Nf6'
+    kind: sideline
+    section: If Black declines
+traps:
+  - file: greedy-nxe4
+    opponent: '6...Nxe4'
+    kind: for-us
+    section: Traps
+  - file: queen-grabs-g2
+    opponent: '5...Qg5'
+    kind: for-us
+    section: Traps
+  - file: declined-qxd4
+    opponent: '9...Qxd4'
+    kind: for-us
+    section: Traps

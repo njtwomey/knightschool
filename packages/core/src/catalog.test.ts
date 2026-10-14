@@ -5,6 +5,7 @@ import {
   filterCourses,
   inStudyOrder,
   matchReason,
+  matchesText,
   nextCourses,
   relevance,
   roleOf,
@@ -189,5 +190,14 @@ describe('relevance and why a course matched', () => {
     expect(matchReason(black!, 'classical')).toEqual({ kind: 'lines', names: ['Classical Variation'] });
     expect(matchReason(black!, 'caro')).toEqual({ kind: 'name' });
     expect(matchReason(black!, 'zzz')).toEqual({ kind: 'text' });
+  });
+});
+
+describe('matchesText', () => {
+  it('needs every word, ignoring case, apostrophes and a plural s', () => {
+    expect(matchesText('queens gambit', "The Queen's Gambit")).toBe(true);
+    expect(matchesText('FORKS', 'A fork attacks two pieces')).toBe(true);
+    expect(matchesText('fork rook', 'A fork attacks two pieces')).toBe(false);
+    expect(matchesText('', 'anything')).toBe(true);
   });
 });

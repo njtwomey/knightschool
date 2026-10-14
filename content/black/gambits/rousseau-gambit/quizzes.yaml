@@ -1,0 +1,48 @@
+- id: ng5-queen
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Ng5
+  prompt: White attacks f7 with the knight. What does Black play, and why can it?
+  accept:
+    - keywords: [[qxg5, queen], [free, lose, loses, unprotected, undefended, takes, take, capture, no]]
+      all: true
+      feedback: Yes. With the f-pawn gone, the queen sees g5 and the knight has no protection.
+    - keywords: [[qxg5, queen]]
+      partial: true
+      feedback: Close. Say why the queen can take the knight.
+  reveal: 4...Qxg5. The pawn left f7, so the queen reaches g5, and nothing protects the knight.
+  showMove: Qxg5
+  examples:
+    match:
+      [
+        the queen takes the knight for free,
+        Qxg5 wins the knight because nothing protects it,
+        queen takes it because it is undefended,
+      ]
+    miss: [castles, it develops the bishop, no idea]
+- id: nxe5-queen-pawn
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5
+  prompt: White took the e5 pawn with the knight. How does Black punish it?
+  accept:
+    - keywords: [[nxe5, knight, takes, take, capture]]
+      feedback: Yes. 4...Nxe5 wins the knight for a pawn, because nothing protects it.
+  reveal: 4...Nxe5. The knight on e5 has no protection, and after 5.Bxg8 Rxg8 Black is a piece up.
+  showMove: Nxe5
+  examples:
+    match: [Nxe5 takes the knight, my knight takes it, capture the knight on e5]
+    miss: [Qh4, castle, it attacks the pawn on f7]
+- id: fxe4-knight-fork
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. d3 Nf6 5. Ng5
+  prompt: Why is taking on e4 a mistake here, and what should Black play?
+  accept:
+    - keywords: [[nf7, f7, fork], [d5]]
+      all: true
+      feedback: Yes. ...fxe4? lets the knight fork on f7. 5...d5 blocks the bishop first.
+    - keywords: [[d5]]
+      feedback: Yes. 5...d5 blocks the bishop and hits it, so the knight cannot use f7.
+    - keywords: [[nf7, f7, fork]]
+      partial: true
+      feedback: Close. You have the danger. Now name the safe move.
+  reveal: 5...fxe4? 6.Nf7 forks the queen and the rook on h8. Black should play 5...d5.
+  showMove: d5
+  examples:
+    match: [play d5 to block the bishop, d5 because Nf7 forks the queen and rook, Nf7 forks so play d5]
+    miss: [castle, Bc5, take the knight with the queen]

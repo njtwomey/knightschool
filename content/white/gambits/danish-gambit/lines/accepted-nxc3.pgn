@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Danish Gambit"]
+[Variation "Danish Gambit: Accepted, Knight Recapture"]
+[ECO "C21"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "development-lead,centre-pawns"]
+[Kind "sideline"]
+
+1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Nxc3 { A calmer choice: take the pawn back with a developing move and play like a Scotch Gambit. Only one pawn is down and White has more pieces out. }
+4... Bb4 5. Bc4 { Develops with an eye on f7. If Black plays ...Nf6 now, e4-e5 wins time with a big attack. } 5... Bxc3+ (5... Nf6 6. e5 Bxc3+ 7. bxc3 d5 8. exf6)
+6. bxc3 { Takes back with the pawn, which keeps the centre pawns and opens the b-file for a rook. } 6... d6 7. Nf3 { Develops and eyes the centre. Plan: castle and push the pawns to e5 to open lines against Black's king. } 7... Nc6 8. O-O { Castles so the king is safe before the middlegame starts. } *

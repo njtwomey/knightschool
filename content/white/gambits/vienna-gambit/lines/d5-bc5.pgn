@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Game: Vienna Gambit, Breyer Variation, 5...Bc5"]
+[ECO "C29"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "centre-fight,bishop-pair"]
+[Kind "sideline"]
+
+1. e4 e5 2. Nc3 Nf6 3. f4 d5 4. fxe5 Nxe4 5. Nf3 Bc5 { Black's most accurate fifth move: the bishop eyes f2 and the knight on e4 is protected by the pawn on d5. }
+6. d4 { Hits the bishop and takes the centre. The pawn on d4 also keeps the bishop away from f2. } 6... Bb4 (6... Bb6 7. Bb5+ { Check, and White castles next while the bishop sits out of play on b6. } 7... Nc6 8. O-O)
+7. Bd2 { Defends the knight on c3 and breaks the pin, so ...Nxc3 would not win anything. } 7... Nxd2 { Black trades knight for bishop. } 8. Qxd2 { Recaptures with the queen so the pawn structure stays healthy, and the queen eyes the bishop on b4. } 8... O-O 9. a3 { Asks the bishop on b4 a question: take on c3 or go back. Either way White keeps the centre. } 9... Be7 10. Bd3 { Develops towards the king side and prepares to castle. Plan: castle, then play Ng5 or Qe3 against the king; the extra centre pawns give White the freer game. } *

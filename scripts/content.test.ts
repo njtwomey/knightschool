@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ourMoveNodes } from '../packages/core/src/index.ts';
+import { cardDefinitions, ourMoveNodes } from '../packages/core/src/index.ts';
 import { loadCourses, loadCurriculum, loadGlossary, loadOpeningGroups } from './content-lib.ts';
 
 // Builds the real files under content/, so a bad PGN, tag or course.yaml fails `make test`, not just `pnpm content:build`.
@@ -31,7 +31,10 @@ describe('content', () => {
   it.each(courses.map((content) => [content.opening.id, content] as const))(
     '%s has cards and a main line',
     (_id, content) => {
-      expect(ourMoveNodes(content).length).toBeGreaterThanOrEqual(3);
+      // A course made only of lines borrowed from other courses (`from:`) is for reading: they drill them.
+      const borrowedOnly = content.opening.variants.every((variant) => variant.alternative);
+      if (borrowedOnly) expect(cardDefinitions(content)).toHaveLength(0);
+      else expect(ourMoveNodes(content).length).toBeGreaterThanOrEqual(3);
       expect(content.opening.variants[0]!.kind).toBe('line');
     },
   );

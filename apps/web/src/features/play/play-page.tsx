@@ -268,6 +268,7 @@ export function PlayPage({ course, line, mode }: Props) {
               interactive={state.mode === 'learn' || (!complete && !opponentThinking && view.expected !== undefined)}
               onMove={(uci) => usePlay.getState().submitMove(uci)}
               lastMove={exploring ? explore!.at(-1)!.uci : view.lastEdge?.uci}
+              lastMoveTone={exploring ? 'yellow' : 'red'}
               arrows={
                 exploring
                   ? []

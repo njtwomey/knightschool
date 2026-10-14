@@ -1,0 +1,28 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Orthodox Defense, Main Line"]
+[ECO "D63"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "pin-on-f6,c-file-pressure"]
+[Kind "main"]
+
+1. d4 d5 2. c4 { Offers the c-pawn to pull Black's d-pawn away from the centre. Black cannot hold the extra pawn for long, so this is a safe way to fight for e4 and d5. } 2... e6
+3. Nc3 { Adds a second attacker on d5, so Black must keep defending it. } 3... Nf6
+( 3... Be7 4. Nf3 Nf6 5. Bg5 )
+4. Bg5 { Pins the knight on f6 to the queen. If it moves, White takes on d5 with more force. [%cal Gg5f6] } 4... Be7
+( 4... Nbd7 5. e3 c6 6. Nf3 Qa5 7. Nd2 { The Cambridge Springs pin on c3 needs an answer. The knight on d2 unpins the bishop's line and guards the knight on c3. } 7... Bb4 8. Qc2 { Guards the knight on c3 again and keeps Black from winning it. } )
+5. e3 { Opens the bishop on f1 and backs up d4, so the centre is solid before the pieces come out. } 5... O-O
+( 5... h6 6. Bh4 O-O 7. Nf3 )
+6. Nf3 { Develops and guards d4 and e5, so Black has no easy way to break the centre. } 6... Nbd7
+( 6... h6 7. Bh4 )
+7. Rc1 { Puts the rook on the c-file ahead of time. When the c-pawns trade, the rook is already there. } 7... c6
+( 7... dxc4 8. Bxc4 c5 9. O-O )
+8. Bd3 { Aims at h7 and waits: if Black takes on c4, the bishop recaptures with a gain of time. } 8... dxc4
+9. Bxc4 { Retakes the pawn and puts the bishop back on a good diagonal. } 9... Nd5
+10. Bxe7 { Trades off the bishop that was pinning, so White has fewer problems with Black's extra space. } 10... Qxe7
+11. O-O { Castles. The king is safe and the rook on f1 can support e4 later. } 11... Nxc3
+12. Rxc3 { Recaptures with the rook, which stays on the open c-file where it presses on c6 and c7. } 12... e5
+13. Qc2 { Plan: pile up on the c-file and keep the pieces coordinated. If Black pushes e5, take it and aim at the weak pawn on c6. } *

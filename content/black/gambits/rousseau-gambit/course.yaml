@@ -1,0 +1,51 @@
+name: Rousseau Gambit
+eco: C50
+side: black
+opening: rousseau-gambit
+tier: 3
+trigger: '1. e4 e5 2. Nf3 Nc6 3. Bc4 f5'
+summary: >-
+  A surprise weapon for Black against the Italian Game: 3...f5 offers the e-pawn to open the f-file. The engine thinks it
+  is dubious, because White's calm 4.d3 leaves Black about a pawn worse, but White's natural-looking tries lose quickly and
+  the course teaches the sound replies and the traps.
+plans:
+  - Meet 4.d3 with ...Nf6 and ...Bc5, develop fast, and take on e4 only when dxe4 helps you.
+  - After a grab on f5 or e5, win the material back or punish it, because White's pieces are not yet developed.
+  - Remember the f-pawn has left f7, so the queen reaches g5 and the king needs care; castle early.
+  - Know that this is a gambit you play for surprise, not because it is best.
+motifs: [pawn-chain, develop-first, castle-early, f7-weakness, fork-trick, hanging-piece, counter-in-the-centre]
+tags: [e4, open, italian, gambit]
+lines:
+  - file: d3-nf6
+    opponent: '4.d3'
+    kind: main
+    section: 'The sound reply: 4.d3'
+  - file: d3-nc3
+    opponent: '4.d3 Nf6 5.Nc3'
+    kind: sideline
+    section: 'The sound reply: 4.d3'
+  - file: d4-exd4
+    opponent: '4.d4'
+    kind: sideline
+    section: 'The sharp reply: 4.d4'
+  - file: exf5-e4
+    opponent: '4.exf5'
+    kind: sideline
+    section: If White takes on f5
+  - file: nc3-fxe4
+    opponent: '4.Nc3'
+    kind: sideline
+    section: If White errs
+traps:
+  - file: nxe5-nxe5
+    opponent: '4.Nxe5'
+    kind: for-us
+    section: Traps
+  - file: ng5-qxg5
+    opponent: '4.Ng5'
+    kind: for-us
+    section: Traps
+  - file: ng5-fxe4
+    opponent: '4.d3 Nf6 5.Ng5'
+    kind: against-us
+    section: Traps

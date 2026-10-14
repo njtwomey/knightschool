@@ -15,12 +15,16 @@ import {
 import { create } from 'zustand';
 import { loadIndex, loadSearchIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
+import { coursesFor, saveChoice, savedChoice, type PracticeSource } from '@/data/practice-source';
+import { getEnrolled } from '@/data/training-settings';
+
+const SOURCE_KEY = 'knightschool.guess.source';
 
 /** Positions in one sitting, as a review session has cards. */
 export const SESSION_LENGTH = 10;
 
-/** Nothing waits for a click: the answer is shown for a few seconds, then the next position comes up. */
-export const GUESS_DELAYS = { full: 2600, partial: 5000, miss: 6500 } as const;
+/** A right answer is shown for a moment, then the next position comes up. Other answers wait for Next. */
+export const GUESS_DELAYS = { full: 2600 } as const;
 
 /** A place a position comes from, to link to once it has been answered. */
 export type Source = { course: string; line: string; name: string; trap: boolean };
@@ -45,8 +49,11 @@ type GuessState = {
   /** Every answer this session, in order. */
   outcomes: Outcome[];
   shownAt: number;
+  /** Which courses the positions come from. Answers are always judged against every course. */
+  source: PracticeSource;
 
   start: () => Promise<void>;
+  setSource: (source: PracticeSource) => void;
   stop: () => void;
   setAnswer: (answer: string) => void;
   submit: () => void;
@@ -56,6 +63,8 @@ type GuessState = {
 
 type Deck = {
   courses: OpeningIndexEntry[];
+  /** The courses positions are asked from (all of them, unless the source narrows it). */
+  pool: OpeningIndexEntry[];
   search: SearchIndex;
   /** How each position went last time, so missed ones come back sooner. */
   history: Map<string, GuessResult>;
@@ -66,7 +75,7 @@ let timer: ReturnType<typeof setTimeout> | undefined;
 /** One candidate per distinct position: transpositions share it, and the first line to reach it names the side. */
 function candidates(from: Deck) {
   const seen = new Map<string, { epd: string; side: 'white' | 'black'; weight: number }>();
-  for (const course of from.courses) {
+  for (const course of from.pool) {
     for (const line of course.lines) {
       line.epds.forEach((epd, i) => {
         if (seen.has(epd)) return;
@@ -140,7 +149,8 @@ export const useGuess = create<GuessState>((set, get) => {
       )
       .catch(() => undefined); // the game still works if the answer cannot be saved
     clearTimeout(timer);
-    timer = setTimeout(show, GUESS_DELAYS[grade.result]);
+    // A right answer moves on by itself; anything else waits, because there is something to read.
+    if (grade.result === 'full') timer = setTimeout(show, GUESS_DELAYS.full);
   }
 
   return {
@@ -151,6 +161,7 @@ export const useGuess = create<GuessState>((set, get) => {
     graded: null,
     outcomes: [],
     shownAt: 0,
+    source: savedChoice(SOURCE_KEY, 'all'),
 
     async start() {
       if (get().phase === 'loading') return;
@@ -161,7 +172,13 @@ export const useGuess = create<GuessState>((set, get) => {
           .then(({ storage }) => storage.guessAttempts.since('1970-01-01T00:00:00.000Z'))
           .then(lastResults)
           .catch(() => new Map<string, GuessResult>());
-        deck = { courses, search, history };
+        const enrolled =
+          get().source === 'learning'
+            ? await whenStorageReady()
+                .then(({ storage }) => getEnrolled(storage))
+                .catch(() => [] as string[])
+            : [];
+        deck = { courses, pool: coursesFor(get().source, courses, enrolled), search, history };
         set({ outcomes: [] });
         show();
       } catch (error) {
@@ -170,6 +187,11 @@ export const useGuess = create<GuessState>((set, get) => {
     },
     stop() {
       clearTimeout(timer);
+    },
+    setSource(source) {
+      saveChoice(SOURCE_KEY, source);
+      set({ source });
+      void get().start();
     },
     setAnswer: (answer) => set({ answer }),
     submit() {

@@ -9,7 +9,17 @@ import { to } from '@/router/location';
 type Group = { title: string; note?: string; variants: Variant[] };
 
 /** The lines and traps of a course in the order a learner needs them: what they will meet most, then the tricks. */
-function groupsOf(variants: Variant[]): Group[] {
+function groupsOf(all: Variant[]): Group[] {
+  // A course that names its own sections shows them in the order they first appear; anything unnamed follows.
+  const titled = [...new Set(all.flatMap((variant) => (variant.section ? [variant.section] : [])))];
+  const sections: Group[] = titled.map((title) => ({
+    title,
+    variants: all.filter((variant) => variant.section === title),
+  }));
+  return [...sections, ...kindGroups(all.filter((variant) => !variant.section))];
+}
+
+function kindGroups(variants: Variant[]): Group[] {
   const lines = variants.filter((variant) => variant.kind === 'line');
   const traps = variants.filter((variant) => variant.kind === 'refutation');
   const normal = lines.filter((variant) => !variant.alternative);

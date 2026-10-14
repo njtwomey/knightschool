@@ -1,0 +1,24 @@
+[Event "Knight School"]
+[Opening "Evans Gambit"]
+[Variation "Italian Game: Evans Gambit, Morphy Attack"]
+[ECO "C52"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pawn-grab"]
+[Themes "centre-fight,lead-in-development"]
+[Kind "main"]
+
+1. e4 { Claims the centre and opens lines for the bishop and queen. } 1... e5 2. Nf3 { Develops a piece and attacks the e5 pawn, so Black must defend it. } 2... Nc6 3. Bc4 { Aims at [f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -), where only the king guards the pawn. } 3... Bc5
+4. b4 { The Evans Gambit. White offers the b-pawn so that the bishop on c5 has to take it or run, and White gets time to build a big [pawn centre](r1bqk1nr/pppp1ppp/2n5/2b1p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R b KQkq -). } 4... Bxb4
+5. c3 { Attacks the bishop and prepares d4. Without this move the pawn sacrifice would buy nothing. } 5... Ba5
+6. d4 { Takes the centre and attacks e5. White now has two pawns in the middle and Black's king is still uncastled. } 6... exd4
+7. O-O { Castles first. The bishop on a5 [pins the c3 pawn](r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQK2R w KQkq -) to the king, so cxd4 is not legal yet; castling ends the pin and gets the king safe. } 7... d6
+( 7... Nge7 8. cxd4 { Now the pawn can retake, because the king has left the diagonal. } 8... d5 9. exd5 Nxd5 10. Ba3 { Stops Black castling: the bishop covers f8. Black's king is stuck in the middle while White's pieces come out. } 10... Be6 )
+( 7... Nf6 8. cxd4 { Retakes the pawn, so White has a strong centre for free. } 8... d6 9. d5 { Drives the knight from c6 before Black can arrange pieces around it. } 9... Ne7 10. e5 { Opens the position while White has the better development. } )
+8. cxd4 { Retakes and wins the pawn back. White has two big pawns in the centre and Black must watch for d5 and e5. } 8... Bb6
+9. Nc3 { Another piece into play, and it defends the e4 pawn. White has fewer pawns but more active pieces. } 9... Na5
+( 9... Bg4 10. Bb5 { Pins the knight on c6 to the king and adds to the pressure on d4. } 10... Bxf3 11. gxf3 { Retakes towards the centre and opens the g-file for the rook. White keeps the bishop pair. } 11... a6 12. Ba4 )
+( 9... Nf6 10. e5 { Hits the knight before Black is ready. Black's king is still in the middle, so opening the centre favours White. } 10... dxe5 11. Ba3 )
+10. Bd3 { Steps out of reach of the knight, which wanted to take the bishop for free. The bishop keeps pointing at h7. } 10... Nge7
+11. h3 { Stops ...Bg4, which would pin the knight on f3. Plan: Re1, then Bg5 or Ne2 and Bf4; look for d5 and e5 breaks. If Black leaves the book, castle, hold the centre and keep developing. } *

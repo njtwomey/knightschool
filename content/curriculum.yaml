@@ -23,3 +23,17 @@
   prerequisites: [e5-open-games]
 - id: flank-and-irregular
   prerequisites: [qgd]
+- id: vs-pawn-gambits
+  prerequisites: [e5-open-games, qgd]
+- id: danish-gambit
+  prerequisites: [vs-e5-italian]
+- id: vienna-gambit
+  prerequisites: [vs-e5-italian]
+- id: kings-gambit
+  prerequisites: [vs-e5-italian]
+- id: queens-gambit
+  prerequisites: [qgd]
+- id: evans-gambit
+  prerequisites: [vs-e5-italian]
+- id: rousseau-gambit
+  prerequisites: [e5-open-games]

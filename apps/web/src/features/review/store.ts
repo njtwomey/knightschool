@@ -1,5 +1,6 @@
 import {
   createScheduler,
+  freePractice,
   isQuizCard,
   matchAnswer,
   recordQuizAnswer,
@@ -20,7 +21,8 @@ import {
 } from '@knightschool/core';
 import type { Storage } from '@knightschool/storage';
 import { create } from 'zustand';
-import { loadOpening } from '@/data/content';
+import { loadIndex, loadOpening } from '@/data/content';
+import { coursesFor, saveChoice, savedChoice } from '@/data/practice-source';
 import { useStorage, whenStorageReady } from '@/data/storage';
 import {
   addIntroducedToday,
@@ -31,14 +33,16 @@ import {
 } from '@/data/training-settings';
 
 const scheduler = createScheduler();
+const SOURCE_KEY = 'knightschool.quiz.source';
+
+/** "due" is the scheduled session; anything else is free practice from those courses. */
+export const DUE = 'due';
 
 /** Nothing waits for a click: a right answer shows a tick and the next card follows by itself. */
 export const REVIEW_DELAYS = {
   afterCorrect: 700,
-  afterMiss: 1400,
   wrongBadge: 900,
   quizRight: 2200,
-  quizMiss: 6000,
 } as const;
 
 type Phase = 'idle' | 'loading' | 'asking' | 'summary' | 'error';
@@ -59,8 +63,16 @@ type ReviewState = {
   advancing: boolean;
   /** The result of the typed answer to the quiz being asked, shown until the next card. */
   quizResult: { matched: boolean; feedback: string | null; close: string | null; answer: string } | null;
+  /** "due" (the review schedule), or where free practice draws from: learning, all, or a course id. */
+  source: string;
+  /** An earlier move of the position being asked, picked from the move table to look at; null shows the question. */
+  viewing: number | null;
+  /** True when an answer is shown and waits for Next: a miss has something to read. */
+  holding: boolean;
+  view: (index: number | null) => void;
 
   start: () => Promise<void>;
+  setSource: (source: string) => void;
   /** Returns true when the move was the expected one. Illegal moves are ignored. */
   submitMove: (uci: string) => boolean;
   /** A typed answer to a quiz card. */
@@ -88,7 +100,8 @@ const storageOrThrow = (): Storage => {
 export const useReview = create<ReviewState>((set, get) => {
   function advance() {
     const { index, queue } = get();
-    if (index + 1 >= queue.length) set({ phase: 'summary', badge: null, advancing: false, quizResult: null });
+    if (index + 1 >= queue.length)
+      set({ phase: 'summary', badge: null, advancing: false, quizResult: null, holding: false });
     else
       set({
         index: index + 1,
@@ -96,6 +109,8 @@ export const useReview = create<ReviewState>((set, get) => {
         badge: null,
         advancing: false,
         quizResult: null,
+        viewing: null,
+        holding: false,
         shownAt: performance.now(),
       });
   }
@@ -113,16 +128,51 @@ export const useReview = create<ReviewState>((set, get) => {
     badge: null,
     advancing: false,
     quizResult: null,
+    source: savedChoice(SOURCE_KEY, DUE),
+    viewing: null,
+    holding: false,
+    view: (viewing) => set({ viewing }),
+
+    setSource(source) {
+      saveChoice(SOURCE_KEY, source);
+      set({ source });
+      void get().start();
+    },
 
     async start() {
       // React runs effects twice in development; two sessions starting together would introduce cards twice.
       if (get().phase === 'loading') return;
       clearTimers();
-      set({ phase: 'loading', error: null, advancing: false, badge: null, quizResult: null });
+      set({
+        phase: 'loading',
+        error: null,
+        advancing: false,
+        badge: null,
+        quizResult: null,
+        viewing: null,
+        holding: false,
+      });
       try {
         const storage = (await whenStorageReady()).storage;
         const now = new Date();
         const enrolled = await getEnrolled(storage);
+        if (get().source !== DUE) {
+          // Free practice: random questions, saved nowhere, so the schedule is untouched.
+          const chosen = coursesFor(get().source, await loadIndex(), enrolled);
+          const free = await Promise.all(chosen.map((course) => loadOpening(course.id)));
+          const queue = freePractice(free, undefined, await getCardOptions(storage));
+          set({
+            queue,
+            index: 0,
+            contents: Object.fromEntries(free.map((content) => [content.opening.id, content])),
+            results: [],
+            sessionId: crypto.randomUUID(),
+            attempt: startAttempt(),
+            shownAt: performance.now(),
+            phase: queue.length ? 'asking' : 'summary',
+          });
+          return;
+        }
         const loaded = await Promise.all(enrolled.map((id) => loadOpening(id)));
         const contents = Object.fromEntries(loaded.map((content) => [content.opening.id, content]));
 
@@ -178,13 +228,17 @@ export const useReview = create<ReviewState>((set, get) => {
         advancing: true,
         results: [...state.results, next.rating!],
       }));
-      const answer = recordAnswer(scheduler, card, next, get().sessionId, new Date());
-      void storageOrThrow()
-        .reviews.record(answer.card, answer.review)
-        .catch((error: unknown) =>
-          set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
-        );
-      later(next.shown ? REVIEW_DELAYS.afterMiss : REVIEW_DELAYS.afterCorrect, advance);
+      if (get().source === DUE) {
+        const answer = recordAnswer(scheduler, card, next, get().sessionId, new Date());
+        void storageOrThrow()
+          .reviews.record(answer.card, answer.review)
+          .catch((error: unknown) =>
+            set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
+          );
+      }
+      // A right first time carries on by itself; a miss or a slip waits for Next so the explanation can be read.
+      if (next.shown || next.wrongTries > 0) set({ holding: true });
+      else later(REVIEW_DELAYS.afterCorrect, advance);
       return true;
     },
 
@@ -211,12 +265,14 @@ export const useReview = create<ReviewState>((set, get) => {
           answer,
         },
       }));
-      void storageOrThrow()
-        .quizAttempts.record(done.card, done.review, done.attempt)
-        .catch((error: unknown) =>
-          set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
-        );
-      later(result.matched ? REVIEW_DELAYS.quizRight : REVIEW_DELAYS.quizMiss, advance);
+      if (get().source === DUE)
+        void storageOrThrow()
+          .quizAttempts.record(done.card, done.review, done.attempt)
+          .catch((error: unknown) =>
+            set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
+          );
+      if (result.matched) later(REVIEW_DELAYS.quizRight, advance);
+      else set({ holding: true });
     },
 
     skip() {

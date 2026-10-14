@@ -1,0 +1,20 @@
+[Event "Knight School"]
+[Opening "King's Gambit Declined"]
+[Variation "King's Gambit Declined: Falkbeer Countergambit, Charousek Variation"]
+[ECO "C32"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "open-e-file,extra-pawn"]
+[Kind "gambit"]
+
+1. e4 e5 2. f4 d5 { The Falkbeer Countergambit: Black answers a gambit with a gambit, offering the d-pawn to open the centre. }
+3. exd5 { Accepts the second pawn. Black's next move cramps White but costs Black a pawn. } 3... e4 { Black wants to cramp White's pieces with the pawn on e4 and attack it quickly. }
+4. d3 { Attacks the e4 pawn straight away, before Black can support it. }
+4... Nf6 5. dxe4 { Takes the pawn on e4. After Black recaptures White is a pawn up, and the d-file is open for the queen. }
+5... Nxe4 6. Nf3 { Develops a piece and prepares to castle. White is a pawn up, so finish development before anything fancy. }
+6... c6 7. Qe2 { Pins the knight on e4 to the king. Black has to give up the knight or lose it. }
+7... cxd5 ( 7... Qa5+ 8. Bd2 { Blocks the check and attacks the queen, so Black cannot also save the pinned knight on e4. } 8... Qxd5 9. Nc3 )
+8. Nbd2 { Adds a second attacker to the pinned knight on e4. }
+8... f5 9. Nxe4 { Takes the pinned knight. } 9... fxe4 10. Ne5 { The knight lands on a strong square and cannot be chased away easily; it also eyes d7 and f7. Plan: finish developing with Be3 and castling long, then attack the e4 pawn and use the extra pawn. If Black leaves the book, get your pieces out before grabbing more pawns. } 10... Nc6 *

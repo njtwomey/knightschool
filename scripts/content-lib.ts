@@ -41,6 +41,31 @@ function readVariants(courseDir: string, kind: 'lines' | 'traps'): VariantSource
     });
 }
 
+/** The lines and traps that a course takes from another course's folder (`from:` in course.yaml). */
+function readReused(manifest: OpeningManifest): VariantSource[] {
+  const homes = new Map(courseDirs().map(({ dir, side }) => [basename(dir), { dir, side }]));
+  return manifest.lines.flatMap((entry) => {
+    if (!entry.from) return [];
+    const home = homes.get(entry.from);
+    if (!home) throw new Error(`${manifest.name}: "${entry.file}" is from "${entry.from}", which is not a course`);
+    if (home.side !== manifest.side)
+      throw new Error(
+        `${manifest.name}: "${entry.file}" is from "${entry.from}", a course for ${home.side}; only lines for the same side can be reused`,
+      );
+    const path = join(home.dir, 'lines', `${entry.file}.pgn`);
+    if (!existsSync(path)) throw new Error(`${manifest.name}: ${rel(path)} does not exist (from: ${entry.from})`);
+    return [
+      {
+        id: entry.file,
+        kind: 'line' as const,
+        game: parsePgn(readFileSync(path, 'utf8'), rel(path)),
+        source: rel(path),
+        reused: true,
+      },
+    ];
+  });
+}
+
 function readYaml<T>(path: string, schema: z.ZodType<T>): T {
   const parsed = schema.safeParse(parseYaml(readFileSync(path, 'utf8')));
   if (!parsed.success) {
@@ -76,7 +101,7 @@ export function loadCourseAt(dir: string, side?: 'white' | 'black'): OpeningCont
   if (side && manifest.side !== side) {
     throw new Error(`${rel(manifestPath)}: side is ${manifest.side} but the course is under content/${side}/`);
   }
-  const variants = [...readVariants(dir, 'lines'), ...readVariants(dir, 'traps')];
+  const variants = [...readVariants(dir, 'lines'), ...readVariants(dir, 'traps'), ...readReused(manifest)];
   const quizPath = join(dir, 'quizzes.yaml');
   const quizzes: QuizEntry[] = existsSync(quizPath) ? readYaml(quizPath, z.array(QuizEntry)) : [];
   return buildOpening(id, manifest, variants, quizzes);

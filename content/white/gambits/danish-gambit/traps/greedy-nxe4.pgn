@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Danish Gambit"]
+[Variation "Danish Gambit Accepted: Classical Defense"]
+[ECO "C21"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "hanging-knight,development-lead"]
+[Refutes "1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 Nf6 6. Nc3 Nxe4"]
+[Kind "for-us"]
+
+1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 Nf6 6. Nc3 Nxe4? { Black grabs the third pawn with the knight, but nothing guards that knight on e4. }
+7. Nxe4 { Wins a whole knight for a pawn. Black has no way to take back on e4. } 7... d5 { Black attacks the bishop and the knight together. } 8. Bxd5 { Takes the pawn and the bishop is safe here. White has regained all the material and is a piece up. } 8... c6 9. Bb3 { Keeps the bishop safe and the extra piece. } *

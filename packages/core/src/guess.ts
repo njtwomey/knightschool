@@ -80,17 +80,24 @@ function identifiers(variation: string, openings: string[]): string[] {
 }
 
 /**
+ * More variations than this reach a position, and the position cannot tell them apart (after 1.e4 d5 a dozen Scandinavian
+ * lines all share it), so the opening alone is the right answer.
+ */
+export const MAX_TELLABLE_VARIATIONS = 4;
+
+/**
  * Grades a typed answer. Any one of the right names is enough, and the order and spelling of the words do not matter:
  * "advance caro kann" is the Caro-Kann, Advance Variation. Naming a variation is full credit, naming only the
- * opening is partial.
+ * opening is partial, unless so many variations share the position that it cannot tell them apart.
  */
 export function gradeGuess(answer: string, targets: GuessTargets): { result: GuessResult; matched?: string } {
   const typed = new Set(words(answer));
   const named = targets.variations.filter((name) => !isMoves(name));
+  const tellable = named.length <= MAX_TELLABLE_VARIATIONS;
   const variation = named.find((name) => identifiers(name, targets.openings).some((part) => covers(typed, part)));
   if (variation) return { result: 'full', matched: variation };
   const opening = targets.openings.find((name) => covers(typed, name));
-  if (opening) return { result: named.length === 0 ? 'full' : 'partial', matched: opening };
+  if (opening) return { result: named.length === 0 || !tellable ? 'full' : 'partial', matched: opening };
   return { result: 'miss' };
 }
 

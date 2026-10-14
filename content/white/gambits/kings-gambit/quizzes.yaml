@@ -1,0 +1,72 @@
+- id: kieseritzky-rook-h1
+  line: 1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 Qxh4+
+  prompt: Black has just taken the h4 pawn with check. How does White win the queen?
+  accept:
+    - keywords: [[rook, rxh4, h1], [take, capture, win, rxh4]]
+      all: true
+      feedback: Yes. The rook on h1 sees h4 through the empty h-file, so it simply takes the queen.
+    - keywords: [[rook, rxh4, h1]]
+      feedback: Yes. The rook on h1 takes the queen on h4.
+  reveal: The rook on h1 takes the queen with 6.Rxh4, because the h-pawn moved forward and left the file open.
+  showMove: Rxh4
+  examples:
+    match: [the rook on h1 takes it, Rxh4, rook takes the queen on h4 because nothing protects it]
+    miss: [the king moves, bishop takes, no idea, blocks with g3]
+- id: cunningham-knight-sac
+  line: 1. e4 e5 2. f4 exf4 3. Nf3 Be7 4. Bc4 Nf6 5. e5 Nh5 6. Nc3 d6 7. d4 g5
+  prompt: Black pushed ...g5 to guard the f4 pawn. What shot wins material for White?
+  accept:
+    - keywords: [[nxg5, sacrifice, sac, knight], [h5, qxh5, queen, undefended, loose, unprotected]]
+      all: true
+      feedback: Yes. Nxg5 and if the bishop takes, Qxh5 wins the stranded knight on h5 with a double attack.
+    - keywords: [[nxg5]]
+      feedback: Yes. 8.Nxg5 opens the line to the knight on h5.
+  reveal: White plays 8.Nxg5. If 8...Bxg5, then 9.Qxh5 wins the knight on h5 and attacks the bishop and rook.
+  showMove: Nxg5
+  examples:
+    match:
+      [
+        Nxg5 and then the queen takes the knight on h5,
+        knight takes g5 and wins the loose knight on h5,
+        sacrifice the knight on g5 then Qxh5,
+      ]
+    miss: [it develops a piece, bishop takes f4, castles, no idea]
+- id: falkbeer-qxd5
+  line: 1. e4 e5 2. f4 d5 3. exd5 e4 4. d3 Nf6 5. dxe4 Nxe4 6. Nf3 Qxd5
+  prompt: Black has just taken the pawn on d5 with the queen. Why is that a blunder?
+  accept:
+    - keywords: [[queen, qxd5, d1, d-file, file], [take, capture, win, free, lose, hang]]
+      all: true
+      feedback: Yes. The queen on d1 sees d5 along the open file, and nothing guards the black queen.
+    - keywords: [[qxd5]]
+      feedback: Yes. White takes the queen with Qxd5.
+  reveal: After 7.Qxd5 the black queen is gone for nothing, because the d-file is open and no black piece guards d5.
+  showMove: Qxd5
+  examples:
+    match:
+      [
+        the white queen takes it on the open d-file and nothing protects it,
+        Qxd5 wins the queen for free,
+        my queen on d1 takes the queen,
+      ]
+    miss: [it develops a piece, the knight forks, no idea, castles]
+- id: why-not-fxe5
+  line: 1. e4 e5 2. f4 Bc5 3. fxe5
+  prompt: White just took the pawn on e5. Why is that a mistake?
+  accept:
+    - keywords: [[qh4, queen, check], [fork, e4, rook, h1, attack, win, lose]]
+      all: true
+      feedback: Yes. 3...Qh4+ and after g3 the queen takes e4 with check and then h1.
+    - keywords: [[qh4, queen, check]]
+      partial: true
+      feedback: Right idea. Say what the queen wins.
+  reveal: After 3...Qh4+ 4.g3 Qxe4+ the queen forks the king and the rook on h1.
+  showMove: Qh4+
+  examples:
+    match:
+      [
+        Qh4 check then the queen forks king and rook,
+        the queen checks on h4 and wins the rook on h1,
+        Qh4 then Qxe4 attacks the rook,
+      ]
+    miss: [it develops a piece, no idea, castles, takes a pawn]

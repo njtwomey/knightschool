@@ -9,6 +9,7 @@ import type { OpeningContent } from './schema/content';
 import {
   cardDefinitions,
   cardId,
+  freePractice,
   introductionOrder,
   isQuizCard,
   planIntroductions,
@@ -317,5 +318,27 @@ describe('quiz cards', () => {
     const wrong = recordQuizAnswer(scheduler, card, { matched: false, answer: 'dunno', msToAnswer: 900 }, 's', NOW);
     expect(wrong.review.rating).toBe('again');
     expect(wrong.attempt.matched).toBe(false);
+  });
+});
+
+describe('freePractice', () => {
+  it('draws from the courses given, at most the size asked, without repeating a card', () => {
+    const c = content();
+    const cards = freePractice([c], 3, {}, () => 0.5, NOW);
+    const all = introductionOrder(c, { includeRare: true }).map((card) => card.id);
+    expect(cards.length).toBe(Math.min(3, all.length));
+    expect(new Set(cards.map((card) => card.id)).size).toBe(cards.length);
+    for (const card of cards) {
+      expect(all).toContain(card.id);
+      expect(card.state).toBe('new');
+    }
+  });
+
+  it('is a different order for a different roll', () => {
+    const c = content();
+    const first = freePractice([c], 100, {}, () => 0, NOW).map((card) => card.id);
+    const second = freePractice([c], 100, {}, () => 0.99, NOW).map((card) => card.id);
+    expect(new Set(first)).toEqual(new Set(second));
+    expect(first).not.toEqual(second);
   });
 });

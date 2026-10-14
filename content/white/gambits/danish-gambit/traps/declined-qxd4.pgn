@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Danish Gambit"]
+[Variation "Danish Gambit Declined: Queen grabs d4"]
+[ECO "C21"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab"]
+[Themes "remove-the-defender"]
+[Refutes "1. e4 e5 2. d4 exd4 3. c3 d5 4. exd5 Qxd5 5. cxd4 Nc6 6. Nf3 Bb4+ 7. Nc3 Bg4 8. Be2 Bxf3 9. Bxf3 Qxd4"]
+[Kind "for-us"]
+
+1. e4 e5 2. d4 exd4 3. c3 d5 4. exd5 Qxd5 5. cxd4 Nc6 6. Nf3 Bb4+ 7. Nc3 Bg4 8. Be2 Bxf3 9. Bxf3 Qxd4? { Grabs a pawn, but the queen is defended only by the knight on c6. }
+10. Bxc6+ { Takes the knight with check. Black has to recapture, and that removes the only defender of the queen. } 10... bxc6 11. Qxd4 { Wins the queen, since nothing recaptures on d4. White is a queen up for a bishop and ahead overall. } *

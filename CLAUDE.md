@@ -67,7 +67,11 @@ position every line passes through, a tier (1 study first, 2 next, 3 alternative
 `content/openings.yaml`, which also says who plays the opening: that makes a course "playing it" or "playing against it"), plans
 and motifs (from `content/motifs.yaml`), and each line's `kind` (main, sideline, rare, gambit; plus `alternative`) and each
 trap's (`for-us` springs it, `against-us` must be avoided). `content/curriculum.yaml` is the study order and prerequisites.
-Gambits and traps are branches inside the course where they arise; there is no separate motifs section. Folders starting with `_`
+Gambits and traps are branches inside the course where they arise; there is no separate motifs section. A line or trap
+can name a `section` (the course page then groups by it), and a line can be taken from another course for the same side with
+`from: <course id>`: it is shown here but never drilled (cards are per course, so its home course drills it). A course is for
+one side and holds one drilled answer per position, so each gambit is its own course with a deep trigger, and the Black
+"tour" course (`vs-pawn-gambits`) borrows the Black lines. Folders starting with `_`
 (`_parked`, `_staging`) are never built.
 
 Which positions earn review cards is `cardDefinitions` in `training.ts`: main and gambit lines always, sidelines unless the
@@ -109,7 +113,7 @@ and `404.html` is copied from `index.html` at build; dev and preview already fal
   Settings), its lines and traps grouped by kind (main, gambits, sidelines, rare, alternatives, traps to avoid, traps to spring;
   click a row = learn, icon buttons show / learn / practise), and the same ground from the other side (courses in the same
   opening, and courses that reach the same positions: `relatedCourses`). The browse store keeps the displayed `line`.
-- `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each.
+- `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each, searchable and A to Z.
 - `play`: Learn (you play both sides, every move shown), Practise (the computer plays the other side) and Every branch.
   `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; lines from the courses you
   are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
@@ -119,11 +123,15 @@ and `404.html` is copied from `index.html` at build; dev and preview already fal
   `guess` ("Name That Opening", `/guess`): a position from the courses and you type what it is; `guessTargets` collects every
   opening and variation whose lines reach it (transpositions count) and `gradeGuess` gives full credit for a variation, half
   for just the opening; answers go to the `guess_attempts` table.
-  `review`: spaced-repetition cards. `today`: dashboard. `settings`, `lab` (render any PGN at a ply, or a FEN).
+  `review`: spaced-repetition cards. Quiz, Guess and Speed share a "from" choice (`SourceSelect`, `data/practice-source.ts`):
+  the courses you are learning, everything, or one course. Quiz also has "Due today (your schedule)", the default; any
+  other choice is free practice (`freePractice` in core) that is never saved, so it cannot touch the schedule. `today`: dashboard. `settings`, `lab` (render any PGN at a ply, or a FEN).
 
-**Nothing may ask the learner to acknowledge anything.** A right move flashes a tick and play carries on by itself (the
-computer replies, the next card appears); a wrong move flashes a cross and snaps back; a miss reveals the move and waits
-for it to be played. No "Next" buttons. Delays live in `DELAYS` / `REVIEW_DELAYS`.
+**Nothing waits for a click when you are right.** A right move flashes a tick and play carries on by itself (the computer
+replies, the next card appears); a wrong move flashes a cross and snaps back; a miss reveals the move. The exception, asked
+for by the user: in Quiz and Guess a miss (or a partly right Guess, or a move needing a retry) stays up with a **Next** button,
+because there is an explanation to read. In Speed a five second modal, with a countdown and the next opening's name, sits
+between lines of a fixed run. Delays live in `DELAYS` / `REVIEW_DELAYS` / `GUESS_DELAYS` / `SPEED_DELAYS`.
 
 All boards are `components/board/app-board.tsx` (colour theme, piece set, legal-move dots, hover and selection
 highlights, tick/cross badge, hint pulse). Preferences are per device in localStorage (`board/prefs.ts`), default the

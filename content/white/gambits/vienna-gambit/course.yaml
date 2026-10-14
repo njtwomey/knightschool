@@ -1,0 +1,55 @@
+name: Vienna Gambit
+eco: C29
+side: white
+opening: pawn-gambits
+tier: 2
+trigger: '1. e4 e5 2. Nc3 Nf6 3. f4'
+summary: >-
+  White plays the f-pawn to open the f-file and build a big centre, as in the King's Gambit but with the knight on c3
+  already guarding e4. This course teaches the best defence, [3...d5](rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq -), and every other
+  reply, with the traps.
+plans:
+  - Take on e5 first (fxe5), develop Nf3, play d4 and Bd3 and castle; the extra centre pawns are the compensation.
+  - Against 3...d5 4.fxe5 Nxe4, answer 5.Nf3, not 5.Qh5; the queen comes out only after the pieces.
+  - If Black takes on f4, kick the knight with e5, play Nf3 and d4, and win the pawn back with Bxf4.
+  - Castle early; the open f-file and the diagonal to the king are only safe when the king is out of the centre.
+motifs: [develop-first, centre-pawns, castle-early, fork, early-queen, give-back-material]
+tags: [e4, gambit, vienna]
+lines:
+  - file: d5-breyer
+    opponent: '3...d5'
+    kind: main
+    section: 'If Black hits back with 3...d5'
+  - file: d5-bc5
+    opponent: '3...d5 4.fxe5 Nxe4 5.Nf3 Bc5'
+    kind: sideline
+    section: 'If Black hits back with 3...d5'
+  - file: exf4-e5
+    opponent: '3...exf4'
+    kind: main
+    section: 'If Black takes the pawn'
+  - file: d6
+    opponent: '3...d6'
+    kind: sideline
+    section: 'If Black declines quietly'
+  - file: nc6
+    opponent: '3...Nc6'
+    kind: sideline
+    section: 'If Black declines quietly'
+  - file: rare-replies
+    opponent: '3...Bc5'
+    kind: rare
+    section: 'Other third moves'
+traps:
+  - file: bb4-fxe5
+    opponent: '3...Bb4'
+    kind: for-us
+    section: 'Traps'
+  - file: qe7-exf4
+    opponent: '3...exf4 4.e5 Qe7'
+    kind: for-us
+    section: 'Traps'
+  - file: qh5-greedy
+    opponent: '3...d5 4.fxe5 Nxe4 5.Qh5'
+    kind: against-us
+    section: 'Traps'

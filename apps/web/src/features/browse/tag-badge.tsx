@@ -1,6 +1,7 @@
 import type { Variant } from '@knightschool/core';
 import { ChevronLeft, Ellipsis } from 'lucide-react';
 import { useState } from 'react';
+import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from 'cn';
@@ -30,12 +31,21 @@ const CHARACTER: Record<Variant['tags']['character'][number], Tone> = {
 const RISK: Record<Variant['tags']['risk'], Tone> = { low: 'green', medium: 'amber', high: 'red' };
 
 function Tag({ tone: kind, children, title }: { tone: Tone; children: React.ReactNode; title?: string }) {
-  return (
-    <Badge variant="outline" className={cn('px-1.5 py-0 text-[11px] font-normal leading-4', tone[kind])} title={title}>
+  const badge = (
+    <Badge variant="outline" className={cn('px-1.5 py-0 text-[11px] font-normal leading-4', tone[kind])}>
       {children}
     </Badge>
   );
+  return title ? <Hint text={title}>{badge}</Hint> : badge;
 }
+
+const CHARACTER_HINT: Record<Variant['tags']['character'][number], string> = {
+  solid: 'Solid: sound and safe, with few weaknesses. Hard for the opponent to attack.',
+  positional: 'Positional: the plan is about pawn structure and good squares rather than quick attacks.',
+  sharp: 'Sharp: the position gets complicated quickly, and one slip can decide the game.',
+  tactical: 'Tactical: the play is about concrete tricks and combinations.',
+  gambit: 'Gambit: a pawn is offered in return for faster development.',
+};
 
 type TagSpec = { key: string; tone: Tone; label: string; title?: string };
 
@@ -47,14 +57,21 @@ function tagsOf(variant: Variant): TagSpec[] {
     variant.kind === 'refutation'
       ? { key: 'trap', tone: 'amber', label: 'trap', title: 'A line that punishes a specific mistake' }
       : null,
-    firstCharacter ? { key: firstCharacter, tone: CHARACTER[firstCharacter], label: firstCharacter } : null,
+    firstCharacter
+      ? {
+          key: firstCharacter,
+          tone: CHARACTER[firstCharacter],
+          label: firstCharacter,
+          title: CHARACTER_HINT[firstCharacter],
+        }
+      : null,
     {
       key: 'risk',
       tone: RISK[tags.risk],
       label: `${tags.risk} risk`,
       title: 'How badly a beginner on your side can go wrong',
     },
-    ...otherCharacters.map((item) => ({ key: item, tone: CHARACTER[item], label: item })),
+    ...otherCharacters.map((item) => ({ key: item, tone: CHARACTER[item], label: item, title: CHARACTER_HINT[item] })),
     tags.earlyMate !== 'none'
       ? {
           key: 'mate',
@@ -67,7 +84,7 @@ function tagsOf(variant: Variant): TagSpec[] {
       key: `trick-${trick}`,
       tone: 'grey' as const,
       label: trick,
-      title: 'A trick either side can fall for',
+      title: `Trick: ${trick.replaceAll('-', ' ')}. A tactic either side can fall for in this line.`,
     })),
   ];
   return list.filter((tag): tag is TagSpec => tag !== null);

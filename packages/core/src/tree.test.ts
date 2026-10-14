@@ -37,6 +37,18 @@ const variant = (id: string, kind: 'line' | 'refutation', moves: string, extra =
 
 const manifest = manifestOf;
 
+describe('buildOpening with a reused line', () => {
+  it("does not hold a line from another course to this course's kind", () => {
+    const kinded = (reused: boolean) => ({
+      ...variant('borrowed', 'line', '1. e4 e5 *', '[Kind "gambit"]'),
+      reused,
+    });
+    const build = (reused: boolean) => buildOpening('test', manifest({ lines: ['borrowed'] }), [kinded(reused)]);
+    expect(() => build(false)).toThrow(/does not match/);
+    expect(() => build(true)).not.toThrow();
+  });
+});
+
 describe('buildOpening', () => {
   const content = buildOpening('test', manifest({ lines: ['main', 'side'], traps: ['trap'] }), [
     variant('main', 'line', '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *'),

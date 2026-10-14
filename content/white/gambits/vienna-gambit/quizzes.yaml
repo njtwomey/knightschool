@@ -1,0 +1,40 @@
+- id: bb4-qg4
+  line: 1. e4 e5 2. Nc3 Nf6 3. f4 Bb4 4. fxe5 Bxc3 5. bxc3 Nxe4
+  prompt: 'White plays 6.Qg4. What does the queen attack?'
+  accept:
+    - keywords: [[e4, knight], [g7, pawn]]
+      all: true
+      feedback: Yes. Qg4 attacks the knight on e4 and the pawn on g7 at once, so Black cannot save both.
+    - keywords: [[fork, attack, qg4]]
+      partial: true
+      feedback: Close. Name both pieces the queen attacks.
+  reveal: 6.Qg4 forks the knight on e4 and the pawn on g7. Black has to move the knight and lets White keep the extra pawn and attack.
+  showMove: Qg4
+  examples:
+    match: [it attacks the knight on e4 and the g7 pawn, the knight and the pawn on g7, a double attack on e4 and g7]
+    miss: [it attacks the king, it develops a piece, no idea]
+- id: qe7-qe2
+  line: 1. e4 e5 2. Nc3 Nf6 3. f4 exf4 4. e5 Qe7
+  prompt: 'White plays 5.Qe2. Why is the e5 pawn safe now?'
+  accept:
+    - keywords: [[defend, e2], [queen, e5, pawn]]
+      all: true
+      feedback: Yes. The queen on e2 defends the e5 pawn, so ...Qxe5 would lose the queen, and the attacked knight must retreat.
+    - keywords: [[defend]]
+      feedback: Yes. The queen on e2 defends the pawn on e5.
+  reveal: 5.Qe2 defends the e5 pawn. If Black takes it with the queen, Qxe5 wins her for nothing, and the knight on f6 has to run back to g8.
+  showMove: Qe2
+  examples:
+    match: [the queen defends the pawn, the queen on e2 defends e5, e2 queen protects the e5 pawn]
+    miss: [it attacks the king, it develops a bishop, no idea]
+- id: breyer-bxc3
+  line: 1. e4 e5 2. Nc3 Nf6 3. f4 d5 4. fxe5 Nxe4 5. Nf3 Be7 6. d4 O-O 7. Bd3 Nxc3
+  prompt: 'Black took on c3. Why does White recapture with the b-pawn?'
+  accept:
+    - keywords: [[centre, center, d4, central, centralised]]
+      feedback: Yes. Recapturing with the b-pawn keeps the pawn on d4 in the centre and the other pieces undisturbed.
+  reveal: 8.bxc3 keeps the pawn on d4, the heart of White's centre. 8.dxc3 would give up the centre and let the queens come off.
+  showMove: bxc3
+  examples:
+    match: [it keeps the pawn on d4, to keep the centre, to keep a strong central pawn]
+    miss: [it attacks the queen, it wins a piece, no idea]

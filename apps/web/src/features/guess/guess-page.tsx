@@ -11,13 +11,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SourceSelect } from '@/components/source-select';
+import { useBrowse } from '@/features/browse/store';
 import { buildHash } from '@/router/hash';
 import { to } from '@/router/location';
 import { allSuggestions, SESSION_LENGTH, sessionPoints, useGuess, type Outcome } from './store';
 
 /** "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts. */
 export function GuessPage() {
-  const { phase, error, question, answer, graded, outcomes } = useGuess();
+  const { phase, error, question, answer, graded, outcomes, source } = useGuess();
+  const index = useBrowse((state) => state.index);
 
   useEffect(() => {
     void useGuess.getState().start();
@@ -56,6 +59,15 @@ export function GuessPage() {
 
   return (
     <Page className="gap-4">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+        Positions from
+        <SourceSelect
+          value={source}
+          onChange={(next) => useGuess.getState().setSource(next)}
+          index={index}
+          label="Positions from"
+        />
+      </div>
       <div className="flex items-center gap-3">
         <Progress value={(outcomes.length / SESSION_LENGTH) * 100} className="flex-1" aria-label="Session progress" />
         <span className="text-sm text-muted-foreground" role="status">
@@ -81,7 +93,8 @@ export function GuessPage() {
             <h2 className="text-2xl font-semibold tracking-tight">Name That Opening</h2>
             <p className="text-muted-foreground">How did this position arise?</p>
             <p className="text-sm text-muted-foreground">
-              Type the opening, and the variation if you know it. Naming only the opening earns half a point.
+              Type the opening, and the variation if you know it. Naming only the opening earns half a point, unless the
+              position is too early to tell variations apart.
               {question.targets.openings.length > 1 &&
                 ` ${question.targets.openings.length} different openings reach this position: name any one.`}
             </p>
@@ -152,7 +165,10 @@ export function GuessPage() {
                 <p className="font-medium">This position comes from</p>
                 <p>{question.targets.openings.join(', ')}</p>
                 {question.targets.variations.length > 0 && (
-                  <p className="text-muted-foreground">{question.targets.variations.join(' · ')}</p>
+                  <p className="text-muted-foreground">
+                    {question.targets.variations.slice(0, 6).join(' · ')}
+                    {question.targets.variations.length > 6 && ` · and ${question.targets.variations.length - 6} more`}
+                  </p>
                 )}
               </div>
               <ul className="flex flex-wrap gap-1.5">
@@ -172,9 +188,15 @@ export function GuessPage() {
                 ))}
               </ul>
               <div>
-                <Button variant="ghost" size="sm" onClick={() => useGuess.getState().next()}>
-                  Skip ahead
-                </Button>
+                {graded.result === 'full' ? (
+                  <Button variant="ghost" size="sm" onClick={() => useGuess.getState().next()}>
+                    Skip ahead
+                  </Button>
+                ) : (
+                  <Button autoFocus onClick={() => useGuess.getState().next()}>
+                    Next
+                  </Button>
+                )}
               </div>
             </div>
           )}
@@ -222,6 +244,15 @@ function Summary({ outcomes }: { outcomes: Outcome[] }) {
           </ul>
         </section>
       )}
+      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+        Next positions from
+        <SourceSelect
+          value={useGuess.getState().source}
+          onChange={(next) => useGuess.getState().setSource(next)}
+          index={useBrowse.getState().index}
+          label="Positions from"
+        />
+      </div>
       <div className="flex flex-wrap gap-2">
         <Button onClick={() => void useGuess.getState().start()}>Another ten</Button>
         <Button asChild variant="outline">

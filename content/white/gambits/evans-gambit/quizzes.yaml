@@ -1,0 +1,50 @@
+- id: evans-cxd4-pinned
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4
+  prompt: White would like to take back on d4 with the c-pawn, but it is not allowed. Why not?
+  accept:
+    - keywords: [[pin, pinned, pins]]
+      feedback: Yes. The bishop on a5 pins the c3 pawn to the king, so it cannot move. Castling takes the king off the line.
+    - keywords: [[bishop, a5, king, diagonal, e1]]
+      partial: true
+      feedback: Close. Say what the bishop on a5 does to the c3 pawn.
+  reveal: The bishop on a5 pins the c3 pawn to the king on e1, so cxd4 is illegal. Castling ends the pin and the pawn can take next move.
+  showMove: O-O
+  examples:
+    match: [the pawn is pinned, the bishop pins the c pawn to the king, c3 is pinned by the bishop on a5]
+    miss: [it loses a pawn, the queen is attacked, no idea]
+- id: evans-nf6-cxd4
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. O-O Nf6
+  prompt: Black has just played 7...Nf6. What does White play, and why is it strong?
+  accept:
+    - keywords: [[cxd4, recapture, retake], [bishop, bc5, hit, attack, e5]]
+      all: true
+      feedback: Yes. 8.cxd4 hits the bishop and e5 is coming, so Black loses time or material.
+    - keywords: [[cxd4, recapture, retake]]
+      partial: true
+      feedback: Right move. Say what it attacks.
+  reveal: 8.cxd4 attacks the bishop on c5. After 8...Bb6 9.e5 kicks the knight and White has a big centre and the initiative.
+  showMove: cxd4
+  examples:
+    match:
+      [cxd4 attacking the bishop, recapture with cxd4 and hit the bishop, retake on d4 which attacks the bishop on c5]
+    miss: [e5, castle, no idea]
+- id: evans-a5-bishop
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bb6 5. a4 Nf6
+  prompt: Black ignored the threat on the bishop. What does White play and why does it win material?
+  accept:
+    - keywords: [[a5], [bishop, bb6, trap, trapped, escape, retreat, square]]
+      all: true
+      feedback: Yes. After 6.a5 the bishop on b6 has no safe square and White wins it for a pawn or two.
+    - keywords: [[a5]]
+      partial: true
+      feedback: Right move. Say what happens to the bishop.
+  reveal: 6.a5 attacks the bishop and it has no safe square. Black can give it up for the f2 pawn, but White ends a piece ahead.
+  showMove: a5
+  examples:
+    match:
+      [
+        a5 and the bishop is trapped,
+        a5 attacks the bishop and it has no escape square,
+        a5 the bishop on b6 cannot retreat,
+      ]
+    miss: [Nc3, castle, no idea]

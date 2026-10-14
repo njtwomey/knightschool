@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Rousseau Gambit, 4.d3 Nf6 5.Ng5"]
+[ECO "C50"]
+[Character "tactical"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "fork,trap"]
+[Kind "against-us"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. d3 Nf6 5. Ng5 5... fxe4? { Takes the pawn, which looks natural, but it opens f7 for the knight. Play 5...d5, which blocks the bishop's line to f7 instead. } 6. Nf7 { Forks the queen and the rook on h8. } 6... Qe7 7. Nxh8 d5 8. Bb5 *

@@ -1,0 +1,19 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Rousseau Gambit, Accepted"]
+[ECO "C50"]
+[Character "gambit,tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork,queen-trap"]
+[Themes "pawn-back,central-pawn"]
+[Kind "sideline"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. exf5?! { Takes the pawn, but it leaves the centre and the engine thinks Black is fine after the reply. }
+4... e4 { Kicks the knight with the pawn, opens the queen's diagonal to h4 and gets time. The f5 pawn will be won back. }
+5. Nd4 ( 5. Ng5 5... Qxg5 { The knight has no defender on g5 now that the f-pawn has gone, so the queen takes it for free. } 6. O-O Qxf5 )
+( 5. Ne5 5... Nxe5 { Takes the knight; the pawn on e5 was just a decoy. } 6. Bb3 Qg5 { Hits g2 and keeps the extra knight. } )
+5... Nf6 { Develops and covers d5, so the knight on d4 and the e4 pawn are both under pressure. }
+6. Nxc6 6... bxc6 { Recaptures towards the centre. The open b-file and a strong d5 are worth more than the doubled pawns. }
+7. d4 7... d5 { Builds a pawn centre, and the bishop on c8 can win the pawn on f5 back. }
+8. Bb3 8... Bxf5 { Takes the pawn back. Black has a solid centre and a lead in development, so the gambit has paid off. } 9. c4 9... Be7 { Gets ready to castle. Level game: castle, then attack the white centre with ...Rb8 or ...Qd7. } *

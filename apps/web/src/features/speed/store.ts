@@ -37,8 +37,8 @@ function savedConfig(): SpeedConfig {
 /** A timed run keeps lines coming; this many is far more than anyone gets through in two minutes. */
 const TIMED_QUEUE = 40;
 
-/** How long a finished line stays up before the next begins (fixed runs), and how long a wrong-move cross shows. */
-export const SPEED_DELAYS = { betweenLines: 1300, wrongBadge: 600 } as const;
+/** How long the next line's name is held up before it begins (fixed runs), and how long a wrong-move cross shows. */
+export const SPEED_DELAYS = { betweenLines: 5000, wrongBadge: 600 } as const;
 
 export type LineResult = {
   courseId: string;
@@ -62,6 +62,8 @@ type SpeedState = {
   config: SpeedConfig;
   queue: Queued[];
   lineIndex: number;
+  /** performance.now() when the pause before the next line ends. */
+  betweenEndsAt: number;
   /** Where we are in the current line's steps. The opponent's steps are skipped the instant they come up. */
   stepIndex: number;
   /** When the current move of yours began, to time it. */
@@ -85,6 +87,7 @@ type SpeedState = {
   /** Builds the run from the set-up and shows its first line. */
   prepare: () => Promise<void>;
   begin: () => void;
+  startNow: () => void;
   submitMove: (uci: string) => boolean;
   hint: () => void;
   stop: () => void;
@@ -169,6 +172,18 @@ export const useSpeed = create<SpeedState>((set, get) => {
     set({ phase: 'summary' });
   }
 
+  /** The first line starts, and a timed run's clock with it. */
+  function launch() {
+    const { config } = get();
+    if (config.mode === 'timed') {
+      const deadline = performance.now() + config.seconds * 1000;
+      set({ deadline });
+      clearTimeout(deadlineTimer);
+      deadlineTimer = setTimeout(timeUp, config.seconds * 1000);
+    }
+    startLine(0);
+  }
+
   function finishLine() {
     const { queue, lineIndex, results, config } = get();
     const result = currentResult();
@@ -178,7 +193,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
     }
     if (lineIndex + 1 >= queue.length) return endRun();
     if (config.mode === 'timed') return startLine(lineIndex + 1); // no pause: the clock is running
-    set({ phase: 'between' });
+    set({ phase: 'between', betweenEndsAt: performance.now() + SPEED_DELAYS.betweenLines });
     clearTimeout(timer);
     timer = setTimeout(() => startLine(lineIndex + 1), SPEED_DELAYS.betweenLines);
   }
@@ -200,6 +215,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
     config: savedConfig(),
     queue: [],
     lineIndex: 0,
+    betweenEndsAt: 0,
     stepIndex: 0,
     turnStartedAt: 0,
     deadline: 0,
@@ -265,16 +281,22 @@ export const useSpeed = create<SpeedState>((set, get) => {
       }
     },
 
+    /** Skips the rest of the countdown before a line. */
+    startNow() {
+      if (get().phase !== 'between') return;
+      clearTimeout(timer);
+      const next = get().lineIndex + 1;
+      if (next === 0) launch();
+      else startLine(next);
+    },
+
+    /** Start pressed: the first line's name and a countdown, then the run (and, if timed, its clock) begins. */
     begin() {
       if (get().phase !== 'ready') return;
-      const { config } = get();
-      if (config.mode === 'timed') {
-        const deadline = performance.now() + config.seconds * 1000;
-        set({ deadline });
-        clearTimeout(deadlineTimer);
-        deadlineTimer = setTimeout(timeUp, config.seconds * 1000);
-      }
-      startLine(0);
+      // lineIndex -1 means "before the first line", so the countdown shows queue[0] as the one up next.
+      set({ phase: 'between', lineIndex: -1, betweenEndsAt: performance.now() + SPEED_DELAYS.betweenLines });
+      clearTimeout(timer);
+      timer = setTimeout(launch, SPEED_DELAYS.betweenLines);
     },
 
     submitMove(uci) {

@@ -1,0 +1,23 @@
+[Event "Knight School"]
+[Opening "Danish Gambit"]
+[Variation "Danish Gambit Accepted: Classical Defense"]
+[ECO "C21"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "development-lead,long-diagonal,gambit-compensation"]
+[Kind "main"]
+
+1. e4 e5 2. d4 { Opens the centre at once so White's pieces get open lines early. } 2... exd4 3. c3 { Offers the pawn on d4 back: if Black takes, White gets a big lead in development in return. } 3... dxc3
+4. Bc4 { Offers a second pawn. In return the bishop aims at f7 and White gets fast development along open lines toward Black's king. }
+4... cxb2
+5. Bxb2 { Wins one pawn back and aims the bishop down the long diagonal at g7 and the rook on h8. Two pawns down, White now plays for speed. }
+5... Nf6 (5... Bb4+ 6. Nc3 Nf6 7. Qb3)
+6. Nc3 { Brings out a piece and defends e4, so the knight on f6 cannot take that pawn for free. White needs every piece in play quickly. }
+6... Bb4 (6... d5 7. Nxd5 { Takes the pawn back before Black's centre grows. } 7... Nxd5 8. exd5 { Takes back with the pawn, which opens the e-file and keeps both bishops. } 8... Bb4+ 9. Kf1 { The king has to move, so White loses the right to castle. White is a little worse but keeps the bishops and open lines. })
+(6... Nc6 7. Nf3 { Develops and prepares to castle. } 7... Bb4 8. O-O Bxc3 9. Bxc3)
+7. Qb3 { Attacks the bishop on b4 and, with the bishop on c4, doubles up on f7. Black must trade or lose time. }
+7... Bxc3+ 8. Qxc3 { The queen and the bishop on b2 now line up on the long diagonal toward g7. Black has to watch the kingside while still behind in development. }
+8... d6 9. Nf3 { Develops and clears the way to castle. Next White wants e4-e5 to open the long diagonal for the queen and bishop. }
+9... O-O 10. O-O { Gets the king safe now that the centre is open. } 10... Nc6 11. Rfe1 { Supports a coming e4-e5. Plan: push e5 to open the diagonal toward g7, keep the pieces active and do not trade them off while a pawn down. White ends a little worse, which is the price of the gambit. } 11... Bg4 *

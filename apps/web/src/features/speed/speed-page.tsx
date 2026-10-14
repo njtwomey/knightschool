@@ -23,7 +23,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useBrowse } from '@/features/browse/store';
 import { to } from '@/router/location';
-import { useSpeed, type SpeedConfig } from './store';
+import { SPEED_DELAYS, useSpeed, type SpeedConfig } from './store';
 
 /** A stopwatch redrawn ten times a second, only while a line is being played. */
 function useNow(running: boolean): number {
@@ -47,6 +47,61 @@ const Big = ({ label, value }: { label: string; value: string }) => (
     <p className="text-sm text-muted-foreground">{label}</p>
   </div>
 );
+
+/**
+ * What to call a line on screen: the opening first ("French Defence"), then the variation under it ("Advance Variation,
+ * Ne7 System"), never the variation alone. A variation name that starts with the opening's own name loses that start.
+ */
+function useTitles() {
+  const openings = useBrowse((state) => state.openings);
+  return (content: { opening: { opening: string; name: string } }, lineName: string) => {
+    const opening =
+      openings.find((candidate) => candidate.id === content.opening.opening)?.name ?? content.opening.name;
+    const firstWord = (text: string) =>
+      text
+        .toLowerCase()
+        .replace(/[^a-z]/g, ' ')
+        .trim()
+        .split(' ')[0];
+    const [head, ...rest] = lineName.split(': ');
+    const variation = rest.length > 0 && firstWord(head!) === firstWord(opening) ? rest.join(': ') : lineName;
+    return { opening, variation };
+  };
+}
+
+/** Between lines of a fixed run: what is coming next and a five second countdown, with a way to skip the wait. */
+function BetweenDialog() {
+  const { phase, queue, lineIndex, betweenEndsAt } = useSpeed();
+  const open = phase === 'between';
+  const now = useNow(open);
+  const titles = useTitles();
+  const next = queue[lineIndex + 1];
+  const nextTitles = next ? titles(next.content, next.lineName) : undefined;
+  const left = Math.max(0, betweenEndsAt - now);
+  const total = SPEED_DELAYS.betweenLines;
+  return (
+    <Dialog open={open && !!next} modal={false}>
+      {open && <div className="fixed inset-x-0 top-[3.25rem] bottom-0 z-40 bg-black/55 backdrop-blur-sm" />}
+      <DialogContent showCloseButton={false} overlay={false} className="sm:max-w-md">
+        <DialogHeader>
+          <DialogDescription>Next up</DialogDescription>
+          <DialogTitle className="text-2xl leading-tight">{nextTitles?.opening}</DialogTitle>
+          <p className="text-lg font-medium">{nextTitles?.variation}</p>
+          <DialogDescription>You play {next?.content.opening.side}.</DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-2">
+          <p className="text-center text-5xl font-semibold tabular-nums" aria-live="off">
+            {Math.ceil(left / 1000)}
+          </p>
+          <Progress value={(left / total) * 100} aria-label="Time until the next line" />
+        </div>
+        <DialogFooter>
+          <Button onClick={() => useSpeed.getState().startNow()}>Start now</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 /** The choices for a run, in a window that opens whenever a new run is started. */
 function SetupDialog() {
@@ -180,6 +235,7 @@ export function SpeedPage() {
   }, [phase]);
 
   const now = useNow(phase === 'playing');
+  const titles = useTitles();
 
   if (phase === 'idle' || phase === 'setup') {
     return (
@@ -205,7 +261,7 @@ export function SpeedPage() {
   }
   if (phase === 'summary') return <Summary />;
 
-  const queued = queue[lineIndex];
+  const queued = queue[Math.max(lineIndex, 0)];
   if (!queued) return null;
   const timed = config.mode === 'timed';
   const side = queued.content.opening.side;
@@ -215,6 +271,7 @@ export function SpeedPage() {
   const previous = steps[Math.min(stepIndex, steps.length) - 1];
   const running = phase === 'playing';
   const upNext = phase === 'between' ? queue[lineIndex + 1] : queued;
+  const shown = titles((upNext ?? queued).content, (upNext ?? queued).lineName);
   const expected = !finished ? steps[stepIndex]!.edge.uci : undefined;
   const clock = Math.max(0, now - state.turnStartedAt);
   const remaining = state.deadline - now;
@@ -225,6 +282,7 @@ export function SpeedPage() {
 
   return (
     <Page className="gap-4 lg:grid-cols-[minmax(0,min(36rem,calc(100dvh-11rem)))_1fr]">
+      <BetweenDialog />
       <div className="grid content-start gap-3">
         <AppBoard
           id="speed"
@@ -234,6 +292,7 @@ export function SpeedPage() {
           interactive={running}
           onMove={(uci) => useSpeed.getState().submitMove(uci)}
           lastMove={previous?.edge.uci}
+          lastMoveTone="red"
           badge={badge}
           hintSquare={running && expected && hintLevel >= 1 ? expected.slice(0, 2) : null}
           arrows={
@@ -263,10 +322,14 @@ export function SpeedPage() {
               aria-label="Time used"
             />
           ) : (
-            <Progress value={(lineIndex / queue.length) * 100} className="flex-1" aria-label="Run progress" />
+            <Progress
+              value={(Math.max(lineIndex, 0) / queue.length) * 100}
+              className="flex-1"
+              aria-label="Run progress"
+            />
           )}
           <span className="text-sm text-muted-foreground" role="status">
-            {timed ? `${config.seconds} seconds` : `Line ${lineIndex + 1} of ${queue.length}`}
+            {timed ? `${config.seconds} seconds` : `Line ${Math.max(lineIndex, 0) + 1} of ${queue.length}`}
           </span>
         </div>
 
@@ -286,9 +349,10 @@ export function SpeedPage() {
             <CardContent className="grid gap-4">
               <div className="grid gap-0.5 rounded-lg border bg-muted/40 p-3">
                 <p className="text-xs uppercase tracking-wide text-muted-foreground">First line</p>
-                <p className="text-lg font-semibold">{queued.lineName}</p>
+                <p className="text-xl font-semibold leading-tight">{shown.opening}</p>
+                <p className="font-medium">{shown.variation}</p>
                 <p className="text-sm text-muted-foreground">
-                  {queued.content.opening.name}, playing {side}.{!timed && ' The other lines follow on their own.'}
+                  You play {side}.{!timed && ' The other lines follow on their own.'}
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -306,11 +370,11 @@ export function SpeedPage() {
             <Card>
               <CardHeader>
                 <CardDescription>
-                  {phase === 'between' ? 'Up next' : `${queued.content.opening.name}, playing ${side}`}
+                  {phase === 'between' ? 'Up next, playing ' : 'Playing '}
+                  {upNext?.content.opening.side ?? side}
                 </CardDescription>
-                <CardTitle className="text-2xl font-semibold leading-tight">
-                  {upNext?.lineName ?? queued.lineName}
-                </CardTitle>
+                <CardTitle className="text-2xl font-semibold leading-tight">{shown.opening}</CardTitle>
+                <p className="text-lg font-medium">{shown.variation}</p>
                 <p className="text-5xl font-semibold tabular-nums">
                   {phase === 'between' ? 'Get ready' : timed ? countdown(remaining) : formatMs(clock)}
                 </p>
@@ -320,8 +384,7 @@ export function SpeedPage() {
                   <>
                     {results.at(-1) &&
                       `Last line: ${formatMs(results.at(-1)!.totalMs / Math.max(1, results.at(-1)!.moves))} per move. `}
-                    {upNext &&
-                      `${upNext.content.opening.name}, playing ${upNext.content.opening.side}. Starting in a moment.`}
+                    {upNext && 'Starting in a moment.'}
                   </>
                 ) : timed ? (
                   <>This move: {formatMs(clock)}. Hints are counted, and the clock keeps running.</>
@@ -351,6 +414,18 @@ function Summary() {
   const config = useSpeed((state) => state.config);
   const summary = speedSummary(results);
   const timed = config.mode === 'timed';
+  const titles = useTitles();
+  const courses = useBrowse((state) => state.index);
+  const titleOfResult = (result: (typeof results)[number]) =>
+    titles(
+      {
+        opening: {
+          opening: courses.find((course) => course.id === result.courseId)?.opening ?? '',
+          name: result.courseName,
+        },
+      },
+      result.lineName,
+    );
   return (
     <Page className="max-w-3xl">
       <header className="grid gap-1">
@@ -394,8 +469,8 @@ function Summary() {
               {results.map((result, i) => (
                 <TableRow key={`${result.courseId}/${result.lineId}/${i}`}>
                   <TableCell className="whitespace-normal">
-                    <span className="font-medium">{result.lineName}</span>{' '}
-                    <span className="text-xs text-muted-foreground">{result.courseName}</span>
+                    <span className="font-medium">{titleOfResult(result).opening}</span>{' '}
+                    <span className="text-muted-foreground">{titleOfResult(result).variation}</span>
                   </TableCell>
                   <TableCell className="text-right tabular-nums">{result.moves}</TableCell>
                   <TableCell className="text-right tabular-nums">

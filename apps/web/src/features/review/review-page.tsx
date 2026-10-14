@@ -1,8 +1,9 @@
 import { Page } from '@/components/page';
-import { explainMove, playUci } from '@knightschool/core';
+import { explainMove, pathTo, playUci, type LineEdge, type OpeningContent } from '@knightschool/core';
 import { Eye, Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
+import { MoveTable } from '@/components/move-table';
 import { BoardSettingsButton } from '@/components/board/board-settings';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -12,9 +13,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
+import { SourceSelect } from '@/components/source-select';
+import { useBrowse } from '@/features/browse/store';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
-import { currentQuestion, useReview, type QuizQuestion } from './store';
+import { currentQuestion, DUE, useReview, type QuizQuestion } from './store';
 import { to } from '@/router/location';
+
+/** The moves that reached a position in a course; empty if it is not on a line. */
+function movesInto(content: OpeningContent, epd: string): LineEdge[] {
+  if (epd === content.opening.rootEpd || !content.nodes[epd]) return [];
+  try {
+    return pathTo(content, epd);
+  } catch {
+    return [];
+  }
+}
 
 const arrow = (uci: string) => ({
   startSquare: uci.slice(0, 2),
@@ -22,9 +35,28 @@ const arrow = (uci: string) => ({
   color: 'rgb(21 128 61 / 0.85)',
 });
 
+/** Chooses between the scheduled session and free practice from any course. Nothing in free practice is saved. */
+function SourceBar() {
+  const source = useReview((state) => state.source);
+  const index = useBrowse((state) => state.index);
+  return (
+    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+      Questions from
+      <SourceSelect
+        value={source}
+        onChange={(next) => useReview.getState().setSource(next)}
+        index={index}
+        extra={[{ value: DUE, label: 'Due today (your schedule)' }]}
+        label="Questions from"
+      />
+      {source !== DUE && <span>Free practice: nothing here changes your schedule.</span>}
+    </div>
+  );
+}
+
 export function ReviewPage() {
   const state = useReview();
-  const { phase, error, attempt, queue, index, results, badge, advancing } = state;
+  const { phase, error, attempt, queue, index, results, badge, advancing, viewing, holding } = state;
 
   useEffect(() => {
     void useReview.getState().start();
@@ -55,12 +87,14 @@ export function ReviewPage() {
   const { card, content, lastEdge, path, expected } = question;
   const side = content.opening.side;
   const done = attempt.status === 'done';
-  const epd = done ? expected.to : card.epd;
-  const lastMove = done ? expected.uci : lastEdge?.uci;
+  const looking = viewing !== null && path[viewing] ? path[viewing] : undefined;
+  const epd = looking ? looking.to : done ? expected.to : card.epd;
+  const lastMove = looking ? looking.uci : done ? expected.uci : lastEdge?.uci;
   const notes = done ? explainMove(card.epd, expected.uci, { edge: expected }) : [];
 
   return (
     <Page className="gap-4">
+      <SourceBar />
       <div className="flex items-center gap-3">
         <Progress value={(index / queue.length) * 100} className="flex-1" aria-label="Session progress" />
         <span className="text-sm text-muted-foreground">
@@ -75,11 +109,14 @@ export function ReviewPage() {
             className="aspect-square w-full"
             epd={epd}
             orientation={side}
-            interactive={!advancing}
+            interactive={!advancing && !looking}
             onMove={(uci) => useReview.getState().submitMove(uci)}
             lastMove={lastMove}
-            arrows={attempt.shown && !done ? [arrow(expected.uci)] : done ? arrowsOf(expected.annotation) : []}
-            squareStyles={done ? squareStylesOf(undefined, expected.annotation) : undefined}
+            lastMoveTone={done && !looking ? 'yellow' : 'red'}
+            arrows={
+              looking ? [] : attempt.shown && !done ? [arrow(expected.uci)] : done ? arrowsOf(expected.annotation) : []
+            }
+            squareStyles={done && !looking ? squareStylesOf(undefined, expected.annotation) : undefined}
             badge={badge}
             hintSquare={attempt.hintUsed && !done ? card.expectedUci.slice(0, 2) : null}
           />
@@ -119,14 +156,19 @@ export function ReviewPage() {
                   ? `${side === 'white' ? 'Black' : 'White'} just played ${lastEdge.san}.`
                   : 'The game is about to begin.'}
               </p>
-              {path.length > 0 && (
-                <p className="font-mono text-xs text-muted-foreground">
-                  {path.map((edge, i) => `${i % 2 === 0 ? `${i / 2 + 1}. ` : ''}${edge.san}`).join(' ')}
-                </p>
-              )}
+              <MoveTable
+                sans={[...path.map((edge) => edge.san), ...(done ? [expected.san] : [])]}
+                selected={viewing}
+                onSelect={(i) => useReview.getState().view(i < path.length - 1 ? i : null)}
+              />
             </div>
             {!done && attempt.wrongTries > 0 && !attempt.shown && <p>Not that one. Try again, or use a hint.</p>}
             {!done && attempt.shown && <p>The move is marked on the board. Play it to carry on.</p>}
+            {holding && (
+              <Button autoFocus className="w-fit" onClick={() => useReview.getState().skip()}>
+                Next
+              </Button>
+            )}
             {done &&
               notes.slice(0, 2).map((note) => (
                 <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
@@ -144,6 +186,7 @@ function Summary({ results }: { results: readonly string[] }) {
   const count = (...ratings: string[]) => results.filter((rating) => ratings.includes(rating)).length;
   return (
     <Page className="max-w-xl gap-4 py-8">
+      <SourceBar />
       <Card>
         <CardHeader>
           <CardTitle>{results.length ? 'Quiz done' : 'Nothing to quiz right now'}</CardTitle>
@@ -154,7 +197,10 @@ function Summary({ results }: { results: readonly string[] }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
-          <Button asChild>
+          {useReview.getState().source !== DUE && (
+            <Button onClick={() => void useReview.getState().start()}>Another ten</Button>
+          )}
+          <Button asChild variant={useReview.getState().source !== DUE ? 'outline' : 'default'}>
             <a href={to('/profile')}>Back to your overview</a>
           </Button>
           <Button asChild variant="outline">
@@ -168,20 +214,32 @@ function Summary({ results }: { results: readonly string[] }) {
 
 /** A question answered in words: type, get feedback or the reveal, and it moves on by itself. */
 function QuizView({ question }: { question: QuizQuestion }) {
-  const { queue, index, quizResult, advancing } = useReview();
+  const { queue, index, quizResult, advancing, viewing, holding } = useReview();
   const [answer, setAnswer] = useState('');
   const { card, content, quiz } = question;
 
   // After the answer the board plays the move that explains it.
   let epd = quiz.epd;
-  let lastMove: string | undefined;
+  // While the question is open, the move that led to the position is marked in red.
+  const path = movesInto(content, quiz.epd);
+  let lastMove: string | undefined = path.at(-1)?.uci;
+  let tone: 'red' | 'yellow' = 'red';
   if (quizResult && quiz.showMove) {
     epd = playUci(quiz.epd, quiz.showMove).epd;
     lastMove = quiz.showMove;
+    tone = 'yellow';
+  }
+  // A move picked in the table shows that earlier position instead.
+  const looking = viewing !== null ? path[viewing] : undefined;
+  if (looking) {
+    epd = looking.to;
+    lastMove = looking.uci;
+    tone = 'red';
   }
 
   return (
     <Page className="gap-4">
+      <SourceBar />
       <div className="flex items-center gap-3">
         <Progress value={(index / queue.length) * 100} className="flex-1" aria-label="Session progress" />
         <span className="text-sm text-muted-foreground">
@@ -196,6 +254,7 @@ function QuizView({ question }: { question: QuizQuestion }) {
           orientation={content.opening.side}
           interactive={false}
           lastMove={lastMove}
+          lastMoveTone={tone}
         />
         <Card className="content-start">
           <CardHeader>
@@ -238,11 +297,21 @@ function QuizView({ question }: { question: QuizQuestion }) {
                 </AlertDescription>
               </Alert>
             )}
-            {advancing && (
-              <Button variant="ghost" size="sm" className="w-fit" onClick={() => useReview.getState().skip()}>
-                Skip ahead
-              </Button>
-            )}
+            <MoveTable
+              sans={path.map((edge) => edge.san)}
+              selected={viewing}
+              onSelect={(i) => useReview.getState().view(i < path.length - 1 ? i : null)}
+            />
+            {advancing &&
+              (holding ? (
+                <Button autoFocus className="w-fit" onClick={() => useReview.getState().skip()}>
+                  Next
+                </Button>
+              ) : (
+                <Button variant="ghost" size="sm" className="w-fit" onClick={() => useReview.getState().skip()}>
+                  Skip ahead
+                </Button>
+              ))}
           </CardContent>
         </Card>
       </div>

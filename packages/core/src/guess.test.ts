@@ -6,6 +6,29 @@ const targets: GuessTargets = {
   variations: ['Advance Variation, Short Variation', 'Advance Variation'],
 };
 
+describe('gradeGuess when many variations share the position', () => {
+  const scandinavian: GuessTargets = {
+    openings: ['Scandinavian Defence'],
+    variations: [
+      'Scandinavian Defense: Modern Variation',
+      'Scandinavian Defense: Lasker Variation',
+      'Scandinavian Defense: Main Line, Mieses Variation',
+      'Scandinavian Defense: Valencian Variation',
+      'Scandinavian Defense: Gubinsky-Melts Defense',
+    ],
+  };
+  it('gives full credit for the opening, since the position cannot name a variation', () => {
+    expect(gradeGuess('scandinavian', scandinavian).result).toBe('full');
+  });
+  it('still gives full credit for naming a variation', () => {
+    expect(gradeGuess('modern scandinavian', scandinavian).result).toBe('full');
+  });
+  it('still asks for the variation when only a few can be told apart', () => {
+    const few = { ...scandinavian, variations: scandinavian.variations.slice(0, 2) };
+    expect(gradeGuess('scandinavian', few).result).toBe('partial');
+  });
+});
+
 describe('gradeGuess', () => {
   it.each([
     ['advance short', 'full'],

@@ -1,0 +1,94 @@
+- id: danish-compensation
+  line: 1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2
+  prompt: White is two pawns down. What does White get in return?
+  accept:
+    - keywords:
+        [
+          [
+            development,
+            develop,
+            lead,
+            attack,
+            bishops,
+            diagonal,
+            diagonals,
+            open,
+            initiative,
+            speed,
+            active,
+            activity,
+            tempo,
+          ],
+        ]
+      feedback: Yes. Both bishops are active, White is ahead in development and the lines to Black's king are open.
+  reveal: White gets a lead in development and two bishops aimed at f7 and g7, which is the compensation for the pawns.
+  examples:
+    match:
+      - A lead in development and an attack
+      - Both bishops are pointing at the king along open diagonals
+      - faster development
+    miss:
+      - nothing at all
+      - an extra pawn
+      - a safe king
+
+- id: danish-greedy-nxe4
+  line: 1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 Nf6 6. Nc3 Nxe4
+  prompt: Black's knight has just taken the pawn on e4. How does White punish it?
+  accept:
+    - keywords: [[nxe4, knight, nc3, capture, take], [lose, hanging, piece, undefended, unprotected, free]]
+      all: true
+      feedback: Yes. Nothing defends the knight on e4, so 7.Nxe4 wins a whole piece.
+    - keywords: [[nxe4, nc3, knight]]
+      partial: true
+      feedback: Right idea. Say why the knight on e4 can simply be taken.
+  reveal: 7.Nxe4 takes the knight, and Black has nothing that recaptures on e4.
+  showMove: Nxe4
+  examples:
+    match:
+      - Nxe4 wins the knight because it is undefended
+      - the knight on c3 takes it for free
+      - capture the knight on e4, it is hanging
+    miss:
+      - castle
+      - Bxf7 check
+      - develop another piece
+
+- id: danish-queen-g2
+  line: 1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 Qg5 6. Nf3 Qxg2 7. Rg1 Qh3 8. Bxf7+
+  prompt: White checks with Bxf7+. Why can Black not just take the bishop with the king?
+  accept:
+    - keywords: [[ng5, knight, g5], [queen, fork, check, h3]]
+      all: true
+      feedback: Yes. After Kxf7 the knight jumps to g5 with check and takes the queen on h3.
+    - keywords: [[ng5, knight, g5]]
+      partial: true
+      feedback: Right idea. Say what the knight on g5 attacks.
+  reveal: After 8...Kxf7 9.Ng5+ the knight checks the king and attacks the queen on h3, so White wins the queen.
+  examples:
+    match:
+      - Ng5 check forks the king and the queen
+      - the knight jumps to g5 with check and wins the queen
+      - Ng5+ then the knight takes the queen on h3
+    miss:
+      - it would be illegal
+      - the bishop is protected
+      - no idea
+
+- id: danish-qxd4-grab
+  line: 1. e4 e5 2. d4 exd4 3. c3 d5 4. exd5 Qxd5 5. cxd4 Nc6 6. Nf3 Bb4+ 7. Nc3 Bg4 8. Be2 Bxf3 9. Bxf3 Qxd4
+  prompt: Black's queen has just taken the pawn on d4. How does White win it?
+  accept:
+    - keywords: [[bxc6, c6, knight, defender]]
+      feedback: Yes. 10.Bxc6+ takes the only defender with check, and then the queen on d4 falls to Qxd4.
+  reveal: 10.Bxc6+ bxc6 11.Qxd4 wins the queen because the knight on c6 was the only piece guarding it.
+  showMove: Bxc6+
+  examples:
+    match:
+      - Bxc6 check removes the defender then Qxd4
+      - take the knight on c6 with check
+      - the knight is the only defender, take it first
+    miss:
+      - castle
+      - Qe2 check
+      - play Rd1

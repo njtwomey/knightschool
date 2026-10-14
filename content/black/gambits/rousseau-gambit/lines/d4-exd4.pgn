@@ -1,0 +1,18 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Rousseau Gambit, 4.d4"]
+[ECO "C50"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "pawn-grab"]
+[Themes "centre-fight,open-e-file"]
+[Kind "sideline"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. d4 { Strikes at the centre at once. The engine rates this as good for White as 4.d3, so Black needs to know the answers. } 4... exd4 { Takes the pawn and opens the e-file. White still stands better, but Black has real counterplay and no weak king squares yet. }
+5. e5 ( 5. Ng5 5... Ne5 { Attacks the bishop and fights for the centre while the knight on g5 has no support. } 6. Bxg8 Rxg8 7. Qxd4 d6 )
+( 5. O-O 5... fxe4 { Wins a second pawn while White spends a move castling. } 6. Nxd4 d5 { Hits the bishop and opens the c8 bishop. } 7. Nxc6 bxc6 )
+5... d5 { Hits the bishop and the pawn chain. If the bishop moves away, ...Bb4+ or ...dxe5 follows with a good game. }
+6. exd6 ( 6. Bb5 6... Bb4+ { Checks and pulls the c-pawn forward, so ...dxc3 opens lines against White's king. } 7. c3 dxc3 8. bxc3 Bc5 )
+6... cxd6 { Recaptures with the c-pawn, which keeps the queen at home and lets Black's pawns march ...d5 next. }
+7. O-O 7... d5 { Hits the bishop again and takes the centre. Black is down about a pawn and a half here, the price of this gambit: develop with ...Nf6, castle, and win the d4 pawn back before you open the f-file. } *

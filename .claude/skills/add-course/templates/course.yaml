@@ -1,7 +1,7 @@
 name: Vienna Game # quote it if it has a colon
 eco: C25 # optional
 side: white # the learner's side: it must match the white/ or black/ folder
-opening: vienna-game # an id from content/openings.yaml (add one if the opening is new: report it, do not edit the file)
+opening: vienna-game # an id from content/openings.yaml (add the opening there if it is new)
 tier: 2 # 1 study first, 2 next, 3 alternatives and rare replies
 trigger: '1. e4 e5 2. Nc3' # every line passes through this position
 summary: >-
@@ -14,6 +14,9 @@ lines: # teaching order; the first is the main line
   - file: main-line
     opponent: '2...Nf6' # what the opponent does to arrive here
     kind: main # main | sideline | rare | gambit
+    # section: If Black takes the pawn   # optional: the course page groups by this heading (give every line one, or none)
+    # alternative: true                   # optional: shown, never drilled (a second answer to a position)
+    # from: other-course-id               # optional: reuse that course's file (same side only; shown, never drilled)
 traps: # or []
   - file: greedy-nxe4
     opponent: '3...Nxe4'

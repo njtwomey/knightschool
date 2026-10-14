@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Evans Gambit"]
+[Variation "Italian Game: Evans Gambit, Hein Countergambit"]
+[ECO "C51"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "centre-fight"]
+[Kind "gambit"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 d5 { Black strikes back in the centre at once instead of taking the pawn. } 5. exd5 { Takes the pawn: if Black grabs b4 White castles and attacks. } 5... Nxb4
+6. O-O { Gets the king safe. Black's knight on b4 is far from home and its pawn on e5 is loose. } 6... Nf6
+7. Nxe5 { Wins the e5 pawn, which Black cannot guard well because the knight on c6 left. } 7... Nbxd5
+8. d4 { Hits the bishop and builds the centre. } 8... Be7 9. Bb2 { Puts the bishop on the long diagonal, pointing at g7 and backing up the knight on e5. Plan: Re1, Nc3 and a free game for White. } 9... O-O 10. Re1 *

@@ -60,6 +60,8 @@ export const Variant = z.object({
   whose: TrapKind.optional(),
   /** Shown and playable but never drilled: a second answer to a position the main line already answers. */
   alternative: z.boolean().default(false),
+  /** A heading the course page groups this under, instead of the usual main / sideline / trap groups. */
+  section: z.string().optional(),
 });
 export type Variant = z.infer<typeof Variant>;
 
@@ -67,6 +69,13 @@ export type Variant = z.infer<typeof Variant>;
 export const CourseLine = z.object({
   /** The file name under lines/, without .pgn. This is the line's id and ends up in learner history. */
   file: Slug,
+  /**
+   * Reuse a line of another course (its id) instead of keeping a copy: "from: e5-open-games". It must be a course for
+   * the same side. The line is shown here but never drilled (its own course drills it), so it counts as an alternative.
+   */
+  from: Slug.optional(),
+  /** A heading to group this under on the course page ("Playing the King's Gambit"). Sections show in course.yaml order. */
+  section: z.string().min(1).optional(),
   /** What the opponent does to reach this line, in SAN with its move number: "3...Bc5" or "2...d5". */
   opponent: z.string().min(1),
   kind: LineKind,
@@ -77,6 +86,7 @@ export type CourseLine = z.infer<typeof CourseLine>;
 /** One entry of the `traps:` list in course.yaml. */
 export const CourseTrap = z.object({
   file: Slug,
+  section: z.string().min(1).optional(),
   opponent: z.string().min(1),
   kind: TrapKind,
 });

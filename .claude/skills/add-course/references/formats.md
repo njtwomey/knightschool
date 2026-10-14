@@ -4,7 +4,7 @@ Code is the authority: `packages/core/src/{schema/content,tree,tags,training,ope
 format reference is `content/README.md`; read it first. This page is the working summary.
 
 ```
-content/curriculum.yaml  openings.yaml  motifs.yaml        shared files (report entries, do not edit when told so)
+content/curriculum.yaml  openings.yaml  motifs.yaml        shared files: study order, opening groups, the idea glossary
 content/white/<...>/<course-id>/   or   content/black/<...>/<course-id>/    the folder decides the side
   course.yaml            required
   lines/<file>.pgn       the repertoire: one PGN per opponent choice, ( ... ) variations inside are fine
@@ -19,24 +19,27 @@ content/white/<...>/<course-id>/   or   content/black/<...>/<course-id>/    the 
 
 ## course.yaml
 
-| Key       | Meaning                                                                                                 |
-| --------- | ------------------------------------------------------------------------------------------------------- |
-| `name`    | The course name; quote it if it has a colon                                                             |
-| `eco`     | Optional ECO code of the opening                                                                        |
-| `side`    | The learner's side: must match `white/` or `black/`                                                     |
-| `opening` | An id in `content/openings.yaml`: who plays that opening decides "play it" versus "play against it"     |
-| `tier`    | 1 study first, 2 next, 3 alternatives and rare replies                                                  |
-| `trigger` | SAN to the position the course starts from: `1. e4 e5 2. Nf3`                                           |
-| `summary` | Two plain sentences (a `>-` block)                                                                      |
-| `plans`   | A few bullets a 1200 can act on when the opponent leaves the book                                       |
-| `motifs`  | Ids from `content/motifs.yaml`                                                                          |
-| `lines`   | Each `{file, opponent, kind: main\|sideline\|rare\|gambit, alternative?}`; `opponent` is what they play |
-| `traps`   | Each `{file, opponent, kind: for-us\|against-us}`                                                       |
+| Key       | Meaning                                                                                                                  |
+| --------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `name`    | The course name; quote it if it has a colon                                                                              |
+| `eco`     | Optional ECO code of the opening                                                                                         |
+| `side`    | The learner's side: must match `white/` or `black/`                                                                      |
+| `opening` | An id in `content/openings.yaml`: who plays that opening decides "play it" versus "play against it"                      |
+| `tier`    | 1 study first, 2 next, 3 alternatives and rare replies                                                                   |
+| `trigger` | SAN to the position the course starts from: `1. e4 e5 2. Nf3`                                                            |
+| `summary` | Two plain sentences (a `>-` block)                                                                                       |
+| `plans`   | A few bullets a 1200 can act on when the opponent leaves the book                                                        |
+| `motifs`  | Ids from `content/motifs.yaml`                                                                                           |
+| `lines`   | Each `{file, opponent, kind: main\|sideline\|rare\|gambit, alternative?, section?, from?}`; `opponent` is what they play |
+| `traps`   | Each `{file, opponent, kind: for-us\|against-us}`                                                                        |
 
 Which lines earn cards (`training.ts`): `main` and `gambit` always; `sideline` unless the explorer says too few games reach it;
 `rare` only when the learner turns on "include rare lines"; `alternative` never. `against-us` traps give cards for the move that
 avoids the trap (the repertoire move in `lines/`; the trap file shows our mistake marked `?`). `for-us` traps give no move cards:
 give each one a quiz.
+
+`section` groups the course page under that heading. `from: <course id>` takes the file from another course for the same
+side (shown here, never drilled; its home course drills it).
 
 ## PGN
 

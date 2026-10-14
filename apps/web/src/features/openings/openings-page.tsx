@@ -16,6 +16,7 @@ import {
 import { Search, Swords, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -28,6 +29,7 @@ import { BoardSearchDialog } from '@/features/courses/board-search';
 import { useProgress } from '@/features/courses/progress';
 import { readHashState, setHashState } from '@/router/location';
 import { CourseCard } from './course-card';
+import { ROLE_HINT, SCOPE_HINT, SIDE_HINT, TIER_HINT } from './explanations';
 import { VariationCard } from './variation-card';
 import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state';
 
@@ -187,9 +189,15 @@ export function OpeningsPage() {
           onValueChange={(scope) => setFilter({ ...filter, scope: (scope || 'all') as CatalogFilter['scope'] })}
           aria-label="Show"
         >
-          <ToggleGroupItem value="all">All</ToggleGroupItem>
-          <ToggleGroupItem value="courses">Courses</ToggleGroupItem>
-          <ToggleGroupItem value="lines">Lines</ToggleGroupItem>
+          <Hint text={SCOPE_HINT.all}>
+            <ToggleGroupItem value="all">All</ToggleGroupItem>
+          </Hint>
+          <Hint text={SCOPE_HINT.courses}>
+            <ToggleGroupItem value="courses">Courses</ToggleGroupItem>
+          </Hint>
+          <Hint text={SCOPE_HINT.lines}>
+            <ToggleGroupItem value="lines">Lines</ToggleGroupItem>
+          </Hint>
         </ToggleGroup>
         <ToggleGroup
           type="single"
@@ -198,9 +206,15 @@ export function OpeningsPage() {
           onValueChange={(role) => setFilter({ ...filter, role: (role || 'all') as CatalogFilter['role'] })}
           aria-label="Playing it or against it"
         >
-          <ToggleGroupItem value="all">Any</ToggleGroupItem>
-          <ToggleGroupItem value="play">Play it</ToggleGroupItem>
-          <ToggleGroupItem value="against">Play against it</ToggleGroupItem>
+          <Hint text={'Show courses whether you play the opening or meet it.'}>
+            <ToggleGroupItem value="all">Any</ToggleGroupItem>
+          </Hint>
+          <Hint text={ROLE_HINT.play}>
+            <ToggleGroupItem value="play">Play it</ToggleGroupItem>
+          </Hint>
+          <Hint text={ROLE_HINT.against}>
+            <ToggleGroupItem value="against">Play against it</ToggleGroupItem>
+          </Hint>
         </ToggleGroup>
         <ToggleGroup
           type="single"
@@ -211,9 +225,15 @@ export function OpeningsPage() {
           }
           aria-label="Tier"
         >
-          <ToggleGroupItem value="1">Tier 1</ToggleGroupItem>
-          <ToggleGroupItem value="2">Tier 2</ToggleGroupItem>
-          <ToggleGroupItem value="3">Tier 3</ToggleGroupItem>
+          <Hint text={TIER_HINT[1]}>
+            <ToggleGroupItem value="1">Tier 1</ToggleGroupItem>
+          </Hint>
+          <Hint text={TIER_HINT[2]}>
+            <ToggleGroupItem value="2">Tier 2</ToggleGroupItem>
+          </Hint>
+          <Hint text={TIER_HINT[3]}>
+            <ToggleGroupItem value="3">Tier 3</ToggleGroupItem>
+          </Hint>
         </ToggleGroup>
         <ToggleGroup
           type="single"
@@ -222,9 +242,15 @@ export function OpeningsPage() {
           onValueChange={(side) => setFilter({ ...filter, side: (side || 'all') as CatalogFilter['side'] })}
           aria-label="Side"
         >
-          <ToggleGroupItem value="all">Both</ToggleGroupItem>
-          <ToggleGroupItem value="white">White</ToggleGroupItem>
-          <ToggleGroupItem value="black">Black</ToggleGroupItem>
+          <Hint text={'Show courses for White and for Black.'}>
+            <ToggleGroupItem value="all">Both</ToggleGroupItem>
+          </Hint>
+          <Hint text={SIDE_HINT.white}>
+            <ToggleGroupItem value="white">White</ToggleGroupItem>
+          </Hint>
+          <Hint text={SIDE_HINT.black}>
+            <ToggleGroupItem value="black">Black</ToggleGroupItem>
+          </Hint>
         </ToggleGroup>
         <div className="flex">
           <Button

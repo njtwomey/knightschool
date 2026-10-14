@@ -66,3 +66,15 @@
   eco: A00-A39
   summary: Openings that avoid 1.e4 and 1.d4, such as the English and Reti, and the irregular first moves.
   moves: 1. c4
+- id: pawn-gambits
+  name: Pawn Gambits
+  side: white
+  eco: C21-D69
+  summary: White offers a pawn for the lead in development, in the King's, Vienna, Danish, Evans and Queen's Gambits. Black's best answers are mostly to take it calmly and give it back.
+  moves: 1. e4 e5 2. f4
+- id: rousseau-gambit
+  name: Rousseau Gambit
+  side: black
+  eco: C50
+  summary: Black answers the Italian 3.Bc4 with the wild 3...f5. White has a calm reply, but the gambit sets real traps.
+  moves: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5
