@@ -146,7 +146,8 @@ export function PlayPage({ course, line, mode }: Props) {
   // If the store was reset while this page stayed open (a hot reload while developing does that), start again instead of
   // sitting on a loading skeleton until the page is refreshed.
   useEffect(() => {
-    if (phase === 'idle') void usePlay.getState().start(course, line, mode, decodeMoves(readHashState().m));
+    if (usePlay.getState().phase === 'idle')
+      void usePlay.getState().start(course, line, mode, decodeMoves(readHashState().m));
   }, [phase, course, line, mode]);
 
   useEffect(() => {

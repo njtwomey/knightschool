@@ -32,7 +32,7 @@ export function ReviewPage() {
 
   // Start again if the store was reset while the page stayed open, rather than waiting on a refresh.
   useEffect(() => {
-    if (phase === 'idle') void useReview.getState().start();
+    if (useReview.getState().phase === 'idle') void useReview.getState().start();
   }, [phase]);
 
   if (phase === 'idle' || phase === 'loading') return <Skeleton className="mx-auto mt-6 h-[28rem] max-w-5xl" />;

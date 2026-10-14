@@ -26,7 +26,7 @@ export function GuessPage() {
 
   // Start again if the store was reset while the page stayed open, rather than waiting on a refresh.
   useEffect(() => {
-    if (phase === 'idle') void useGuess.getState().start();
+    if (useGuess.getState().phase === 'idle') void useGuess.getState().start();
   }, [phase]);
 
   const names = useMemo(() => (phase === 'asking' ? allSuggestions() : []), [phase]);
