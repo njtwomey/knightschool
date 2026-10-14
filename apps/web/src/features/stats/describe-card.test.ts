@@ -1,3 +1,4 @@
+import { testManifest } from '@/test-manifest';
 import { buildOpening, newCard, parsePgn } from '@knightschool/core';
 import { describe, expect, it } from 'vitest';
 import { describeCard } from './describe-card';
@@ -15,7 +16,7 @@ const game = parsePgn(`[Event "x"]
 
 const content = buildOpening(
   't',
-  { name: 'T', eco: 'C20', side: 'white', level: 'beginner', summary: 'x', tags: [], lines: ['main'], refutations: [] },
+  testManifest(),
   [{ id: 'main', kind: 'line', game, source: 'main.pgn' }],
   [
     {

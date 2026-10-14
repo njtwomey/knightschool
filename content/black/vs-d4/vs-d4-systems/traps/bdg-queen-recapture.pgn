@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Blackmar-Diemer Gambit"]
+[Variation "Blackmar-Diemer Gambit Accepted, Ryder Gambit"]
+[ECO "D00"]
+[Character "tactical,gambit"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab"]
+[Themes "hanging-d4-pawn,queen-trade"]
+[Refutes "1. d4 d5 2. e4 dxe4 3. Nc3 Nf6 4. f3 exf3 5. Qxf3"]
+[Kind "for-us"]
+
+1. d4 d5 2. e4 dxe4 3. Nc3 Nf6 4. f3 exf3 5. Qxf3? { Recaptures with the queen, which leaves the d4 pawn with nothing defending it. }
+5... Qxd4 { Wins a pawn for free: the queen on f3 does not guard d4 and nothing else does either. }
+6. Be3 Qh4+ { Check, and the queen leaves with tempo. } 7. g3 Qg4 { Offers the queens: after Qxg4 Black is two pawns up in an endgame. } 8. Qf2 *

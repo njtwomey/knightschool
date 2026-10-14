@@ -5,7 +5,7 @@ PNPM_VERSION := $(shell node -p "require('./package.json').packageManager.split(
 PNPM ?= $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo npx -y pnpm@$(PNPM_VERSION))
 
 .DEFAULT_GOAL := help
-.PHONY: help install dev build preview test test-watch lint fix format format-check typecheck check pre-push hooks clean
+.PHONY: help install dev popularity build preview test test-watch lint fix format format-check typecheck check pre-push hooks clean
 
 help: ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  make %-13s %s\n", $$1, $$2}'
@@ -21,6 +21,9 @@ dev: node_modules ## Run the site locally with hot reload (http://localhost:5173
 
 build: node_modules ## Typecheck and build the site into apps/web/dist
 	$(PNPM) build
+
+popularity: node_modules ## Fetch how often players reach each position from Lichess into content/popularity (needs LICHESS_TOKEN in .env)
+	$(PNPM) popularity
 
 preview: build ## Serve the production build locally
 	$(PNPM) preview

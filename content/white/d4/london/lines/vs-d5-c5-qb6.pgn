@@ -1,0 +1,21 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Accelerated London System, Steinitz Countergambit"]
+[ECO "D00"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,pin"]
+[Themes "b2-pressure,nb5-c7"]
+[Kind "sideline"]
+
+1. d4 d5 2. Bf4 c5 { Hits d4 at once. } 3. e3 3... Qb6
+(3... Nc6 4. c3)
+(3... cxd4 4. exd4)
+(3... Nf6 4. Nd2)
+4. Nc3 { Counterattacks: the knight hits d5, and if the queen grabs b2, Nxd5 threatens Nc7+ and Rb1 together. } 4... e6
+(4... c4 5. Nxd5 { The d5 pawn was only defended by the queen's pin on b2. After ...Qa5+ White has won a pawn and keeps the better game. })
+5. Nb5 { Threatens Nc7+, forking the king and the rook on a8. } 5... Na6
+6. a4 { Stops ...Nb4 and ...Nc7 ideas and keeps the knight on b5 firmly placed. } 6... Nf6
+7. Nf3 { Develops and keeps c3 free for a pawn that supports the centre. } 7... Be7
+8. c3 { Takes b4 away from Black's pieces. Then Bd3 and castle: b2 is no longer a worry because the queen and rook cover it. } *

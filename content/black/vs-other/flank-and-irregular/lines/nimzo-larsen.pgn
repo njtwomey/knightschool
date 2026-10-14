@@ -1,0 +1,17 @@
+[Event "Knight School"]
+[Opening "Nimzo-Larsen Attack"]
+[Variation "Nimzo-Larsen Attack: Classical Variation"]
+[ECO "A01"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "qgd-setup"]
+[Kind "sideline"]
+
+1. b3 d5 { Takes the centre. With a pawn on d5, White's b2 bishop has few targets on the long diagonal. }
+2. Bb2 Nf6 { Develops and keeps e4 under control. }
+3. e3 ( 3. Nf3 e6 4. e3 Be7 ) 3... e6 { Backs up d5 and opens the c8 bishop. Black's usual setup works unchanged. }
+4. Nf3 ( 4. Bxf6?! Qxf6 { Recapturing with the queen is best: it also looks down the long diagonal at the rook on a1. } 5. d4 c5 ) 4... Be7 { Clears f8 so Black can castle. }
+5. c4 O-O 6. Be2 c5 { Fights for the centre at once. If White plays cxd5, Black recaptures with the pawn on e6. }
+7. O-O Nc6 8. cxd5 exd5 { Black has a healthy centre with pawns on c5 and d5. Plan: develop the c8 bishop, ...Re8 and ...Qd7, and do not push either pawn until pieces back it up. } *

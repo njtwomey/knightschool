@@ -56,9 +56,14 @@ function SetupDialog() {
   const set = (change: Partial<SpeedConfig>) => useSpeed.getState().setConfig({ ...config, ...change });
 
   return (
-    <Dialog open={phase === 'setup'}>
+    // Not modal, with the dimming drawn below the header, so the navigation stays usable while the window is open.
+    <Dialog open={phase === 'setup'} modal={false}>
+      {phase === 'setup' && (
+        <div className="fixed inset-x-0 top-[3.25rem] bottom-0 z-40 bg-black/55 backdrop-blur-sm" />
+      )}
       <DialogContent
         showCloseButton={false}
+        overlay={false}
         className="sm:max-w-lg"
         onInteractOutside={(event) => event.preventDefault()}
       >

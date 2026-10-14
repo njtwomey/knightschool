@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "English Opening"]
+[Variation "Anglo-Indian Defense, Mikenas Variation"]
+[ECO "A18"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "e5-push"]
+[RefutedBy "1. c4 Nf6 2. Nc3 e6 3. e4 Bb4 4. e5"]
+[Kind "against-us"]
+
+1. c4 Nf6 2. Nc3 e6 3. e4 Bb4? { Looks like the Nimzo-Indian pin, but White's pawn is on e4 and can push with tempo. }
+4. e5 Ne4? { Jumping forward looks natural, but the knight on e4 has no support. The only retreat was 4...Ng8. } 5. Nxe4 { White wins a knight for nothing: nothing guards e4, and Black cannot take back. } *

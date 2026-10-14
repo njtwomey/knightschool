@@ -25,7 +25,7 @@ import {
   type AnalysisLine,
 } from '../packages/core/src/index.ts';
 import { parseBestMove, parseInfo, type Info } from '../packages/engine/src/uci.ts';
-import { loadOpenings, rel, root } from './content-lib.ts';
+import { loadCourses, rel, root } from './content-lib.ts';
 
 export const analysisPath = join(root, 'content', 'analysis', 'analysis.json');
 const PV_MOVES = 8;
@@ -161,7 +161,7 @@ const clock = (seconds: number) => {
 };
 
 async function main() {
-  const courses = loadOpenings();
+  const courses = loadCourses();
   const known = new Set(courses.map((content) => content.opening.id));
   for (const id of wanted) if (!known.has(id)) throw new Error(`no course "${id}". Known: ${[...known].join(', ')}`);
   const chosen = courses.filter((content) => all || wanted.includes(content.opening.id));

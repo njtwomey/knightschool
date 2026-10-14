@@ -22,7 +22,13 @@ import type { Storage } from '@knightschool/storage';
 import { create } from 'zustand';
 import { loadOpening } from '@/data/content';
 import { useStorage, whenStorageReady } from '@/data/storage';
-import { addIntroducedToday, getEnrolled, getIntroducedToday, getNewPerDay } from '@/data/training-settings';
+import {
+  addIntroducedToday,
+  getEnrolled,
+  getCardOptions,
+  getIntroducedToday,
+  getNewPerDay,
+} from '@/data/training-settings';
 
 const scheduler = createScheduler();
 
@@ -127,7 +133,7 @@ export const useReview = create<ReviewState>((set, get) => {
             existing: new Set((await storage.cards.byOpening(content.opening.id)).map((card) => card.id)),
           })),
         );
-        const fresh = planIntroductions(openings, quota, now);
+        const fresh = planIntroductions(openings, quota, now, await getCardOptions(storage));
         await storage.cards.insertMissing(fresh);
         if (fresh.length) await addIntroducedToday(storage, fresh.length, now);
 

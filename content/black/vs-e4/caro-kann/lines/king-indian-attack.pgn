@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Breyer Variation"]
+[ECO "B10"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "central-pawns,e5-break"]
+[Kind "sideline"]
+
+1. e4 c6 2. d3 d5 { Takes the centre at once. White has played a slow move, so Black can claim space. }
+3. Nd2 ( 3. Nf3 Bg4 4. h3 Bxf3 5. Qxf3 e6 ) 3... e5 { Builds a big pawn centre. White's knight on d2 blocks the bishop, so White cannot easily hit the centre. }
+4. Ngf3 Bd6 { Defends e5 and develops. } 5. g3 ( 5. d4 exd4 6. Bd3 Ne7 ) 5... Nf6 { Develops with an attack on e4. }
+6. Bg2 O-O { King safe, and the rook goes to e8 next to back up the centre. } 7. O-O Re8 { Adds a defender to e5 and keeps the pressure on e4. Black has a big centre. If White varies, castle and keep the pawns on e5 and d5. }
+*

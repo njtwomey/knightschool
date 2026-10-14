@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "King's Pawn Game"]
+[Variation "King's Pawn Game: Gunderam Defense"]
+[ECO "C40"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "development,centre-pawns"]
+[Kind "rare"]
+
+1. e4 e5 2. Nf3 Qe7 { The queen defends e5 but blocks the f8 bishop, which makes Black's development awkward. } (2... Bd6 3. d4 { Takes the centre before the bishop settles. } 3... Nc6 4. dxe5 Nxe5 5. Nxe5 Bxe5 6. f4 { Kicks the bishop and gains space. } 6... Bf6 7. Bd3) 3. Bc4 { Develops and aims at f7. Black's queen is awkwardly placed on e7. } 3... Nf6 4. d3 { Guards e4 and opens the c1 bishop. } 4... c6 5. O-O d6 6. Nbd2 { Develops the last knight without blocking the c-pawn. Plan: c3 and a slow d4 or Nc4, and watch the e-file where the black queen can pin pieces. } *

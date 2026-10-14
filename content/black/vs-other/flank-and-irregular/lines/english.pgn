@@ -1,0 +1,23 @@
+[Event "Knight School"]
+[Opening "English Opening"]
+[Variation "Anglo-Indian Defense, Queen's Gambit Declined Formation"]
+[ECO "A17"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "qgd-setup,c5-break"]
+[Kind "main"]
+
+1. c4 Nf6 { Develops a piece and watches e4 and d5, so White's c-pawn does not get a free centre. }
+2. Nc3 ( 2. d4 e6 3. Nc3 d5 4. Nf3 Be7 ) ( 2. Nf3 e6 3. Nc3 d5 4. d4 Be7 )
+2... e6 { Prepares ...d5 and frees the c8 bishop. It comes before ...d5 so that 3.e4 can be met by ...d5 straight away. }
+3. Nf3 ( 3. d4 d5 4. Nf3 Be7 ) 3... d5 { Takes the centre. After 4.d4 this is a Queen's Gambit Declined, a setup Black already knows. }
+4. d4 ( 4. cxd5 exd5 { Recapturing with the e-pawn keeps a solid pawn on d5 and keeps the c8 bishop free. } 5. d4 Be7 6. Bg5 c6 )
+4... Be7 { Clears the way to castle and gets the bishop out before a White bishop can pin the f6 knight. }
+5. Bf4 ( 5. Bg5 O-O 6. e3 Nbd7 { The usual Queen's Gambit Declined setup, with ...c6 and ...dxc4 to come. } 7. Rc1 c6 ) 5... O-O { The king is safe before the centre opens. }
+6. e3 c5 { Hits the d4 pawn now that Black has castled. After dxc5 the bishop takes back and has a good diagonal. }
+7. dxc5 Bxc5 { Takes the pawn back; the bishop now eyes f2 and all of Black's pieces have room. }
+8. a3 Nc6 { Brings the last minor piece into the game before White can disturb the centre. }
+9. cxd5 exd5 { Recapturing with the e-pawn opens the c8 bishop's diagonal and leaves Black's pieces more active. }
+10. Be2 Bf5 { The bishop develops and also covers e4. Plan: ...Re8 and a queen move, keeping d5 guarded. If White leaves the book, keep every piece active. } *

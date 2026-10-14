@@ -1,0 +1,17 @@
+[Event "Knight School"]
+[Opening "Elephant Gambit"]
+[Variation "Elephant Gambit: Paulsen Countergambit"]
+[ECO "C40"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "extra-pawn,pinned-pawn"]
+[Kind "gambit"]
+
+1. e4 e5 2. Nf3 d5?! { The Elephant Gambit: Black offers the d-pawn for quick development. It is unsound, so White simply takes the pawn and plays carefully. }
+3. exd5 { Takes the pawn. White is a pawn up and Black has no big threat yet, so there is no need to be clever. } 3... e4 (3... Qxd5 4. Nc3 { Hits the queen with a developing move. } 4... Qd6 5. d4 { Takes the centre now that the queen has to move again. } 5... exd4 6. Qe2+ { Check, so Black has to deal with it. } 6... Be7 7. Nb5) (3... Bd6 4. d4 { Takes the centre and attacks e5. } 4... e4 5. Ne5 { The knight is safe here and hits f7. } 5... Nf6 6. Bb5+ Nbd7 7. Bg5)
+4. Qe2 { Pins the pawn on e4 to Black's king, so it cannot take the knight on f3. It also attacks the pawn on e4. } 4... Nf6 (4... Qe7 5. Nd4 { The knight is attacked, so it moves. The queen on e7 blocks Black's bishop. } 5... Nf6 6. Nc3 a6 7. h3)
+5. Nc3 { Attacks e4 a second time. Black has only one real defender and the pawn is pinned until the king moves off the file. } 5... Be7
+6. Nxe4 { Takes the pawn on e4, which had two attackers against one defender. } 6... Nxd5
+7. c4 { Kicks the knight away and gains space. } 7... Nb4 8. d4 { Takes the centre while Black's knight is offside. } 8... O-O 9. a3 { Hits the knight on b4, which has few safe squares. } 9... Re8 10. Bf4 { Develops the last bishop. Plan: castle long, keep the extra pawn and trade pieces, because a pawn up is easiest to use in the endgame. } 10... Bf5 *

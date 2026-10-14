@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit Declined"]
+[Variation "Cambridge Springs Defence, Bd3 trap"]
+[ECO "D52"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pin"]
+[Themes "queen-sortie,pin-on-c3"]
+[Kind "for-us"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. Nf3 c6 6. e3 Qa5 7. Nd2 Bb4 8. Qc2 ( 8. Qb3 dxc4 { The pawn takes with a
+threat on the queen, and the knight on c3 is pinned. } ) 8... O-O 9. Bd3? { A natural developing move. It leaves the
+bishop on g5 without a defender. } 9... dxc4! { Hits the bishop on d3 and opens the fifth rank, so the queen on a5 now
+attacks the bishop on g5. } 10. Nxc4 Qxg5 { White cannot save both bishops, and the pinned knight cannot help. } *

@@ -1,17 +1,14 @@
 import { Page } from '@/components/page';
 import {
   START_EPD,
-  filterFamilies,
-  groupFamilies,
-  searchAt,
-  searchLines,
   allLines,
-  isMotifFamily,
+  filterCourses,
   matchReason,
   relevance,
-  type LineHit,
+  searchAt,
+  searchLines,
   type CatalogFilter,
-  type FamilyView,
+  type LineHit,
   type OpeningIndexEntry,
   type SearchIndex,
 } from '@knightschool/core';
@@ -29,7 +26,7 @@ import { isActive, movesText, queryEpd, START_QUERY, type BoardQuery } from '@/f
 import { BoardSearchDialog } from '@/features/courses/board-search';
 import { useProgress } from '@/features/courses/progress';
 import { readHashState, setHashState } from '@/router/location';
-import { FamilyCard } from './family-card';
+import { CourseCard } from './course-card';
 import { VariationCard } from './variation-card';
 import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state';
 
@@ -59,12 +56,15 @@ function boardMatch(query: BoardQuery, index: SearchIndex | null, courses: Openi
 const PAGE = 100;
 
 type Item =
-  | { kind: 'opening'; view: FamilyView; name: string; score: number }
+  | { kind: 'course'; course: OpeningIndexEntry; name: string; score: number }
   | { kind: 'line'; hit: LineHit; name: string; score: number };
 
-/** The long list of openings. Search finds openings and, separately, variations; filters say whether you play it or against it. */
+/**
+ * Browse: courses in the order to study them, and every line in them. Courses and lines are the same kind of card, so one
+ * search covers both. Filters say which side you play, whether you are playing an opening or against it, and the tier.
+ */
 export function OpeningsPage() {
-  const { index, families, indexStatus, indexError } = useBrowse();
+  const { index, openings, indexStatus, indexError } = useBrowse();
   const learned = useProgress((state) => state.learned);
   const storage = useStorage((state) => state.storage);
   // The search, filters and board-search moves live in the URL hash, so a refresh or a shared link shows the same list.
@@ -93,69 +93,52 @@ export function OpeningsPage() {
   }, [filter, query]);
 
   const match = useMemo(() => boardMatch(query, searchIndex, index), [query, searchIndex, index]);
-  const views: FamilyView[] = useMemo(() => {
-    const filtered = filterFamilies(groupFamilies(index, families), filter);
-    if (!match) return filtered;
-    return filtered.flatMap(({ family, courses }) => {
-      const kept = courses.filter((course) => match.ids.has(course.id));
-      return kept.length ? [{ family, courses: kept }] : [];
-    });
-  }, [index, families, filter, match]);
+  const courses = useMemo(() => {
+    const filtered = filterCourses(index, filter, openings);
+    return match ? filtered.filter((course) => match.ids.has(course.id)) : filtered;
+  }, [index, openings, filter, match]);
   // Lines are found by name, or (with the board search on) are the lines through the position. With nothing typed, "All"
-  // and "Lines" list every one, so the page always shows openings, motifs and lines together.
+  // and "Lines" list every one, so the page always shows courses and lines together.
   const hits: LineHit[] = useMemo(() => {
-    if (filter.scope === 'openings' || filter.scope === 'motifs') return [];
-    const limit = filter.query.trim() ? 60 : 300;
-    if (filter.query.trim()) return searchLines(views, filter.query, limit);
+    if (filter.scope === 'courses') return [];
+    const limit = filter.query.trim() ? 60 : 400;
+    if (filter.query.trim()) return searchLines(courses, filter.query, limit);
     if (match) {
-      return allLines(views)
+      return allLines(courses)
         .filter((hit) => match.lines.get(hit.course.id)?.some((line) => line.id === hit.line.id))
         .slice(0, limit);
     }
-    return allLines(views).slice(0, limit);
-  }, [views, filter.query, filter.scope, match]);
-  const matching = match
-    ? new Set(views.flatMap((view) => view.courses.map((course) => course.id))).size
-    : index.length;
-
-  // Openings you have started come first, then the rest in the order they are listed.
-  const ordered = useMemo(() => {
-    const fraction = (view: FamilyView) => {
-      const total = view.courses.reduce((sum, course) => sum + course.cards, 0);
-      return total === 0 ? 0 : view.courses.reduce((sum, course) => sum + (learned[course.id] ?? 0), 0) / total;
-    };
-    return [...views].sort((a, b) => fraction(b) - fraction(a));
-  }, [views, learned]);
+    return allLines(courses).slice(0, limit);
+  }, [courses, filter.query, filter.scope, match]);
+  const matching = match ? courses.length : index.length;
 
   // One list. Searching ranks by relevance (a name match counts most, a match in the text around it less); with nothing
-  // typed it is alphabetical. An opening, a motif and a named line are the same kind of card, so they share the list.
+  // typed the courses come in study order, then the lines.
   const all: Item[] = useMemo(() => {
-    const wanted = (motif: boolean) => filter.scope === 'all' || filter.scope === (motif ? 'motifs' : 'openings');
-    const openings: Item[] = ordered
-      .filter((view) => wanted(isMotifFamily(view.courses)))
-      .map((view) => ({
-        kind: 'opening',
-        view,
-        name: view.family.name,
-        score: relevance(
-          view.family.name,
-          [
-            view.family.summary,
-            ...view.courses.flatMap((course) => [course.name, ...course.lines.map((l) => l.name)]),
-          ].join(' '),
-          filter.query,
-        ),
-      }));
+    const items: Item[] =
+      filter.scope === 'lines'
+        ? []
+        : courses.map((course) => ({
+            kind: 'course',
+            course,
+            name: course.name,
+            score: relevance(
+              course.name,
+              [course.summary, course.trigger, ...course.lines.flatMap((line) => [line.name, line.opponent])].join(' '),
+              filter.query,
+            ),
+          }));
     const lines: Item[] = hits.map((hit) => ({
       kind: 'line',
       hit,
       name: hit.line.name,
-      score: relevance(hit.line.name, `${hit.course.name} ${hit.family.name} ${hit.course.summary}`, filter.query),
+      score: relevance(hit.line.name, `${hit.course.name} ${hit.line.opponent} ${hit.course.summary}`, filter.query),
     }));
-    return [...openings, ...lines]
-      .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
-  }, [ordered, hits, filter.query, filter.scope]);
+    const typed = filter.query.trim() !== '';
+    const ranked = [...items, ...lines].filter((item) => item.score > 0);
+    // Stable sort: with a search the best match is first, without one study order is kept.
+    return typed ? ranked.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)) : ranked;
+  }, [courses, hits, filter.query, filter.scope]);
 
   // Only the first hundred are drawn; "Show more" adds another hundred. Changing the search or a filter starts again.
   const signature = JSON.stringify([filter, query.played.length, query.kind]);
@@ -168,7 +151,8 @@ export function OpeningsPage() {
       <header className="grid gap-1">
         <h2 className="text-3xl font-semibold tracking-tight">Browse</h2>
         <p className="text-muted-foreground">
-          Find an opening, a motif or a named line, or play moves on a board to find what covers them.
+          Courses are listed in the order to study them. Find a course or a single line, or play moves on a board to
+          find what covers them.
         </p>
       </header>
 
@@ -182,8 +166,8 @@ export function OpeningsPage() {
             type="search"
             value={filter.query}
             onChange={(event) => setFilter({ ...filter, query: event.target.value })}
-            placeholder="Search openings, motifs and lines…"
-            aria-label="Search openings, motifs and lines"
+            placeholder="Search courses and lines…"
+            aria-label="Search courses and lines"
             className="pl-9"
           />
         </div>
@@ -194,10 +178,9 @@ export function OpeningsPage() {
           onValueChange={(scope) => setFilter({ ...filter, scope: (scope || 'all') as CatalogFilter['scope'] })}
           aria-label="Show"
         >
-          <ToggleGroupItem value="openings">Openings</ToggleGroupItem>
-          <ToggleGroupItem value="lines">Lines</ToggleGroupItem>
-          <ToggleGroupItem value="motifs">Motifs</ToggleGroupItem>
           <ToggleGroupItem value="all">All</ToggleGroupItem>
+          <ToggleGroupItem value="courses">Courses</ToggleGroupItem>
+          <ToggleGroupItem value="lines">Lines</ToggleGroupItem>
         </ToggleGroup>
         <ToggleGroup
           type="single"
@@ -209,6 +192,19 @@ export function OpeningsPage() {
           <ToggleGroupItem value="all">Any</ToggleGroupItem>
           <ToggleGroupItem value="play">Play it</ToggleGroupItem>
           <ToggleGroupItem value="against">Play against it</ToggleGroupItem>
+        </ToggleGroup>
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          value={String(filter.tier)}
+          onValueChange={(tier) =>
+            setFilter({ ...filter, tier: (tier ? Number(tier) : 'all') as CatalogFilter['tier'] })
+          }
+          aria-label="Tier"
+        >
+          <ToggleGroupItem value="1">Tier 1</ToggleGroupItem>
+          <ToggleGroupItem value="2">Tier 2</ToggleGroupItem>
+          <ToggleGroupItem value="3">Tier 3</ToggleGroupItem>
         </ToggleGroup>
         <ToggleGroup
           type="single"
@@ -282,17 +278,18 @@ export function OpeningsPage() {
       {indexStatus === 'ready' && items.length > 0 && (
         <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {items.map((item) =>
-            item.kind === 'opening' ? (
-              <li key={`opening/${item.view.family.id}`} className="contents">
-                <FamilyCard
-                  view={item.view}
+            item.kind === 'course' ? (
+              <li key={`course/${item.course.id}`} className="contents">
+                <CourseCard
+                  course={item.course}
+                  openings={openings}
                   learned={learned}
-                  matches={match?.lines}
-                  reason={matchReason(item.view, filter.query)}
+                  matches={match?.lines.get(item.course.id)}
+                  reason={matchReason(item.course, filter.query)}
                 />
               </li>
             ) : (
-              <VariationCard key={`${item.hit.course.id}/${item.hit.line.id}`} hit={item.hit} />
+              <VariationCard key={`${item.hit.course.id}/${item.hit.line.id}`} hit={item.hit} openings={openings} />
             ),
           )}
         </ul>

@@ -1,0 +1,21 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Classical Variation"]
+[ECO "B18"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "good-bishop,h-pawn-fight"]
+[Kind "main"]
+
+1. e4 c6 2. d4 d5 3. Nc3 ( 3. Nd2 dxe4 4. Nxe4 ) 3... dxe4 { Takes the pawn so White has to spend a move getting it back, and Black can then develop the bishop. }
+4. Nxe4 Bf5 { Out before ...e6 closes the diagonal, and it attacks the knight. This course plays this move rather than 4...Nd7, which walks into a mating trick. }
+5. Ng3 ( 5. Bd3 Bxe4 6. Bxe4 Nf6 ) ( 5. Nc5 b6 6. Na4 ) 5... Bg6 { Retreats to a safe square where the bishop still controls the long diagonal. }
+6. h4 ( 6. Nf3 Nd7 7. h4 h6 8. Bd3 Bxd3 9. Qxd3 e6 ) 6... h6 { Stops h5, which would push the bishop back and take away its retreat square. }
+7. Nf3 Nd7 { Develops, and supports an early ...Ngf6 and ...e6. }
+8. h5 Bh7 { The bishop steps back out of the pawn's reach and stays on the diagonal that points at White's bishop on d3. } 9. Bd3 Bxd3 { Trades off White's most active piece, so Black's king and pieces are safe. }
+10. Qxd3 e6 { Closes the diagonal now the bishop has gone, supports d5 and frees both the knight and bishop on the kingside. }
+11. Bd2 ( 11. Bf4 Qa5+ 12. Bd2 Bb4 ) 11... Ngf6 { Develops the last minor piece and prepares ...Be7 and castling. }
+12. O-O-O Be7 { White has castled long into the open d-file. Black's plan: castle short, play ...c5 or ...Qa5, and keep the pawn on d4 under watch. If White leaves the book, develop, castle short and use the c-file. }
+*

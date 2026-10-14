@@ -1,0 +1,17 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Pianissimo, Quiet Fourth Moves"]
+[ECO "C53"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "castle-early,solid-centre"]
+[Kind "sideline"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. d3 { Another quiet move that guards e4. }
+( 4. O-O Nf6 5. d3 d6 )
+( 4. Nc3 Nf6 5. d3 d6 6. Bg5 h6 { Asks the bishop what it wants: if it takes on f6, Black recaptures with the queen. } 7. Bxf6 Qxf6 8. Nd5 Qd8 )
+4... Nf6 { Attacks e4 and develops. Black plays the same plan against every quiet fourth move. }
+5. O-O d6 { Supports e5 and frees the c8 bishop. }
+6. c3 { This transposes into the main line, the Giuoco Pianissimo. } 6... O-O *

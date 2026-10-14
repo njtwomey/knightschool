@@ -1,0 +1,132 @@
+name: Open Games (1...e5)
+eco: C40
+side: black
+opening: open-games
+tier: 1
+trigger: '1. e4 e5'
+summary: >-
+  Meet 1.e4 with 1...e5, then follow one plan against White's third move: Nc6 and Bc5 against the Italian Game, a closed
+  Ruy Lopez setup, and a handful of simple answers to the Scotch, Four Knights and rare moves.
+plans:
+  - Play 2...Nc6, then meet 3.Bc4 with 3...Bc5, 4...Nf6, 5...d6 and castle by move six.
+  - Against 3.Bb5 play ...a6, ...Nf6, ...Be7, ...b5, ...d6 and ...O-O, and keep the centre closed.
+  - Take every gambit pawn (Evans, Scotch Gambit) but give material back or trade pieces to stay safe.
+  - Never play 2...Nf6 3.Nxe5 (Stafford) or 3...Nd4 (Blackburne Shilling); the course never needs them.
+  - Do not pin ...Bg4 against Nc3 and Bc4 while your queen is on d1's line of fire; the Légal trap wins at once.
+  - Develop a knight to f6 and c6 and keep the pawn on e5 defended.
+  - Against a gambit, give the pawn back or take it only when you can keep your king safe, then castle.
+  - Fight for the centre with ...d5 whenever White's pieces are not yet ready.
+  - Do not bring the queen out early, and chase White's queen when it comes out.
+motifs:
+  [
+    develop-first,
+    castle-early,
+    fork-trick,
+    noahs-ark,
+    legal-mate,
+    counter-in-the-centre,
+    f7-weakness,
+    give-back-material,
+    decline-the-gambit,
+    tempo-on-queen,
+    scholar-mate,
+    pin-absolute,
+  ]
+tags: [e4, open, black]
+lines:
+  - file: italian-pianissimo
+    opponent: '3.Bc4'
+    kind: main
+  - file: italian-d4-break
+    opponent: '4.c3 Nf6 5.d4'
+    kind: sideline
+  - file: italian-quiet-fourths
+    opponent: '4.d3, 4.O-O or 4.Nc3'
+    kind: sideline
+  - file: evans-gambit
+    opponent: '4.b4'
+    kind: gambit
+  - file: ruy-lopez-setup
+    opponent: '3.Bb5'
+    kind: main
+  - file: scotch-game
+    opponent: '3.d4 exd4 4.Nxd4'
+    kind: sideline
+  - file: scotch-gambit
+    opponent: '3.d4 exd4 4.Bc4'
+    kind: gambit
+  - file: goring-gambit
+    opponent: '3.d4 exd4 4.c3'
+    kind: gambit
+  - file: four-knights
+    opponent: '3.Nc3'
+    kind: sideline
+  - file: ponziani
+    opponent: '3.c3'
+    kind: rare
+  - file: rare-third-moves
+    opponent: '3.Be2 or 3.d3'
+    kind: rare
+  - file: two-knights-ng5
+    opponent: '3.Bc4 Nf6 4.Ng5'
+    kind: sideline
+    alternative: true
+  - file: bishops-opening
+    opponent: '2.Bc4'
+    kind: main
+  - file: vienna-bishop
+    opponent: '2.Nc3'
+    kind: main
+  - file: vienna-gambit
+    opponent: '3.f4'
+    kind: gambit
+  - file: kings-gambit-declined
+    opponent: '2.f4'
+    kind: gambit
+  - file: kings-gambit-fischer
+    opponent: '2.f4'
+    kind: gambit
+    alternative: true
+  - file: danish-gambit-declined
+    opponent: '2.d4 exd4 3.c3'
+    kind: gambit
+  - file: centre-game-queen-takes
+    opponent: '2.d4 exd4 3.Qxd4'
+    kind: sideline
+  - file: centre-game-knight-takes
+    opponent: '2.d4 exd4 3.Nf3'
+    kind: sideline
+  - file: wayward-queen
+    opponent: '2.Qh5'
+    kind: sideline
+  - file: rare-second-moves
+    opponent: '2.d3'
+    kind: rare
+traps:
+  - file: noahs-ark
+    opponent: '8.Qxd4'
+    kind: for-us
+  - file: fork-trick-four-knights
+    opponent: '4.Bc4 Nxe4 5.Nxe4 d5 6.Bxd5'
+    kind: for-us
+  - file: legal-mate-pattern
+    opponent: '3...d6 4.Nc3 Bg4 5.Nxe5'
+    kind: against-us
+  - file: kings-gambit-fxe5
+    opponent: '3.fxe5'
+    kind: for-us
+  - file: wayward-queen-qb3
+    opponent: '5.Qb3'
+    kind: for-us
+  - file: centre-game-qc3
+    opponent: '4.Qc3'
+    kind: for-us
+  - file: scholars-mate
+    opponent: '2.Qh5 Nc6 3.Bc4'
+    kind: against-us
+  - file: vienna-f4-exf4
+    opponent: '3.f4'
+    kind: against-us
+  - file: danish-qxd4
+    opponent: '9.Bxf3'
+    kind: against-us

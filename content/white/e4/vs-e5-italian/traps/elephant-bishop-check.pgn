@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Elephant Gambit"]
+[Variation "Elephant Gambit: Paulsen Countergambit"]
+[ECO "C40"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "double-attack"]
+[Refutes "1. e4 e5 2. Nf3 d5?! 3. exd5 e4 4. Bb5+"]
+[Kind "against-us"]
+
+1. e4 e5 2. Nf3 d5?! 3. exd5 e4 4. Bb5+? { A natural check, but it ignores the pawn that attacks the knight on f3. } 4... c6 { Attacks the bishop and keeps the pawn on e4 attacking the knight. White cannot save both pieces. } 5. dxc6 bxc6 6. Ba4 exf3 { Wins the knight. } 7. Qxf3 Nf6 *

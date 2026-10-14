@@ -1,0 +1,28 @@
+- id: owen-bg6-mate
+  line: 1. e4 b6 2. d4 Bb7 3. Bd3 f5 4. exf5 Bxg2 5. Qh5+ g6 6. fxg6 Nf6 7. gxh7+ Nxh5
+  prompt: Black took the queen with the knight. What does White play, and why?
+  accept:
+    - keywords: [[bg6, g6, mate, checkmate]]
+      feedback: Yes. Bg6 is checkmate. The king is boxed in by its own pieces and nothing can take the bishop.
+  reveal: The bishop on d3 goes to g6 with check, and the king on e8 has no escape square and no way to block or capture.
+  showMove: Bg6#
+  examples:
+    match: [Bg6 is checkmate, bishop to g6 mate, the bishop gives mate on g6, bg6]
+    miss: [take the knight, castle, push the pawn, I do not know]
+- id: nb5-queen-trap
+  line: 1. e4 Nc6 2. Nf3 d5 3. exd5 Qxd5 4. Nc3 Qa5 5. d4 Nf6 6. Bd2 e6
+  prompt: 'What does 7.Nb5 threaten?'
+  accept:
+    - keywords: [[queen, qa5, discovered, bd2, uncover], [c7, nxc7, fork, rook]]
+      feedback: Yes. The knight steps away and uncovers the bishop on the queen, and it also threatens Nxc7+ forking king and rook.
+  reveal: Nb5 uncovers the bishop on d2 against the queen on a5, and it also threatens Nxc7+, a check that forks the king and the rook on a8.
+  showMove: Nb5
+  examples:
+    match:
+      [
+        it uncovers the bishop on the queen,
+        the queen is attacked and c7 falls,
+        threatens a fork on c7,
+        discovered attack on the queen,
+      ]
+    miss: [it develops a piece, it castles, I do not know, protects the pawn on d4]

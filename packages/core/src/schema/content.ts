@@ -36,39 +36,83 @@ export const VariantTags = z.object({
 });
 export type VariantTags = z.infer<typeof VariantTags>;
 
+/** How much a line matters, which decides whether it earns review cards. */
+export const LineKind = z.enum(['main', 'sideline', 'rare', 'gambit']);
+export type LineKind = z.infer<typeof LineKind>;
+/** A trap is one we spring (for us) or one we must not fall for (against us). */
+export const TrapKind = z.enum(['for-us', 'against-us']);
+export type TrapKind = z.infer<typeof TrapKind>;
+export const Tier = z.union([z.literal(1), z.literal(2), z.literal(3)]);
+export type Tier = z.infer<typeof Tier>;
+
 export const Variant = z.object({
   id: Slug, // the file name
-  kind: z.enum(['line', 'refutation']), // the folder: lines/ or refutations/
+  kind: z.enum(['line', 'refutation']), // the folder: lines/ or traps/ (a trap is called a refutation inside the code)
   name: z.string().min(1), // PGN [Variation]
   eco: z.string().regex(/^[A-E]\d\d$/),
   tags: VariantTags,
   mainLine: z.array(z.string()), // the variant's own main line, as UCI moves from the start
+  /** What the opponent does to arrive here, as written in course.yaml: "3...Bc5". */
+  opponent: z.string().default(''),
+  /** Lines only: main, sideline, rare or gambit. */
+  weight: LineKind.optional(),
+  /** Traps only: for-us or against-us. */
+  whose: TrapKind.optional(),
+  /** Shown and playable but never drilled: a second answer to a position the main line already answers. */
+  alternative: z.boolean().default(false),
 });
 export type Variant = z.infer<typeof Variant>;
 
-/** The contents of opening.yaml, before the variants are read. */
+/** One entry of the `lines:` list in course.yaml. */
+export const CourseLine = z.object({
+  /** The file name under lines/, without .pgn. This is the line's id and ends up in learner history. */
+  file: Slug,
+  /** What the opponent does to reach this line, in SAN with its move number: "3...Bc5" or "2...d5". */
+  opponent: z.string().min(1),
+  kind: LineKind,
+  alternative: z.boolean().default(false),
+});
+export type CourseLine = z.infer<typeof CourseLine>;
+
+/** One entry of the `traps:` list in course.yaml. */
+export const CourseTrap = z.object({
+  file: Slug,
+  opponent: z.string().min(1),
+  kind: TrapKind,
+});
+export type CourseTrap = z.infer<typeof CourseTrap>;
+
+/** The contents of course.yaml, before the variants are read. */
 export const OpeningManifest = z.object({
   name: z.string().min(1),
-  eco: z.string().regex(/^[A-E]\d\d$/),
-  side: Side, // the side the learner plays
-  level: z.enum(['beginner', 'club']),
+  eco: z
+    .string()
+    .regex(/^[A-E]\d\d$/)
+    .optional(),
+  side: Side, // the side the learner plays; it must match the white/ or black/ folder
+  /** The opening this course is about, an id from content/openings.yaml. Courses that share one are shown together. */
+  opening: Slug,
+  /** 1: study first. 2: next. 3: alternatives and rare replies. */
+  tier: Tier,
+  /** SAN from the start to the position every line of the course passes through: "1. e4 e5 2. Nf3". Empty means the start. */
+  trigger: z.string(),
   summary: z.string().min(1),
-  tags: z.array(Slug),
-  /** Courses about the same opening, from either side, share a family so they can be shown together. Defaults to the id. */
-  family: Slug.optional(),
-  /** Set when this course is a repertoire *against* an opening: its name, e.g. "Caro-Kann Defence". */
-  against: z.string().min(1).optional(),
-  /** Set by the loader for courses under content/motifs: a named position or idea that belongs to no opening. */
-  motif: z.boolean().optional(),
-  lines: z.array(Slug).min(1), // teaching order; the first is the main line
-  refutations: z.array(Slug),
+  /** Short plan bullets a player can act on when the opponent leaves the book. */
+  plans: z.array(z.string().min(1)).default([]),
+  /** Ids from content/motifs.yaml. */
+  motifs: z.array(Slug).default([]),
+  tags: z.array(Slug).default([]),
+  lines: z.array(CourseLine).min(1), // teaching order; the first is the main line
+  traps: z.array(CourseTrap).default([]),
 });
 export type OpeningManifest = z.infer<typeof OpeningManifest>;
 
-export const Opening = OpeningManifest.omit({ lines: true, refutations: true }).extend({
+export const Opening = OpeningManifest.omit({ lines: true, traps: true }).extend({
   id: Slug, // the folder name
   rootEpd: z.string(),
-  variants: z.array(Variant), // lines then refutations, each in teaching order
+  /** The position after `trigger`. */
+  triggerEpd: z.string(),
+  variants: z.array(Variant), // lines then traps, each in teaching order
 });
 export type Opening = z.infer<typeof Opening>;
 
@@ -78,13 +122,16 @@ export const OpeningIndexEntry = Opening.pick({
   name: true,
   eco: true,
   side: true,
-  level: true,
+  opening: true,
+  tier: true,
+  trigger: true,
   summary: true,
+  plans: true,
+  motifs: true,
   tags: true,
-  family: true,
-  against: true,
-  motif: true,
 }).extend({
+  /** Position in content/curriculum.yaml: the order to study in. */
+  order: z.number().int(),
   variants: z.number().int(),
   /** How many cards the course produces, for progress bars. */
   cards: z.number().int(),
@@ -96,6 +143,10 @@ export const OpeningIndexEntry = Opening.pick({
       id: Slug,
       name: z.string(),
       kind: z.enum(['line', 'refutation']),
+      opponent: z.string(),
+      weight: LineKind.optional(),
+      whose: TrapKind.optional(),
+      alternative: z.boolean(),
       /** A position partway along the line, for its thumbnail. */
       epd: z.string(),
       /** The position after each of the first plies (from the second), for "Name That Opening". */
@@ -189,17 +240,41 @@ export const QuizEntry = z.object({
 });
 export type QuizEntry = z.infer<typeof QuizEntry>;
 
-/** One entry of content/families.yaml: an opening that courses are grouped under, from either side. */
-export const FamilyMeta = z.object({
+/**
+ * One entry of content/openings.yaml: an opening that courses are grouped under, from either side. `side` is who
+ * plays it, so a course on that side is "playing it" and a course on the other side is "playing against it".
+ */
+export const OpeningMeta = z.object({
   id: Slug,
   name: z.string().min(1),
+  side: Side,
   eco: z.string().optional(), // 'B10' or 'B10-B19'
   summary: z.string().min(1),
-  /** SAN that reaches the defining position, e.g. "1. e4 c6": drawn on the card and used as its thumbnail. */
+  /** SAN that reaches the defining position, e.g. "1. e4 c6": its thumbnail. */
   moves: z.string().min(1),
 });
-export type FamilyMeta = z.infer<typeof FamilyMeta>;
+export type OpeningMeta = z.infer<typeof OpeningMeta>;
 
-/** A family as built: its metadata, its defining position, and the courses under it (playing it first). */
-export const Family = FamilyMeta.extend({ epd: z.string(), courses: z.array(Slug).min(1) });
-export type Family = z.infer<typeof Family>;
+/** An opening as built: its entry, its defining position, and the courses under it. */
+export const OpeningGroup = OpeningMeta.extend({ epd: z.string(), courses: z.array(Slug).min(1) });
+export type OpeningGroup = z.infer<typeof OpeningGroup>;
+
+/** One entry of content/motifs.yaml: a tactical or structural idea, in plain words, for the glossary and for tagging. */
+export const MotifEntry = z.object({
+  id: Slug,
+  name: z.string().min(1),
+  summary: z.string().min(1),
+  group: z.enum(['tactical', 'structural']),
+});
+export type MotifEntry = z.infer<typeof MotifEntry>;
+
+/** A motif as built: its entry plus the courses that name it, for the glossary page. */
+export const GlossaryEntry = MotifEntry.extend({ courses: z.array(Slug) });
+export type GlossaryEntry = z.infer<typeof GlossaryEntry>;
+
+/** One entry of content/curriculum.yaml: the order to study courses in, and what to do first. */
+export const CurriculumEntry = z.object({
+  id: Slug,
+  prerequisites: z.array(Slug).default([]),
+});
+export type CurriculumEntry = z.infer<typeof CurriculumEntry>;

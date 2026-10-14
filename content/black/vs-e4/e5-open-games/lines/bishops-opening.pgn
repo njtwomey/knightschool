@@ -1,0 +1,29 @@
+[Event "Knight School"]
+[Opening "Bishop's Opening"]
+[Variation "Bishop's Opening"]
+[ECO "C23"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-trade,d5-break"]
+[Kind "main"]
+
+1. e4 e5 2. Bc4 { White's bishop eyes f7, the square only the black king guards. Black should develop calmly and keep f7 covered. }
+2... Nc6 { Guards e5 and develops. ...Nf6 comes next, hitting e4. }
+3. d3 { Protects e4 and frees the bishop on c1. }
+( 3. Nf3 { This is the Italian Game, taught with the other 2.Nf3 lines. Black plays 3...Bc5 and the game continues there. } 3... Bc5 )
+( 3. Nc3 { Another way to guard e4. After 3...Nf6 4.d3 the game joins the main line below. } 3... Nf6 4. d3 Na5 )
+( 3. Qh5 { The early queen move. The Wayward Queen line explains why 3...g6 is the answer. } 3... g6 4. Qf3 Nf6 )
+( 3. Qf3 { Queen and bishop both aim at f7. } 3... Nf6 { Develops and blocks the f-file, so the queen cannot reach f7. } )
+3... Nf6 { Attacks e4 and gets ready to meet White's centre with ...d5. }
+4. Nc3 { A second guard for e4. }
+( 4. Nf3 { Now it is the Italian Game with d3 played. Black's ...Bc5 below leads straight into those lines. } 4... Bc5 )
+4... Na5 { Attacks the bishop that eyes f7. Black is happy to give a knight for White's most dangerous piece. }
+5. Bb3 { Keeps the bishop. }
+( 5. Nge2 Nxc4 { Takes the bishop that was aiming at f7 before White can use it. } 6. dxc4 d6 )
+5... Nxb3 { Removes the bishop that was aiming at f7. White must recapture with a pawn, which leaves White with doubled b-pawns. }
+6. axb3 d5 { Challenges the centre now that White's attacking bishop is gone. If White takes, ...Nxd5 develops with a hit on c3. }
+7. exd5 Nxd5 8. Nf3 Nxc3 { Swaps off White's knight. After bxc3 White has doubled pawns on the c-file. }
+9. bxc3 Bd6 { Develops and guards e5, so the extra pawn is not at risk. }
+10. O-O O-O 11. Nd2 Be6 { The position is level. Black's plan: finish development, put the rooks on the d- and e-files, and aim at White's doubled pawns on b3 and c3. } *

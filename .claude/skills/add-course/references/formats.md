@@ -1,64 +1,42 @@
-# Formats: files, opening.yaml, families.yaml, PGN, tags
+# Formats: files, course.yaml, PGN, tags
 
-Code is the authority: `packages/core/src/{schema/content,tree,tags,families}.ts`, `scripts/content-lib.ts`. The build
-errors name the file and the problem; this page only covers what they cannot tell you.
-
-## Layout
+Code is the authority: `packages/core/src/{schema/content,tree,tags,training,openings}.ts`, `scripts/content-lib.ts`. The full
+format reference is `content/README.md`; read it first. This page is the working summary.
 
 ```
-content/families.yaml                    openings that group courses (shared file; see Families)
-content/openings/<course-id>/
-  opening.yaml                           required
-  lines/<variant-id>.pgn                 the repertoire; at least one; the first listed is the main line
-  refutations/<variant-id>.pgn           optional: ONE specific mistake or trap each, needs [Refutes]
-  quizzes.yaml                           optional
+content/curriculum.yaml  openings.yaml  motifs.yaml        shared files (report entries, do not edit when told so)
+content/white/<...>/<course-id>/   or   content/black/<...>/<course-id>/    the folder decides the side
+  course.yaml            required
+  lines/<file>.pgn       the repertoire: one PGN per opponent choice, ( ... ) variations inside are fine
+  traps/<file>.pgn       optional: a trick inside the course: for-us (we spring it) or against-us (we must not fall for it)
+  quizzes.yaml           optional
 ```
 
-- Ids (course folder, variant file, quiz id) are kebab-case (`^[a-z0-9]+(-[a-z0-9]+)*$`) and **permanent**: they are part
-  of card ids and learner history. `all` is reserved as a variant id.
-- Variant ids are unique across `lines/` and `refutations/`. Every `.pgn` must be listed in `opening.yaml` and every listed
-  id must exist.
-- One game per `.pgn`. Everything in a course merges into one tree keyed by position, so transpositions share cards and
-  comments. A shared move may be commented in only one place (different comment text on the same move is an error).
+- The course id is its folder name (unique across the tree). `<file>` names are ids too: kebab-case, stable, never renamed.
+- Every `.pgn` must be listed in `course.yaml` (`lines:` or `traps:`) and every listed one must exist; files are unique across
+  both folders. The `lines:` order is the teaching order and the first is the main line.
+- Every line's main path passes through the course's `trigger` position.
 
-## opening.yaml
+## course.yaml
 
-| Field         | Rule                                                                                                |
-| ------------- | --------------------------------------------------------------------------------------------------- |
-| `name`        | Non-empty. Every PGN `[Opening "..."]` must equal it. **Quote it if it contains a colon.**          |
-| `eco`         | `A00`..`E99`                                                                                        |
-| `side`        | `white` or `black`: the learner's side                                                              |
-| `level`       | `beginner` (use this) or `club`                                                                     |
-| `summary`     | Two plain sentences. Use a `>-` block.                                                              |
-| `tags`        | kebab-case words, may be `[]`: `e4`/`d4`, `open`/`semi-open`/`closed`, `solid`, `system`, `against` |
-| `family`      | Optional: id of the opening (families.yaml) this course belongs to                                  |
-| `against`     | Optional: the name of the opening this course is a repertoire against (e.g. `Queen's Gambit`)       |
-| `lines`       | Ids in teaching order; at least one; **first = main line**                                          |
-| `refutations` | Ids, or `[]` (the key must be present)                                                              |
+| Key       | Meaning                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------- |
+| `name`    | The course name; quote it if it has a colon                                                             |
+| `eco`     | Optional ECO code of the opening                                                                        |
+| `side`    | The learner's side: must match `white/` or `black/`                                                     |
+| `opening` | An id in `content/openings.yaml`: who plays that opening decides "play it" versus "play against it"     |
+| `tier`    | 1 study first, 2 next, 3 alternatives and rare replies                                                  |
+| `trigger` | SAN to the position the course starts from: `1. e4 e5 2. Nf3`                                           |
+| `summary` | Two plain sentences (a `>-` block)                                                                      |
+| `plans`   | A few bullets a 1200 can act on when the opponent leaves the book                                       |
+| `motifs`  | Ids from `content/motifs.yaml`                                                                          |
+| `lines`   | Each `{file, opponent, kind: main\|sideline\|rare\|gambit, alternative?}`; `opponent` is what they play |
+| `traps`   | Each `{file, opponent, kind: for-us\|against-us}`                                                       |
 
-**One course = one learner side = exactly one repertoire move per position.** Alternative systems against the same
-opening (Two Knights, Advance, Panov against the Caro-Kann) are separate courses, never lines of one course.
-
-## Families (content/families.yaml)
-
-An opening seen from both sides. The app groups courses under it: courses that **play it** (no `against`) and courses that
-**meet it** (`against: <opening name>`). Example: family `queens-gambit` has "Queen's Gambit" (White) and the Black courses
-QGD, Slav, Semi-Slav with `against: Queen's Gambit`.
-
-Entry fields (`FamilyMeta`): `id` (kebab), `name`, `eco` (optional, `D06` or `D06-D69`), `summary`, `moves` (legal SAN from
-move 1 to the defining position, `1. d4 d5 2. c4`). Template: `templates/families.yaml`.
-
-Rules (`families.ts`, `content-lib.ts`):
-
-- A course with `family:` joins that family; with no `family` it stands alone as its own opening (id = course id).
-- A course with `against:` **must** name a family that is **listed in families.yaml**, or the build fails. A listed family must
-  have at least one course, and its `moves` must be legal.
-- Ids in families.yaml are unique. `family`/`against` are not checked against each other beyond that, so keep them consistent.
-- **Adding a course to a family that already exists**: set `family:` in the course; no families.yaml edit needed.
-- **A new family** (e.g. you add the first course of `slav-defence` with `against`): add one entry. families.yaml is shared and
-  edited by everyone, so **when told to "report, don't edit", do not touch it**: put the entry (from the template) in your
-  final report for the coordinator, and say which course needs it. The build of your course fails until it is added; that is
-  expected.
+Which lines earn cards (`training.ts`): `main` and `gambit` always; `sideline` unless the explorer says too few games reach it;
+`rare` only when the learner turns on "include rare lines"; `alternative` never. `against-us` traps give cards for the move that
+avoids the trap (the repertoire move in `lines/`; the trap file shows our mistake marked `?`). `for-us` traps give no move cards:
+give each one a quiz.
 
 ## PGN
 
@@ -76,17 +54,16 @@ Only the learner's moves are cards; the opponent's moves never are.
 
 - Positions reachable only through a marked mistake **by the learner's own side** (a trap they fall into) are shown but never
   cards and are not conflict-checked. A mistake marked on the **opponent's** move does not stop cards: the punishing reply is a card.
-- Introduction order: main line of the first line, then other lines, then refutation-only positions; each by distance from
+- Introduction order: main line of the first line, then other lines, then trap-only positions; each by distance from
   the start. After every 4th move card a quiz is slotted in.
-- **Every-branch drill** (`#/play/<course>/all/branches`): the learner plays the repertoire move; the computer plays a random
+- **Every-branch drill** (`/play/<course>/all/branches`): the learner plays the repertoire move; the computer plays a random
   known reply, the main-line one three times as often. So: list every reply the opponent is likely to try (lines or short
   variations), put the most common reply in the first line, and give each sideline reply its own repertoire answer, or the
   drill ends there.
 
 ## Tags (PGN header)
 
-Required: `Opening`, `Variation`, `ECO`, `Character`, `Risk`, `EarlyMate`, `Tricks`. Optional: `Event`, `Refutes` (required in
-`refutations/`), `RefutedBy`, `Themes`. Lowercase values, comma lists without spaces. Unknown tags or values fail the build.
+Required: `Opening`, `Variation`, `ECO`, `Character`, `Risk`, `EarlyMate`, `Tricks`. Optional: `Event`, `Refutes`, `RefutedBy`, `Themes`, `Kind` (optional: the line or trap kind, cross-checked with course.yaml). Lowercase values, comma lists without spaces. Unknown tags or values fail the build.
 
 | Tag         | Values and how to choose                                                                                                                                                                                                                      |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -96,9 +73,7 @@ Required: `Opening`, `Variation`, `ECO`, `Character`, `Risk`, `EarlyMate`, `Tric
 | `Risk`      | `low`: a slip costs a tempo. `medium`: a slip loses a pawn or piece, or early queen, hanging pieces, pins on our pieces. `high`: one slip loses the game fast. When unsure pick the higher.                                                   |
 | `EarlyMate` | `none` unless a concrete mating pattern exists in the first 12 moves: `white`, `black`, or `both`. Means "who can mate if the line goes wrong".                                                                                               |
 | `Tricks`    | `none` (alone) or motifs that actually occur in the file: `trap fork pin skewer discovered-attack hanging-piece back-rank queen-trap smothered-mate early-queen pawn-grab castling-lost mate-threat`. A trap file has `trap` plus its tactic. |
-| `Refutes`   | Legal SAN from move 1 ending on the opponent's mistake: `1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4`. Shown to the learner verbatim. Keep it a prefix of the file.                                                                                        |
-| `Themes`    | kebab-case plans, 1 to 3: `d4-break`, `f7-pressure`, `good-bishop`. Reuse: `grep -rh '^\[Themes' content/openings`.                                                                                                                           |
+| `Refutes`   | Optional. Legal SAN from move 1 ending on the opponent's mistake: `1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4`. Shown to the learner verbatim.                                                                                                            |
+| `Themes`    | kebab-case plans, 1 to 3: `d4-break`, `f7-pressure`, `good-bishop`. Reuse: `grep -rh '^\[Themes' content`.                                                                                                                                    |
 
-`refutations/` is **only** for a line that punishes one specific mistake or trap (Blackburne Shilling, Elephant Trap), each
-with `Refutes`. A strong line against an opponent's opening, or against a merely dubious move (`2.Bc4?!`), is a regular
-`lines/` file (mark the dubious move `?!`).
+A trap file (`traps/`) is one specific trick: a mistake we must avoid (`against-us`) or an opponent mistake we punish (`for-us`, which must end clearly better for us). A strong line against a merely dubious move (`2.Bc4?!`) is a regular `lines/` file (mark the dubious move `?!`).

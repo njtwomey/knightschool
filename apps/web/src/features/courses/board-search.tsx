@@ -185,8 +185,7 @@ export function BoardSearchDialog({
                       .size;
                     // Straight to the course, with the moves played here already on its board.
                     const href =
-                      to(`/opening/${course?.family ?? id}`) +
-                      buildHash({ c: id, m: encodeMoves(query.played.map((move) => move.uci)) });
+                      to(`/course/${id}`) + buildHash({ m: encodeMoves(query.played.map((move) => move.uci)) });
                     return (
                       <li key={id}>
                         <a

@@ -1,0 +1,23 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Advance Line"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "e5-wedge,space-advantage"]
+[Kind "sideline"]
+
+1. e4 c5 2. c3 e6 3. d4 d5
+4. e5 { Gains space and shuts in the bishop on c8 behind its own pawns. The chain from c3 to e5 is a firm base. }
+4... Nc6
+5. Nf3 { Develops and defends the pawn on e5 at once. }
+5... Qb6
+(5... Nge7 6. Na3)
+(5... cxd4 6. cxd4)
+6. a3 { Stops ...Bb4 and keeps b4 available as a pawn break if Black plays ...c4. }
+6... c4
+7. Nbd2 { Develops the knight and attacks the pawn on c4, which Black now has to look after. }
+7... Na5
+8. Be2 { Develops and prepares to castle. The pawn on c4 can be attacked later with b3. } *

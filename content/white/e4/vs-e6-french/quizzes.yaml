@@ -1,0 +1,46 @@
+- id: base-of-the-chain
+  line: 1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6
+  prompt: Which of White's pawns is the base of the chain, the one Black's pieces will attack?
+  accept:
+    - keywords: [[d4]]
+      feedback: Yes. The chain runs d4, e5. Black attacks the base with c5, Nc6 and a queen move, so we keep guarding d4.
+  reveal: The pawn on d4 is the base. If it falls, the e5 pawn loses its support too, so we defend d4 rather than trade it.
+  examples:
+    match: [the d4 pawn, d4, it is the pawn on d4]
+    miss: [the e5 pawn, c3, the f-pawn]
+- id: why-be2-not-bd3
+  line: 1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 c4 7. Nbd2 Na5
+  prompt: Why does White play the bishop to e2 rather than d3 here?
+  accept:
+    - keywords: [[c4], [attack, control, cover, take, capture, stop, prevent, guard]]
+      all: true
+      feedback: Yes. The c4 pawn covers d3, so a bishop there would be captured for nothing.
+    - keywords: [[c4]]
+      partial: true
+      feedback: Close. Say what the c4 pawn does to d3.
+  reveal: The pawn on c4 attacks d3, so the bishop would be taken for free. It goes to e2 and then we castle.
+  examples:
+    match: [the c4 pawn attacks d3, c4 controls d3, because the pawn on c4 would take it]
+    miss: [to castle quickly, it protects b2, because the knight is on d2]
+- id: counting-b2
+  line: 1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. Be3
+  prompt: White just played Be3. Which pawn can Black win now?
+  accept:
+    - keywords: [[b2, qxb2]]
+      feedback: Yes. The bishop was the only guard of b2, and when it left, Black's queen can simply take it.
+  reveal: Black wins the pawn on b2. The bishop on c1 was its only guard, so it must stay there while Black's queen is on b6.
+  showMove: Qxb2
+  examples:
+    match: [the b2 pawn, Qxb2, the queen takes on b2]
+    miss: [the d4 pawn, it develops a piece, nothing is wrong]
+- id: greek-gift-bxh7
+  line: 1. e4 e6 2. d4 d5 3. e5 Ne7 4. Nf3 Nf5 5. Bd3 c5 6. dxc5 Bxc5 7. O-O Nc6 8. a3 Bb6 9. Re1 O-O 10. Nc3 Nfd4
+  prompt: Black has castled and the knight left f5. What sacrifice does White have?
+  accept:
+    - keywords: [[h7, bxh7, greek, gift]]
+      feedback: Yes. After Bxh7+ Kxh7 Ng5+ the king is dragged forward and the queen joins with check.
+  reveal: Bxh7+ Kxh7 Ng5+ Kg6 Qd3+ and White's pieces swarm the exposed king.
+  showMove: Bxh7+
+  examples:
+    match: [Bxh7+ the Greek gift, sacrifice the bishop on h7, take h7 with the bishop]
+    miss: [Nxd4, take the knight on d4, castle]

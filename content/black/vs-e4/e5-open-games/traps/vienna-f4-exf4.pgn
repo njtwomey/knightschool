@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Gambit: 3...exf4 4.e5"]
+[ECO "C26"]
+[Character "sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "knight-trapped,counter-in-the-centre"]
+[Kind "against-us"]
+
+1. e4 e5 2. Nc3 Nf6 3. f4 exf4? { Grabs the pawn, but after 4.e5 the knight is attacked and must go all the way back to g8. } 4. e5 { Attacks the knight on f6. } 4... Ng8 { The only safe square. White leads in development and has a space advantage for the pawn. } 5. Nf3 d6 *

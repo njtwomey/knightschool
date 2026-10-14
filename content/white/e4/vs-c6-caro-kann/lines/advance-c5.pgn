@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence: Advance Variation"]
+[Variation "Botvinnik-Carls Defence"]
+[ECO "B12"]
+[Character "positional,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "extra-pawn,open-lines"]
+[Kind "sideline"]
+
+1. e4 c6 2. d4 d5 3. e5 c5 { Black strikes at d4 before developing. } 4. dxc5 { Wins a pawn. Black has no quick way to take it back, and the pawn on e5 stops ...Nf6. } 4... Nc6
+( 4... e6 5. Nf3 { Develops and guards e5. } 5... Bxc5 6. Bd3 { Here the bishop is not bothered by ...Bf5, since the bishop on c8 is still shut in by ...e6. } 6... Ne7 7. O-O Nbc6 )
+5. Nf3 { Guards e5 so the extra pawn cannot be won back by ...Nxe5. } 5... Bg4 6. c3 { Gives d4 to the queen and shuts the diagonal, preparing b4 to keep the pawn. } 6... e6
+7. Be3 { Develops and covers c5, so the extra pawn is looked after. } 7... Nge7 8. Nbd2 { Last piece out; it will help hold e5 and c4. } 8... Nf5 9. Bd4 { Gives back the pawn only on White's terms and keeps pieces active. } 9... Be7 10. h3 Bxf3 11. Nxf3 O-O 12. Qa4 { Hits the knight on c6 and keeps a clear head. White is a pawn up with a safe position. If Black leaves the book, keep e5 guarded, finish development, and give the pawn back only for a clear gain. } *

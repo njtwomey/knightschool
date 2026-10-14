@@ -1,0 +1,28 @@
+[Event "Knight School"]
+[Opening "Center Game"]
+[Variation "Danish Gambit Declined: Sorensen Defense"]
+[ECO "C21"]
+[Character "solid,positional"]
+[Risk "medium"]
+[EarlyMate "white"]
+[Tricks "pawn-grab"]
+[Themes "give-back-the-pawn,centre-pawns"]
+[Kind "gambit"]
+
+1. e4 e5 2. d4 { White opens the centre at once and hopes to get a lead in development. }
+2... exd4 { Takes the pawn. White cannot win it back quickly without losing time. }
+3. c3 { The Danish Gambit try: White is ready to give even more pawns for fast development. }
+3... d5 { The key reply. It hits e4 at once and returns a pawn on Black's terms. Grabbing everything with ...dxc3 gives White a strong attack. }
+4. exd5
+( 4. cxd4 dxe4 5. Nc3 Nf6 )
+( 4. Qxd4 Nf6 5. exd5 Qxd5 )
+( 4. e5 c5 5. cxd4 Nc6 )
+4... Qxd5 { Gets the pawn back, and the queen eyes both d4 and g2. }
+5. cxd4 ( 5. Nf3 Nc6 6. cxd4 Bb4+ )
+5... Nc6 { Develops and attacks d4. }
+6. Nf3 6... Bb4+
+7. Nc3 7... Bg4
+8. Be2 ( 8. Bd2 Bxc3 9. Bxc3 Bxf3 )
+8... Bxf3 { Takes the knight that guards d4. } 9. Bxf3 9... Qc4
+10. Bxc6+ ( 10. Qb3 Qxb3 11. axb3 Nge7 )
+10... bxc6 11. Qe2+ Qxe2+ 12. Kxe2 O-O-O { Queens are off, White's king is stuck in the middle, and Black's pieces are ready. Plan: ...Nf6, ...Rhe8 and pressure on the isolated d4 pawn. } *

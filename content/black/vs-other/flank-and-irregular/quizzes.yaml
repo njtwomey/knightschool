@@ -1,0 +1,56 @@
+- id: larsen-long-diagonal
+  line: 1. b3 d5 2. Bb2 Nf6 3. e3 e6 4. Bxf6 Qxf6 5. Nf3
+  prompt: White traded bishops and then developed the knight. What can Black win now?
+  accept:
+    - keywords: [[rook, a1, qxa1]]
+      feedback: Yes. With the b2 bishop gone, the queen on f6 sees the whole long diagonal and nothing guards the rook on a1.
+  reveal: The queen takes the rook on a1. The b2 bishop was the only thing guarding that diagonal, and the knight on b1 does not protect a1.
+  showMove: Qxa1
+  examples:
+    match: [the rook, Qxa1, the queen takes the rook on a1, it wins the rook]
+    miss: [a pawn, nothing, the knight on f3, the bishop on f1]
+- id: bird-bxg4-tempo
+  line: 1. f4 d5 2. e4 dxe4 3. Nc3 Nf6 4. g4
+  prompt: Why can Black safely take the pawn with 4...Bxg4?
+  accept:
+    - keywords: [[queen, qd1, d1]]
+      feedback: Yes. The bishop takes the pawn with an attack on the queen, so White has no time to win e4 back.
+  reveal: The bishop on g4 attacks the queen on d1. White must deal with that first, so Black keeps both extra pawns.
+  showMove: Bxg4
+  examples:
+    match:
+      [
+        it attacks the queen,
+        the bishop hits the queen on d1,
+        the queen is attacked so White has no time,
+        it gains a tempo by attacking the queen,
+      ]
+    miss: [it wins a pawn, it develops a piece, it protects e4, it defends the knight]
+- id: kadas-rook-h3
+  line: 1. h4 d5 2. Rh3
+  prompt: White has just played the rook to h3. What should Black do?
+  accept:
+    - keywords: [[bxh3, bishop, c8]]
+      feedback: Yes. The bishop on c8 sees all the way to h3 and takes the rook for free.
+  reveal: The bishop on c8 captures the rook with Bxh3. The diagonal from c8 to h3 is open, and White can only take back a bishop.
+  showMove: Bxh3
+  examples:
+    match: [Bxh3, take the rook with the bishop, the bishop on c8 takes h3, bishop takes the rook]
+    miss: [play Nf6, push the pawn to e5, attack the rook with the queen, ignore it]
+- id: grob-c6-cover
+  line: 1. g4 d5 2. Bg2 c6
+  prompt: What does 2...c6 do against the bishop on g2?
+  accept:
+    - keywords: [[b7, d5, diagonal], [defend]]
+      all: true
+      feedback: Yes. The pawn on c6 guards d5 and shuts the bishop's diagonal, so b7 and d5 are safe.
+  reveal: The pawn on c6 protects d5 and blocks the long diagonal, so the bishop on g2 has nothing to attack.
+  examples:
+    match:
+      [
+        it protects b7 and d5,
+        it defends d5 and covers the long diagonal,
+        protects the pawn on d5,
+        it guards b7 from the bishop,
+      ]
+    miss: [it attacks the centre, it develops a piece, it prepares castling, it opens the queen]

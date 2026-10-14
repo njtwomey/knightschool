@@ -7,14 +7,13 @@ import {
   lastResults,
   newId,
   searchAt,
-  type Family,
   type GuessResult,
   type GuessTargets,
   type OpeningIndexEntry,
   type SearchIndex,
 } from '@knightschool/core';
 import { create } from 'zustand';
-import { loadFamilies, loadIndex, loadSearchIndex } from '@/data/content';
+import { loadIndex, loadSearchIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
 
 /** Positions in one sitting, as a review session has cards. */
@@ -24,7 +23,7 @@ export const SESSION_LENGTH = 10;
 export const GUESS_DELAYS = { full: 2600, partial: 5000, miss: 6500 } as const;
 
 /** A place a position comes from, to link to once it has been answered. */
-export type Source = { course: string; family: string; line: string; name: string; trap: boolean };
+export type Source = { course: string; line: string; name: string; trap: boolean };
 
 export type Question = {
   epd: string;
@@ -57,7 +56,6 @@ type GuessState = {
 
 type Deck = {
   courses: OpeningIndexEntry[];
-  families: Family[];
   search: SearchIndex;
   /** How each position went last time, so missed ones come back sooner. */
   history: Map<string, GuessResult>;
@@ -86,7 +84,7 @@ function pick(from: Deck, asked: Set<string>): Question | null {
   for (let attempt = 0; attempt < 30 && pool.length > 0; attempt++) {
     let roll = Math.random() * pool.reduce((sum, candidate) => sum + candidate.weight, 0);
     const chosen = pool.find((candidate) => (roll -= candidate.weight) < 0) ?? pool[pool.length - 1]!;
-    const targets = guessTargets(from.search, chosen.epd, from.courses, from.families);
+    const targets = guessTargets(from.search, chosen.epd, from.courses);
     if (targets.openings.length === 0) continue;
     const found = searchAt(from.search, chosen.epd, 'both');
     const sources: Source[] = [];
@@ -96,7 +94,6 @@ function pick(from: Deck, asked: Set<string>): Question | null {
       if (!owner || !named || sources.some((s) => s.course === hit.course && s.line === hit.line)) continue;
       sources.push({
         course: owner.id,
-        family: owner.family ?? owner.id,
         line: named.id,
         name: named.name,
         trap: named.kind === 'refutation',
@@ -159,12 +156,12 @@ export const useGuess = create<GuessState>((set, get) => {
       if (get().phase === 'loading') return;
       set({ phase: 'loading', error: null });
       try {
-        const [courses, families, search] = await Promise.all([loadIndex(), loadFamilies(), loadSearchIndex()]);
+        const [courses, search] = await Promise.all([loadIndex(), loadSearchIndex()]);
         const history = await whenStorageReady()
           .then(({ storage }) => storage.guessAttempts.since('1970-01-01T00:00:00.000Z'))
           .then(lastResults)
           .catch(() => new Map<string, GuessResult>());
-        deck = { courses, families, search, history };
+        deck = { courses, search, history };
         set({ outcomes: [] });
         show();
       } catch (error) {
@@ -186,7 +183,7 @@ export const useGuess = create<GuessState>((set, get) => {
 
 /** Every name worth suggesting while typing, built once the openings have loaded. */
 export function allSuggestions(): string[] {
-  return deck ? guessSuggestions(deck.courses, deck.families) : [];
+  return deck ? guessSuggestions(deck.courses) : [];
 }
 
 /** Points scored so far this session, for the progress line. */

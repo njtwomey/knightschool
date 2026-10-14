@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Modern Variation"]
+[ECO "B01"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "c4-space,quick-development"]
+[Kind "main"]
+
+1. e4 d5 2. exd5 Nf6 3. d4 { Takes the centre at once. If Black takes back on d5 with the knight, c4 comes with a tempo. } 3... Nxd5 (3... g6 4. c4) (3... Bg4 4. Nf3 Bxf3 5. Qxf3) (3... c6 4. dxc6 Nxc6 5. Nf3) 4. c4 { Kicks the knight away and builds a big pawn centre. It leaves a hole on d4, but White's pieces will cover it. } 4... Nb6 (4... Nb4 5. a3 N4c6 6. Nf3) 5. Nf3 { Develops and defends d4 so the centre pawns stay put. } 5... Bg4 6. Be2 { Gets ready to castle and keeps h3 in reserve if the bishop takes on f3. } 6... e6 7. Nc3 { Brings out the last knight to guard the centre. Plan: castle, then d5 or c5 to gain space. } 7... Nc6 8. O-O Be7 9. h3 { Asks the bishop the same question: trade on f3 or retreat. } *

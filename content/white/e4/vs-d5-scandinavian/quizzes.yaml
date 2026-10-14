@@ -1,0 +1,71 @@
+- id: nb5-discovered
+  line: 1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 6. Bd2 Nc6 7. Nb5
+  prompt: White just played Nb5. How does moving the knight attack Black's queen on a5?
+  accept:
+    - keywords: [[bishop, bd2, d2, discovered]]
+      feedback: Yes. The knight steps away and the bishop on d2 now attacks the queen. Black must move it and Nxc7+ is also threatened.
+  reveal: The knight was blocking the bishop on d2. Once it moves, the bishop attacks the queen on a5, and the knight on b5 threatens Nxc7+ too.
+  showMove: Qb6
+  examples:
+    match:
+      - the bishop on d2 attacks it
+      - a discovered attack from the bishop
+      - the knight uncovers the d2 bishop
+    miss:
+      - the knight attacks the queen directly
+      - it forks the king
+      - not sure
+- id: bishop-g6-h-pawn
+  line: 1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6 5. Nf3 Bg4 6. h3 Bh5 7. g4 Bg6 8. Ne5 c6
+  prompt: Black's bishop is on g6 with almost no squares. Which pawn move does White play next to attack it?
+  accept:
+    - keywords: [[h4, h5]]
+      feedback: Yes. h4 then h5 attacks the bishop, and f5 is covered by the g4 pawn, so it has to give itself up.
+    - keywords: [[h], [pawn]]
+      all: true
+      feedback: Yes. The h-pawn goes h4 and h5 to attack the bishop, and f5 is covered by the g4 pawn.
+  reveal: White plays h4 and then h5. The bishop cannot go to f5 because of the g4 pawn, so it has to trade itself off on e4.
+  showMove: h4
+  examples:
+    match:
+      - h4 then h5
+      - push the h pawn
+      - h5 to hit the bishop
+    miss:
+      - castle kingside
+      - Qd3
+      - the g pawn
+- id: ne5-loses-queen
+  line: 1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bg4 6. Ne5
+  prompt: White moved the knight from f3 to attack the bishop. What does White lose?
+  accept:
+    - keywords: [[queen]]
+      feedback: Yes. The knight on f3 was blocking the bishop's attack on the queen, and Bxd1 wins it.
+  reveal: The knight on f3 was the only thing between Black's bishop and White's queen. After Bxd1 White cannot even recapture with the knight, because it is pinned by the queen on a5.
+  showMove: Bxd1
+  examples:
+    match:
+      - the queen is hanging to the bishop
+      - bishop takes the queen
+      - it loses the queen
+    miss:
+      - it loses a pawn
+      - nothing
+      - the knight gets trapped
+- id: why-bd2
+  line: 1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 6. Bd2
+  prompt: What is the point of putting the bishop on d2, behind the c3 knight?
+  accept:
+    - keywords: [[queen, a5], [attack, discover, discovered, nb5, nd5]]
+      all: true
+      feedback: Yes. If the knight moves, the bishop attacks the queen on a5, so knight jumps come with tempo.
+  reveal: When the knight on c3 moves, the bishop on d2 attacks Black's queen on a5. That makes Nb5 or Nd5 jumps strong if Black forgets to guard those squares.
+  examples:
+    match:
+      - if the knight moves the bishop attacks the queen
+      - discovered attack on the queen
+      - it lets Nb5 hit the queen with tempo
+    miss:
+      - develops the bishop
+      - guards the knight on c3
+      - to castle long

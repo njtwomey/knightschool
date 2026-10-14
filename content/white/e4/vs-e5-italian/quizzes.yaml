@@ -1,0 +1,98 @@
+- id: legal-mate-queen
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. Nc3 Bg4 5. h3 Bh5
+  prompt: 'White plays 6.Nxe5 and leaves the queen to be taken. Why can White afford it?'
+  accept:
+    - keywords: [[mate, checkmate, bxf7, nd5, qxd1]]
+      feedback: Yes. If the bishop takes the queen, Bxf7+ and Nd5 are checkmate.
+    - keywords: [[queen, bishop, bxd1, takes]]
+      partial: true
+      feedback: Close. Say what White gets if the bishop takes the queen.
+  reveal: If Black takes the queen with 6...Bxd1, White plays 7.Bxf7+ Ke7 8.Nd5, which is checkmate.
+  showMove: Nxe5
+  examples:
+    match:
+      [White gets a forced checkmate, because Bxf7 and then Nd5 is mate, if Black takes the queen it is mate in two]
+    miss: [it wins a pawn, the queen is protected, no idea]
+- id: nxe5-trap
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4 4. Nxe5
+  prompt: White just took the pawn on e5. Why is that a mistake?
+  accept:
+    - keywords: [[queen, qg5], [fork, attack, two, double, threat, g2, knight]]
+      all: true
+      feedback: Yes. 4...Qg5 attacks the knight on e5 and the pawn on g2 at once.
+    - keywords: [[queen, qg5]]
+      partial: true
+      feedback: Right idea. Say what the queen attacks.
+  reveal: After 4...Qg5 the queen attacks both the knight on e5 and the pawn on g2, and White cannot save both.
+  showMove: Qg5
+  examples:
+    match: [Black plays Qg5 forking e5 and g2, the queen attacks two things, Qg5 hits the knight and the g2 pawn]
+    miss: [it develops a piece, no idea, castles]
+- id: f7-sacrifice
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5
+  prompt: 'White can play 6.Nxf7. What is the idea of the sacrifice?'
+  accept:
+    - keywords: [[king], [pull, drag, expose, open, force, lure, exposed, out, hunt]]
+      all: true
+      feedback: Yes. It drags the king out into the open where the queen and bishop can hunt it.
+  reveal: After 6...Kxf7 7.Qf3+ the king is exposed and White attacks the pinned knight on d5.
+  showMove: Nxf7
+  examples:
+    match: [it drags the king out into the open, to expose the king, to lure the king forward and attack it]
+    miss: [it wins a pawn, it castles, it develops a piece]
+- id: fork-pawn
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4 d5
+  prompt: 'Black has just played 5...d5. What does the pawn attack?'
+  accept:
+    - keywords: [[bishop, bc4, c4], [knight, ne4, e4]]
+      all: true
+      feedback: Yes. The pawn forks the bishop on c4 and the knight on e4, so White cannot keep both.
+  reveal: The pawn attacks the bishop on c4 and the knight on e4 at once. White loses the edge after 4.Nc3.
+  examples:
+    match: [it attacks the bishop and the knight, the bishop on c4 and the knight on e4, it forks my bishop and knight]
+    miss: [it attacks the queen, the rook and the king, it develops]
+- id: petrov-discovered-check
+  line: 1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nxe4 4. Qe2 Nf6
+  prompt: 'Black moved the pinned knight away. What wins the black queen?'
+  accept:
+    - keywords: [[nc6, knight], [check, discovered, queen, fork]]
+      all: true
+      feedback: Yes. Nc6+ is a discovered check from the queen on e2, and the knight also attacks the black queen.
+    - keywords: [[nc6]]
+      feedback: Yes. Nc6+ is a discovered check and attacks the queen as well.
+  reveal: 5.Nc6+ uncovers a check from the queen on e2 and attacks the black queen at the same time. Black must answer the check and loses the queen.
+  showMove: Nc6+
+  examples:
+    match: [Nc6+, the knight moves with discovered check, Nc6 discovered check attacking the queen]
+    miss: [Qxe4, castle, take the pawn on f7, no idea]
+- id: philidor-qb3
+  line: 1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6
+  prompt: 'Black developed the knight and ignored f7. Which move attacks both f7 and b7?'
+  accept:
+    - keywords: [[qb3, b3]]
+      feedback: Yes. Qb3 attacks b7 and f7 at once, so Black loses a pawn.
+  reveal: 7.Qb3 attacks the pawn on b7 and, with the bishop on c4, the pawn on f7. Black cannot defend both.
+  showMove: Qb3
+  examples:
+    match: [Qb3, the queen to b3, queen b3]
+    miss: [Bxf7+, Nc3, castle, no idea]
+- id: elephant-pin
+  line: 1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Qe2
+  prompt: 'The pawn on e4 attacks the knight on f3. Why can the pawn not take it?'
+  accept:
+    - keywords: [[pin, pinned, king, check, illegal]]
+      feedback: Yes. The pawn is pinned to its king by the queen on e2, so taking would leave the king in check.
+  reveal: The queen on e2 pins the pawn on e4 to the black king on e8. If the pawn took the knight, the king would be in check.
+  examples:
+    match: [it is pinned, the pawn is pinned to the king, it would leave the king in check]
+    miss: [the knight is protected, it is too slow, no idea]
+- id: stafford-f2
+  line: 1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nc6 4. Nxc6 dxc6 5. Nc3 Bc5 6. Bd3 Ng4
+  prompt: 'Which white square is under attack and could fall?'
+  accept:
+    - keywords: [[f2]]
+      feedback: Yes. The knight on g4 and the bishop on c5 both attack f2, and ...Qh4 will add a third attacker.
+  reveal: The bishop on c5 and the knight on g4 both attack f2, which only the king guards, and the queen can join with ...Qh4.
+  examples:
+    match: [f2, the pawn on f2, f2 is attacked twice]
+    miss: [e4, the king, h2, no idea]

@@ -1,15 +1,41 @@
 import { describe, expect, it } from 'vitest';
-import { familyProgress, filterFamilies, groupFamilies, matchReason, relevance, roleOf, searchLines } from './catalog';
-import type { Family, OpeningIndexEntry } from './schema/content';
+import {
+  allLines,
+  courseProgress,
+  filterCourses,
+  inStudyOrder,
+  matchReason,
+  nextCourses,
+  relevance,
+  roleOf,
+  searchLines,
+  type CatalogFilter,
+} from './catalog';
+import type { OpeningIndexEntry } from './schema/content';
+
+const line = (id: string, name: string, over: Partial<OpeningIndexEntry['lines'][number]> = {}) => ({
+  id,
+  name,
+  kind: 'line' as const,
+  opponent: '',
+  alternative: false,
+  epd: '',
+  epds: [],
+  ...over,
+});
 
 const course = (over: Partial<OpeningIndexEntry>): OpeningIndexEntry => ({
   id: 'x',
   name: 'X',
-  eco: 'A00',
   side: 'white',
-  level: 'beginner',
+  opening: 'x',
+  tier: 1,
+  trigger: '1. e4',
   summary: '',
+  plans: [],
+  motifs: [],
   tags: [],
+  order: 0,
   variants: 1,
   cards: 10,
   keyEpd: '',
@@ -19,129 +45,95 @@ const course = (over: Partial<OpeningIndexEntry>): OpeningIndexEntry => ({
 
 const courses = [
   course({
-    id: 'caro',
+    id: 'caro-black',
     name: 'Caro-Kann Defence',
     side: 'black',
-    family: 'caro-kann',
-    eco: 'B12',
-    lines: [
-      { id: 'classical', name: 'Classical Variation', kind: 'line', epd: '', epds: [] },
-      { id: 'advance', name: 'Advance Variation', kind: 'line', epd: '', epds: [] },
-    ],
+    opening: 'caro-kann',
+    order: 3,
+    tier: 3,
+    lines: [line('classical', 'Classical Variation'), line('advance', 'Advance Variation', { opponent: '3.e5' })],
   }),
   course({
-    id: 'caro-2k',
-    name: 'Caro-Kann: Two Knights Attack',
-    side: 'white',
-    family: 'caro-kann',
-    against: 'Caro-Kann Defence',
-    eco: 'B11',
-    lines: [{ id: 'bg4', name: 'Two Knights, 3...Bg4', kind: 'line', epd: '', epds: [] }],
-  }),
-  course({
-    id: 'caro-adv',
+    id: 'caro-white',
     name: 'Caro-Kann: Advance Variation',
-    side: 'white',
-    family: 'caro-kann',
-    against: 'Caro-Kann Defence',
-    eco: 'B12',
-    lines: [{ id: 'short', name: 'Advance, Short System', kind: 'line', epd: '', epds: [] }],
+    opening: 'caro-kann',
+    order: 2,
+    tier: 2,
+    summary: 'White pushes e5 against the Caro-Kann.',
+    lines: [line('short', 'Advance, Short System')],
   }),
   course({
     id: 'italian',
     name: 'Italian Game',
-    side: 'white',
-    family: 'italian',
-    eco: 'C50',
-    summary: 'Aims at f7.',
-    lines: [
-      { id: 'gp', name: 'Giuoco Pianissimo', kind: 'line', epd: '', epds: [] },
-      { id: 'bs', name: 'Blackburne Shilling Gambit', kind: 'refutation', epd: '', epds: [] },
-    ],
+    opening: 'italian',
+    order: 0,
+    tier: 1,
+    lines: [line('gp', 'Giuoco Piano'), line('trap', 'Blackburne Shilling', { kind: 'refutation' })],
   }),
 ];
-
-const families: Family[] = [
-  {
-    id: 'caro-kann',
-    name: 'Caro-Kann Defence',
-    eco: 'B10-B19',
-    summary: '1.e4 c6, solid.',
-    moves: '1. e4 c6',
-    epd: 'x',
-    courses: ['caro-2k', 'caro-adv', 'caro'],
-  },
-  {
-    id: 'italian',
-    name: 'Italian Game',
-    summary: 'Quiet and classical.',
-    moves: '1. e4 e5 2. Nf3 Nc6 3. Bc4',
-    epd: 'y',
-    courses: ['italian'],
-  },
+const openings = [
+  { id: 'caro-kann', side: 'black' as const },
+  { id: 'italian', side: 'white' as const },
 ];
+const base: CatalogFilter = { query: '', side: 'all', tier: 'all', role: 'all', scope: 'all' };
+const ids = (list: OpeningIndexEntry[]) => list.map((c) => c.id);
 
-const views = groupFamilies(courses, families);
-const ids = (filter: Partial<Parameters<typeof filterFamilies>[1]>) =>
-  filterFamilies(views, { query: '', role: 'all', side: 'all', scope: 'all', ...filter }).map((view) => [
-    view.family.id,
-    view.courses.map((c) => c.id),
-  ]);
-
-describe('catalog', () => {
-  it('groups courses under their opening, playing it first and then the systems against it', () => {
-    expect(views[0]!.courses.map((c) => c.id)).toEqual(['caro', 'caro-adv', 'caro-2k']);
-    expect(roleOf(courses[0]!)).toBe('play');
-    expect(roleOf(courses[1]!)).toBe('against');
+describe('study order and filters', () => {
+  it('lists courses in the order of the curriculum', () => {
+    expect(ids(inStudyOrder(courses))).toEqual(['italian', 'caro-white', 'caro-black']);
+    expect(ids(filterCourses(courses, base, openings))).toEqual(['italian', 'caro-white', 'caro-black']);
   });
 
-  it('filters by whether you play the opening or play against it', () => {
-    expect(ids({ role: 'against' })).toEqual([['caro-kann', ['caro-adv', 'caro-2k']]]);
-    expect(ids({ role: 'play' })).toEqual([
-      ['caro-kann', ['caro']],
-      ['italian', ['italian']],
+  it('filters by side, tier and role', () => {
+    expect(ids(filterCourses(courses, { ...base, side: 'black' }, openings))).toEqual(['caro-black']);
+    expect(ids(filterCourses(courses, { ...base, tier: 2 }, openings))).toEqual(['caro-white']);
+    // Playing the Caro-Kann is the Black course; the White Advance course plays against it.
+    expect(roleOf(courses[0]!, openings)).toBe('play');
+    expect(roleOf(courses[1]!, openings)).toBe('against');
+    expect(ids(filterCourses(courses, { ...base, role: 'against' }, openings))).toEqual(['caro-white']);
+    expect(ids(filterCourses(courses, { ...base, role: 'play' }, openings))).toEqual(['italian', 'caro-black']);
+  });
+
+  it('matches every search word against the name, summary, trigger and lines', () => {
+    expect(ids(filterCourses(courses, { ...base, query: 'giuoco' }, openings))).toEqual(['italian']);
+    expect(ids(filterCourses(courses, { ...base, query: 'caro advance' }, openings))).toEqual([
+      'caro-white',
+      'caro-black',
     ]);
-  });
-
-  it('filters by side, and drops openings with nothing left', () => {
-    expect(ids({ side: 'black' })).toEqual([['caro-kann', ['caro']]]);
-    expect(ids({ side: 'black', role: 'against' })).toEqual([]);
-  });
-
-  it('searches an opening by its own text or any of its courses', () => {
-    expect(ids({ query: 'caro' }).map(([id]) => id)).toEqual(['caro-kann']);
-    expect(ids({ query: 'f7' }).map(([id]) => id)).toEqual(['italian']);
-    expect(ids({ query: 'two knights' }).map(([id]) => id)).toEqual(['caro-kann']);
-    expect(ids({ query: 'caro italian' })).toEqual([]);
-  });
-
-  it('finds variations in their own right, labelled by their course and opening', () => {
-    const hits = searchLines(views, 'advance');
-    expect(hits.map((hit) => [hit.course.id, hit.line.id])).toEqual([
-      ['caro', 'advance'],
-      ['caro-adv', 'short'],
-    ]);
-    expect(searchLines(views, 'bg4').map((hit) => hit.line.name)).toEqual(['Two Knights, 3...Bg4']);
-    expect(searchLines(views, 'blackburne')[0]!.line.kind).toBe('refutation');
-  });
-
-  it('puts a name match before a looser match, and finds nothing for an empty search', () => {
-    expect(searchLines(views, 'advance variation')[0]!.line.name).toBe('Advance Variation');
-    expect(searchLines(views, '  ')).toEqual([]);
-    expect(searchLines(views, 'zzz')).toEqual([]);
-  });
-
-  it('respects the filters when searching variations', () => {
-    const against = filterFamilies(views, { query: '', role: 'against', side: 'all', scope: 'all' });
-    expect(searchLines(against, 'advance').map((hit) => hit.course.id)).toEqual(['caro-adv']);
-  });
-
-  it('adds up progress across the courses of an opening', () => {
-    expect(familyProgress(courses.slice(0, 3), { caro: 4, 'caro-2k': 2 })).toEqual({ learned: 6, total: 30 });
+    expect(filterCourses(courses, { ...base, query: 'zzz' }, openings)).toEqual([]);
   });
 });
 
-describe('relevance', () => {
+describe('searching lines', () => {
+  it('finds lines by name or by what the opponent plays, and nothing for an empty search', () => {
+    expect(
+      searchLines(courses, 'advance')
+        .map((hit) => hit.line.id)
+        .sort(),
+    ).toEqual(['advance', 'short']);
+    expect(searchLines(courses, '3.e5').map((hit) => hit.line.id)).toEqual(['advance']);
+    expect(searchLines(courses, '  ')).toEqual([]);
+    expect(searchLines(courses, 'blackburne')[0]!.line.kind).toBe('refutation');
+  });
+
+  it('lists every line in study order', () => {
+    expect(allLines(courses).map((hit) => hit.line.id)).toEqual(['gp', 'trap', 'short', 'classical', 'advance']);
+  });
+});
+
+describe('progress and what to take next', () => {
+  it('sums learned cards over courses', () => {
+    expect(courseProgress(courses, { italian: 4, 'caro-white': 1 })).toEqual({ learned: 5, total: 30 });
+  });
+
+  it('suggests unstarted courses whose prerequisites are started, in study order', () => {
+    const prerequisites = { 'caro-white': ['italian'], 'caro-black': [] };
+    expect(ids(nextCourses(courses, prerequisites, {}))).toEqual(['italian', 'caro-black']);
+    expect(ids(nextCourses(courses, prerequisites, { italian: 3 }))).toEqual(['caro-white', 'caro-black']);
+  });
+});
+
+describe('relevance and why a course matched', () => {
   it('ranks a name match above a content match, and the whole name highest', () => {
     const scores = [
       relevance('Advance Variation', '', 'advance variation'),
@@ -158,17 +150,11 @@ describe('relevance', () => {
     expect(relevance('Scotch Game', '', '  ')).toBe(relevance('Italian Game', '', ''));
   });
 
-  it('finds every word, in any order, in the name', () => {
-    expect(relevance('Two Knights Defence', '', 'defence knights')).toBe(60);
-  });
-});
-
-describe('matchReason', () => {
-  const [view] = groupFamilies(courses, families);
   it('says whether the name, a line inside, or only the text matched', () => {
-    expect(matchReason(view!, '')).toBeUndefined();
-    expect(matchReason(view!, 'classical')).toEqual({ kind: 'lines', names: ['Classical Variation'] });
-    expect(matchReason(view!, view!.family.name.split(' ')[0]!)).toEqual({ kind: 'name' });
-    expect(matchReason(view!, 'zzz')).toEqual({ kind: 'text' });
+    const [black] = courses;
+    expect(matchReason(black!, '')).toBeUndefined();
+    expect(matchReason(black!, 'classical')).toEqual({ kind: 'lines', names: ['Classical Variation'] });
+    expect(matchReason(black!, 'caro')).toEqual({ kind: 'name' });
+    expect(matchReason(black!, 'zzz')).toEqual({ kind: 'text' });
   });
 });

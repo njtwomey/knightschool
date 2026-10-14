@@ -1,0 +1,131 @@
+- id: noahs-ark-pawns
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. d4 b5 6. Bb3 Nxd4 7. Nxd4 exd4 8. Qxd4
+  prompt: White's queen just took on d4. How does Black trap the bishop on b3?
+  accept:
+    - keywords: [[c5, c4], [pawn, pawns, bishop, trap]]
+      all: true
+      feedback: Yes. ...c5 hits the queen, and a later ...c4 shuts the bishop in on b3 so it cannot escape.
+    - keywords: [[c5, c4]]
+      partial: true
+      feedback: Close. Say what the pawn move does to the bishop.
+  reveal: Black plays ...c5 to hit the queen and then ...c4, so the bishop on b3 has no way out and is lost for two pawns.
+  showMove: c5
+  examples:
+    match:
+      - c5 then c4 to trap the bishop
+      - play the c pawn to c5 and c4 to trap the bishop
+      - pawns on c5 and c4 trap the bishop
+    miss:
+      - castle
+      - take the queen with the knight
+      - it develops a piece
+      - Bishop to e6
+- id: four-knights-fork
+  line: 1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4
+  prompt: Black took the pawn on e4 and White has taken the knight. Which Black move wins a piece back, and why?
+  accept:
+    - keywords: [[d5], [fork, attack, both, two, bishop, knight]]
+      all: true
+      feedback: Yes. ...d5 attacks the bishop on c4 and the knight on e4 at once, so White cannot save both.
+    - keywords: [[d5]]
+      partial: true
+      feedback: Close. Say what the pawn on d5 attacks.
+  reveal: The pawn goes to d5 and forks the bishop on c4 and the knight on e4, so Black wins one of them back.
+  showMove: d5
+  examples:
+    match:
+      - d5 forks the bishop and knight
+      - d5 attacks both the bishop and the knight
+      - pawn to d5 attacks two pieces
+    miss:
+      - castle kingside
+      - Nxe5 takes a pawn
+      - it controls the centre
+      - Qh4
+- id: legal-poisoned-queen
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. Nc3 Bg4 5. Nxe5
+  prompt: White just let Black take the queen on d1. Why must Black not capture it?
+  accept:
+    - keywords: [[mate, checkmate, nd5, bxf7, qxf7, f7], [bishop, knight, check, king]]
+      all: true
+      feedback: Yes. After ...Bxd1 White plays Bxf7+ and Nd5 checkmate, so the queen is poisoned.
+    - keywords: [[mate, checkmate]]
+      feedback: Yes. Taking the queen walks into Bxf7+ and Nd5 checkmate.
+  reveal: Black should take the knight on e5 instead. After ...Bxd1? Bxf7+ Ke7 Nd5 is checkmate.
+  showMove: Nxe5
+  examples:
+    match:
+      - it allows mate with Bxf7 and Nd5
+      - Bxf7 check then Nd5 is checkmate
+      - white gets checkmate
+    miss:
+      - the queen is protected
+      - it wins a piece
+      - it hangs the bishop
+      - nothing wrong with it
+- id: pianissimo-h6
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6 8. Bb3 Ba7 9. h3
+  prompt: Why does Black answer with ...h6 here?
+  accept:
+    - keywords: [[bg5, g5, bishop], [pin, stop, prevent, block, avoid]]
+      all: true
+      feedback: Yes. ...h6 stops Bg5, which would pin the knight on f6 to the queen.
+    - keywords: [[bg5, g5, pin, pinned]]
+      feedback: Yes. It prevents the pin of the knight on f6 with Bg5.
+  reveal: ...h6 stops Bg5, which would pin the knight on f6 to the queen on d8.
+  showMove: h6
+  examples:
+    match:
+      - it stops Bg5
+      - stops the bishop pinning the knight on g5
+      - prevents the pin with Bg5
+    miss:
+      - it attacks the knight
+      - develops a piece
+      - to castle
+      - it wins a pawn
+- id: kings-gambit-fxe5
+  line: 1. e4 e5 2. f4 Bc5 3. fxe5
+  prompt: White just took on e5. Which check wins for Black?
+  accept:
+    - keywords: [[qh4, h4]]
+      feedback: Yes. 3...Qh4+ wins. White has no good way out of the check, and ...Qxe4+ follows.
+  reveal: 3...Qh4+ is check on the diagonal to e1. After 4.g3 Qxe4+ Black wins the rook on h1.
+  showMove: Qh4+
+  examples:
+    match: [Qh4+, queen to h4, Qh4 check]
+    miss: [Nf6, Bxf2+, no idea]
+- id: wayward-queen-nd4
+  line: 1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3 Nf6 5. Qb3
+  prompt: White's queen and bishop both aim at f7. Which Black move punishes this?
+  accept:
+    - keywords: [[nd4, d4]]
+      feedback: Yes. 5...Nd4 hits the queen and threatens ...Nxc2+ with a fork. After 6.Bxf7+ Ke7 Black wins material.
+  reveal: 5...Nd4! attacks the queen on b3 and threatens ...Nxc2+. If 6.Bxf7+ Ke7 7.Qc4 b5 the queen is chased again and the bishop is lost.
+  showMove: Nd4
+  examples:
+    match: [Nd4, knight to d4, play the knight to d4]
+    miss: [Qe7, castle, no idea]
+- id: centre-game-bb4
+  line: 1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qc3
+  prompt: White's queen stepped back to c3. Which move wins it?
+  accept:
+    - keywords: [[bb4, b4]]
+      feedback: Yes. 4...Bb4 pins the queen to the king, since there is no pawn on d2. White loses the queen for a bishop.
+  reveal: 4...Bb4 pins the queen to the king. The queen cannot move away, so Black trades a bishop for it.
+  showMove: Bb4
+  examples:
+    match: [Bb4, bishop to b4, play the bishop to b4 pinning the queen]
+    miss: [Nf6, Bc5, no idea]
+- id: scholars-mate-f7
+  line: 1. e4 e5 2. Qh5 Nc6 3. Bc4
+  prompt: White's queen and bishop are aimed at f7. Why must Black not play 3...Nf6 here?
+  accept:
+    - keywords: [[f7, qxf7], [mate]]
+      all: true
+      feedback: Yes. After 3...Nf6?? White plays 4.Qxf7 mate. Black must play 3...g6 to hit the queen.
+  reveal: The queen takes on f7 with the bishop's support, and the king cannot recapture, so it is checkmate. 3...g6 chases the queen first.
+  showMove: g6
+  examples:
+    match: [Qxf7 is mate, it loses to mate on f7, because of checkmate on f7]
+    miss: [it loses a pawn, the knight is attacked, no idea]

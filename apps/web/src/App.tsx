@@ -14,7 +14,8 @@ import { useStorage } from '@/data/storage';
 import { useBrowse } from '@/features/browse/store';
 import { CreditsPage } from '@/features/credits/credits-page';
 import { LabPage } from '@/features/lab/lab-page';
-import { OpeningPage } from '@/features/opening/opening-page';
+import { CoursePage } from '@/features/course/course-page';
+import { GlossaryPage } from '@/features/glossary/glossary-page';
 import { OpeningsPage } from '@/features/openings/openings-page';
 import { PlayPage } from '@/features/play/play-page';
 import { GuessPage } from '@/features/guess/guess-page';
@@ -31,16 +32,9 @@ function useRoute(): Route {
 
 export function App() {
   const route = useRoute();
-  const selectFamily = useBrowse((state) => state.selectFamily);
+  const selectCourse = useBrowse((state) => state.selectCourse);
   const loadIndex = useBrowse((state) => state.loadIndex);
-  const index = useBrowse((state) => state.index);
-  // A course link opens the opening it belongs to, scrolled to that course.
-  const familyId =
-    route.page === 'opening' || route.page === 'motif'
-      ? route.id
-      : route.page === 'course'
-        ? (index.find((course) => course.id === route.id)?.family ?? route.id)
-        : null;
+  const courseId = route.page === 'course' ? route.id : null;
   const status = useStorage((state) => state.status);
 
   useEffect(() => {
@@ -49,8 +43,8 @@ export function App() {
   }, [loadIndex]);
 
   useEffect(() => {
-    void selectFamily(familyId);
-  }, [familyId, selectFamily]);
+    void selectCourse(courseId);
+  }, [courseId, selectCourse]);
 
   const link = (href: string, label: string, active: boolean, icon: ReactNode) => (
     <Button asChild variant={active ? 'secondary' : 'ghost'} size="sm">
@@ -72,11 +66,7 @@ export function App() {
           {link(
             to('/browse'),
             'Browse',
-            route.page === 'openings' ||
-              route.page === 'opening' ||
-              route.page === 'motif' ||
-              route.page === 'course' ||
-              route.page === 'play',
+            route.page === 'openings' || route.page === 'course' || route.page === 'play' || route.page === 'glossary',
             <Search aria-hidden />,
           )}
           {link(to('/quiz'), 'Quiz', route.page === 'review', <Library aria-hidden />)}
@@ -127,9 +117,8 @@ export function App() {
         {route.page === 'home' && <HomePage />}
         {route.page === 'profile' && <ProfilePage tab={route.tab} />}
         {route.page === 'openings' && <OpeningsPage />}
-        {route.page === 'opening' && <OpeningPage familyId={route.id} />}
-        {route.page === 'motif' && <OpeningPage familyId={route.id} />}
-        {route.page === 'course' && familyId && <OpeningPage familyId={familyId} focusCourse={route.id} />}
+        {route.page === 'course' && <CoursePage courseId={route.id} />}
+        {route.page === 'glossary' && <GlossaryPage />}
         {route.page === 'play' && <PlayPage course={route.course} line={route.line} mode={route.mode} />}
         {route.page === 'review' && <ReviewPage />}
         {route.page === 'guess' && <GuessPage />}

@@ -1,11 +1,5 @@
 import { Page } from '@/components/page';
-import {
-  groupFamilies,
-  guessSummary,
-  isMotifFamily,
-  planIntroductions,
-  type OpeningIndexEntry,
-} from '@knightschool/core';
+import { guessSummary, nextCourses, planIntroductions, type OpeningIndexEntry } from '@knightschool/core';
 import { ArrowRight, Play, Telescope } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { BoardThumb } from '@/components/board/board-thumb';
@@ -16,9 +10,9 @@ import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { loadOpening } from '@/data/content';
 import { useStorage } from '@/data/storage';
-import { getEnrolled, getIntroducedToday, getNewPerDay } from '@/data/training-settings';
+import { getCardOptions, getEnrolled, getIntroducedToday, getNewPerDay } from '@/data/training-settings';
 import { useBrowse } from '@/features/browse/store';
-import { FamilyCard } from '@/features/openings/family-card';
+import { CourseCard } from '@/features/openings/course-card';
 import { percent, useProgress } from '@/features/courses/progress';
 import { to } from '@/router/location';
 
@@ -37,7 +31,7 @@ async function loadRows(index: OpeningIndexEntry[]): Promise<Row[]> {
       existing: new Set((await storage.cards.byOpening(content.opening.id)).map((card) => card.id)),
     })),
   );
-  const fresh = planIntroductions(openings, quota, now);
+  const fresh = planIntroductions(openings, quota, now, await getCardOptions(storage));
   return Promise.all(
     enrolled.map(async (course) => ({
       course,
@@ -60,7 +54,7 @@ function Stat({ label, value, note }: { label: string; value: number; note?: str
 export function OverviewPage() {
   const status = useStorage((state) => state.status);
   const storage = useStorage((state) => state.storage);
-  const { index, families, indexStatus } = useBrowse();
+  const { index, openings, prerequisites, indexStatus } = useBrowse();
   const learned = useProgress((state) => state.learned);
   const [rows, setRows] = useState<Row[] | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
@@ -96,15 +90,13 @@ export function OverviewPage() {
   const fresh = rows?.reduce((sum, row) => sum + row.fresh, 0) ?? 0;
   const total = due + fresh;
   const known = Object.values(learned).reduce((sum, n) => sum + n, 0);
-  // Openings with nothing enrolled or learned yet, to suggest.
-  const suggestions = groupFamilies(index, families)
-    .filter((view) => !isMotifFamily(view.courses))
-    .filter((view) =>
-      view.courses.every(
-        (course) => !rows?.some((row) => row.course.id === course.id) && !((learned[course.id] ?? 0) > 0),
-      ),
-    )
-    .slice(0, 2);
+  // The next courses in the study order whose prerequisites you have started.
+  const suggestions = nextCourses(
+    index.filter((course) => !rows?.some((row) => row.course.id === course.id)),
+    prerequisites,
+    learned,
+    2,
+  );
   const unavailable = status === 'paused' || status === 'unavailable' || status === 'error';
 
   return (
@@ -226,11 +218,11 @@ export function OverviewPage() {
       {suggestions.length > 0 && (
         <section className="grid gap-3">
           <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            {rows && rows.length > 0 ? 'Add another course' : 'Popular first courses'}
+            {rows && rows.length > 0 ? 'Next in your study order' : 'Where to start'}
           </h3>
           <div className="grid gap-4 lg:grid-cols-2">
-            {suggestions.map((view) => (
-              <FamilyCard key={view.family.id} view={view} learned={learned} />
+            {suggestions.map((course) => (
+              <CourseCard key={course.id} course={course} openings={openings} learned={learned} />
             ))}
           </div>
         </section>

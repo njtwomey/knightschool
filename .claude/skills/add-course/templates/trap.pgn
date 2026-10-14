@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Greedy 3...Nxe4"]
+[ECO "C26"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Refutes "1. e4 e5 2. Nc3 Nf6 3. Bc4 Nxe4"]
+[Kind "for-us"]
+
+1. e4 e5 2. Nc3 Nf6 3. Bc4 Nxe4? { Black takes a pawn and allows a strong attack. } 4. Nxe4 d5 5. Bd3 dxe4 6. Bxe4 *

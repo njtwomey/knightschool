@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "French Defence: Advance Variation"]
+[Variation "Advance Variation, Be3 Blunder"]
+[ECO "C02"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab"]
+[Themes "b2-pawn,counting"]
+[Kind "against-us"]
+
+1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. Be3? { Looks natural, guarding d4, but the bishop was the only defender of b2. Black's queen now has a free pawn and a strong attack. }
+6... Qxb2! { The queen takes b2 and now attacks the rook on a1 as well. We cannot trap it, and Black is a pawn up with a strong attack. } *

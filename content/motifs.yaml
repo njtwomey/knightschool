@@ -1,0 +1,205 @@
+# The vocabulary for course.yaml `motifs:` and for the glossary page. One plain sentence each.
+- id: hanging-piece
+  name: 'Hanging piece'
+  summary: 'A piece that nobody defends, so it can simply be taken.'
+  group: tactical
+- id: fork
+  name: 'Fork'
+  summary: 'One piece attacks two or more targets at once, and only one can be saved.'
+  group: tactical
+- id: pin-absolute
+  name: 'Absolute pin'
+  summary: 'A piece cannot legally move because it shields its own king.'
+  group: tactical
+- id: pin-relative
+  name: 'Pin to a piece behind'
+  summary: 'A piece can move, but doing so would expose a more valuable piece behind it.'
+  group: tactical
+- id: skewer
+  name: 'Skewer'
+  summary: 'A pin in reverse: the valuable piece must move and the one behind it is lost.'
+  group: tactical
+- id: discovered-attack
+  name: 'Discovered attack'
+  summary: 'Moving one piece uncovers an attack from another, often with a threat of its own.'
+  group: tactical
+- id: double-check
+  name: 'Double check'
+  summary: 'Two pieces give check at once, so the king must move.'
+  group: tactical
+- id: remove-the-defender
+  name: 'Remove the defender'
+  summary: 'Capture or chase away the piece that guards a target, then take the target.'
+  group: tactical
+- id: overloaded-piece
+  name: 'Overloaded piece'
+  summary: 'A defender with two jobs: it cannot do both, so one of them fails.'
+  group: tactical
+- id: deflection
+  name: 'Deflection'
+  summary: 'Force a defending piece away from the square or task it is guarding.'
+  group: tactical
+- id: decoy
+  name: 'Decoy'
+  summary: 'Lure a piece onto a square where it can be attacked or where it blocks something.'
+  group: tactical
+- id: back-rank
+  name: 'Back-rank mate'
+  summary: 'A rook or queen mates a king trapped behind its own pawns on the first or eighth rank.'
+  group: tactical
+- id: smothered-mate
+  name: 'Smothered mate'
+  summary: 'A knight mates a king that is boxed in by its own pieces.'
+  group: tactical
+- id: legal-mate
+  name: 'Légal’s mate'
+  summary: 'A queen sacrifice that wins because the pinned knight and bishops deliver mate.'
+  group: tactical
+- id: scholar-mate
+  name: 'Scholar’s mate'
+  summary: 'A four-move attack by queen and bishop on f7 (or f2) that wins against careless defence.'
+  group: tactical
+- id: greek-gift
+  name: 'Greek gift'
+  summary: 'A bishop sacrifice on h7 (or h2) followed by a knight and queen attack on the castled king.'
+  group: tactical
+- id: f7-weakness
+  name: 'Weakness on f7'
+  summary: 'The f7 pawn is defended only by the king at the start, so attacks aim there (and at f2 for Black).'
+  group: tactical
+- id: fork-trick
+  name: 'Fork trick'
+  summary: 'Trade knights on e4 so a pawn move wins a piece through a discovered or forking threat.'
+  group: tactical
+- id: poisoned-pawn
+  name: 'Poisoned pawn'
+  summary: 'A pawn that can be taken, but taking it loses time or material (b2 and g7 are the classics).'
+  group: tactical
+- id: queen-trap
+  name: 'Queen trap'
+  summary: 'A queen that has gone looking for pawns runs out of safe squares and is lost.'
+  group: tactical
+- id: bishop-trap
+  name: 'Bishop trap'
+  summary: 'A bishop with no safe squares left is attacked and cannot escape.'
+  group: tactical
+- id: knight-on-the-rim
+  name: 'Knight on the rim'
+  summary: 'A knight on the edge controls few squares and can be trapped or hunted.'
+  group: tactical
+- id: tempo-on-queen
+  name: 'Tempo on the queen'
+  summary: 'Developing with an attack on the queen, so the opponent loses a move.'
+  group: tactical
+- id: zwischenzug
+  name: 'In-between move'
+  summary: 'A surprise move played before the expected recapture, usually a check or a bigger threat.'
+  group: tactical
+- id: counting
+  name: 'Counting attackers and defenders'
+  summary: 'Before capturing, count how many pieces attack and defend the square and what each exchange costs.'
+  group: tactical
+- id: x-ray
+  name: 'X-ray'
+  summary: 'A piece attacks through another piece, so the pieces in between matter.'
+  group: tactical
+- id: elephant-trap
+  name: 'Elephant trap'
+  summary: 'In the Queen’s Gambit Declined, grabbing a pawn on d5 loses a piece to a pin on the d-file.'
+  group: tactical
+- id: noahs-ark
+  name: 'Noah’s Ark trap'
+  summary: 'In the Ruy Lopez, a pawn chain on the queenside traps the bishop on b3.'
+  group: tactical
+- id: queen-cut-off
+  name: 'Queen cut off'
+  summary: 'The queen is attacked and every square it could go to is covered.'
+  group: tactical
+- id: centre-pawns
+  name: 'Pawns in the centre'
+  summary: 'Pawns on e4 and d4 (or e5 and d5) take space and give the pieces room.'
+  group: structural
+- id: develop-first
+  name: 'Develop first'
+  summary: 'Bring knights and bishops out before moving the same piece twice or attacking early.'
+  group: structural
+- id: castle-early
+  name: 'Castle early'
+  summary: 'Get the king safe and a rook toward the middle, usually by move six or seven.'
+  group: structural
+- id: early-queen
+  name: 'Early queen'
+  summary: 'Bringing the queen out early usually loses time, except where it is a known and safe idea.'
+  group: structural
+- id: pawn-chain
+  name: 'Pawn chain'
+  summary: 'Linked pawns on a diagonal: attack the base, because the chain falls from the bottom.'
+  group: structural
+- id: attack-the-base
+  name: 'Attack the base'
+  summary: 'Hit the back pawn of a chain, which has no pawn to defend it.'
+  group: structural
+- id: bad-bishop
+  name: 'Bad bishop'
+  summary: 'A bishop hemmed in by its own pawns on the same colour, with little to do.'
+  group: structural
+- id: good-bishop-out
+  name: 'Get the good bishop out'
+  summary: 'Develop the bishop that the pawn chain would otherwise lock in, before closing the position.'
+  group: structural
+- id: isolated-queens-pawn
+  name: 'Isolated queen’s pawn'
+  summary: 'A d-pawn with no friendly pawns on the neighbouring files: it gives activity and needs protecting.'
+  group: structural
+- id: open-file
+  name: 'Open file'
+  summary: 'A file with no pawns on it, the natural highway for a rook.'
+  group: structural
+- id: outpost
+  name: 'Outpost'
+  summary: 'A square deep in enemy territory that no enemy pawn can attack, ideal for a knight.'
+  group: structural
+- id: fianchetto-diagonal
+  name: 'Fianchetto diagonal'
+  summary: 'A bishop on b2 or g2 (or b7, g7) rakes a long diagonal toward the enemy king.'
+  group: structural
+- id: freeing-break
+  name: 'Freeing break'
+  summary: 'A pawn move such as ...c5 or ...e5 that opens a cramped position.'
+  group: structural
+- id: minority-attack
+  name: 'Minority attack'
+  summary: 'Advancing fewer pawns against more to leave the other side with a weakness.'
+  group: structural
+- id: h-pawn-attack
+  name: 'h-pawn attack'
+  summary: 'Pushing the h-pawn to open the file against a castled king.'
+  group: structural
+- id: space
+  name: 'Space'
+  summary: 'Controlling more of the board with pawns, which gives your pieces more room.'
+  group: structural
+- id: give-back-material
+  name: 'Give the material back'
+  summary: 'Return a gambit pawn at the right moment to keep the lead in development.'
+  group: structural
+- id: decline-the-gambit
+  name: 'Decline the gambit'
+  summary: 'Meet a gambit by not taking the pawn, or by hitting back in the centre.'
+  group: structural
+- id: opposite-castling
+  name: 'Opposite-side castling'
+  summary: 'Kings on opposite wings: both sides race to attack with pawns.'
+  group: structural
+- id: pawn-wedge
+  name: 'Pawn wedge'
+  summary: 'A pawn pushed to e5 or d5 that cramps the opponent and supports pieces behind it.'
+  group: structural
+- id: counter-in-the-centre
+  name: 'Counter in the centre'
+  summary: 'Answer a flank or gambit attack with ...d5 or ...e5, striking where the opponent is weakest.'
+  group: structural
+- id: long-diagonal
+  name: 'Long diagonal'
+  summary: 'The diagonal a1-h8 or h1-a8: a bishop there pressures b7, g7, b2 or g2.'
+  group: structural

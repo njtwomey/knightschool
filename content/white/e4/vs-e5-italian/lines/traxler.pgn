@@ -1,0 +1,21 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Traxler Counterattack: 5.Bxf7+"]
+[ECO "C57"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "king-safety,extra-pawn"]
+[Kind "main"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 Bc5
+5. Bxf7+ { The calm reply. Take the pawn with check, keep the extra material and do not enter the mess after 5.Nxf7. } 5... Ke7
+( 5... Kf8 6. Bb3 h6 7. Nf7 )
+6. Bb3 { Retreats to a safe square, keeps the extra pawn and still looks at the centre. } 6... Rf8
+7. O-O { Castles. The king is out of the way and the rook comes to the open f-file. } 7... d6
+8. Nc3 { Brings a piece out and eyes d5. Black's king cannot castle any more, so White should develop fast and make threats. } 8... Qe8
+( 8... Nd4 9. Nd5 Nxd5 10. Bxd5 h6 11. c3 )
+( 8... h6 9. Nh7 { Attacks the rook on f8. If ...Nxh7 then Nd5+ comes with check and the queen joins the attack. } 9... Nxh7 10. Nd5+ Ke8 11. Qh5+ )
+9. Nd5 { Check, and it removes Black's best defender, the knight on f6. After the trade White keeps the extra pawn and Black's king is still stuck. } 9... Nxd5 10. exd5 10... Nd4
+11. c3 { Kicks the knight, and it must decide: take the bishop or retreat. } 11... Nxb3 12. Qxb3 { White is a pawn up with a safe king. Plan: untangle with d4 and Be3, trade queens if possible, and let the extra pawn win the ending. } *

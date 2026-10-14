@@ -1,0 +1,56 @@
+name: Against queen's-pawn systems
+eco: D00
+side: black
+opening: d4-systems
+tier: 2
+trigger: '1. d4 d5'
+summary: >-
+  What to play when White starts 1.d4 but does not play 2.c4: the Colle and Stonewall with e3, the bishop on g5 or the Torre,
+  the Veresov, the Blackmar-Diemer Gambit and the quiet fianchetto setups. The same setup (knights out, ...e6, ...c5, a bishop
+  on d6 or e7, castle) works against all of them.
+plans:
+  - Meet quiet systems with ...Nf6, ...e6, ...c5 and ...Nc6, then castle by move eight.
+  - Hit d4 early with ...c5 and ...Nc6, before White gets e4 in.
+  - When White's bishop is out on g5, play ...h6 and ...Qb6; the queen attacks b2 and White must spend a move on it.
+  - Against the Blackmar-Diemer Gambit take the pawns, develop calmly and castle.
+  - Do not push ...g5 or ...e5 to chase a bishop; it loses a pawn and opens lines against your king.
+motifs: [attack-the-base, develop-first, give-back-material, tempo-on-queen, poisoned-pawn]
+tags: [d4, queens-pawn, systems]
+lines:
+  - file: colle-system
+    opponent: '2.Nf3 Nf6 3.e3'
+    kind: main
+  - file: stonewall-e3
+    opponent: '2.e3'
+    kind: main
+  - file: pseudo-trompowsky
+    opponent: '2.Bg5'
+    kind: sideline
+  - file: torre-attack
+    opponent: '2.Nf3 Nf6 3.Bg5'
+    kind: sideline
+  - file: quiet-setups
+    opponent: '2.g3, 2.c3 or 2.Nf3 and g3'
+    kind: sideline
+  - file: veresov
+    opponent: '2.Nc3 Nf6 3.Bg5'
+    kind: rare
+  - file: blackmar-diemer
+    opponent: '2.e4'
+    kind: gambit
+traps:
+  - file: colle-qb3-c4
+    opponent: '6.Qb3'
+    kind: for-us
+  - file: torre-bxb8
+    opponent: '3.Bg5 Ne4 4.Bf4 c5 5.e3 Qb6 6.Nbd2 Nxd2 7.Bxb8'
+    kind: for-us
+  - file: bdg-queen-recapture
+    opponent: '5.Qxf3'
+    kind: for-us
+  - file: torre-g5-kick
+    opponent: '4.Bh4'
+    kind: against-us
+  - file: veresov-e5-break
+    opponent: '4.Nf3'
+    kind: against-us

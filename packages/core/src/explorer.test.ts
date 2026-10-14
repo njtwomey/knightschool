@@ -1,5 +1,6 @@
+import { manifestOf } from './test-manifest';
 import { describe, expect, it } from 'vitest';
-import { applyPopularity, type ExplorerPosition } from './explorer';
+import { applyPopularity, popularityTargets, type ExplorerPosition } from './explorer';
 import { parsePgn } from './pgn';
 import { buildOpening } from './tree';
 import { applyNames, parseOpeningsTsv } from './openings-list';
@@ -16,11 +17,7 @@ const game = parsePgn(`[Event "x"]
 
 1. e4 e5 2. Nf3 *`);
 
-const content = buildOpening(
-  't',
-  { name: 'T', eco: 'C20', side: 'white', level: 'beginner', summary: 'x', tags: [], lines: ['main'], refutations: [] },
-  [{ id: 'main', kind: 'line', game, source: 'main.pgn' }],
-);
+const content = buildOpening('t', manifestOf({ name: 'T' }), [{ id: 'main', kind: 'line', game, source: 'main.pgn' }]);
 
 // Fixture shaped like the explorer's reply: 1. e4 is played in 60 of 100 games, 1...e5 in 30 of those 60.
 const fixture: Record<string, ExplorerPosition> = {
@@ -64,5 +61,57 @@ describe('opening names', () => {
   it('finds the position from the pgn when there is no epd column', () => {
     const index = parseOpeningsTsv("eco\tname\tpgn\nB00\tKing's Pawn Game\t1. e4");
     expect([...index.keys()]).toEqual(['rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -']);
+  });
+});
+
+describe('popularityTargets', () => {
+  const header = (name: string) => `[Event "x"]
+[Opening "T"]
+[Variation "${name}"]
+[ECO "C20"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+
+`;
+  const built = (kinds: { rare?: boolean; alternative?: boolean }) => {
+    const base = manifestOf({ name: 'T', lines: ['main', 'side'] });
+    const manifest = {
+      ...base,
+      lines: base.lines.map((line) =>
+        line.file === 'side'
+          ? { ...line, kind: kinds.rare ? ('rare' as const) : line.kind, alternative: kinds.alternative ?? false }
+          : line,
+      ),
+    };
+    return buildOpening('t', manifest, [
+      { id: 'main', kind: 'line', game: parsePgn(`${header('main')}1. e4 e5 2. Nf3 *`), source: 'main.pgn' },
+      { id: 'side', kind: 'line', game: parsePgn(`${header('side')}1. e4 c5 2. Nf3 *`), source: 'side.pgn' },
+    ]);
+  };
+
+  it('lists every position on the lines that count, once, including side branches', () => {
+    const targets = popularityTargets([built({})]);
+    expect(targets).toHaveLength(new Set(targets).size);
+    expect(targets).toContain(START_EPD);
+    expect(targets).toHaveLength(Object.keys(built({}).nodes).length);
+  });
+
+  it('walks each course on its own, so a position another course already listed does not hide what lies beyond it', () => {
+    const first = built({});
+    const second = { ...built({}), opening: { ...built({}).opening, id: 'u' } };
+    expect(popularityTargets([first, second])).toEqual(popularityTargets([first]));
+    const shallow = buildOpening('s', manifestOf({ name: 'S', trigger: '' }), [
+      { id: 'main', kind: 'line', game: parsePgn(`${header('main')}1. e4 *`), source: 'main.pgn' },
+    ]);
+    expect(popularityTargets([shallow, first])).toHaveLength(Object.keys(first.nodes).length);
+  });
+
+  it('leaves out rare lines and alternatives unless asked for everything', () => {
+    const all = Object.keys(built({}).nodes).length;
+    expect(popularityTargets([built({ rare: true })])).toHaveLength(all - 2);
+    expect(popularityTargets([built({ alternative: true })])).toHaveLength(all - 2);
+    expect(popularityTargets([built({ rare: true })], true)).toHaveLength(all);
   });
 });

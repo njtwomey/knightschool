@@ -84,3 +84,32 @@ export function toExplorerCache(epd: string, response: ExplorerResponse, now: Da
     fetchedAt: now.toISOString(),
   };
 }
+
+/**
+ * The positions whose popularity is worth fetching: every position reached through the lines that earn cards or are
+ * drilled, side variations included (branch practice samples the opponent's replies there). Rare lines and
+ * alternatives are left out unless `everything` is set, so a fetch skips the long tail. Positions are keyed by EPD, so
+ * one that several courses reach is listed once.
+ */
+export function popularityTargets(contents: OpeningContent[], everything = false): string[] {
+  const epds = new Set<string>();
+  for (const content of contents) {
+    const wanted = new Set(
+      content.opening.variants
+        .filter((variant) => everything || !(variant.alternative || variant.weight === 'rare'))
+        .map((variant) => variant.id),
+    );
+    const seen = new Set([content.opening.rootEpd]); // per course: another course reaching a position says nothing here
+    const queue = [content.opening.rootEpd];
+    while (queue.length) {
+      const node = content.nodes[queue.shift()!];
+      for (const edge of node?.moves ?? []) {
+        if (!edge.variants.some((id) => wanted.has(id)) || seen.has(edge.to)) continue;
+        seen.add(edge.to);
+        queue.push(edge.to);
+      }
+    }
+    for (const epd of seen) epds.add(epd);
+  }
+  return [...epds].sort();
+}

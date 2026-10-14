@@ -9,6 +9,7 @@ import {
   startAttempt,
   type AttemptAction,
 } from '@knightschool/core';
+import { testManifest } from '@/test-manifest';
 import { openMemoryStorage } from '@knightschool/storage/testing';
 import { describe, expect, it } from 'vitest';
 
@@ -26,11 +27,7 @@ const game = parsePgn(`[Event "x"]
 
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6 8. a4 Ba7 *`);
 
-const content = buildOpening(
-  't',
-  { name: 'T', eco: 'C20', side: 'white', level: 'beginner', summary: 'x', tags: [], lines: ['main'], refutations: [] },
-  [{ id: 'main', kind: 'line', game, source: 'main.pgn' }],
-);
+const content = buildOpening('t', testManifest(), [{ id: 'main', kind: 'line', game, source: 'main.pgn' }]);
 
 // What the learner does with each card: a spread of ratings so the cards are due at different times.
 const ANSWERS: AttemptAction[][] = [

@@ -1,15 +1,18 @@
 /**
  * pnpm course:eval [opening-id[/variant-id] ...] [--depth 14] [--multipv 3] [--lose 100] [--line-floor -50] [--gambit-floor -150] [--refute-min 150]
- *                  [--no-cache] [--quiet]
+ *                  [--no-cache] [--quiet] [--dir <course-folder>] [--threads 2] [--wasm]
+ *
+ * `--dir` evaluates one course folder from anywhere (a scratch or staging folder). The real Stockfish is used when it is
+ * installed (STOCKFISH or PATH or Homebrew), with `--threads` threads; `--wasm` forces the browser build.
  *
  * Evaluates whole courses offline with the same Stockfish build the app uses (stockfish-19-lite-single from
  * node_modules, run as a child process and spoken to in UCI text; it is never imported). For each variant it prints the
  * evaluation after every move, in pawns from White's point of view, and exits 1 when it finds:
  *   - a learner move that costs the mover at least --lose centipawns against the engine's best (the same test and
  *     the same constant, BIG_SWING_CP, as the engineExplainer and the "Measure this line" button);
- *   - a line (not a refutation) that ends worse than --line-floor centipawns for the learner (--gambit-floor, default
+ *   - a line (not a trap) that ends worse than --line-floor centipawns for the learner (--gambit-floor, default
  *     -150, for a line whose Character includes gambit);
- *   - a refutation that ends less than --refute-min centipawns ahead for the learner, the side that punishes.
+ *   - a trap we spring (for-us) that ends less than --refute-min centipawns ahead for the learner, the side that punishes.
  * Every position of the opening's tree is searched once (transpositions share a search) at depth/MultiPV like the
  * app's engine panel, and results are cached in .cache/course-eval.json (written atomically) so reruns are quick. Use --no-cache when
  * other runs may be going at the same time.
@@ -39,7 +42,8 @@ import {
   type Evaluation,
   type UciTransport,
 } from '../packages/engine/src/index.ts';
-import { loadOpenings, root } from './content-lib.ts';
+import { delimiter } from 'node:path';
+import { loadCourseAt, loadCourses, root } from './content-lib.ts';
 
 // ---- options -------------------------------------------------------------------------------------------------------
 
@@ -68,6 +72,11 @@ const lineFloorCp = flag('line-floor', -50);
 const gambitFloorCp = flag('gambit-floor', -150); // a line tagged Character gambit may end this far down for the learner
 const refuteMinCp = flag('refute-min', 150);
 const useCache = !has('no-cache');
+/** Evaluate one course folder from anywhere (a scratch or staging directory), not the shared tree. */
+const dirAt = args.indexOf('--dir');
+const courseDir = dirAt >= 0 ? args.splice(dirAt, 2)[1] : undefined;
+const threads = flag('threads', 2);
+const nativeOff = has('wasm'); // by default the real Stockfish is used when it is installed
 const quiet = has('quiet'); // only print moves that raise a finding or a note
 const wanted = args.filter((arg) => !arg.startsWith('--'));
 if (args.some((arg) => arg.startsWith('--'))) {
@@ -79,9 +88,22 @@ if (args.some((arg) => arg.startsWith('--'))) {
 
 const enginePath = join(root, 'node_modules', 'stockfish', 'bin', 'stockfish-19-lite-single.js');
 
+/** The real Stockfish when it is installed: deeper and several times faster than the browser build. */
+function nativePath(): string | undefined {
+  if (nativeOff) return undefined;
+  const fromEnv = process.env.STOCKFISH;
+  if (fromEnv) return existsSync(fromEnv) ? fromEnv : undefined;
+  const dirs = (process.env.PATH ?? '').split(delimiter).filter((dir) => dir && !dir.includes('node_modules'));
+  return [...dirs, '/opt/homebrew/bin', '/usr/local/bin'].map((dir) => join(dir, 'stockfish')).find(existsSync);
+}
+
 function childTransport(): UciTransport {
-  if (!existsSync(enginePath)) throw new Error(`${enginePath} not found. Run pnpm install.`);
-  const child: ChildProcessWithoutNullStreams = spawn(process.execPath, [enginePath], { stdio: 'pipe' });
+  const native = nativePath();
+  if (!native && !existsSync(enginePath)) throw new Error(`${enginePath} not found. Run pnpm install.`);
+  const child: ChildProcessWithoutNullStreams = native
+    ? spawn(native, [], { stdio: 'pipe' })
+    : spawn(process.execPath, [enginePath], { stdio: 'pipe' });
+  if (native) child.stdin.write(`setoption name Threads value ${threads}\nsetoption name Hash value 256\n`);
   let listener: (line: string) => void = () => {};
   createInterface({ input: child.stdout }).on('line', (line) => listener(line));
   child.on('error', (error) => {
@@ -273,13 +295,14 @@ async function evaluateOpening(content: OpeningContent, only: Set<string>): Prom
     };
     let mark = '';
     const floorCp = variant.tags.character.includes('gambit') ? gambitFloorCp : lineFloorCp;
-    if (variant.kind === 'line' && forLearner < floorCp)
+    if (variant.kind === 'line' && !variant.alternative && forLearner < floorCp)
       mark = verdict(
         `ends at ${show(last)} (White's view), ${(forLearner / 100).toFixed(2)} for the learner; floor is ${floorCp / 100}${floorCp === gambitFloorCp ? ' (gambit)' : ''}`,
       );
-    if (variant.kind === 'refutation' && forLearner < refuteMinCp)
+    // A trap we spring must leave us well ahead. A trap we must avoid ends with us worse, which is its point.
+    if (variant.kind === 'refutation' && variant.whose === 'for-us' && forLearner < refuteMinCp)
       mark = verdict(
-        `refutation ends at ${show(last)} (White's view), ${(forLearner / 100).toFixed(2)} for the learner; wanted at least ${refuteMinCp / 100}`,
+        `trap ends at ${show(last)} (White's view), ${(forLearner / 100).toFixed(2)} for the learner; wanted at least ${refuteMinCp / 100}`,
       );
     console.log(`    ends ${show(last).padStart(6)} (White's view), ${pawns(forLearner)} for you${mark}`);
   }
@@ -308,7 +331,7 @@ async function evaluateOpening(content: OpeningContent, only: Set<string>): Prom
 }
 
 async function main() {
-  const all = loadOpenings();
+  const all = courseDir ? [loadCourseAt(courseDir)] : loadCourses();
   const ids = new Set(all.map((content) => content.opening.id));
   const variantFilter = new Set<string>();
   const chosen = wanted.length
@@ -319,6 +342,7 @@ async function main() {
         return openingId;
       })
     : [...ids];
+  if (courseDir) wanted.length = 0;
   const findings: Finding[] = [];
   try {
     await engine.ready();

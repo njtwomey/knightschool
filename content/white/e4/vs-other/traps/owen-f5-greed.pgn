@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Owen Defence"]
+[Variation "Owen Defence: Matovinsky Gambit"]
+[ECO "B00"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "white"]
+[Tricks "trap,pawn-grab,discovered-attack"]
+[Refutes "1. e4 b6 2. d4 Bb7 3. Bd3 f5 4. exf5 Bxg2"]
+[Themes "queen-check,bishop-on-d3"]
+[Kind "for-us"]
+
+1. e4 b6 2. d4 Bb7 3. Bd3 f5?! { Attacks e4 a second time, but weakens Black's own king. } 4. exf5 { Takes the pawn and opens the diagonal from h5 to e8. } 4... Bxg2? { Greedy: the bishop takes a pawn and attacks the rook on h1, but it leaves the king uncovered. } 5. Qh5+ { Check. The queen reaches the king because f7 is empty. } 5... g6 6. fxg6 { Threatens gxh7 and keeps up the attack. } 6... Nf6? { Hits the queen, but it walks into a mating net. } 7. gxh7+ { Discovered check: the pawn leaves g6 and the queen on h5 gives check down the diagonal. Black can take the queen, but the king is about to be trapped. } 7... Nxh5 8. Bg6# { Checkmate: nothing can take the bishop, and Black's own pieces box in the king. } *

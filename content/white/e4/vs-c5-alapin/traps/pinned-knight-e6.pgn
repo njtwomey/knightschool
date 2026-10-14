@@ -1,0 +1,18 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Smith-Morra Declined"]
+[ECO "B22"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pin"]
+[Themes "pin,e5-knight"]
+[Refutes "1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5 dxe5 9. Nxe5 e6"]
+[Kind "for-us"]
+
+1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5 dxe5 9. Nxe5
+9... e6? { Black develops, but the knight on c6 is pinned and its only guards are the pawn on b7 and the queen.  }
+10. Nxc6! bxc6
+(10... Qd5 11. Nc3)
+11. Bxc6+ { The pawn that took on c6 is now the one in the way: this check wins the rook on a8. }
+11... Bd7 12. Bxa8 Qxa8 13. O-O *

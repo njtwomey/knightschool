@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Barmen Defense"]
+[ECO "B22"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab"]
+[Themes "tempo-gain,loose-pawn"]
+[Kind "against-us"]
+
+1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. d4 Nf6
+5. c4? { Looks like a free tempo on the queen, but the c3 pawn was the one guarding d4. Once it leaves, the pawn on d4 is attacked twice and defended only by the queen. }
+5... Qxd4 { Takes a pawn and attacks the rook on a1 and the pawn on c4 as well. }
+6. Qb3 { Dodges the queen trade, but Black has won a clean pawn and White has nothing to show for it. }
+6... Nc6 7. Nf3 Qd6 *

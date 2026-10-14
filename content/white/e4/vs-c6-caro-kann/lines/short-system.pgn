@@ -1,0 +1,21 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence: Advance Variation"]
+[Variation "Short Variation"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "pawn-chain,c5-break"]
+[Kind "main"]
+
+1. e4 c6 2. d4 d5 3. e5 { Gains space. The pawn on e5 takes squares from Black's knight and cannot easily be attacked. } 3... Bf5 { Black brings the light-squared bishop out before ...e6 closes it in. }
+4. Nf3 { Develops and guards d4, the pawn at the base of White's chain. [%csl Gd4] } 4... e6
+5. Be2 { Safe and quiet, and it clears the way to castle. On d3 the bishop could be traded off by ...Bxd3. } 5... c5 { Black hits the base of the chain. }
+6. O-O { Castle first. Next comes c3 to guard d4 twice, and then Nbd2. } 6... Nc6
+( 6... Qb6?! { Black eyes b2 and d4 together, but it spends a move while White is ready to strike. } 7. c4 { Opens the centre before Black is developed. The queen is out on b6 and the bishop on c1 still guards b2. } 7... Nc6 8. cxd5 exd5 9. Nc3 { Piles up on d5 and d4; Black's queen has no good square. } 9... Qd8 10. Bg5 Be7 11. Nb5 )
+( 6... cxd4 7. Nxd4 { The knight recaptures with a threat on the bishop. } 7... Bg6 8. c4 { Hits d5 and takes more space; Black's pieces are cramped. } 8... dxc4 9. Qa4+ Nd7 10. Be3 )
+7. c3 { Now d4 is guarded twice, by the knight and the pawn. Count the guards before anyone captures there. [%csl Gd4] } 7... cxd4
+( 7... Bg4 8. Nbd2 { Brings the last piece out and covers d4 again. } 8... cxd4 9. cxd4 a5 10. h3 { Asks the bishop what it wants to do before it can take on f3. } 10... Bh5 11. Qb3 )
+8. cxd4 Nge7 9. Nc3 { The knight adds a third defender to d4 and eyes b5 and d5. } 9... Bg4
+10. Nd2 { Steps away so that ...Bxf3 cannot spoil the pawns. The knight comes back to f3 after the bishops trade. } 10... Bxe2 11. Nxe2 Nf5 12. Nf3 Rc8 { White has more space and a solid pawn chain. If Black leaves the book, castle, guard d4 and play Rb1 and b4 to grow on the queenside. } *

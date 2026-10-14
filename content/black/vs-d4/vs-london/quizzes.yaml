@@ -1,0 +1,50 @@
+- id: bd3-forgets-b2
+  line: 1. d4 d5 2. Nf3 Nf6 3. Bf4 c5 4. e3 Nc6 5. c3 Qb6 6. Bd3
+  prompt: White developed the bishop to d3. Which pawn did White forget to guard?
+  accept:
+    - keywords: [[b2]]
+      feedback: Yes. The pawn on b2 is still attacked by the queen, and ...c4 wins a tempo on the bishop first.
+  reveal: The pawn on b2 has only the queen to guard it, and the queen on b6 is aiming at it. After ...c4 the bishop must move and Black takes b2.
+  showMove: c4
+  examples:
+    match: [b2, the b2 pawn, pawn on b2 is hanging]
+    miss: [d4, the bishop, the knight on f3]
+- id: nb5-axb5
+  line: 1. d4 d5 2. Nc3 Nf6 3. Bf4 a6 4. Nb5
+  prompt: White jumped the knight to b5. How does Black punish it?
+  accept:
+    - keywords: [[axb5, pawn, take, a6]]
+      feedback: Yes. The a-pawn covers b5, so the knight is simply lost.
+  reveal: The pawn on a6 attacks b5, so ...axb5 wins the knight for nothing. This is exactly why ...a6 is played.
+  showMove: axb5
+  examples:
+    match: [take it with the a-pawn, axb5, the pawn on a6 takes the knight]
+    miss: [move the queen, castle, play c5]
+- id: why-a6
+  line: 1. d4 d5 2. Nc3 Nf6 3. Bf4
+  prompt: Black plays ...a6 here. Which square does the pawn guard, and why does that matter?
+  accept:
+    - keywords: [[b5, nb5], [c7, fork, knight, nc7]]
+      all: true
+      feedback: Yes. The pawn guards b5, so the knight cannot jump to b5 and then land on c7 with a fork.
+    - keywords: [[b5, nb5]]
+      partial: true
+      feedback: Close. Say what the knight would do from b5.
+  reveal: The pawn on a6 guards b5. Without it, Nb5 followed by Nc7+ forks the king and the rook on a8.
+  examples:
+    match: [it stops Nb5 and the fork on c7, b5 so the knight cannot reach c7, stops the knight jumping to b5 and c7]
+    miss: [it develops a piece, it prepares castling, it attacks the bishop]
+- id: nc6-allows-nb5
+  line: 1. d4 d5 2. Nc3 Nf6 3. Bf4 c5 4. e3 Nc6 5. Nb5
+  prompt: Black played ...Nc6 and White's knight is on b5. What is White threatening?
+  accept:
+    - keywords: [[nc7, c7], [fork, king, rook, check]]
+      all: true
+      feedback: Yes. Nc7+ forks the king and the rook on a8.
+    - keywords: [[nc7, c7]]
+      partial: true
+      feedback: Close. Say what the knight would attack from c7.
+  reveal: The knight threatens Nc7+, forking the king and the rook on a8. The queen guards c7 but can only take after the damage is done.
+  examples:
+    match: [Nc7 check forking king and rook, the knight forks the king and rook on c7, Nc7+ fork]
+    miss: [it attacks my pawn, it threatens mate on f7, it wants to castle]

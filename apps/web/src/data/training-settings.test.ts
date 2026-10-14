@@ -2,13 +2,16 @@ import { openMemoryStorage } from '@knightschool/storage/testing';
 import { describe, expect, it } from 'vitest';
 import {
   addIntroducedToday,
+  getCardOptions,
   getEnrolled,
+  getMinPopularityPercent,
   getIntroducedToday,
   getNewPerDay,
   lastDays,
   localDay,
   previousDay,
   setEnrolled,
+  setMinPopularityPercent,
   setNewPerDay,
 } from './training-settings';
 
@@ -33,6 +36,20 @@ describe('training settings', () => {
     expect(await getNewPerDay(storage)).toBe(0);
     await storage.settings.set('newCardsPerDay', '-3', now.toISOString());
     expect(await getNewPerDay(storage)).toBe(10);
+  });
+
+  it('cuts sidelines below 5% by default, accepts another share or none, and ignores a damaged value', async () => {
+    const { storage } = await openMemoryStorage();
+    expect(await getMinPopularityPercent(storage)).toBe(5);
+    expect(await getCardOptions(storage)).toEqual({ includeRare: false, minPopularity: 0.05 });
+    await setMinPopularityPercent(storage, 0, now);
+    expect(await getMinPopularityPercent(storage)).toBe(0);
+    await setMinPopularityPercent(storage, 10, now);
+    expect((await getCardOptions(storage)).minPopularity).toBeCloseTo(0.1);
+    await storage.settings.set('minPopularityPercent', 'lots', now.toISOString());
+    expect(await getMinPopularityPercent(storage)).toBe(5);
+    await storage.settings.set('minPopularityPercent', '250', now.toISOString());
+    expect(await getMinPopularityPercent(storage)).toBe(5);
   });
 
   it('counts introductions per local day', async () => {

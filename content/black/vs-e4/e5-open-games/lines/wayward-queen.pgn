@@ -1,0 +1,18 @@
+[Event "Knight School"]
+[Opening "King's Pawn Game"]
+[Variation "King's Pawn Game: Wayward Queen Attack"]
+[ECO "C20"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "white"]
+[Tricks "early-queen,mate-threat"]
+[Themes "tempo-on-queen,f7-defence"]
+[Kind "sideline"]
+
+1. e4 e5 2. Qh5 { The queen comes out on move two. It hits e5 and eyes f7, but it breaks the rule of developing the minor pieces first, so Black can chase it. }
+2... Nc6 { Guards e5 and develops with a piece that the queen cannot hit. }
+3. Bc4 { Queen and bishop both aim at f7. Qxf7 would be checkmate. }
+3... g6 { Attacks the queen and, once it moves, Black can develop in peace. Never play 3...Nf6, which lets White play Qxf7 mate. }
+4. Qf3 { Keeps the pressure on f7. }
+4... Nf6 { Develops and blocks the f-file, so the queen cannot reach f7. } 5. Ne2 5... Bg7 { Develops the bishop. }
+6. d3 6... O-O 7. Nbc3 7... d6 { Protects e5 and opens the c8 bishop. } 8. a3 8... h6 { Stops a bishop or knight from landing on g5 and bothering the kingside. } 9. Bd2 Kh7 { Black has developed fully while White's queen wandered. Plan: ...Be6 to trade White's attacking bishop, then ...Qd7 and ...Rae8. } *

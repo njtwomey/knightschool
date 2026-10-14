@@ -1,4 +1,11 @@
-import { Family, OpeningContent, OpeningIndexEntry, SearchIndex } from '@knightschool/core';
+import {
+  CurriculumEntry,
+  GlossaryEntry,
+  OpeningContent,
+  OpeningGroup,
+  OpeningIndexEntry,
+  SearchIndex,
+} from '@knightschool/core';
 import { z } from 'zod';
 
 // Written by `pnpm content:build`. Served from the same origin, so offline caching (Phase 8) can precache them.
@@ -29,6 +36,17 @@ export function loadSearchIndex(): Promise<SearchIndex> {
   return searchIndex;
 }
 
-export async function loadFamilies(): Promise<Family[]> {
-  return z.array(Family).parse(await fetchJson('families.json'));
+/** The openings that courses are grouped under, with who plays each. */
+export async function loadOpenings(): Promise<OpeningGroup[]> {
+  return z.array(OpeningGroup).parse(await fetchJson('openings.json'));
+}
+
+/** The study order and what each course depends on. */
+export async function loadCurriculum(): Promise<CurriculumEntry[]> {
+  return z.array(CurriculumEntry).parse(await fetchJson('curriculum.json'));
+}
+
+/** The motif vocabulary, each with the courses that use it. */
+export async function loadGlossary(): Promise<GlossaryEntry[]> {
+  return z.array(GlossaryEntry).parse(await fetchJson('glossary.json'));
 }

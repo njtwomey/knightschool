@@ -1,0 +1,52 @@
+- id: bf4-hangs
+  line: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Qc7 6. Bf4
+  prompt: White's bishop just attacked the queen on c7. What should Black play, and why?
+  accept:
+    - keywords: [[qxf4]]
+      feedback: Yes. Qxf4 wins a bishop for nothing, because the bishop on d3 does not protect f4.
+    - keywords: [[take, lose], [bishop, f4]]
+      all: true
+      feedback: Yes. The bishop on f4 is unprotected, so the queen simply takes it.
+  reveal: The bishop on f4 is not protected by anything, so 6...Qxf4 wins a whole piece.
+  showMove: Qxf4
+  examples:
+    match: [Qxf4, take the bishop for free, the bishop is hanging so capture it]
+    miss: [move the queen away, castle, play Nf6, defend the queen with the bishop]
+- id: bxd5-hangs
+  line: 1. e4 c6 2. Bc4 d5 3. Bxd5
+  prompt: White just took the pawn on d5 with the bishop. How does Black punish it?
+  accept:
+    - keywords: [[cxd5]]
+      feedback: Yes. The c6 pawn was guarding d5, so cxd5 wins the bishop for a pawn.
+    - keywords: [[take, recapture], [pawn, c6, bishop]]
+      all: true
+      feedback: Yes. Taking with the c-pawn wins a whole bishop for a pawn.
+  reveal: 3...cxd5 takes the bishop with the c-pawn. White has lost a piece for a pawn.
+  showMove: cxd5
+  examples:
+    match: [cxd5, take the bishop with the c pawn, recapture with the pawn on c6]
+    miss: [Nf6, castle, attack the bishop with a knight]
+- id: qh5-g6
+  line: 1. e4 c6 2. Bc4 d5 3. Bb3 dxe4 4. Qh5
+  prompt: White's queen on h5 is aiming at f7. What does Black play to chase it away?
+  accept:
+    - keywords: [[g6]]
+      feedback: Yes. 4...g6 hits the queen with a pawn, and Black gains time for development.
+    - keywords: [[e6]]
+      partial: true
+      feedback: Close. e6 is safe, but g6 attacks the queen and wins time.
+  reveal: 4...g6 attacks the queen with a pawn. After 5.Qe5 Nf6 Black develops with tempo and is a pawn up.
+  showMove: g6
+  examples:
+    match: [g6, play g6 to attack the queen, pawn to g6]
+    miss: [castle, Nf6, take the bishop]
+- id: qe2-mate
+  line: 1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nd7 5. Qe2
+  prompt: White played 5.Qe2. What is the threat if Black develops with 5...Ngf6?
+  accept:
+    - keywords: [[nd6, d6, mate, checkmate, smothered]]
+      feedback: Yes. 6.Nd6 is mate, because the e7 pawn is pinned by the queen and the king has no squares.
+  reveal: After 5...Ngf6?? comes 6.Nd6 mate. The e7 pawn is pinned to the king by the queen on e2.
+  examples:
+    match: [Nd6 mate, knight to d6 is checkmate, smothered mate on d6]
+    miss: [Qxe7, it attacks the queen, nothing is wrong]

@@ -1,0 +1,27 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Barmen Defense"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "d4-pawn-centre,tempo-gain,development-lead"]
+[Kind "main"]
+
+1. e4 c5
+2. c3
+2... d5
+3. exd5 { Wins a pawn for the moment and opens the e-file. Black has to recapture, and either way a Black piece comes out early. }
+3... Qxd5
+(3... Nf6 4. Bb5+ { Check first, so Black must spend a move answering it before taking back on d5. } 4... Bd7 5. Bc4 b5 6. Be2 Nxd5 7. Nf3)
+(3... Nf6 4. Bb5+ Nbd7 5. Nf3 Nxd5 6. d4)
+4. d4 { Takes the centre. Nc3 cannot hit the queen the way it does against the Scandinavian, because the c3 pawn is in the way, so White develops and plays d4 first. }
+4... Nf6
+5. Nf3 { Guards d4 and blocks the queen's diagonal to g2, the pawn White cannot easily defend yet. [%cal Gf3d4] }
+5... e6
+(5... Nc6 6. Be3 e6 7. Na3)
+6. Bd3 { Develops the bishop to a good diagonal and clears f1 so White can castle. }
+6... Be7
+7. O-O O-O
+8. Qe2 { Plan: Rd1 and Na3 or Nbd2, and if Black takes on d4, recapture with the c-pawn and play Nc3 with tempo, hitting the queen. If Black leaves the book, develop everything and keep d4 guarded. } *

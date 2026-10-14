@@ -1,3 +1,4 @@
+import { manifestOf } from './test-manifest';
 import { describe, expect, it } from 'vitest';
 import { epdAfterPgn } from './chess';
 import { START_EPD } from './epd';
@@ -25,16 +26,12 @@ const course = (id: string, name: string, side: OpeningManifest['side'], spec: S
   const refs = spec.refutations ?? [];
   return buildOpening(
     id,
-    {
+    manifestOf({
       name,
-      eco: 'C20',
       side,
-      level: 'beginner',
-      summary: 'x',
-      tags: [],
       lines: spec.lines.map((_, i) => `line-${i}`),
-      refutations: refs.map((_, i) => `trap-${i}`),
-    },
+      traps: refs.map((_, i) => `trap-${i}`),
+    }),
     [
       ...spec.lines.map((text, i) => ({
         id: `line-${i}`,

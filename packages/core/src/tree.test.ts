@@ -1,3 +1,4 @@
+import { manifestOf } from './test-manifest';
 import { describe, expect, it } from 'vitest';
 import { parsePgn } from './pgn';
 import { buildOpening, type VariantSource } from './tree';
@@ -15,7 +16,6 @@ import {
   variantPath,
 } from './tree-helpers';
 import { START_EPD } from './epd';
-import type { OpeningManifest } from './schema/content';
 
 const header = (variation: string, extra = '') => `[Event "Knight School"]
 [Opening "Test Opening"]
@@ -35,20 +35,10 @@ const variant = (id: string, kind: 'line' | 'refutation', moves: string, extra =
   source: `${id}.pgn`,
 });
 
-const manifest = (over: Partial<OpeningManifest> = {}): OpeningManifest => ({
-  name: 'Test Opening',
-  eco: 'C50',
-  side: 'white',
-  level: 'beginner',
-  summary: 'x',
-  tags: [],
-  lines: ['main'],
-  refutations: [],
-  ...over,
-});
+const manifest = manifestOf;
 
 describe('buildOpening', () => {
-  const content = buildOpening('test', manifest({ lines: ['main', 'side'], refutations: ['trap'] }), [
+  const content = buildOpening('test', manifest({ lines: ['main', 'side'], traps: ['trap'] }), [
     variant('main', 'line', '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *'),
     variant('side', 'line', '1. e4 e5 2. Nf3 Nf6 3. Nxe5 *'),
     variant(
@@ -149,7 +139,7 @@ describe('buildOpening', () => {
   });
 
   it('keeps a refutation demonstration without making a card from the mistake', () => {
-    const demo = buildOpening('d', manifest({ lines: ['main'], refutations: ['trap'] }), [
+    const demo = buildOpening('d', manifest({ lines: ['main'], traps: ['trap'] }), [
       variant('main', 'line', '1. e4 e5 2. Nf3 Nc6 *'),
       variant(
         'trap',
@@ -167,7 +157,7 @@ describe('buildOpening', () => {
 });
 
 describe('buildOpening authoring errors', () => {
-  const m = (over?: Partial<OpeningManifest>) => manifest(over);
+  const m = (over?: Parameters<typeof manifestOf>[0]) => manifest(over);
 
   it('rejects two repertoire moves for one position', () => {
     expect(() =>
@@ -202,19 +192,41 @@ describe('buildOpening authoring errors', () => {
     );
   });
 
-  it('rejects a refutation without Refutes', () => {
-    expect(() =>
-      buildOpening('x', m({ refutations: ['r'] }), [
-        variant('main', 'line', '1. e4 *'),
-        variant('r', 'refutation', '1. d4 *'),
-      ]),
-    ).toThrow(/Refutes/);
+  it('rejects a line whose main path does not pass through the trigger', () => {
+    expect(() => buildOpening('x', m({ trigger: '1. e4 e5' }), [variant('main', 'line', '1. d4 d5 *')])).toThrow(
+      /trigger/,
+    );
+    expect(() => buildOpening('x', m({ trigger: '1. e5' }), [variant('main', 'line', '1. e4 *')])).toThrow(/legal/);
   });
 
-  it('rejects an Opening tag that disagrees with opening.yaml', () => {
-    const wrong = variant('main', 'line', '1. e4 *');
-    wrong.game.tags.Opening = 'Something Else';
-    expect(() => buildOpening('x', m(), [wrong])).toThrow(/does not match/);
+  it('accepts an empty trigger, which means the starting position', () => {
+    expect(() => buildOpening('x', m({ trigger: '' }), [variant('main', 'line', '1. d4 d5 *')])).not.toThrow();
+  });
+
+  it('lets an alternative line answer a position the main line already answers, and never makes it a repertoire move', () => {
+    const base = m({ lines: ['main', 'other'] });
+    const manifestWithAlternative = {
+      ...base,
+      lines: base.lines.map((line) => (line.file === 'other' ? { ...line, alternative: true } : line)),
+    };
+    const built = buildOpening('x', manifestWithAlternative, [
+      variant('main', 'line', '1. e4 e5 2. Nf3 *'),
+      variant('other', 'line', '1. e4 e5 2. Nc3 *'),
+    ]);
+    const after = built.nodes['rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -']!;
+    expect(after.moves.map((edge) => [edge.san, edge.isRepertoire])).toEqual([
+      ['Nf3', true],
+      ['Nc3', false],
+    ]);
+  });
+
+  it('refuses the same answer twice when neither line is an alternative', () => {
+    expect(() =>
+      buildOpening('x', m({ lines: ['a', 'b'] }), [
+        variant('a', 'line', '1. e4 e5 2. Nf3 *'),
+        variant('b', 'line', '1. e4 e5 2. Nc3 *'),
+      ]),
+    ).toThrow(/two repertoire moves/);
   });
 
   it('rejects two variants that comment differently on the same move', () => {
@@ -229,7 +241,7 @@ describe('buildOpening authoring errors', () => {
 
 describe('positions after a mistake of ours', () => {
   it('are shown but never become cards', () => {
-    const demo = buildOpening('d', manifest({ lines: ['main'], refutations: ['trap'] }), [
+    const demo = buildOpening('d', manifest({ lines: ['main'], traps: ['trap'] }), [
       variant('main', 'line', '1. e4 e5 2. Nf3 Nc6 *'),
       variant(
         'trap',

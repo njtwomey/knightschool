@@ -1,10 +1,11 @@
+import { manifestOf } from './test-manifest';
 import { describe, expect, it } from 'vitest';
 import { reduceAttempt, startAttempt, type Attempt, type AttemptAction } from './attempt';
 import { EASY_WITHIN_MS } from './constants';
 import { autoGrade } from './grading';
 import { parsePgn } from './pgn';
 import { createScheduler, newCard, scheduleReview } from './scheduler';
-import type { OpeningContent, OpeningManifest } from './schema/content';
+import type { OpeningContent } from './schema/content';
 import {
   cardDefinitions,
   cardId,
@@ -94,19 +95,16 @@ ${name === 'trap' ? '[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4"]' : ''}
 
 ${moves}`);
 
-const manifest: OpeningManifest = {
-  name: 'T',
-  eco: 'C20',
-  side: 'white',
-  level: 'beginner',
-  summary: 'x',
-  tags: [],
-  lines: ['main', 'side'],
-  refutations: ['trap'],
-};
+const base = manifestOf({ name: 'T', lines: ['main', 'side'], traps: ['trap'] });
+const withKinds = (side: 'sideline' | 'rare' | 'main', trap: 'for-us' | 'against-us', alternative = false) => ({
+  ...base,
+  lines: base.lines.map((line) => (line.file === 'side' ? { ...line, kind: side, alternative } : line)),
+  traps: base.traps.map((entry) => ({ ...entry, kind: trap })),
+});
+const manifest = withKinds('sideline', 'against-us');
 
-const content = (): OpeningContent =>
-  buildOpening('t', manifest, [
+const content = (m = manifest): OpeningContent =>
+  buildOpening('t', m, [
     { id: 'main', kind: 'line', game: game('1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *', 'main'), source: 'main.pgn' },
     { id: 'side', kind: 'line', game: game('1. e4 e5 2. Nf3 Nf6 3. Nxe5 *', 'side'), source: 'side.pgn' },
     {
@@ -122,6 +120,17 @@ describe('cardDefinitions', () => {
     const cards = cardDefinitions(content());
     expect(cards.map((card) => card.expectedUci)).toEqual(['e2e4', 'g1f3', 'f1c4', 'f3e5', 'f3d4']);
     expect(cards[0]!.id).toBe(cardId('t', cards[0]!.epd));
+  });
+
+  it('leaves out rare lines, alternatives and traps we spring, unless rare lines are switched on', () => {
+    const expected = (c: OpeningContent, options = {}) => cardDefinitions(c, options).map((card) => card.expectedUci);
+    expect(expected(content(withKinds('rare', 'against-us')))).toEqual(['e2e4', 'g1f3', 'f1c4', 'f3d4']);
+    expect(expected(content(withKinds('rare', 'against-us')), { includeRare: true })).toContain('f3e5');
+    // An alternative never earns a card, even with rare lines on.
+    expect(expected(content(withKinds('sideline', 'against-us', true)), { includeRare: true })).not.toContain('f3e5');
+    // A trap we spring is shown and quizzed, never drilled: its own positions earn no card.
+    expect(expected(content(withKinds('sideline', 'for-us')))).not.toContain('f3d4');
+    expect(expected(content(withKinds('sideline', 'against-us')))).toContain('f3d4');
   });
 
   it('drops a sideline whose position too few games reach, and keeps unknown popularity and the main line', () => {

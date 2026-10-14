@@ -1,0 +1,53 @@
+- id: bishop-first
+  line: 1. d4 d5 2. Bf4
+  prompt: Why does White play Bf4 before e3?
+  accept:
+    - keywords: [[bishop, f4, diagonal, c8, h2], [block, bury, shut, outside, trapped, behind]]
+      all: true
+      feedback: Yes. Once the pawn is on e3 the bishop would be shut in behind it, so it comes out first.
+    - keywords: [[block, bury, shut, trapped, outside, behind]]
+      feedback: Right. A pawn on e3 would block the bishop in.
+  reveal: The bishop wants to be outside the pawn chain. After e3 it would be stuck behind its own pawns.
+  examples:
+    match:
+      [e3 would block in the bishop, the bishop gets out before e3 shuts it in, it would be shut in behind the e3 pawn]
+    miss: [to attack the queen, castles, it controls the centre]
+- id: nh5-queen
+  line: 1. d4 d5 2. Bf4 Nf6 3. e3 Nh5
+  prompt: Black's knight attacks the bishop on f4. How does White punish it?
+  accept:
+    - keywords: [[qxh5, queen, qh5], [h5, knight, take, capture, lose]]
+      all: true
+      feedback: Yes. The queen sees h5 along the diagonal from d1, so Qxh5 wins the knight.
+    - keywords: [[qxh5]]
+      feedback: Yes. Qxh5 wins the knight for nothing.
+  reveal: With e2 empty, the queen on d1 attacks h5. The knight is undefended, so Qxh5 wins it.
+  showMove: Qxh5
+  examples:
+    match: [Qxh5, the queen takes the knight on h5, the queen captures it on h5 because nothing defends it]
+    miss: [take the bishop, move the bishop away, Bxh5]
+- id: poisoned-b2-reply
+  line: 1. d4 d5 2. Bf4 c5 3. e3 Qb6 4. Nc3 Qxb2
+  prompt: Black took the pawn on b2. Which capture with the knight wins a pawn and threatens a fork?
+  accept:
+    - keywords: [[nxd5, d5]]
+      feedback: Yes. Nxd5 threatens Nc7+ forking king and rook, and Rb1 next traps the queen.
+  reveal: 5.Nxd5 threatens Nc7+, a fork of the king and the rook on a8, while Rb1 would trap the queen on b2.
+  showMove: Nxd5
+  examples:
+    match: [Nxd5, the knight takes on d5, knight captures d5 threatening Nc7]
+    miss: [Nb5, Bxb8, take the queen]
+- id: englund-safe-block
+  line: 1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+
+  prompt: Black's queen gives check and also attacks the bishop on f4. Which piece blocks safely on d2?
+  accept:
+    - keywords: [[bd2]]
+      feedback: Yes. Bd2 blocks the check and takes the bishop out of danger at the same time.
+    - keywords: [[bishop], [d2]]
+      all: true
+      feedback: Yes. The bishop blocks on d2, which also rescues it from the queen.
+  reveal: Bd2 blocks the check and moves the attacked bishop to safety. Nbd2 or Qd2 would lose material.
+  showMove: Bd2
+  examples:
+    match: [Bd2, bishop to d2, the bishop blocks on d2]
+    miss: [Nbd2, Qd2, knight to d2]

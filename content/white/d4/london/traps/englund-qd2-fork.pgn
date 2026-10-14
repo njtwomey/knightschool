@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Englund Gambit"]
+[Variation "Englund Gambit: Main Line, Qd2 fork"]
+[ECO "A40"]
+[Character "tactical,gambit"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap,fork"]
+[Themes "b2-undefended,queen-fork"]
+[Kind "against-us"]
+
+1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Qd2? { Blocks the check with the queen, but the pawn on b2 is left with no defender. } 5... Qxb2 { Takes the pawn and forks the rook on a1 and the knight on b1. } 6. c3 6... Qxa1 7. Qc2 7... d6 *

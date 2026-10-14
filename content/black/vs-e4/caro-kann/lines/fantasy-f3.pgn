@@ -1,0 +1,19 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Fantasy Variation"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "pin-on-c3,central-break"]
+[Kind "sideline"]
+
+1. e4 c6 2. d4 d5 3. f3 e6 { Supports d5 solidly. The pawn on f3 takes the best square from White's king's knight, so White is behind in development. }
+4. Nc3 Bb4 { Pins the knight on c3 to the king and so weakens White's control of d5 and e4. }
+5. Bd3 Ne7 { Develops, and prepares ...dxe4 followed by ...Ng6 or ...O-O. If White plays a3, the bishop can take on c3 and ruin White's pawns. }
+6. Nge2 dxe4 { Opens the centre while White's king is still in the middle and White is behind in development. }
+7. fxe4 ( 7. Bxe4 O-O ) 7... e5 { Strikes at d4 before White finishes development. The central break gives Black an equal game. }
+8. Be3 ( 8. a3 Ba5 9. Be3 Nd7 ) 8... exd4 { Opens the e-file against White's king in the middle and keeps the pieces active. }
+9. Nxd4 O-O { King safe. The bishop on b4 and the knight on e7 are well placed. } 10. O-O Nd7 { Develops the last minor piece. The position is balanced. Black's plan: put a rook on the e-file, aim a knight at e5 and trade pieces. If White varies, castle and use the e-file. }
+*

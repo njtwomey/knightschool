@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence: Advance Variation"]
+[Variation "Early Bd3"]
+[ECO "B12"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-trade"]
+[Refutes "1. e4 c6 2. d4 d5 3. e5 Bf5 4. Bd3"]
+[Kind "against-us"]
+
+1. e4 c6 2. d4 d5 3. e5 Bf5 4. Bd3?! { Looks natural, but ...Bxd3 trades off Black's problem piece for White's good one. The right move is 4.Nf3. } 4... Bxd3 5. Qxd3 e6 { Black has swapped away the bishop that e5 was cramping, and can now break with ...c5 and ...Nc6 in comfort. } *

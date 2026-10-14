@@ -1,0 +1,47 @@
+- id: bg5-pin
+  line: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5
+  prompt: What is the bishop on g5 doing to the knight on f6?
+  accept:
+    - keywords: [[pin]]
+      feedback: Yes. The knight on f6 is pinned to the queen on d8.
+  reveal: The bishop pins the knight on f6 to the queen on d8, so the knight cannot move without losing the queen.
+  examples:
+    match: [it pins the knight, the knight is pinned to the queen]
+    miss: [it attacks the king, it is protected]
+- id: elephant-trap
+  line: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. cxd5 exd5 6. Nxd5
+  prompt: White just took a pawn on d5. Why is that a mistake?
+  accept:
+    - keywords: [[bb4, check, bishop], [queen, bxd8, d8, piece, lose]]
+      all: true
+      feedback: Yes. After 6...Nxd5 7.Bxd8 Bb4+ White's queen is lost and Black wins a piece.
+    - keywords: [[nxd5, pinned, pin, knight]]
+      partial: true
+      feedback: 'Close. Taking the knight is only the start: 7.Bxd8 Bb4+ wins White a piece.'
+  reveal: 6...Nxd5! 7.Bxd8 Bb4+ and White loses the queen for only a bishop, so Black ends up a piece ahead.
+  showMove: Nxd5
+  examples:
+    match: [Bb4 check wins the queen, Black plays Bb4 and White loses the queen]
+    miss: [it attacks the king, castles]
+- id: cambridge-bd3
+  line: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. Nf3 c6 6. e3 Qa5 7. Nd2 Bb4 8. Qc2 O-O 9. Bd3
+  prompt: White just played Bd3. Which Black move wins a piece?
+  accept:
+    - keywords: [[dxc4, c4]]
+      feedback: Yes. 9...dxc4 hits the bishop on d3 and opens the fifth rank, so the queen on a5 attacks the loose bishop on g5.
+  reveal: 9...dxc4! attacks the bishop on d3 and opens the fifth rank. Whichever way White recaptures, ...Qxg5 takes the bishop on g5.
+  showMove: dxc4
+  examples:
+    match: [dxc4, pawn takes on c4, Black plays dxc4 hitting the bishop]
+    miss: [Bxc3, Qxg5, castles]
+- id: catalan-a6
+  line: 1. d4 d5 2. c4 e6 3. g3 Nf6 4. Bg2 Be7 5. Nf3 O-O 6. O-O dxc4 7. Qc2
+  prompt: Black is a pawn up. What does 7...a6 get ready, so the pawn on c4 can be kept?
+  accept:
+    - keywords: [[b5]]
+      feedback: Yes. ...a6 prepares ...b5, a pawn that holds the pawn on c4 and stops the queen retaking it.
+  reveal: ...a6 prepares ...b5. With pawns on b5 and c4 White's queen cannot take on c4 without losing a pawn, and the bishop on b7 will follow.
+  showMove: a6
+  examples:
+    match: [it prepares b5, so that b5 can hold the pawn, b5 to keep the extra pawn]
+    miss: [it develops the bishop, castles, it pins the knight]

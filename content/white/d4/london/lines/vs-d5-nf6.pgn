@@ -1,0 +1,24 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Accelerated London System"]
+[ECO "D00"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-outside,e5-outpost,kingside-attack"]
+[Kind "main"]
+
+1. d4 d5 2. Bf4 { The bishop comes out before e3 is played, so it is never shut in behind its own pawns. } 2... Nf6
+3. e3 { Supports d4 and opens the other bishop. The c1 bishop is already outside the pawn chain, so this costs nothing. } 3... e6
+(3... c5 4. Nd2 e6 5. c3 Nc6 6. Ngf3)
+(3... Bf5 4. Nf3 e6 5. c4)
+4. Nd2 { Heads for f3 and leaves the c-pawn free to support d4. It also sets a small trap: if Black's knight jumps to h5 to hit the bishop, Qxh5 wins it. } 4... c5
+(4... Bd6 5. Bg3 { The bishop steps back to g3. If Black trades on g3, the h-pawn recaptures and the h-file opens for later. } 5... O-O 6. Ngf3 c5 7. c3 Nc6 8. Bd3)
+5. c3 { Backs up d4, so after ...cxd4 White recaptures with a solid centre and nothing hangs. } 5... Nc6
+(5... Qb6 6. Qb3 { Offers a queen trade, which removes the attacker of b2. If Black avoids it with ...c4, Qxb6 axb6 leaves doubled b-pawns. } 6... Nc6 7. Ngf3)
+6. Ngf3 6... Bd6
+7. Bg3 { Keeps the bishop instead of trading it. From g3 it still eyes the e5 square, and a trade on g3 would open the h-file for White. } 7... O-O
+8. Bd3 { Points at h7 and clears the back rank so White can castle. } 8... b6
+9. Ne5 { The knight can sit here for good: the d4 pawn supports it and no black pawn can kick it away. } 9... Bb7
+10. O-O { Castle before starting the attack. Next come f4 and Qf3 or Qe2, with the knight on e5 as the anchor. When Black leaves the book, aim for Ne5, f4 and a kingside attack. } *

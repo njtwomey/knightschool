@@ -1,7 +1,7 @@
+import { manifestOf } from './test-manifest';
 import { describe, expect, it } from 'vitest';
 import { chooseReply, expectedMove, nextBranchMove } from './branches';
 import { parsePgn } from './pgn';
-import type { OpeningManifest } from './schema/content';
 import { buildOpening, RESERVED_LINE_ID } from './tree';
 
 const game = (variation: string, moves: string) =>
@@ -16,17 +16,8 @@ const game = (variation: string, moves: string) =>
 
 ${moves}`);
 
-const manifest = (over: Partial<OpeningManifest> = {}): OpeningManifest => ({
-  name: 'T',
-  eco: 'B12',
-  side: 'white',
-  level: 'beginner',
-  summary: 'x',
-  tags: [],
-  lines: ['main', 'side'],
-  refutations: [],
-  ...over,
-});
+const manifest = (over: Parameters<typeof manifestOf>[0] = {}) =>
+  manifestOf({ name: 'T', eco: 'B12', lines: ['main', 'side'], ...over });
 
 // White's answer to 1...c6 is 2. Nc3 against everything; Black may play 2...d5 (main line) or 2...e5.
 const content = buildOpening('t', manifest(), [

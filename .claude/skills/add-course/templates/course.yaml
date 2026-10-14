@@ -1,0 +1,20 @@
+name: Vienna Game # quote it if it has a colon
+eco: C25 # optional
+side: white # the learner's side: it must match the white/ or black/ folder
+opening: vienna-game # an id from content/openings.yaml (add one if the opening is new: report it, do not edit the file)
+tier: 2 # 1 study first, 2 next, 3 alternatives and rare replies
+trigger: '1. e4 e5 2. Nc3' # every line passes through this position
+summary: >-
+  Two plain sentences: what the course does, and what the learner will practise.
+plans:
+  - A plan a 1200 can act on when the opponent leaves the book.
+motifs: [fork] # ids from content/motifs.yaml
+tags: [e4, open]
+lines: # teaching order; the first is the main line
+  - file: main-line
+    opponent: '2...Nf6' # what the opponent does to arrive here
+    kind: main # main | sideline | rare | gambit
+traps: # or []
+  - file: greedy-nxe4
+    opponent: '3...Nxe4'
+    kind: for-us # for-us: we spring it; against-us: we must not fall for it

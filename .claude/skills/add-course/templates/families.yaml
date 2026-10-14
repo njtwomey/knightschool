@@ -1,6 +1,0 @@
-# One entry for content/families.yaml (the coordinator adds it; do not edit that file yourself when told to report).
-- id: vienna-game # kebab-case; the same string as `family:` in each course's opening.yaml
-  name: Vienna Game
-  eco: C25-C29 # optional, 'C25' or 'C25-C29'
-  summary: One or two plain sentences about the opening from both sides.
-  moves: 1. e4 e5 2. Nc3 # SAN to the defining position (legal, from move 1)

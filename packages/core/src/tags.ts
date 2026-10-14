@@ -15,6 +15,7 @@ export const KNOWN_TAGS = [
   'Refutes',
   'RefutedBy',
   'Themes',
+  'Kind',
 ] as const;
 
 const list = (value: string | undefined) =>
@@ -25,7 +26,7 @@ const list = (value: string | undefined) =>
         .map((item) => item.trim())
         .filter(Boolean);
 
-export type VariantHeader = { name: string; eco: string; opening: string; tags: VariantTags };
+export type VariantHeader = { name: string; eco: string; opening: string; tags: VariantTags; kind?: string };
 
 /** Turns the raw PGN header into validated variant metadata. Throws an Error naming `source` on any problem. */
 export function parseVariantHeader(raw: Record<string, string>, source: string): VariantHeader {
@@ -76,5 +77,5 @@ export function parseVariantHeader(raw: Record<string, string>, source: string):
   if (problems.length || !parsed.success) {
     throw new Error(`${source}: ${problems.join('; ')}`);
   }
-  return { name: raw.Variation!, eco: raw.ECO!, opening: raw.Opening!, tags: parsed.data };
+  return { name: raw.Variation!, eco: raw.ECO!, opening: raw.Opening!, tags: parsed.data, kind: raw.Kind };
 }

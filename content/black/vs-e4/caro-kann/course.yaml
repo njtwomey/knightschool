@@ -1,0 +1,69 @@
+name: Caro-Kann Defence
+eco: B10
+side: black
+opening: caro-kann-defence
+tier: 3
+trigger: '1. e4 c6'
+summary: >-
+  A solid reply to 1.e4: the c6 pawn backs up ...d5, and Black's light-squared bishop gets out before ...e6 can shut it in.
+  Learn one set-up against each way White can meet it, from the Advance and Exchange to the odd second moves.
+plans:
+  - Play ...d5 on the next move, and take the bishop out to f5 or g4 before you play ...e6.
+  - Against the Advance (e5), hit the base of the chain with ...c5 and develop quietly.
+  - Against the Exchange, put the queen on c7 and trade the light bishops; Black has no weaknesses.
+  - Check every White move that attacks something for a free piece before you reply.
+motifs: [good-bishop-out, attack-the-base, smothered-mate, isolated-queens-pawn, counting, hanging-piece]
+tags: [e4, semi-open, solid]
+lines:
+  - file: advance-short
+    opponent: '3.e5'
+    kind: main
+  - file: advance-h4
+    opponent: '4.h4'
+    kind: sideline
+  - file: advance-nc3
+    opponent: '4.Nc3'
+    kind: sideline
+  - file: advance-g4
+    opponent: '4.g4'
+    kind: rare
+  - file: exchange
+    opponent: '3.exd5'
+    kind: main
+  - file: classical
+    opponent: '3.Nc3'
+    kind: main
+  - file: panov-attack
+    opponent: '4.c4'
+    kind: sideline
+  - file: two-knights
+    opponent: '2.Nc3'
+    kind: sideline
+  - file: fantasy-f3
+    opponent: '3.f3'
+    kind: sideline
+  - file: king-indian-attack
+    opponent: '2.d3'
+    kind: sideline
+  - file: accelerated-panov
+    opponent: '2.c4'
+    kind: sideline
+  - file: hillbilly
+    opponent: '2.Bc4'
+    kind: rare
+traps:
+  - file: classical-smothered-mate
+    opponent: '5.Qe2'
+    kind: against-us
+  - file: exchange-qb3-pressure
+    opponent: '6.Bf4'
+    kind: against-us
+  - file: exchange-bf4-blunder
+    opponent: '6.Bf4'
+    kind: for-us
+  - file: hillbilly-bxd5
+    opponent: '3.Bxd5'
+    kind: for-us
+  - file: hillbilly-qh5
+    opponent: '4.Qh5'
+    kind: for-us

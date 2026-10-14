@@ -159,7 +159,7 @@ export function GuessPage() {
                 {question.sources.slice(0, 8).map((source) => (
                   <li key={`${source.course}/${source.line}`}>
                     <Button asChild variant="outline" size="sm">
-                      <a href={to(`/opening/${source.family}`) + buildHash({ c: source.course, v: source.line })}>
+                      <a href={to(`/course/${source.course}`) + buildHash({ v: source.line })}>
                         {source.name}
                         {source.trap && (
                           <Badge variant="secondary" className="px-1.5 py-0 text-[11px]">

@@ -3,9 +3,11 @@ import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state'
 
 describe('openings hash state', () => {
   it('is the default state with an empty hash', () => {
-    expect(filterFromHash({})).toEqual({ query: '', role: 'all', side: 'all', scope: 'all' });
+    expect(filterFromHash({})).toEqual({ query: '', role: 'all', side: 'all', tier: 'all', scope: 'all' });
     expect(boardQueryFromHash({})).toEqual({ played: [], kind: 'both' });
-    expect(hashFromState({ query: '', role: 'all', side: 'all', scope: 'all' }, { played: [], kind: 'both' })).toEqual({
+    expect(
+      hashFromState({ query: '', role: 'all', side: 'all', tier: 'all', scope: 'all' }, { played: [], kind: 'both' }),
+    ).toEqual({
       q: undefined,
       role: undefined,
       side: undefined,
@@ -19,6 +21,7 @@ describe('openings hash state', () => {
       query: 'two knights',
       role: 'against' as const,
       side: 'white' as const,
+      tier: 2 as const,
       scope: 'lines' as const,
     };
     const query = boardQueryFromHash({ bm: 'e2e4.c7c6.b1c3', bk: 'lines' });
@@ -34,6 +37,7 @@ describe('openings hash state', () => {
       query: '',
       role: 'all',
       side: 'all',
+      tier: 'all',
       scope: 'all',
     });
     expect(boardQueryFromHash({ bm: 'e2e4.e2e4.e7e5', bk: 'nope' })).toMatchObject({ kind: 'both' });

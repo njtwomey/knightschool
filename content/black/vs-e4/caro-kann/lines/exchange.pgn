@@ -1,0 +1,21 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Exchange Variation"]
+[ECO "B13"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-trade,solid-centre"]
+[Kind "main"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 { Recapturing with the c-pawn keeps the centre even and opens the c-file for Black's rooks. }
+4. Bd3 ( 4. Nc3 Nf6 5. Bf4 Bg4 6. f3 Bd7 ) ( 4. Nf3 Nc6 5. Bb5 e6 6. O-O Bd6 ) ( 4. c4 Nf6 )
+4... Nc6 { Develops with pressure on d4, the pawn White needs for a grip on the centre. }
+5. c3 ( 5. Nf3 Bg4 6. c3 Qc7 7. Nbd2 Nf6 )
+5... Qc7 { Aims at the bishop on d3 and the h2 pawn, and stops Bf4: White's bishop would hang to the queen. }
+6. Ne2 Bg4 { Gets the bishop out before ...e6 shuts it in, and it eyes the knight on e2, which guards the d4 pawn. }
+7. O-O e6 { Supports d5 and opens a path for the f8 bishop. } 8. f3 Bh5 { Keeps the bishop alive: from h5 it can swing to g6 and trade White's good bishop. }
+9. Nd2 Nf6 { Brings the last knight out, so Black is fully developed. }
+10. Nb3 Bd6 { Eyes the kingside. Black's plan: trade the light bishops with ...Bg6, castle, and play for a safe, equal position. If White leaves the book, castle and aim at d4 with the pieces. }
+*

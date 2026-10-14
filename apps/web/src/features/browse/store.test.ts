@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { buildOpening, continueLine, parsePgn } from '@knightschool/core';
+import { testManifest } from '@/test-manifest';
 import { currentEpd, useBrowse } from './store';
 
 const game = parsePgn(`[Event "x"]
@@ -13,11 +14,7 @@ const game = parsePgn(`[Event "x"]
 
 1. e4 e5 2. Nf3 *`);
 
-const content = buildOpening(
-  't',
-  { name: 'T', eco: 'C20', side: 'white', level: 'beginner', summary: 'x', tags: [], lines: ['main'], refutations: [] },
-  [{ id: 'main', kind: 'line', game, source: 'main.pgn' }],
-);
+const content = buildOpening('t', testManifest(), [{ id: 'main', kind: 'line', game, source: 'main.pgn' }]);
 
 const san = () => useBrowse.getState().path.map((edge) => edge.san);
 

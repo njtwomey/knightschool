@@ -1,4 +1,4 @@
-import type { Family, OpeningIndexEntry } from './schema/content';
+import type { OpeningIndexEntry } from './schema/content';
 import type { SearchIndex } from './search';
 import { searchAt } from './search';
 
@@ -40,19 +40,11 @@ function covers(answer: Set<string>, name: string): boolean {
   return needed.length > 0 && needed.every((word) => answer.has(word));
 }
 
-/** The course name without its opening prefix: "Caro-Kann: Advance Variation" is the Advance Variation. */
-const shortName = (name: string) => name.replace(/^[^:]+: /, '');
-
 /**
  * The right answers for a position, from what the courses say about it. Transpositions count: every course whose
- * lines pass through the position contributes its opening and the names of its lines that do.
+ * lines pass through the position contributes its name and the names of its lines that do.
  */
-export function guessTargets(
-  index: SearchIndex,
-  epd: string,
-  courses: OpeningIndexEntry[],
-  families: Family[],
-): GuessTargets {
+export function guessTargets(index: SearchIndex, epd: string, courses: OpeningIndexEntry[]): GuessTargets {
   const found = searchAt(index, epd, 'both');
   const openings = new Set<string>();
   const variations = new Set<string>();
@@ -60,14 +52,10 @@ export function guessTargets(
   for (const hit of found.lines) {
     const course = courses.find((candidate) => candidate.id === hit.course);
     if (!course) continue;
-    const family = families.find((candidate) => candidate.id === (course.family ?? course.id));
-    openings.add(family?.name ?? course.name);
-    if (!course.motif) variations.add(shortName(course.name));
-    if (course.motif) openings.add(course.name);
+    openings.add(course.name);
     const line = course.lines.find((candidate) => candidate.id === hit.line);
     if (line) variations.add(line.name);
   }
-  // A course whose name repeats its opening adds nothing as a "variation".
   for (const name of openings) variations.delete(name);
   return { openings: [...openings], variations: [...variations] };
 }
@@ -107,11 +95,10 @@ export function gradeGuess(answer: string, targets: GuessTargets): { result: Gue
 }
 
 /** Every name worth suggesting while typing: openings, courses and variations, once each. */
-export function guessSuggestions(courses: OpeningIndexEntry[], families: Family[]): string[] {
+export function guessSuggestions(courses: OpeningIndexEntry[]): string[] {
   const names = new Set<string>();
-  for (const family of families) names.add(family.name);
   for (const course of courses) {
-    names.add(shortName(course.name));
+    names.add(course.name);
     for (const line of course.lines) names.add(line.name);
   }
   return [...names].sort((a, b) => a.localeCompare(b));

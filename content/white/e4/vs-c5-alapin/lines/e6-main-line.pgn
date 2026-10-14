@@ -1,0 +1,29 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Exchange Line"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "isolated-pawn,blockade,d4-break"]
+[Kind "main"]
+
+1. e4 c5
+2. c3
+2... e6
+3. d4 { Takes the centre. If Black takes on d4, the c-pawn recaptures. }
+3... d5
+(3... cxd4 4. cxd4 d5 5. exd5 exd5 6. Nf3)
+(3... Nf6 4. e5 Nd5 5. Nf3 cxd4 (5... Nc6 6. c4 Ndb4 7. dxc5) 6. cxd4 d6 7. Bc4 Be7 8. O-O)
+4. exd5 { Trades Black's centre pawn for ours and leaves Black with an isolated pawn on d5 if the c-pawn is later exchanged. The e-file opens for White's pieces. }
+4... exd5
+(4... Qxd5 5. Nf3 Nc6 6. Be3)
+5. Nf3 { Develops and guards d4. }
+5... Nc6
+6. Bb5 { Pins the knight on c6 to the king and adds pressure to d4's attacker, so Black has to spend time on the pawn. }
+6... Bd6
+7. O-O Nge7
+8. dxc5 { Trades the d-pawn for the c-pawn and leaves Black with the lone d5 pawn to look after. The bishop has to move again. }
+8... Bxc5
+9. Nbd2 { Plan: Nb3 to chase the bishop, then a bishop on f4 or g5 and a knight on d4. The d5 pawn is a target, and the square in front of it, d4, is a perfect outpost for a White knight. } *

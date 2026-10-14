@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Accelerated London System, Nh5 trick"]
+[ECO "D00"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Refutes "1. d4 d5 2. Bf4 Nf6 3. e3 Nh5"]
+[Themes "queen-diagonal,knight-on-the-rim"]
+[Kind "for-us"]
+
+1. d4 d5 2. Bf4 Nf6 3. e3 Nh5? { Black hopes to win the bishop pair by taking on f4, but the knight on h5 is loose. } 4. Qxh5 { The queen sees h5 along the diagonal d1-h5, since e2 is empty. Black has dropped a whole knight for nothing. } 4... c6 5. Nd2 *

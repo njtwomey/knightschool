@@ -21,7 +21,8 @@
     "db:generate": "pnpm --filter @knightschool/storage db:generate",
     "engine:copy": "tsx scripts/copy-engine.ts",
     "course:eval": "tsx scripts/course-eval.ts",
-    "analyse": "tsx scripts/analyse.ts"
+    "analyse": "tsx scripts/analyse.ts",
+    "popularity": "tsx --env-file-if-exists=.env scripts/popularity.ts"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Blackburne-Kloosterboer Gambit"]
+[ECO "B01"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "extra-pawn,quick-development"]
+[Kind "rare"]
+
+1. e4 d5 2. exd5 c6 { Offers a pawn for quick development. } 3. dxc6 { Takes it. Black gets quick development in return, so White should finish developing before worrying about the pawn. } 3... Nxc6 4. Nf3 e5 5. Bb5 { Pins the c6 knight against the king and develops. Plan: castle, and give the pawn back only when it helps development. } *

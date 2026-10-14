@@ -9,10 +9,12 @@ import {
   OpeningContent,
   type Annotation,
   type LineEdge,
+  type LineKind,
   type LineNode,
   type OpeningManifest,
   type Quiz,
   type QuizEntry,
+  type TrapKind,
   type Variant,
 } from './schema/content';
 
@@ -49,7 +51,7 @@ function mergeAnnotation(a: Annotation | undefined, b: Annotation | undefined, w
 }
 
 /**
- * Builds one opening's tree from its manifest and variant files. Positions are keyed by EPD, so a variant that
+ * Builds one course's tree from its manifest and variant files. Positions are keyed by EPD, so a variant that
  * transposes into another shares its nodes. Throws an Error naming the file at the first authoring problem.
  */
 export function buildOpening(
@@ -58,26 +60,40 @@ export function buildOpening(
   variants: VariantSource[],
   quizEntries: QuizEntry[] = [],
 ): OpeningContent {
-  const listed = [...manifest.lines, ...manifest.refutations];
+  const lineIds = manifest.lines.map((line) => line.file);
+  const trapIds = manifest.traps.map((trap) => trap.file);
+  const listed = [...lineIds, ...trapIds];
   if (listed.includes(RESERVED_LINE_ID))
     throw new Error(`${id}: "${RESERVED_LINE_ID}" is reserved (it means every branch) and cannot be a line id`);
   const byId = new Map(variants.map((variant) => [variant.id, variant]));
   if (new Set(listed).size !== listed.length)
-    throw new Error(`${id}: variant ids must be unique across lines and refutations`);
+    throw new Error(`${id}: file names must be unique across lines/ and traps/`);
   for (const variantId of listed)
-    if (!byId.has(variantId)) throw new Error(`${id}: opening.yaml lists "${variantId}" but no such file exists`);
+    if (!byId.has(variantId)) throw new Error(`${id}: course.yaml lists "${variantId}" but no such file exists`);
   for (const variant of variants)
-    if (!listed.includes(variant.id)) throw new Error(`${variant.source}: not listed in ${id}/opening.yaml`);
-  for (const variantId of manifest.lines)
+    if (!listed.includes(variant.id)) throw new Error(`${variant.source}: not listed in ${id}/course.yaml`);
+  for (const variantId of lineIds)
     if (byId.get(variantId)!.kind !== 'line')
-      throw new Error(`${id}: "${variantId}" is under refutations/ but listed as a line`);
-  for (const variantId of manifest.refutations)
+      throw new Error(`${id}: "${variantId}" is under traps/ but listed as a line`);
+  for (const variantId of trapIds)
     if (byId.get(variantId)!.kind !== 'refutation')
-      throw new Error(`${id}: "${variantId}" is under lines/ but listed as a refutation`);
+      throw new Error(`${id}: "${variantId}" is under lines/ but listed as a trap`);
+  let triggerEpd: string;
+  try {
+    triggerEpd = epdAfterPgn(manifest.trigger);
+  } catch {
+    throw new Error(`${id}: the trigger "${manifest.trigger}" is not a legal sequence of moves from the start`);
+  }
+  const listing = new Map<string, { opponent: string; weight?: LineKind; whose?: TrapKind; alternative: boolean }>();
+  for (const line of manifest.lines)
+    listing.set(line.file, { opponent: line.opponent, weight: line.kind, alternative: line.alternative });
+  for (const trap of manifest.traps)
+    listing.set(trap.file, { opponent: trap.opponent, whose: trap.kind, alternative: false });
 
   const ourSide = manifest.side;
   const nodes = new Map<string, MutableNode>();
   const mainLine = new Set<string>(); // `${from}>${san}` for the main line of the first line
+  const alternativeIds = new Set(manifest.lines.filter((line) => line.alternative).map((line) => line.file));
   const metas: Variant[] = [];
 
   const nodeAt = (epd: string, ply: number): MutableNode => {
@@ -96,16 +112,15 @@ export function buildOpening(
   for (const variantId of listed) {
     const variant = byId.get(variantId)!;
     const header = parseVariantHeader(variant.game.tags, variant.source);
-    if (header.opening !== manifest.name) {
+    const declared = listing.get(variantId)!;
+    const expectedKind = declared.weight ?? declared.whose;
+    if (header.kind !== undefined && header.kind !== expectedKind) {
       throw new Error(
-        `${variant.source}: [Opening "${header.opening}"] does not match opening.yaml name "${manifest.name}"`,
+        `${variant.source}: [Kind "${header.kind}"] does not match course.yaml, which says ${expectedKind}`,
       );
     }
-    if (variant.kind === 'refutation' && !header.tags.refutes) {
-      throw new Error(`${variant.source}: refutations need a [Refutes] tag`);
-    }
     const mainUcis: string[] = [];
-    const isFirstLine = variantId === manifest.lines[0];
+    const isFirstLine = variantId === lineIds[0];
 
     const walk = (startEpd: string, startPly: number, moves: PgnMoveNode[], onMain: boolean) => {
       let epd = startEpd;
@@ -144,6 +159,17 @@ export function buildOpening(
       });
     };
     walk(START_EPD, 0, variant.game.moves, true);
+    // Every line of a course passes through its trigger position: that is what makes it one course.
+    let walked = START_EPD;
+    const path = [walked];
+    for (const uci of mainUcis) {
+      walked = nodes.get(walked)!.moves.find((edge) => edge.uci === uci)!.to;
+      path.push(walked);
+    }
+    if (!path.includes(triggerEpd)) {
+      throw new Error(`${variant.source}: the main line does not pass through the trigger "${manifest.trigger}"`);
+    }
+    const listed_ = listing.get(variantId)!;
     metas.push({
       id: variantId,
       kind: variant.kind,
@@ -151,6 +177,10 @@ export function buildOpening(
       eco: header.eco,
       tags: header.tags,
       mainLine: mainUcis,
+      opponent: listed_.opponent,
+      weight: listed_.weight,
+      whose: listed_.whose,
+      alternative: listed_.alternative,
     });
   }
 
@@ -172,7 +202,12 @@ export function buildOpening(
   for (const node of nodes.values()) {
     for (const edge of node.moves) edge.isMainLine = mainLine.has(`${node.epd}>${edge.uci}`);
     if (!node.isOurTurn || node.moves.length === 0 || !clean.has(node.epd)) continue;
-    const good = node.moves.filter((edge) => !edge.annotation?.nag.some((nag) => BAD_NAGS.has(nag)));
+    const good = node.moves.filter(
+      (edge) =>
+        !edge.annotation?.nag.some((nag) => BAD_NAGS.has(nag)) &&
+        // An alternative answer is shown but is not the repertoire: another line already answers this position.
+        ![...edge.variants].every((variantId) => alternativeIds.has(variantId)),
+    );
     if (good.length > 1) {
       const names = good.map((edge) => `${edge.san} (${[...edge.variants].join(', ')})`).join(' vs ');
       throw new Error(`${id}: two repertoire moves for the same position ${node.epd}: ${names}. Mark the wrong one ?`);
@@ -189,12 +224,14 @@ export function buildOpening(
     name: manifest.name,
     eco: manifest.eco,
     side: manifest.side,
-    level: manifest.level,
+    opening: manifest.opening,
+    tier: manifest.tier,
+    trigger: manifest.trigger,
+    triggerEpd,
     summary: manifest.summary,
+    plans: manifest.plans,
+    motifs: manifest.motifs,
     tags: manifest.tags,
-    family: manifest.family,
-    against: manifest.against,
-    motif: manifest.motif,
     rootEpd: START_EPD,
     variants: metas,
   });

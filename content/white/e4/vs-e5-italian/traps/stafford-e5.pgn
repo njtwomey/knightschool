@@ -1,0 +1,13 @@
+[Event "Knight School"]
+[Opening "Petrov's Defense"]
+[Variation "Petrov's Defense: Stafford Gambit Accepted"]
+[ECO "C42"]
+[Character "sharp"]
+[Risk "high"]
+[EarlyMate "black"]
+[Tricks "trap,mate-threat"]
+[Themes "f2-attack"]
+[Refutes "1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nc6?! 4. Nxc6 dxc6 5. e5"]
+[Kind "against-us"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nc6?! 4. Nxc6 dxc6 5. e5?! { Chases the knight, but gives Black a free hand against f2 and the e4 square. 5.d3 keeps things safe. } 5... Ne4 { The knight is well placed here and White cannot easily remove it. } 6. d3?? { Hits the knight, but ignores the real danger. } 6... Bc5 { Now f2 is attacked and White's king is exposed. Taking the knight with dxe4 loses to ...Bxf2+ and ...Qxd1, so White is lost either way. } 7. Be3 Bxe3 8. fxe3 Qh4+ 9. g3 Nxg3 10. hxg3 Qxh1 *

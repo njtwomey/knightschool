@@ -1,0 +1,25 @@
+[Event "Knight School"]
+[Opening "King's Gambit"]
+[Variation "King's Gambit Declined: Classical Defence"]
+[ECO "C30"]
+[Character "solid,sharp"]
+[Risk "medium"]
+[EarlyMate "both"]
+[Tricks "trap"]
+[Themes "bishop-c5,centre-pawns"]
+[Kind "gambit"]
+
+1. e4 e5 2. f4 { The King's Gambit. White offers a pawn to drag Black's e-pawn away and open the f-file for an attack. }
+2... Bc5 { Declines the pawn and develops. The bishop eyes f2 and sets a trap: if White takes on e5, ...Qh4+ wins at once. }
+3. Nf3 { Guards h4, so ...Qh4+ no longer works, and attacks e5. }
+3... d6 { Protects e5 and opens the bishop on c8. }
+4. c3 { Prepares d4 to take the whole centre. }
+( 4. Bc4 Nf6 5. d3 Nc6 )
+( 4. Nc3 Nf6 5. Bc4 Nc6 )
+4... Nf6 { Attacks e4 and develops. If White plays d4, Black takes and the bishop steps back to b6. }
+5. d4 ( 5. fxe5 dxe5 6. Nxe5 Qe7 7. d4 Bd6 )
+5... exd4 6. cxd4 Bb6 { Keeps the bishop on the diagonal aimed at d4 and out of reach of any pawn push. }
+7. Nc3 O-O { The king is safe and the rook joins the game. }
+8. Bd3 ( 8. e5 Ng4 9. h3 Nh6 )
+8... Nc6 { Adds a second attacker to d4, which White must keep guarding. }
+9. Bc2 Re8 { The rook eyes e4, which White has to keep guarded. } 10. O-O Bg4 { Pins the knight on f3 to the queen, so d4 loses a guard. Black's plan: keep piling up on d4 and use the rook on e8 against e4. } *

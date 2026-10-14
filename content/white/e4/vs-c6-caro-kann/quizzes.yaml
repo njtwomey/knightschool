@@ -1,0 +1,59 @@
+- id: no-bd3
+  line: 1. e4 c6 2. d4 d5 3. e5 Bf5
+  prompt: 'Why does White avoid 4.Bd3 here?'
+  accept:
+    - keywords: [[trade, swap, exchange, bxd3, remove, bishop, bishops], [bad, problem, cramped, good, free, helps]]
+      all: true
+      feedback: Yes. Black happily trades off the bishop that was cramped by e5, and White gives up its own good bishop.
+    - keywords: [[trade, swap, exchange, bxd3]]
+      feedback: Yes. After ...Bxd3 Black has solved its problem bishop for free.
+  reveal: After 4.Bd3 Bxd3 5.Qxd3 Black has traded off its cramped bishop and White has lost a good one. Play 4.Nf3 and keep the bishops.
+  showMove: Nf3
+  examples:
+    match:
+      - Black trades the bishops with Bxd3
+      - it lets Black swap off the bad bishop
+      - Black can exchange the bishop for free
+    miss:
+      - it loses a pawn
+      - it develops a piece
+      - not sure
+- id: count-b2
+  line: 1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 c5 6. O-O Qb6 7. Be3
+  prompt: 'White just moved the bishop from c1. What can Black take now?'
+  accept:
+    - keywords: [[b2], [pawn, queen, qxb2, take, win]]
+      all: true
+      feedback: Yes. The bishop on c1 was the only guard of b2, so ...Qxb2 wins a pawn.
+    - keywords: [[b2, qxb2]]
+      feedback: Yes. b2 has lost its only guard.
+  reveal: The bishop on c1 guarded b2. Once it moves to e3, Black's queen takes the pawn on b2 for free. Count the guards before moving one.
+  showMove: Qxb2
+  examples:
+    match:
+      - the pawn on b2
+      - Qxb2 wins a pawn
+      - black takes b2 with the queen
+    miss:
+      - the pawn on d4
+      - nothing
+      - it gives check
+- id: d4-guards
+  line: 1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 c5 6. O-O Nc6 7. c3
+  prompt: 'What does 7.c3 do for the d4 pawn?'
+  accept:
+    - keywords: [[d4], [defend, support, twice, again, second, extra]]
+      all: true
+      feedback: Yes. d4 was attacked by the pawn on c5 and the knight on c6, so it needed a second guard besides the knight on f3.
+    - keywords: [[defend, support]]
+      feedback: Yes. c3 guards d4 so Black cannot win it.
+  reveal: Black's pawn and knight both hit d4. The knight on f3 guarded it once; the pawn on c3 guards it a second time, so ...cxd4 and ...Nxd4 win nothing.
+  examples:
+    match:
+      - it defends d4 a second time
+      - protects the pawn on d4
+      - supports d4 so black cannot take it
+    miss:
+      - it attacks the bishop
+      - it opens the c file
+      - castles

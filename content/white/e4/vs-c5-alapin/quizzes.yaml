@@ -1,0 +1,44 @@
+- id: knight-retreat-d5
+  line: 1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. Nf3 Nc6 6. cxd4 Nb6
+  prompt: 'Black retreated the knight to b6 without playing ...d6. Which pawn move punishes it?'
+  accept:
+    - keywords: [[d5]]
+      feedback: Yes. 7.d5 attacks the knight on c6. If it takes on e5, the knight on f3 takes it back and White is a piece up.
+  reveal: 7.d5 attacks the knight on c6. It cannot take on e5 safely, so it has to run and Black loses material.
+  showMove: d5
+  examples:
+    match: [d5, play d5, push the pawn to d5]
+    miss: [take on b6, castle, it attacks the queen, no idea]
+- id: pinned-c6-fork
+  line: 1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. Nf3 Nc6 6. cxd4 d6 7. Bc4 Nb6 8. Bb5 dxe5 9. Nxe5 e6 10. Nxc6 bxc6
+  prompt: 'Black took back on c6 with the pawn. What does White win next?'
+  accept:
+    - keywords: [[rook, a8, exchange]]
+      feedback: Yes. Bxc6+ is check, and when the king moves the bishop takes the rook on a8.
+  reveal: Bxc6+ gives check and attacks the rook on a8. Black must answer the check, then the bishop takes the rook.
+  showMove: Bxc6+
+  examples:
+    match: [the rook on a8, it wins the rook, it forks the king and the rook]
+    miss: [the queen, a pawn, no idea, the knight]
+- id: c4-drops-d4
+  line: 1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. d4 Nf6
+  prompt: 'White is tempted by 5.c4, hitting the queen. Why does it lose a pawn?'
+  accept:
+    - keywords: [[d4], [defend, lose, c3, guard]]
+      all: true
+      feedback: Yes. The c3 pawn is what guards d4. Once it moves to c4, the queen takes d4 for free.
+  reveal: The pawn on c3 guards d4. After c4 the queen simply takes d4, and White gets nothing for the pawn.
+  examples:
+    match: [it leaves d4 undefended, the c3 pawn guards d4, d4 hangs to the queen]
+    miss: [it blocks the bishop, it attacks the queen, no idea, the pawn is too slow]
+- id: bc4-undefended-knight
+  line: 1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. Nf3 Nc6 6. cxd4 d6 7. Bc4
+  prompt: 'Why does Black have to move the knight on d5 at once?'
+  accept:
+    - keywords: [[defend, block, d6, lose]]
+      feedback: Yes. The pawn on d6 blocks the queen's view of d5, so nothing defends the knight.
+  reveal: The d6 pawn blocks Black's queen, so nothing defends the knight on d5 and the bishop would simply take it.
+  showMove: Nb6
+  examples:
+    match: [nothing defends it, the d6 pawn blocks the queen, it is undefended]
+    miss: [it is pinned, it is a bad square, no idea, to castle]

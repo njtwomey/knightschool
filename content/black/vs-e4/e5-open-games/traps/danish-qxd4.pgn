@@ -1,0 +1,11 @@
+[Event "Knight School"]
+[Opening "Center Game"]
+[Variation "Danish Gambit Declined: Queen grabs d4"]
+[ECO "C21"]
+[Character "tactical"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab"]
+[Kind "against-us"]
+
+1. e4 e5 2. d4 exd4 3. c3 d5 4. exd5 Qxd5 5. cxd4 Nc6 6. Nf3 Bb4+ 7. Nc3 Bg4 8. Be2 Bxf3 9. Bxf3 Qxd4?? { Grabs a pawn, but the queen is defended only by the knight. } 10. Bxc6+ { Removes the only defender with check. } 10... bxc6 11. Qxd4 *

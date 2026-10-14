@@ -1,0 +1,17 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Accelerated London System, Steinitz Countergambit, quiet 4.Qc1"]
+[ECO "D00"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "b2-protection,quiet-development"]
+[Kind "sideline"]
+
+1. d4 d5 2. Bf4 c5 3. e3 Qb6
+4. Qc1 { A quiet way to guard b2 without risk. It is a little less ambitious than Nc3 (the engine calls it level), but there are no tricks to know. } 4... Nc6
+5. Nf3 5... cxd4
+6. exd4 { Recapture with the pawn so the e-file and the bishop on f4 stay open. } 6... Nf6
+7. c3 7... Bf5
+8. Nbd2 *

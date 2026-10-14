@@ -4,20 +4,19 @@ export type Route =
   | { page: 'home' }
   | { page: 'profile'; tab: 'overview' | 'stats' | 'settings' }
   | { page: 'openings' }
-  | { page: 'opening'; id: string }
-  | { page: 'motif'; id: string }
   | { page: 'course'; id: string }
   | { page: 'play'; course: string; line: string; mode: PlayMode }
   | { page: 'review' }
   | { page: 'guess' }
   | { page: 'speed' }
+  | { page: 'glossary' }
   | { page: 'credits' }
   | { page: 'lab' }
   | { page: 'settings' };
 
 const slug = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** The page for a path such as `/opening/caro-kann` (without the site's base). Unknown paths show the home page. */
+/** The page for a path such as `/course/caro-kann` (without the site's base). Unknown paths show the home page. */
 export function parseRoute(pathname: string): Route {
   const [first, a, b, c] = pathname.split('/').filter(Boolean);
   switch (first) {
@@ -31,10 +30,6 @@ export function parseRoute(pathname: string): Route {
     case 'overview':
     case 'today':
       return { page: 'profile', tab: 'overview' };
-    case 'opening':
-      return a && slug.test(a) ? { page: 'opening', id: a } : { page: 'openings' };
-    case 'motif':
-      return a && slug.test(a) ? { page: 'motif', id: a } : { page: 'openings' };
     case 'course':
       return a && slug.test(a) ? { page: 'course', id: a } : { page: 'home' };
     case 'play':
@@ -50,6 +45,8 @@ export function parseRoute(pathname: string): Route {
       return { page: 'speed' };
     case 'stats':
       return { page: 'profile', tab: 'stats' };
+    case 'glossary':
+      return { page: 'glossary' };
     case 'credits':
       return { page: 'credits' };
     case 'lab':

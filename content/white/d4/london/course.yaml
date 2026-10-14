@@ -1,0 +1,58 @@
+name: London System
+eco: D02
+side: white
+opening: london-system
+tier: 3
+trigger: '1. d4'
+summary: >-
+  One White setup against almost everything: d4, Bf4, e3, c3 and knights to d2 and f3. Fewer lines to learn, and the plans
+  repeat from game to game, so it is the alternative to a full 1.d4 repertoire.
+plans:
+  - Put the bishop on f4 before playing e3, then build the pawn chain with e3, c3 and d4. Retreat the bishop to g3, not h2.
+  - Develop Nd2, Ngf3 and Bd3, castle, and aim for a knight on e5 backed by the pawn on d4.
+  - If Black plays ...c5 and ...Qb6, protect or counter b2 straight away (Nc3 or Qc1) before castling.
+  - Against a fianchetto or an odd first move, play the same pieces and leave the centre alone until you are castled.
+motifs: [good-bishop-out, pawn-chain, outpost, poisoned-pawn, counting, tempo-on-queen, hanging-piece, bishop-trap]
+tags: [d4, closed, system]
+lines:
+  - file: vs-d5-nf6
+    opponent: '1...d5 2.Bf4 Nf6'
+    kind: main
+  - file: vs-d5-c5-qb6
+    opponent: '2...c5 3.e3 Qb6'
+    kind: sideline
+  - file: vs-d5-c5-qb6-qc1
+    opponent: '2...c5 3.e3 Qb6'
+    kind: sideline
+    alternative: true
+  - file: vs-d5-bf5
+    opponent: '2...Bf5'
+    kind: sideline
+  - file: vs-nf6-g6
+    opponent: '1...Nf6 2.Bf4 g6'
+    kind: sideline
+  - file: vs-englund-gambit
+    opponent: '1...e5'
+    kind: gambit
+  - file: vs-c5
+    opponent: '1...c5'
+    kind: sideline
+  - file: vs-f5
+    opponent: '1...f5'
+    kind: rare
+traps:
+  - file: nh5-queen-takes-knight
+    opponent: '3...Nh5'
+    kind: for-us
+  - file: poisoned-b2
+    opponent: '4...Qxb2'
+    kind: for-us
+  - file: englund-bc3-pin
+    opponent: '5...Qxb2'
+    kind: against-us
+  - file: englund-qd2-fork
+    opponent: '4...Qb4+'
+    kind: against-us
+  - file: englund-nbd2-hangs-bishop
+    opponent: '4...Qb4+'
+    kind: against-us

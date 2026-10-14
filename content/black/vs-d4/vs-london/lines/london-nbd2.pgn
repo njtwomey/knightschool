@@ -1,0 +1,17 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Queen's Pawn Game: London System, Nbd2 and ...cxd4"]
+[ECO "D02"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "isolated-pawn,bishop-outside"]
+[Kind "sideline"]
+
+1. d4 d5 2. Nf3 Nf6 3. Bf4 c5 4. e3 Nc6 5. Nbd2
+( 5. Be2 cxd4 6. exd4 Bf5 )
+( 5. Bd3 Bg4 { The bishop pins the knight to the queen before ...e6 can close its diagonal. } 6. c3 e6 )
+5... cxd4 { Trades Black's c-pawn for White's c-pawn and leaves White a lone pawn on d4, which Black can pressure for the rest of the game. } 6. exd4 6... Bf5 { The bishop gets outside the pawn chain, so ...e6 will not block it. } 7. c3
+( 7. Bb5 Rc8 8. O-O e6 )
+7... e6 { Supports d5 and opens the bishop on f8. } 8. Qb3 8... Qd7 { Guards b7, which the queen on b3 attacked, and sits next to the knights. } 9. Be2 9... h6 { Gives the bishop on f5 the h7 square, so Ne5 or g4 cannot trap it, and stops Bg5. } 10. O-O 10... Be7 { Gets the king's bishop out before castling. Then castle and aim at the pawn on d4: ...Rc8, ...Na5 and ...Nd5 or ...Ne4 keep White busy. } *

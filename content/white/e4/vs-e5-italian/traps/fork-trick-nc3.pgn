@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Fork trick: 4.Nc3?! Nxe4"]
+[ECO "C55"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,fork"]
+[Themes "piece-safety"]
+[Kind "against-us"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3?! { Develops, but the pawn on e4 is now guarded only by this knight. } 4... Nxe4 5. Nxe4 d5 { The fork: the pawn attacks both the bishop and the knight. } 6. Bd3 dxe4 7. Bxe4 *

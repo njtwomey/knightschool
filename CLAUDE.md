@@ -22,7 +22,12 @@ Use `make` (run `make` alone to list targets). It uses a global pnpm if present,
 - `make fix`: ESLint autofix plus Prettier. `make hooks` installs a git pre-push hook that runs `make pre-push`.
 - Single test file: `pnpm exec vitest run packages/core/src/epd.test.ts`; by name: `pnpm exec vitest run -t "epdToFen"`.
 - `pnpm content:build`: validate `content/` and write `apps/web/public/content/*.json` (gitignored). Needs no network;
-  fetches Lichess opening names once into `.cache/`, and asks the explorer for popularity only if `LICHESS_TOKEN` is set.
+  fetches Lichess opening names once into `.cache/`. Popularity is read from the committed `content/popularity/popularity.json`;
+  the build never asks the network. `make popularity` (needs `LICHESS_TOKEN`) fills it in: only positions on lines that earn
+  cards, resumable, one request at a time, a first full run takes hours. It holds counts per position and per move (the
+  explorer band is blitz and rapid, 1000 to 1600) for the card threshold now and for weighting the computer's replies later.
+  Secrets go in `.env` (git-ignored, mode 600; `.env.example` is the template). Only `pnpm popularity` loads it, through
+  node's `--env-file-if-exists=.env` in `package.json`; never read, print or commit `.env`.
   `scripts/content.test.ts` builds the real content in `make test`.
 - `pnpm db:generate`: after changing `packages/storage/src/schema.ts`, writes a numbered SQL migration with drizzle-kit and
   bundles it into `src/migrations.generated.ts` (check both in). A test fails if the schema and migrations disagree.
@@ -53,20 +58,24 @@ Data is split into content (authored, shipped, read-only) and user state (writte
 schemas in `packages/core`; Drizzle tables in `packages/storage` mirror the user-state schemas. Positions are keyed by
 EPD (FEN without move counters), so transpositions share one node. See `docs/PLAN.md` "Data model".
 
-### Opening content
+### Content
 
-`content/motifs/<id>/` holds motifs (the Traxler, the Fried Liver, the Calabrese): the same files as a course, but the directory marks
-them as belonging to no opening. They have no page of their own to browse: Search lists them (scope Motifs) next to openings and lines, and Review and Name That Opening use them like any course. The loader
-(`scripts/content-lib.ts`) reads both directories, and ids must be unique across them.
+Content is organised by who is to move and what the opponent has done (`docs/CURRICULUM.md` is the proposal, `content/README.md`
+the format). A **course** is a folder under `content/white/` or `content/black/` (the folder decides the side) with
+`course.yaml`, `lines/*.pgn`, `traps/*.pgn` and `quizzes.yaml`; its id is the folder name. `course.yaml` gives the trigger
+position every line passes through, a tier (1 study first, 2 next, 3 alternatives), the opening it belongs to (an id from
+`content/openings.yaml`, which also says who plays the opening: that makes a course "playing it" or "playing against it"), plans
+and motifs (from `content/motifs.yaml`), and each line's `kind` (main, sideline, rare, gambit; plus `alternative`) and each
+trap's (`for-us` springs it, `against-us` must be avoided). `content/curriculum.yaml` is the study order and prerequisites.
+Gambits and traps are branches inside the course where they arise; there is no separate motifs section. Folders starting with `_`
+(`_parked`, `_staging`) are never built.
 
-`content/openings/<opening-id>/` holds `opening.yaml` (name, ECO, side, level, summary, `lines:` and `refutations:`
-lists in teaching order), `lines/<variant>.pgn` (the repertoire) and `refutations/<variant>.pgn` (how to punish a
-mistake or trap; needs a `Refutes` tag). Each PGN header carries structured tags (Character, Risk, EarlyMate, Tricks,
-optional Refutes, RefutedBy, Themes) in a fixed vocabulary. `content/README.md` is the authoring reference; read it
-before editing any PGN. The build will merge an opening's variants into one EPD-keyed tree and reject unknown tag
-values, files missing from `opening.yaml`, and two different repertoire moves for the same position.
-
-Variant ids (file names) end up in learner history; do not rename them casually. `make test` and `pnpm content:build` fail with the file name on an illegal move, unknown tag or conflicting repertoire move.
+Which positions earn review cards is `cardDefinitions` in `training.ts`: main and gambit lines always, sidelines unless the
+explorer says too few games reach them, rare lines only with the "include rare lines" setting, alternatives never, `for-us`
+traps never (they get quizzes), `against-us` traps yes (the avoiding move). The build merges every line of a course into one
+EPD-keyed tree and rejects unknown tag values, files missing from `course.yaml`, a line that misses the trigger, and two
+different repertoire moves for the same position (use `alternative: true` for a second answer). It warns where a White course
+and a Black course disagree at a shared position. File names end up in learner history; do not rename them casually.
 
 ### Storage
 
@@ -83,22 +92,24 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 
 ### Web app
 
-Real path URLs (History API, `apps/web/src/router`): `/` Home, `/browse` (aliases `/search`, `/openings`; openings, motifs and lines in one grid), `/opening/:family`, `/motif/:id` (a motif: a named position or idea that belongs to no opening), `/course/:id` (opens its
-opening scrolled to that course), `/play/:course/:line/:mode` (learn | practice; line `all` is the every-branch drill),
+Real path URLs (History API, `apps/web/src/router`): `/` Home, `/browse` (aliases `/search`, `/openings`; courses in study order and every line, in one grid), `/course/:id` (one course),
+`/glossary`, `/play/:course/:line/:mode` (learn | practice; line `all` is the every-branch drill),
 `/quiz` (alias `/review`), `/guess`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
 `setHashState` as the page changes and read once when it opens, so a refresh or shared link restores it exactly:
-opening page `#c=<course>&v=<variation>&m=<uci.uci…>`; openings `#q=…&role=…&side=…&bm=<moves>&bk=<kind>`; play
+course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=…&scope=…&bm=<moves>&bk=<kind>`; play
 `#m=<moves played>`; lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
 and `404.html` is copied from `index.html` at build; dev and preview already fall back). Features in `apps/web/src/features/*`:
 
-- `openings` (the Browse page): the long list of openings (cards from `content/families.yaml`), filters (play it / against
-  it, side), a scope switch (all / openings / lines) and one result grid where openings and named lines are cards of the
-  same kind (lines have a board thumbnail), best name match first (`searchLines`), and **board search** in a modal: `search.json` maps every
-  position to the lines through it, so transpositions match and results can be limited to lines, traps or both.
-- `opening`: one opening's page: the board with the engine strip (on by default, off in Settings), and its courses
-  grouped into _Play it_ / _Play against it_ tabs, each course a header line plus a table of variations (click a row = practise; icon buttons show it on
-  the board, learn it first, practise). The browse store keeps the displayed `line`; `path` is always a prefix of it.
+- `openings` (the Browse page): courses in study order and every line, as cards of one kind (lines have a board thumbnail).
+  Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all / courses / lines); search ranked
+  by relevance with "why it matched" (`filterCourses`, `searchLines`, `relevance`); and **board search** in a modal:
+  `search.json` maps every position to the lines through it, so transpositions match.
+- `course`: one course's page: what it is for, its plans and motifs, the board with the engine strip (on by default, off in
+  Settings), its lines and traps grouped by kind (main, gambits, sidelines, rare, alternatives, traps to avoid, traps to spring;
+  click a row = learn, icon buttons show / learn / practise), and the same ground from the other side (courses in the same
+  opening, and courses that reach the same positions: `relatedCourses`). The browse store keeps the displayed `line`.
+- `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each.
 - `play`: Learn (you play both sides, every move shown), Practise (the computer plays the other side) and Every branch.
   `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; lines from the courses you
   are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
@@ -119,18 +130,17 @@ highlights, tick/cross badge, hint pulse). Preferences are per device in localSt
 green profile. `StaticBoard` draws a FEN, EPD or PGN-at-a-ply (`resolvePosition` in core). Piece sets are the library's
 drawings with different finishing; a real alternative set needs a licence check first.
 
-### Courses, families and branch practice
+### Branch practice and authoring
 
-One learner side and one repertoire move per position per course, so alternative systems against an opening are separate
-courses sharing a `family` (and with `against` set); see `content/README.md`. `#/play/<course>/all/branches` is the
+One learner side and one repertoire move per position per course; a second answer is an `alternative` line. `/play/<course>/all/branches` is the
 every-branch drill: `nextBranchMove` walks the tree, the learner gets their repertoire move and the computer a weighted
 random known reply. Positions after a mistake the learner's own side makes are never cards (`tree.ts`, "clean" positions).
-`pnpm course:eval [course[/line]]` checks courses with Stockfish (swings, how lines end); the `add-course` skill
+`pnpm course:eval [course[/line] | --dir <course-folder>]` checks courses with Stockfish (native when installed; swings, how lines end); the `add-course` skill
 (`.claude/skills/add-course`) is the authoring guide: use it for any content change.
 
 ### Quizzes
 
-`content/openings/<id>/quizzes.yaml` (see `content/README.md`): the position is a move list, answers are keyword groups,
+`<course>/quizzes.yaml` (see `content/README.md`): the position is a move list, answers are keyword groups,
 and `examples` are checked against the matcher when the course is built, so a bad keyword fails the build. Quizzes are
 review cards (`quiz:<opening>:<id>`, one in every five introduced), graded matched or missed, written with
 `quizAttempts.record`. In Review a quiz is answered by typing, then moves on by itself (a "Skip ahead" button is optional).

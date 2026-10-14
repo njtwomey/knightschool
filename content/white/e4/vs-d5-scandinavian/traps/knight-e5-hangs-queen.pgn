@@ -1,0 +1,12 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Main Line, Queen Left Undefended"]
+[ECO "B01"]
+[Character "tactical"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap,pin,hanging-piece"]
+[Themes "pin-on-knight,queen-lost"]
+[Kind "against-us"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bg4 6. Ne5? { Looks like it attacks the bishop, but the knight was the only thing blocking the bishop from the queen. } 6... Bxd1 { The bishop takes the queen. White cannot take back with the knight because it is pinned by the queen on a5. } 7. Kxd1 Qb6 8. Be3 *

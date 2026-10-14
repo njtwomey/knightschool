@@ -3,6 +3,11 @@ import { newId } from './ids';
 import type { Attempt } from './attempt';
 import { newCard, scheduleReview } from './scheduler';
 import type { LineNode, OpeningContent } from './schema/content';
+
+/** What decides which positions earn cards: the popularity cut-off, and whether rare lines are included. */
+export type CardOptions = { minPopularity?: number; includeRare?: boolean };
+const optionsOf = (options: number | CardOptions): CardOptions =>
+  typeof options === 'number' ? { minPopularity: options } : options;
 import type { RatingName } from './grading';
 import type { Card, QuizAttempt, Review } from './schema/user';
 import type { FSRS } from 'ts-fsrs';
@@ -26,8 +31,8 @@ export function quizDefinitions(content: OpeningContent): CardDefinition[] {
 }
 
 /** Move cards in introduction order with a quiz after every few, so quizzes arrive early instead of at the very end. */
-export function introductionOrder(content: OpeningContent, minPopularity = MIN_POPULARITY_FOR_CARD): CardDefinition[] {
-  const moves = cardDefinitions(content, minPopularity);
+export function introductionOrder(content: OpeningContent, options: number | CardOptions = {}): CardDefinition[] {
+  const moves = cardDefinitions(content, options);
   const quizzes = quizDefinitions(content);
   const order: CardDefinition[] = [];
   let q = 0;
@@ -39,21 +44,41 @@ export function introductionOrder(content: OpeningContent, minPopularity = MIN_P
 }
 
 /**
- * Every card an opening can produce, in the order they should be introduced: the main line first, then the other
- * lines, then positions only reached in refutations; each group by distance from the start. A position off the
- * main line earns a card only if enough games at the explorer's band reach it (when that is known).
+ * Every card a course can produce, in the order they should be introduced: the main line first, then the other
+ * lines, then positions only reached in traps; each group by distance from the start.
+ *
+ * Which positions count: a position earns a card when some line or trap that passes through it is drilled. Main lines
+ * and gambits always are; sidelines are unless the explorer says too few games reach them; rare lines only when the
+ * learner has asked for them; alternative lines never (they show a second answer to a position another line already
+ * answers); traps we spring (for-us) never, because the opponent has to move first, but traps we must avoid
+ * (against-us) are, so the avoiding move is learned.
  */
-export function cardDefinitions(content: OpeningContent, minPopularity = MIN_POPULARITY_FOR_CARD): CardDefinition[] {
-  const kindOf = new Map(content.opening.variants.map((variant) => [variant.id, variant.kind]));
+export function cardDefinitions(content: OpeningContent, options: number | CardOptions = {}): CardDefinition[] {
+  const { minPopularity = MIN_POPULARITY_FOR_CARD, includeRare = false } = optionsOf(options);
+  const variants = new Map(content.opening.variants.map((variant) => [variant.id, variant]));
+  const drilled = (id: string) => {
+    const variant = variants.get(id);
+    if (!variant || variant.alternative) return false;
+    if (variant.kind === 'line') return variant.weight === 'rare' ? includeRare : true;
+    return variant.whose !== 'for-us';
+  };
+  // Positions only on the strength of sidelines or traps are held to the popularity cut-off when it is known.
+  const firmly = (id: string) =>
+    variants.get(id)?.kind === 'line' && ['main', 'gambit'].includes(variants.get(id)?.weight ?? '');
   const rankOf = (node: LineNode): number => {
     const edge = node.moves.find((move) => move.isRepertoire)!;
     if (edge.isMainLine) return 0;
-    return edge.variants.some((id) => kindOf.get(id) === 'line') ? 1 : 2;
+    return edge.variants.some((id) => variants.get(id)?.kind === 'line') ? 1 : 2;
   };
   return Object.values(content.nodes)
     .filter((node) => node.isOurTurn && node.moves.some((move) => move.isRepertoire))
+    .filter((node) => node.moves.find((move) => move.isRepertoire)!.variants.some(drilled))
     .map((node) => ({ node, rank: rankOf(node) }))
-    .filter(({ node, rank }) => rank === 0 || node.popularity === undefined || node.popularity >= minPopularity)
+    .filter(({ node, rank }) => {
+      if (rank === 0 || node.popularity === undefined) return true;
+      const edge = node.moves.find((move) => move.isRepertoire)!;
+      return edge.variants.some((id) => drilled(id) && firmly(id)) || node.popularity >= minPopularity;
+    })
     .sort((a, b) => a.rank - b.rank || a.node.ply - b.node.ply)
     .map(({ node }) => ({
       id: cardId(content.opening.id, node.epd),
@@ -71,9 +96,10 @@ export function planIntroductions(
   openings: { content: OpeningContent; existing: ReadonlySet<string> }[],
   quota: number,
   now: Date,
+  options: CardOptions = {},
 ): Card[] {
   const queues = openings.map(({ content, existing }) =>
-    introductionOrder(content).filter((card) => !existing.has(card.id)),
+    introductionOrder(content, options).filter((card) => !existing.has(card.id)),
   );
   const chosen: CardDefinition[] = [];
   for (let round = 0; chosen.length < quota; round++) {

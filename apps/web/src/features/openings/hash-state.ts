@@ -3,7 +3,8 @@ import type { BoardQuery, Played } from '@/features/courses/board-query';
 import { decodeMoves, encodeMoves, type HashParams } from '@/router/hash';
 
 const ROLES: CatalogFilter['role'][] = ['all', 'play', 'against'];
-const SCOPES: SearchScope[] = ['openings', 'lines', 'motifs', 'all'];
+const SCOPES: SearchScope[] = ['courses', 'lines', 'all'];
+const TIERS = ['1', '2', '3'] as const;
 const SIDES: CatalogFilter['side'][] = ['all', 'white', 'black'];
 const KINDS: ResultKind[] = ['both', 'lines', 'refutations'];
 
@@ -13,6 +14,7 @@ export function filterFromHash(params: HashParams): CatalogFilter {
     query: params.q ?? '',
     role: ROLES.find((role) => role === params.role) ?? 'all',
     side: SIDES.find((side) => side === params.side) ?? 'all',
+    tier: TIERS.find((tier) => tier === params.tier) ? (Number(params.tier) as 1 | 2 | 3) : 'all',
     scope: SCOPES.find((scope) => scope === params.scope) ?? 'all',
   };
 }
@@ -39,6 +41,7 @@ export function hashFromState(filter: CatalogFilter, query: BoardQuery): Record<
     q: filter.query.trim() ? filter.query : undefined,
     role: filter.role === 'all' ? undefined : filter.role,
     side: filter.side === 'all' ? undefined : filter.side,
+    tier: filter.tier === 'all' ? undefined : String(filter.tier),
     scope: filter.scope === 'all' ? undefined : filter.scope,
     bm: query.played.length ? encodeMoves(query.played.map((move) => move.uci)) : undefined,
     bk: query.kind === 'both' ? undefined : query.kind,

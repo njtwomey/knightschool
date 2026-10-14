@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Center Game"]
+[Variation "Center Game: Kieseritzky Variation"]
+[ECO "C21"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "development,tempo-on-queen"]
+[Kind "sideline"]
+
+1. e4 e5 2. d4 exd4
+3. Nf3 { White will take back with the knight. }
+3... Nc6 { Develops and attacks the pawn on d4 a second time. After 4.Nxd4 this is the Scotch Game, taught with the other 2.Nf3 lines. }
+4. Nxd4 *

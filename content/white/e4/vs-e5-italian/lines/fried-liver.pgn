@@ -1,0 +1,23 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Fried Liver Attack"]
+[ECO "C57"]
+[Character "gambit,sharp"]
+[Risk "high"]
+[EarlyMate "white"]
+[Tricks "trap,pin"]
+[Themes "king-hunt,f7-pressure"]
+[Kind "main"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5
+6. Nxf7 { The sacrifice. The knight takes the pawn only the king guards and forks the queen and the rook. The point is to drag the king out into the open. [%cal Gg5f7] } 6... Kxf7
+7. Qf3+ { Check, and the queen also attacks the knight on d5, which the bishop on c4 pins against the king. [%cal Gf3d5,Gc4d5] } 7... Ke6
+( 7... Ke8 8. Bxd5 { Takes the knight; if the queen recaptures, White's queen takes first and Black ends a piece down. } 8... Qf6 9. Bxc6 bxc6 10. Qh5+ )
+( 7... Ke7 8. Bxd5 Qe8 9. Bxc6 Qxc6 10. Qxc6 bxc6 )
+( 7... Kg8 8. Bxd5+ Qxd5 9. Qxd5+ Be6 10. Qxe6# )
+8. Nc3 { Piles up on the pinned knight on d5. Black must find ...Ncb4 or lose it. [%cal Gc3d5] } 8... Ncb4 { The only defence: it guards d5 and threatens ...Nxc2+. }
+9. O-O { Castles and lets Black take on c2. The king is safe and the rook joins in, which is worth more than a pawn. } 9... c6
+( 9... Nxc2 10. Bxd5+ Kd6 11. Bb3 Nd4 12. Qd5+ )
+10. d4 { Opens the centre for the c1 bishop and the f1 rook while Black's king is still in the middle. [%cal Gd2d4] } 10... Qf6
+11. Qe2 { Keeps the queens on, because trading would end the attack, and White has more pieces ready. } 11... Ke7
+12. Ne4 { Hits the queen and the squares round Black's king. The pawn on d4 supports the knight. Plan: keep making threats with check and develop with tempo; the king in the open is Black's problem. } *

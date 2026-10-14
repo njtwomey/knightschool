@@ -1,0 +1,75 @@
+- id: colle-qb3-c4
+  line: 1. d4 d5 2. Nf3 Nf6 3. e3 e6 4. Bd3 c5 5. c3 Nc6 6. Qb3
+  prompt: 'White put the queen on b3, on the same diagonal as the bishop on d3. Which pawn move wins material, and how?'
+  accept:
+    - keywords: [[c4], [fork, queen, bishop, both, two]]
+      all: true
+      feedback: Yes. The pawn on c4 attacks the queen and the bishop at once, and White cannot save both.
+    - keywords: [[c4]]
+      partial: true
+      feedback: Close. Say what the pawn on c4 attacks.
+  reveal: 6...c4 attacks the queen on b3 and the bishop on d3 together. White can only take the pawn, and after Bxc4 dxc4 the queen must run, leaving Black a bishop up for two pawns.
+  showMove: c4
+  examples:
+    match:
+      - c4 forks the queen and the bishop
+      - play c4 to attack the queen and bishop
+      - c4 hits both the queen and bishop
+    miss:
+      - Nxd4 wins a pawn
+      - develop the bishop to d7
+      - castle kingside
+- id: torre-bxb8
+  line: 1. d4 d5 2. Nf3 Nf6 3. Bg5 Ne4 4. Bf4 c5 5. e3 Qb6 6. Nbd2 Nxd2 7. Bxb8
+  prompt: "White took the knight on b8 instead of recapturing on d2. What is Black's best reply?"
+  accept:
+    - keywords: [[nxf3, f3]]
+      feedback: Yes. The knight on d2 takes the knight on f3 with check, so White has no time to save the bishop on b8.
+    - keywords: [[rxb8, b8]]
+      partial: true
+      feedback: Close, but first use the check. Taking on b8 at once lets White recapture on d2.
+  reveal: 7...Nxf3+ takes with check. After Qxf3 Rxb8 Black has won two knights for a knight and a bishop, and the b2 pawn is still hanging.
+  showMove: Nxf3+
+  examples:
+    match:
+      - Nxf3+
+      - the knight takes on f3 with check
+      - capture the knight on f3
+    miss:
+      - Qxb2
+      - take the bishop with the rook
+      - castle
+- id: bdg-queen-recapture
+  line: 1. d4 d5 2. e4 dxe4 3. Nc3 Nf6 4. f3 exf3 5. Qxf3
+  prompt: 'White recaptured with the queen. Which pawn can Black take for free now?'
+  accept:
+    - keywords: [[d4, qxd4]]
+      feedback: Yes. The queen on f3 does not guard d4, and no other white piece does either.
+  reveal: 5...Qxd4 wins a pawn, because nothing protects d4 once the queen has gone to f3. After Be3 Qh4+ Black keeps the extra pawns.
+  showMove: Qxd4
+  examples:
+    match:
+      - Qxd4
+      - the pawn on d4
+      - take d4 with the queen
+    miss:
+      - castle kingside
+      - the pawn on b2
+      - Nc6 to develop
+- id: torre-g5-kick
+  line: 1. d4 d5 2. Nf3 Nf6 3. Bg5 Ne4 4. Bh4 g5
+  prompt: 'Black pushed the pawn to g5 to chase the bishop. What does White do now?'
+  accept:
+    - keywords: [[g5, nxg5], [pawn, nxg5, bxg5, lose, take]]
+      all: true
+      feedback: Yes. Nxg5 wins the pawn, and after Nxg5 Bxg5 the bishop is safe and Black's kingside is weakened.
+  reveal: The pawn on g5 is attacked by the knight on f3 and the bishop on h4, and Black cannot support it. Nxg5 wins a pawn. The right move was 4...c5, ignoring the bishop.
+  examples:
+    match:
+      - White takes the pawn on g5 with the knight
+      - Nxg5 wins a pawn
+      - the g5 pawn is lost
+    miss:
+      - it traps the bishop
+      - White castles
+      - nothing, it is a good move

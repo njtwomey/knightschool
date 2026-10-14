@@ -1,3 +1,4 @@
+import { testManifest } from '@/test-manifest';
 import { buildOpening, parsePgn } from '@knightschool/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DELAYS, setRandom, usePlay } from './store';
@@ -25,11 +26,7 @@ const gameOf = (moves: string) =>
 
 ${moves}`);
 
-const content = buildOpening(
-  't',
-  { name: 'T', eco: 'C20', side: 'white', level: 'beginner', summary: 'x', tags: [], lines: ['main'], refutations: [] },
-  [{ id: 'main', kind: 'line', game, source: 'main.pgn' }],
-);
+const content = buildOpening('t', testManifest(), [{ id: 'main', kind: 'line', game, source: 'main.pgn' }]);
 
 async function begin(mode: 'learn' | 'practice') {
   usePlay.setState({ content, variantId: 'main', steps: [], phase: 'idle' });
@@ -142,23 +139,10 @@ describe('every branch', () => {
   });
 
   // White's answer to the Caro-Kann is 2. Nc3; Black may reply 2...d5 or 2...e5, and White must know both.
-  const branchy = buildOpening(
-    'b',
-    {
-      name: 'B',
-      eco: 'B12',
-      side: 'white',
-      level: 'beginner',
-      summary: 'x',
-      tags: [],
-      lines: ['main', 'side'],
-      refutations: [],
-    },
-    [
-      { id: 'main', kind: 'line', game: gameOf('1. e4 c6 2. Nc3 d5 3. Nf3 *'), source: 'main.pgn' },
-      { id: 'side', kind: 'line', game: gameOf('1. e4 c6 2. Nc3 e5 3. Nf3 *'), source: 'side.pgn' },
-    ],
-  );
+  const branchy = buildOpening('b', testManifest({ name: 'B', eco: 'B12', lines: ['main', 'side'] }), [
+    { id: 'main', kind: 'line', game: gameOf('1. e4 c6 2. Nc3 d5 3. Nf3 *'), source: 'main.pgn' },
+    { id: 'side', kind: 'line', game: gameOf('1. e4 c6 2. Nc3 e5 3. Nf3 *'), source: 'side.pgn' },
+  ]);
 
   async function drill(roll: number) {
     setRandom(() => roll);

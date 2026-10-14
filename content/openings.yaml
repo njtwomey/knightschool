@@ -1,0 +1,68 @@
+# The openings that courses are grouped under. `side` is who plays the opening: a course on that side is "playing it",
+# a course on the other side is "playing against it". Each course names its opening in course.yaml.
+- id: queens-gambit-declined
+  name: Queen's Gambit Declined
+  side: black
+  eco: D30-D69
+  summary: Black meets 1.d4 d5 2.c4 with ...e6 and holds the centre. Solid, classical and the same against every move order.
+  moves: 1. d4 d5 2. c4 e6
+- id: italian-game
+  name: Italian Game
+  side: white
+  eco: C50-C54
+  summary: White develops the bishop to c4 and aims at f7. Natural moves, clear plans and several famous traps.
+  moves: 1. e4 e5 2. Nf3 Nc6 3. Bc4
+- id: open-games
+  name: Open Games
+  side: black
+  eco: C20-C99
+  summary: Black meets 1.e4 with ...e5 and fights for the centre at once, against the Ruy Lopez, Scotch, Italian and the rest.
+  moves: 1. e4 e5
+- id: sicilian-defence
+  name: Sicilian Defence
+  side: black
+  eco: B20-B99
+  summary: Black answers 1.e4 with ...c5, an unbalanced fight. White's quiet Alapin plan is the first thing to learn against it.
+  moves: 1. e4 c5
+- id: french-defence
+  name: French Defence
+  side: black
+  eco: C00-C19
+  summary: Black plays ...e6 and ...d5 and accepts a cramped but solid position. White's Advance variation is the one to meet first.
+  moves: 1. e4 e6
+- id: caro-kann-defence
+  name: Caro-Kann Defence
+  side: black
+  eco: B10-B19
+  summary: Black plays ...c6 and ...d5, a sound structure with no weak pawns. The Advance variation is White's most direct reply.
+  moves: 1. e4 c6
+- id: scandinavian-defence
+  name: Scandinavian Defence
+  side: black
+  eco: B01
+  summary: Black hits e4 at once with ...d5. White gains time by attacking the queen and gets an easy, comfortable game.
+  moves: 1. e4 d5
+- id: rare-replies-to-e4
+  name: Rare Replies to 1.e4
+  side: black
+  eco: B00-B09
+  summary: The odd answers to 1.e4, such as Pirc, Modern, Alekhine and Owen. Few players know the right way to meet them.
+  moves: 1. e4 d6
+- id: london-system
+  name: London System
+  side: white
+  eco: D02-D05
+  summary: White plays d4, Nf3 and Bf4 against nearly everything. One setup to learn, with the same plans every game.
+  moves: 1. d4 d5 2. Nf3 Nf6 3. Bf4
+- id: d4-systems
+  name: Other Queen's Pawn Systems
+  side: white
+  eco: A40-A49
+  summary: The queen's pawn setups that are not the Queen's Gambit or London, such as the Trompowsky, Colle and Torre.
+  moves: 1. d4 Nf6
+- id: flank-openings
+  name: Flank Openings
+  side: white
+  eco: A00-A39
+  summary: Openings that avoid 1.e4 and 1.d4, such as the English and Reti, and the irregular first moves.
+  moves: 1. c4

@@ -1,0 +1,25 @@
+# The order to study courses in. A course may only depend on courses listed before it.
+- id: vs-e5-italian
+- id: e5-open-games
+  prerequisites: [vs-e5-italian]
+- id: qgd
+- id: vs-london
+  prerequisites: [qgd]
+- id: vs-c5-alapin
+  prerequisites: [vs-e5-italian]
+- id: vs-e6-french
+  prerequisites: [vs-e5-italian]
+- id: vs-c6-caro-kann
+  prerequisites: [vs-e6-french]
+- id: vs-d5-scandinavian
+  prerequisites: [vs-e5-italian]
+- id: vs-d4-systems
+  prerequisites: [qgd]
+- id: vs-other
+  prerequisites: [vs-e5-italian]
+- id: london
+  prerequisites: [vs-london]
+- id: caro-kann
+  prerequisites: [e5-open-games]
+- id: flank-and-irregular
+  prerequisites: [qgd]
