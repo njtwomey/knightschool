@@ -100,8 +100,10 @@ and `404.html` is copied from `index.html` at build; dev and preview already fal
   grouped into _Play it_ / _Play against it_ tabs, each course a header line plus a table of variations (click a row = practise; icon buttons show it on
   the board, learn it first, practise). The browse store keeps the displayed `line`; `path` is always a prefix of it.
 - `play`: Learn (you play both sides, every move shown), Practise (the computer plays the other side) and Every branch.
-  `speed` (`/speed`): five lines from the courses you are learning, played from memory against the clock with the other side
-  answering instantly; the result is the mean time per move. Runs go to the `speed_attempts` table (no effect on the review
+  `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; lines from the courses you
+  are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
+  instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hints (piece, then move) are
+  counted. The last set-up is kept in localStorage. Runs go to the `speed_attempts` table (no effect on the review
   schedule), shown on the Stats tab.
   `guess` ("Name That Opening", `/guess`): a position from the courses and you type what it is; `guessTargets` collects every
   opening and variation whose lines reach it (transpositions count) and `gradeGuess` gives full credit for a variation, half
