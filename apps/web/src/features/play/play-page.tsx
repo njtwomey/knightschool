@@ -1,6 +1,6 @@
 import { Page } from '@/components/page';
 import { explainMove, type LineStep } from '@knightschool/core';
-import { BookOpen, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'lucide-react';
+import { BookOpen, Ellipsis, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { BoardSettingsButton } from '@/components/board/board-settings';
@@ -17,10 +17,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Progress } from '@/components/ui/progress';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { PlayBreadcrumbs } from '@/features/browse/breadcrumbs';
 import { EngineLines } from '@/features/engine/engine-lines';
+import { EvalBar } from '@/features/engine/eval-bar';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
 import { decodeMoves, encodeMoves } from '@/router/hash';
@@ -52,32 +54,61 @@ type Props = { course: string; line: string; mode: PlayMode };
  * shown dimmed, so you can see where it goes, and any move can be clicked to jump back to it; other modes show only what
  * has been played, so nothing is given away.
  */
-function MoveTable({ steps, index, learn }: { steps: LineStep[]; index: number; learn: boolean }) {
-  const rows = Math.ceil((learn ? steps.length : index) / 2);
+function MoveTable({
+  steps,
+  index,
+  learn,
+  explore,
+}: {
+  steps: LineStep[];
+  index: number;
+  learn: boolean;
+  /** Moves played off the line: the table follows them from where the line was left. */
+  explore: { san: string }[];
+}) {
+  type Entry = { san: string; kind: 'played' | 'future' | 'explored'; jump?: number };
+  const entries: Entry[] =
+    explore.length > 0
+      ? [
+          ...steps.slice(0, index).map((step, i): Entry => ({ san: step.edge.san, kind: 'played', jump: i + 1 })),
+          ...explore.map((move): Entry => ({ san: move.san, kind: 'explored' })),
+        ]
+      : steps.slice(0, learn ? steps.length : index).map((step, i): Entry => ({
+          san: step.edge.san,
+          kind: i < index ? 'played' : 'future',
+          jump: learn ? i + 1 : undefined,
+        }));
+  const rows = Math.ceil(entries.length / 2);
   if (rows === 0) return <p className="text-sm text-muted-foreground">No moves yet.</p>;
+  const lastExplored = explore.length > 0 ? entries.length - 1 : -1;
   const cell = (i: number) => {
-    const step = steps[i];
-    if (!step || (!learn && i >= index)) return <TableCell />;
-    const played = i < index;
-    const current = i === index - 1;
+    const entry = entries[i];
+    if (!entry) return <TableCell />;
+    const current = i === lastExplored || (explore.length === 0 && i === index - 1);
     const text = (
       <span
         className={
-          current ? 'rounded bg-secondary px-1 font-medium' : played ? 'px-1' : 'px-1 text-muted-foreground/60'
+          entry.kind === 'explored'
+            ? `rounded px-1 font-medium text-primary ${current ? 'bg-primary/15' : ''}`
+            : current
+              ? 'rounded bg-secondary px-1 font-medium'
+              : entry.kind === 'played'
+                ? 'px-1'
+                : 'px-1 text-muted-foreground/60'
         }
       >
-        {step.edge.san}
+        {entry.san}
       </span>
     );
     return (
       <TableCell className="py-1 font-mono">
-        {learn ? (
+        {entry.jump !== undefined ? (
           <Button
             type="button"
             variant="ghost"
             size="xs"
             className="h-auto px-0 font-mono hover:bg-transparent hover:underline"
-            onClick={() => usePlay.getState().goTo(i + 1)}
+            onClick={() => usePlay.getState().goTo(entry.jump!)}
           >
             {text}
           </Button>
@@ -205,7 +236,6 @@ export function PlayPage({ course, line, mode }: Props) {
   else if (attempt.wrongTries > 0) instruction = 'Not that one. Try again, or use a hint.';
   else instruction = `Your move as ${side}.`;
 
-  const ModeIcon = MODES[state.mode].icon;
   const exploring = state.mode === 'learn' && explore !== null && explore.length > 0;
   const shownEpd = exploring ? explore!.at(-1)!.epd : view.epd;
 
@@ -225,36 +255,57 @@ export function PlayPage({ course, line, mode }: Props) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,min(40rem,calc(100dvh-11rem)))_1fr]">
         <div className="grid content-start gap-3">
-          <AppBoard
-            id="play"
-            className="aspect-square w-full"
-            epd={shownEpd}
-            orientation={side}
-            interactive={state.mode === 'learn' || (!complete && !opponentThinking && view.expected !== undefined)}
-            onMove={(uci) => usePlay.getState().submitMove(uci)}
-            lastMove={exploring ? explore!.at(-1)!.uci : view.lastEdge?.uci}
-            arrows={
-              exploring
-                ? []
-                : [
-                    ...(view.showExpected && view.expected ? [arrowFor(view.expected.uci)] : []),
-                    ...arrowsOf(view.lastEdge?.annotation),
-                  ]
-            }
-            squareStyles={exploring ? undefined : squareStylesOf(undefined, view.lastEdge?.annotation)}
-            badge={badge}
-            hintSquare={view.hintSquare}
-          />
+          <div className="flex gap-2">
+            {state.mode === 'learn' && <EvalBar orientation={side} />}
+            <AppBoard
+              id="play"
+              className="aspect-square min-w-0 flex-1"
+              epd={shownEpd}
+              orientation={side}
+              interactive={state.mode === 'learn' || (!complete && !opponentThinking && view.expected !== undefined)}
+              onMove={(uci) => usePlay.getState().submitMove(uci)}
+              lastMove={exploring ? explore!.at(-1)!.uci : view.lastEdge?.uci}
+              arrows={
+                exploring
+                  ? []
+                  : [
+                      ...(view.showExpected && view.expected ? [arrowFor(view.expected.uci)] : []),
+                      ...arrowsOf(view.lastEdge?.annotation),
+                    ]
+              }
+              squareStyles={exploring ? undefined : squareStylesOf(undefined, view.lastEdge?.annotation)}
+              badge={badge}
+              hintSquare={view.hintSquare}
+            />
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <BoardSettingsButton />
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={state.mode === 'learn' || state.mode === 'practice' ? state.mode : ''}
+              onValueChange={(value) => value && chooseMode(value as PlayMode)}
+              aria-label="Learn or practise"
+            >
+              <ToggleGroupItem value="learn">
+                <BookOpen aria-hidden /> Learn
+              </ToggleGroupItem>
+              <ToggleGroupItem value="practice">
+                <Target aria-hidden /> Practise
+              </ToggleGroupItem>
+            </ToggleGroup>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                  <ModeIcon aria-hidden /> {MODES[state.mode].name}
+                <Button
+                  variant={state.mode === 'branches' ? 'secondary' : 'outline'}
+                  size="icon"
+                  aria-label="More ways to play"
+                >
+                  <Ellipsis aria-hidden />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-72">
-                <DropdownMenuLabel>How do you want to play?</DropdownMenuLabel>
+                <DropdownMenuLabel>More ways to play</DropdownMenuLabel>
                 <DropdownMenuRadioGroup value={state.mode} onValueChange={(value) => chooseMode(value as PlayMode)}>
                   {(Object.keys(MODES) as PlayMode[]).map((key) => (
                     <DropdownMenuRadioItem key={key} value={key} className="items-start">
@@ -359,7 +410,12 @@ export function PlayPage({ course, line, mode }: Props) {
                   </p>
                 </div>
               )}
-              <MoveTable steps={steps} index={index} learn={state.mode === 'learn' && !drill} />
+              <MoveTable
+                steps={steps}
+                index={index}
+                learn={state.mode === 'learn' && !drill}
+                explore={exploring ? explore! : []}
+              />
               {state.mode === 'learn' && !drill && (
                 <p className="text-xs text-muted-foreground">
                   Right arrow plays the next move, left arrow goes back. Click a move to jump to it.
