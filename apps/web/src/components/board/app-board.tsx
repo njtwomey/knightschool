@@ -1,8 +1,9 @@
 import { epdToFen, legalMovesFrom, sideToMove, type Square } from '@knightschool/core';
 import { Check, X } from 'lucide-react';
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { useBoardPrefs } from './prefs';
+import { usePreview } from './preview';
 import { piecesFor } from './pieces';
 import { themeById } from './themes';
 
@@ -30,6 +31,8 @@ export type AppBoardProps = {
   /** Called for any click on a square, even when the board is not interactive: for editing a position. */
   onSquareSelect?: (square: string) => void;
   className?: string;
+  /** Show the position the learner is pointing at in the text, in place of this one (see `RichText`). */
+  previewable?: boolean;
 };
 
 const YELLOW = 'rgb(245 230 60 / 0.5)';
@@ -55,7 +58,25 @@ function Brackets() {
  * The one board used everywhere. Colours, pieces and aids come from the learner's preferences; it shows where the
  * selected piece can go, marks the square under the pointer with corner brackets, and can put a tick or cross on a square.
  */
-export function AppBoard({
+export function AppBoard({ previewable = false, ...props }: AppBoardProps) {
+  const preview = usePreview((state) => state.epd);
+  // A board that goes away takes any pointed-at position with it.
+  useEffect(() => (previewable ? () => usePreview.getState().clear() : undefined), [previewable]);
+  if (!previewable || preview === null) return <AppBoardView {...props} />;
+  // While a position is being pointed at, the board shows it plainly: no moves, arrows or marks of its own.
+  return (
+    <AppBoardView
+      id={props.id}
+      epd={preview}
+      orientation={props.orientation}
+      interactive={false}
+      coordinates={props.coordinates}
+      className={`${props.className ?? ''} rounded-sm ring-2 ring-primary ring-offset-2 ring-offset-background`}
+    />
+  );
+}
+
+function AppBoardView({
   id,
   epd,
   orientation,

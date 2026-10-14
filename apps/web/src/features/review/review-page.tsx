@@ -7,6 +7,7 @@ import { BoardSettingsButton } from '@/components/board/board-settings';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { RichText } from '@/components/rich-text';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
@@ -70,6 +71,7 @@ export function ReviewPage() {
         <div className="grid content-start gap-3">
           <AppBoard
             id="review"
+            previewable
             className="aspect-square w-full"
             epd={epd}
             orientation={side}
@@ -128,7 +130,7 @@ export function ReviewPage() {
             {done &&
               notes.slice(0, 2).map((note) => (
                 <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
-                  {note.text}
+                  <RichText text={note.text} />
                 </p>
               ))}
           </CardContent>

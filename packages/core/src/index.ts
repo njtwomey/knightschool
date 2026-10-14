@@ -25,3 +25,4 @@ export * from './tags';
 export * from './training';
 export * from './tree';
 export * from './tree-helpers';
+export * from './rich-text';

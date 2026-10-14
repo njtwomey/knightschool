@@ -10,7 +10,7 @@
 [Kind "main"]
 
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5
-6. Nxf7 { The sacrifice. The knight takes the pawn only the king guards and forks the queen and the rook. The point is to drag the king out into the open. [%cal Gg5f7] } 6... Kxf7
+6. Nxf7 { The sacrifice. The knight takes the pawn only the king guards and [forks the queen and the rook](r1bqkb1r/ppp2Npp/2n5/3np3/2B5/8/PPPP1PPP/RNBQK2R b KQkq -). The point is to drag the king out into the open. [%cal Gg5f7] } 6... Kxf7
 7. Qf3+ { Check, and the queen also attacks the knight on d5, which the bishop on c4 pins against the king. [%cal Gf3d5,Gc4d5] } 7... Ke6
 ( 7... Ke8 8. Bxd5 { Takes the knight; if the queen recaptures, White's queen takes first and Black ends a piece down. } 8... Qf6 9. Bxc6 bxc6 10. Qh5+ )
 ( 7... Ke7 8. Bxd5 Qe8 9. Bxc6 Qxc6 10. Qxc6 bxc6 )

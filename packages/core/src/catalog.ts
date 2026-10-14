@@ -1,3 +1,4 @@
+import { plainText } from './rich-text';
 import type { OpeningIndexEntry, Side, Tier } from './schema/content';
 
 /** What a search looks in: everything, or only courses or lines. */
@@ -12,8 +13,25 @@ export type CatalogFilter = {
   scope: SearchScope;
 };
 
-const words = (text: string) => text.toLowerCase().split(/\s+/).filter(Boolean);
-const matchesAll = (needles: string[], haystack: string) => needles.every((needle) => haystack.includes(needle));
+/**
+ * Lowercase, accents and apostrophes dropped ("Queen's" and "Queens" read alike), and hyphens and other punctuation
+ * turned into spaces ("Caro-Kann" and "caro kann" read alike). Dots stay so a move such as "3.e5" can be searched.
+ */
+export const fold = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/['\u2018\u2019`]/g, '')
+    .replace(/[-_,:;()/]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const words = (text: string) => fold(text).split(' ').filter(Boolean);
+/** A search word is found as typed, or without a plural s ("queens" still finds "queen"). */
+const found = (needle: string, haystack: string) =>
+  haystack.includes(needle) || (needle.length > 3 && needle.endsWith('s') && haystack.includes(needle.slice(0, -1)));
+const matchesAll = (needles: string[], haystack: string) => needles.every((needle) => found(needle, haystack));
 
 /** Courses in the order to study them, from content/curriculum.yaml. */
 export const inStudyOrder = (courses: OpeningIndexEntry[]) => [...courses].sort((a, b) => a.order - b.order);
@@ -23,14 +41,14 @@ const courseText = (course: OpeningIndexEntry) =>
     course.name,
     course.eco ?? '',
     course.trigger,
-    course.summary,
-    ...course.plans,
+    plainText(course.summary),
+    ...course.plans.map(plainText),
     ...course.motifs,
     ...course.tags,
     ...course.lines.flatMap((line) => [line.name, line.opponent]),
   ]
-    .join(' ')
-    .toLowerCase();
+    .map(fold)
+    .join(' ');
 
 /** Who plays each opening, so a course can be told apart as playing it or playing against it. */
 export type OwnerOf = { id: string; side: Side };
@@ -65,11 +83,11 @@ export function searchLines(courses: OpeningIndexEntry[], query: string, limit =
   const hits: LineHit[] = [];
   for (const course of courses) {
     for (const line of course.lines) {
-      const text = [line.name, line.opponent, course.name, course.eco ?? ''].join(' ').toLowerCase();
+      const text = fold([line.name, line.opponent, course.name, course.eco ?? ''].join(' '));
       if (matchesAll(needles, text)) hits.push({ course, line });
     }
   }
-  const exact = (hit: LineHit) => (hit.line.name.toLowerCase().includes(needles.join(' ')) ? 0 : 1);
+  const exact = (hit: LineHit) => (fold(hit.line.name).includes(needles.join(' ')) ? 0 : 1);
   return hits.sort((a, b) => exact(a) - exact(b) || a.course.order - b.course.order).slice(0, limit);
 }
 
@@ -87,16 +105,18 @@ export function relevance(name: string, content: string, query: string): number 
   const needles = words(query);
   if (needles.length === 0) return 1;
   const typed = needles.join(' ');
-  const lower = name.toLowerCase();
+  const lower = fold(name);
   const nameWords = new Set(lower.split(/[^a-z0-9]+/).filter(Boolean));
+  const isNameWord = (needle: string) =>
+    nameWords.has(needle) || (needle.length > 3 && needle.endsWith('s') && nameWords.has(needle.slice(0, -1)));
   if (lower === typed) return 100;
   if (lower.startsWith(typed)) return 80;
-  if (needles.every((needle) => nameWords.has(needle))) return 60;
+  if (needles.every(isNameWord)) return 60;
   if (matchesAll(needles, lower)) return 50;
-  const text = `${lower} ${content.toLowerCase()}`;
-  const found = needles.filter((needle) => text.includes(needle)).length;
-  if (found === needles.length) return 20;
-  return found > 0 && needles.length > 1 ? 5 * (found / needles.length) : 0;
+  const text = `${lower} ${fold(content)}`;
+  const hits = needles.filter((needle) => found(needle, text)).length;
+  if (hits === needles.length) return 20;
+  return hits > 0 && needles.length > 1 ? 5 * (hits / needles.length) : 0;
 }
 
 export type MatchReason =
@@ -111,9 +131,9 @@ export type MatchReason =
 export function matchReason(course: OpeningIndexEntry, query: string): MatchReason | undefined {
   const needles = words(query);
   if (needles.length === 0) return undefined;
-  if (matchesAll(needles, course.name.toLowerCase())) return { kind: 'name' };
+  if (matchesAll(needles, fold(course.name))) return { kind: 'name' };
   const names = course.lines
-    .filter((line) => matchesAll(needles, `${line.name} ${line.opponent}`.toLowerCase()))
+    .filter((line) => matchesAll(needles, fold(`${line.name} ${line.opponent}`)))
     .map((line) => line.name);
   return names.length > 0 ? { kind: 'lines', names: [...new Set(names)] } : { kind: 'text' };
 }

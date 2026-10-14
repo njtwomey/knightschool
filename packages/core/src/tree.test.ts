@@ -192,6 +192,11 @@ describe('buildOpening authoring errors', () => {
     );
   });
 
+  it('rejects a comment that links to an illegal position, naming the file', () => {
+    const bad = variant('main', 'line', '1. e4 { Look at [f7](8/8/8/8/8/8/8/8 w - -) now. } *');
+    expect(() => buildOpening('x', m(), [bad])).toThrow(/main\.pgn: "f7" links to/);
+  });
+
   it('rejects a line whose main path does not pass through the trigger', () => {
     expect(() => buildOpening('x', m({ trigger: '1. e4 e5' }), [variant('main', 'line', '1. d4 d5 *')])).toThrow(
       /trigger/,

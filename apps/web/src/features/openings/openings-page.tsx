@@ -4,6 +4,7 @@ import {
   allLines,
   filterCourses,
   matchReason,
+  plainText,
   relevance,
   searchAt,
   searchLines,
@@ -124,7 +125,11 @@ export function OpeningsPage() {
             name: course.name,
             score: relevance(
               course.name,
-              [course.summary, course.trigger, ...course.lines.flatMap((line) => [line.name, line.opponent])].join(' '),
+              [
+                plainText(course.summary),
+                course.trigger,
+                ...course.lines.flatMap((line) => [line.name, line.opponent]),
+              ].join(' '),
               filter.query,
             ),
           }));
@@ -132,7 +137,11 @@ export function OpeningsPage() {
       kind: 'line',
       hit,
       name: hit.line.name,
-      score: relevance(hit.line.name, `${hit.course.name} ${hit.line.opponent} ${hit.course.summary}`, filter.query),
+      score: relevance(
+        hit.line.name,
+        `${hit.course.name} ${hit.line.opponent} ${plainText(hit.course.summary)}`,
+        filter.query,
+      ),
     }));
     const typed = filter.query.trim() !== '';
     const ranked = [...items, ...lines].filter((item) => item.score > 0);

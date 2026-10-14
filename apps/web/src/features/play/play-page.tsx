@@ -7,6 +7,7 @@ import { BoardSettingsButton } from '@/components/board/board-settings';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { RichText } from '@/components/rich-text';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
@@ -260,6 +261,7 @@ export function PlayPage({ course, line, mode }: Props) {
             {state.mode === 'learn' && <EvalBar orientation={side} />}
             <AppBoard
               id="play"
+              previewable
               className="aspect-square min-w-0 flex-1"
               epd={shownEpd}
               orientation={side}
@@ -388,10 +390,7 @@ export function PlayPage({ course, line, mode }: Props) {
                 {exploring
                   ? 'This is off the line. Watch the engine to see what it costs or gains, or click what people play.'
                   : state.mode === 'learn'
-                    ? upcomingNotes
-                        .slice(0, 2)
-                        .map((note) => note.text)
-                        .join(' ')
+                    ? upcomingNotes.slice(0, 2).map((note) => <RichText key={note.text} text={`${note.text} `} />)
                     : MODES[state.mode].blurb}
               </CardDescription>
             </CardHeader>
@@ -430,7 +429,7 @@ export function PlayPage({ course, line, mode }: Props) {
               <p className="font-medium">{label(lastStep!, index - 1)}</p>
               {notes.slice(0, 2).map((note) => (
                 <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
-                  {note.text}
+                  <RichText text={note.text} />
                 </p>
               ))}
             </div>

@@ -77,3 +77,7 @@ Required: `Opening`, `Variation`, `ECO`, `Character`, `Risk`, `EarlyMate`, `Tric
 | `Themes`    | kebab-case plans, 1 to 3: `d4-break`, `f7-pressure`, `good-bishop`. Reuse: `grep -rh '^\[Themes' content`.                                                                                                                                    |
 
 A trap file (`traps/`) is one specific trick: a mistake we must avoid (`against-us`) or an opponent mistake we punish (`for-us`, which must end clearly better for us). A strong line against a merely dubious move (`2.Bc4?!`) is a regular `lines/` file (mark the dubious move `?!`).
+
+## Position links
+
+In a comment, `summary` or `plans` bullet, `[words](EPD-or-FEN)` makes the words hover-able: the board beside the text shows that position. Get the EPD with `pnpm fen "1. e4 e5 2. Nf3"`. See `content/README.md`, "Position links in text".

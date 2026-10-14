@@ -1,4 +1,5 @@
 import { explainMove, nodeAt, type OpeningContent } from '@knightschool/core';
+import { RichText } from '@/components/rich-text';
 import { currentEpd, useBrowse } from './store';
 
 const NAG_WORDS: Record<number, string> = {
@@ -34,7 +35,7 @@ export function PositionDetails({ content }: { content: OpeningContent }) {
       )}
       {notes.map((note) => (
         <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
-          {note.text}
+          <RichText text={note.text} />
         </p>
       ))}
       {!last && <p className="text-muted-foreground">Use the arrows under the board, or tap a move in the list.</p>}

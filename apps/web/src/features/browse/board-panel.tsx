@@ -21,6 +21,7 @@ export function BoardPanel({ content }: { content: OpeningContent }) {
         <EvalBar orientation={content.opening.side} />
         <AppBoard
           id="explore"
+          previewable
           className="aspect-square min-w-0 flex-1"
           epd={epd}
           orientation={content.opening.side}

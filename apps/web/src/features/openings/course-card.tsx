@@ -1,5 +1,6 @@
 import {
   courseProgress,
+  plainText,
   roleOf,
   type MatchReason,
   type OpeningGroup,
@@ -50,7 +51,7 @@ export function CourseCard({
           <h3 className="text-base font-semibold leading-tight">{course.name}</h3>
           {course.eco && <Badge variant="outline">{course.eco}</Badge>}
         </div>
-        <p className="line-clamp-2 text-sm text-muted-foreground">{course.summary}</p>
+        <p className="line-clamp-2 text-sm text-muted-foreground">{plainText(course.summary)}</p>
         <div className="flex flex-wrap gap-1 text-xs">
           <Badge variant={course.tier === 1 ? 'default' : 'secondary'} className="px-1.5 py-0 text-[11px] font-normal">
             {TIER[course.tier]}

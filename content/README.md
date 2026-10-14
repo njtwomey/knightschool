@@ -137,6 +137,15 @@ Motif ids (shared with `Annotation.motifs` and the MotifExplainer, so a quiz ans
 
 Move-level tags (a trick at one specific move) belong in that move's annotation, not the header.
 
+## Position links in text
+
+A comment, a course `summary` and a `plans` bullet may point at a position, so a reader can see what the words mean:
+`[f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -)`. The words in square brackets are shown; the part in
+parentheses is any legal FEN or EPD. Beside a board, hovering (or tapping) the words puts that position on the board and
+it goes back when the pointer leaves. `pnpm fen "1. e4 e5 2. Nf3 Nc6 3. Bc4"` prints the EPD for a move list. A target that
+looks like a position (it contains `/`) but is not legal fails the build with the file name. Comments are shared by every
+file that reaches the same move, so put a link in the one file that owns that comment.
+
 ## Example
 
 ```

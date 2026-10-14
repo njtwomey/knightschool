@@ -1,3 +1,4 @@
+import { checkRichText } from './rich-text';
 import { START_EPD } from './epd';
 import { playSan, sideToMove } from './chess';
 import type { PgnGame, PgnMoveNode } from './pgn';
@@ -60,6 +61,7 @@ export function buildOpening(
   variants: VariantSource[],
   quizEntries: QuizEntry[] = [],
 ): OpeningContent {
+  for (const text of [manifest.summary, ...manifest.plans]) checkRichText(text, `${id}/course.yaml`);
   const lineIds = manifest.lines.map((line) => line.file);
   const trapIds = manifest.traps.map((trap) => trap.file);
   const listed = [...lineIds, ...trapIds];
@@ -137,6 +139,7 @@ export function buildOpening(
         }
         const from = nodeAt(epd, ply);
         const to = nodeAt(played.epd, ply + 1);
+        if (move.comment) checkRichText(move.comment, variant.source);
         const annotation = annotationOf(move);
         const where = `${variant.source}: ${move.san} at ply ${ply + 1}`;
         let edge = from.moves.find((candidate) => candidate.uci === played.uci);

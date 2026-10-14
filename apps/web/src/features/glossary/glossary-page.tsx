@@ -4,7 +4,7 @@ import { Page } from '@/components/page';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { loadGlossary } from '@/data/content';
+import { glossary } from './use-glossary';
 import { useBrowse } from '@/features/browse/store';
 import { to } from '@/router/location';
 
@@ -15,7 +15,7 @@ export function GlossaryPage() {
   const [failure, setFailure] = useState<string | null>(null);
 
   useEffect(() => {
-    loadGlossary()
+    glossary()
       .then(setEntries)
       .catch((error: unknown) => setFailure(error instanceof Error ? error.message : String(error)));
   }, []);

@@ -1,6 +1,7 @@
 import { courseProgress, relatedCourses, roleOf, type RelatedCourse } from '@knightschool/core';
 import { useEffect, useRef, useState } from 'react';
 import { Page } from '@/components/page';
+import { RichText } from '@/components/rich-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -25,6 +26,8 @@ import { useEngine } from '@/features/engine/store';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState, to } from '@/router/location';
+import { MotifChip } from '@/features/glossary/motif-chip';
+import { useGlossary } from '@/features/glossary/use-glossary';
 import { LinesTable } from './lines-table';
 
 function isTyping(target: EventTarget | null) {
@@ -60,6 +63,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
   const learned = useProgress((state) => state.learned);
   const autoEngine = useEnginePrefs((state) => state.auto);
   const [related, setRelated] = useState<RelatedCourse[]>([]);
+  const definitions = useGlossary();
   useKeyboardNavigation();
 
   // The engine is on by default; Settings turns it off.
@@ -138,11 +142,15 @@ export function CoursePage({ courseId }: { courseId: string }) {
                 <EnrolButton openingId={courseId} />
               </span>
             </div>
-            <p className="max-w-3xl text-muted-foreground">{course.summary}</p>
+            <p className="max-w-3xl text-muted-foreground">
+              <RichText text={course.summary} />
+            </p>
             {course.plans.length > 0 && (
               <ul className="grid max-w-3xl list-disc gap-1 pl-5 text-sm">
                 {course.plans.map((plan) => (
-                  <li key={plan}>{plan}</li>
+                  <li key={plan}>
+                    <RichText text={plan} />
+                  </li>
                 ))}
               </ul>
             )}
@@ -150,11 +158,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
               <p className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
                 Ideas in this course:
                 {course.motifs.map((motif) => (
-                  <a key={motif} href={`${to('/glossary')}#${motif}`}>
-                    <Badge variant="outline" className="font-normal hover:bg-accent">
-                      {motif.replace(/-/g, ' ')}
-                    </Badge>
-                  </a>
+                  <MotifChip key={motif} id={motif} entry={definitions?.find((entry) => entry.id === motif)} />
                 ))}
               </p>
             )}

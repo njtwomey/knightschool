@@ -104,6 +104,39 @@ describe('study order and filters', () => {
   });
 });
 
+describe('forgiving search', () => {
+  const gambit = course({
+    id: 'qgd',
+    name: "Queen's Gambit Declined",
+    lines: [line('orthodox', "Queen's Gambit, Orthodox")],
+  });
+  const caro = course({ id: 'caro', name: 'Caro-Kann Defence', lines: [line('exchange', 'Exchange Variation')] });
+  const both = [gambit, caro];
+
+  it("finds Queen's Gambit however the apostrophe and plural are typed", () => {
+    for (const query of ["queen's", 'queens', 'Queens Gambit', 'queen', "QUEEN'S gambit", 'queens’ gambit']) {
+      expect(ids(filterCourses(both, { ...base, query }, openings)), query).toEqual(['qgd']);
+    }
+    expect(searchLines(both, 'queens gambit').map((hit) => hit.line.id)).toEqual(['orthodox']);
+  });
+
+  it('reads hyphens, spaces and accents alike', () => {
+    for (const query of ['caro-kann', 'caro kann', 'Caro Kann', 'cäro']) {
+      expect(ids(filterCourses(both, { ...base, query }, openings)), query).toEqual(['caro']);
+    }
+  });
+
+  it('ranks a plural or apostrophe-free name as a whole-word match', () => {
+    expect(relevance("Queen's Gambit Declined", '', 'queens')).toBeGreaterThanOrEqual(60);
+    expect(relevance("Queen's Gambit Declined", '', 'queens gambit')).toBeGreaterThan(0);
+    expect(matchReason(gambit, 'queens gambit')).toEqual({ kind: 'name' });
+  });
+
+  it('does not match unrelated words', () => {
+    expect(filterCourses(both, { ...base, query: 'queens rook' }, openings)).toEqual([]);
+  });
+});
+
 describe('searching lines', () => {
   it('finds lines by name or by what the opponent plays, and nothing for an empty search', () => {
     expect(

@@ -1,4 +1,14 @@
-import { BarChart3, CircleUser, LayoutDashboard, Library, Search, Settings, Telescope, Timer } from 'lucide-react';
+import {
+  BarChart3,
+  BookText,
+  CircleUser,
+  LayoutDashboard,
+  Library,
+  Search,
+  Settings,
+  Telescope,
+  Timer,
+} from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
 import { SiteFooter } from '@/components/site-footer';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -66,12 +76,13 @@ export function App() {
           {link(
             to('/browse'),
             'Browse',
-            route.page === 'openings' || route.page === 'course' || route.page === 'play' || route.page === 'glossary',
+            route.page === 'openings' || route.page === 'course' || route.page === 'play',
             <Search aria-hidden />,
           )}
           {link(to('/quiz'), 'Quiz', route.page === 'review', <Library aria-hidden />)}
           {link(to('/guess'), 'Guess', route.page === 'guess', <Telescope aria-hidden />)}
           {link(to('/speed'), 'Speed', route.page === 'speed', <Timer aria-hidden />)}
+          {link(to('/glossary'), 'Glossary', route.page === 'glossary', <BookText aria-hidden />)}
         </nav>
         <div className="ml-auto flex items-center gap-1">
           <DropdownMenu>
