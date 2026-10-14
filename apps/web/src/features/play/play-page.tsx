@@ -174,11 +174,14 @@ export function PlayPage({ course, line, mode }: Props) {
     : variants.find((candidate) => candidate.id === line)!;
   const next = drill ? undefined : variants[variants.findIndex((candidate) => candidate.id === line) + 1];
 
-  /** Learn and Practise play one line; Every branch has no single line, so those switch the page. */
-  function chooseMode(mode: PlayMode) {
-    if (mode === 'branches') navigate(`/play/${course}/${ALL_BRANCHES}/branches`);
-    else if (drill) navigate(`/play/${course}/${firstLine.id}/${mode}`);
-    else usePlay.getState().setMode(mode);
+  /**
+   * Switching how you play changes the address, so a refresh or a shared link comes back to exactly this: the course,
+   * the line and the mode are all in the path (/play/<course>/<line>/<learn | practice>, and /play/<course>/all/branches
+   * for the every-branch drill).
+   */
+  function chooseMode(next: PlayMode) {
+    if (next === 'branches') navigate(`/play/${course}/${ALL_BRANCHES}/branches`);
+    else navigate(`/play/${course}/${drill ? firstLine.id : line}/${next}`);
   }
   const side = content.opening.side;
   const other = side === 'white' ? 'Black' : 'White';
@@ -397,7 +400,7 @@ export function PlayPage({ course, line, mode }: Props) {
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {state.mode === 'learn' ? (
-                  <Button onClick={() => usePlay.getState().setMode('practice')}>
+                  <Button onClick={() => chooseMode('practice')}>
                     <Target aria-hidden /> Now practise it
                   </Button>
                 ) : (
