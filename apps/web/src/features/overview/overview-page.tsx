@@ -25,13 +25,14 @@ async function loadRows(index: OpeningIndexEntry[]): Promise<Row[]> {
   const enrolled = (await getEnrolled(storage)).flatMap((id) => index.find((entry) => entry.id === id) ?? []);
   const quota = Math.max(0, (await getNewPerDay(storage)) - (await getIntroducedToday(storage, now)));
   const contents = await Promise.all(enrolled.map((entry) => loadOpening(entry.id)));
-  const openings = await Promise.all(
+  const courses = await Promise.all(
     contents.map(async (content) => ({
       content,
-      existing: new Set((await storage.cards.byOpening(content.opening.id)).map((card) => card.id)),
+      cards: await storage.cards.byOpening(content.opening.id),
+      reviews: await storage.reviews.byOpening(content.opening.id),
     })),
   );
-  const fresh = planIntroductions(openings, quota, now, await getCardOptions(storage));
+  const fresh = planIntroductions(courses, quota, now, await getCardOptions(storage));
   return Promise.all(
     enrolled.map(async (course) => ({
       course,

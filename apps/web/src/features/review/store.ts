@@ -253,14 +253,16 @@ export const useReview = create<ReviewState>((set, get) => {
         const loaded = await Promise.all(enrolled.map((id) => loadOpening(id)));
         const contents = Object.fromEntries(loaded.map((content) => [content.opening.id, content]));
 
+        // New cards come from each course's path: its open units in order, never ahead of what is passed.
         const quota = Math.max(0, (await getNewPerDay(storage)) - (await getIntroducedToday(storage, now)));
-        const openings = await Promise.all(
+        const courses = await Promise.all(
           loaded.map(async (content) => ({
             content,
-            existing: new Set((await storage.cards.byOpening(content.opening.id)).map((card) => card.id)),
+            cards: await storage.cards.byOpening(content.opening.id),
+            reviews: await storage.reviews.byOpening(content.opening.id),
           })),
         );
-        const fresh = planIntroductions(openings, quota, now, await getCardOptions(storage));
+        const fresh = planIntroductions(courses, quota, now, await getCardOptions(storage));
         await storage.cards.insertMissing(fresh);
         if (fresh.length) await addIntroducedToday(storage, fresh.length, now);
 

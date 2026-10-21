@@ -91,35 +91,6 @@ export function cardDefinitions(content: OpeningContent, options: number | CardO
 }
 
 /**
- * The next new cards to introduce today, at most `quota`, taking turns between openings so one does not hog the day.
- * `existing` holds the ids already in storage. Returns the cards to insert.
- */
-export function planIntroductions(
-  openings: { content: OpeningContent; existing: ReadonlySet<string> }[],
-  quota: number,
-  now: Date,
-  options: CardOptions = {},
-): Card[] {
-  const queues = openings.map(({ content, existing }) =>
-    introductionOrder(content, options).filter((card) => !existing.has(card.id)),
-  );
-  const chosen: CardDefinition[] = [];
-  for (let round = 0; chosen.length < quota; round++) {
-    let any = false;
-    for (const queue of queues) {
-      const next = queue[round];
-      if (!next || chosen.length >= quota) continue;
-      any = true;
-      chosen.push(next);
-    }
-    if (!any) break;
-  }
-  // Due times one millisecond apart, earliest first and all already past, so a session studies the new cards in the
-  // order they were introduced and every one of them is due immediately.
-  return chosen.map((definition, i) => newCard(definition, new Date(now.getTime() - (chosen.length - i))));
-}
-
-/**
  * Free practice: a handful of questions from the given courses, whether or not they are being learned. The cards are
  * made fresh and are never saved, so nothing here touches the review schedule. Picked at random, or (`popular`)
  * favouring the positions more games reach. `random` is injectable for tests.

@@ -1,6 +1,6 @@
 # Study paths, spaced repetition and authoring: analysis and plan
 
-Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 and 2 are built (see §4 for what changed from this proposal). Decisions
+Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 to 3 are built (see §4 for what changed from this proposal). Decisions
 that change stored data are listed at the end.
 
 ## 1. What exists today
@@ -165,7 +165,13 @@ Each stage stands on its own and is small enough to review.
    the quiz yet. Opening rush is Speed with a new source, `rush:<course>`: each passed unit from the first move to its
    end (the depth choice does not apply), repeated to fill the run when few are passed. "Standard" is stage 3.
 3. **Path-ordered introductions.** New cards come from unlocked units in path order; the daily queue stays as it is.
-   Supplementary items stop being cards if D3 says so (a data change: see below).
+   Supplementary items stop being cards if D3 says so (a data change: see below). **Done**, with no data change:
+   `planIntroductions` (now in `units.ts`) takes each course's cards and reviews and offers the cards of unlocked units
+   and units being learned, in path order, taking turns between courses, up to the daily limit. Quizzes are no longer
+   introduced; quiz cards already stored stay and are still asked when due (nothing is deleted). Due reviews always come
+   first (`planSession`, unchanged). Learn and Drill in `features/play/record.ts` are unchanged: what you choose to
+   learn or drill makes its cards whatever the path says, so jumping ahead still works. Free practice and the build's
+   card counts keep the flat `introductionOrder`.
 4. **Unit order overrides for shipped courses** in `course.yaml`, checked by the build.
 5. **Authoring, local storage.** Tables for authored chapters and courses with history; merge into the tree at load;
    export and import them; reminders. (D4.)

@@ -207,8 +207,9 @@ random known reply. Positions after a mistake the learner's own side makes are n
 
 `<course>/quizzes.yaml` (see `content/README.md`): the position is a move list, answers are keyword groups,
 and `examples` are checked against the matcher when the course is built, so a bad keyword fails the build. Quizzes are
-review cards (`quiz:<opening>:<id>`, one in every five introduced), graded matched or missed, written with
-`quizAttempts.record`. In Review a quiz is answered by typing, then moves on by itself (a "Skip ahead" button is optional).
+review cards (`quiz:<opening>:<id>`), graded matched or missed, written with `quizAttempts.record`. Since the study path
+(stage 3) new quiz cards are no longer introduced: quizzes are extras on the Path tab, and quiz cards already in the
+database are still asked when due. In Review a quiz is answered by typing, then moves on by itself (a "Skip ahead" button is optional).
 
 ### Training
 
@@ -216,9 +217,13 @@ Pure logic is in core: `autoGrade` and the `reduceAttempt` state machine (hint, 
 (ts-fsrs; `Card` stores `scheduledDays` and `learningSteps` because FSRS needs them), `cardDefinitions` /
 `planIntroductions` / `planSession`, and `recordAnswer` (new schedule plus the `Review` row, written together by
 `reviews.record`). Which openings are trained and the new-cards-per-day limit live in the settings table
-(`apps/web/src/data/training-settings.ts`), so they export with everything else. New cards are introduced when a session
-starts, up to the daily limit; they are given due times one millisecond apart in the past so sorting by due date keeps
-main-line-first order. Practice answers in `play` feed the same cards through `features/play/record.ts`; Learn only
+(`apps/web/src/data/training-settings.ts`), so they export with everything else. New cards are introduced when a quiz
+session starts, up to the daily limit, in **path order** (`planIntroductions` in `units.ts`: each enrolled course offers
+the cards of its unlocked units and units being learned, in unit order, taking turns between courses; a locked unit
+waits until the unit it grows from is passed; quizzes are never introduced). Due reviews are never limited by this:
+`planSession` puts them first. New cards get due times one millisecond apart in the past so sorting by due date keeps
+the introduction order. `introductionOrder` (moves and quizzes, flat) is still what free practice and the build's card
+counts use. Practice answers in `play` feed the same cards through `features/play/record.ts`; Learn only
 introduces them. A review is card by card: the position before our move, the opponent's last move highlighted.
 
 **Units (the study path, `units.ts` in core, docs/STUDY-PLAN.md).** `courseUnits(content, options)` cuts a course into

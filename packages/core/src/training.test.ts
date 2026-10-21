@@ -13,7 +13,6 @@ import {
   introductionOrder,
   isQuizCard,
   lineQuestions,
-  planIntroductions,
   planSession,
   quizCardId,
   quizDefinitions,
@@ -21,6 +20,8 @@ import {
   recordQuizAnswer,
 } from './training';
 import { buildOpening } from './tree';
+import { courseUnits, planIntroductions } from './units';
+import type { Card, Review } from './schema/user';
 import { namedPly, variantPath } from './tree-helpers';
 
 const NOW = new Date('2026-10-13T10:00:00.000Z');
@@ -149,14 +150,28 @@ describe('cardDefinitions', () => {
 });
 
 describe('planIntroductions', () => {
+  const answered = (cards: Card[], rating: Review['rating'] = 'good'): Review[] =>
+    cards.flatMap((card) =>
+      [1, 2].map((minute) => ({
+        id: `${card.id}:${minute}`,
+        cardId: card.id,
+        at: new Date(NOW.getTime() + minute * 60_000).toISOString(),
+        rating,
+        playedUci: null,
+        msToAnswer: 1000,
+        hintUsed: false,
+        sessionId: 's',
+      })),
+    );
+
   it('introduces at most the quota, skips existing cards, and takes turns between openings', () => {
     const a = content();
     const b = { ...content(), opening: { ...content().opening, id: 'u' } };
-    const existing = new Set([cardId('t', a.opening.rootEpd)]);
+    const first = cardDefinitions(a)[0]!;
     const cards = planIntroductions(
       [
-        { content: a, existing },
-        { content: b, existing: new Set() },
+        { content: a, cards: [newCard(first, NOW)], reviews: [] },
+        { content: b, cards: [], reviews: [] },
       ],
       4,
       NOW,
@@ -166,12 +181,27 @@ describe('planIntroductions', () => {
     expect(cards.every((card) => card.state === 'new' && Date.parse(card.due) <= NOW.getTime())).toBe(true);
     // Due times keep the introduction order, so a session studies them in that order.
     expect(planSession([...cards].reverse()).map((card) => card.id)).toEqual(cards.map((card) => card.id));
-    expect(planIntroductions([{ content: a, existing }], 0, NOW)).toEqual([]);
+    expect(cards.map((card) => card.id)).not.toContain(first.id);
+    expect(planIntroductions([{ content: a, cards: [], reviews: [] }], 0, NOW)).toEqual([]);
   });
 
-  it('stops when everything is introduced', () => {
+  it('introduces only from open units, in path order, until the unit they grow from is passed', () => {
     const a = content();
-    expect(planIntroductions([{ content: a, existing: new Set() }], 100, NOW)).toHaveLength(cardDefinitions(a).length);
+    const [main, rest] = courseUnits(a) as [
+      ReturnType<typeof courseUnits>[number],
+      ReturnType<typeof courseUnits>[number],
+    ];
+    const ids = (cards: Card[]) => cards.map((card) => card.id);
+    // Nothing studied: only the first unit, however big the allowance.
+    const fresh = planIntroductions([{ content: a, cards: [], reviews: [] }], 100, NOW);
+    expect(ids(fresh)).toEqual(main.cards.map((card) => card.id));
+    // Introduced but not yet sure: nothing new, so new material never piles up on a unit being learned.
+    expect(planIntroductions([{ content: a, cards: fresh, reviews: [] }], 100, NOW)).toEqual([]);
+    expect(planIntroductions([{ content: a, cards: fresh, reviews: answered(fresh, 'hard') }], 100, NOW)).toEqual([]);
+    // Passed: the next unit opens.
+    const next = planIntroductions([{ content: a, cards: fresh, reviews: answered(fresh) }], 100, NOW);
+    expect(ids(next)).toEqual(rest.cards.map((card) => card.id));
+    expect(fresh.length + next.length).toBe(cardDefinitions(a).length);
   });
 });
 
@@ -297,11 +327,11 @@ describe('quiz cards', () => {
     expect(order.filter(isQuizCard)).toHaveLength(2);
   });
 
-  it('are introduced like any other card', () => {
+  it('are never introduced through the path: they are extras', () => {
     const c = withQuizzes();
-    const cards = planIntroductions([{ content: c, existing: new Set() }], 100, NOW);
-    expect(cards.filter(isQuizCard)).toHaveLength(2);
-    expect(cards.filter((card) => !isQuizCard(card))).toHaveLength(cardDefinitions(c).length);
+    const cards = planIntroductions([{ content: c, cards: [], reviews: [] }], 100, NOW);
+    expect(cards.length).toBeGreaterThan(0);
+    expect(cards.filter(isQuizCard)).toEqual([]);
   });
 
   it('are graded matched or missed, with a review row and an attempt row', () => {

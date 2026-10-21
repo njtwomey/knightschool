@@ -42,9 +42,9 @@ describe('a training session against a real database', () => {
     const { storage } = await openMemoryStorage();
     const scheduler = createScheduler({ fuzz: false });
 
-    await storage.cards.insertMissing(planIntroductions([{ content, existing: new Set() }], 10, NOW));
+    await storage.cards.insertMissing(planIntroductions([{ content, cards: [], reviews: [] }], 10, NOW));
     const queue = planSession(await storage.cards.due(NOW.toISOString()));
-    expect(queue).toHaveLength(8); // White makes eight moves in this line
+    expect(queue).toHaveLength(4); // White makes eight moves in this line: the path's first unit is four of them
 
     const scheduled = [];
     for (const [i, card] of queue.entries()) {
@@ -57,7 +57,7 @@ describe('a training session against a real database', () => {
       scheduled.push(answer.card);
     }
 
-    expect((await storage.stats()).reviews).toBe(8);
+    expect((await storage.stats()).reviews).toBe(4);
     expect(scheduled.every((card) => card.reps === 1 && card.state !== 'new' && card.stability > 0)).toBe(true);
 
     // Right after the session only a missed card (relearning, due in minutes) can still be due today.
@@ -73,5 +73,36 @@ describe('a training session against a real database', () => {
     // The easiest card comes back last.
     const dues = scheduled.map((card) => card.due).sort();
     expect(scheduled[0]!.due).toBe(dues.at(-1));
+  });
+
+  it('introduces the next unit only once the first is passed, reading the cards and reviews back from the database', async () => {
+    const { storage } = await openMemoryStorage();
+    const scheduler = createScheduler({ fuzz: false });
+    const plan = async (now: Date) =>
+      planIntroductions(
+        [{ content, cards: await storage.cards.byOpening('t'), reviews: await storage.reviews.byOpening('t') }],
+        10,
+        now,
+      );
+    const first = await plan(NOW);
+    await storage.cards.insertMissing(first);
+    expect(await plan(NOW)).toEqual([]); // the second unit waits
+
+    // Every move of the first unit right twice in a row.
+    for (const round of [0, 1]) {
+      const at = new Date(NOW.getTime() + round * DAY);
+      for (const card of await storage.cards.byOpening('t')) {
+        const attempt = reduceAttempt(
+          startAttempt(),
+          { type: 'move', uci: card.expectedUci, elapsedMs: 2000 },
+          card.expectedUci,
+        );
+        const answer = recordAnswer(scheduler, card, attempt, `session-${round}`, at);
+        await storage.reviews.record(answer.card, answer.review);
+      }
+    }
+    const second = await plan(new Date(NOW.getTime() + 2 * DAY));
+    expect(second).toHaveLength(4);
+    expect(second.filter((card) => first.some((other) => other.id === card.id))).toEqual([]);
   });
 });
