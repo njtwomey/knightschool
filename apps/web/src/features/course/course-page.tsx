@@ -4,14 +4,7 @@ import { Page } from '@/components/page';
 import { RichText } from '@/components/rich-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { CourseBreadcrumbs } from '@/features/browse/breadcrumbs';
 import { Hint } from '@/components/hint';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -111,17 +104,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
 
   return (
     <Page>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href={to('/browse')}>Browse</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{course?.name ?? courseId}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <CourseBreadcrumbs course={courseId} />
 
       {contentStatus === 'error' && (
         <Alert variant="destructive">
