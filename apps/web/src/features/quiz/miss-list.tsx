@@ -1,5 +1,6 @@
 import { regretSummary, REGRET_CAP, REGRET_WORDS, type Regret } from '@knightschool/core';
 import { useEffect, useState } from 'react';
+import { uciArrow } from '@/components/board/shapes';
 import { StaticBoard } from '@/components/board/static-board';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,10 +9,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useEnginePrefs } from '@/data/engine/prefs';
 import { checkMisses, useMissChecks, type Miss, type MissCheck } from './regret';
 import { useQuiz } from './store';
-
-// Board arrows take a colour string, not a class: the same green the quiz uses for the course's move.
-const COURSE_ARROW = 'rgb(21 128 61 / 0.85)';
-const PLAYED_ARROW = 'rgb(220 38 38 / 0.8)';
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 
@@ -103,7 +100,6 @@ function MissRow({
   check: MissCheck | undefined;
   showCourse: boolean;
 }) {
-  const from = (uci: string, color: string) => ({ startSquare: uci.slice(0, 2), endSquare: uci.slice(2, 4), color });
   return (
     <li className="flex flex-col gap-3 border-t pt-4 first:border-t-0 first:pt-0 sm:flex-row sm:items-start">
       <StaticBoard
@@ -111,7 +107,7 @@ function MissRow({
         source={{ epd: miss.epd }}
         orientation={miss.side}
         coordinates={false}
-        arrows={[from(miss.playedUci, PLAYED_ARROW), from(miss.expectedUci, COURSE_ARROW)]}
+        arrows={[uciArrow(miss.playedUci, 'played'), uciArrow(miss.expectedUci, 'answer')]}
         className="max-w-56 shrink-0 sm:w-32"
       />
       <div className="grid min-w-0 gap-1.5 text-sm">
