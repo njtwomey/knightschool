@@ -2,8 +2,6 @@ import {
   laneLayout,
   matchesText,
   numberedMove,
-  subtreeOf,
-  type LaneLayout,
   type MoveTree,
   type OpeningContent,
   type Side,
@@ -18,6 +16,7 @@ import { loadOpening } from '@/data/content';
 import { lineHref } from '@/features/line/tabs';
 import { to } from '@/router/location';
 import { laneColour } from './colours';
+import { below, indexModel, type IndexModel } from './index-model';
 import { LaneTree } from './lane-tree';
 
 /** A line as the explorer lists it: its id, what to call it, the course to open it in, and its side. */
@@ -62,11 +61,13 @@ function useMoveComment(courses: readonly string[], fromEpd: string | undefined,
 }
 
 /**
- * Lines as a tree, full width, in three columns (a course's tree, and the whole curriculum's). On the left the index:
- * the lines as a hierarchy shaped like the tree, each under the line it grows out of. Pointing at a line lights its
- * path and shows its last position; clicking picks it and scrolls the tree to where it branches; the chevron folds its
- * branches away, in the index and in the tree; the crosshair shows only it and its branches. In the middle the tree,
- * one column per move and the first line straight across the top. On the right a board with the move last pointed at.
+ * Lines as a tree, full width, in three columns (a course's tree, and the whole curriculum's). On the left the index,
+ * shaped like the tree: in groups when `groupOf` is given (the curriculum, by its first moves), each line under the
+ * line it grows out of. Pointing at a line lights its path and shows its last position; clicking picks it and scrolls
+ * the tree to where it branches; the chevron folds a line's or a group's branches away, in the index and in the tree;
+ * the crosshair lights a line or a group and everything under it and scrolls there, keeping the rest of the tree. In
+ * the middle the tree, one column per move and the first line straight across the top. On the right a board with the
+ * move last pointed at.
  */
 export function TreeExplorer({
   tree,
@@ -78,6 +79,7 @@ export function TreeExplorer({
   search = false,
   aside,
   zoom,
+  groupOf,
 }: {
   tree: MoveTree;
   /** In order: the first is the main line, the rest in the order their lanes are claimed. */
@@ -94,23 +96,30 @@ export function TreeExplorer({
   aside?: ReactNode;
   /** The tree's starting zoom: the whole curriculum starts far out, to show its shape. */
   zoom?: number;
+  /** Groups for the index (lines with the same key are listed together under its label). */
+  groupOf?: (id: string) => { key: string; label: string };
 }) {
   const ids = useMemo(() => lines.map((line) => line.id), [lines]);
   const byId = useMemo(() => new Map(lines.map((line) => [line.id, line])), [lines]);
   const full = useMemo(() => laneLayout(tree, ids), [tree, ids]);
-  const [only, setOnly] = useState<string | null>(null);
+  const model = useMemo(() => indexModel(full, ids, groupOf), [full, ids, groupOf]);
+  const groupLines = useMemo(() => new Map(model.groups.map((group) => [group.key, group.lines])), [model]);
+  /** Folded lines and groups: a group's key is kept with a "group:" prefix so it cannot clash with a line id. */
   const [folded, setFolded] = useState<ReadonlySet<string>>(new Set());
+  const [lighted, setLighted] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const hidden = useMemo(() => {
     const out = new Set<string>();
-    for (const line of folded) for (const below of subtreeOf(full, line).slice(1)) out.add(below);
+    for (const key of folded) {
+      if (key.startsWith('group:')) for (const id of groupLines.get(key.slice(6)) ?? []) out.add(id);
+      else for (const id of below(model, key)) out.add(id);
+    }
     return out;
-  }, [full, folded]);
+  }, [model, groupLines, folded]);
   const layout = useMemo(() => {
-    const scope = only ? subtreeOf(full, only) : ids;
-    const shown = scope.filter((id) => !hidden.has(id));
+    const shown = ids.filter((id) => !hidden.has(id));
     return shown.length === ids.length ? full : laneLayout(tree, shown);
-  }, [tree, full, ids, only, hidden]);
+  }, [tree, full, ids, hidden]);
 
   const [picked, setPicked] = useState<string | null>(initialPicked ?? null);
   const [pointed, setPointed] = useState<string | null>(null);
@@ -121,7 +130,12 @@ export function TreeExplorer({
   const colourOf = (id: string) => laneColour(indexOf.get(id) ?? 0);
   const name = (line: ExplorerLine) =>
     shortNames && line.name.includes(':') ? line.name.slice(line.name.indexOf(':') + 1).trim() || line.name : line.name;
-  const lit = new Set([pointed ?? picked].filter((id): id is string => id !== null));
+  /** The lines a crosshair lights: a group's lines, or a line and everything under it. */
+  const lightOf = (key: string) =>
+    key.startsWith('group:') ? (groupLines.get(key.slice(6)) ?? []) : [key, ...below(model, key)];
+  const lit = new Set<string>(
+    pointed ? [pointed] : [...(lighted ? lightOf(lighted) : []), ...(picked ? [picked] : [])],
+  );
   const endOf = (id: string) => full.pathOf.get(id)?.at(-1) ?? null;
   const shownId = focus ?? (picked ? endOf(picked) : null) ?? layout.top;
   const shown = tree.nodes.get(shownId)!;
@@ -130,7 +144,9 @@ export function TreeExplorer({
   const comment = useMoveComment([...new Set(through.map((id) => byId.get(id)!.course))], parent?.epd, shown.uci);
   const pickedLine = picked ? byId.get(picked) : undefined;
   const foldedCounts = new Map(
-    [...folded].filter((id) => !hidden.has(id)).map((id) => [id, subtreeOf(full, id).length - 1] as const),
+    [...folded]
+      .filter((key) => !key.startsWith('group:') && !hidden.has(key))
+      .map((id) => [id, below(model, id).length] as const),
   );
 
   const pick = (id: string | null) => {
@@ -149,28 +165,32 @@ export function TreeExplorer({
     setPointed(id);
     if (id) setFocus(endOf(id));
   };
-  const toggleFold = (id: string) =>
+  const toggleFold = (key: string) =>
     setFolded((current) => {
       const next = new Set(current);
-      if (!next.delete(id)) next.add(id);
+      if (!next.delete(key)) next.add(key);
       return next;
     });
+  const light = (key: string) => {
+    const next = key === lighted ? null : key;
+    setLighted(next);
+    const first = next ? lightOf(next)[0] : undefined;
+    if (first) setScrollTo(full.branchAt.get(first) ?? null);
+  };
   const matches = query.trim() ? lines.filter((line) => matchesText(query, `${line.name} ${line.course}`)) : null;
+  const grouped = model.groups.length > 1;
 
-  const entryProps = {
-    layout: full,
-    lines,
+  const entryProps: EntryProps = {
+    model,
+    byId,
     picked,
-    only,
+    lighted,
     folded,
     colourOf,
     name,
     onPoint: point,
     onPick: (id: string) => pick(id === picked ? null : id),
-    onOnly: (id: string) => {
-      setOnly(id === only ? null : id);
-      setPicked(id);
-    },
+    onLight: light,
     onFold: toggleFold,
   };
 
@@ -202,9 +222,9 @@ export function TreeExplorer({
                   Open all
                 </Button>
               )}
-              {only && (
-                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => setOnly(null)}>
-                  <X aria-hidden /> Show all
+              {lighted && (
+                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => setLighted(null)}>
+                  <X aria-hidden /> Clear
                 </Button>
               )}
             </div>
@@ -213,18 +233,57 @@ export function TreeExplorer({
             <ul>
               {matches.length === 0 && <li className="px-2 py-1 text-sm text-muted-foreground">No line matches.</li>}
               {matches.map((line) => (
-                <IndexEntry key={line.id} {...entryProps} line={line} depth={0} flat />
+                <IndexEntry key={line.id} {...entryProps} id={line.id} depth={0} flat />
               ))}
             </ul>
+          ) : grouped ? (
+            <ul>
+              {model.groups.map((group) => {
+                const key = `group:${group.key}`;
+                const open = !folded.has(key);
+                return (
+                  <li key={group.key}>
+                    <div className="group flex items-center gap-1 rounded-md pr-1 text-sm hover:bg-accent/60">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-6 shrink-0"
+                        aria-label={open ? `Fold ${group.label}` : `Open ${group.label}`}
+                        aria-expanded={open}
+                        onClick={() => toggleFold(key)}
+                      >
+                        <ChevronRight
+                          className={open ? 'rotate-90 transition-transform' : 'transition-transform'}
+                          aria-hidden
+                        />
+                      </Button>
+                      <span className="flex-1 py-1 font-mono text-xs font-semibold">
+                        {group.label}{' '}
+                        <span className="font-sans font-normal text-muted-foreground">{group.lines.length}</span>
+                      </span>
+                      <CrosshairButton active={lighted === key} onClick={() => light(key)} />
+                    </div>
+                    {open && (
+                      <ul className="ml-3 border-l pl-1">
+                        {group.roots.map((id) => (
+                          <IndexEntry key={id} {...entryProps} id={id} depth={1} />
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           ) : (
-            <LineIndex {...entryProps} parent={null} depth={0} />
+            <ul>
+              {model.groups[0]?.roots.map((id) => (
+                <IndexEntry key={id} {...entryProps} id={id} depth={0} />
+              ))}
+            </ul>
           )}
         </nav>
 
         <section aria-label="The tree" className="order-3 grid min-w-0 gap-2 lg:order-none">
-          {only && (
-            <p className="text-sm text-muted-foreground">Showing {name(byId.get(only)!)} and what grows out of it.</p>
-          )}
           <LaneTree
             tree={tree}
             layout={layout}
@@ -240,7 +299,7 @@ export function TreeExplorer({
           />
           <p className="text-xs text-muted-foreground">
             One column per move; the main line runs straight across the top. Point at a move or a line to see it on the
-            board; fold a line in the list to tuck its branches away.
+            board; fold a line in the list to tuck its branches away, or use the crosshair to light up a branch.
           </p>
         </section>
 
@@ -295,85 +354,85 @@ export function TreeExplorer({
   );
 }
 
+function CrosshairButton({ active, onClick }: { active: boolean; onClick: () => void }) {
+  const label = active ? 'Stop lighting this branch' : 'Light up this branch and everything under it';
+  return (
+    <Button
+      variant={active ? 'secondary' : 'ghost'}
+      size="icon"
+      className={`size-6 shrink-0 ${active ? '' : 'opacity-0 group-hover:opacity-100 focus:opacity-100'}`}
+      aria-label={label}
+      title={label}
+      aria-pressed={active}
+      onClick={onClick}
+    >
+      <Crosshair aria-hidden />
+    </Button>
+  );
+}
+
 type EntryProps = {
-  layout: LaneLayout;
-  lines: ExplorerLine[];
+  model: IndexModel;
+  byId: ReadonlyMap<string, ExplorerLine>;
   picked: string | null;
-  only: string | null;
+  lighted: string | null;
   folded: ReadonlySet<string>;
   colourOf: (id: string) => string;
   name: (line: ExplorerLine) => string;
   onPoint: (id: string | null) => void;
   onPick: (id: string) => void;
-  onOnly: (id: string) => void;
+  onLight: (id: string) => void;
   onFold: (id: string) => void;
 };
 
-/** The lines that grow out of `parent`, each with its own children under it unless folded. */
-function LineIndex({ parent, depth, ...props }: EntryProps & { parent: string | null; depth: number }) {
-  const children = props.lines.filter((line) => (props.layout.parentOf.get(line.id) ?? null) === parent);
-  if (children.length === 0) return null;
-  return (
-    <ul className={depth > 0 ? 'ml-3 border-l pl-1' : ''}>
-      {children.map((line) => (
-        <IndexEntry key={line.id} {...props} line={line} depth={depth} />
-      ))}
-    </ul>
-  );
-}
-
-function IndexEntry(props: EntryProps & { line: ExplorerLine; depth: number; flat?: boolean }) {
-  const { layout, lines, line, depth, picked, only, folded, colourOf, name, onPoint, onPick, onOnly, onFold, flat } =
+function IndexEntry(props: EntryProps & { id: string; depth: number; flat?: boolean }) {
+  const { model, byId, id, depth, picked, lighted, folded, colourOf, name, onPoint, onPick, onLight, onFold, flat } =
     props;
-  const branches = lines.filter((candidate) => layout.parentOf.get(candidate.id) === line.id).length;
-  const open = !folded.has(line.id);
-  const chosen = line.id === picked;
-  const alone = only === line.id;
+  const line = byId.get(id)!;
+  const children = model.children.get(id) ?? [];
+  const under = below(model, id).length;
+  const open = !folded.has(id);
+  const chosen = id === picked;
   return (
     <li>
       <div
         className={`group flex items-center gap-1 rounded-md pr-1 text-sm ${chosen ? 'bg-accent' : 'hover:bg-accent/60'}`}
-        onMouseEnter={() => onPoint(line.id)}
+        onMouseEnter={() => onPoint(id)}
         onMouseLeave={() => onPoint(null)}
       >
         {!flat && (
           <Button
             variant="ghost"
             size="icon"
-            className={`size-6 shrink-0 ${branches > 0 ? '' : 'invisible'}`}
-            aria-label={open ? `Fold the ${branches} branches of ${line.name}` : `Open the branches of ${line.name}`}
+            className={`size-6 shrink-0 ${children.length > 0 ? '' : 'invisible'}`}
+            aria-label={open ? `Fold the ${under} branches of ${line.name}` : `Open the branches of ${line.name}`}
             aria-expanded={open}
-            onClick={() => onFold(line.id)}
+            onClick={() => onFold(id)}
           >
             <ChevronRight className={open ? 'rotate-90 transition-transform' : 'transition-transform'} aria-hidden />
           </Button>
         )}
-        <span aria-hidden className="size-2.5 shrink-0 rounded-full" style={{ background: colourOf(line.id) }} />
+        <span aria-hidden className="size-2.5 shrink-0 rounded-full" style={{ background: colourOf(id) }} />
         <Button
           variant="ghost"
           className="h-auto min-w-0 flex-1 justify-start whitespace-normal px-1 py-1 text-left font-normal hover:bg-transparent"
           aria-pressed={chosen}
-          onClick={() => onPick(line.id)}
+          onClick={() => onPick(id)}
         >
           <span className={chosen ? 'font-medium' : ''}>
             {name(line)}
-            {!open && branches > 0 && <span className="ml-1 text-xs text-muted-foreground">+{branches}</span>}
+            {!open && under > 0 && <span className="ml-1 text-xs text-muted-foreground">+{under}</span>}
           </span>
         </Button>
-        {branches > 0 && (
-          <Button
-            variant={alone ? 'secondary' : 'ghost'}
-            size="icon"
-            className={`size-6 shrink-0 ${alone ? '' : 'opacity-0 group-hover:opacity-100 focus:opacity-100'}`}
-            aria-label={alone ? 'Show every line' : 'Show only this line and its branches'}
-            title={alone ? 'Show every line' : 'Show only this line and its branches'}
-            onClick={() => onOnly(line.id)}
-          >
-            <Crosshair aria-hidden />
-          </Button>
-        )}
+        {children.length > 0 && <CrosshairButton active={lighted === id} onClick={() => onLight(id)} />}
       </div>
-      {!flat && open && <LineIndex {...props} parent={line.id} depth={depth + 1} />}
+      {!flat && open && children.length > 0 && (
+        <ul className={depth >= 0 ? 'ml-3 border-l pl-1' : ''}>
+          {children.map((child) => (
+            <IndexEntry key={child} {...props} id={child} depth={depth + 1} />
+          ))}
+        </ul>
+      )}
     </li>
   );
 }

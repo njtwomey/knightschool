@@ -1,4 +1,4 @@
-import { inStudyOrder } from '@knightschool/core';
+import { inStudyOrder, numberedLine, pathOf } from '@knightschool/core';
 import { useMemo } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -30,6 +30,18 @@ export function CurriculumTreePage() {
       }
     return out;
   }, [loaded, courses]);
+
+  // The index groups lines by their first two moves ("1.e4 e5", "1.d4 Nf6"), so each opening folds on its own.
+  const groupOf = useMemo(() => {
+    if (!loaded) return undefined;
+    return (id: string) => {
+      const sans = pathOf(loaded.tree, id)
+        .slice(1, 3)
+        .map((node) => loaded.tree.nodes.get(node)!.san!);
+      const label = numberedLine(sans);
+      return { key: label, label };
+    };
+  }, [loaded]);
 
   const header = (
     <div className="grid gap-1">
@@ -63,7 +75,7 @@ export function CurriculumTreePage() {
       lines={lines}
       header={header}
       search
-      zoom={0.3}
+      groupOf={groupOf}
       aside={
         <Select onValueChange={(course) => navigate(courseHref(course, 'tree'))}>
           <SelectTrigger className="h-8 w-full" aria-label="Open one course's tree">
