@@ -15,18 +15,14 @@ import { join } from 'node:path';
 import {
   AnalysisFile,
   PopularityFile,
-  OpeningIndexEntry,
+  type OpeningIndexEntry,
   restrictAnalysis,
   applyNames,
   buildSearchIndex,
-  introductionOrder,
-  mainLine,
-  variantPath,
+  courseIndexEntry,
   applyPopularity,
   parseOpeningsTsv,
   treeGraph,
-  lichessUrlForCourse,
-  lichessUrlForLine,
   type OpeningContent,
 } from '../packages/core/src/index.ts';
 import {
@@ -36,6 +32,7 @@ import {
   loadGlossary,
   loadOpeningGroups,
   loadTree,
+  chapterTexts,
   rel,
   root,
 } from './content-lib.ts';
@@ -103,39 +100,19 @@ async function main() {
     const { opening } = content;
     built.push(content);
     writeFileSync(join(outDir, `${opening.id}.json`), JSON.stringify(content));
-    const main = mainLine(content);
     index.push(
-      OpeningIndexEntry.parse({
-        ...opening,
+      courseIndexEntry(content, {
         order: order.get(opening.id) ?? 0,
-        variants: opening.variants.length,
-        cards: introductionOrder(content, { minPopularity: 0 }).length,
-        lichess: lichessUrlForCourse(content),
-        keyEpd: main[Math.min(5, main.length - 1)]?.to ?? opening.rootEpd,
-        lines: opening.variants.map(({ id, name, kind, opponent, weight, whose, alternative }) => {
-          // A position partway along the line, for its thumbnail.
-          const path = variantPath(content, id);
-          return {
-            id,
-            name,
-            kind,
-            opponent,
-            weight,
-            whose,
-            alternative,
-            epd: path[Math.min(7, path.length - 1)]?.to ?? opening.rootEpd,
-            epds: path.slice(1, 14).map((edge) => edge.to),
-            alsoIn: (listedBy.get(id) ?? []).filter((course) => course !== opening.id),
-            lichess: lichessUrlForLine(content, id),
-            branch: branches.get(id),
-          };
-        }),
+        alsoIn: (line) => listedBy.get(line) ?? [],
+        branch: (line) => branches.get(line),
       }),
     );
     console.log(`  ${opening.id}: ${Object.keys(content.nodes).length} positions, ${opening.variants.length} variants`);
   }
   writeFileSync(join(outDir, 'index.json'), JSON.stringify(index));
   writeFileSync(join(outDir, 'tree.json'), JSON.stringify(graph));
+  // The chapters as written, so the app can merge chapters authored in it with the tree exactly as this build does.
+  writeFileSync(join(outDir, 'chapters.json'), JSON.stringify(chapterTexts()));
   writeFileSync(join(outDir, 'search.json'), JSON.stringify(buildSearchIndex(built)));
   // Native-Stockfish analysis from `pnpm analyse`, trimmed to the positions some course reaches.
   const analysisFile = join(root, 'content', 'analysis', 'analysis.json');

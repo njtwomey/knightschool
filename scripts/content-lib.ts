@@ -44,6 +44,18 @@ export function readChapters(dir: string): Chapter[] {
     });
 }
 
+/** Every chapter's text, for the app (public/content/chapters.json): it parses and merges them with chapters authored in it. */
+export function chapterTexts(): { id: string; source: string; pgn: string }[] {
+  if (!existsSync(treeDir)) return [];
+  return readdirSync(treeDir, { recursive: true, encoding: 'utf8' })
+    .filter((file) => file.endsWith('.pgn'))
+    .sort()
+    .map((file) => {
+      const path = join(treeDir, file);
+      return { id: basename(file, '.pgn'), source: rel(path), pgn: readFileSync(path, 'utf8') };
+    });
+}
+
 let tree: TheoryTree | undefined;
 /** The theory tree: every chapter under content/tree, read once. */
 export function loadTree(): TheoryTree {

@@ -106,6 +106,15 @@ a banner with "use it in this tab"; opening is retried briefly while the old tab
 multi-statement changes by building statements with `toSQL()` and calling `exec.transaction`, never `db.batch`.
 Import merges by `at` (logs keep existing rows) and writes nothing if any row fails validation.
 
+**Authored content (schema 5, `authoring` repository).** `authored_chapters` (PGN text in the content/tree format),
+`authored_courses` (course.yaml as JSON text, validated only when projected, so an old row never blocks) and
+`authored_history` (append-only: each row is an item as it was before a change; rows of one editor action share a
+`group`). `apply` saves an action with its history in one transaction; deletes are soft (`deletedAt`, the text is kept);
+`undo` takes back the newest action not yet undone and records itself as a group with `undoOf`, so nothing is lost;
+`changesSince` counts edits for the reminder to export (`data/backup.ts`, `exportReminder` in core: 20 edits or 7 days,
+counted from `lastExportAt` in settings, which both exports now write). The export carries the three tables; exports
+from before schema 5 import with none.
+
 Browser behaviour (OPFS, the tab lock) is not covered by `make test`. To check it, drive headless Chrome with
 puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 5173 is busy).
 
@@ -136,6 +145,12 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
   engine strip, its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
   from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
   `lichess` in index.json).
+- **Authored courses** are ordinary courses: `data/content.ts` merges them into `loadIndex`, `loadOpening` and
+  `loadTreeGraph` through `data/authored.ts`, which reads the live authored rows and runs `buildAuthored` (core) over
+  them and the shipped chapters as written (`public/content/chapters.json`, from the build, fetched only when something
+  is authored). A chapter or course that does not fit (an id taken, a `[Start]` naming nothing, a comment clashing
+  with a shipped one: one comment per move holds here too) is left out with a problem, never a crash. The browse store's
+  `reload` refreshes the lists after an edit. Board search (`search.json`) does not include them.
 - `path` (a course's Path tab, `features/path`): the course cut into units (`courseUnits` in core, see Training) in
   study order, each with its state, its moves (yours in bold), what unlocks it if locked, its extras (traps and quizzes,
   never needed to pass) and Learn / Drill buttons for just that unit. `data/course-path.ts` loads it: units cut with the

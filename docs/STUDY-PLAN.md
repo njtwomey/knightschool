@@ -1,6 +1,6 @@
 # Study paths, spaced repetition and authoring: analysis and plan
 
-Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 to 4 are built (see §4 for what changed from this proposal). Decisions
+Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 to 5 are built (see §4 for what changed from this proposal). Decisions
 that change stored data are listed at the end.
 
 ## 1. What exists today
@@ -178,7 +178,20 @@ Each stage stands on its own and is small enough to review.
    an impossible order, naming the file. In the app, where the learner's settings may cut other units, entries naming
    units that do not exist are ignored, and if what is left fails the default path is kept. No course uses it yet.
 5. **Authoring, local storage.** Tables for authored chapters and courses with history; merge into the tree at load;
-   export and import them; reminders. (D4.)
+   export and import them; reminders. (D4.) **Done** (D4 and D5 approved): migration 5 adds `authored_chapters`,
+   `authored_courses` and `authored_history` and touches nothing else (tested by upgrading a schema-4 database and
+   importing a schema-4 export). History rows hold the item as it was before each change, grouped by action; undo takes
+   back the newest action and is itself recorded; deletes are soft. The browser merges the authored chapters with the
+   shipped ones (the build now also writes `chapters.json`, the chapters as written) with `resolveTree` and
+   `projectCourse`, so an authored course shows on Courses, its Path tab, Learn, Drill, Quiz and the tree. Decisions
+   made here: authored courses are new courses (a shipped course cannot be edited locally, but an authored chapter can
+   branch from a shipped one with `[Start]`); the one-comment-per-move rule applies, so an authored move cannot
+   comment differently on a move the shipped tree already explains (the chapter is left out with the reason); board
+   search leaves authored lines out. Move comments stay on moves (no position notes): a move's comment describes the
+   position it leads to. Supplementary tags are a PGN command in the comment, `[%tag tip,trap]`, carried to
+   `Annotation.tags`. Line metadata is in the headers: `[Variation]` the title, a new `[Description]`, and `[Snapshot]`
+   (a ply; authored lines without one are pictured at their end). The export reminder comes after 20 authored edits or
+   7 days since the last export.
 6. **The editor,** under Profile (a new tab beside Overview, Stats and Settings, e.g. `/profile/author`, and an entry in
    the profile menu): board, lane tree, branch, comment, tags, metadata, groups, overrides, undo.
 7. **Publishing:** YAML serialisation and reading, issue form template, link, clipboard and download fallback.

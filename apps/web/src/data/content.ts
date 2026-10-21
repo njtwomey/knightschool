@@ -8,6 +8,7 @@ import {
   TreeGraph,
 } from '@knightschool/core';
 import { z } from 'zod';
+import { authoredIndexEntries, authoredTreeGraph, loadAuthoredBuild } from './authored';
 
 // Written by `pnpm content:build`. Served from the same origin, so offline caching (Phase 8) can precache them.
 const url = (file: string) => `${import.meta.env.BASE_URL}content/${file}`;
@@ -18,11 +19,31 @@ async function fetchJson(file: string): Promise<unknown> {
   return response.json();
 }
 
-export async function loadIndex(): Promise<OpeningIndexEntry[]> {
-  return z.array(OpeningIndexEntry).parse(await fetchJson('index.json'));
+let shippedIndex: Promise<OpeningIndexEntry[]> | undefined;
+
+/** The shipped courses only (index.json), loaded once. */
+export function loadShippedIndex(): Promise<OpeningIndexEntry[]> {
+  shippedIndex ??= fetchJson('index.json').then((json) => z.array(OpeningIndexEntry).parse(json));
+  shippedIndex.catch(() => {
+    shippedIndex = undefined; // allow a retry after a failed load
+  });
+  return shippedIndex;
 }
 
+const shippedIds = async () => (await loadShippedIndex()).map((entry) => entry.id);
+
+/** Every course: the shipped ones, then the ones authored in the app (`data/authored.ts`). */
+export async function loadIndex(): Promise<OpeningIndexEntry[]> {
+  const shipped = await loadShippedIndex();
+  const authored = await loadAuthoredBuild(async () => shipped.map((entry) => entry.id)).catch(() => null);
+  return authored ? [...shipped, ...authoredIndexEntries(authored, shipped)] : shipped;
+}
+
+/** One course: shipped (its JSON), or authored (projected in the browser from the authored rows). */
 export async function loadOpening(id: string): Promise<OpeningContent> {
+  const authored = await loadAuthoredBuild(shippedIds).catch(() => null);
+  const own = authored?.courses.find((content) => content.opening.id === id);
+  if (own) return own;
   return OpeningContent.parse(await fetchJson(`${id}.json`));
 }
 
@@ -49,6 +70,8 @@ export async function loadCurriculum(): Promise<CurriculumEntry[]> {
 
 /** The whole theory tree (`tree.json`): every chapter with its moves and the courses that list it. */
 export async function loadTreeGraph(): Promise<TreeGraph> {
+  const authored = await loadAuthoredBuild(shippedIds).catch(() => null);
+  if (authored && authored.chapters.length > 0) return authoredTreeGraph(authored, await loadShippedIndex());
   return TreeGraph.parse(await fetchJson('tree.json'));
 }
 

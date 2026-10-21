@@ -16,20 +16,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { exportJsonFile, exportSqliteFile } from '@/data/backup';
 import { useStorage } from '@/data/storage';
 
 type Stats = { cards: number; reviews: number; quizAttempts: number };
-
-function download(name: string, data: BlobPart, type: string) {
-  const url = URL.createObjectURL(new Blob([data], { type }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = name;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-const today = () => new Date().toISOString().slice(0, 10);
 
 export function DataSection() {
   const { status, error, storage } = useStorage();
@@ -116,11 +106,7 @@ export function DataSection() {
             variant="outline"
             onClick={() =>
               run(async () => {
-                download(
-                  `knightschool-${today()}.json`,
-                  JSON.stringify(await storage.exportJson(), null, 2),
-                  'application/json',
-                );
+                await exportJsonFile(storage);
                 return 'Exported a readable JSON copy.';
               })
             }
@@ -131,7 +117,7 @@ export function DataSection() {
             variant="outline"
             onClick={() =>
               run(async () => {
-                download(`knightschool-${today()}.sqlite`, await storage.exportSqlite(), 'application/vnd.sqlite3');
+                await exportSqliteFile(storage);
                 return 'Exported the SQLite database file.';
               })
             }

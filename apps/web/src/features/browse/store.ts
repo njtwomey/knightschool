@@ -39,6 +39,8 @@ type BrowseState = {
   notice: string | null;
 
   loadIndex: () => Promise<void>;
+  /** Loads the courses again, and the open course: after authored content changes. */
+  reload: () => Promise<void>;
   /** Opens a course's page: loads it and puts its start on the board. */
   selectCourse: (id: string | null) => Promise<void>;
   /** Puts a variation of the open course on the board, at its last move. */
@@ -83,6 +85,16 @@ export const useBrowse = create<BrowseState>((set, get) => ({
       });
     } catch (error) {
       set({ indexStatus: 'error', indexError: error instanceof Error ? error.message : String(error) });
+    }
+  },
+
+  async reload() {
+    set({ indexStatus: 'idle' });
+    await get().loadIndex();
+    const open = get().courseId;
+    if (open) {
+      set({ courseId: null });
+      await get().selectCourse(open);
     }
   },
 
