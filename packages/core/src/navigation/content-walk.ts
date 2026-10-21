@@ -18,13 +18,6 @@ export function mainLine(content: OpeningContent): LineEdge[] {
   }
 }
 
-/** Positions where it is the learner's turn and the repertoire has a move: one card each. */
-export function ourMoveNodes(content: OpeningContent): LineNode[] {
-  return Object.values(content.nodes)
-    .filter((node) => node.isOurTurn && node.moves.some((edge) => edge.isRepertoire))
-    .sort((a, b) => a.ply - b.ply);
-}
-
 /** The shortest sequence of moves from the start to a position. */
 export function pathTo(content: OpeningContent, epd: string): LineEdge[] {
   const root = content.opening.rootEpd;
@@ -115,12 +108,6 @@ export function continueLine(content: OpeningContent, path: LineEdge[]): LineEdg
     line.push(next);
     node = nodeAt(content, next.to);
   }
-}
-
-/** The other moves available after a path, in display order, leaving out the one the shown line takes. */
-export function alternativesAfter(content: OpeningContent, path: LineEdge[], taken?: LineEdge): LineEdge[] {
-  const node = nodeAt(content, path.at(-1)?.to ?? content.opening.rootEpd);
-  return orderedMoves(node).filter((edge) => edge.uci !== taken?.uci);
 }
 
 /** Which variant a run of moves belongs to: the first one that all of them appear in, or undefined if they diverge. */

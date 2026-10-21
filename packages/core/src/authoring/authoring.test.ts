@@ -3,8 +3,6 @@ import {
   buildAuthored,
   exportReminder,
   isOwnOpening,
-  overridesFromYaml,
-  overridesToYaml,
   ownOpeningGroups,
   ownOpeningId,
   slugify,
@@ -173,19 +171,6 @@ describe('PGN with tags', () => {
     expect(game.tags.Description).toBe('Say "hi"');
     expect(game.moves.map((move) => move.tags)).toEqual([['tip'], ['blunder', 'other']]);
     expect(parsePgn(writePgn(game))).toEqual(game);
-  });
-});
-
-describe('units: as YAML', () => {
-  it('round-trips, leaves out empty parts, and explains what does not fit', () => {
-    const text = overridesToYaml({ order: ['main:2'], after: { 'side:1': ['main:2'] }, drop: {} });
-    expect(text).toBe('order:\n  - main:2\nafter:\n  side:1:\n    - main:2\n');
-    expect(overridesFromYaml(text)).toEqual({ order: ['main:2'], after: { 'side:1': ['main:2'] }, drop: {} });
-    expect(overridesToYaml({ order: [], after: {}, drop: {} })).toBe('');
-    expect(overridesFromYaml('  ')).toBeUndefined();
-    expect(() => overridesFromYaml('order: [main]')).toThrow(/order\.0: a unit id/);
-    expect(() => overridesFromYaml('first: [main:1]')).toThrow(/Unrecognized key/);
-    expect(() => overridesFromYaml('order: [')).toThrow(/^Not YAML/);
   });
 });
 

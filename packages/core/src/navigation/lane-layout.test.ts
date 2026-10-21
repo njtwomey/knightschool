@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { laneLayout, subtreeOf } from './lane-layout';
+import { laneLayout } from './lane-layout';
 import { buildMoveTree, pathOf, prefixId } from './move-tree';
 
 const ITALIAN = ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1c4'];
@@ -62,8 +62,6 @@ describe('laneLayout', () => {
       copy: 'evans',
     });
     expect(layout.branchAt.get('evans')).toBe(prefixId([...ITALIAN, 'f8c5']));
-    expect(subtreeOf(layout, 'evans')).toEqual(['evans', 'copy']);
-    expect(subtreeOf(layout, 'main')).toHaveLength(5);
   });
 
   it('starts no deeper than asked, so one line alone still shows its moves', () => {

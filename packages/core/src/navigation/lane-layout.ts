@@ -25,14 +25,6 @@ export type LaneLayout = {
   branchAt: Map<string, string>;
 };
 
-/** A line and every line that grows out of it, at any depth, in layout order. */
-export function subtreeOf(layout: LaneLayout, line: string): string[] {
-  const out = [line];
-  for (const candidate of layout.parentOf.keys())
-    if (out.includes(layout.parentOf.get(candidate) ?? '') && !out.includes(candidate)) out.push(candidate);
-  return out;
-}
-
 /**
  * A git-history layout of some lines of a move tree, for reading rather than for admiring: one row per ply (drawn as a
  * column, left to right), so the same move number lines up across every line, and one lane per line. The first line

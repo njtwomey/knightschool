@@ -1,4 +1,4 @@
-import type { OpeningGroup, OpeningIndexEntry, OpeningMeta } from '../schema/content';
+import type { OpeningGroup, OpeningMeta } from '../schema/content';
 import { epdAfterPgn } from '../chess/chess';
 
 /**
@@ -26,9 +26,4 @@ export function buildOpeningGroups(metas: OpeningMeta[], courses: { id: string; 
     }
     return { ...meta, epd, courses: own };
   });
-}
-
-/** The courses in the same opening as this one: the other side of it, and any other repertoire for the same side. */
-export function siblingsOf(course: OpeningIndexEntry, courses: OpeningIndexEntry[]): OpeningIndexEntry[] {
-  return courses.filter((other) => other.opening === course.opening && other.id !== course.id);
 }

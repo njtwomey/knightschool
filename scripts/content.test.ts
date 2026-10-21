@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { cardDefinitions, courseUnits, ourMoveNodes, type CardOptions } from '../packages/core/src/index.ts';
+import { cardDefinitions, courseUnits, type CardOptions, type OpeningContent } from '../packages/core/src/index.ts';
 import { loadCourses, loadCurriculum, loadGlossary, loadOpeningGroups } from './content-lib.ts';
+
+/** How many positions ask the learner for a move: their turn, with a repertoire move. */
+const ourMoves = (content: OpeningContent) =>
+  Object.values(content.nodes).filter((node) => node.isOurTurn && node.moves.some((edge) => edge.isRepertoire)).length;
 
 // Builds the real files under content/, so a bad PGN, tag or course.yaml fails `make test`, not just `pnpm content:build`.
 describe('content', () => {
@@ -34,7 +38,7 @@ describe('content', () => {
       // A course made only of lines borrowed from other courses (`from:`) is for reading: they drill them.
       const borrowedOnly = content.opening.variants.every((variant) => variant.alternative);
       if (borrowedOnly) expect(cardDefinitions(content)).toHaveLength(0);
-      else expect(ourMoveNodes(content).length).toBeGreaterThanOrEqual(3);
+      else expect(ourMoves(content)).toBeGreaterThanOrEqual(3);
       expect(content.opening.variants[0]!.kind).toBe('line');
     },
   );

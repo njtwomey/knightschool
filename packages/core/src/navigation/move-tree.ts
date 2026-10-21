@@ -1,13 +1,12 @@
 import { playUci } from '../chess/chess';
 import { START_EPD } from '../chess/epd';
-import { numberedLine } from '../chess/notation';
 import { positionId } from '../chess/position-id';
 import type { Side } from '../schema/content';
 
 /**
  * A prefix tree of lines: one node per move sequence from the initial position. Nodes are keyed by the moves that lead
  * there, not by the position, so two move orders that transpose stay two nodes and it is always a tree. It knows
- * nothing about drawing; `compress` gives the shape worth drawing (branch points and ends only).
+ * nothing about drawing (`laneLayout` lays it out).
  */
 export type MovePath = {
   line: string;
@@ -106,36 +105,6 @@ export function buildMoveTree(paths: readonly MovePath[], startEpd = START_EPD):
   return { root, nodes, paths: byLine };
 }
 
-/**
- * Keeps only what some lines pass through: the lines named, and the lines any of the courses list. With neither, the
- * tree is returned as it is. A node keeps only the kept lines, and the courses of those lines that are in scope.
- */
-export function scopeTree(tree: MoveTree, scope: { courses?: readonly string[]; lines?: readonly string[] }): MoveTree {
-  if (!scope.courses && !scope.lines) return tree;
-  const keep = new Set(
-    [...tree.paths.values()]
-      .filter(
-        (path) =>
-          scope.lines?.includes(path.line) || path.courses.some((course) => scope.courses?.includes(course) ?? false),
-      )
-      .map((path) => path.line),
-  );
-  const inScope = (course: string) => !scope.courses || scope.courses.includes(course);
-  const nodes = new Map<string, MoveNode>();
-  for (const node of tree.nodes.values()) {
-    const lines = node.lines.filter((line) => keep.has(line));
-    if (lines.length === 0 && node.id !== tree.root) continue;
-    const courses: string[] = [];
-    for (const line of lines) addAll(courses, tree.paths.get(line)!.courses.filter(inScope));
-    nodes.set(node.id, { ...node, lines, courses, ends: node.ends.filter((line) => keep.has(line)), children: [] });
-  }
-  for (const node of nodes.values()) {
-    node.children = tree.nodes.get(node.id)!.children.filter((child) => nodes.has(child));
-  }
-  const paths = new Map([...tree.paths].filter(([line]) => keep.has(line)));
-  return { root: tree.root, nodes, paths };
-}
-
 /** The node ids along one line, root first; empty for a line the tree does not have. */
 export function pathOf(tree: MoveTree, line: string): string[] {
   const path = tree.paths.get(line);
@@ -150,84 +119,3 @@ export function sansOf(tree: MoveTree, nodeId: string): string[] {
     sans.unshift(node.san);
   return sans;
 }
-
-/** A stretch of single moves drawn as one edge, ending at a branch point, the end of a line, or both. */
-export type MoveRun = {
-  /** The id of its last move node. */
-  id: string;
-  /** The run it continues from; null for the root. */
-  parent: string | null;
-  children: string[];
-  /** Its move nodes, first to last; empty for the root. */
-  moves: MoveNode[];
-  /** At the last move: the ply, position, lines through it, their courses, and lines that end there. */
-  ply: number;
-  epd: string;
-  lines: string[];
-  courses: string[];
-  ends: string[];
-};
-
-export type CompressedTree = { root: string; runs: Map<string, MoveRun> };
-
-/** The last node of the moves every line shares (the root when the first moves already differ). */
-export function trunkEnd(tree: MoveTree): MoveNode {
-  let node = tree.nodes.get(tree.root)!;
-  while (node.children.length === 1 && node.ends.length === 0) node = tree.nodes.get(node.children[0]!)!;
-  return node;
-}
-
-/**
- * Every move its own node, except the moves all lines share, which are one: what a course's tree draws. Lines that
- * start "1.e4 e5 2.Nf3 Nc6 3.Bc4" then begin under one node that says so.
- */
-export function everyMove(tree: MoveTree): CompressedTree {
-  const trunk = trunkEnd(tree).ply;
-  return compress(tree, (node) => node.ply >= trunk);
-}
-
-/**
- * Joins every run of moves with no choice in it into one edge: the nodes left are the root, branch points and the ends
- * of lines. A line that ends where others carry on stops the run there too, so every end can be marked. `keep` keeps
- * more nodes of their own (`keep: () => true` keeps every move).
- */
-export function compress(tree: MoveTree, keep?: (node: MoveNode) => boolean): CompressedTree {
-  const runs = new Map<string, MoveRun>();
-  const stops = (node: MoveNode) => node.children.length !== 1 || node.ends.length > 0 || (keep?.(node) ?? false);
-  const runFrom = (node: MoveNode, parent: string | null, moves: MoveNode[]): string => {
-    const run: MoveRun = {
-      id: node.id,
-      parent,
-      children: [],
-      moves,
-      ply: node.ply,
-      epd: node.epd,
-      lines: node.lines,
-      courses: node.courses,
-      ends: node.ends,
-    };
-    runs.set(node.id, run);
-    for (const childId of node.children) {
-      const stretch: MoveNode[] = [];
-      let next = tree.nodes.get(childId)!;
-      stretch.push(next);
-      while (!stops(next)) {
-        next = tree.nodes.get(next.children[0]!)!;
-        stretch.push(next);
-      }
-      run.children.push(runFrom(next, node.id, stretch));
-    }
-    return node.id;
-  };
-  runFrom(tree.nodes.get(tree.root)!, null, []);
-  return { root: tree.root, runs };
-}
-
-/** A run's moves as numbered text. */
-export const runText = (run: Pick<MoveRun, 'moves'>) =>
-  run.moves.length
-    ? numberedLine(
-        run.moves.map((move) => move.san!),
-        run.moves[0]!.ply - 1,
-      )
-    : '';

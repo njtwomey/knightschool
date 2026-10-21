@@ -4,13 +4,11 @@ import { parsePgn } from '../chess/pgn';
 import { buildOpening, type VariantSource } from './course-build';
 import {
   pathFromUcis,
-  alternativesAfter,
   continueLine,
   lineName,
   lineSteps,
   mainLine,
   pathSteps,
-  ourMoveNodes,
   pathTo,
   positionsAlong,
   preferredMove,
@@ -19,6 +17,11 @@ import {
   walkMoves,
 } from '../navigation/content-walk';
 import { START_EPD } from '../chess/epd';
+import type { OpeningContent } from '../schema/content';
+
+/** Positions where it is the learner's turn and the repertoire has a move. */
+const ourMoveNodes = (content: OpeningContent) =>
+  Object.values(content.nodes).filter((node) => node.isOurTurn && node.moves.some((edge) => edge.isRepertoire));
 
 const header = (variation: string, extra = '') => `[Event "Knight School"]
 [Opening "Test Opening"]
@@ -165,14 +168,6 @@ describe('buildOpening', () => {
     expect(toNf3.map((edge) => edge.san)).toEqual(['e4', 'e5', 'Nf3']);
     expect(continueLine(content, toNf3).map((edge) => edge.san)).toEqual(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5']);
     expect(continueLine(content, []).map((edge) => edge.san)).toEqual(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5']);
-  });
-
-  it('lists the other moves at a position, leaving out the one the shown line takes', () => {
-    const afterE4E5Nf3 = continueLine(content, []).slice(0, 3);
-    const shown = continueLine(content, [])[3];
-    expect(alternativesAfter(content, afterE4E5Nf3, shown).map((edge) => edge.san)).toEqual(['Nf6']);
-    expect(alternativesAfter(content, afterE4E5Nf3).map((edge) => edge.san)).toEqual(['Nc6', 'Nf6']);
-    expect(alternativesAfter(content, continueLine(content, []), undefined)).toEqual([]);
   });
 
   it('walks a list of moves through the tree and stops at the first one it does not know', () => {
