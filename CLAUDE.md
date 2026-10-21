@@ -161,7 +161,8 @@ and `404.html` is copied from `index.html` at build; dev and preview already fal
 Where things live in `apps/web/src`: `router/route.ts` (`parseRoute`, route page names match the folders: `search`,
 `quiz`, `name-it`, ...), `router/hrefs.ts` (every page's tabs and the address builders `courseHref`, `lineHref`,
 `branchesHref`, `createHref`, `lineEditHref`, `profileHref`, plus `parseLineTab` / `parseUnitRef`: build every link with
-these, never by hand), `router/location.ts` and `router/hash.ts`. `data/` holds loading and the shared stores:
+these, never by hand), `router/menu.ts` (`headerItemOf`: which header item a page belongs to; course, line, play, path and tree pages are Courses,
+Create's are Create, Profile's are Profile), `router/location.ts` and `router/hash.ts`. `data/` holds loading and the shared stores:
 `catalog-store.ts` (`useCatalog`: the course index, the open course and the board's place in it), `progress-store.ts`
 (`useProgress`), `authored-content.ts` and `authored-edits.ts`, `training-settings.ts`, `storage.ts`, `content.ts` (every
 `load*`; `loadOpening` keeps each course once, cleared when the authored build changes) and `fetch-content.ts`
@@ -171,17 +172,24 @@ anything loaded once). `lib/` holds plain helpers: `local-prefs.ts` (every local
 a Zustand store of them; board and engine preferences are two such stores; keys and stored formats are kept, so an old
 value still reads), `feedback.ts` (`FEEDBACK_DELAYS`, `createTimers`), `errors.ts` (`errorText(error)`), `session.ts`
 (`SessionPhase` and `sessionLoader`, the loading phase, the guard against a second start and the error phase that the
-session stores share), `days.ts`. `hooks/` holds `use-async.ts` (`useAsync(load, deps)` gives `{ data, error, loading }`:
+session stores share), `sort.ts` (`nextSort`, `sortRows`), `days.ts`. `hooks/` holds `use-sort.ts` (`useSort(compare,
+{ initial, fallback })`: a heading sorts up, then down, then back to the table's own order), `use-async.ts` (`useAsync(load, deps)` gives `{ data, error, loading }`:
 use it for any effect that loads something, never a hand-written cancelled flag) and `use-now.ts` (a ticking clock).
-`components/` holds shared UI: `ui` (shadcn), `board` (with `shapes.ts`), `breadcrumbs` (`CrumbMenu`, `TabGroup`,
-`CourseBreadcrumbs`, `PlayBreadcrumbs`), `tags` (`TagBadge`, `TagLegend`, `tag-specs.ts`, and `hints.ts`, the hover
-wording for tags and filters), `icon-action.tsx`. Features in `apps/web/src/features/*`, one folder per page, named as
+`components/` holds shared UI: `ui` (shadcn), `board` (with `shapes.ts`), `breadcrumbs` (`TrailCrumbs`, the one shape of
+every breadcrumb trail: a root, crumbs that are menus of their siblings (`CrumbMenu`), the page's tabs (`TabGroup`) and
+anything trailing; `useCourseItems` for the course menus; `CourseBreadcrumbs` and `PlayBreadcrumbs` are built on it, as
+are Create's and Profile's), `tags` (`TagBadge`, `TagLegend`, `tag-specs.ts`, and `hints.ts`, the hover wording for tags
+and filters and `KIND_LABEL` / `KIND_OPTIONS` / `kindLabel`, the one name of each kind of line), `sortable-table.tsx`
+(`SortableHeader`, and `RowLink`: a link stretched over its row or card, so a click anywhere opens it; controls in the
+row take `ABOVE_ROW_LINK` to keep their own clicks. Never an `onClick` on a row), `filter-toggle.tsx` (`FilterToggle`,
+every one-of-several choice and filter, with hints and an optional `allValue`; options in `filter-options.ts`, among
+them `SIDE_FILTER_OPTIONS`: Both, White, Black, value `'all'` for both), `icon-action.tsx`. Features in `apps/web/src/features/*`, one folder per page, named as
 the menu names it:
 
 The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | Create | Glossary (`App.tsx`).
 
-- `courses` (`/courses`): every course in one table, filtered by side (White / Black / Both), every column sortable, a
-  row opens the course.
+- `courses` (`/courses`): every course in one table, filtered by side (Both / White / Black), every column sortable
+  (up, down, back to study order), a row opens the course.
 - `search` (the Search page, once called Browse; `search-page.tsx`): courses in study order and every line, as cards of one kind (lines
   have a board thumbnail). Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all /
   courses / lines); a forgiving search (words run together, small slips: `editDistance` in core `search/text-match.ts`) ranked by
@@ -194,11 +202,11 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
   `lichess` in index.json).
 - `create` (**Create**, the course editor, its own section of the menu). `/create` (`create-page.tsx`) is your courses
-  in one sortable table (name, side, lines, last edited, status with its problems on hover; open, view as learner,
+  in one sortable table (newest edit first; name, side, lines, last edited, status with its problems on hover; open, view as learner,
   copy, delete) with New course, Import contribution, Undo (named after the action: "Undo: reorder the path"; each save stores its name under `authoringUndoLabels` in settings, and `describeUndo` falls back to what changed for older actions) and
   Export. `/create/<course>` (`course-editor.tsx`, tabs (`CREATE_TABS` in `router/hrefs.ts`) at the end of the breadcrumbs, `crumbs.tsx`) has
   Details (`course-form.tsx`: name, side while no line has moves, tier, opening, summary, about, plans, motifs, groups),
-  Lines (`lines-tab.tsx`: every line with kind, group, opponent, moves, what it grows from and problems; new from the
+  Lines (`lines-tab.tsx`: every line with kind, group, opponent, moves, what it grows from and problems, sortable like the other tables; new from the
   start or branching from a line, rename, copy, delete), Path (`path-order.tsx`, bonus items grouped under the unit they
   attach to) and Publish; View as learner and Undo sit in its header. `/create/<course>/<line>` (`line-page.tsx`) is the
   line editor with course and line menus and previous/next. `shell.tsx` gates on the database and shows notices and
@@ -288,8 +296,8 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   the moves per question. At the end
   of a quiz every wrong move is listed with what it cost by the engine against the course's move (`training/regret.ts` in core:
   under 30cp a memory slip, 30 to 99 an inaccuracy, 100 and more a mistake), from baked analysis or the browser engine at
-  depth 14 after the session. `profile`: its tabs (`PROFILE_TABS`) are `overview` (the dashboard), `stats` and
-  `settings`, each a folder under `features/profile`. `lab` (render any PGN at a ply, or a FEN).
+  depth 14 after the session. `profile`: its tabs (`PROFILE_TABS` in `router/hrefs.ts`, at the end of its breadcrumbs as on a course) are
+  `overview` (the dashboard), `stats` and `settings`, each a folder under `features/profile`. `lab` (render any PGN at a ply, or a FEN).
 
 Toggle groups mark the chosen item from `aria-checked` / `aria-pressed` (`components/ui/toggle.tsx`), because a hover
 hint (`Hint`, a tooltip trigger) round an item overwrites its `data-state`.
