@@ -42,7 +42,12 @@ const files: Record<string, unknown> = {
 };
 vi.stubGlobal('fetch', (url: string) => {
   const file = url.split('/').at(-1)!;
-  return Promise.resolve({ ok: file in files, status: 404, json: () => Promise.resolve(files[file]) });
+  return Promise.resolve({
+    ok: file in files,
+    status: 404,
+    headers: new Headers({ 'content-type': 'application/json' }),
+    json: () => Promise.resolve(files[file]),
+  });
 });
 
 const course = {

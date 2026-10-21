@@ -48,12 +48,14 @@ async function load(courseNames: Map<string, string>): Promise<Loaded> {
     mostMissed(reviews, 5).map(async (entry) => {
       const card = await storage.cards.get(entry.cardId);
       if (!card) return { text: 'A card that was removed', course: '', entry };
-      if (!contents.has(card.openingId)) contents.set(card.openingId, await loadOpening(card.openingId));
-      return {
-        text: describeCard(contents.get(card.openingId)!, card),
-        course: courseNames.get(card.openingId) ?? card.openingId,
-        entry,
-      };
+      const course = courseNames.get(card.openingId) ?? card.openingId;
+      // A card can outlive its course (deleted in Create, or renamed in an update): say so rather than fail the page.
+      try {
+        if (!contents.has(card.openingId)) contents.set(card.openingId, await loadOpening(card.openingId));
+        return { text: describeCard(contents.get(card.openingId)!, card), course, entry };
+      } catch {
+        return { text: 'A move from a course that is no longer here', course, entry };
+      }
     }),
   );
   const learned = Object.values(await storage.cards.learnedByOpening()).reduce((sum, n) => sum + n, 0);

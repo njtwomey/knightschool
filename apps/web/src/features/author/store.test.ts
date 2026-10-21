@@ -8,7 +8,12 @@ vi.mock('@/data/storage', () => ({ whenStorageReady: () => Promise.resolve(memor
 vi.stubGlobal('fetch', (url: string) => {
   const file = url.split('/').at(-1)!;
   const body = file === 'index.json' || file === 'chapters.json' ? [] : null;
-  return Promise.resolve({ ok: body !== null, status: 404, json: () => Promise.resolve(body) });
+  return Promise.resolve({
+    ok: body !== null,
+    status: 404,
+    headers: new Headers({ 'content-type': 'application/json' }),
+    json: () => Promise.resolve(body),
+  });
 });
 
 const { draftCourses, fullLine, useAuthor } = await import('./store');
