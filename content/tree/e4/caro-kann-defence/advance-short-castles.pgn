@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Advance Variation, Short Variation, 6.O-O and 6.c3"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "attack-d4,open-file,queenside-space"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "6.O-O or 6.c3"]
+[Start "short-system 12...Rc8"]
+
+13. a3 ( 13. Rb1 Be7 ) 13... Be7 { Gets ready to castle. The bishop also covers g5 and h4, squares White's pieces might use against Black's king. } 14. b4 O-O { Black is safe and well placed. Plan: keep the knight on f5 and a rook on c8, aim at d4, and break with ...f6 when White's e5 pawn needs extra guarding. } *

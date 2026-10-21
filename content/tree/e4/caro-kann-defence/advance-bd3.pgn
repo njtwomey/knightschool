@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Advance Variation, Bd3 and the bishop trade"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork"]
+[Themes "c5-break,attack-the-base,bishop-trade"]
+[For "black"]
+[Kind "main"]
+[Opponent "4.Bd3 or 4.Nf3 e6 5.Bd3"]
+[Start "bd3-trade 5...e6"]
+
+6. Nf3 { Develops and guards d4. The same position comes from 4.Nf3 e6 5.Bd3 Bxd3 6.Qxd3, the most common club line. } ( 6. f4 c5 { Hits d4 at once. White's f-pawn guards e5 but does nothing for d4. } ) ( 6. c3 c5 ) ( 6. Ne2 c5 ) ( 6. Nc3 c5 ) 6... c5 { Attacks d4, the base of White's pawn chain. With the light bishops gone, Black's position has no bad piece. } 7. c3 { Props up d4, so a trade on d4 can be met by cxd4. } ( 7. dxc5 Bxc5 { Takes back and develops with gain of time. } 8. O-O ( 8. Qb5+ Nd7 { The only good block. The knight covers c5, so the bishop there stays guarded; ...Nc6 or ...Qd7 would leave it to Qxc5. } ) ( 8. Be3 Bxe3 9. Qxe3 Ne7 ) 8... Ne7 { Heads for c6 or f5 and lets Black castle. } ) ( 7. O-O Nc6 8. c3 { The same position as the main line. } ) ( 7. Qb5+ Qd7 { Offers a queen trade, and the queen guards b7 along the seventh rank. } ) ( 7. Bg5 Qb6 { Steps out of the bishop's attack. The bishop has left c1, so b2 has no guard, and the queen hits b2 and d4 together. } ) ( 7. Be3 cxd4 8. Nxd4 Nc6 ) ( 7. c4 Nc6 ) 7... Nc6 { Adds a second attacker on d4. } 8. O-O a6 { Takes b5 from White's queen and knight, so Qb5+ and Nb5 are never a problem, and gets ready for ...b5 later. } 9. Be3 cxd4 { Swaps on d4 now that it opens the c-file for Black's rook. } 10. cxd4 Nge7 { The knight cannot use f6, which the e5 pawn covers, so it goes via e7 to f5. } 11. Nc3 Nf5 { From f5 the knight hits d4 and the bishop on e3. Plan: ...Be7 and ...O-O, a rook to c8, and ...Nb4 or ...Qb6 to keep pressing on d4 and b2. } *

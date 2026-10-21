@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Advance Variation, 4.f4 and 4.c3"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "c5-break,attack-the-base,b2-pressure"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.f4 or 4.c3"]
+[Start "short-system 3...Bf5"]
+
+4. f4 { Backs up e5 with a pawn. The cost is time: White's kingside pieces are still at home, and the f4 pawn does nothing to guard d4. } ( 4. c3 e6 { Supports d5 and opens the f8 bishop. Black's plan is the usual ...c5 and ...Nc6. } 5. Nf3 { The same position as 4.Nf3 e6 5.c3: Black plays ...c5. } ( 5. Be2 c5 6. Nf3 { The same position as 4.Nf3 e6 5.Be2 c5 6.c3: Black plays ...Nc6. } ) ( 5. Bd3 Bxd3 6. Qxd3 { The same position as the Bd3 line: Black plays ...c5. } ) ( 5. Nd2 c5 ) ) 4... e6 { Supports d5. The f4 pawn does nothing for d4, so ...c5 comes next. } 5. Nf3 ( 5. c3 c5 6. Nf3 { The same position as the main line. } ) ( 5. Nc3 c5 ) ( 5. Be3 Qb6 { Hits b2, which lost its guard when the bishop left c1. } ) ( 5. Bd3 Bxd3 6. Qxd3 { The same position as 4.Bd3 Bxd3 5.Qxd3 e6 6.f4: Black plays ...c5. } ) 5... c5 { Attacks d4, the base of White's chain. With f4 played, White cannot easily add guards to d4. } 6. c3 ( 6. dxc5 Bxc5 { Takes back with a good position: the bishop is active on c5 and White has given up d4. } ) ( 6. Be3 Qb6 { Hits b2, which lost its guard when the bishop left c1, and adds to the pressure on d4. } ) ( 6. Bb5+ Nc6 { Blocks with a developing move that also hits d4. } ) 6... Nc6 { Another attacker on d4. } 7. Be2 ( 7. Bd3 Bxd3 8. Qxd3 Nh6 { Heads for f5, where the knight hits d4 again. } ) 7... Qb6 { Hits b2 and piles up on d4. The queen is safe on b6 because White's queenside is not developed. } 8. O-O h5 { Stops g4, the pawn push that would chase the bishop on f5, and makes g4 a square for Black's knight instead. Plan: ...Nh6 and ...Ng4, ...Be7, and swap on d4 when White can no longer hold it. } *
