@@ -2,7 +2,6 @@ import {
   numberedMove,
   pathFromUcis,
   positionsAlong,
-  runMove,
   type CourseUnit,
   type OpeningContent,
   type UnitProgress,
@@ -21,7 +20,9 @@ import {
   Target,
 } from 'lucide-react';
 import { useMemo, useState, type ReactNode } from 'react';
-import { AppBoard } from '@/components/board/app-board';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { StudyBoard } from '@/components/board/study-board';
+import { MoveList, type MoveListMove } from '@/components/move-list';
 import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -66,9 +67,40 @@ function stretchMoves(content: OpeningContent, stretch: UnitStretch): { lead: Sh
   return { lead: moves.slice(0, stretch.from), own: moves.slice(stretch.from) };
 }
 
-/** The position at the end of a unit's first stretch, for the board. */
-function endOf(content: OpeningContent, stretch: UnitStretch): { epd: string; lastMove?: string } {
-  return { epd: positionsAlong(content, pathFromUcis(content, stretch.moves)).at(-1)!, lastMove: stretch.moves.at(-1) };
+/**
+ * The board beside the path: the picked unit's first stretch, at its end to begin with, to step back through. Keyed by
+ * the unit, so picking another starts at its end again.
+ */
+function UnitBoard({ content, unit }: { content: OpeningContent; unit: CourseUnit }) {
+  const path = useMemo(() => pathFromUcis(content, unit.stretches[0]!.moves), [content, unit]);
+  const positions = useMemo(() => positionsAlong(content, path), [content, path]);
+  const [index, setIndex] = useState(path.length);
+  const stepper = useLineStepper({ length: path.length, index, setIndex });
+  const last = path[index - 1];
+  return (
+    <StudyBoard
+      id="path-board"
+      size="aside"
+      epd={positions[index]!}
+      orientation={content.opening.side}
+      interactive={false}
+      lastMove={last?.uci}
+      stepper={stepper}
+      controls={{ flip: true }}
+      caption={
+        <p>
+          <span className="font-medium">Unit {unit.index + 1}</span>{' '}
+          <span className="text-muted-foreground">
+            {index === path.length
+              ? `ends here${unit.side ? ' (its first branch)' : ''}.`
+              : last
+                ? `after ${numberedMove(index - 1, last.san)}.`
+                : 'from the start.'}
+          </span>
+        </p>
+      }
+    />
+  );
 }
 
 /** A unit's stretch as numbered moves, the unit's own moves in bold, after the last two moves that lead to it. */
@@ -86,21 +118,18 @@ function StretchMoves({
     stretch.plies.filter((_, i) => progress?.moves[i]?.passed || progress?.moves[i]?.graduated),
   );
   return (
-    <p className="font-mono text-sm leading-relaxed">
-      {lead.length > 0 && (
-        <span className="text-muted-foreground">
-          {lead.length > 2 && '… '}
-          {lead.slice(-2).map((move, i) => `${runMove(move.ply, move.san, i === 0)} `)}
-        </span>
-      )}
-      {own.map((move, i) => (
-        <span
-          key={move.ply}
-          className={move.core ? `font-semibold ${passedPlies.has(move.ply) ? 'text-primary' : ''}` : ''}
-        >
-          {runMove(move.ply, move.san, i === 0)}{' '}
-        </span>
-      ))}
+    <p className="text-sm">
+      <MoveList
+        layout="inline"
+        truncated={lead.length > 2}
+        moves={[
+          ...lead.slice(-2).map((move): MoveListMove => ({ ...move, state: 'lead' })),
+          ...own.map((move): MoveListMove => ({
+            ...move,
+            state: !move.core ? 'played' : passedPlies.has(move.ply) ? 'done' : 'core',
+          })),
+        ]}
+      />
     </p>
   );
 }
@@ -170,8 +199,6 @@ export function CoursePathPage({ course }: { course: string }) {
     ]),
   ) as Record<UnitState, number>;
   const done = counts.passed + counts.graduated;
-  const side = ready.opening.side;
-  const board = shown ? endOf(ready, shown.stretches[0]!) : null;
 
   return (
     <Page>
@@ -222,20 +249,9 @@ export function CoursePathPage({ course }: { course: string }) {
                 />
               ))}
             </ol>
-            {board && shown && (
-              <aside className="hidden gap-2 lg:sticky lg:top-20 lg:grid" aria-label="The picked unit's position">
-                <AppBoard
-                  id="path-board"
-                  className="aspect-square w-full"
-                  epd={board.epd}
-                  orientation={side}
-                  interactive={false}
-                  lastMove={board.lastMove}
-                />
-                <p className="text-sm">
-                  <span className="font-medium">Unit {shown.index + 1}</span>{' '}
-                  <span className="text-muted-foreground">ends here{shown.side ? ' (its first branch)' : ''}.</span>
-                </p>
+            {shown && (
+              <aside className="hidden lg:sticky lg:top-20 lg:grid" aria-label="The picked unit's position">
+                <UnitBoard key={shown.id} content={ready} unit={shown} />
               </aside>
             )}
           </div>

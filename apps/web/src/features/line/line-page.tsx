@@ -1,20 +1,11 @@
-import {
-  type LineEdge,
-  namedPly,
-  numberedMove,
-  type OpeningContent,
-  runMove,
-  type Variant,
-  variantPath,
-} from '@knightschool/core';
+import { namedPly, numberedMove, type OpeningContent, type Variant, variantPath } from '@knightschool/core';
 import { BookOpen, GitBranch, GitFork, ListChecks, PenLine, Target } from 'lucide-react';
 import { EcoLink } from '@/components/eco-link';
-import { MoveTags } from '@/components/move-tags';
-import { useEffect, useMemo, useState } from 'react';
-import { AppBoard } from '@/components/board/app-board';
-import { StepButtons } from '@/components/board/step-buttons';
+import { useMemo, useState } from 'react';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { StudyBoard } from '@/components/board/study-board';
+import { MoveList } from '@/components/move-list';
 import { Page } from '@/components/page';
-import { RichText } from '@/components/rich-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -61,24 +52,6 @@ const KIND: Record<string, string> = {
   'for-us': 'Trap to spring',
   'against-us': 'Trap to avoid',
 };
-
-/** The line as paragraphs: a run of moves, then the comment on the last of them. */
-type Paragraph = { moves: { ply: number; san: string; tags?: string[] }[]; comment?: string };
-
-function paragraphsOf(path: LineEdge[], from: number): Paragraph[] {
-  const paragraphs: Paragraph[] = [];
-  let current: Paragraph = { moves: [] };
-  for (let ply = from; ply < path.length; ply++) {
-    const edge = path[ply]!;
-    current.moves.push({ ply, san: edge.san, tags: edge.annotation?.tags });
-    if (edge.annotation?.text) {
-      paragraphs.push({ ...current, comment: edge.annotation.text });
-      current = { moves: [] };
-    }
-  }
-  if (current.moves.length) paragraphs.push(current);
-  return paragraphs;
-}
 
 /**
  * The About tab: what the line is, told mostly in words. A picture of the position where the line becomes itself (the
@@ -133,33 +106,12 @@ function About({
   const path = useMemo(() => variantPath(content, variant.id), [content, variant.id]);
   const named = useMemo(() => namedPly(content, variant.id), [content, variant.id]);
   const [ply, setPly] = useState(named);
-  // The arrow keys step through the line too; Home and End go to its start and its end.
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
-      const next =
-        event.key === 'ArrowLeft'
-          ? (at: number) => Math.max(0, at - 1)
-          : event.key === 'ArrowRight'
-            ? (at: number) => Math.min(path.length, at + 1)
-            : event.key === 'Home'
-              ? () => 0
-              : event.key === 'End'
-                ? () => path.length
-                : null;
-      if (!next) return;
-      event.preventDefault();
-      setPly(next);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [path.length]);
+  const stepper = useLineStepper({ length: path.length, index: ply, setIndex: setPly });
 
   const positions = [opening.rootEpd, ...path.map((edge) => edge.to)];
   const trigger = Math.max(0, positions.indexOf(opening.triggerEpd));
   const epd = positions[ply] ?? opening.rootEpd;
   const positionName = content.nodes[epd]?.name;
-  const paragraphs = paragraphsOf(path, trigger);
 
   // Where the line sits in the tree: what it grows from and what grows from it, found in any course that lists them.
   const entry = index
@@ -237,36 +189,32 @@ function About({
         </div>
 
         <aside className="grid content-start gap-2 md:sticky md:top-20 md:col-start-2 md:row-span-2 md:row-start-1 md:self-start">
-          <AppBoard
+          <StudyBoard
             id="line-about"
             previewable
-            className="aspect-square w-full"
+            size="aside"
             epd={epd}
             orientation={side}
             interactive={false}
             lastMove={ply > 0 ? path[ply - 1]?.uci : undefined}
+            stepper={stepper}
+            controls={{ flip: true }}
+            caption={
+              <p>
+                <span className="font-medium">
+                  {ply === 0 ? 'The start' : `After ${numberedMove(ply - 1, path[ply - 1]!.san)}`}
+                </span>
+                {positionName && <span className="text-muted-foreground">: {positionName}</span>}
+              </p>
+            }
+            below={
+              ply !== named && (
+                <Button variant="link" className="h-auto justify-start p-0 text-sm" onClick={() => setPly(named)}>
+                  Back to the position that names the line
+                </Button>
+              )
+            }
           />
-          <div className="flex items-start justify-between gap-2">
-            <p className="text-sm">
-              <span className="font-medium">
-                {ply === 0 ? 'The start' : `After ${numberedMove(ply - 1, path[ply - 1]!.san)}`}
-              </span>
-              {positionName && <span className="text-muted-foreground">: {positionName}</span>}
-            </p>
-            <StepButtons
-              onFirst={() => setPly(0)}
-              onPrev={() => setPly(Math.max(0, ply - 1))}
-              onNext={() => setPly(Math.min(path.length, ply + 1))}
-              onLast={() => setPly(path.length)}
-              atStart={ply === 0}
-              atEnd={ply >= path.length}
-            />
-          </div>
-          {ply !== named && (
-            <Button variant="link" className="h-auto justify-start p-0 text-sm" onClick={() => setPly(named)}>
-              Back to the position that names the line
-            </Button>
-          )}
         </aside>
 
         <div className="grid min-w-0 content-start gap-6">
@@ -277,25 +225,27 @@ function About({
             {trigger > 0 && (
               <p className="text-sm text-muted-foreground">
                 The course starts after{' '}
-                <MoveRun
+                <MoveList
+                  layout="inline"
                   moves={path.slice(0, trigger).map((edge, i) => ({ ply: i, san: edge.san }))}
-                  ply={ply}
-                  onPick={setPly}
+                  current={ply - 1}
+                  onSelect={(at) => setPly(at + 1)}
                 />
                 .
               </p>
             )}
-            {paragraphs.map((paragraph, i) => (
-              <p key={i} className="leading-relaxed">
-                <MoveRun moves={paragraph.moves} ply={ply} onPick={setPly} />
-                {paragraph.comment && (
-                  <>
-                    {' '}
-                    <RichText text={paragraph.comment} />
-                  </>
-                )}
-              </p>
-            ))}
+            <MoveList
+              layout="paragraphs"
+              label="The line"
+              moves={path.slice(trigger).map((edge, i) => ({
+                ply: trigger + i,
+                san: edge.san,
+                tags: edge.annotation?.tags,
+                comment: edge.annotation?.text,
+              }))}
+              current={ply - 1}
+              onSelect={(at) => setPly(at + 1)}
+            />
           </section>
 
           {(parent || children.length > 0 || alsoIn.length > 0) && (
@@ -360,36 +310,5 @@ function About({
         </div>
       </div>
     </Page>
-  );
-}
-
-/** Moves as small buttons: clicking one shows the position after it. The first move of a run carries its number. */
-function MoveRun({
-  moves,
-  ply,
-  onPick,
-}: {
-  moves: { ply: number; san: string; tags?: string[] }[];
-  ply: number;
-  onPick: (ply: number) => void;
-}) {
-  return (
-    <>
-      {moves.map((move, i) => (
-        <span key={move.ply}>
-          {i > 0 && ' '}
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            className={`h-auto px-0.5 font-mono font-medium hover:underline ${move.ply + 1 === ply ? 'bg-secondary' : ''}`}
-            onClick={() => onPick(move.ply + 1)}
-          >
-            {runMove(move.ply, move.san, i === 0)}
-          </Button>
-          <MoveTags tags={move.tags} className="ml-0.5" />
-        </span>
-      ))}
-    </>
   );
 }

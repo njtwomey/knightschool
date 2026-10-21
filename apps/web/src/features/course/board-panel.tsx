@@ -1,65 +1,49 @@
-import { nodeAt, type OpeningContent } from '@knightschool/core';
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
-import { AppBoard } from '@/components/board/app-board';
-import { BoardSettingsButton } from '@/components/board/board-settings';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { EvalBar } from '@/components/engine/eval-bar';
+import type { OpeningContent } from '@knightschool/core';
+import { useLineStepper } from '@/components/board/line-stepper';
 import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
+import { StudyBoard } from '@/components/board/study-board';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { currentEpd, useCatalog } from '@/data/catalog-store';
 
-/** The board on the course page for exploring: step through a line, or play a move to see if the course has it. */
+/**
+ * The board on the course page for exploring: step through the line shown (the buttons or the arrow keys), or play a
+ * move to see if the course has it. The engine's score sits beside it and its best line under it.
+ */
 export function BoardPanel({ content }: { content: OpeningContent }) {
-  const { path, notice, tryMove, stepBack, stepForward, toStart, toEnd } = useCatalog();
+  const { path, line, notice, tryMove, setPath } = useCatalog();
   const epd = currentEpd(content, path);
   const last = path.at(-1);
-  const atEnd = nodeAt(content, epd).moves.length === 0;
+  const stepper = useLineStepper({
+    length: line.length,
+    index: path.length,
+    setIndex: (index) => setPath(line.slice(0, index)),
+    label: 'Move through the line',
+  });
 
   return (
-    <div className="grid gap-3">
-      <div className="flex gap-2">
-        <EvalBar orientation={content.opening.side} />
-        <AppBoard
-          id="explore"
-          previewable
-          className="aspect-square min-w-0 flex-1"
-          epd={epd}
-          orientation={content.opening.side}
-          lastMove={last?.uci}
-          arrows={arrowsOf(last?.annotation)}
-          squareStyles={squareStylesOf(undefined, last?.annotation)}
-          onMove={tryMove}
-        />
-      </div>
-      <div className="flex items-center justify-between gap-2">
-        <BoardSettingsButton />
-        <div className="flex gap-1" role="group" aria-label="Move through the line">
-          <Button variant="outline" size="icon" onClick={toStart} disabled={path.length === 0} aria-label="Start">
-            <ChevronFirst aria-hidden />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={stepBack}
-            disabled={path.length === 0}
-            aria-label="Back one move"
-          >
-            <ChevronLeft aria-hidden />
-          </Button>
-          <Button variant="outline" size="icon" onClick={stepForward} disabled={atEnd} aria-label="Forward one move">
-            <ChevronRight aria-hidden />
-          </Button>
-          <Button variant="outline" size="icon" onClick={toEnd} disabled={atEnd} aria-label="End of line">
-            <ChevronLast aria-hidden />
-          </Button>
-        </div>
-        <span className="w-9" aria-hidden />
-      </div>
-      {notice && (
-        <Alert role="status">
-          <AlertDescription>{notice}</AlertDescription>
-        </Alert>
-      )}
-    </div>
+    <StudyBoard
+      id="explore"
+      previewable
+      epd={epd}
+      orientation={content.opening.side}
+      lastMove={last?.uci}
+      arrows={arrowsOf(last?.annotation)}
+      squareStyles={squareStylesOf(undefined, last?.annotation)}
+      onMove={tryMove}
+      stepper={stepper}
+      controls={{ flip: true, evalBar: true }}
+      engine={{
+        view: 'strip',
+        before: path.length > 1 ? path[path.length - 2]!.to : content.opening.rootEpd,
+        lastMove: last,
+      }}
+      below={
+        notice && (
+          <Alert role="status">
+            <AlertDescription>{notice}</AlertDescription>
+          </Alert>
+        )
+      }
+    />
   );
 }
