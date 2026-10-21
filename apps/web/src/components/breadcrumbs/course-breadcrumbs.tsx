@@ -1,69 +1,26 @@
-import { inStudyOrder } from '@knightschool/core';
-import { CrumbMenu, type MenuItem } from '@/components/breadcrumbs/crumb-menu';
-import { TabGroup } from '@/components/breadcrumbs/tab-group';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { TrailCrumbs } from '@/components/breadcrumbs/trail-crumbs';
+import { useCourseItems } from '@/components/breadcrumbs/use-course-items';
 import { useCatalog } from '@/data/catalog-store';
-import { navigate, to } from '@/router/location';
 import { courseHref, lineHref, LINE_TABS, COURSE_TABS, type LineTab, type CourseTab } from '@/router/hrefs';
-
-/** Every course as menu items, in study order, grouped by the side you play. */
-function useCourseItems(): MenuItem[] {
-  const index = useCatalog((state) => state.index);
-  return [
-    ...inStudyOrder(index.filter((course) => course.side === 'white')),
-    ...inStudyOrder(index.filter((course) => course.side === 'black')),
-  ].map((course) => ({
-    id: course.id,
-    label: course.name,
-    href: courseHref(course.id),
-    group: course.side === 'white' ? 'You play White' : 'You play Black',
-  }));
-}
 
 /** Courses, then the course as a menu of every course, then the course's views: the breadcrumbs of a course page. */
 export function CourseBreadcrumbs({ course, tab = 'overview' }: { course: string; tab?: CourseTab }) {
   const index = useCatalog((state) => state.index);
-  const courses = useCourseItems();
+  const courses = useCourseItems((id) => courseHref(id));
   const name = index.find((candidate) => candidate.id === course)?.name ?? course;
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href={to('/courses')}>Courses</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          {courses.length > 1 ? (
-            <CrumbMenu label={name} current={course} items={courses} menuLabel="Other courses" />
-          ) : (
-            <BreadcrumbPage>{name}</BreadcrumbPage>
-          )}
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <TabGroup
-            tabs={COURSE_TABS}
-            value={tab}
-            onPick={(next) => navigate(courseHref(course, next))}
-            label="Views of this course"
-          />
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
+    <TrailCrumbs
+      root={{ label: 'Courses', href: '/courses' }}
+      crumbs={[{ label: name, menu: { current: course, items: courses, label: 'Other courses' } }]}
+      tabs={{ tabs: COURSE_TABS, value: tab, href: (next) => courseHref(course, next), label: 'Views of this course' }}
+    />
   );
 }
 
 /**
  * Where you are: Courses, the course (a menu of every course) and the line (a menu of every line of the course), then
- * the line's tabs: About, Learn, Drill and Quiz. The tabs are the only control for how you are working on a line, so
- * they sit where you look to see where you are.
+ * the line's tabs: About, Learn, Drill, Quiz and Tree. The tabs are the only control for how you are working on a line,
+ * so they sit where you look to see where you are.
  */
 export function PlayBreadcrumbs({
   course,
@@ -78,56 +35,33 @@ export function PlayBreadcrumbs({
   tab: LineTab | 'branches';
 }) {
   const index = useCatalog((state) => state.index);
-  const courses = useCourseItems();
+  const courses = useCourseItems((id) => courseHref(id));
   const entry = index.find((candidate) => candidate.id === course);
   const name = lineName ?? entry?.lines.find((candidate) => candidate.id === line)?.name ?? line;
   // A line link keeps the tab you are on; an every-branch drill has no line, so its links open About.
   const linkTab: LineTab = tab === 'branches' ? 'about' : tab;
-  const lines: MenuItem[] = (entry?.lines ?? []).map((candidate) => ({
+  const lines = (entry?.lines ?? []).map((candidate) => ({
     id: candidate.id,
     label: candidate.name,
     href: lineHref(course, candidate.id, linkTab),
     group: 'Lines in this course',
   }));
-
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href={to('/courses')}>Courses</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <CrumbMenu
-            label={entry?.name ?? course}
-            href={courseHref(course)}
-            current={course}
-            items={courses}
-            menuLabel="Other courses"
-          />
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          {lines.length > 1 ? (
-            <CrumbMenu label={name} current={line} items={lines} menuLabel="Other lines in this course" />
-          ) : (
-            <BreadcrumbPage>{name}</BreadcrumbPage>
-          )}
-        </BreadcrumbItem>
-        {tab !== 'branches' && (
-          <>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <TabGroup
-                tabs={LINE_TABS}
-                value={tab}
-                onPick={(next) => navigate(lineHref(course, line, next))}
-                label="Work on this line"
-              />
-            </BreadcrumbItem>
-          </>
-        )}
-      </BreadcrumbList>
-    </Breadcrumb>
+    <TrailCrumbs
+      root={{ label: 'Courses', href: '/courses' }}
+      crumbs={[
+        {
+          label: entry?.name ?? course,
+          href: courseHref(course),
+          menu: { current: course, items: courses, label: 'Other courses' },
+        },
+        { label: name, menu: { current: line, items: lines, label: 'Other lines in this course' } },
+      ]}
+      tabs={
+        tab === 'branches'
+          ? undefined
+          : { tabs: LINE_TABS, value: tab, href: (next) => lineHref(course, line, next), label: 'Work on this line' }
+      }
+    />
   );
 }

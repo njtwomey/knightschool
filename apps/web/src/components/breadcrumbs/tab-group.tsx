@@ -1,5 +1,8 @@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
+/** A page's tab: its value in the address, its name, and what it is for (shown on hover). */
+export type TabSpec<T extends string> = { tab: T; name: string; blurb: string };
+
 /** One choice of several, so a joined group: a shared border, flat inside, round at the two ends. */
 export function TabGroup<T extends string>({
   tabs,
@@ -7,7 +10,7 @@ export function TabGroup<T extends string>({
   onPick,
   label,
 }: {
-  tabs: readonly { tab: T; name: string; blurb: string }[];
+  tabs: readonly TabSpec<T>[];
   value: T;
   onPick: (tab: T) => void;
   label: string;

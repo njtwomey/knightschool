@@ -1,71 +1,42 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+import { TrailCrumbs } from '@/components/breadcrumbs/trail-crumbs';
+import { useCourseItems } from '@/components/breadcrumbs/use-course-items';
 import { Button } from '@/components/ui/button';
-import { CrumbMenu, type MenuItem } from '@/components/breadcrumbs/crumb-menu';
-import { TabGroup } from '@/components/breadcrumbs/tab-group';
-import { navigate, to } from '@/router/location';
+import { navigate } from '@/router/location';
 import { entryId } from './helpers';
 import { draftCourses, fullLine, useAuthor } from './store';
 import { createHref, lineEditHref, CREATE_TABS, type CreateTab } from '@/router/hrefs';
 
+const ROOT = { label: 'Create', href: '/create' };
+
 /** Your courses as menu items, each opening the same tab. */
-function useCourseItems(tab: CreateTab): MenuItem[] {
+function useOwnCourseItems(tab: CreateTab) {
   const rows = useAuthor((state) => state.rows);
-  return draftCourses(rows).map((course) => ({
-    id: course.id,
-    label: course.manifest.name,
-    href: createHref(course.id, tab),
-    group: 'Your courses',
-  }));
+  const courses = draftCourses(rows).map((course) => ({ id: course.id, name: course.manifest.name }));
+  return useCourseItems((id) => createHref(id, tab), { courses, group: 'Your courses' });
 }
 
 /** Create, then the course (a menu of your courses), then its tabs: Details, Lines, Path, Publish. */
 export function CreateBreadcrumbs({ course, tab }: { course: string; tab: CreateTab }) {
-  const courses = useCourseItems(tab);
+  const courses = useOwnCourseItems(tab);
   const name = courses.find((item) => item.id === course)?.label ?? course;
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href={to('/create')}>Create</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          {courses.length > 1 ? (
-            <CrumbMenu label={name} current={course} items={courses} menuLabel="Your other courses" />
-          ) : (
-            <BreadcrumbPage>{name}</BreadcrumbPage>
-          )}
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <TabGroup
-            tabs={CREATE_TABS}
-            value={tab}
-            onPick={(next) => navigate(createHref(course, next))}
-            label="Parts of this course"
-          />
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
+    <TrailCrumbs
+      root={ROOT}
+      crumbs={[{ label: name, menu: { current: course, items: courses, label: 'Your other courses' } }]}
+      tabs={{ tabs: CREATE_TABS, value: tab, href: (next) => createHref(course, next), label: 'Parts of this course' }}
+    />
   );
 }
 
 /** Create, the course (a menu), the line (a menu of its lines), and the previous and next line. */
 export function LineBreadcrumbs({ course, line }: { course: string; line: string }) {
-  const courses = useCourseItems('lines');
+  const courses = useOwnCourseItems('lines');
   const rows = useAuthor((state) => state.rows);
   const build = useAuthor((state) => state.build);
   const entry = draftCourses(rows).find((candidate) => candidate.id === course);
   const ids = (entry?.manifest.lines ?? []).map(entryId);
-  const lines: MenuItem[] = ids.map((id) => ({
+  const lines = ids.map((id) => ({
     id,
     label: fullLine(build, id)?.game.tags.Variation ?? id,
     href: lineEditHref(course, id),
@@ -76,30 +47,18 @@ export function LineBreadcrumbs({ course, line }: { course: string; line: string
   const next = at >= 0 && at < ids.length - 1 ? ids[at + 1] : undefined;
   const name = lines.find((item) => item.id === line)?.label ?? line;
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href={to('/create')}>Create</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <CrumbMenu
-            label={entry?.manifest.name ?? course}
-            href={createHref(course, 'lines')}
-            current={course}
-            items={courses}
-            menuLabel="Your other courses"
-          />
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          {lines.length > 1 ? (
-            <CrumbMenu label={name} current={line} items={lines} menuLabel="Other lines in this course" />
-          ) : (
-            <BreadcrumbPage>{name}</BreadcrumbPage>
-          )}
-        </BreadcrumbItem>
-        <BreadcrumbItem>
+    <TrailCrumbs
+      root={ROOT}
+      crumbs={[
+        {
+          label: entry?.manifest.name ?? course,
+          href: createHref(course, 'lines'),
+          menu: { current: course, items: courses, label: 'Your other courses' },
+        },
+        { label: name, menu: { current: line, items: lines, label: 'Other lines in this course' } },
+      ]}
+      trailing={
+        <>
           <Button
             size="icon"
             variant="ghost"
@@ -122,8 +81,8 @@ export function LineBreadcrumbs({ course, line }: { course: string; line: string
           >
             <ChevronRight aria-hidden />
           </Button>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
+        </>
+      }
+    />
   );
 }

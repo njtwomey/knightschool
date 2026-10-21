@@ -5,8 +5,13 @@ import { RESERVED_LINE_ID } from '@knightschool/core';
  * functions that build an address and the ones that read the parts of one. Build every link with these, never by hand.
  */
 
-/** Profile's tabs: Overview, Stats and Settings. */
-export type ProfileTab = 'overview' | 'stats' | 'settings';
+/** Profile's tabs: what is due and how far through your courses you are, how you are doing, and your settings. */
+export const PROFILE_TABS = [
+  { tab: 'overview', name: 'Overview', blurb: 'What is due today and how far through your courses you are.' },
+  { tab: 'stats', name: 'Stats', blurb: 'How you are doing: your answers, Name That Opening and Speed.' },
+  { tab: 'settings', name: 'Settings', blurb: 'Appearance, the board, training, the explorer and your data.' },
+] as const;
+export type ProfileTab = (typeof PROFILE_TABS)[number]['tab'];
 
 /** `/profile` (the overview) or `/profile/<tab>`. */
 export const profileHref = (tab: ProfileTab = 'overview') => (tab === 'overview' ? '/profile' : `/profile/${tab}`);
