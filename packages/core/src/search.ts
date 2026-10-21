@@ -15,6 +15,8 @@ export const SearchEntry = z.object({
   lines: z.array(SearchLine),
   /** SAN for each move in `lines`, as played from this position. */
   san: z.record(z.string(), z.string()),
+  /** The opening this position belongs to: its own name (Lichess's list), or the nearest named position before it. */
+  name: z.string().optional(),
 });
 export type SearchEntry = z.infer<typeof SearchEntry>;
 
@@ -35,6 +37,21 @@ export function buildSearchIndex(contents: OpeningContent[]): SearchIndex {
     return entry;
   };
   const kinds = new Map<Key, SearchLine['kind']>();
+  // The opening name a position carries on from: walked from each course's start, shallowest first.
+  const names = new Map<string, string>();
+  for (const content of contents) {
+    const queue: [string, string | undefined][] = [[content.opening.rootEpd, undefined]];
+    const seen = new Set<string>();
+    while (queue.length) {
+      const [epd, above] = queue.shift()!;
+      if (seen.has(epd)) continue;
+      seen.add(epd);
+      const node = content.nodes[epd];
+      const name = node?.name ?? above;
+      if (name && !names.has(epd)) names.set(epd, name);
+      for (const edge of node?.moves ?? []) queue.push([edge.to, name]);
+    }
+  }
 
   for (const content of contents) {
     for (const variant of content.opening.variants) kinds.set(`${content.opening.id}\t${variant.id}`, variant.kind);
@@ -68,7 +85,8 @@ export function buildSearchIndex(contents: OpeningContent[]): SearchIndex {
         a.line.localeCompare(b.line) ||
         String(a.next).localeCompare(String(b.next)),
     );
-    index[epd] = { lines, san: Object.fromEntries(entry.san) };
+    const name = names.get(epd);
+    index[epd] = { lines, san: Object.fromEntries(entry.san), ...(name ? { name } : {}) };
   }
   return index;
 }

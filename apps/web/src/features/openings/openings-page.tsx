@@ -34,14 +34,16 @@ import { VariationCard } from './variation-card';
 import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state';
 
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
-type Match = { ids: Set<string>; lines: Map<string, LineInfo[]> } | null;
+/** The courses and lines the board search reaches, and the opening the position belongs to ("Englund Gambit"). */
+type Match = { ids: Set<string>; lines: Map<string, LineInfo[]>; name?: string } | null;
 
 /** Which courses (and which of their lines) the board search matches, or null when it is not narrowing anything. */
 function boardMatch(query: BoardQuery, index: SearchIndex | null, courses: OpeningIndexEntry[]): Match {
   if (!index || !isActive(query)) return null;
   const epd = queryEpd(query);
   const found = searchAt(index, epd, query.kind);
-  if (!found) return { ids: new Set(), lines: new Map() };
+  const name = index[epd]?.name;
+  if (!found) return { ids: new Set(), lines: new Map(), name };
   const lines = new Map<string, LineInfo[]>();
   if (epd !== START_EPD) {
     for (const line of found.lines) {
@@ -53,7 +55,7 @@ function boardMatch(query: BoardQuery, index: SearchIndex | null, courses: Openi
       lines.set(line.course, list);
     }
   }
-  return { ids: new Set(found.courses), lines };
+  return { ids: new Set(found.courses), lines, name };
 }
 
 const PAGE = 100;
@@ -260,7 +262,10 @@ export function OpeningsPage() {
           >
             <Swords aria-hidden />
             {isActive(query) ? (
-              <span className="font-mono">{movesText(query.played) || 'Any position'}</span>
+              <span>
+                <span className="font-mono">{movesText(query.played) || 'Any position'}</span>
+                {match?.name && <span className="ml-2 font-medium">{match.name}</span>}
+              </span>
             ) : (
               'Search by moves'
             )}
@@ -320,6 +325,7 @@ export function OpeningsPage() {
                   openings={openings}
                   learned={learned}
                   matches={match?.lines.get(item.course.id)}
+                  here={match?.name}
                   reason={matchReason(item.course, filter.query)}
                 />
               </li>

@@ -108,4 +108,14 @@ describe('board search index', () => {
     const fork = searchAt(index, epdAfterPgn('1. e4 e5 2. Nf3 Nc6'))!;
     expect(fork.moves.find((move) => move.san === 'Bc4')!.lines).toBe(2); // the Italian line and its trap both play it
   });
+
+  it('names each position after its own opening name, or the nearest named position before it', () => {
+    const c = course('italian', 'Italian', 'white', { lines: ['1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3'] });
+    const named = epdAfterPgn('1. e4 e5 2. Nf3 Nc6 3. Bc4');
+    c.nodes[named]!.name = 'Italian Game';
+    const index = buildSearchIndex([c]);
+    expect(index[named]!.name).toBe('Italian Game');
+    expect(index[epdAfterPgn('1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3')]!.name).toBe('Italian Game');
+    expect(index[epdAfterPgn('1. e4 e5')]!.name).toBeUndefined();
+  });
 });

@@ -67,6 +67,7 @@ export function CourseCard({
   learned,
   matches,
   reason,
+  here,
 }: {
   course: OpeningIndexEntry;
   openings: OpeningGroup[];
@@ -75,6 +76,8 @@ export function CourseCard({
   matches?: LineInfo[];
   /** Why the search found this course, when it was not by name. */
   reason?: MatchReason;
+  /** The opening of the position the board search reached; shown instead of the course's summary. */
+  here?: string;
 }) {
   const progress = courseProgress([course], learned);
   const started = progress.learned > 0;
@@ -98,7 +101,14 @@ export function CourseCard({
             </Hint>
           )}
         </div>
-        <p className="line-clamp-2 text-sm text-muted-foreground">{plainText(course.summary)}</p>
+        {matches && matches.length > 0 && here ? (
+          <p className="text-sm">
+            <span className="text-muted-foreground">Here: </span>
+            <span className="font-medium">{here}</span>
+          </p>
+        ) : (
+          <p className="line-clamp-2 text-sm text-muted-foreground">{plainText(course.summary)}</p>
+        )}
         <div className="flex flex-wrap gap-1 text-xs">
           <Hint text={TIER_HINT[course.tier]}>
             <Badge
