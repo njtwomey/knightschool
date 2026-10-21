@@ -6,6 +6,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { AppBoard } from '@/components/board/app-board';
 import { MoveTable } from '@/components/move-table';
 import { BoardSettingsButton } from '@/components/board/board-settings';
+import { StepButtons } from '@/components/board/step-buttons';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -158,6 +159,7 @@ function Review({ scope }: { scope?: LineScope }) {
           />
           <div className="flex flex-wrap items-center gap-2">
             <BoardSettingsButton />
+            <PathSteps length={path.length} />
             <Button
               variant="outline"
               onClick={() => useReview.getState().hint()}
@@ -274,6 +276,29 @@ function Summary({ results }: { results: readonly string[] }) {
   );
 }
 
+/**
+ * Steps back and forth through the moves that led to the question, up to the question itself (the last of them): the
+ * same as clicking the moves in the table.
+ */
+function PathSteps({ length }: { length: number }) {
+  const viewing = useReview((state) => state.viewing);
+  const view = useReview((state) => state.view);
+  if (length < 2) return null;
+  const at = viewing ?? length - 1;
+  const goTo = (i: number) => view(i >= length - 1 ? null : Math.max(0, i));
+  return (
+    <StepButtons
+      label="Step through the moves so far"
+      onFirst={() => goTo(0)}
+      onPrev={() => goTo(at - 1)}
+      onNext={() => goTo(at + 1)}
+      onLast={() => goTo(length - 1)}
+      atStart={at <= 0}
+      atEnd={viewing === null}
+    />
+  );
+}
+
 /** A question answered in words: type, get feedback or the reveal, and it moves on by itself. */
 function QuizView({ question }: { question: QuizQuestion }) {
   const { queue, index, quizResult, advancing, viewing, holding } = useReview();
@@ -309,15 +334,18 @@ function QuizView({ question }: { question: QuizQuestion }) {
         </span>
       </div>
       <div className="board-columns grid gap-6">
-        <AppBoard
-          id="quiz"
-          className="aspect-square w-full"
-          epd={epd}
-          orientation={content.opening.side}
-          interactive={false}
-          lastMove={lastMove}
-          lastMoveTone={tone}
-        />
+        <div className="grid content-start gap-2">
+          <AppBoard
+            id="quiz"
+            className="aspect-square w-full"
+            epd={epd}
+            orientation={content.opening.side}
+            interactive={false}
+            lastMove={lastMove}
+            lastMoveTone={tone}
+          />
+          <PathSteps length={path.length} />
+        </div>
         <Card className="content-start">
           <CardHeader>
             <CardDescription className="flex flex-wrap items-center gap-2">

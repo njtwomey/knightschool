@@ -3,6 +3,7 @@ import { BookOpen, GitBranch, GitFork, ListChecks, Target } from 'lucide-react';
 import { EcoLink } from '@/components/eco-link';
 import { useEffect, useMemo, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
+import { StepButtons } from '@/components/board/step-buttons';
 import { Page } from '@/components/page';
 import { RichText } from '@/components/rich-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -125,6 +126,27 @@ function About({
   const path = useMemo(() => variantPath(content, variant.id), [content, variant.id]);
   const named = useMemo(() => namedPly(content, variant.id), [content, variant.id]);
   const [ply, setPly] = useState(named);
+  // The arrow keys step through the line too; Home and End go to its start and its end.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
+      const next =
+        event.key === 'ArrowLeft'
+          ? (at: number) => Math.max(0, at - 1)
+          : event.key === 'ArrowRight'
+            ? (at: number) => Math.min(path.length, at + 1)
+            : event.key === 'Home'
+              ? () => 0
+              : event.key === 'End'
+                ? () => path.length
+                : null;
+      if (!next) return;
+      event.preventDefault();
+      setPly(next);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [path.length]);
 
   const positions = [opening.rootEpd, ...path.map((edge) => edge.to)];
   const trigger = Math.max(0, positions.indexOf(opening.triggerEpd));
@@ -208,12 +230,22 @@ function About({
             interactive={false}
             lastMove={ply > 0 ? path[ply - 1]?.uci : undefined}
           />
-          <p className="text-sm">
-            <span className="font-medium">
-              {ply === 0 ? 'The start' : `After ${moveLabel(ply - 1, path[ply - 1]!.san, true)}`}
-            </span>
-            {positionName && <span className="text-muted-foreground">: {positionName}</span>}
-          </p>
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-sm">
+              <span className="font-medium">
+                {ply === 0 ? 'The start' : `After ${moveLabel(ply - 1, path[ply - 1]!.san, true)}`}
+              </span>
+              {positionName && <span className="text-muted-foreground">: {positionName}</span>}
+            </p>
+            <StepButtons
+              onFirst={() => setPly(0)}
+              onPrev={() => setPly(Math.max(0, ply - 1))}
+              onNext={() => setPly(Math.min(path.length, ply + 1))}
+              onLast={() => setPly(path.length)}
+              atStart={ply === 0}
+              atEnd={ply >= path.length}
+            />
+          </div>
           {ply !== named && (
             <Button variant="link" className="h-auto justify-start p-0 text-sm" onClick={() => setPly(named)}>
               Back to the position that names the line

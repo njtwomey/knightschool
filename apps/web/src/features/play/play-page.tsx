@@ -5,6 +5,7 @@ import { BookOpen, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'l
 import { useEffect } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { BoardSettingsButton } from '@/components/board/board-settings';
+import { StepButtons } from '@/components/board/step-buttons';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -279,6 +280,22 @@ export function PlayPage({ course, line, mode }: Props) {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <BoardSettingsButton />
+            {state.mode === 'learn' && !drill && (
+              <StepButtons
+                onFirst={() => {
+                  usePlay.getState().leaveExplore();
+                  usePlay.getState().goTo(0);
+                }}
+                onPrev={() => (explore ? usePlay.getState().exploreBack() : usePlay.getState().goTo(index - 1))}
+                onNext={() => view.upcoming && usePlay.getState().submitMove(view.upcoming.edge.uci)}
+                onLast={() => {
+                  usePlay.getState().leaveExplore();
+                  usePlay.getState().goTo(steps.length);
+                }}
+                atStart={index === 0 && !exploring}
+                atEnd={complete || !view.upcoming || exploring}
+              />
+            )}
             {!drill && (
               <Button variant="outline" onClick={() => chooseMode('branches')} title={MODES.branches.blurb}>
                 <GitBranch aria-hidden /> Every branch

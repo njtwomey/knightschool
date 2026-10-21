@@ -7,9 +7,10 @@ import {
   type OpeningContent,
   type Side,
 } from '@knightschool/core';
-import { BookOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Crosshair, Target, X } from 'lucide-react';
+import { BookOpen, ChevronRight, Crosshair, Target, X } from 'lucide-react';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
+import { StepButtons } from '@/components/board/step-buttons';
 import { RichText } from '@/components/rich-text';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -385,29 +386,15 @@ export function TreeExplorer({
             <p className="text-sm font-medium">
               {shown.san ? `After ${numberedMove(shown.ply - 1, shown.san)}` : 'The start'}
             </p>
-            <div className="flex gap-1" role="group" aria-label="Step through the line">
-              {(
-                [
-                  ['First move', ChevronsLeft, steps[0], at <= 0],
-                  ['Previous move', ChevronLeft, steps[at - 1], at <= 0],
-                  ['Next move', ChevronRight, steps[at + 1], at < 0 || at >= steps.length - 1],
-                  ['Last move', ChevronsRight, steps.at(-1), at < 0 || at >= steps.length - 1],
-                ] as const
-              ).map(([label, Icon, target, off]) => (
-                <Button
-                  key={label}
-                  variant="outline"
-                  size="icon"
-                  className="size-8"
-                  aria-label={label}
-                  title={picked ? label : 'Pick a line to step through it'}
-                  disabled={!picked || off}
-                  onClick={() => goTo(target)}
-                >
-                  <Icon aria-hidden />
-                </Button>
-              ))}
-            </div>
+            <StepButtons
+              onFirst={() => goTo(steps[0])}
+              onPrev={() => goTo(steps[at - 1])}
+              onNext={() => goTo(steps[at + 1])}
+              onLast={() => goTo(steps.at(-1))}
+              atStart={!picked || at <= 0}
+              atEnd={!picked || at < 0 || at >= steps.length - 1}
+              disabledTitle="Pick a line to step through it"
+            />
           </div>
           {comment && (
             <p className="text-sm text-muted-foreground">

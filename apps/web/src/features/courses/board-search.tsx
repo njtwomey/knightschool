@@ -1,5 +1,6 @@
 import { playUci, searchAt, type OpeningIndexEntry, type SearchIndex, type ResultKind } from '@knightschool/core';
-import { FlipHorizontal2, RotateCcw, Undo2 } from 'lucide-react';
+import { FlipHorizontal2 } from 'lucide-react';
+import { StepButtons } from '@/components/board/step-buttons';
 import { useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -46,6 +47,13 @@ export function BoardSearchDialog({
 }: Props) {
   const [side, setSide] = useState<'white' | 'black'>('white');
   const [notice, setNotice] = useState<string | null>(null);
+  // Moves stepped back over, nearest first, so forward and last can play them again until a different move is played.
+  const [ahead, setAhead] = useState<Props['query']['played']>([]);
+  const step = (played: Props['query']['played'], next: Props['query']['played']) => {
+    onQueryChange({ ...query, played });
+    setAhead(next);
+    setNotice(null);
+  };
   const epd = queryEpd(query);
   const here = index ? searchAt(index, epd, query.kind) : undefined;
 
@@ -53,9 +61,10 @@ export function BoardSearchDialog({
     try {
       const move = playUci(epd, uci);
       onQueryChange({ ...query, played: [...query.played, { uci, san: move.san, epd: move.epd }] });
+      setAhead(ahead[0]?.uci === uci ? ahead.slice(1) : []);
       setNotice(
         index && !searchAt(index, move.epd, query.kind)
-          ? `No course reaches ${move.san} from here. Undo to go back.`
+          ? `No course reaches ${move.san} from here. Step back to go back.`
           : null,
       );
       return true;
@@ -93,24 +102,15 @@ export function BoardSearchDialog({
               }))}
             />
             <div className="flex flex-wrap items-center gap-1.5">
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Undo the last move"
-                disabled={query.played.length === 0}
-                onClick={() => (onQueryChange({ ...query, played: query.played.slice(0, -1) }), setNotice(null))}
-              >
-                <Undo2 aria-hidden />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Start again"
-                disabled={query.played.length === 0}
-                onClick={() => (onQueryChange({ ...query, played: [] }), setNotice(null))}
-              >
-                <RotateCcw aria-hidden />
-              </Button>
+              <StepButtons
+                label="Step through the moves played"
+                onFirst={() => step([], [...query.played, ...ahead])}
+                onPrev={() => step(query.played.slice(0, -1), [query.played.at(-1)!, ...ahead])}
+                onNext={() => step([...query.played, ahead[0]!], ahead.slice(1))}
+                onLast={() => step([...query.played, ...ahead], [])}
+                atStart={query.played.length === 0}
+                atEnd={ahead.length === 0}
+              />
               <Button
                 variant="outline"
                 size="icon"
@@ -204,7 +204,7 @@ export function BoardSearchDialog({
               </div>
             )}
             {here && here.moves.length === 0 && (
-              <p className="text-sm text-muted-foreground">The lines end here. Undo to try another move.</p>
+              <p className="text-sm text-muted-foreground">The lines end here. Step back to try another move.</p>
             )}
             {!here && query.played.length > 0 && !notice && (
               <p className="text-sm text-muted-foreground">No course reaches this position.</p>
