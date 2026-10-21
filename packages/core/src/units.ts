@@ -721,3 +721,42 @@ export function unitStretches(unit: CourseUnit, first?: number, last?: number): 
   }
   return parts;
 }
+
+/** The lines in the order their units first come on a path, then any line with no unit, in the order given. */
+export function lineOrderOf(units: CourseUnit[], lines: string[]): string[] {
+  const seen: string[] = [];
+  for (const unit of units) if (lines.includes(unit.line) && !seen.includes(unit.line)) seen.push(unit.line);
+  return [...seen, ...lines.filter((line) => !seen.includes(line))];
+}
+
+/**
+ * The `units.order` that studies a course's lines in `lineOrder`: a stable topological sort of its units in which a
+ * unit's priority is its line's place in the order, so what a unit waits for always comes first (a branch moves as
+ * early as the unit it grows from allows, never before it). Undefined when that is the default path, so nothing needs
+ * writing. `custom` keeps a hand-written block's `after` and `drop`. The result always passes `checkUnitOverrides`.
+ */
+export function unitOrderFor(
+  content: OpeningContent,
+  lineOrder: string[],
+  custom: Pick<UnitOverrides, 'after' | 'drop'> = { after: {}, drop: {} },
+): string[] | undefined {
+  const base = courseUnits({ ...content, opening: { ...content.opening, units: { order: [], ...custom } } });
+  const withUnits = lineOrder.filter((line) => base.some((unit) => unit.line === line));
+  const defaultOrder = lineOrderOf(base, withUnits).filter((line) => withUnits.includes(line));
+  if (defaultOrder.join(' ') === withUnits.join(' ')) return undefined;
+  const rank = (unit: CourseUnit) => {
+    const at = withUnits.indexOf(unit.line);
+    return at < 0 ? Infinity : at;
+  };
+  const placed = new Set<string>();
+  const sequence: string[] = [];
+  while (sequence.length < base.length) {
+    const next = base
+      .filter((unit) => !placed.has(unit.id) && unit.prerequisites.every((need) => placed.has(need)))
+      .sort((a, b) => rank(a) - rank(b) || a.index - b.index)[0];
+    if (!next) break; // cannot happen: courseUnits gives an order where every prerequisite comes first
+    placed.add(next.id);
+    sequence.push(next.id);
+  }
+  return sequence.join(' ') === base.map((unit) => unit.id).join(' ') ? undefined : sequence;
+}

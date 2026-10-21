@@ -1,4 +1,4 @@
-import { contributionYaml, readChapter } from '@knightschool/core';
+import { contributionYaml, courseUnits, readChapter } from '@knightschool/core';
 import { openMemoryStorage } from '@knightschool/storage/testing';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
@@ -104,14 +104,6 @@ describe('writing a course in the editor', () => {
     expect(author().build!.problems).toEqual([]);
   });
 
-  it('checks path changes against the units before saving them', async () => {
-    expect(await author().setOverrides('order: [nope:1]')).toMatch(/"nope:1" is not a unit/);
-    expect(await author().setOverrides('order: [my-italian-main:1]')).toBeNull();
-    expect(draftCourses(author().rows)[0]!.manifest.units?.order).toEqual(['my-italian-main:1']);
-    expect(await author().setOverrides('')).toBeNull();
-    expect(draftCourses(author().rows)[0]!.manifest.units).toBeUndefined();
-  });
-
   it('renames and deletes a group, keeping its lines', async () => {
     await author().renameGroup('Gambits', 'Sharp');
     expect(draftCourses(author().rows)[0]!.manifest.lines[1]).toMatchObject({ section: 'Sharp' });
@@ -132,5 +124,44 @@ describe('writing a course in the editor', () => {
     expect(author().build!.problems).toEqual([]);
     expect(contributionYaml(author().contribution('my-italian'))).toBe(yaml);
     expect(await author().importContribution('nope: 1')).toMatch(/not a Knight School contribution/);
+  });
+
+  it('orders the path, moves a line to the bonus and back, and undo takes a change back', async () => {
+    const lines = () => draftCourses(author().rows)[0]!.manifest.lines;
+    const ids = () => lines().map((entry) => (typeof entry === 'string' ? entry : entry.id));
+    const f4 = ids()[1]!; // the alternative 2.f4, in the bonus
+    // A second line on the path: Black's 2...Nf6, branching from the main line.
+    author().selectLine('my-italian-main');
+    author().setPly(3);
+    author().startBranch();
+    await play('g8f6');
+    const nf6 = author().lineId!;
+    expect(ids()).toEqual(['my-italian-main', nf6, f4]);
+
+    // Study 2...Nf6 first: the lines are written in that order, and the path starts with it.
+    expect(await author().setPath([nf6, 'my-italian-main'], [f4])).toBeNull();
+    expect(ids()).toEqual([nf6, 'my-italian-main', f4]);
+    expect(courseUnits(author().build!.courses[0]!)[0]!.line).toBe(nf6);
+    expect(author().build!.problems).toEqual([]);
+
+    // The default order writes no units.order.
+    expect(await author().setPath(['my-italian-main', nf6], [f4])).toBeNull();
+    expect(draftCourses(author().rows)[0]!.manifest.units).toBeUndefined();
+
+    // To the bonus and back: an alternative, then not.
+    expect(await author().setPath(['my-italian-main'], [f4, nf6])).toBeNull();
+    expect(lines()[2]).toMatchObject({ id: nf6, alternative: true });
+    expect(await author().setPath(['my-italian-main', nf6], [f4])).toBeNull();
+    expect(lines()[1]).toBe(nf6);
+
+    // 2.f4 on the path would give the position after 1...e5 two answers: the build's problem, nothing saved.
+    const before = JSON.stringify(lines());
+    expect(await author().setPath(['my-italian-main', nf6, f4], [])).toMatch(/two repertoire moves/);
+    expect(JSON.stringify(lines())).toBe(before);
+
+    // Undo takes back the last change of order.
+    await author().setPath([nf6, 'my-italian-main'], [f4]);
+    await author().undo();
+    expect(ids()).toEqual(['my-italian-main', nf6, f4]);
   });
 });

@@ -9,6 +9,8 @@ import { buildOpening } from './tree';
 import {
   checkUnitOverrides,
   courseUnits,
+  lineOrderOf,
+  unitOrderFor,
   cutIntoUnits,
   pathIntroductionOrder,
   unitProgress,
@@ -473,5 +475,49 @@ describe('course.yaml units: overrides', () => {
     ]);
     // What still fails after that keeps the default path rather than breaking the app.
     expect(ids(overridden({ after: { 'main:1': ['main:2'] } }))).toEqual(ids(content));
+  });
+});
+
+describe('ordering lines into units.order', () => {
+  const lines = ['main', 'gambit', 'side', 'avoid'];
+  const withOrder = (order: string[] | undefined) => ({
+    ...content,
+    opening: { ...content.opening, units: { order: order ?? [], after: {}, drop: {} } },
+  });
+
+  it('writes nothing for the default order', () => {
+    expect(lineOrderOf(courseUnits(content), lines)).toEqual(['main', 'gambit', 'side', 'avoid']);
+    expect(unitOrderFor(content, ['main', 'gambit', 'side', 'avoid'])).toBeUndefined();
+    // Lines without units (rare lines, here) do not count.
+    expect(unitOrderFor(content, ['main', 'gambit', 'rare', 'side', 'avoid'])).toBeUndefined();
+  });
+
+  it.each([
+    ['a branch moved first comes right after the unit it grows from', ['side', 'main', 'gambit', 'avoid']],
+    ['a trap first, the main line last', ['avoid', 'side', 'gambit', 'main']],
+    ['the gambit last', ['main', 'side', 'avoid', 'gambit']],
+  ])('%s, and the result is always valid', (_name, order) => {
+    const result = unitOrderFor(content, order)!;
+    expect(result).toBeDefined();
+    expect(() => checkUnitOverrides(withOrder(result))).not.toThrow();
+    const units = courseUnits(withOrder(result));
+    expect(units.map((unit) => unit.id)).toEqual(result);
+    for (const unit of units)
+      for (const need of unit.prerequisites) expect(result.indexOf(need)).toBeLessThan(unit.index);
+    // The lines come in the order asked for, as far as what they wait for allows.
+    const first = lineOrderOf(units, order);
+    if (order[0] !== 'main') expect(first[0]).toBe('main'); // every branch grows from main:1
+  });
+
+  it('puts a branch moved first straight after its parent unit', () => {
+    expect(unitOrderFor(content, ['side', 'main', 'gambit', 'avoid'])!.slice(0, 2)).toEqual(['main:1', 'side:1']);
+  });
+
+  it('keeps hand-written prerequisites', () => {
+    const result = unitOrderFor(content, ['avoid', 'main', 'gambit', 'side'], {
+      after: { 'avoid:1': ['side:1'] },
+      drop: {},
+    })!;
+    expect(result.indexOf('avoid:1')).toBeGreaterThan(result.indexOf('side:1'));
   });
 });

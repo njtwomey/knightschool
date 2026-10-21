@@ -10,7 +10,7 @@ import { CourseForm, NewCourseDialog } from './course-form';
 import { GroupActions } from './group-actions';
 import { entryId, entrySection } from './helpers';
 import { LineEditor } from './line-editor';
-import { PathOverrides } from './path-overrides';
+import { PathOrder } from './path-order';
 import { ImportContributionDialog, PublishPanel } from './publish';
 import { draftCourses, fullLine, useAuthor } from './store';
 
@@ -98,7 +98,7 @@ export function AuthorPage() {
               <CourseForm key={course.id} course={course} />
             </TabsContent>
             <TabsContent value="path">
-              <PathOverrides key={course.id} course={course} />
+              <PathOrder key={course.id} course={course} />
             </TabsContent>
             <TabsContent value="publish">
               <PublishPanel key={course.id} course={course} />

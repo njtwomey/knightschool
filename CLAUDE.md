@@ -153,8 +153,12 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
   played on the board at the end of a line; **Branch here** makes the next move the start of a new line (a second answer
   where you move is listed `alternative`, since a course has one answer per position). A move's note has free text and
   tags (tip, trap, common blunder, any word); a comment another line already gives is read-only (one comment per move).
-  Lines have a title, a description, a kind, a group (course `section`) and a snapshot. The Path tab edits `units:` as
-  YAML, checked against the units before saving. Deletes ask first, take what grows from a line with it, and offer
+  Lines have a title, a description, a kind, a group (course `section`) and a snapshot. The Path tab (`path-order.tsx`)
+  orders the drilled lines (drag by the handle, or the arrows) beside a Bonus column (traps to spring, alternatives,
+  quizzes); a line moves between them with a button (to Bonus makes it an `alternative`). `setPath` writes `lines:` in
+  that order and, through `unitOrderFor` in core (a stable topological sort, prerequisites always first), a `units.order`
+  only when the order differs from the default; an order giving a position two answers shows the build's problem
+  instead of saving. A hand-written `after` or `drop` is kept. Deletes ask first, take what grows from a line with it, and offer
   Undo; the reminder to export shows above the editor. Learners see notes, tags (`components/move-tags.tsx`) and the
   description in About, Learn and Drill. **Publish** (`publish.tsx`, `contribution.ts` in core) writes the course as one
   YAML contribution (course entry plus chapters, moves as PGN) and opens GitHub's contribution form

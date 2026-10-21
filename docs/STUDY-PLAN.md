@@ -199,7 +199,9 @@ Each stage stands on its own and is small enough to review.
    the end of a line, and **Branch here** starts a new chapter at any position, whose `[Start]` names the chapter that
    writes the move before; a branch that gives a second answer where you move is listed `alternative` (shown, not
    drilled), because a course holds one answer per position. Groups are the course entries' `section`. Overrides are
-   the `units:` block edited as YAML and checked against the units before saving. Every action is one undoable history
+   set by ordering, at the user's request: the Path tab orders the drilled lines (drag or arrows) beside a Bonus column,
+   and the order becomes `lines:` plus, when it differs from the default, a `units.order` from a stable topological sort
+   in which prerequisites always come first (`unitOrderFor`); there is no YAML and no prerequisite editing in the app. Every action is one undoable history
    group; deleting a line also deletes what branches from it, after a confirmation. At the user's request a new course
    is **a course of its own** by default (no opening needed: it goes under an automatic "My courses" group per side);
    adding to an opening of the app, and carrying on from the end of one of its lines, is the second choice. A comment

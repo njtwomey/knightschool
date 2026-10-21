@@ -1,6 +1,5 @@
-import { courseUnits, playSan, START_EPD, type CourseEntry, type TreeLine } from '@knightschool/core';
-import { useMemo, useState } from 'react';
-import { useAuthor } from './store';
+import { playSan, START_EPD, type CourseEntry, type CourseUnit, type TreeLine } from '@knightschool/core';
+import { useState } from 'react';
 
 export const entryId = (entry: CourseEntry) => (typeof entry === 'string' ? entry : entry.id);
 export const entrySection = (entry: CourseEntry) => (typeof entry === 'string' ? undefined : entry.section);
@@ -18,13 +17,16 @@ export function ucisOf(line: TreeLine | undefined): string[] {
   });
 }
 
-/** The units of a course with their ids, for writing path changes. */
-export function useCourseUnits(courseId: string) {
-  const build = useAuthor((state) => state.build);
-  return useMemo(() => {
-    const content = build?.courses.find((candidate) => candidate.opening.id === courseId);
-    return content ? courseUnits({ ...content, opening: { ...content.opening, units: undefined } }) : [];
-  }, [build, courseId]);
+/** "12 units: Main line (1–4), Two Knights (1–2), …": the path, unit by unit, run together by line. */
+export function unitSummary(units: CourseUnit[], title: (line: string) => string): string {
+  const runs: { line: string; from: number; to: number }[] = [];
+  for (const unit of units) {
+    const last = runs.at(-1);
+    if (last?.line === unit.line && unit.n === last.to + 1) last.to = unit.n;
+    else runs.push({ line: unit.line, from: unit.n, to: unit.n });
+  }
+  const parts = runs.map((run) => `${title(run.line)} (${run.from === run.to ? run.from : `${run.from}–${run.to}`})`);
+  return `${units.length} ${units.length === 1 ? 'unit' : 'units'}: ${parts.join(', ')}`;
 }
 
 /** A field's value that starts from its source and starts again whenever the source changes (after a save or undo). */

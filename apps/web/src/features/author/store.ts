@@ -5,7 +5,8 @@ import {
   checkUnitOverrides,
   newChapter,
   opponentMove,
-  overridesFromYaml,
+  projectCourse,
+  unitOrderFor,
   readContribution,
   CourseManifest,
   type Contribution,
@@ -81,7 +82,12 @@ export type AuthorState = {
     meta: Partial<Pick<CourseManifest, 'name' | 'summary' | 'opening' | 'about' | 'plans'>>,
   ) => Promise<void>;
   /** Returns an error message, or null when the overrides were saved. */
-  setOverrides: (yaml: string) => Promise<string | null>;
+  /**
+   * Sets the study order: `path` lists the drilled lines in the order to study them, `bonus` the lines shown but not
+   * needed (an alternative, or a trap to spring). Writes `lines:` in that order and a `units.order` that follows it as
+   * far as prerequisites allow. Returns the build's problem instead of saving when the order does not fit.
+   */
+  setPath: (path: string[], bonus: string[]) => Promise<string | null>;
   undo: () => Promise<void>;
   /** The contribution for a course: its course.yaml and the authored chapters it needs. Throws when it is not valid. */
   contribution: (courseId: string) => Contribution;
@@ -538,21 +544,47 @@ export const useAuthor = create<AuthorState>((set, get) => {
       await save([courseChange({ ...course, manifest: { ...course.manifest, ...meta } })], 'Saved the course.');
     },
 
-    async setOverrides(yaml) {
+    async setPath(path, bonus) {
       const course = courseOf(get().courseId);
-      if (!course) return 'No course is open.';
-      let units;
+      const tree = get().build?.tree;
+      if (!course || !tree) return 'No course is open.';
+      const byId = new Map(course.manifest.lines.map((entry) => [entryId(entry), entry]));
+      const content = get().build?.courses.find((candidate) => candidate.opening.id === course.id);
+      // A trap is never an alternative: one we spring is a bonus by its kind already.
+      const isTrap = (id: string) => {
+        const variant = content?.opening.variants.find((candidate) => candidate.id === id);
+        const kind = variant ? (variant.whose ?? variant.weight) : tree.lines.get(id)?.game.tags.Kind;
+        return kind === 'for-us' || kind === 'against-us';
+      };
+      const entry = (id: string, alternative: boolean): CourseEntry => {
+        const old = byId.get(id) ?? id;
+        const next: Record<string, unknown> = typeof old === 'string' ? { id: old } : { ...old };
+        delete next.alternative;
+        if (alternative && !isTrap(id)) next.alternative = true;
+        return withSection(next as CourseEntry, entrySection(old));
+      };
+      const lines = [...path.map((id) => entry(id, false)), ...bonus.map((id) => entry(id, true))];
+      // Projected without overrides first: an order that gives one position two answers fails here, as in the build.
+      const manifest: DraftCourse['manifest'] = { ...course.manifest, lines };
+      delete manifest.units;
+      let projected;
       try {
-        units = overridesFromYaml(yaml);
-        const content = get().build?.courses.find((candidate) => candidate.opening.id === course.id);
-        if (units && content) checkUnitOverrides({ ...content, opening: { ...content.opening, units } });
+        projected = projectCourse(course.id, CourseManifest.parse(manifest), tree);
       } catch (error) {
         return errorText(error);
       }
-      const manifest = { ...course.manifest };
-      delete manifest.units;
-      if (units) manifest.units = units;
-      await save([courseChange({ ...course, manifest })], 'Saved the path changes.');
+      const custom = course.manifest.units;
+      const kept = { after: custom?.after ?? {}, drop: custom?.drop ?? {} };
+      const order = unitOrderFor(projected, path, kept);
+      if (order || Object.keys(kept.after).length || Object.keys(kept.drop).length) {
+        manifest.units = { order: order ?? [], ...kept };
+        try {
+          checkUnitOverrides({ ...projected, opening: { ...projected.opening, units: manifest.units } });
+        } catch (error) {
+          return errorText(error);
+        }
+      }
+      await save([courseChange({ ...course, manifest })], 'Saved the order of the path.');
       return null;
     },
 
