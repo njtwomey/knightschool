@@ -173,7 +173,7 @@ export function HomePage() {
               </a>
             </Button>
             <Button asChild size="lg" variant="ghost">
-              <a href={to('/guess')}>
+              <a href={to('/name')}>
                 <Telescope aria-hidden /> Name That Opening
               </a>
             </Button>
@@ -208,7 +208,7 @@ export function HomePage() {
           Play lines you know against the clock. The other side replies instantly, and you get your average time per
           move.
         </Feature>
-        <Feature href={to('/guess')} icon={<Telescope aria-hidden />} title="Name that opening">
+        <Feature href={to('/name')} icon={<Telescope aria-hidden />} title="Name that opening">
           A position comes up. Say where it came from, and get half a point for the opening alone.
         </Feature>
       </section>

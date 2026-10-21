@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 /**
  * First, back, forward and last: the one set of controls for moving through a line on any board you study from (a
  * line's About tab, Learn, the quiz's moves so far, board search, the tree, Lab). Pages that test you (Drill, Speed,
- * Guess) do not have it.
+ * Name it) do not have it.
  */
 export function StepButtons({
   onFirst,

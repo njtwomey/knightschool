@@ -123,7 +123,7 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/search` (aliases `/browse`, `/openings`; the page called Search: courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/path` its study path, `/course/:id/tree` its tree),
 `/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill; learn and drill
 take `/<n>` for unit n of that line on the path, or `/<n>/<first>-<last>` for some of its moves),
-`/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/create`
+`/quiz` (alias `/review`), `/name` (alias `/guess`), `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/create`
 (your courses; `/profile/author` redirects here), `/create/:course` and `/create/:course/{lines,path,publish}` (one course's
 Details, Lines, Path and Publish), `/create/:course/:line` (the line editor), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
@@ -132,7 +132,7 @@ course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=�
 `#m=<moves played>` (and `&p=<part>` in a unit with several branches); lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
 and `404.html` is copied from `index.html` at build; dev and preview already fall back). Features in `apps/web/src/features/*`:
 
-The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Create | Glossary (`App.tsx`).
+The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | Create | Glossary (`App.tsx`).
 
 - `courses` (`/courses`): every course in one table, filtered by side (White / Black / Both), every column sortable, a
   row opens the course.
@@ -217,7 +217,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Cr
   instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hints (piece, then move) are
   counted. The last set-up is kept in localStorage. Runs go to the `speed_attempts` table (no effect on the review
   schedule), shown on the Stats tab.
-  `guess` ("Name That Opening", `/guess`): a position from the courses and you type what it is; `guessTargets` collects every
+  `guess` ("Name That Opening", menu "Name it", `/name`): a position from the courses and you type what it is; `guessTargets` collects every
   opening and variation whose lines reach it (transpositions count) and `gradeGuess` gives full credit for a variation, half
   for just the opening; answers go to the `guess_attempts` table.
   `review`: spaced-repetition cards. Quiz, Guess and Speed share a "from" choice (`SourceSelect`, `data/practice-source.ts`):

@@ -139,7 +139,7 @@ export function OverviewPage() {
       {!rows && !failure && !unavailable && <Skeleton className="h-40" />}
 
       <a
-        href={to('/guess')}
+        href={to('/name')}
         className="group flex items-center gap-4 rounded-xl border bg-card p-4 outline-none transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50"
       >
         <Telescope className="size-8 shrink-0 text-muted-foreground" aria-hidden />

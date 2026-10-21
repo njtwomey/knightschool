@@ -74,7 +74,7 @@ export function App() {
     if (/^\/profile\/author\/?$/.test(pathname)) navigate('/create', { replace: true });
   }, [pathname]);
 
-  // In the order you use them: find and look (Courses, Browse, Tree), practise (Quiz, Speed, Guess), write your own
+  // In the order you use them: find and look (Courses, Browse, Tree), practise (Quiz, Speed, Name it), write your own
   // (Create), look things up (Glossary).
   const links: { href: string; label: string; active: boolean; icon: ReactNode; group: number }[] = [
     {
@@ -94,7 +94,7 @@ export function App() {
     { href: to('/tree'), label: 'Tree', active: route.page === 'tree', icon: <GitFork aria-hidden />, group: 0 },
     { href: to('/quiz'), label: 'Quiz', active: route.page === 'review', icon: <Library aria-hidden />, group: 1 },
     { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden />, group: 1 },
-    { href: to('/guess'), label: 'Guess', active: route.page === 'guess', icon: <Telescope aria-hidden />, group: 1 },
+    { href: to('/name'), label: 'Name it', active: route.page === 'guess', icon: <Telescope aria-hidden />, group: 1 },
     {
       href: to('/create'),
       label: 'Create',

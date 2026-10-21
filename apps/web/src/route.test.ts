@@ -70,6 +70,7 @@ describe('parseRoute', () => {
     ['/play/caro-kann/all/learn', { page: 'play', course: 'caro-kann', line: 'all', tab: 'branches' }],
     ['/quiz', { page: 'review' }],
     ['/review', { page: 'review' }],
+    ['/name', { page: 'guess' }],
     ['/guess', { page: 'guess' }],
     ['/glossary', { page: 'glossary' }],
     ['/tree', { page: 'tree' }],

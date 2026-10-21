@@ -78,6 +78,7 @@ export function parseRoute(pathname: string): Route {
     case 'quiz':
     case 'review':
       return { page: 'review' };
+    case 'name':
     case 'guess':
       return { page: 'guess' };
     case 'speed':
