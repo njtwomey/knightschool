@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Queen's Pawn Game: Accelerated London System, ...Bg4 blunder"]
+[ECO "D00"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "queen-diagonal"]
+[Refutes "1. d4 d5 2. Bf4 Nc6 3. e3 Bg4"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "3...Bg4"]
+[Start "vs-d5-nc6 3.e3"]
+
+3... Bg4 $2 { Aims to pin a knight on f3, but there is no knight there yet, and nothing guards the bishop. } 4. Qxg4 { The queen takes along the d1-g4 diagonal, which e3 opened and e2 leaves clear. Black has lost a bishop for nothing. } 4... Nf6 5. Qe2 *

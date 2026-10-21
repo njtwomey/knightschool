@@ -1,0 +1,44 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Queen's Pawn Game: Accelerated London System, 2...Nc6"]
+[ECO "D00"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "hanging-piece"]
+[Themes "c4-break,queenside-space"]
+[For "white"]
+[Kind "main"]
+[Opponent "1...d5 2.Bf4 Nc6"]
+[Start "london-bf4-first 2.Bf4"]
+
+2... Nc6 { Develops the knight in front of the c-pawn. From c6 it can jump to b4 and, with a bishop on f5, gang up on c2. }
+3. e3 { Supports d4 and opens the bishop on f1. The other bishop is already out on f4, so the pawn shuts nothing in. }
+3... Nf6
+( 3... e6 4. Nd2 4... Bd6 ( 4... Nf6 { Transposes to 3...Nf6 4.Nd2 e6. } ) 5. Bg3 { Keeps the bishop. If Black takes on g3, the h-pawn recaptures and the h-file opens for White's rook. } )
+( 3... Nb4 4. a3 { Sends the knight back before a bishop on f5 can join it in attacking c2. Black has spent two moves for nothing. } 4... Nc6 ( 4... Na6 5. c4 ) 5. c4 )
+( 3... e5 4. dxe5 { Takes the pawn. Black gets quicker development for it, but no real attack. } 4... f6 ( 4... g5 5. Bg3 { Steps back. The bishop is safe on g3, and ...g5 has loosened Black's kingside. } ) 5. Bb5 { Pins the knight on c6 and keeps the extra pawn. If ...fxe5, Qh5+ catches Black's king in the open. } 5... a6 6. Bxc6+ bxc6 7. Nd2 )
+( 3... f6 4. Nf3 { Stops ...e5, which ...f6 was preparing. } )
+( 3... a6 4. Nd2 )
+( 3... g6 4. Nd2 )
+4. Nd2 { The knight goes to f3 by way of d2, which leaves the c-pawn free to move. With f3 still empty, the queen also watches h5. }
+4... Bf5
+( 4... Bg4 5. Be2 { Offers to trade off the bishop before it can pin a knight on f3. } 5... Bxe2 6. Ngxe2 e6 7. O-O { Castled with a solid centre. Next c4 hits d5. } )
+( 4... e6 5. Ngf3 Bd6 6. Bg3 { Keeps the bishop. If Black takes on g3, hxg3 opens the h-file for White's rook. } 6... O-O 7. c4 { With both knights out, White hits d5. Rc1 and a3 come next. } )
+( 4... Nb4 5. a3 Nc6 6. c4 )
+( 4... Nh5 $2 5. Qxh5 { The queen sees h5 along the d1-h5 diagonal, because e2 and f3 are empty. Black has lost a knight. } )
+( 4... g6 5. c4 )
+( 4... a6 5. c4 )
+( 4... e5 $2 5. dxe5 Nd7 6. Ngf3 { The knight guards e5, so White stays a pawn up. } )
+5. c4 { Hits d5. The bishop has left c8, so b7 is loose and Qb3 can attack it. }
+5... e6
+( 5... dxc4 6. Bxc4 e6 7. Ngf3 )
+( 5... Nb4 6. Rc1 { The knight and the bishop on f5 both hit c2. The rook guards it, and a3 next drives the knight away. } 6... e6 7. Ngf3 )
+( 5... Nh5 $2 6. Qxh5 )
+6. a3 { Takes the b4 square from the knight and the bishop, so ...Nb4 and ...Bb4 never come. }
+6... Bd6
+( 6... Be7 7. Ngf3 O-O 8. Be2 )
+( 6... h6 7. Rc1 )
+7. Bxd6 { Trades off the bishop that guards Black's dark squares. The queen has to recapture and can be chased later. }
+7... Qxd6 ( 7... cxd6 8. cxd5 exd5 9. Ngf3 ) 8. Ngf3 O-O ( 8... e5 9. cxd5 Qxd5 10. Bc4 ) 9. Rc1 { The rook takes the c-file, where White's play is. }
+9... Ne7 10. b4 { Gains space on the queenside. Plan: Be2 and castle, then c5 and b5 to push Black's pieces back, with the rook ready on the c-file. } *
