@@ -7,21 +7,16 @@ import {
   OpeningIndexEntry,
   SearchIndex,
   TreeGraph,
+  type AuthoredBuild,
 } from '@knightschool/core';
 import { z } from 'zod';
-import { fetchContent } from './fetch-content';
+import { fetchContent, onceRetryable } from './fetch-content';
 import { authoredIndexEntries, authoredTreeGraph, loadAuthoredBuild } from './authored-content';
 
-let shippedIndex: Promise<OpeningIndexEntry[]> | undefined;
-
 /** The shipped courses only (index.json), loaded once. */
-export function loadShippedIndex(): Promise<OpeningIndexEntry[]> {
-  shippedIndex ??= fetchContent('index.json').then((json) => z.array(OpeningIndexEntry).parse(json));
-  shippedIndex.catch(() => {
-    shippedIndex = undefined; // allow a retry after a failed load
-  });
-  return shippedIndex;
-}
+export const loadShippedIndex = onceRetryable(() =>
+  fetchContent('index.json').then((json) => z.array(OpeningIndexEntry).parse(json)),
+);
 
 const shippedIds = async () => (await loadShippedIndex()).map((entry) => entry.id);
 
@@ -32,24 +27,30 @@ export async function loadIndex(): Promise<OpeningIndexEntry[]> {
   return authored ? [...shipped, ...authoredIndexEntries(authored, shipped)] : shipped;
 }
 
-/** One course: shipped (its JSON), or authored (projected in the browser from the authored rows). */
+/** Courses already loaded, by id, for the authored build they were loaded with (a change to it starts again). */
+const openings = { build: null as AuthoredBuild | null, byId: new Map<string, () => Promise<OpeningContent>>() };
+
+/**
+ * One course: shipped (its JSON), or authored (projected in the browser from the authored rows). Each is loaded once
+ * and shared, until something authored changes.
+ */
 export async function loadOpening(id: string): Promise<OpeningContent> {
   const authored = await loadAuthoredBuild(shippedIds).catch(() => null);
-  const own = authored?.courses.find((content) => content.opening.id === id);
-  if (own) return own;
-  return OpeningContent.parse(await fetchContent(`${id}.json`));
+  if (authored !== openings.build) {
+    openings.build = authored;
+    openings.byId.clear();
+  }
+  let load = openings.byId.get(id);
+  if (!load) {
+    const own = authored?.courses.find((content) => content.opening.id === id);
+    load = onceRetryable(async () => own ?? OpeningContent.parse(await fetchContent(`${id}.json`)));
+    openings.byId.set(id, load);
+  }
+  return load();
 }
-
-let searchIndex: Promise<SearchIndex> | undefined;
 
 /** Every position in every course, for searching with a board. Loaded once, when first needed. */
-export function loadSearchIndex(): Promise<SearchIndex> {
-  searchIndex ??= fetchContent('search.json').then((json) => SearchIndex.parse(json));
-  searchIndex.catch(() => {
-    searchIndex = undefined; // allow a retry after a failed load
-  });
-  return searchIndex;
-}
+export const loadSearchIndex = onceRetryable(() => fetchContent('search.json').then((json) => SearchIndex.parse(json)));
 
 /** The openings that courses are grouped under, with who plays each. */
 export async function loadOpenings(): Promise<OpeningGroup[]> {

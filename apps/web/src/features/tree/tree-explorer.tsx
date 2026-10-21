@@ -1,12 +1,4 @@
-import {
-  laneLayout,
-  matchesText,
-  pathOf,
-  numberedMove,
-  type MoveTree,
-  type OpeningContent,
-  type Side,
-} from '@knightschool/core';
+import { laneLayout, matchesText, pathOf, numberedMove, type MoveTree, type Side } from '@knightschool/core';
 import { BookOpen, ChevronRight, Crosshair, Target, X } from 'lucide-react';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
@@ -24,16 +16,8 @@ import { lineHref } from '@/router/hrefs';
 /** A line as the explorer lists it: its id, what to call it, the course to open it in, and its side. */
 export type ExplorerLine = { id: string; name: string; course: string; side: Side };
 
-const courseContent = new Map<string, Promise<OpeningContent | null>>();
-/** A course's content, loaded once per page load; null if it cannot be loaded (the comment is simply not shown). */
-const contentOf = (course: string) => {
-  let pending = courseContent.get(course);
-  if (!pending) {
-    pending = loadOpening(course).catch(() => null);
-    courseContent.set(course, pending);
-  }
-  return pending;
-};
+/** A course's content; null if it cannot be loaded (the comment is simply not shown). */
+const contentOf = (course: string) => loadOpening(course).catch(() => null);
 
 /** The comment on a move, from the first of the given courses that has one. */
 function useMoveComment(courses: readonly string[], fromEpd: string | undefined, uci: string | null): string | null {

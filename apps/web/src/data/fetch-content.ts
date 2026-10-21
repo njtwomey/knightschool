@@ -1,5 +1,5 @@
 // Written by `pnpm content:build`. Served from the same origin, so offline caching can precache them.
-const contentUrl = (file: string) => `${import.meta.env.BASE_URL}content/${file}`;
+export const contentUrl = (file: string) => `${import.meta.env.BASE_URL}content/${file}`;
 
 /** A content file was asked for that is not there: a course that has been removed or renamed, or no build yet. */
 export class MissingContent extends Error {}
@@ -12,4 +12,22 @@ export async function fetchContent(file: string): Promise<unknown> {
   if (!response.ok || !isJson)
     throw new MissingContent(`Could not load ${file} (${response.ok ? 'not found' : response.status}).`);
   return response.json();
+}
+
+/**
+ * `load` run once and its promise shared by every caller, unless it fails: then the next call tries again, so a
+ * dropped connection does not leave the page broken until a reload.
+ */
+export function onceRetryable<T>(load: () => Promise<T>): () => Promise<T> {
+  let pending: Promise<T> | undefined;
+  return () => {
+    if (!pending) {
+      const attempt = load();
+      pending = attempt;
+      attempt.catch(() => {
+        if (pending === attempt) pending = undefined;
+      });
+    }
+    return pending;
+  };
 }

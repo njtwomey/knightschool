@@ -291,9 +291,12 @@ export const useSpeed = create<SpeedState>((set, get) => {
         const candidates = pool.flatMap((course) =>
           course.lines.filter((line) => line.kind === 'line').map((line) => ({ course: course.id, line })),
         );
-        const contents = new Map<string, OpeningContent>();
-        const need = config.weighting === 'popular' ? candidates.map(({ course }) => course) : [];
-        for (const course of new Set(need)) contents.set(course, await loadOpening(course));
+        // Weighing by popularity needs every course of the pool; a plain draw only the ones picked.
+        const popular =
+          config.weighting === 'popular'
+            ? await Promise.all([...new Set(candidates.map(({ course }) => course))].map(loadOpening))
+            : [];
+        const contents = new Map(popular.map((content) => [content.opening.id, content]));
         // A line is as popular as the position its first eight moves reach.
         const reach = ({ course, line }: (typeof candidates)[number]) => {
           const content = contents.get(course)!;
@@ -307,16 +310,17 @@ export const useSpeed = create<SpeedState>((set, get) => {
           config.mode === 'timed' ? TIMED_QUEUE : config.lines,
         );
         if (picked.length === 0) throw new Error('There are no lines to play from that choice.');
-        for (const { course } of picked) if (!contents.has(course)) contents.set(course, await loadOpening(course));
-        const queue = picked.map(({ course, line }) => {
-          const content = contents.get(course)!;
-          return {
-            content,
-            lineId: line.id,
-            lineName: line.name,
-            steps: cutToMove(lineSteps(content, line.id), config.depth),
-          };
-        });
+        const queue = await Promise.all(
+          picked.map(async ({ course, line }) => {
+            const content = await loadOpening(course);
+            return {
+              content,
+              lineId: line.id,
+              lineName: line.name,
+              steps: cutToMove(lineSteps(content, line.id), config.depth),
+            };
+          }),
+        );
         set({ queue, lineIndex: 0, phase: 'ready' });
       });
     },

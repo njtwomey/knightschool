@@ -103,4 +103,18 @@ describe('authored courses in the app', () => {
     expect(graph.chapters.map((chapter) => chapter.id).sort()).toEqual(['italian', 'my-line']);
     expect(graph.chapters.find((chapter) => chapter.id === 'italian')!.courses).toEqual(['italian-game', 'mine']);
   });
+
+  it('load once while nothing authored changes, and again after an edit', async () => {
+    const first = await loadOpening('mine');
+    expect(await loadOpening('mine')).toBe(first);
+    const before = rows.courses[0]!.manifest;
+    rows.courses[0]!.manifest = JSON.stringify({ ...course, name: 'Mine, renamed' });
+    try {
+      const edited = await loadOpening('mine');
+      expect(edited).not.toBe(first);
+      expect(edited.opening.name).toBe('Mine, renamed');
+    } finally {
+      rows.courses[0]!.manifest = before;
+    }
+  });
 });

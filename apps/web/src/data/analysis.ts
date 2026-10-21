@@ -1,5 +1,6 @@
 import { AnalysisFile } from '@knightschool/core';
 import type { Evaluation, EvalStore } from '@knightschool/engine';
+import { contentUrl } from './fetch-content';
 
 /** Engine ids of baked evaluations start with this, so a result says where it came from. */
 export const BAKED_PREFIX = 'baked: ';
@@ -41,7 +42,7 @@ let loading: Promise<AnalysisFile | undefined> | undefined;
 export function loadAnalysis(): Promise<AnalysisFile | undefined> {
   loading ??= (async () => {
     try {
-      const response = await fetch(`${import.meta.env.BASE_URL}content/analysis.json`);
+      const response = await fetch(contentUrl('analysis.json'));
       if (!response.ok) return undefined;
       const parsed = AnalysisFile.safeParse(await response.json());
       return parsed.success ? parsed.data : undefined;

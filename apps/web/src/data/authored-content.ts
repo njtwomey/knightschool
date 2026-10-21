@@ -11,25 +11,19 @@ import {
   type TreeGraph,
 } from '@knightschool/core';
 import { z } from 'zod';
-import { fetchContent } from './fetch-content';
+import { fetchContent, onceRetryable } from './fetch-content';
 import { whenStorageReady } from './storage';
 
 /** How long the lists wait for the database before showing only the shipped courses. */
 const STORAGE_WAIT_MS = 3000;
 
 const ChapterText = z.array(z.object({ id: z.string(), source: z.string(), pgn: z.string() }));
-let shippedChapters: Promise<Chapter[]> | undefined;
-
 /** The shipped chapters as written (public/content/chapters.json), parsed once, when authored content first needs them. */
-export function loadShippedChapters(): Promise<Chapter[]> {
-  shippedChapters ??= fetchContent('chapters.json').then((json) =>
+export const loadShippedChapters: () => Promise<Chapter[]> = onceRetryable(() =>
+  fetchContent('chapters.json').then((json) =>
     ChapterText.parse(json).map(({ id, source, pgn }) => ({ id, source, game: parsePgn(pgn, source) })),
-  );
-  shippedChapters.catch(() => {
-    shippedChapters = undefined;
-  });
-  return shippedChapters;
-}
+  ),
+);
 
 export type AuthoredRows = { chapters: AuthoredChapter[]; courses: AuthoredCourse[] };
 

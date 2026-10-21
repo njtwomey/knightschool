@@ -8,7 +8,6 @@ import {
   speedSummary,
   streak,
   type Missed,
-  type OpeningContent,
 } from '@knightschool/core';
 import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -44,7 +43,6 @@ async function load(courseNames: Map<string, string>): Promise<Loaded> {
   // A day counts toward the streak whether you reviewed moves or named openings.
   const reviewDays = new Set([...reviews, ...attempts, ...speedRuns].map((entry) => dayOf(entry.at)));
 
-  const contents = new Map<string, OpeningContent>();
   const missed = await Promise.all(
     mostMissed(reviews, 5).map(async (entry) => {
       const card = await storage.cards.get(entry.cardId);
@@ -52,8 +50,7 @@ async function load(courseNames: Map<string, string>): Promise<Loaded> {
       const course = courseNames.get(card.openingId) ?? card.openingId;
       // A card can outlive its course (deleted in Create, or renamed in an update): say so rather than fail the page.
       try {
-        if (!contents.has(card.openingId)) contents.set(card.openingId, await loadOpening(card.openingId));
-        return { text: describeCard(contents.get(card.openingId)!, card), course, entry };
+        return { text: describeCard(await loadOpening(card.openingId), card), course, entry };
       } catch {
         return { text: 'A move from a course that is no longer here', course, entry };
       }
