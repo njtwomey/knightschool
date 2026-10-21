@@ -9,12 +9,10 @@ import {
   type OpeningContent,
 } from '@knightschool/core';
 import { EcoLink } from '@/components/eco-link';
-import { Eye, Lightbulb } from 'lucide-react';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { AppBoard } from '@/components/board/app-board';
-import { MoveTable } from '@/components/move-table';
-import { BoardSettingsButton } from '@/components/board/board-settings';
-import { StepButtons } from '@/components/board/step-buttons';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { StudyBoard } from '@/components/board/study-board';
+import { MoveList } from '@/components/move-list';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -27,9 +25,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { SourceSelect } from '@/components/source-select';
 import { WeightingSelect } from '@/components/weighting-select';
 import { useCatalog } from '@/data/catalog-store';
-import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
+import { arrowsOf, squareStylesOf, uciArrow } from '@/components/board/shapes';
 import { MissList } from './miss-list';
-import { currentQuestion, DUE, useQuiz, type LineScope, type QuizQuestion } from './store';
+import { currentQuestion, DUE, useQuiz, type LineScope, type MoveQuestion, type QuizQuestion } from './store';
 import { to } from '@/router/location';
 import { lineHref, profileHref } from '@/router/hrefs';
 
@@ -42,12 +40,6 @@ function movesInto(content: OpeningContent, epd: string): LineEdge[] {
     return [];
   }
 }
-
-const arrow = (uci: string) => ({
-  startSquare: uci.slice(0, 2),
-  endSquare: uci.slice(2, 4),
-  color: 'rgb(21 128 61 / 0.85)',
-});
 
 /** What sits above the questions instead of the source choice: a line's breadcrumbs and tabs on its Quiz tab. */
 const HeaderSlot = createContext<ReactNode>(null);
@@ -130,7 +122,7 @@ export function QuizPage({ scope, header }: { scope?: LineScope; header?: ReactN
 
 function QuizSession({ scope }: { scope?: LineScope }) {
   const state = useQuiz();
-  const { phase, error, attempt, queue, index, results, badge, advancing, viewing, holding } = state;
+  const { phase, error, results } = state;
   const course = scope?.course;
   const line = scope?.line;
 
@@ -161,7 +153,14 @@ function QuizSession({ scope }: { scope?: LineScope }) {
   const question = currentQuestion(state);
   if (!question) return null;
   if (question.kind === 'quiz') return <QuizView question={question} />;
+  return <MoveView question={question} />;
+}
+
+/** A move to play: the position before it, the moves that led there, hint and show, and what the move is for after. */
+function MoveView({ question }: { question: MoveQuestion }) {
+  const { attempt, queue, index, badge, advancing, viewing, holding } = useQuiz();
   const { card, content, lastEdge, path, expected } = question;
+  const stepper = usePathStepper(path.length);
   const side = content.opening.side;
   const done = attempt.status === 'done';
   const looking = viewing !== null && path[viewing] ? path[viewing] : undefined;
@@ -179,39 +178,27 @@ function QuizSession({ scope }: { scope?: LineScope }) {
         </span>
       </div>
       <div className="board-columns grid gap-6">
-        <div className="grid content-start gap-3">
-          <AppBoard
-            id="review"
-            previewable
-            className="aspect-square w-full"
-            epd={epd}
-            orientation={side}
-            interactive={!advancing && !looking}
-            onMove={(uci) => useQuiz.getState().submitMove(uci)}
-            lastMove={lastMove}
-            lastMoveTone={done && !looking ? 'yellow' : 'red'}
-            arrows={
-              looking ? [] : attempt.shown && !done ? [arrow(expected.uci)] : done ? arrowsOf(expected.annotation) : []
-            }
-            squareStyles={done && !looking ? squareStylesOf(undefined, expected.annotation) : undefined}
-            badge={badge}
-            hintSquare={attempt.hintUsed && !done ? card.expectedUci.slice(0, 2) : null}
-          />
-          <div className="flex flex-wrap items-center gap-2">
-            <BoardSettingsButton />
-            <PathSteps length={path.length} />
-            <Button
-              variant="outline"
-              onClick={() => useQuiz.getState().hint()}
-              disabled={attempt.hintUsed || attempt.shown || done}
-            >
-              <Lightbulb aria-hidden /> Hint
-            </Button>
-            <Button variant="outline" onClick={() => useQuiz.getState().show()} disabled={attempt.shown || done}>
-              <Eye aria-hidden /> Show me
-            </Button>
-          </div>
-        </div>
+        <StudyBoard
+          id="review"
+          previewable
+          epd={epd}
+          orientation={side}
+          interactive={!advancing && !looking}
+          onMove={(uci) => useQuiz.getState().submitMove(uci)}
+          lastMove={lastMove}
+          lastMoveTone={done && !looking ? 'yellow' : 'red'}
+          arrows={
+            looking ? [] : attempt.shown && !done ? [uciArrow(expected.uci)] : done ? arrowsOf(expected.annotation) : []
+          }
+          squareStyles={done && !looking ? squareStylesOf(undefined, expected.annotation) : undefined}
+          badge={badge}
+          hintSquare={attempt.hintUsed && !done ? card.expectedUci.slice(0, 2) : null}
+          stepper={stepper}
+          controls={{
+            hint: { onHint: () => useQuiz.getState().hint(), disabled: attempt.hintUsed || attempt.shown || done },
+            show: { onShow: () => useQuiz.getState().show(), disabled: attempt.shown || done },
+          }}
+        />
 
         <Card className="content-start">
           <CardHeader>
@@ -234,10 +221,13 @@ function QuizSession({ scope }: { scope?: LineScope }) {
                   ? `${side === 'white' ? 'Black' : 'White'} just played ${lastEdge.san}.`
                   : 'The game is about to begin.'}
               </p>
-              <MoveTable
-                sans={[...path.map((edge) => edge.san), ...(done ? [expected.san] : [])]}
-                selected={viewing}
-                onSelect={(i) => useQuiz.getState().view(i < path.length - 1 ? i : null)}
+              <MoveList
+                layout="table"
+                label="Moves so far"
+                empty="The game is about to begin."
+                moves={[...path, ...(done ? [expected] : [])].map((edge, ply) => ({ ply, san: edge.san }))}
+                current={viewing ?? path.length - (done ? 0 : 1)}
+                onSelect={(ply) => useQuiz.getState().view(ply < path.length - 1 ? ply : null)}
               />
             </div>
             {!done && attempt.wrongTries > 0 && !attempt.shown && <p>Not that one. Try again, or use a hint.</p>}
@@ -318,25 +308,19 @@ function Summary({ results }: { results: readonly string[] }) {
 
 /**
  * Steps back and forth through the moves that led to the question, up to the question itself (the last of them): the
- * same as clicking the moves in the table.
+ * same as clicking the moves in the table. Nothing to step through before the second move.
  */
-function PathSteps({ length }: { length: number }) {
+function usePathStepper(length: number) {
   const viewing = useQuiz((state) => state.viewing);
-  const view = useQuiz((state) => state.view);
-  if (length < 2) return null;
-  const at = viewing ?? length - 1;
-  const goTo = (i: number) => view(i >= length - 1 ? null : Math.max(0, i));
-  return (
-    <StepButtons
-      label="Step through the moves so far"
-      onFirst={() => goTo(0)}
-      onPrev={() => goTo(at - 1)}
-      onNext={() => goTo(at + 1)}
-      onLast={() => goTo(length - 1)}
-      atStart={at <= 0}
-      atEnd={viewing === null}
-    />
-  );
+  const stepper = useLineStepper({
+    length: length - 1,
+    index: viewing ?? length - 1,
+    setIndex: (i) => useQuiz.getState().view(i >= length - 1 ? null : Math.max(0, i)),
+    atEnd: viewing === null,
+    keys: length >= 2,
+    label: 'Step through the moves so far',
+  });
+  return length >= 2 ? stepper : null;
 }
 
 /** A question answered in words: type, get feedback or the reveal, and it moves on by itself. */
@@ -344,11 +328,12 @@ function QuizView({ question }: { question: QuizQuestion }) {
   const { queue, index, quizResult, advancing, viewing, holding } = useQuiz();
   const [answer, setAnswer] = useState('');
   const { card, content, quiz } = question;
+  const path = movesInto(content, quiz.epd);
+  const stepper = usePathStepper(path.length);
 
   // After the answer the board plays the move that explains it.
   let epd = quiz.epd;
   // While the question is open, the move that led to the position is marked in red.
-  const path = movesInto(content, quiz.epd);
   let lastMove: string | undefined = path.at(-1)?.uci;
   let tone: 'red' | 'yellow' = 'red';
   if (quizResult && quiz.showMove) {
@@ -374,18 +359,15 @@ function QuizView({ question }: { question: QuizQuestion }) {
         </span>
       </div>
       <div className="board-columns grid gap-6">
-        <div className="grid content-start gap-2">
-          <AppBoard
-            id="quiz"
-            className="aspect-square w-full"
-            epd={epd}
-            orientation={content.opening.side}
-            interactive={false}
-            lastMove={lastMove}
-            lastMoveTone={tone}
-          />
-          <PathSteps length={path.length} />
-        </div>
+        <StudyBoard
+          id="quiz"
+          epd={epd}
+          orientation={content.opening.side}
+          interactive={false}
+          lastMove={lastMove}
+          lastMoveTone={tone}
+          stepper={stepper}
+        />
         <Card className="content-start">
           <CardHeader>
             <CardDescription className="flex flex-wrap items-center gap-2">
@@ -427,10 +409,13 @@ function QuizView({ question }: { question: QuizQuestion }) {
                 </AlertDescription>
               </Alert>
             )}
-            <MoveTable
-              sans={path.map((edge) => edge.san)}
-              selected={viewing}
-              onSelect={(i) => useQuiz.getState().view(i < path.length - 1 ? i : null)}
+            <MoveList
+              layout="table"
+              label="Moves so far"
+              empty="The game is about to begin."
+              moves={path.map((edge, ply) => ({ ply, san: edge.san }))}
+              current={viewing ?? path.length - 1}
+              onSelect={(ply) => useQuiz.getState().view(ply < path.length - 1 ? ply : null)}
             />
             {advancing &&
               (holding ? (

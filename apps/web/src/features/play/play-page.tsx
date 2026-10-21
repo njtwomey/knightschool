@@ -1,11 +1,11 @@
 import { Page } from '@/components/page';
 import { explainMove, type LineStep, numberedMove } from '@knightschool/core';
 import { EcoLink } from '@/components/eco-link';
-import { BookOpen, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'lucide-react';
+import { BookOpen, GitBranch, RotateCcw, Target, Undo2 } from 'lucide-react';
 import { useEffect } from 'react';
-import { AppBoard } from '@/components/board/app-board';
-import { BoardSettingsButton } from '@/components/board/board-settings';
-import { StepButtons } from '@/components/board/step-buttons';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { StudyBoard } from '@/components/board/study-board';
+import { MoveList, type MoveListMove } from '@/components/move-list';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,13 +14,10 @@ import { RichText } from '@/components/rich-text';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { PlayBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
-import { EngineLines } from '@/components/engine/engine-lines';
-import { EvalBar } from '@/components/engine/eval-bar';
 import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
-import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
+import { arrowsOf, squareStylesOf, uciArrow } from '@/components/board/shapes';
 import { encodeMoves } from '@/router/hash';
 import { startFromAddress } from './resume';
 import { ALL_BRANCHES, playView, usePlay, type PlayMode } from './store';
@@ -37,98 +34,9 @@ const MODES: Record<PlayMode, { name: string; blurb: string; icon: typeof BookOp
   },
 };
 
-const arrowFor = (uci: string) => ({
-  startSquare: uci.slice(0, 2),
-  endSquare: uci.slice(2, 4),
-  color: 'rgb(21 128 61 / 0.85)',
-});
 const label = (step: LineStep, index: number) => numberedMove(index, step.edge.san);
 
 type Props = { course: string; line: string; mode: PlayMode; unit?: UnitRef };
-
-/**
- * The line as a table of full moves. Moves played are solid and the latest is marked. In Learn the rest of the line is
- * shown dimmed, so you can see where it goes, and any move can be clicked to jump back to it; other modes show only what
- * has been played, so nothing is given away.
- */
-function MoveTable({
-  steps,
-  index,
-  learn,
-  explore,
-}: {
-  steps: LineStep[];
-  index: number;
-  learn: boolean;
-  /** Moves played off the line: the table follows them from where the line was left. */
-  explore: { san: string }[];
-}) {
-  type Entry = { san: string; kind: 'played' | 'future' | 'explored'; jump?: number };
-  const entries: Entry[] =
-    explore.length > 0
-      ? [
-          ...steps.slice(0, index).map((step, i): Entry => ({ san: step.edge.san, kind: 'played', jump: i + 1 })),
-          ...explore.map((move): Entry => ({ san: move.san, kind: 'explored' })),
-        ]
-      : steps.slice(0, learn ? steps.length : index).map((step, i): Entry => ({
-          san: step.edge.san,
-          kind: i < index ? 'played' : 'future',
-          jump: learn ? i + 1 : undefined,
-        }));
-  const rows = Math.ceil(entries.length / 2);
-  if (rows === 0) return <p className="text-sm text-muted-foreground">No moves yet.</p>;
-  const lastExplored = explore.length > 0 ? entries.length - 1 : -1;
-  const cell = (i: number) => {
-    const entry = entries[i];
-    if (!entry) return <TableCell />;
-    const current = i === lastExplored || (explore.length === 0 && i === index - 1);
-    const text = (
-      <span
-        className={
-          entry.kind === 'explored'
-            ? `rounded px-1 font-medium text-primary ${current ? 'bg-primary/15' : ''}`
-            : current
-              ? 'rounded bg-secondary px-1 font-medium'
-              : entry.kind === 'played'
-                ? 'px-1'
-                : 'px-1 text-muted-foreground/60'
-        }
-      >
-        {entry.san}
-      </span>
-    );
-    return (
-      <TableCell className="py-1 font-mono">
-        {entry.jump !== undefined ? (
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            className="h-auto px-0 font-mono hover:bg-transparent hover:underline"
-            onClick={() => usePlay.getState().goTo(entry.jump!)}
-          >
-            {text}
-          </Button>
-        ) : (
-          text
-        )}
-      </TableCell>
-    );
-  };
-  return (
-    <Table aria-label="The line">
-      <TableBody>
-        {Array.from({ length: rows }, (_, row) => (
-          <TableRow key={row}>
-            <TableCell className="w-8 py-1 font-mono text-muted-foreground">{row + 1}.</TableCell>
-            {cell(row * 2)}
-            {cell(row * 2 + 1)}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-}
 
 export function PlayPage({ course, line, mode, unit }: Props) {
   const state = usePlay();
@@ -158,32 +66,33 @@ export function PlayPage({ course, line, mode, unit }: Props) {
     });
   }, [phase, index, steps, scope]);
 
-  // Learn: the arrow keys go forward (playing the move shown) and back through the line. They do nothing when you are
-  // recalling the line yourself. The mode is read from the store, since it can be switched on the page without the
-  // address changing.
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
-      const play = usePlay.getState();
-      if (play.mode !== 'learn') return;
-      if (event.key === 'ArrowLeft') {
-        if (play.explore) play.exploreBack();
-        else play.goTo(play.index - 1);
-      } else if (event.key === 'ArrowRight') {
-        const upcoming = play.steps[play.index];
-        if (!play.explore && upcoming && play.phase === 'playing') play.submitMove(upcoming.edge.uci);
-      } else if (event.key === 'Home') {
-        play.leaveExplore();
-        play.goTo(0);
-      } else if (event.key === 'End') {
-        play.leaveExplore();
-        play.goTo(play.steps.length);
-      } else return;
-      event.preventDefault();
-    };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
+  // Learn: the steps (and the arrow keys) go forward by playing the move shown, and back through the line or the moves
+  // explored off it. They are not there when you are recalling the line yourself.
+  const learning = state.mode === 'learn';
+  const exploring = learning && explore !== null && explore.length > 0;
+  const stepping = learning && line !== ALL_BRANCHES;
+  const stepper = useLineStepper({
+    length: steps.length,
+    index,
+    min: firstIndex,
+    keys: stepping,
+    setIndex: (target) => usePlay.getState().goTo(target),
+    first: () => {
+      usePlay.getState().leaveExplore();
+      usePlay.getState().goTo(0);
+    },
+    prev: () => (exploring ? usePlay.getState().exploreBack() : usePlay.getState().goTo(index - 1)),
+    next: () => {
+      const upcoming = steps[index];
+      if (!explore && upcoming && phase === 'playing') usePlay.getState().submitMove(upcoming.edge.uci);
+    },
+    last: () => {
+      usePlay.getState().leaveExplore();
+      usePlay.getState().goTo(steps.length);
+    },
+    atStart: index <= firstIndex && !exploring,
+    atEnd: phase === 'complete' || !steps[index] || exploring,
+  });
 
   if (phase === 'error') {
     return (
@@ -243,7 +152,6 @@ export function PlayPage({ course, line, mode, unit }: Props) {
   else if (attempt.wrongTries > 0) instruction = 'Not that one. Try again, or use a hint.';
   else instruction = `Your move as ${side}.`;
 
-  const exploring = state.mode === 'learn' && explore !== null && explore.length > 0;
   const shownEpd = exploring ? explore!.at(-1)!.epd : view.epd;
 
   return (
@@ -270,106 +178,81 @@ export function PlayPage({ course, line, mode, unit }: Props) {
 
       <div className="board-columns grid gap-6 stacked:gap-4">
         {/* Stacked on a phone, the panel with the move to play follows the board and its buttons; the engine comes last. */}
-        <div className="grid content-start gap-3 stacked:contents">
-          <div className="flex gap-2">
-            {state.mode === 'learn' && <EvalBar orientation={side} />}
-            <AppBoard
-              id="play"
-              previewable
-              className="aspect-square min-w-0 flex-1"
-              epd={shownEpd}
-              orientation={side}
-              interactive={state.mode === 'learn' || (!complete && !opponentThinking && view.expected !== undefined)}
-              onMove={(uci) => usePlay.getState().submitMove(uci)}
-              lastMove={exploring ? explore!.at(-1)!.uci : view.lastEdge?.uci}
-              lastMoveTone={exploring ? 'yellow' : 'red'}
-              arrows={
-                exploring
-                  ? []
-                  : [
-                      ...(view.showExpected && view.expected ? [arrowFor(view.expected.uci)] : []),
-                      ...arrowsOf(view.lastEdge?.annotation),
-                    ]
-              }
-              squareStyles={exploring ? undefined : squareStylesOf(undefined, view.lastEdge?.annotation)}
-              badge={badge}
-              hintSquare={view.hintSquare}
-            />
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <BoardSettingsButton />
-            {state.mode === 'learn' && !everyBranch && (
-              <StepButtons
-                onFirst={() => {
-                  usePlay.getState().leaveExplore();
-                  usePlay.getState().goTo(0);
-                }}
-                onPrev={() => (explore ? usePlay.getState().exploreBack() : usePlay.getState().goTo(index - 1))}
-                onNext={() => view.upcoming && usePlay.getState().submitMove(view.upcoming.edge.uci)}
-                onLast={() => {
-                  usePlay.getState().leaveExplore();
-                  usePlay.getState().goTo(steps.length);
-                }}
-                atStart={index <= firstIndex && !exploring}
-                atEnd={complete || !view.upcoming || exploring}
-              />
-            )}
-            {!everyBranch && (
-              <Button variant="outline" onClick={() => chooseMode('branches')} title={MODES.branches.blurb}>
-                <GitBranch aria-hidden /> Every branch
-              </Button>
-            )}
-            {state.mode === 'drill' && !complete && (
-              <>
-                <Button
-                  variant="outline"
-                  onClick={() => usePlay.getState().hint()}
-                  disabled={attempt.hintUsed || attempt.shown || !view.expected}
-                >
-                  <Lightbulb aria-hidden /> Hint
+        <StudyBoard
+          id="play"
+          previewable
+          className="stacked:contents"
+          epd={shownEpd}
+          orientation={side}
+          interactive={learning || (!complete && !opponentThinking && view.expected !== undefined)}
+          onMove={(uci) => usePlay.getState().submitMove(uci)}
+          lastMove={exploring ? explore!.at(-1)!.uci : view.lastEdge?.uci}
+          lastMoveTone={exploring ? 'yellow' : 'red'}
+          arrows={
+            exploring
+              ? []
+              : [
+                  ...(view.showExpected && view.expected ? [uciArrow(view.expected.uci)] : []),
+                  ...arrowsOf(view.lastEdge?.annotation),
+                ]
+          }
+          squareStyles={exploring ? undefined : squareStylesOf(undefined, view.lastEdge?.annotation)}
+          badge={badge}
+          hintSquare={view.hintSquare}
+          stepper={stepping ? stepper : null}
+          controls={{
+            evalBar: learning,
+            hint:
+              state.mode === 'drill' && !complete
+                ? {
+                    onHint: () => usePlay.getState().hint(),
+                    disabled: attempt.hintUsed || attempt.shown || !view.expected,
+                  }
+                : undefined,
+            show:
+              state.mode === 'drill' && !complete
+                ? { onShow: () => usePlay.getState().show(), disabled: attempt.shown || !view.expected }
+                : undefined,
+          }}
+          actions={
+            <>
+              {!everyBranch && (
+                <Button variant="outline" onClick={() => chooseMode('branches')} title={MODES.branches.blurb}>
+                  <GitBranch aria-hidden /> Every branch
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => usePlay.getState().show()}
-                  disabled={attempt.shown || !view.expected}
-                >
-                  <Eye aria-hidden /> Show me
-                </Button>
-              </>
-            )}
-            <Button variant="ghost" onClick={() => usePlay.getState().restart()} className="ml-auto">
-              <RotateCcw aria-hidden /> Restart
-            </Button>
-          </div>
-          {state.mode === 'drill' && !everyBranch && (
-            <p className="text-sm text-muted-foreground">
-              Not sure of it yet?{' '}
-              <Button variant="link" className="h-auto p-0" onClick={() => chooseMode('learn')}>
-                <BookOpen aria-hidden /> Go back to learning this {scope ? 'unit' : 'line'}
+              )}
+              <Button variant="ghost" onClick={() => usePlay.getState().restart()} className="ml-auto">
+                <RotateCcw aria-hidden /> Restart
               </Button>
-            </p>
-          )}
-          {state.mode === 'learn' && (
-            <Card className="stacked:order-1">
-              <CardHeader className="flex-row items-center justify-between gap-2 space-y-0">
-                <CardTitle className="text-base">Engine</CardTitle>
-                {exploring && (
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => usePlay.getState().exploreBack()}>
-                      <Undo2 aria-hidden /> Take back
-                    </Button>
-                    <Button size="sm" onClick={() => usePlay.getState().leaveExplore()}>
-                      Back to the line
-                    </Button>
-                  </div>
-                )}
-              </CardHeader>
-              <CardContent>
-                <EngineLines epd={shownEpd} />
-              </CardContent>
-            </Card>
-          )}
-        </div>
+            </>
+          }
+          engine={
+            learning && {
+              view: 'lines',
+              actions: exploring && (
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => usePlay.getState().exploreBack()}>
+                    <Undo2 aria-hidden /> Take back
+                  </Button>
+                  <Button size="sm" onClick={() => usePlay.getState().leaveExplore()}>
+                    Back to the line
+                  </Button>
+                </div>
+              ),
+            }
+          }
+          below={
+            state.mode === 'drill' &&
+            !everyBranch && (
+              <p className="text-sm text-muted-foreground">
+                Not sure of it yet?{' '}
+                <Button variant="link" className="h-auto p-0" onClick={() => chooseMode('learn')}>
+                  <BookOpen aria-hidden /> Go back to learning this {scope ? 'unit' : 'line'}
+                </Button>
+              </p>
+            )
+          }
+        />
 
         <div className="grid content-start gap-4">
           <Card>
@@ -414,11 +297,30 @@ export function PlayPage({ course, line, mode, unit }: Props) {
                   </p>
                 </div>
               )}
-              <MoveTable
-                steps={steps}
-                index={index}
-                learn={state.mode === 'learn' && !everyBranch}
-                explore={exploring ? explore! : []}
+              <MoveList
+                layout="table"
+                label="The line"
+                empty="No moves yet."
+                moves={
+                  exploring
+                    ? [
+                        ...steps.slice(0, index).map((step, ply): MoveListMove => ({ ply, san: step.edge.san })),
+                        ...explore!.map((move, i): MoveListMove => ({
+                          ply: index + i,
+                          san: move.san,
+                          state: 'explored',
+                        })),
+                      ]
+                    : steps
+                        .slice(0, stepping ? steps.length : index)
+                        .map((step, ply): MoveListMove => ({
+                          ply,
+                          san: step.edge.san,
+                          state: ply < index ? 'played' : 'future',
+                        }))
+                }
+                current={exploring ? index + explore!.length - 1 : index - 1}
+                onSelect={stepping ? (ply) => usePlay.getState().goTo(ply + 1) : undefined}
               />
               {state.mode === 'learn' && !everyBranch && (
                 <p className="text-xs text-muted-foreground">

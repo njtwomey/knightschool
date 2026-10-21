@@ -446,7 +446,7 @@ export const useQuiz = create<QuizState>((set, get) => {
 export const quizFor = (content: OpeningContent | undefined, card: Card): Quiz | undefined =>
   content?.quizzes.find((quiz) => card.id === `quiz:${content.opening.id}:${quiz.id}`);
 
-type MoveQuestion = {
+export type MoveQuestion = {
   kind: 'move';
   card: Card;
   content: OpeningContent;
