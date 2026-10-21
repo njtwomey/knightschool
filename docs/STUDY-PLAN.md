@@ -153,7 +153,8 @@ Each stage stands on its own and is small enough to review.
 4. **Unit order overrides for shipped courses** in `course.yaml`, checked by the build.
 5. **Authoring, local storage.** Tables for authored chapters and courses with history; merge into the tree at load;
    export and import them; reminders. (D4.)
-6. **The editor:** board, lane tree, branch, comment, tags, metadata, groups, overrides, undo.
+6. **The editor,** under Profile (a new tab beside Overview, Stats and Settings, e.g. `/profile/author`, and an entry in
+   the profile menu): board, lane tree, branch, comment, tags, metadata, groups, overrides, undo.
 7. **Publishing:** YAML serialisation and reading, issue form template, link, clipboard and download fallback.
 
 ## 5. Decisions needed before building (hard to reverse)
