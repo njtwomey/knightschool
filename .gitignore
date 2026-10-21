@@ -11,3 +11,6 @@ coverage/
 apps/web/public/content/
 apps/web/public/engine/
 .cache/
+
+# Local snapshot of content/ before the tree restructure (reference only, never built)
+.content/
