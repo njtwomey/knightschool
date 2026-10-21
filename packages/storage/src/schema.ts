@@ -122,6 +122,38 @@ export const explorerCache = sqliteTable('explorer_cache', {
   fetchedAt: text().notNull(),
 });
 
+/** Chapters written in the app, as PGN text (the content/tree format). Deleting is soft: `deletedAt` is set. */
+export const authoredChapters = sqliteTable('authored_chapters', {
+  id: text().primaryKey(),
+  pgn: text().notNull(),
+  at: text().notNull(),
+  deletedAt: text(),
+});
+
+/** Courses written in the app: course.yaml as JSON text. Deleting is soft. */
+export const authoredCourses = sqliteTable('authored_courses', {
+  id: text().primaryKey(),
+  manifest: text().notNull(),
+  at: text().notNull(),
+  deletedAt: text(),
+});
+
+/** Append-only. Every change to authored content keeps what was there before, so undo and restore are one step. */
+export const authoredHistory = sqliteTable(
+  'authored_history',
+  {
+    id: text().primaryKey(),
+    group: text().notNull(),
+    at: text().notNull(),
+    kind: text({ enum: ['chapter', 'course'] }).notNull(),
+    itemId: text().notNull(),
+    before: text(),
+    beforeDeletedAt: text(),
+    undoOf: text(),
+  },
+  (table) => [index('authored_history_item_idx').on(table.itemId), index('authored_history_at_idx').on(table.at)],
+);
+
 /** Schema version lives here, not in the tables above: migrations run before anything else reads. */
 export const meta = sqliteTable('meta', {
   key: text().primaryKey(),

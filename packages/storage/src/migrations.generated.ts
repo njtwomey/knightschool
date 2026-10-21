@@ -49,4 +49,15 @@ export const MIGRATIONS: Migration[] = [
     name: 'bouncy_jackal',
     statements: ['ALTER TABLE `speed_attempts` ADD `hints` integer DEFAULT 0 NOT NULL;'],
   },
+  {
+    id: 5,
+    name: 'magenta_the_initiative',
+    statements: [
+      'CREATE TABLE `authored_chapters` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`pgn` text NOT NULL,\n\t`at` text NOT NULL,\n\t`deleted_at` text\n);',
+      'CREATE TABLE `authored_courses` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`manifest` text NOT NULL,\n\t`at` text NOT NULL,\n\t`deleted_at` text\n);',
+      'CREATE TABLE `authored_history` (\n\t`id` text PRIMARY KEY NOT NULL,\n\t`group` text NOT NULL,\n\t`at` text NOT NULL,\n\t`kind` text NOT NULL,\n\t`item_id` text NOT NULL,\n\t`before` text,\n\t`before_deleted_at` text,\n\t`undo_of` text\n);',
+      'CREATE INDEX `authored_history_item_idx` ON `authored_history` (`item_id`);',
+      'CREATE INDEX `authored_history_at_idx` ON `authored_history` (`at`);',
+    ],
+  },
 ];

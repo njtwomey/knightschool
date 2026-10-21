@@ -30,7 +30,7 @@ export type TreeEdge = {
   san: string;
   uci: string;
   /** The move's annotation, merged over every chapter that writes it. */
-  note: Pick<PgnMoveNode, 'comment' | 'nags' | 'arrows' | 'circles'>;
+  note: Pick<PgnMoveNode, 'comment' | 'nags' | 'arrows' | 'circles' | 'tags'>;
   /** Chapters that write this move themselves (not through their [Start]). More than one is worth tidying. */
   writtenIn: string[];
 };
@@ -61,7 +61,11 @@ export function sanMoves(text: string, source: string): string[] {
 }
 
 const hasNote = (move: PgnMoveNode) =>
-  Boolean(move.comment) || move.nags.length > 0 || move.arrows.length > 0 || move.circles.length > 0;
+  Boolean(move.comment) ||
+  move.nags.length > 0 ||
+  move.arrows.length > 0 ||
+  move.circles.length > 0 ||
+  (move.tags?.length ?? 0) > 0;
 
 /**
  * `[Start "evans-gambit 6.d4"]`: the chapter this one branches from, and the move of that chapter it follows. When the
@@ -147,6 +151,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
           nags: union(note.nags, move.nags),
           arrows: union(note.arrows, move.arrows),
           circles: union(note.circles, move.circles),
+          ...(note.tags || move.tags ? { tags: union(note.tags ?? [], move.tags ?? []) } : {}),
         };
       }
       here = [...here, edge];
@@ -219,6 +224,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
         nags: note.nags,
         arrows: note.arrows,
         circles: note.circles,
+        ...(note.tags ? { tags: note.tags } : {}),
         variations,
       };
     });
@@ -234,6 +240,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
       nags: edge.note.nags,
       arrows: edge.note.arrows,
       circles: edge.note.circles,
+      ...(edge.note.tags ? { tags: edge.note.tags } : {}),
       variations: [],
     }));
     const tags = { ...chapter.game.tags };

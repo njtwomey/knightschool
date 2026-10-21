@@ -157,11 +157,14 @@ export function pathFromUcis(content: OpeningContent, ucis: string[]): LineEdge[
 }
 
 /**
- * The ply where a line becomes itself: the deepest position along it that has an opening name, so a picture of the
+ * The ply where a line becomes itself: its [Snapshot] when the author chose one, else the deepest position along it
+ * that has an opening name, so a picture of the
  * line shows the variation rather than move 12. Without names, a position partway along (ply 8, or the end).
  */
 export function namedPly(content: OpeningContent, variantId: string): number {
   const path = variantPath(content, variantId);
+  const chosen = content.opening.variants.find((variant) => variant.id === variantId)?.snapshot;
+  if (chosen !== undefined) return Math.min(chosen, path.length);
   for (let ply = path.length; ply > 0; ply--) if (content.nodes[path[ply - 1]!.to]?.name) return ply;
   return Math.min(8, path.length);
 }

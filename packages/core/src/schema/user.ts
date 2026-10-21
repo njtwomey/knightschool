@@ -114,3 +114,44 @@ export const ExplorerCache = z.object({
   fetchedAt: Instant,
 });
 export type ExplorerCache = z.infer<typeof ExplorerCache>;
+
+/**
+ * A chapter written in the app: the same PGN text as a file in content/tree, with [Start], [For], [Kind] and the other
+ * headers. Its id is the line id. Deleting sets `deletedAt` (soft); history keeps every earlier version.
+ */
+export const AuthoredChapter = z.object({
+  id: z.string(),
+  pgn: z.string(),
+  at: Instant,
+  deletedAt: Instant.nullable(),
+});
+export type AuthoredChapter = z.infer<typeof AuthoredChapter>;
+
+/** A course written in the app: course.yaml as JSON text, checked when it is projected (so an old row never blocks). */
+export const AuthoredCourse = z.object({
+  id: z.string(),
+  manifest: z.string(),
+  at: Instant,
+  deletedAt: Instant.nullable(),
+});
+export type AuthoredCourse = z.infer<typeof AuthoredCourse>;
+
+export const AuthoredKind = z.enum(['chapter', 'course']);
+export type AuthoredKind = z.infer<typeof AuthoredKind>;
+
+/**
+ * Append-only history of authored content: one row per item changed, holding the item as it was before (`before`
+ * null: it did not exist). Rows of one action share `group`, so undo takes the action back whole. An undo is itself a
+ * group, with `undoOf` naming the group it took back.
+ */
+export const AuthoredChange = z.object({
+  id: z.string(),
+  group: z.string(),
+  at: Instant,
+  kind: AuthoredKind,
+  itemId: z.string(),
+  before: z.string().nullable(),
+  beforeDeletedAt: Instant.nullable(),
+  undoOf: z.string().nullable(),
+});
+export type AuthoredChange = z.infer<typeof AuthoredChange>;

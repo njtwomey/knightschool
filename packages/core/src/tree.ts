@@ -38,8 +38,16 @@ type MutableEdge = Omit<LineEdge, 'variants'> & { variants: Set<string> };
 type MutableNode = Omit<LineNode, 'moves'> & { moves: MutableEdge[] };
 
 function annotationOf(move: PgnMoveNode): Annotation | undefined {
-  if (!move.comment && !move.nags.length && !move.arrows.length && !move.circles.length) return undefined;
-  return { text: move.comment, nag: move.nags, motifs: [], arrows: move.arrows, circles: move.circles };
+  if (!move.comment && !move.nags.length && !move.arrows.length && !move.circles.length && !move.tags?.length)
+    return undefined;
+  return {
+    text: move.comment,
+    nag: move.nags,
+    motifs: [],
+    arrows: move.arrows,
+    circles: move.circles,
+    ...(move.tags?.length ? { tags: move.tags } : {}),
+  };
 }
 
 /** Merges two annotations on the same move from different variants. Differing comments are an authoring error. */
@@ -55,6 +63,7 @@ function mergeAnnotation(a: Annotation | undefined, b: Annotation | undefined, w
     motifs: union(a.motifs, b.motifs),
     arrows: union(a.arrows, b.arrows),
     circles: union(a.circles, b.circles),
+    ...(a.tags || b.tags ? { tags: union(a.tags ?? [], b.tags ?? []) } : {}),
   };
 }
 
@@ -204,6 +213,8 @@ export function buildOpening(
       whose: listed_.whose,
       alternative: listed_.alternative,
       section: listed_.section,
+      ...(header.description ? { description: header.description } : {}),
+      ...(header.snapshot !== undefined ? { snapshot: Math.min(header.snapshot, mainUcis.length) } : {}),
     });
   }
 

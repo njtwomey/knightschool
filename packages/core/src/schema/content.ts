@@ -62,6 +62,10 @@ export const Variant = z.object({
   alternative: z.boolean().default(false),
   /** A heading the course page groups this under, instead of the usual main / sideline / trap groups. */
   section: z.string().optional(),
+  /** PGN [Description]: what the line is and why it matters. */
+  description: z.string().optional(),
+  /** PGN [Snapshot]: the ply (from the start) of the position that pictures the line. */
+  snapshot: z.number().int().nonnegative().optional(),
 });
 export type Variant = z.infer<typeof Variant>;
 
@@ -276,6 +280,8 @@ export const Annotation = z.object({
   motifs: z.array(Motif).default([]),
   arrows: z.array(z.string()).default([]), // colour letter + squares, as in PGN [%cal]: 'Ge2e4'
   circles: z.array(z.string()).default([]), // colour letter + square, as in PGN [%csl]: 'Ge4'
+  /** Supplementary notes, PGN [%tag]: tip, trap, blunder or another word. Shown while studying, never asked. */
+  tags: z.array(z.string()).optional(),
 });
 export type Annotation = z.infer<typeof Annotation>;
 

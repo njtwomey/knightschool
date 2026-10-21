@@ -7,6 +7,8 @@ export type PgnMoveNode = {
   comment?: string;
   arrows: string[]; // 'Ge2e4'
   circles: string[]; // 'Ge4'
+  /** Supplementary notes on the move, written `[%tag trap,tip]` in its comment: tip, trap, blunder or any other word. */
+  tags?: string[];
   /** Alternatives to this move: each is a line that starts from the position this move was played in. */
   variations: PgnMoveNode[][];
 };
@@ -21,12 +23,17 @@ type ParserMove = ReturnType<typeof parseGame>['moves'][number];
 function toNode(move: ParserMove): PgnMoveNode {
   const diag = move.commentDiag;
   const comment = (diag?.comment ?? move.commentAfter ?? '').replace(/\s+/g, ' ').trim();
+  const tags = String((diag as { tag?: unknown } | undefined)?.tag ?? '')
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter(Boolean);
   return {
     san: move.notation.notation,
     nags: (move.nag ?? []).map((nag) => Number(nag.slice(1))),
     ...(comment ? { comment } : {}),
     arrows: [...(diag?.colorArrows ?? [])],
     circles: [...(diag?.colorFields ?? [])],
+    ...(tags.length ? { tags } : {}),
     variations: (move.variations ?? []).map((variation) => variation.map(toNode)),
   };
 }
@@ -51,6 +58,7 @@ function formatComment(node: PgnMoveNode): string {
   const parts = [node.comment ?? ''];
   if (node.arrows.length) parts.push(`[%cal ${node.arrows.join(',')}]`);
   if (node.circles.length) parts.push(`[%csl ${node.circles.join(',')}]`);
+  if (node.tags?.length) parts.push(`[%tag ${node.tags.join(',')}]`);
   return `{ ${parts.filter(Boolean).join(' ')} }`;
 }
 
@@ -64,7 +72,8 @@ function writeLine(moves: PgnMoveNode[], startPly: number): string {
     else if (needNumber) out.push(`${number}...`);
     out.push(node.san);
     for (const nag of node.nags) out.push(`$${nag}`);
-    const hasComment = Boolean(node.comment) || node.arrows.length > 0 || node.circles.length > 0;
+    const hasComment =
+      Boolean(node.comment) || node.arrows.length > 0 || node.circles.length > 0 || (node.tags?.length ?? 0) > 0;
     if (hasComment) out.push(formatComment(node));
     for (const variation of node.variations) out.push(`( ${writeLine(variation, ply)} )`);
     needNumber = hasComment || node.variations.length > 0;
@@ -77,6 +86,7 @@ function writeLine(moves: PgnMoveNode[], startPly: number): string {
  * numbers the moves of a game that begins later on (a book chapter): 7 starts with "4... ".
  */
 export function writePgn(game: PgnGame, startPly = 0): string {
-  const header = Object.entries(game.tags).map(([key, value]) => `[${key} "${value}"]`);
+  const escape = (value: string) => value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  const header = Object.entries(game.tags).map(([key, value]) => `[${key} "${escape(value)}"]`);
   return `${header.join('\n')}\n\n${writeLine(game.moves, startPly)} *\n`;
 }

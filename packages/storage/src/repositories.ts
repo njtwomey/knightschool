@@ -1,4 +1,8 @@
 import type {
+  AuthoredChange,
+  AuthoredChapter,
+  AuthoredCourse,
+  AuthoredKind,
   Card,
   EvalCache,
   ExplorerCache,
@@ -8,7 +12,7 @@ import type {
   Setting,
   SpeedAttempt,
 } from '@knightschool/core/schema';
-import { and, asc, count, eq, gt, gte, lte, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, gt, gte, lte, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/sqlite-proxy';
 import type { SqlExecutor, Statement } from './executor';
 import * as schema from './schema';
@@ -62,12 +66,33 @@ export interface Storage {
     set(key: string, value: string, at: string): Promise<void>;
     all(): Promise<Setting[]>;
   };
+  authoring: {
+    /** Every authored chapter and course, deleted ones too (`deletedAt` set). */
+    chapters(): Promise<AuthoredChapter[]>;
+    courses(): Promise<AuthoredCourse[]>;
+    /** Saves an action: for each item, its previous state goes to history, then the new state replaces it. */
+    apply(action: AuthoredAction): Promise<void>;
+    /** The history, newest first. */
+    history(): Promise<AuthoredChange[]>;
+    /**
+     * Takes back the newest action not yet undone, recording the undo as an action of its own (`undoOf`), so nothing is
+     * lost. Returns the group undone, or undefined when there is nothing to undo.
+     */
+    undo(group: string, at: string, newId: () => string): Promise<string | undefined>;
+    /** How many history rows were written after `at`: edits since the last export. */
+    changesSince(at: string): Promise<number>;
+  };
   explorer: {
     /** A cached answer no older than `ttlMs` at `now`. */
     get(key: string, now: string, ttlMs: number): Promise<ExplorerCache | undefined>;
     put(entry: ExplorerCache): Promise<void>;
   };
 }
+
+/** One change in an authoring action: an item's new text, or null to delete it (softly). */
+export type AuthoredEdit = { historyId: string; kind: AuthoredKind; itemId: string; body: string | null };
+/** One authoring action: its changes are saved, with what they replace, together or not at all. */
+export type AuthoredAction = { group: string; at: string; edits: AuthoredEdit[] };
 
 export type StorageInternals = { storage: Storage; db: ReturnType<typeof createDb>; exec: SqlExecutor };
 
@@ -97,6 +122,36 @@ const insertReview = (db: Db, review: Review) => db.insert(schema.reviews).value
 
 export function createStorage(exec: SqlExecutor): StorageInternals {
   const db = createDb(exec);
+
+  /** An authored item as it is now: its text and when it was deleted, or undefined when it has never existed. */
+  async function currentItem(kind: AuthoredKind, id: string) {
+    if (kind === 'chapter') {
+      const [row] = await db.select().from(schema.authoredChapters).where(eq(schema.authoredChapters.id, id));
+      return row && { body: row.pgn, deletedAt: row.deletedAt };
+    }
+    const [row] = await db.select().from(schema.authoredCourses).where(eq(schema.authoredCourses.id, id));
+    return row && { body: row.manifest, deletedAt: row.deletedAt };
+  }
+  /** The statement that puts an authored item in a state: its text, and when it was deleted (null: it is not). */
+  function writeItem(kind: AuthoredKind, id: string, body: string, deletedAt: string | null, at: string) {
+    if (kind === 'chapter') {
+      const values = { id, pgn: body, at, deletedAt };
+      return statementOf(
+        db
+          .insert(schema.authoredChapters)
+          .values(values)
+          .onConflictDoUpdate({ target: schema.authoredChapters.id, set: values }),
+      );
+    }
+    const values = { id, manifest: body, at, deletedAt };
+    return statementOf(
+      db
+        .insert(schema.authoredCourses)
+        .values(values)
+        .onConflictDoUpdate({ target: schema.authoredCourses.id, set: values }),
+    );
+  }
+  const historyRow = (row: AuthoredChange) => statementOf(db.insert(schema.authoredHistory).values(row));
 
   const storage: Storage = {
     async stats() {
@@ -238,6 +293,74 @@ export function createStorage(exec: SqlExecutor): StorageInternals {
           .onConflictDoUpdate({ target: schema.settings.key, set: { value, at } });
       },
       all: () => db.select().from(schema.settings),
+    },
+    authoring: {
+      chapters: () => db.select().from(schema.authoredChapters).orderBy(asc(schema.authoredChapters.id)),
+      courses: () => db.select().from(schema.authoredCourses).orderBy(asc(schema.authoredCourses.id)),
+      async apply({ group, at, edits }) {
+        const statements: Statement[] = [];
+        for (const edit of edits) {
+          const now = await currentItem(edit.kind, edit.itemId);
+          if (edit.body === null && (!now || now.deletedAt)) continue; // deleting what is not there
+          statements.push(
+            historyRow({
+              id: edit.historyId,
+              group,
+              at,
+              kind: edit.kind,
+              itemId: edit.itemId,
+              before: now?.body ?? null,
+              beforeDeletedAt: now?.deletedAt ?? null,
+              undoOf: null,
+            }),
+            // Deleting keeps the text: only `deletedAt` is set.
+            edit.body === null
+              ? writeItem(edit.kind, edit.itemId, now!.body, at, at)
+              : writeItem(edit.kind, edit.itemId, edit.body, null, at),
+          );
+        }
+        if (statements.length) await exec.transaction(statements);
+      },
+      history: () =>
+        db
+          .select()
+          .from(schema.authoredHistory)
+          .orderBy(desc(schema.authoredHistory.at), desc(schema.authoredHistory.id)),
+      async undo(group, at, newId) {
+        const rows = await storage.authoring.history();
+        const undone = new Set(rows.flatMap((row) => (row.undoOf ? [row.undoOf] : [])));
+        const target = rows.find((row) => row.undoOf === null && !undone.has(row.group))?.group;
+        if (!target) return undefined;
+        const statements: Statement[] = [];
+        for (const row of rows.filter((candidate) => candidate.group === target)) {
+          const now = await currentItem(row.kind, row.itemId);
+          statements.push(
+            historyRow({
+              id: newId(),
+              group,
+              at,
+              kind: row.kind,
+              itemId: row.itemId,
+              before: now?.body ?? null,
+              beforeDeletedAt: now?.deletedAt ?? null,
+              undoOf: target,
+            }),
+          );
+          // An item the action created is deleted again, softly, so its text is kept; anything else goes back.
+          if (row.before === null) {
+            if (now) statements.push(writeItem(row.kind, row.itemId, now.body, at, at));
+          } else statements.push(writeItem(row.kind, row.itemId, row.before, row.beforeDeletedAt, at));
+        }
+        await exec.transaction(statements);
+        return target;
+      },
+      async changesSince(at) {
+        const [row] = await db
+          .select({ n: count() })
+          .from(schema.authoredHistory)
+          .where(gt(schema.authoredHistory.at, at));
+        return row?.n ?? 0;
+      },
     },
     explorer: {
       async get(key, now, ttlMs) {

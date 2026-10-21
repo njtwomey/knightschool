@@ -75,6 +75,10 @@ rules below.
   avoid it) for a trap. A course of the other side that lists a trap sees it flipped: one side's `for-us` is the other's
   `against-us`. A course can override the kind of any line it lists.
 - **`[Opponent]`** is what the opponent does to reach the line ("3...Bc5"), shown in the lines list. A course can override it.
+- **`[Description]`** (optional) says what the line is and why it matters; **`[Snapshot]`** (optional) is the ply,
+  counted from the start, of the position that pictures the line (otherwise the deepest named position).
+- **Supplementary tags on a move**: `[%tag tip]`, `[%tag trap,blunder]` or any other word, inside the move's comment
+  like `[%cal]`. They are shown while studying and never asked.
 - **A move has one comment and one set of marks**, wherever it is written: two chapters that comment differently on the
   same move fail the build, and every line shows the move with what the tree holds (a comment or `?` written in one
   chapter appears in all of them). Before commenting a move that already exists, read what the tree says. The comment explains the move for both sides, so write "White", "Black", never "we". When both sides' courses

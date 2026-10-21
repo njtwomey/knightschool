@@ -4,6 +4,7 @@ import { attempt, at, card, evalLine, explorerEntry, guess, speed, review, T0 } 
 import { LATEST_SCHEMA_VERSION, migrate } from './migrate';
 import { MIGRATIONS } from './migrations.generated';
 import * as schema from './schema';
+import { createStorage } from './repositories';
 import { exportJson, importJson } from './transfer';
 import { openMemoryDatabase, openMemoryStorage } from './testing/memory';
 
@@ -11,6 +12,8 @@ import { openMemoryDatabase, openMemoryStorage } from './testing/memory';
 const snake = (name: string) => name.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 
 type Open = Awaited<ReturnType<typeof openMemoryStorage>>;
+
+const PGN = '[Event "Knight School"]\n[For "white"]\n\n1. e4 e5 *\n';
 let s: Open;
 beforeEach(async () => {
   s = await openMemoryStorage();
@@ -25,6 +28,9 @@ describe('migrations', () => {
       'all',
     );
     expect(rows.flat()).toEqual([
+      'authored_chapters',
+      'authored_courses',
+      'authored_history',
       'cards',
       'eval_cache',
       'explorer_cache',
@@ -69,6 +75,20 @@ describe('migrations', () => {
       'get',
     );
     expect(rows).toEqual([3, 0, 0]);
+  });
+
+  it('upgrades a database from schema 4 to the authoring tables without touching what was there', async () => {
+    const { exec } = await openMemoryDatabase();
+    await migrate(exec, MIGRATIONS.slice(0, 5));
+    const storage = createStorage(exec).storage;
+    await storage.cards.save(card('kept', { reps: 4 }));
+    await storage.reviews.append(review('r1', 'kept'));
+    await storage.settings.set('enrolled', '["italian-game"]', T0);
+    await migrate(exec);
+    expect(await storage.cards.get('kept')).toEqual(card('kept', { reps: 4 }));
+    expect(await storage.reviews.forCard('kept')).toEqual([review('r1', 'kept')]);
+    expect(await storage.settings.get('enrolled')).toBe('["italian-game"]');
+    expect(await storage.authoring.chapters()).toEqual([]);
   });
 
   it('refuses a database saved by a newer app', async () => {
@@ -244,6 +264,14 @@ async function populate(target: Open) {
   await target.storage.evals.put([evalLine(1), evalLine(2)]);
   await target.storage.settings.set('grading', 'auto', T0);
   await target.storage.explorer.put(explorerEntry());
+  await target.storage.authoring.apply({
+    group: 'g1',
+    at: at(3),
+    edits: [
+      { historyId: 'h1', kind: 'chapter', itemId: 'my-line', body: PGN },
+      { historyId: 'h2', kind: 'course', itemId: 'my-course', body: '{"name":"Mine"}' },
+    ],
+  });
 }
 
 describe('export and import', () => {
@@ -261,6 +289,9 @@ describe('export and import', () => {
       evalCache: 2,
       settings: 1,
       explorerCache: 1,
+      authoredChapters: 1,
+      authoredCourses: 1,
+      authoredHistory: 2,
     });
     expect((await exportJson(fresh)).tables).toEqual(dump.tables);
     fresh.close();
@@ -311,5 +342,98 @@ describe('stats', () => {
   it('counts rows', async () => {
     await populate(s);
     expect(await s.storage.stats()).toEqual({ cards: 2, reviews: 2, quizAttempts: 1 });
+  });
+});
+
+describe('authored content', () => {
+  let n = 0;
+  const id = () => `h${String(++n).padStart(3, '0')}`;
+  const save = (group: string, minute: number, kind: 'chapter' | 'course', itemId: string, body: string | null) =>
+    s.storage.authoring.apply({ group, at: at(minute), edits: [{ historyId: id(), kind, itemId, body }] });
+  const chapter = async (itemId: string) => (await s.storage.authoring.chapters()).find((row) => row.id === itemId);
+
+  it('keeps every earlier version in history, and deletes softly', async () => {
+    await save('g1', 1, 'chapter', 'a', 'one');
+    await save('g2', 2, 'chapter', 'a', 'two');
+    await save('g3', 3, 'chapter', 'a', null);
+    expect(await chapter('a')).toEqual({ id: 'a', pgn: 'two', at: at(3), deletedAt: at(3) });
+    const history = await s.storage.authoring.history();
+    expect(history.map((row) => [row.group, row.before, row.beforeDeletedAt])).toEqual([
+      ['g3', 'two', null],
+      ['g2', 'one', null],
+      ['g1', null, null],
+    ]);
+    // Deleting what is already deleted or never existed writes nothing.
+    await save('g4', 4, 'chapter', 'a', null);
+    await save('g5', 4, 'chapter', 'nothing', null);
+    expect(await s.storage.authoring.history()).toHaveLength(3);
+  });
+
+  it('undoes the newest action whole, step by step, and records each undo', async () => {
+    await save('g1', 1, 'chapter', 'a', 'one');
+    await s.storage.authoring.apply({
+      group: 'g2',
+      at: at(2),
+      edits: [
+        { historyId: id(), kind: 'chapter', itemId: 'a', body: 'two' },
+        { historyId: id(), kind: 'course', itemId: 'c', body: '{}' },
+      ],
+    });
+    await save('g3', 3, 'chapter', 'a', null);
+
+    expect(await s.storage.authoring.undo('u1', at(4), id)).toBe('g3'); // the delete is taken back
+    expect(await chapter('a')).toMatchObject({ pgn: 'two', deletedAt: null });
+    expect(await s.storage.authoring.undo('u2', at(5), id)).toBe('g2'); // both items of g2 go back
+    expect(await chapter('a')).toMatchObject({ pgn: 'one', deletedAt: null });
+    expect((await s.storage.authoring.courses())[0]).toMatchObject({ id: 'c', deletedAt: at(5) }); // created: deleted
+    expect(await s.storage.authoring.undo('u3', at(6), id)).toBe('g1');
+    expect(await chapter('a')).toMatchObject({ pgn: 'one', deletedAt: at(6) }); // the text is kept
+    expect(await s.storage.authoring.undo('u4', at(7), id)).toBeUndefined();
+    const undos = (await s.storage.authoring.history()).filter((row) => row.undoOf);
+    expect(undos.map((row) => row.undoOf)).toEqual(['g1', 'g2', 'g2', 'g3']);
+  });
+
+  it('counts the edits since a time, for the reminder to export', async () => {
+    await save('g1', 1, 'chapter', 'a', 'one');
+    await save('g2', 5, 'chapter', 'a', 'two');
+    expect(await s.storage.authoring.changesSince(at(0))).toBe(2);
+    expect(await s.storage.authoring.changesSince(at(1))).toBe(1);
+  });
+
+  it('imports an export from before authoring (schema 4) without loss', async () => {
+    await s.storage.cards.save(card('mine', { at: at(1) }));
+    const old = {
+      app: 'knightschool',
+      schemaVersion: 4,
+      exportedAt: T0,
+      tables: {
+        cards: [card('a')],
+        reviews: [review('r1', 'a')],
+        quizAttempts: [],
+        guessAttempts: [],
+        speedAttempts: [],
+        evalCache: [],
+        settings: [],
+        explorerCache: [],
+      },
+    };
+    const report = await importJson(s, old);
+    expect(report).toMatchObject({ cards: 1, reviews: 1, authoredChapters: 0, authoredHistory: 0 });
+    expect(await s.storage.cards.get('a')).toEqual(card('a'));
+    expect(await s.storage.cards.get('mine')).toBeDefined();
+  });
+
+  it('merges authored content from another device: the newer copy wins, history is the union', async () => {
+    const other = await openMemoryStorage();
+    await save('g1', 1, 'chapter', 'a', 'mine');
+    await other.storage.authoring.apply({
+      group: 'o1',
+      at: at(5),
+      edits: [{ historyId: 'o-h1', kind: 'chapter', itemId: 'a', body: 'theirs' }],
+    });
+    await importJson(s, await exportJson(other));
+    expect(await chapter('a')).toMatchObject({ pgn: 'theirs' });
+    expect((await s.storage.authoring.history()).map((row) => row.group)).toEqual(['o1', 'g1']);
+    other.close();
   });
 });

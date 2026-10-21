@@ -19,6 +19,8 @@ export const KNOWN_TAGS = [
   'Start', // tree chapters: the moves before the chapter's own
   'For', // tree chapters: the side the line is written for, which [Kind] and [Risk] are relative to
   'Opponent', // tree chapters: what the opponent does to reach the line ("3...Bc5")
+  'Description', // what the line is and why it matters
+  'Snapshot', // the ply (from the start) of the position that pictures the line
 ] as const;
 
 const list = (value: string | undefined) =>
@@ -29,7 +31,15 @@ const list = (value: string | undefined) =>
         .map((item) => item.trim())
         .filter(Boolean);
 
-export type VariantHeader = { name: string; eco: string; opening: string; tags: VariantTags; kind?: string };
+export type VariantHeader = {
+  name: string;
+  eco: string;
+  opening: string;
+  tags: VariantTags;
+  kind?: string;
+  description?: string;
+  snapshot?: number;
+};
 
 /** Turns the raw PGN header into validated variant metadata. Throws an Error naming `source` on any problem. */
 export function parseVariantHeader(raw: Record<string, string>, source: string): VariantHeader {
@@ -76,9 +86,19 @@ export function parseVariantHeader(raw: Record<string, string>, source: string):
       .safeParse(raw.ECO).success
   )
     problems.push(`ECO "${raw.ECO}" is not A00 to E99`);
+  if (raw.Snapshot !== undefined && !/^\d+$/.test(raw.Snapshot))
+    problems.push(`[Snapshot "${raw.Snapshot}"] should be a ply, a whole number`);
 
   if (problems.length || !parsed.success) {
     throw new Error(`${source}: ${problems.join('; ')}`);
   }
-  return { name: raw.Variation!, eco: raw.ECO!, opening: raw.Opening!, tags: parsed.data, kind: raw.Kind };
+  return {
+    name: raw.Variation!,
+    eco: raw.ECO!,
+    opening: raw.Opening!,
+    tags: parsed.data,
+    kind: raw.Kind,
+    ...(raw.Description ? { description: raw.Description } : {}),
+    ...(raw.Snapshot !== undefined ? { snapshot: Number(raw.Snapshot) } : {}),
+  };
 }

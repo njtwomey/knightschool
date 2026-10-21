@@ -1,4 +1,7 @@
 import {
+  AuthoredChange,
+  AuthoredChapter,
+  AuthoredCourse,
   Card,
   EvalCache,
   ExplorerCache,
@@ -29,6 +32,10 @@ export const Dump = z.object({
     evalCache: z.array(EvalCache),
     settings: z.array(Setting),
     explorerCache: z.array(ExplorerCache),
+    // Authored content (schema 5 on); older exports have none.
+    authoredChapters: z.array(AuthoredChapter).default([]),
+    authoredCourses: z.array(AuthoredCourse).default([]),
+    authoredHistory: z.array(AuthoredChange).default([]),
   }),
 });
 export type Dump = z.infer<typeof Dump>;
@@ -49,13 +56,17 @@ export async function exportJson({ db }: StorageInternals, now = new Date()): Pr
       evalCache: await db.select().from(schema.evalCache),
       settings: await db.select().from(schema.settings),
       explorerCache: await db.select().from(schema.explorerCache),
+      authoredChapters: await db.select().from(schema.authoredChapters),
+      authoredCourses: await db.select().from(schema.authoredCourses),
+      authoredHistory: await db.select().from(schema.authoredHistory),
     },
   };
 }
 
 /**
  * Validates every row, then merges into the existing tables in one transaction. Rows are matched by id (or key):
- * logs (reviews, quiz attempts) keep what is already there, everything else keeps the copy with the newer `at`.
+ * logs (reviews, quiz attempts, authored history) keep what is already there, everything else keeps the copy with the
+ * newer `at`.
  * Nothing is written if any row is invalid. Returns how many rows each table received.
  */
 export async function importJson(internals: StorageInternals, input: unknown): Promise<ImportReport> {
@@ -112,6 +123,31 @@ export async function importJson(internals: StorageInternals, input: unknown): P
           }),
       ),
     ),
+    ...t.authoredChapters.map((row) =>
+      statementOf(
+        db
+          .insert(schema.authoredChapters)
+          .values(row)
+          .onConflictDoUpdate({
+            target: schema.authoredChapters.id,
+            set: row,
+            setWhere: newer(schema.authoredChapters.at),
+          }),
+      ),
+    ),
+    ...t.authoredCourses.map((row) =>
+      statementOf(
+        db
+          .insert(schema.authoredCourses)
+          .values(row)
+          .onConflictDoUpdate({
+            target: schema.authoredCourses.id,
+            set: row,
+            setWhere: newer(schema.authoredCourses.at),
+          }),
+      ),
+    ),
+    ...t.authoredHistory.map((row) => statementOf(db.insert(schema.authoredHistory).values(row).onConflictDoNothing())),
   ];
   if (statements.length) await exec.transaction(statements);
   return {
@@ -123,6 +159,9 @@ export async function importJson(internals: StorageInternals, input: unknown): P
     evalCache: t.evalCache.length,
     settings: t.settings.length,
     explorerCache: t.explorerCache.length,
+    authoredChapters: t.authoredChapters.length,
+    authoredCourses: t.authoredCourses.length,
+    authoredHistory: t.authoredHistory.length,
   };
 }
 
