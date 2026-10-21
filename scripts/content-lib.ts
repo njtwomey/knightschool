@@ -43,17 +43,10 @@ export function readChapters(dir: string): Chapter[] {
     });
 }
 
-const trees = new Map<string, TheoryTree>();
-/**
- * The theory tree: every chapter under content/tree. `extra` is a folder of chapters to read along with it (a course
- * being written in content/_staging keeps its new chapters in its own tree/ folder until they move into content/tree).
- */
-export function loadTree(extra?: string): TheoryTree {
-  const key = extra ?? '';
-  const cached = trees.get(key);
-  if (cached) return cached;
-  const tree = resolveTree([...readChapters(treeDir), ...(extra ? readChapters(extra) : [])]);
-  trees.set(key, tree);
+let tree: TheoryTree | undefined;
+/** The theory tree: every chapter under content/tree, read once. */
+export function loadTree(): TheoryTree {
+  tree ??= resolveTree(readChapters(treeDir));
   return tree;
 }
 
@@ -76,17 +69,13 @@ export function courseDirs(): string[] {
     );
 }
 
-/**
- * Reads and validates one course folder: its course.yaml and quizzes, with its lines taken from the tree. A course
- * folder may hold a tree/ of its own chapters (while it is being written in content/_staging).
- */
+/** Reads and validates one course folder: its course.yaml and quizzes, with its lines taken from the tree. */
 export function loadCourseAt(dir: string): OpeningContent {
   const id = basename(dir);
   const manifest = readYaml(join(dir, 'course.yaml'), CourseManifest);
   const quizPath = join(dir, 'quizzes.yaml');
   const quizzes: QuizEntry[] = existsSync(quizPath) ? readYaml(quizPath, z.array(QuizEntry)) : [];
-  const own = join(dir, 'tree');
-  return projectCourse(id, manifest, loadTree(existsSync(own) ? own : undefined), quizzes);
+  return projectCourse(id, manifest, loadTree(), quizzes);
 }
 
 /** Reads and validates every course under content/courses. A course's id is its folder name. Throws on the first problem, naming the file. */

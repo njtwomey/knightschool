@@ -2,17 +2,16 @@
 // plays next. Use it to find the chapter a new line branches from ([Start]) and to read a move's comment before you
 // write one (a move has one comment across the whole tree).
 //   cp .claude/skills/add-course/templates/tree-at.mts.txt "$SCRATCH/tree-at.mts"
-//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/tree-at.mts" "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4" [content/_staging/<id>/tree]
-// The optional second argument is a folder of new chapters to read along with content/tree (staging).
+//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/tree-at.mts" "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4"
 import { join } from 'node:path';
 
 const root = process.env.KS_ROOT;
-const [moves = '', extra] = process.argv.slice(2);
-if (!root) throw new Error('Usage: KS_ROOT=<repo> tsx tree-at.mts "<moves>" [extra-tree-folder]');
+const [moves = ''] = process.argv.slice(2);
+if (!root) throw new Error('Usage: KS_ROOT=<repo> tsx tree-at.mts "<moves>"');
 const core = await import(join(root, 'packages/core/src/index.ts'));
 const lib = await import(join(root, 'scripts/content-lib.ts'));
 
-const tree = lib.loadTree(extra);
+const tree = lib.loadTree();
 const label = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
 const NAGS: Record<number, string> = { 1: '!', 2: '?', 3: '!!', 4: '??', 5: '!?', 6: '?!' };
 const describe = (edge: any) => {

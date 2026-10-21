@@ -85,8 +85,7 @@ or "playing against it"), a required introduction (`about`: `idea`, `risks`, opt
 `section`). Any course lists any line of either side; a trap written for the other side flips. `projectCourse` rebuilds each
 listed line from the start and merges them with `buildOpening` into the course's EPD-keyed tree: the shape the app reads,
 unchanged from before the tree. `content/curriculum.yaml` is the study order. `make doctor` reports overlaps (moves written
-twice, unlisted chapters, shared lines); it never fails. A course folder may carry its own `tree/` of new chapters while it is
-being written in `content/_staging`; folders starting with `_` are never built.
+twice, unlisted chapters, shared lines); it never fails.
 
 Which positions earn review cards is `cardDefinitions` in `training.ts`: main and gambit lines always, sidelines unless the
 explorer says too few games reach them, rare lines only with the "include rare lines" setting, alternatives never, `for-us`

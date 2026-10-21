@@ -5,15 +5,14 @@
 ```sh
 cp .claude/skills/add-course/templates/tree-at.mts.txt "$SCRATCH/tree-at.mts"
 cp .claude/skills/add-course/templates/check-course.mts.txt "$SCRATCH/check-course.mts"
-KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/tree-at.mts" "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3"  # [<staging>/tree]
-KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<course-id>    # or content/_staging/<id>
+KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/tree-at.mts" "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3"
+KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<course-id>
 ```
 
 `$SCRATCH` is any directory outside the repo (in a Claude session: the scratchpad).
 
 - `tree-at` plays the moves and prints, for each, the chapters that write it, its marks and its comment (or `NOT IN THE
-TREE`), then every move the tree has from the last position, and the `[Start]` for a new chapter from there. Pass a
-  staging `tree/` folder as the second argument to include your new chapters.
+TREE`), then every move the tree has from the last position, and the `[Start]` for a new chapter from there.
 - `check-course` loads the course with `loadCourseAt` (the real build's code: `content/tree` plus the folder's own
   `tree/`), prints every listed line move by move with whose move it is, the author and generated notes and
   `(from <chapter>)` where other chapters write the move, flags `[no note]` on the learner's moves, and ends with
@@ -24,8 +23,7 @@ Build errors start with the file. The ones whose fix is not obvious:
 
 - `[Start "..."] should name a chapter and one of its moves, like "evans-gambit 6.d4"`: write the move with its number,
   `6.d4` or `6...exd4`.
-- `[Start] branches from "x", but there is no chapter of that name`: a typo, or the parent is in a staging `tree/` the
-  command did not read.
+- `[Start] branches from "x", but there is no chapter of that name`: a typo in the chapter name.
 - `[Start] branches after 5.c3 in "x", which does not write that move itself`: `x` only inherits it, or the number is
   wrong. Name the chapter `tree-at` lists as writing it.
 - `[Start] is ambiguous: "x" writes 5.c3 in more than one place; give the moves before it too`: `[Start "x 4...Bxb4 5.c3"]`.
@@ -45,7 +43,7 @@ Build errors start with the file. The ones whose fix is not obvious:
   mistake: the mark is seen by every course that passes there.
 - `the main line does not pass through the trigger "..."`: the course's trigger is wrong, the line belongs to another
   course, or its `[Start]` parent reaches the position by a move order that skips the trigger position.
-- `content/openings.yaml: "X" has no course`: an opening with no course yet (expected while staging). `... opening "X",
+- `content/openings.yaml: "X" has no course`: an opening with no course yet. `... opening "X",
 which is not in content/openings.yaml` or `motif "Y" is not in motifs.yaml`: add the entry.
 - A position link error names the file and the bad target: regenerate it with `pnpm fen "<moves>"`.
 - `Nested mappings are not allowed ...` (no file name): an unquoted `: ` in a yaml value.
@@ -60,9 +58,7 @@ make check                # format, lint, typecheck, tests (scripts/content.test
 pnpm course:eval --dir content/courses/<course-id> --no-cache --depth 16 --lose 75 --threads 1
 ```
 
-Do not run `content:build` or `make doctor` for a staged course: they read only `content/tree` and `content/courses`, and
-the build fails until every opening in openings.yaml has a course. `course:eval` takes `--dir` for any course folder
-(staging included, with its `tree/`) and `<course-id>` for one in `content/courses`.
+`course:eval` takes `<course-id>` for a course in `content/courses`, or `--dir <course folder>`.
 
 `make doctor` sections: **moves written in more than one chapter** (start the later chapter after them; a new chapter of
 yours should never appear here), **chapters no course lists** (list it or remove it), **lines in more than one course**

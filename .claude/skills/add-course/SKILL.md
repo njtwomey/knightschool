@@ -41,17 +41,13 @@ errors, `make doctor`, `course:eval`, gotchas). Templates are in `templates/`.
    few games reach them (`content/popularity/popularity.json`, filled by `make popularity`); rare only with the setting;
    alternatives never; `for-us` traps never (they get quizzes); `against-us` traps yes (the move that avoids them).
 
-## Work in place, or stage
+## Where to work
 
-- **Alone:** write chapters straight into `content/tree/<first move>/<family>/` and the course into
+- Write chapters straight into `content/tree/<first move>/<family>/` and the course into
   `content/courses/<id>/`; iterate with the check script, `pnpm content:build` and `make doctor`.
-- **With other agents authoring at once:** work in `content/_staging/<id>/` (folders starting with `_` are never built):
-  `course.yaml`, `quizzes.yaml` and `tree/*.pgn` for your new chapters. Staged chapters may branch off any chapter in
-  `content/tree`, and the course may list both. The check script and `course:eval --dir` read the folder's `tree/` along
-  with `content/tree`. Do **not** edit chapters in `content/tree` (other courses read them; report the change you need
-  instead), do not branch off another staging folder, and do not run `pnpm content:build` (it cannot see staging and
-  fails while any opening in `openings.yaml` has no course). The coordinator moves it in: each `tree/*.pgn` into
-  `content/tree/<first move>/<family>/`, the rest of the folder into `content/courses/<id>/`.
+- **With other agents authoring at once:** chapters are separate files, so write your own and do not edit another
+  chapter's moves or comments without saying so (other courses read them). Two courses may need the same `course.yaml` or
+  `curriculum.yaml` lines; agree who edits them.
 - Always: one engine job at a time with `--threads 1` when the machine is shared. No commit, no push unless asked (the user
   decides). `pnpm` missing? `npx -y pnpm@12.11.2`. macOS `sed -i ''`; use Python for edits. No whole-repo formatters on content;
   format your own yaml with `pnpm exec prettier --write <file>` (PGN is prettier-ignored).
@@ -61,8 +57,8 @@ Two helper scripts live in `templates/` (copy each to the session scratchpad, `$
 ```sh
 cp .claude/skills/add-course/templates/tree-at.mts.txt "$SCRATCH/tree-at.mts"
 cp .claude/skills/add-course/templates/check-course.mts.txt "$SCRATCH/check-course.mts"
-KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/tree-at.mts" "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4"   # [content/_staging/<id>/tree]
-KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<id>                # or content/_staging/<id>
+KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/tree-at.mts" "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4"
+KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<id>
 ```
 
 `tree-at` prints who writes each move, its marks and comment, what the tree plays next, and the `[Start]` for a new
@@ -88,7 +84,7 @@ chapter there. `check-course` builds one course as the real build does.
      `[Start]`. Add earlier moves when the parent writes that move in more than one place (`[Start "x 4...Bxb4 5.c3"]`);
      the build says when.
    - Copy `templates/chapter-line.pgn` or `chapter-trap.pgn` (real Evans chapters: replace every header and move) to
-     `content/tree/<first move>/<family>/<id>.pgn`, beside its relatives (staging: `<course>/tree/<id>.pgn`).
+     `content/tree/<first move>/<family>/<id>.pgn`, beside its relatives.
    - Headers: `[For]` (the side it is written for), `[Kind]`, `[Opponent]` (what the opponent does to reach it,
      "4...Bxb4 5.c3 Ba5"), `[Start]`, and the tags (step 6). The moves begin right after the `[Start]` move, numbered as
      in the game (`5... Ba5` when Black moves first). Never retype moves the parent already has.
@@ -110,7 +106,7 @@ chapter there. `check-course` builds one course as the real build does.
 10. **Engine**: `pnpm course:eval --dir <course folder> --no-cache --depth 16 --lose 75 --threads 1` (a few minutes; run it
     in the background and read the output; do not poll with sleep). Fix findings by switching to the engine's move or
     shortening the line. Rerun a flagged gambit or trap at `--depth 18` before believing it.
-11. **Whole repo** (alone, not in staging): `pnpm content:build` (ids, `[Start]`s, comments, curriculum, cross-course
+11. **Whole repo**: `pnpm content:build` (ids, `[Start]`s, comments, curriculum, cross-course
     warnings), then `make doctor` and read what names your chapters (moves written twice: start the later chapter after
     them; a chapter no course lists: list it or remove it), then `make check` (`scripts/content.test.ts` builds the real
     content).

@@ -1,7 +1,7 @@
 // Builds ONE course folder exactly as pnpm content:build does and prints what a learner will read.
 //   cp .claude/skills/add-course/templates/check-course.mts.txt "$SCRATCH/check-course.mts"
-//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<id>      # or content/_staging/<id>
-// The folder name is the course id. Its lines come from content/tree plus the folder's own tree/ (staging). Each move
+//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<id>
+// The folder name is the course id. Its lines come from content/tree. Each move
 // shows whose it is, the notes a learner sees, and the chapters that write it out (from <chapter>). Exit 1 on error.
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';

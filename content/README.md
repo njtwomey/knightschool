@@ -33,7 +33,6 @@ content/
   motifs.yaml         the vocabulary for `motifs:` and the glossary
   analysis/           native-Stockfish results from `pnpm analyse`
   popularity/         Lichess explorer counts from `make popularity`
-  _staging/ _parked/  folders starting with _ are never built
 ```
 
 The folders under `tree/` are for people (first move, then the opening family); the build reads every `.pgn` under
@@ -213,14 +212,6 @@ To teach the Evans Gambit's 5...Bd6 (not in the tree yet) in the White Evans cou
    `[Opponent "5...Bd6"]` and the moves from `5... Bd6` on.
 3. Add `evans-bd6` to `lines:` in `courses/evans-gambit/course.yaml`.
 4. `pnpm content:build`, then `make doctor`.
-
-## Staging a course
-
-While a course is being written alongside other work, keep it in `content/_staging/<course>/` with its `course.yaml`,
-`quizzes.yaml` and a `tree/` folder of its new chapters (they may branch off `content/tree`). `content:build` and
-`make doctor` ignore folders starting with `_`; `pnpm course:eval --dir content/_staging/<course>` loads it with its own
-chapters. Moving it in means moving the chapters into `content/tree/<first move>/<family>/` and the folder into
-`content/courses/`.
 
 ## Sources
 

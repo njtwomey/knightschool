@@ -2,7 +2,7 @@
  * pnpm course:eval [opening-id[/variant-id] ...] [--depth 14] [--multipv 3] [--lose 100] [--line-floor -50] [--gambit-floor -150] [--refute-min 150]
  *                  [--no-cache] [--quiet] [--dir <course-folder>] [--threads 2] [--wasm]
  *
- * `--dir` evaluates one course folder from anywhere (a scratch or staging folder). The real Stockfish is used when it is
+ * `--dir` evaluates one course folder by path. The real Stockfish is used when it is
  * installed (STOCKFISH or PATH or Homebrew), with `--threads` threads; `--wasm` forces the browser build.
  *
  * Evaluates whole courses offline with the same Stockfish build the app uses (stockfish-19-lite-single from
@@ -72,7 +72,7 @@ const lineFloorCp = flag('line-floor', -50);
 const gambitFloorCp = flag('gambit-floor', -150); // a line tagged Character gambit may end this far down for the learner
 const refuteMinCp = flag('refute-min', 150);
 const useCache = !has('no-cache');
-/** Evaluate one course folder from anywhere (a scratch or staging directory), not the shared tree. */
+/** Evaluate one course folder by path. */
 const dirAt = args.indexOf('--dir');
 const courseDir = dirAt >= 0 ? args.splice(dirAt, 2)[1] : undefined;
 const threads = flag('threads', 2);

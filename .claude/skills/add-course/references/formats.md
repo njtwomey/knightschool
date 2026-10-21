@@ -8,7 +8,6 @@ content/curriculum.yaml  openings.yaml  motifs.yaml   shared files: study order,
 content/tree/<first move>/<opening family>/<id>.pgn   the theory: one chapter (one line) per file, both sides
 content/courses/<id>/course.yaml                      a course: side, trigger, introduction, plans, the lines it takes
 content/courses/<id>/quizzes.yaml                     optional
-content/_staging/<id>/{course.yaml,quizzes.yaml,tree/*.pgn}   a course being written beside others (never built)
 ```
 
 - The folders under `tree/` are for people: first move (`e4`, `d4`, `other`), then the opening family
