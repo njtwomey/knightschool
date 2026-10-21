@@ -281,7 +281,7 @@ export function SpeedPage() {
   ]);
 
   return (
-    <Page className="gap-4 lg:grid-cols-[minmax(0,min(36rem,calc(100dvh-11rem)))_1fr]">
+    <Page className="board-columns gap-4 [--board-cap:36rem]">
       <BetweenDialog />
       <div className="grid content-start gap-3">
         <AppBoard

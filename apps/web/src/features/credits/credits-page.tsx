@@ -117,10 +117,10 @@ export function CreditsPage() {
             <TableBody>
               {LIBRARIES.map((library) => (
                 <TableRow key={library.name}>
-                  <TableCell className="font-medium">
+                  <TableCell className="whitespace-normal font-medium">
                     <Link href={library.href}>{library.name}</Link>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{library.use}</TableCell>
+                  <TableCell className="whitespace-normal text-muted-foreground">{library.use}</TableCell>
                   <TableCell>{library.licence}</TableCell>
                 </TableRow>
               ))}

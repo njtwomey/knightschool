@@ -7,7 +7,13 @@ export function ThemeToggle() {
   const { resolved, setTheme } = useTheme();
   const next = resolved === 'dark' ? 'light' : 'dark';
   return (
-    <Button variant="ghost" size="icon" aria-label={`Switch to ${next} mode`} onClick={() => setTheme(next)}>
+    <Button
+      variant="ghost"
+      size="icon"
+      className="pointer-coarse:size-10"
+      aria-label={`Switch to ${next} mode`}
+      onClick={() => setTheme(next)}
+    >
       {resolved === 'dark' ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
     </Button>
   );

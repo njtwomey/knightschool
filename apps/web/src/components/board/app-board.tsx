@@ -1,4 +1,5 @@
 import { epdToFen, legalMovesFrom, sideToMove, type Square } from '@knightschool/core';
+import { cn } from 'cn';
 import { Check, X } from 'lucide-react';
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Chessboard } from 'react-chessboard';
@@ -129,7 +130,8 @@ function AppBoardView({
 
   return (
     <div
-      className={className}
+      // Never wider than --board-size (index.css): it keeps the board on screen on a phone, upright or sideways.
+      className={cn('w-full max-w-(--board-size)', className)}
       style={{ ['--board-light' as string]: theme.light, ['--board-dark' as string]: theme.dark }}
     >
       <Chessboard

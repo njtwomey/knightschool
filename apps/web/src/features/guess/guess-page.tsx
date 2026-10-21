@@ -74,7 +74,7 @@ export function GuessPage() {
           {Math.min(outcomes.length + (answered ? 0 : 1), SESSION_LENGTH)} of {SESSION_LENGTH}
         </span>
       </div>
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,min(36rem,calc(100dvh-11rem)))_1fr]">
+      <div className="board-columns grid gap-6 [--board-cap:36rem]">
         <div className="grid content-start gap-3">
           <AppBoard
             id="guess"

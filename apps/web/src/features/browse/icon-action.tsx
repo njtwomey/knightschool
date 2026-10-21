@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
  * is an icon button there goes through this file, so the behaviour is changed in one place. There is no tooltip (they get
  * in the way of the next button) and no grow effect; `aria-label` still names the button for screen readers.
  */
-export const ICON_BUTTON = 'transition-colors hover:bg-accent hover:text-foreground hover:ring-2 hover:ring-primary/60';
+export const ICON_BUTTON =
+  'transition-colors hover:bg-accent hover:text-foreground hover:ring-2 hover:ring-primary/60 pointer-coarse:size-10';
 
 /** An icon-only button, as a link or a button. */
 export function IconAction({
