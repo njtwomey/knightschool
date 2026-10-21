@@ -202,6 +202,8 @@ export const OpeningIndexEntry = Opening.pick({
       epd: z.string(),
       /** The position after each of the first plies (from the second), for "Name That Opening". */
       epds: z.array(z.string()),
+      /** Other courses that list this line too ("also in"). */
+      alsoIn: z.array(Slug).default([]),
     }),
   ),
 });

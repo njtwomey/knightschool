@@ -26,5 +26,6 @@ export * from './tags';
 export * from './training';
 export * from './tree';
 export * from './theory-tree';
+export * from './position-id';
 export * from './tree-helpers';
 export * from './rich-text';

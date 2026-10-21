@@ -1,9 +1,9 @@
 /**
  * pnpm content:build
  *
- * Reads content/openings/<opening>/{opening.yaml,lines/*.pgn,refutations/*.pgn}, validates everything against the
- * schemas in packages/core, merges each opening's variants into one tree and writes apps/web/public/content/*.json.
- * A broken file fails the build with the file name in the message.
+ * Reads the theory tree (content/tree) and the courses (content/courses), validates everything against the schemas
+ * in packages/core, projects each course's lines into its own tree and writes apps/web/public/content/*.json, plus
+ * tree.json (the whole tree, to draw). A broken file fails the build with the file name in the message.
  *
  * Optional Lichess steps, so reruns are offline:
  *   - opening names: downloads lichess-org/chess-openings (CC0) once into .cache/.
@@ -24,6 +24,7 @@ import {
   variantPath,
   applyPopularity,
   parseOpeningsTsv,
+  treeGraph,
   type OpeningContent,
 } from '../packages/core/src/index.ts';
 import {
@@ -32,6 +33,7 @@ import {
   loadCurriculum,
   loadGlossary,
   loadOpeningGroups,
+  loadTree,
   rel,
   root,
 } from './content-lib.ts';
@@ -83,6 +85,10 @@ async function main() {
   const courses = loadCourses();
   const curriculum = loadCurriculum(courses);
   const order = new Map(curriculum.map((entry, i) => [entry.id, i]));
+  const listedBy = new Map<string, string[]>();
+  for (const content of courses)
+    for (const variant of content.opening.variants)
+      listedBy.set(variant.id, [...(listedBy.get(variant.id) ?? []), content.opening.id]);
   for (let content of courses) {
     if (names) content = applyNames(content, names);
     if (popularity) content = applyPopularity(content, (epd) => popularity.positions[epd]);
@@ -110,6 +116,7 @@ async function main() {
             alternative,
             epd: path[Math.min(7, path.length - 1)]?.to ?? opening.rootEpd,
             epds: path.slice(1, 14).map((edge) => edge.to),
+            alsoIn: (listedBy.get(id) ?? []).filter((course) => course !== opening.id),
           };
         }),
       }),
@@ -117,6 +124,7 @@ async function main() {
     console.log(`  ${opening.id}: ${Object.keys(content.nodes).length} positions, ${opening.variants.length} variants`);
   }
   writeFileSync(join(outDir, 'index.json'), JSON.stringify(index));
+  writeFileSync(join(outDir, 'tree.json'), JSON.stringify(treeGraph(loadTree())));
   writeFileSync(join(outDir, 'search.json'), JSON.stringify(buildSearchIndex(built)));
   // Native-Stockfish analysis from `pnpm analyse`, trimmed to the positions some course reaches.
   const analysisFile = join(root, 'content', 'analysis', 'analysis.json');

@@ -22,6 +22,7 @@ const line = (id: string, name: string, over: Partial<OpeningIndexEntry['lines']
   alternative: false,
   epd: '',
   epds: [],
+  alsoIn: [],
   ...over,
 });
 

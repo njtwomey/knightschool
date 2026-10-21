@@ -1,6 +1,7 @@
 import { playSan } from './chess';
 import { START_EPD } from './epd';
 import { parsePgn, type PgnGame, type PgnMoveNode } from './pgn';
+import { positionId } from './position-id';
 import {
   LineKind,
   Side,
@@ -38,8 +39,9 @@ export type TreeLine = {
   source: string;
   /** The side the chapter is written for ([For]): its [Kind] and [Risk] are from that side's point of view. */
   side: Side;
-  /** The position where the chapter's own moves begin. */
+  /** The position where the chapter's own moves begin, and how many plies lead there. */
   startEpd: string;
+  startPly: number;
   /** Chapters whose moves the [Start] path runs through, in order: the branches this line grows out of. */
   parents: string[];
   /** The [Start] moves (annotated from the tree, no variations) followed by the chapter's moves. */
@@ -221,6 +223,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
       source: chapter.source,
       side: chapter.game.tags.For as Side,
       startEpd: path.at(-1)?.to ?? START_EPD,
+      startPly: path.length,
       parents,
       game: { tags, moves: [...prefix, ...chapter.game.moves] },
     });
@@ -231,6 +234,49 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
 /** Moves that more than one chapter writes out, which `make doctor` reports so they can be written once. */
 export function rewrittenMoves(tree: TheoryTree): TreeEdge[] {
   return [...tree.edges.values()].filter((edge) => edge.writtenIn.length > 1);
+}
+
+/** The tree as data to draw: chapters as branches (which grows out of which, after which move) and every move. */
+export type TreeGraph = {
+  /** Position id (`positionId`) of the initial position. */
+  root: string;
+  chapters: {
+    id: string;
+    name: string;
+    side: Side;
+    /** The chapter it branches from, and the move of that chapter it follows ("6.d4"); null from the start. */
+    parent: string | null;
+    after: string | null;
+    /** Position id where its own moves begin. */
+    from: string;
+    source: string;
+  }[];
+  /** Every move once, between position ids, with the chapters that write it. */
+  moves: { from: string; to: string; san: string; chapters: string[] }[];
+};
+
+export function treeGraph(tree: TheoryTree): TreeGraph {
+  return {
+    root: positionId(START_EPD),
+    chapters: [...tree.lines.values()].map((line) => {
+      const branch = line.game.moves[line.startPly - 1];
+      return {
+        id: line.id,
+        name: line.game.tags.Variation ?? line.id,
+        side: line.side,
+        parent: line.parents.at(-1) ?? null,
+        after: branch ? moveText(line.startPly - 1, branch.san) : null,
+        from: positionId(line.startEpd),
+        source: line.source,
+      };
+    }),
+    moves: [...tree.edges.values()].map((edge) => ({
+      from: positionId(edge.from),
+      to: positionId(edge.to),
+      san: edge.san,
+      chapters: edge.writtenIn,
+    })),
+  };
 }
 
 /** A trap's kind seen from the other side: the trap one side springs is the one the other must avoid. */

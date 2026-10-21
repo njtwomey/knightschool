@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { parseStart, projectCourse, resolveTree, rewrittenMoves, sanMoves, type Chapter } from './theory-tree';
+import {
+  parseStart,
+  projectCourse,
+  resolveTree,
+  rewrittenMoves,
+  sanMoves,
+  treeGraph,
+  type Chapter,
+} from './theory-tree';
+import { positionId } from './position-id';
 import { epdAfterPgn } from './chess';
 import { parsePgn, writePgn } from './pgn';
 import type { CourseManifest } from './schema/content';
@@ -118,6 +127,23 @@ describe('resolveTree', () => {
     const text = writePgn(evans.game, 6);
     expect(text).toContain('4. b4 Bxb4 5. c3');
     expect(parsePgn(text).moves.map((move) => move.san)).toEqual(evans.game.moves.map((move) => move.san));
+  });
+});
+
+describe('treeGraph', () => {
+  it('lists each chapter with the chapter and move it branches after, and each move once', () => {
+    const graph = treeGraph(resolveTree([italian, evans, twoKnights]));
+    expect(graph.chapters.map(({ id, parent, after }) => [id, parent, after])).toEqual([
+      ['italian', null, null],
+      ['evans', 'italian', '3...Bc5'],
+      ['two-knights', 'italian', '3.Bc4'],
+    ]);
+    expect(graph.chapters[1]!.from).toBe(positionId(epdAfterPgn('1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5')));
+    const fromRoot = graph.moves.filter((move) => move.from === graph.root);
+    expect(fromRoot).toEqual([
+      { from: graph.root, to: positionId(epdAfterPgn('1. e4')), san: 'e4', chapters: ['italian'] },
+    ]);
+    expect(graph.moves).toHaveLength(9 + 5 + 4);
   });
 });
 
