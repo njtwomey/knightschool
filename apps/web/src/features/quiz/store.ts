@@ -43,6 +43,7 @@ import {
 } from '@/data/training-settings';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { errorText } from '@/lib/errors';
+import { sessionLoader } from '@/lib/session';
 
 const scheduler = createScheduler();
 const SOURCE_KEY = 'knightschool.quiz.source';
@@ -216,6 +217,8 @@ export const useQuiz = create<QuizState>((set, get) => {
       });
   }
 
+  const load = sessionLoader(get, set, 'first');
+
   return {
     phase: 'idle',
     error: null,
@@ -257,22 +260,18 @@ export const useQuiz = create<QuizState>((set, get) => {
     },
 
     async start() {
-      // React runs effects twice in development; two sessions starting together would introduce cards twice.
-      if (get().phase === 'loading') return;
-      clearTimers();
-      set({
-        phase: 'loading',
+      const reset = {
         chain: null,
         unsaved: [],
         following: false,
-        error: null,
         advancing: false,
         badge: null,
         quizResult: null,
         viewing: null,
         holding: false,
-      });
-      try {
+      };
+      await load(reset, async () => {
+        clearTimers();
         const storage = (await whenStorageReady()).storage;
         const now = new Date();
         const index = await loadIndex();
@@ -356,9 +355,7 @@ export const useQuiz = create<QuizState>((set, get) => {
           shownAt: performance.now(),
           phase: queue.length ? 'asking' : 'summary',
         });
-      } catch (error) {
-        set({ phase: 'error', error: errorText(error) });
-      }
+      });
     },
 
     submitMove(uci) {

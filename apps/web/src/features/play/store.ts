@@ -28,6 +28,7 @@ import { introduceStep, recordStep } from './record';
 import type { UnitRef } from '@/router/hrefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { errorText } from '@/lib/errors';
+import { sessionLoader } from '@/lib/session';
 
 export type PlayMode = 'learn' | 'drill' | 'branches';
 
@@ -106,8 +107,6 @@ type PlayState = {
 const timers = createTimers();
 const later = timers.later;
 const clearTimers = timers.clear;
-/** How many times `start` has been called: each call's number, so a slower earlier one can tell it was overtaken. */
-let runs = 0;
 
 /** Is the learner asked for this step, or does the computer play it? */
 const asked = (mode: PlayMode, step: LineStep) => mode === 'learn' || step.ours;
@@ -123,6 +122,9 @@ const FRESH = {
 };
 
 export const usePlay = create<PlayState>((set, get) => {
+  // Only the latest start may set the page up: an earlier one still loading (a quick change of unit) gives way.
+  const load = sessionLoader(get, set, 'latest');
+
   /** After a move: finish the line, ask the learner, or let the computer reply after a short pause. */
   function proceed() {
     const { content, mode } = get();
@@ -218,16 +220,13 @@ export const usePlay = create<PlayState>((set, get) => {
     firstIndex: 0,
 
     async start(courseId, variantId, mode, moves = [], unit, part = 0) {
-      // Only the latest start may set the page up: an earlier one still loading (a quick change of unit) gives way.
-      const run = ++runs;
       clearTimers();
-      set({ phase: 'loading', error: null, ...FRESH, scope: null, firstIndex: 0 });
-      try {
+      await load({ ...FRESH, scope: null, firstIndex: 0 }, async (current) => {
         const content = await loadOpening(courseId);
-        if (run !== runs) return;
+        if (!current()) return;
         if (unit && mode !== 'branches') {
           const scope = await scopeFor(content, variantId, unit, part);
-          if (run !== runs) return;
+          if (!current()) return;
           const stretch = scope.parts[scope.part]!;
           const resumed = resumeStretch(content, stretch, moves);
           set({ content, variantId, scope, firstIndex: stretch.from, steps: resumed.steps });
@@ -238,9 +237,7 @@ export const usePlay = create<PlayState>((set, get) => {
         const resumed = resumeFrom(content, variantId, mode, moves);
         set({ content, variantId, steps: resumed.steps });
         begin(mode, resumed);
-      } catch (error) {
-        if (run === runs) set({ phase: 'error', error: errorText(error) });
-      }
+      });
     },
 
     setMode: (mode) => {

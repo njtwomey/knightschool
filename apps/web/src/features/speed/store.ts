@@ -19,7 +19,7 @@ import { whenStorageReady } from '@/data/storage';
 import { getEnrolled } from '@/data/training-settings';
 import { oneOf, type PrefSchema, readPrefs, writePrefs } from '@/lib/local-prefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
-import { errorText } from '@/lib/errors';
+import { sessionLoader } from '@/lib/session';
 
 /** How a run is set up: a fixed number of lines, or as many moves as you can make before the time is up. */
 export type SpeedConfig = {
@@ -233,6 +233,8 @@ export const useSpeed = create<SpeedState>((set, get) => {
     endRun();
   }
 
+  const load = sessionLoader(get, set, 'first');
+
   return {
     phase: 'idle',
     error: null,
@@ -262,11 +264,9 @@ export const useSpeed = create<SpeedState>((set, get) => {
     },
 
     async prepare() {
-      if (get().phase === 'loading') return;
-      clearAll();
-      const { config } = get();
-      set({ phase: 'loading', error: null, results: [], queue: [] });
-      try {
+      await load({ results: [], queue: [] }, async () => {
+        clearAll();
+        const { config } = get();
         const rush = rushCourse(config.source);
         if (rush) {
           const queue = await rushQueue(rush, config.mode === 'timed' ? TIMED_QUEUE : config.lines, config.weighting);
@@ -318,9 +318,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
           };
         });
         set({ queue, lineIndex: 0, phase: 'ready' });
-      } catch (error) {
-        set({ phase: 'error', error: errorText(error) });
-      }
+      });
     },
 
     /** Skips the rest of the countdown before a line. */

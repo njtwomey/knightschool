@@ -22,7 +22,7 @@ import { whenStorageReady } from '@/data/storage';
 import { coursesFor, saveChoice, savedChoice, savedWeighting, type PracticeSource } from '@/data/practice-source';
 import { getEnrolled } from '@/data/training-settings';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
-import { errorText } from '@/lib/errors';
+import { sessionLoader } from '@/lib/session';
 
 const SOURCE_KEY = 'knightschool.guess.source';
 const WEIGHTING_KEY = 'knightschool.guess.weighting';
@@ -194,6 +194,8 @@ export const useNameIt = create<NameItState>((set, get) => {
     if (grade.result === 'full') timers.later(FEEDBACK_DELAYS.guessFull, show);
   }
 
+  const load = sessionLoader(get, set, 'first');
+
   return {
     phase: 'idle',
     error: null,
@@ -206,9 +208,7 @@ export const useNameIt = create<NameItState>((set, get) => {
     weighting: savedWeighting(WEIGHTING_KEY),
 
     async start() {
-      if (get().phase === 'loading') return;
-      set({ phase: 'loading', error: null });
-      try {
+      await load({}, async () => {
         const [courses, search] = await Promise.all([loadIndex(), loadSearchIndex()]);
         const history = await whenStorageReady()
           .then(({ storage }) => storage.guessAttempts.since('1970-01-01T00:00:00.000Z'))
@@ -234,9 +234,7 @@ export const useNameIt = create<NameItState>((set, get) => {
         deck = { courses, pool, reach, search, history };
         set({ outcomes: [] });
         show();
-      } catch (error) {
-        set({ phase: 'error', error: errorText(error) });
-      }
+      });
     },
     stop() {
       timers.clear();
