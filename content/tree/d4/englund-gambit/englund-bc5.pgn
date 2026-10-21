@@ -1,0 +1,26 @@
+[Event "Knight School"]
+[Opening "Englund Gambit"]
+[Variation "Englund Gambit: 2...Bc5"]
+[ECO "A40"]
+[Character "gambit,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pawn-grab,early-queen"]
+[Themes "accept-the-pawn,development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "2...Bc5"]
+[Start "vs-englund-gambit 2.dxe5"]
+
+2... Bc5 { Develops at once and points at f2, hoping White gets careless. Black is a pawn down for it. }
+3. Nf3 { Develops and guards e5. The knight also covers g5 and h4, so an attack on f2 is slow. }
+3... Qe7
+( 3... Nc6 { Transposes to 2...Nc6 3.Nf3 Bc5. } )
+( 3... d6 4. Bf4 { Guards e5 a second time, so taking there costs Black. } )
+( 3... d5 4. exd6 { Takes en passant: the pawn captures the d-pawn as it goes past. White stays a pawn up. } )
+( 3... Ne7 4. Nc3 )
+4. Nc3 { Develops and covers d5 and e4. The knight on f3 guards e5, so the queen cannot win the pawn back. }
+4... Nc6
+5. Nd5 { Hits the queen at once, and the knight also eyes c7. }
+5... Qd8 6. a3 { Takes b4 from the bishop and prepares b4, which will chase the bishop off c5. }
+6... Nge7 7. e4 { White is a pawn up with a big centre. Plan: b4, Bb2 or Bg5, and castle; the knight on f3 keeps guarding e5. } *
