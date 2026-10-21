@@ -16,6 +16,7 @@ import { CourseCard } from '@/features/search/course-card';
 import { percent, useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
+import { errorText } from '@/lib/errors';
 
 type Row = { course: OpeningIndexEntry; due: number; fresh: number };
 
@@ -68,7 +69,7 @@ export function OverviewPage() {
     void useProgress.getState().refresh();
     loadRows(index)
       .then((loaded) => !cancelled && setRows(loaded))
-      .catch((caught: unknown) => !cancelled && setFailure(caught instanceof Error ? caught.message : String(caught)));
+      .catch((caught: unknown) => !cancelled && setFailure(errorText(caught)));
     return () => {
       cancelled = true;
     };

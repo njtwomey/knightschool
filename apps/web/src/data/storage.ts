@@ -1,5 +1,6 @@
 import { openBrowserStorage, StorageUnavailableError, type BrowserStorage } from '@knightschool/storage';
 import { create } from 'zustand';
+import { errorText } from '@/lib/errors';
 
 type StorageState = {
   /** `paused`: another tab took the database over. Use `open()` to take it back. */
@@ -27,7 +28,7 @@ export const useStorage = create<StorageState>((set, get) => ({
       );
       set({ storage, status: 'ready' });
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
+      const message = errorText(error);
       set({
         status: error instanceof StorageUnavailableError ? 'unavailable' : 'error',
         error: message,

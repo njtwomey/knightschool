@@ -47,6 +47,7 @@ import { EngineLines } from '@/features/engine/engine-lines';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState } from '@/router/location';
 import { FEEDBACK_DELAYS } from '@/lib/feedback';
+import { errorText } from '@/lib/errors';
 
 const PIECES: PieceLetter[] = ['K', 'Q', 'R', 'B', 'N', 'P'];
 
@@ -129,7 +130,7 @@ export function LabPage() {
       begin(game.startFen, game.sans);
       setPaste('');
     } catch (error) {
-      setProblem(error instanceof Error ? error.message : String(error));
+      setProblem(errorText(error));
     }
   }
 

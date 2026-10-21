@@ -19,6 +19,7 @@ import { useStorage } from '@/data/storage';
 import { lastDays, localDay, previousDay } from '@/lib/days';
 import { useCatalog } from '@/data/catalog-store';
 import { describeCard } from './describe-card';
+import { errorText } from '@/lib/errors';
 
 type Loaded = {
   total: number;
@@ -93,7 +94,7 @@ export function StatsPage() {
     let cancelled = false;
     load(new Map(index.map((course) => [course.id, course.name])))
       .then((loaded) => !cancelled && setData(loaded))
-      .catch((error: unknown) => !cancelled && setFailure(error instanceof Error ? error.message : String(error)));
+      .catch((error: unknown) => !cancelled && setFailure(errorText(error)));
     return () => {
       cancelled = true;
     };

@@ -10,6 +10,7 @@ import { glossary } from './use-glossary';
 import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
+import { errorText } from '@/lib/errors';
 
 /** The tactical and structural ideas the courses use, in plain words, with the courses where each turns up. */
 export function GlossaryPage() {
@@ -20,7 +21,7 @@ export function GlossaryPage() {
   useEffect(() => {
     glossary()
       .then(setEntries)
-      .catch((error: unknown) => setFailure(error instanceof Error ? error.message : String(error)));
+      .catch((error: unknown) => setFailure(errorText(error)));
   }, []);
 
   // A link such as /glossary#fork scrolls to that entry once the list is there.

@@ -41,6 +41,7 @@ import { loadUndoLabels, saveAuthored, undoAuthored, type AuthoredChangeInput } 
 import { reminderToExport } from '@/data/backup';
 import { loadShippedIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
+import { errorText } from '@/lib/errors';
 
 /** A course as the editor holds it: its id and its course.yaml, lines as entries. */
 export type DraftCourse = { id: string; manifest: CourseManifest & { lines: CourseEntry[] } };
@@ -176,8 +177,6 @@ export function positionsOf(line: TreeLine | undefined): string[] {
   for (const move of line?.game.moves ?? []) positions.push(playSan(positions.at(-1)!, move.san).epd);
   return positions;
 }
-
-const errorText = (error: unknown) => (error instanceof Error ? error.message : String(error));
 
 let pendingHint: string | null = null;
 

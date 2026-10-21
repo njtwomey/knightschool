@@ -22,6 +22,7 @@ import { whenStorageReady } from '@/data/storage';
 import { coursesFor, saveChoice, savedChoice, savedWeighting, type PracticeSource } from '@/data/practice-source';
 import { getEnrolled } from '@/data/training-settings';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
+import { errorText } from '@/lib/errors';
 
 const SOURCE_KEY = 'knightschool.guess.source';
 const WEIGHTING_KEY = 'knightschool.guess.weighting';
@@ -234,7 +235,7 @@ export const useNameIt = create<NameItState>((set, get) => {
         set({ outcomes: [] });
         show();
       } catch (error) {
-        set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
+        set({ phase: 'error', error: errorText(error) });
       }
     },
     stop() {

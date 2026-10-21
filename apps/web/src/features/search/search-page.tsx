@@ -32,6 +32,7 @@ import { CourseCard } from './course-card';
 import { ROLE_HINT, SCOPE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
 import { VariationCard } from './variation-card';
 import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state';
+import { errorText } from '@/lib/errors';
 
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
 /** The courses and lines the board search reaches, and the opening the position belongs to ("Englund Gambit"). */
@@ -87,7 +88,7 @@ export function SearchPage() {
     let cancelled = false;
     loadSearchIndex()
       .then((loaded) => !cancelled && setSearchIndex(loaded))
-      .catch((error: unknown) => !cancelled && setSearchFailed(error instanceof Error ? error.message : String(error)));
+      .catch((error: unknown) => !cancelled && setSearchFailed(errorText(error)));
     return () => {
       cancelled = true;
     };

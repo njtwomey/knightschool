@@ -1,6 +1,7 @@
 import { buildMoveTree, chapterTitle, type MoveTree, type TreeGraph } from '@knightschool/core';
 import { useEffect, useState } from 'react';
 import { loadTreeGraph } from '@/data/content';
+import { errorText } from '@/lib/errors';
 
 type TreeChapter = TreeGraph['chapters'][number];
 
@@ -41,10 +42,7 @@ export function useMoveTree(): { loaded: LoadedTree | null; error: string | null
     let live = true;
     loadMoveTree()
       .then((loaded) => live && setState({ loaded, error: null }))
-      .catch(
-        (error: unknown) =>
-          live && setState({ loaded: null, error: error instanceof Error ? error.message : String(error) }),
-      );
+      .catch((error: unknown) => live && setState({ loaded: null, error: errorText(error) }));
     return () => {
       live = false;
     };

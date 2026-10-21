@@ -6,6 +6,7 @@ import { useStorage } from '@/data/storage';
 import { to } from '@/router/location';
 import { createExplorer, getToken } from './service';
 import { profileHref } from '@/router/hrefs';
+import { errorText } from '@/lib/errors';
 
 const share = (part: number, whole: number) => (whole === 0 ? 0 : Math.round((part / whole) * 100));
 
@@ -24,7 +25,7 @@ export function ExplorerPanel({ epd, onPlay }: { epd: string; onPlay?: (uci: str
       .lookup(epd)
       .then((row) => !cancelled && row && setOutcome({ epd, row }))
       .catch((error: unknown) => {
-        if (!cancelled) setOutcome({ epd, problem: error instanceof Error ? error.message : String(error) });
+        if (!cancelled) setOutcome({ epd, problem: errorText(error) });
       });
     return () => {
       cancelled = true;

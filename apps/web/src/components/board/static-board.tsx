@@ -1,6 +1,7 @@
 import { resolvePosition, type PositionSource } from '@knightschool/core';
 import { useMemo } from 'react';
 import { AppBoard, type AppBoardProps } from './app-board';
+import { errorText } from '@/lib/errors';
 
 type Props = { source: PositionSource; id: string; orientation?: 'white' | 'black' } & Pick<
   AppBoardProps,
@@ -17,7 +18,7 @@ export function StaticBoard({ source, id, orientation, ...rest }: Props) {
     try {
       return { ok: true as const, position: resolvePosition(JSON.parse(key) as PositionSource) };
     } catch (error) {
-      return { ok: false as const, message: error instanceof Error ? error.message : String(error) };
+      return { ok: false as const, message: errorText(error) };
     }
   }, [key]);
 

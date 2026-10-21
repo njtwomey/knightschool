@@ -19,6 +19,7 @@ import { whenStorageReady } from '@/data/storage';
 import { getEnrolled } from '@/data/training-settings';
 import { oneOf, type PrefSchema, readPrefs, writePrefs } from '@/lib/local-prefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
+import { errorText } from '@/lib/errors';
 
 /** How a run is set up: a fixed number of lines, or as many moves as you can make before the time is up. */
 export type SpeedConfig = {
@@ -318,7 +319,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
         });
         set({ queue, lineIndex: 0, phase: 'ready' });
       } catch (error) {
-        set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
+        set({ phase: 'error', error: errorText(error) });
       }
     },
 

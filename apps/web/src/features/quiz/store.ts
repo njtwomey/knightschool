@@ -42,6 +42,7 @@ import {
   getNewPerDay,
 } from '@/data/training-settings';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
+import { errorText } from '@/lib/errors';
 
 const scheduler = createScheduler();
 const SOURCE_KEY = 'knightschool.quiz.source';
@@ -179,7 +180,7 @@ export const useQuiz = create<QuizState>((set, get) => {
           get().queue.find((candidate) => candidate.id === definition.id) ??
           (await storageOrThrow().cards.get(definition.id));
       } catch (error) {
-        set({ phase: 'error', error: error instanceof Error ? error.message : String(error), following: false });
+        set({ phase: 'error', error: errorText(error), following: false });
         return;
       }
       if (stored && stored.expectedUci === definition.expectedUci) card = stored;
@@ -356,7 +357,7 @@ export const useQuiz = create<QuizState>((set, get) => {
           phase: queue.length ? 'asking' : 'summary',
         });
       } catch (error) {
-        set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
+        set({ phase: 'error', error: errorText(error) });
       }
     },
 
@@ -394,9 +395,7 @@ export const useQuiz = create<QuizState>((set, get) => {
         }));
         void storageOrThrow()
           .reviews.record(answer.card, answer.review)
-          .catch((error: unknown) =>
-            set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
-          );
+          .catch((error: unknown) => set({ phase: 'error', error: errorText(error) }));
       }
       // A right first time carries on by itself; a miss or a slip waits for Next so the explanation can be read.
       if (next.shown || next.wrongTries > 0) set({ holding: true });
@@ -430,9 +429,7 @@ export const useQuiz = create<QuizState>((set, get) => {
       if (saving())
         void storageOrThrow()
           .quizAttempts.record(done.card, done.review, done.attempt)
-          .catch((error: unknown) =>
-            set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
-          );
+          .catch((error: unknown) => set({ phase: 'error', error: errorText(error) }));
       if (result.matched) later(FEEDBACK_DELAYS.quizRight, advance);
       else set({ holding: true });
     },

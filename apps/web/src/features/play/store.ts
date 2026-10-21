@@ -27,6 +27,7 @@ import { getCardOptions } from '@/data/training-settings';
 import { introduceStep, recordStep } from './record';
 import type { UnitRef } from '@/router/hrefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
+import { errorText } from '@/lib/errors';
 
 export type PlayMode = 'learn' | 'drill' | 'branches';
 
@@ -177,7 +178,7 @@ export const usePlay = create<PlayState>((set, get) => {
       .then(({ storage }) =>
         isDrill(mode) ? recordStep(storage, content, step, attempt, sessionId) : introduceStep(storage, content, step),
       )
-      .catch((error: unknown) => set({ error: error instanceof Error ? error.message : String(error) }));
+      .catch((error: unknown) => set({ error: errorText(error) }));
   }
 
   function begin(mode: PlayMode, from?: { steps: LineStep[]; index: number }) {
@@ -238,7 +239,7 @@ export const usePlay = create<PlayState>((set, get) => {
         set({ content, variantId, steps: resumed.steps });
         begin(mode, resumed);
       } catch (error) {
-        if (run === runs) set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
+        if (run === runs) set({ phase: 'error', error: errorText(error) });
       }
     },
 

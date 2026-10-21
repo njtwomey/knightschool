@@ -11,6 +11,7 @@ import {
 } from '@knightschool/core';
 import { create } from 'zustand';
 import { loadCurriculum, loadIndex, loadOpening, loadOpenings } from '@/data/content';
+import { errorText } from '@/lib/errors';
 
 type Status = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -84,7 +85,7 @@ export const useCatalog = create<CatalogState>((set, get) => ({
         indexStatus: 'ready',
       });
     } catch (error) {
-      set({ indexStatus: 'error', indexError: error instanceof Error ? error.message : String(error) });
+      set({ indexStatus: 'error', indexError: errorText(error) });
     }
   },
 
@@ -125,7 +126,7 @@ export const useCatalog = create<CatalogState>((set, get) => ({
       set({ content, openingId: id, line: continueLine(content, []), contentStatus: 'ready' });
     } catch (error) {
       if (get().courseId === id) {
-        set({ contentStatus: 'error', contentError: error instanceof Error ? error.message : String(error) });
+        set({ contentStatus: 'error', contentError: errorText(error) });
       }
     }
   },

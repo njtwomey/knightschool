@@ -34,6 +34,7 @@ import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
 import { SessionStarters } from './session-starters';
 import { lineHref } from '@/router/hrefs';
+import { errorText } from '@/lib/errors';
 
 const KIND: Record<CourseUnit['kind'], string> = {
   main: 'Main line',
@@ -140,7 +141,7 @@ export function CoursePathPage({ course }: { course: string }) {
     let live = true;
     loadCoursePath(ready)
       .then((loaded) => live && setPath(loaded))
-      .catch((error: unknown) => live && setFailure(error instanceof Error ? error.message : String(error)));
+      .catch((error: unknown) => live && setFailure(errorText(error)));
     return () => {
       live = false;
     };

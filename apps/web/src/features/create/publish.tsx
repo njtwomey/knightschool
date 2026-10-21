@@ -19,6 +19,7 @@ import { download } from '@/data/backup';
 import { navigate } from '@/router/location';
 import { useAuthor, type DraftCourse } from './store';
 import { createHref } from '@/router/hrefs';
+import { errorText } from '@/lib/errors';
 
 /** Copies text to the clipboard; false when the browser will not. */
 async function copy(text: string): Promise<boolean> {
@@ -49,7 +50,7 @@ export function PublishPanel({ course }: { course: DraftCourse }) {
         error: null,
       };
     } catch (error) {
-      return { yaml: '', fields: undefined, lines: 0, error: error instanceof Error ? error.message : String(error) };
+      return { yaml: '', fields: undefined, lines: 0, error: errorText(error) };
     }
     // The contribution is rebuilt whenever the saved rows change.
     // eslint-disable-next-line react-hooks/exhaustive-deps

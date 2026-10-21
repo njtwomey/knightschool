@@ -12,6 +12,7 @@ import { create } from 'zustand';
 import { bakedEvaluation, bakedFirstStore, loadAnalysis } from '@/data/analysis';
 import { useStorage } from '@/data/storage';
 import { createWorkerTransport } from './worker-transport';
+import { errorText } from '@/lib/errors';
 
 /** Deep enough to be far stronger than any beginner, shallow enough to answer in about a second. */
 const ANALYSIS = { depth: 14, multipv: 3 } as const;
@@ -65,7 +66,7 @@ export const useEngine = create<EngineState>((set, get) => ({
     } catch (error) {
       engine?.dispose();
       engine = undefined;
-      set({ status: 'error', error: error instanceof Error ? error.message : String(error) });
+      set({ status: 'error', error: errorText(error) });
     }
   },
 
@@ -95,7 +96,7 @@ export const useEngine = create<EngineState>((set, get) => ({
       if (token !== analysing || result.partial) return;
       set((state) => ({ current: result, thinking: false, seen: { ...state.seen, [epd]: result } }));
     } catch (error) {
-      if (token === analysing) set({ thinking: false, error: error instanceof Error ? error.message : String(error) });
+      if (token === analysing) set({ thinking: false, error: errorText(error) });
     }
   },
 
@@ -113,7 +114,7 @@ export const useEngine = create<EngineState>((set, get) => ({
       }
     } catch (error) {
       if (!(error instanceof DOMException && error.name === 'AbortError')) {
-        set({ error: error instanceof Error ? error.message : String(error) });
+        set({ error: errorText(error) });
       }
     } finally {
       set((state) => ({ measure: state.measure && { ...state.measure, running: false } }));

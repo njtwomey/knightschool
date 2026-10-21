@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { exportJsonFile, exportSqliteFile } from '@/data/backup';
 import { useStorage } from '@/data/storage';
+import { errorText } from '@/lib/errors';
 
 type Stats = { cards: number; reviews: number; quizAttempts: number };
 
@@ -45,7 +46,7 @@ export function DataSection() {
       setMessage({ ok: true, text: await action() });
       setVersion((current) => current + 1);
     } catch (failure) {
-      setMessage({ ok: false, text: failure instanceof Error ? failure.message : String(failure) });
+      setMessage({ ok: false, text: errorText(failure) });
     }
   }
 

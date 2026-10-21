@@ -29,6 +29,7 @@ import { QuizPage } from '@/features/quiz/quiz-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { to } from '@/router/location';
 import { courseHref, lineHref, lineEditHref, type LineTab, type UnitRef } from '@/router/hrefs';
+import { errorText } from '@/lib/errors';
 
 /** One line's page: the tab decides what it shows. Learn, Drill and the every-branch drill are the play page. */
 export function LinePage({
@@ -94,7 +95,7 @@ function LineAbout({ course, line }: { course: string; line: string }) {
     let live = true;
     loadOpening(course)
       .then((loaded) => live && setContent(loaded))
-      .catch((caught: unknown) => live && setError(caught instanceof Error ? caught.message : String(caught)));
+      .catch((caught: unknown) => live && setError(errorText(caught)));
     return () => {
       live = false;
     };
