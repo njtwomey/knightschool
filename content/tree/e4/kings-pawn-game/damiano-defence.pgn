@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "rare"]
 [Opponent "2...f6"]
-[Start "1. e4 e5 2. Nf3"]
+[Start "giuoco-piano 2.Nf3"]
 
 2... f6 $6 { The Damiano Defence: the pawn on f6 blocks the knight's retreat square but weakens the king. } 3. Nxe5 { Offers a knight to drag the f-pawn away. If Black takes, the queen check wins the e5 pawn and leaves the king in the open. } 3... fxe5 $2 ( 3... Qe7 4. Nf3 { Retreats, since 4.Qh5+ would lose to ...g6. } 4... Qxe4+ 5. Be2 { Develops with tempo. } 5... d5 6. O-O ) 4. Qh5+ { Check, and the king cannot castle any more. The queen also wins the e5 pawn next. } 4... Ke7 ( 4... g6 5. Qxe5+ Qe7 6. Qxh8 ) 5. Qxe5+ Kf7 6. Bc4+ d5 7. Bxd5+ Kg6 8. Qg3+ { Keeps checking so the king cannot tidy itself up, and White wins more material. The slower 8.h4 gives Black time to untangle. } *

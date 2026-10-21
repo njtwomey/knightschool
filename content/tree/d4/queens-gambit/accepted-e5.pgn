@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "4...e5"]
-[Start "1. d4 d5 2. c4 dxc4 3. Nf3 Nf6 4. e3"]
+[Start "accepted 3...Nf6 4.e3"]
 
 4... e5 $2 { Black tries to hit the centre at once, but the pawn on e5 is not defended by anything. } 5. Nxe5 $1 { Takes it. The pawn on d4 stays safe because the queen guards it, and the knight can step back to c4 to win the other pawn as well. } 5... Nbd7 6. Nxc4 { The knight comes back and takes the second pawn. White is a clean pawn up with a solid centre. } *

@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "4...Bxb4 5.c3 Bc5"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3"]
+[Start "evans-gambit 5.c3"]
 
 5... Bc5 { Black retreats the bishop but keeps the pawn. } 6. d4 { Hits the bishop and the e5 pawn together, so Black must give up something. } 6... exd4 7. O-O { Castles before recapturing, as in the main line. The pawn on d4 can wait. } 7... d6 8. cxd4 { Retakes with a tempo: the pawn attacks the bishop on c5. } 8... Bb6 { Transposes to the main line. Play on with 9.Nc3. } *

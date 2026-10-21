@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "sideline"]
 [Opponent "2.Bg5"]
-[Start "1. d4 d5"]
+[Start "orthodox 1...d5"]
 
 2. Bg5 h6 { Asks the bishop where it is going. If it leaves the diagonal, White has lost time; if it takes on f6 later, Black keeps the bishop pair. } 3. Bh4 ( 3. Bxh6 Nxh6 { White gave a bishop for a pawn. The knight on h6 is awkward for the moment, but Black is a clear piece up. } 4. Nf3 e6 ) 3... c6 { Prepares ...Qb6, which hits b2 while White's bishop is away from c1 and cannot defend it. } 4. e3 Qb6 { The queen attacks the b2 pawn at once. White has to spend a move, or the pawn goes. } 5. Qc1 ( 5. Nd2 Bf5 6. Bd3 Bxd3 7. cxd3 e6 ) ( 5. Nf3 Bf5 6. Qc1 Nd7 ) 5... Bf5 { Develops the bishop outside the pawn chain before ...e6. It also eyes the b1-h7 diagonal, so White cannot easily play Bd3 and trade it off for free. } 6. c4 e6 { Holds d5 and finally opens the f8 bishop. } 7. Nc3 Be7 { Develops with a hint of ...Bxh4. If White takes on e7, Black recaptures with the knight and has a healthy set-up. } 8. Bxe7 Nxe7 { Recapture with the knight so the king keeps its pawn cover, and the knight is not needed on f6 any more. } 9. Nf3 O-O { Castles before White can open the centre with cxd5 and Nd2-e4. } 10. Be2 dxc4 { Opens the centre while White is still behind in development. The pawn on c4 can be kept with ...b5 or handed back. } 11. O-O Nd7 { Plan: ...Nd7-b6 or ...Nf5, then ...Rad8, and trade the c4 pawn for a good centre. If the queen on b6 is ever hit by Na4 or a rook, move it away rather than leave it on a bad square. } *

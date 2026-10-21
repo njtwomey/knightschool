@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "3...Be7"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4"]
+[Start "giuoco-piano 3.Bc4"]
 
 3... Be7 4. d4 { Strikes the centre at once. Black's bishop on e7 is passive, so White takes space before Black is ready. } 4... exd4 5. c3 { Offers the pawn back for quick development. If Black takes on c3, Nxc3 brings a piece out with tempo; otherwise White retakes d4. } 5... Nf6 ( 5... d6 6. cxd4 { Retakes with the pawn so White holds a big centre and keeps the bishop pair for the middlegame. } 6... Bg4 ) 6. e5 { Kicks the knight and gains space. } 6... Ne4 7. Bd5 { Attacks the knight on e4 and the one on c6 at the same time. Plan: win back the d4 pawn, castle and keep the pawn on e5 as a wedge in Black's position. } *

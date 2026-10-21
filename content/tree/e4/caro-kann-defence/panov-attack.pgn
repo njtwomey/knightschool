@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "sideline"]
 [Opponent "4.c4"]
-[Start "1. e4 c6 2. d4 d5 3. exd5 cxd5 4. c4 Nf6"]
+[Start "caro-kann-exchange 4.c4 Nf6"]
 
 5. Nc3 ( 5. cxd5 Nxd5 6. Nf3 Nc6 ) 5... e6 { Supports d5 and opens the bishop. Black does not mind a trade on d5, because it leaves White with an isolated pawn on d4. } 6. Nf3 ( 6. Bg5 Be7 7. Nf3 O-O ) 6... Be7 { Gets ready to castle, and keeps the choice of how to recapture on d5. } 7. cxd5 Nxd5 { Recaptures with the knight, which now stands on a strong central square. White has an isolated pawn on d4. } 8. Bd3 O-O { King safe. Black can now aim at d4, the pawn with no neighbours to protect it. } 9. O-O Nc6 { Adds a second attacker to d4. Black's plan: blockade the d4 pawn with a knight on d5, trade pieces and aim for a good endgame. If White varies, keep a knight on d5 and trade pieces. } *

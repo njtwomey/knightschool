@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "1...b6"]
-[Start "1. e4"]
+[Start "giuoco-piano 1.e4"]
 
 1... b6 2. d4 { Takes the centre. Black's bishop will shoot at e4, but the pawns are well placed. } 2... Bb7 3. Bd3 { Defends e4 against the bishop and develops toward the kingside. Black's ...f5 would now be a mistake (see the trap). } 3... e6 ( 3... Nf6 4. Nc3 { A second defender of e4, so the pawn is safe against both the bishop and the knight. } 4... e6 5. Nf3 ) 4. Nf3 { Develops and guards d4. } 4... c5 5. c3 { Supports d4 so that ...cxd4 can be met with cxd4 and White keeps the centre. } 5... Nf6 6. Qe2 { Black attacks e4 twice, with the knight and the bishop. The queen makes it three defenders. } 6... Be7 7. O-O { Castles before the centre opens: the king is safe and the rook joins in. } 7... O-O 8. Nbd2 { Plan: keep e4 well defended, then play e5 to chase the knight, or aim Qe2 and the knights at the kingside. Do not play e5 before your pieces are developed. } *

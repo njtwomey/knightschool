@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "gambit"]
 [Opponent "2...d5"]
-[Start "1. e4 e5 2. f4 d5 3. exd5 e4 4. d3 Nf6 5. dxe4 Nxe4 6. Nf3"]
+[Start "falkbeer 6.Nf3"]
 
 6... c6 7. Qe2 { Pins the knight on e4 to the king. Black has to give up the knight or lose it. } 7... cxd5 ( 7... Qa5+ 8. Bd2 { Blocks the check and attacks the queen, so Black cannot also save the pinned knight on e4. } 8... Qxd5 9. Nc3 ) 8. Nbd2 { Adds a second attacker to the pinned knight on e4. } 8... f5 9. Nxe4 { Takes the pinned knight. } 9... fxe4 10. Ne5 { The knight lands on a strong square and cannot be chased away easily; it also eyes d7 and f7. Plan: finish developing with Be3 and castling long, then attack the e4 pawn and use the extra pawn. If Black leaves the book, get your pieces out before grabbing more pawns. } 10... Nc6 *

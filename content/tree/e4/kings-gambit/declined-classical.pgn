@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "2...Bc5"]
-[Start "1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3"]
+[Start "kings-gambit-declined 4.c3"]
 
 4... Nf6 ( 4... Bg4 5. Be2 { Unpins the knight on f3 and prepares to castle. } 5... Nf6 6. d4 ) 5. d4 { Takes the centre. If Black captures, White recaptures with the c-pawn and keeps a big pawn centre. } 5... exd4 6. cxd4 { Recaptures and keeps two pawns in the centre. } 6... Bb6 { Keeps the bishop on the diagonal aimed at d4 and out of reach of any pawn push. } 7. Nc3 { Develops and guards e4, so the e-pawn can push to e5 later. } 7... O-O 8. Bd3 { Develops the bishop and clears the way to castle. } 8... Bg4 9. Be3 { Develops the last bishop and guards d4 against ...Bxf3 and ...Nxd4 tricks. Plan: castle, keep the centre pawns together and play e5 when it kicks a piece. If Black leaves the book, complete development before opening lines. } *

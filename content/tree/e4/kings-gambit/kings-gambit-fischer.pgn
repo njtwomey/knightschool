@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "gambit"]
 [Opponent "2.f4"]
-[Start "1. e4 e5 2. f4"]
+[Start "kings-gambit-declined 2.f4"]
 
 2... exf4 { Takes the pawn. Black keeps the extra pawn and White has to prove the attack is worth it. This is the main alternative to the quiet 2...Bc5. } 3. Nf3 { Develops, covers h4 so that ...Qh4+ is not check, and aims for d4 and Bxf4 to win the pawn back. } 3... d6 { The Fischer Defence. It blocks White's e4-e5 push, opens the bishop on c8 and prepares ...g5 to hold on to the pawn. } 4. d4 { Takes the centre now that Black's pawn on d6 blocks the e-pawn from being attacked. } 4... g5 { Defends the pawn on f4 by controlling it from g5, so White cannot simply win it back with Bxf4. } 5. h4 { Attacks the g5 pawn. } 5... g4 { Pushes the pawn and hits the knight. If the knight goes to e5, ...dxe5 wins it, so it must retreat. [%cal Gg4f3] } 6. Ng1 Qf6 { Attacks the pawn on d4 and gets the queen out. It also eyes the h4 pawn from the side. [%cal Gf6d4] } 7. Nc3 Ne7 { Covers d5, so Nd5 cannot hit the queen, and gets the knight ready for g6 or c6. } 8. Bb5+ c6 { Blocks the check and attacks the bishop, which has to move. } 9. Bd3 Bh6 { Defends the f4 pawn, which White's bishop and knight both want to take. } 10. Nge2 Nd7 { Develops the last minor piece, so Black can castle soon. } 11. Qd2 *

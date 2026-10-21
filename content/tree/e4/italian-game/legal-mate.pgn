@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "3...d6 4.Nc3 Bg4 5.h3 Bh5"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. Nc3 Bg4 5. h3"]
+[Start "vs-d6 5.h3"]
 
 5... Bh5 $2 { Keeps the pin on the knight at f3. It looks natural, but it leaves the e5 pawn defended only by a pawn that cannot move away. } 6. Nxe5 $1 { Offers the queen. If Black takes it, White has a forced mate. } 6... Bxd1 $2 7. Bxf7+ Ke7 8. Nd5# *

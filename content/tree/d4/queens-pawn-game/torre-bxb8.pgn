@@ -11,6 +11,6 @@
 [For "black"]
 [Kind "for-us"]
 [Opponent "3.Bg5 Ne4 4.Bf4 c5 5.e3 Qb6 6.Nbd2 Nxd2 7.Bxb8"]
-[Start "1. d4 d5 2. Nf3 Nf6 3. Bg5 Ne4 4. Bf4 c5 5. e3 Qb6 6. Nbd2 Nxd2"]
+[Start "torre-attack 6...Nxd2"]
 
 7. Bxb8 $2 { Grabs a knight instead of recapturing, and forgets that the black knight on d2 is attacking the knight on f3. } 7... Nxf3+ { Takes with check, so White has no time to save the bishop on b8. } 8. Qxf3 Rxb8 { Black has won two knights for a bishop and a knight. } 9. Qxd5 Qxb2 *

@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "against-us"]
 [Opponent "3...e4"]
-[Start "1. e4 e5 2. Nf3 d5 3. exd5 e4"]
+[Start "elephant-gambit 3...e4"]
 
 4. d3 $2 { Attacks the e4 pawn but forgets the knight on f3 is still attacked. } 4... exf3 { Takes the knight for free. } 5. Qxf3 Nf6 6. Nc3 Bb4 *

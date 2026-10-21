@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "sideline"]
 [Opponent "2.Nc3"]
-[Start "1. e4 c6"]
+[Start "short-system 1...c6"]
 
 2. Nc3 d5 { Same plan as always: attack e4 with the d-pawn, backed by the c6 pawn. } 3. Nf3 ( 3. d4 dxe4 4. Nxe4 Bf5 ) ( 3. exd5 cxd5 4. d4 Nf6 ) 3... Bg4 { Pins the knight to the queen and gets the bishop out before ...e6. } 4. h3 ( 4. exd5 cxd5 5. h3 Bxf3 6. Qxf3 e6 ) 4... Bxf3 { Takes the knight that guards d4 and e5, rather than retreating and letting g4 push the bishop around. } 5. Qxf3 e6 { Supports d5 and opens the way for the king's bishop. } 6. d4 Nf6 { Develops and attacks e4. White has the bishop pair, but Black has no weaknesses. } 7. Bd3 dxe4 { Takes the pawn so White cannot keep a big centre. } 8. Nxe4 Nxe4 { Trades White's best-placed piece. } 9. Qxe4 Nd7 { Black develops without weaknesses. If White varies, castle short, play ...Be7 and ...c5 to challenge d4. } *

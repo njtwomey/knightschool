@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "gambit"]
 [Opponent "2.c4"]
-[Start "1. d4 d5 2. c4"]
+[Start "orthodox 2.c4"]
 
 2... e5 { The Albin: Black gives the queen's gambit pawn a very different answer, attacking the centre with a pawn. } 3. dxe5 { Takes the pawn. Black is offering one of his own to chase after White's king in the centre, but with care White ends up better. } 3... d4 { The d-pawn cramps White and becomes a long-term thorn. } 4. Nf3 { Develops and defends the extra pawn on e5. Do not play 4.e3 here: after ...Bb4+ and ...dxe3 Black has [a trap](rnbqk1nr/ppp2ppp/8/4P3/1bP5/4p3/PP1B1PPP/RN1QKBNR w KQkq -) that wins at once. } 4... Nc6 { Adds an attacker to e5 and develops. } 5. g3 Nge7 { Heads for g6 to win the e5 pawn back, and keeps the bishop free to go to g4 or e6 later. } 6. Bg2 Ng6 { Attacks e5 and covers the knight's route to the kingside. White cannot hold the extra pawn for free. } *

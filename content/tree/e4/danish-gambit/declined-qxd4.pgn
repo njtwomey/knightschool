@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "9...Qxd4"]
-[Start "1. e4 e5 2. d4 exd4 3. c3 d5 4. exd5 Qxd5 5. cxd4 Nc6 6. Nf3 Bb4+ 7. Nc3 Bg4 8. Be2 Bxf3 9. Bxf3"]
+[Start "danish-gambit-declined 9.Bxf3"]
 
 9... Qxd4 $2 { Grabs a pawn, but the queen is defended only by the knight. } 10. Bxc6+ { Takes the knight with check. Black has to recapture, and that removes the only defender of the queen. } 10... bxc6 11. Qxd4 { Wins the queen, since nothing recaptures on d4. White is a queen up for a bishop and ahead overall. } *

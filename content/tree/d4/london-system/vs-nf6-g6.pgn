@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "1...Nf6 2.Bf4 g6"]
-[Start "1. d4"]
+[Start "orthodox 1.d4"]
 
 1... Nf6 2. Bf4 g6 ( 2... e6 3. e3 d5 4. Nd2 ) 3. e3 Bg7 4. Nf3 O-O 5. Be2 { Against a fianchetto the bishop belongs on e2: it covers the kingside and leaves d3 for a pawn if needed. } 5... d6 6. h3 { Gives the bishop on f4 the retreat square h2, so ...Nh5 or ...e5 cannot trap it. } 6... Nbd7 ( 6... c5 7. c3 ) 7. O-O b6 8. Bh2 { Out of the way of ...e5 and ...Nh5, and it still watches the long diagonal toward Black's king. } 8... Bb7 9. a4 { Stops ...b5 and gains space on the queenside. } 9... a6 10. c3 { Supports d4 and makes room for Nbd2 and Qc2. With the centre solid, Black has no way to open it favourably. Plan: Nbd2, Qc2 and e4. } *

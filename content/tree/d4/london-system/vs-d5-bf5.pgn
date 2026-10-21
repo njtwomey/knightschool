@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "2...Bf5"]
-[Start "1. d4 d5 2. Bf4"]
+[Start "london-bf4-first 2.Bf4"]
 
 2... Bf5 3. e3 e6 4. c4 { Both sides have the same bishops, so White breaks the symmetry: the c-pawn challenges d5 and pulls Black's centre apart. } 4... Nf6 ( 4... dxc4 5. Bxc4 ) ( 4... Bb4+ 5. Nd2 ) ( 4... c6 5. Qb3 ) ( 4... Bxb1 5. Qa4+ ) 5. Nf3 Bd6 6. Bxd6 { Trade the bishop here: the pawn recapture ...cxd6 gives Black a worse pawn structure, while White keeps a free hand. } 6... cxd6 7. cxd5 { Opens the c-file and leaves Black with a tricky isolated d-pawn to look after. } 7... Nxd5 8. Nbd2 *

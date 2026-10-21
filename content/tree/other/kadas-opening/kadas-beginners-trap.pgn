@@ -11,6 +11,6 @@
 [For "black"]
 [Kind "for-us"]
 [Opponent "2.Rh3"]
-[Start "1. h4 d5"]
+[Start "flank-and-irregular-odd-first-moves 1.h4 d5"]
 
 2. Rh3 $2 { The rook looks active but the bishop on c8 sees all the way along the diagonal to h3. } 2... Bxh3 { Takes the rook for nothing but a bishop. } 3. gxh3 { White has lost a rook for a bishop and is down the exchange for no reason. } *

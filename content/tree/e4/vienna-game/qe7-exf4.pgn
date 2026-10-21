@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "3...exf4 4.e5 Qe7"]
-[Start "1. e4 e5 2. Nc3 Nf6 3. f4 exf4 4. e5"]
+[Start "vienna-f4-exf4 4.e5"]
 
 4... Qe7 $2 { Hits the pawn on e5, but the queen blocks Black's own bishop and leaves the knight on f6 short of squares. } 5. Qe2 { Defends the e5 pawn, so ...Qxe5 would lose the queen. The attacked knight on f6 has to run back to g8. } 5... Ng8 6. d4 { Takes the centre; Black has no developed pieces and the pawn on f4 will fall. } 6... Nc6 7. Nf3 { Develops and keeps pressure on the centre. } 7... d5 8. Nxd5 { Wins a pawn with a fork: the knight attacks the queen on e7 and the pawn on f4. } *

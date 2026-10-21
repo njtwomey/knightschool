@@ -11,6 +11,6 @@
 [For "black"]
 [Kind "against-us"]
 [Opponent "1.g4"]
-[Start "1. g4 d5 2. Bg2"]
+[Start "grob 2.Bg2"]
 
 2... Bxg4 $6 { Wins a pawn, but the bishop is now loose on g4 and White's Bg2 still points at b7. Black has to be careful from here. } 3. c4 c6 4. cxd5 cxd5 5. Qb3 { Attacks d5 and b7 at once. The safe reply is 5...Nf6, which adds a defender to d5 and lets Black meet Qxb7 with ...Nbd7. } 5... e6 $2 { Defends d5 but forgets the loose bishop on g4. } 6. Qa4+ { Check, and the queen also attacks the bishop on g4 along the fourth rank. } 6... Nc6 7. Qxg4 { White wins a whole piece. } *

@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "6...Nc6"]
-[Start "1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 6. Bd2"]
+[Start "qa5-classical 5...Bf5 6.Bd2"]
 
 6... Nc6 { Develops a piece but forgets about b5 and d5, which the pawn on c6 would have covered. } 7. Nb5 { The knight moves away and the bishop on d2 attacks the queen. Nb5 also threatens Nxc7+, a check that forks the king and rook on a8. [%cal Gd2a5,Gb5c7] } 7... Qb6 8. c4 { Threatens c5, which would drive the queen off b6 with no good square left. } 8... Nb8 9. Qa4 c6 10. c5 { Hits the queen again, and it has to give ground. } 10... Qd8 11. Ba5 { Attacks the queen once more, and White keeps winning time and more. } *

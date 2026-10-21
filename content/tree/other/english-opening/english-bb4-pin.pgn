@@ -11,6 +11,6 @@
 [For "black"]
 [Kind "against-us"]
 [Opponent "3.e4"]
-[Start "1. c4 Nf6 2. Nc3 e6 3. e4"]
+[Start "english-e4 3.e4"]
 
 3... Bb4 $2 { Looks like the Nimzo-Indian pin, but White's pawn is on e4 and can push with tempo. } 4. e5 Ne4 $2 { Jumping forward looks natural, but the knight on e4 has no support. The only retreat was 4...Ng8. } 5. Nxe4 { White wins a knight for nothing: nothing guards e4, and Black cannot take back. } *

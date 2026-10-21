@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "sideline"]
 [Opponent "2.g3"]
-[Start "1. Nf3 d5"]
+[Start "reti-c4 1...d5"]
 
 2. g3 Nf6 { Develops and covers e4, where White's central pawn break is aimed. } 3. Bg2 e6 4. O-O Be7 5. d3 O-O 6. Nbd2 c5 7. e4 Nc6 8. Re1 b5 { Starts a pawn advance on the queenside, where White has nothing to defend with, while White prepares e5. } 9. e5 Nd7 { The attacked knight steps to d7, where it hits the e5 pawn and leaves f6 free for the bishop. } 10. Nf1 b4 { Gains more space and takes the c3 square away from the White knight. The pawn storm is moving faster than White's knight, which needs three moves to reach the king's side. } *

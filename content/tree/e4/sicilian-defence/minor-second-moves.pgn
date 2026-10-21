@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "2...Nc6"]
-[Start "1. e4 c5 2. c3"]
+[Start "nf6-main-line 2.c3"]
 
 2... Nc6 ( 2... d6 3. d4 { Whatever Black plays, White now takes the centre. If Black captures, the c-pawn recaptures. } 3... Nf6 4. Bd3 { Guards e4 and develops, so the knight's attack on e4 is no threat. } 4... cxd4 5. cxd4 Nc6 6. Nf3 ) ( 2... g6 3. d4 cxd4 4. cxd4 d5 5. e5 { Gains space and keeps Black's knight off f6, so the king's side stays cramped. } 5... Nc6 6. Nc3 { The c-pawn has gone, so c3 is free for the knight, which adds pressure on d5 and d4. } ) ( 2... e5 3. Nf3 { Develops and attacks e5, so Black has to defend it. } 3... Nc6 4. Bc4 { Aims at f7 and prepares to castle. } 4... Nf6 5. d3 { Guards e4 without committing the d-pawn to a trade. The c3 pawn already supports a later d4. } ) ( 2... b6 3. d4 Bb7 4. Bd3 { Guards e4, which the bishop on b7 is aiming at. } 4... e6 5. Nf3 ) 3. d4 { Takes the centre. If Black takes on d4, the c-pawn recaptures and White keeps the pair of pawns. } 3... d5 4. exd5 { Opens the position while White's pieces are ready and Black's queen has to come out to recapture. } 4... Qxd5 5. Nf3 { Develops, guards d4 and blocks the queen's diagonal to g2. } 5... cxd4 6. cxd4 { Recaptures with the pawn to keep the centre. } 6... e5 7. Nc3 { The c-pawn has gone, so the knight can come out, and it attacks the queen with tempo. [%cal Gc3d5] } 7... Bb4 8. Bd2 { Takes the sting out of the pin on the knight and offers to trade the bishops. } *

@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "3...Qd8"]
-[Start "1. e4 d5 2. exd5 Qxd5 3. Nc3"]
+[Start "qa5-classical 3.Nc3"]
 
 3... Qd8 4. d4 Nf6 ( 4... c6 5. Nf3 Nf6 6. h3 ) 5. Nf3 Bg4 6. h3 { Asks the bishop what it wants. Taking on f3 hands White the bishop pair; going to h5 lets g4 trap it later. } 6... Bxf3 ( 6... Bh5 7. g4 { The pawn covers f5 and attacks the bishop, so it can only go to g6. } 7... Bg6 8. Ne5 { Eyes g6 and prepares h4-h5, which hits the bishop. It has no good retreat, so Black ends up trading it off. [%cal Gh2h4] } ) 7. Qxf3 { Takes back with the queen, which is now active and eyes b7. } 7... c6 8. Be3 { Guards d4 so the queen can stay on f3, and develops the last minor piece. } 8... e6 9. Bd3 Nbd7 10. O-O-O { Castles long so the king is safe and the rook looks down the d-file. Plan: g4 and g5 to drive the knight away, with the bishop pair behind the pawns. } *

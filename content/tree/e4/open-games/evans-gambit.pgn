@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "gambit"]
 [Opponent "4.b4"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5"]
+[Start "giuoco-piano 3...Bc5"]
 
 4. b4 { The Evans Gambit. White offers the b-pawn so that the bishop on c5 has to take it or run, and White gets time to build a big [pawn centre](r1bqk1nr/pppp1ppp/2n5/2b1p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R b KQkq -). } 4... Bxb4 { Take it. The pawn is real: if Black defends carefully, White's lead in development runs out. } 5. c3 { Attacks the bishop and prepares d4. Without this move the pawn sacrifice would buy nothing. } 5... Be7 { Retreats to a safe square. This is the simplest way to keep the extra pawn. } 6. d4 { Same idea as always: take the centre first, the pawn can wait. } 6... Na5 { Attacks the bishop on c4. It is White's best attacking piece, and Black wants it traded or driven away. } 7. Be2 { Keeps the bishop away from the knight on a5, which wanted to trade it off. } ( 7. Nxe5 Nxc4 8. Nxc4 d5 { Hits the centre: Black gives the extra pawn back for a free game and safe king. } 9. exd5 Qxd5 10. Ne3 Qd8 ) 7... exd4 { Swaps Black's e-pawn for White's d-pawn, opening lines for Black's pieces and leaving Black a pawn ahead. } 8. Qxd4 Nf6 { Develops a piece and attacks the e4 pawn. } 9. e5 Nc6 { Brings a knight back into play with an attack on the queen. } 10. Qh4 Nd5 { Saves the knight and guards the bishop on e7 from the queen on h4. Plan: Black is a pawn up, so castle, trade pieces and watch the squares around the king. } *

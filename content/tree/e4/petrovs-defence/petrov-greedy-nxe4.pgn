@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "3...Nxe4"]
-[Start "1. e4 e5 2. Nf3 Nf6 3. Nxe5"]
+[Start "petrov-classical 3.Nxe5"]
 
 3... Nxe4 $6 { Black grabs the pawn at once, which is the most natural mistake in the Petrov. It walks into a pin along the e-file. } 4. Qe2 { Attacks the knight on e4, which is pinned: if it moves, the white knight on e5 uncovers a check from the queen. } 4... Nf6 $2 { Looks natural, but moving the knight uncovers the queen's line to the king. } 5. Nc6+ { Discovered check from the queen, and the knight on c6 also attacks the black queen. Black must answer the check and loses the queen. } 5... Qe7 6. Nxe7 Bxe7 *

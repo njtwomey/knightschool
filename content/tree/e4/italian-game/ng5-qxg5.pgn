@@ -11,6 +11,6 @@
 [For "black"]
 [Kind "for-us"]
 [Opponent "4.Ng5"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5"]
+[Start "rousseau-gambit 3...f5"]
 
 4. Ng5 $2 { Looks like the usual attack on f7, but the f-pawn has already moved and nothing guards the knight. } 4... Qxg5 { The queen sees all the way to g5 along the diagonal now that the f7 pawn has left, and takes the knight for nothing. } 5. O-O f4 { Keeps the extra knight and gains space; White has no attack for a whole piece. } 6. Nc3 Nf6 *

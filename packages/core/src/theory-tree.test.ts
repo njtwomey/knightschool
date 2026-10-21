@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { projectCourse, resolveTree, rewrittenMoves, sanMoves, type Chapter } from './theory-tree';
+import { parseStart, projectCourse, resolveTree, rewrittenMoves, sanMoves, type Chapter } from './theory-tree';
 import { epdAfterPgn } from './chess';
 import { parsePgn, writePgn } from './pgn';
 import type { CourseManifest } from './schema/content';
@@ -24,10 +24,10 @@ const chapter = (id: string, body: string, extra: Record<string, string> = {}): 
 
 const italian = chapter('italian', '1. e4 e5 2. Nf3 { Develops and hits e5. } 2... Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4');
 const evans = chapter('evans', '4. b4 Bxb4 5. c3 Ba5 6. d4', {
-  Start: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5',
+  Start: 'italian 3...Bc5',
   Kind: 'gambit',
 });
-const twoKnights = chapter('two-knights', '3... Nf6 4. Ng5 d5 5. exd5', { Start: '1. e4 e5 2. Nf3 Nc6 3. Bc4' });
+const twoKnights = chapter('two-knights', '3... Nf6 4. Ng5 d5 5. exd5', { Start: 'italian 3.Bc4' });
 
 const course = (lines: CourseManifest['lines'], over: Partial<CourseManifest> = {}): CourseManifest => {
   const rest: Partial<ReturnType<typeof manifestOf>> = manifestOf({ trigger: '1. e4 e5 2. Nf3 Nc6 3. Bc4' });
@@ -55,6 +55,7 @@ describe('resolveTree', () => {
     expect(line.game.tags.Start).toBeUndefined();
     expect(line.startEpd).toBe(epdAfterPgn('1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5'));
     expect(line.parents).toEqual(['italian']);
+    expect(tree.lines.get('two-knights')!.parents).toEqual(['italian']);
     expect(tree.lines.get('italian')!.parents).toEqual([]);
   });
 
@@ -70,14 +71,38 @@ describe('resolveTree', () => {
     expect(ours.sort()).toEqual(['b4', 'c3']);
   });
 
-  it('fails when a [Start] never meets the rest of the tree', () => {
-    const stray = chapter('stray', '3. Bb5', { Start: '1. e4 e5 2. Nf3 Nc6' }); // nothing writes 1.e4 e5 2.Nf3 Nc6 here
-    expect(() => resolveTree([stray])).toThrow(/stray\.pgn: \[Start .* leaves the tree/);
+  it('reads a [Start] as a chapter and the move it branches after, with earlier moves when needed', () => {
+    expect(parseStart('evans-gambit 6.d4', 'x')).toEqual({ parent: 'evans-gambit', ply: 10, sans: ['d4'] });
+    expect(parseStart('odd 1.h4 d5', 'x')).toEqual({ parent: 'odd', ply: 1, sans: ['h4', 'd5'] });
+    expect(parseStart('italian 3...Bc5+', 'x')).toEqual({ parent: 'italian', ply: 5, sans: ['Bc5'] });
+    expect(parseStart('', 'x')).toBeUndefined();
+    expect(() => parseStart('1. e4 e5', 'x.pgn')).toThrow(/x\.pgn: \[Start "1\. e4 e5"\] should name a chapter/);
+  });
+
+  it('fails when a [Start] names a missing chapter, a move the parent does not write, or a circle', () => {
+    const stray = chapter('stray', '3. Bb5', { Start: 'nowhere 2...Nc6' });
+    expect(() => resolveTree([italian, stray])).toThrow(/stray\.pgn: \[Start\] branches from "nowhere"/);
+    const notOwn = chapter('not-own', '4. b4', { Start: 'evans 3...Bc5' }); // 3...Bc5 is italian's move, not evans'
+    expect(() => resolveTree([italian, evans, notOwn])).toThrow(/after 3\.\.\.Bc5 in "evans", which does not write/);
+    const a = chapter('a', '2. Nf3', { Start: 'b 1...e5' });
+    const b = chapter('b', '2. Nc3', { Start: 'a 1...e5' });
+    expect(() => resolveTree([a, b])).toThrow(/in a circle: a, b/);
+  });
+
+  it('asks for the earlier moves when the parent writes the branch move in two places', () => {
+    const firsts = chapter('firsts', '1. h4 ( 1. a3 d5 ) 1... d5');
+    const ambiguous = chapter('after-h4', '2. d4', { Start: 'firsts 1...d5' });
+    expect(() => resolveTree([firsts, ambiguous])).toThrow(
+      /ambiguous: "firsts" writes 1\.\.\.d5 in more than one place/,
+    );
+    const clear = chapter('after-a3', '2. d4', { Start: 'firsts 1.a3 d5' });
+    const tree = resolveTree([firsts, clear]);
+    expect(tree.lines.get('after-a3')!.game.moves.map((move) => move.san)).toEqual(['a3', 'd5', 'd4']);
   });
 
   it('fails on a clashing line id, an illegal move, or two different comments on one move', () => {
     expect(() => resolveTree([italian, { ...evans, id: 'italian' }])).toThrow(/also used by italian\.pgn/);
-    expect(() => resolveTree([chapter('bad', '1. e4 e5 2. Ke3')])).toThrow(/bad\.pgn: illegal move 2\. Ke3/);
+    expect(() => resolveTree([chapter('bad', '1. e4 e5 2. Ke3')])).toThrow(/bad\.pgn: illegal move 2\.Ke3/);
     const other = chapter('other', '1. e4 e5 2. Nf3 { A different note. } 2... d6');
     expect(() => resolveTree([italian, other])).toThrow(/commented differently/);
   });
@@ -137,7 +162,7 @@ describe('projectCourse', () => {
   });
 
   it('turns a chapter whose [Kind] is a trap kind into a trap', () => {
-    const trap = chapter('trap', '4... Nd4 5. Nxe5', { Start: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3', Kind: 'for-us' });
+    const trap = chapter('trap', '4... Nd4 5. Nxe5', { Start: 'italian 4.c3', Kind: 'for-us' });
     const projected = projectCourse('c', course(['italian', 'trap']), resolveTree([italian, trap]));
     expect(projected.opening.variants.map((variant) => [variant.id, variant.kind, variant.whose])).toEqual([
       ['italian', 'line', undefined],
@@ -147,11 +172,11 @@ describe('projectCourse', () => {
 
   it('turns a trap written for one side into the other kind of trap for a course of the other side', () => {
     const trap = chapter('trap', '4... Nd4? 5. Nxe5', {
-      Start: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3',
+      Start: 'italian 4.c3',
       Kind: 'for-us',
     });
     const blackChapter = chapter('black-line', '4... Nf6', {
-      Start: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3',
+      Start: 'italian 4.c3',
       For: 'black',
     });
     const both = resolveTree([italian, trap, blackChapter]);

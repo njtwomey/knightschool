@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "4...Bxb4 5.c3 Be7"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Be7 6. d4"]
+[Start "evans-gambit 6.d4"]
 
 6... Na5 ( 6... exd4 7. cxd4 { No pin here, so the c-pawn can retake and White has a full centre again. } 7... Na5 8. Be2 ) 7. Be2 { Keeps the bishop away from the knight on a5, which wanted to trade it off. } 7... exd4 8. Qxd4 { Retakes with the queen, which now eyes g7 and the knight that Black wants to develop. } 8... Nf6 9. e5 { Hits the knight with a pawn and gains time. } 9... Nc6 10. Qh4 { Attacks the bishop on e7, which the knight has to protect by going to d5. } 10... Nd5 11. Qg3 { Plan: castle, put the rooks in the centre, and use the open diagonal towards g7. } *

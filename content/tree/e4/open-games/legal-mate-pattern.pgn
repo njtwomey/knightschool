@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "against-us"]
 [Opponent "3...d6 4.Nc3 Bg4 5.Nxe5"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4"]
+[Start "giuoco-piano 3.Bc4"]
 
 3... d6 $6 { Playable, but the quiet 3...d6 invites a pin with ...Bg4, and that is how Légal's mate happens. We play 3...Bc5 instead. } 4. Nc3 Bg4 $6 { Pins the knight on f3 to the queen. Pinning against Nc3 and Bc4 allows a famous trick. } 5. Nxe5 $1 { White leaves the queen en prise on purpose. } 5... Bxd1 $4 { Taking the queen is the losing mistake. If Black simply takes the knight on e5 first, White is the one in trouble. } 6. Bxf7+ { Check! The bishop attacks the king. } 6... Ke7 7. Nd5# *

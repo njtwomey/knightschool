@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "2...d5 3.exd5 e4 4.d3 Nf6 5.dxe4 Nxe4 6.Nf3 Qxd5"]
-[Start "1. e4 e5 2. f4 d5 3. exd5 e4 4. d3 Nf6 5. dxe4 Nxe4 6. Nf3"]
+[Start "falkbeer 6.Nf3"]
 
 6... Qxd5 $2 { Takes the pawn, but the d-file is open and the white queen on d1 stares at d5. } 7. Qxd5 { Nothing defends the black queen, so White wins it for nothing. } 7... Nf6 *

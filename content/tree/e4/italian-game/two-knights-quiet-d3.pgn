@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "3...Nf6"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6"]
+[Start "two-knights-na5 3...Nf6"]
 
 4. d3 { A quiet alternative to 4.Ng5 for players who dislike the sharp lines: it guards e4 and keeps the position calm. } 4... Bc5 ( 4... Be7 5. O-O O-O 6. Re1 d6 7. c3 ) 5. c3 { Transposes to the main Giuoco Piano. } 5... d6 6. O-O O-O 7. Re1 a6 8. Bb3 *

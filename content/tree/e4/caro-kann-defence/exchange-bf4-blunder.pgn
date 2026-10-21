@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "for-us"]
 [Opponent "6.Bf4"]
-[Start "1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Qc7"]
+[Start "caro-kann-exchange 5...Qc7"]
 
 6. Bf4 $2 { White's bishop attacks the queen, but nothing protects the bishop. } 6... Qxf4 { The queen takes a free bishop. White cannot take back, because the bishop on d3 does not guard f4. } *

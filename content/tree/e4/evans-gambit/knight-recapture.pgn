@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "against-us"]
 [Opponent "4...Bxb4 5.c3 Ba5 6.d4 exd4"]
-[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4"]
+[Start "accepted-main-line 6...exd4"]
 
 7. Nxd4 $2 { Retakes with the knight, which looks natural. But it lets the knight trade off and leaves White a pawn down with nothing to show for it. } 7... Nge7 { Develops and keeps the extra pawn. Castle (7.O-O) or 7.Qb3 instead; the pieces then come out with tempo. } 8. O-O O-O 9. Qh5 d6 *

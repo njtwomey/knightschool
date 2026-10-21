@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "against-us"]
 [Opponent "5...Qxb2"]
-[Start "1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Bd2 Qxb2"]
+[Start "vs-englund-gambit 5...Qxb2"]
 
 6. Bc3 $2 { It hits the queen, so it looks natural, but it walks into a pin. } 6... Bb4 { Pins the bishop on c3 to the king, since the king on e1 stands behind it. White is lost: Bd2 drops the rook on a1, and Qd2 is worse. } 7. Qd2 $4 { Tries to meet the pin, but the bishop simply takes. } 7... Bxc3 8. Qxc3 $4 { Leaves the first rank open. } 8... Qc1# *

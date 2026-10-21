@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "against-us"]
 [Opponent "3.f4"]
-[Start "1. e4 e5 2. Nc3 Nf6 3. f4"]
+[Start "vienna-gambit 3.f4"]
 
 3... exf4 $2 { Grabs the pawn, but after 4.e5 the knight is attacked and must go all the way back to g8. } 4. e5 { Kicks the [knight on f6](rnbqkb1r/pppp1ppp/5n2/4P3/5p2/2N5/PPPP2PP/R1BQKBNR b KQkq -) at once. It has few safe squares, and White gets space for the pawn. } 4... Ng8 { The only safe square. White leads in development and has a space advantage for the pawn. } 5. Nf3 d6 *

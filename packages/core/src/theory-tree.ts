@@ -60,9 +60,34 @@ const hasNote = (move: PgnMoveNode) =>
   Boolean(move.comment) || move.nags.length > 0 || move.arrows.length > 0 || move.circles.length > 0;
 
 /**
- * Reads the chapters into one tree. They may come in any order: each is resolved once every move of its [Start] has
- * been written by some other chapter. Throws, naming the file, when ids clash, [For] is missing, a move is illegal, two
- * chapters comment differently on the same move, or a [Start] never connects to the rest of the tree.
+ * `[Start "evans-gambit 6.d4"]`: the chapter this one branches from, and the move of that chapter it follows. When the
+ * parent writes that move in more than one place, give the moves before it too, as many as it takes:
+ * `[Start "odd-first-moves 1.h4 d5"]`.
+ */
+export type StartPoint = { parent: string; ply: number; sans: string[] };
+
+const moveText = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
+const bareSan = (san: string) => san.replace(/[+#!?]+$/, '');
+
+/** Reads a [Start] header. Missing or empty: the chapter starts from the initial position. */
+export function parseStart(text: string | undefined, source: string): StartPoint | undefined {
+  if (!text?.trim()) return undefined;
+  const match = /^(\S+)\s+(\d+)(\.{3}|\.)\s*(.+)$/.exec(text.trim());
+  if (!match)
+    throw new Error(
+      `${source}: [Start "${text}"] should name a chapter and one of its moves, like "evans-gambit 6.d4"`,
+    );
+  const [, parent, number, dots] = match as unknown as [string, string, string, string];
+  const sans = sanMoves(`${number}${dots} ${match[4]}`, source).map(bareSan);
+  const first = (Number(number) - 1) * 2 + (dots === '...' ? 1 : 0);
+  return { parent, ply: first + sans.length - 1, sans };
+}
+
+/**
+ * Reads the chapters into one tree. A chapter with a [Start] branches from a move its parent chapter writes (on its
+ * main line or in one of its variations), so chapters are resolved parents first, in any file order. Throws, naming
+ * the file, when ids clash, [For] is missing, a move is illegal, two chapters comment differently on the same move, or
+ * a [Start] names a chapter or a move that does not exist.
  */
 export function resolveTree(chapters: Chapter[]): TheoryTree {
   const ids = new Map<string, string>();
@@ -77,18 +102,20 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
   }
 
   const edges = new Map<string, TreeEdge>();
-  const write = (chapter: Chapter, fromEpd: string, startPly: number, moves: PgnMoveNode[]) => {
-    let epd = fromEpd;
-    moves.forEach((move, index) => {
-      const ply = startPly + index;
-      for (const variation of move.variations) write(chapter, epd, ply, variation);
+  /** For each resolved chapter, the path from the start to after each move it writes, by "ply:san". */
+  const anchors = new Map<string, Map<string, TreeEdge[][]>>();
+  const write = (chapter: Chapter, path: TreeEdge[], moves: PgnMoveNode[]) => {
+    const own = anchors.get(chapter.id)!;
+    let here = path;
+    moves.forEach((move) => {
+      const ply = here.length;
+      const epd = here.at(-1)?.to ?? START_EPD;
+      for (const variation of move.variations) write(chapter, here, variation);
       let played;
       try {
         played = playSan(epd, move.san);
       } catch {
-        throw new Error(
-          `${chapter.source}: illegal move ${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'} ${move.san}`,
-        );
+        throw new Error(`${chapter.source}: illegal move ${moveText(ply, move.san)}`);
       }
       const key = edgeKey(epd, played.uci);
       const edge = edges.get(key) ?? {
@@ -106,7 +133,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
         if (move.comment && note.comment && move.comment !== note.comment) {
           const others = edge.writtenIn.filter((id) => id !== chapter.id).map((id) => ids.get(id));
           throw new Error(
-            `${chapter.source}: ${move.san} at ply ${ply + 1} is commented differently in ${others.join(', ')}: ` +
+            `${chapter.source}: ${moveText(ply, move.san)} is commented differently in ${others.join(', ')}: ` +
               `"${note.comment}" / "${move.comment}". A move has one comment, wherever it is written.`,
           );
         }
@@ -118,49 +145,57 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
           circles: union(note.circles, move.circles),
         };
       }
-      epd = played.epd;
+      here = [...here, edge];
+      const anchor = `${ply}:${bareSan(edge.san)}`;
+      own.set(anchor, [...(own.get(anchor) ?? []), here]);
     });
   };
 
-  // Resolved in rounds: a chapter waits until every move of its [Start] is written.
-  const starts = new Map(
-    chapters.map((chapter) => [chapter.id, sanMoves(chapter.game.tags.Start ?? '', chapter.source)]),
-  );
+  const starts = new Map(chapters.map((chapter) => [chapter.id, parseStart(chapter.game.tags.Start, chapter.source)]));
+  for (const chapter of chapters) {
+    const start = starts.get(chapter.id);
+    if (start && !ids.has(start.parent))
+      throw new Error(
+        `${chapter.source}: [Start] branches from "${start.parent}", but there is no chapter of that name`,
+      );
+  }
   const startPaths = new Map<string, TreeEdge[]>();
+  const lineage = new Map<string, string[]>();
   let pending = [...chapters];
   while (pending.length) {
     const waiting: Chapter[] = [];
     for (const chapter of pending) {
-      const path: TreeEdge[] = [];
-      let epd = START_EPD;
-      let connected = true;
-      for (const san of starts.get(chapter.id)!) {
-        let played;
-        try {
-          played = playSan(epd, san);
-        } catch {
-          throw new Error(`${chapter.source}: [Start] has an illegal move ${san}`);
+      const start = starts.get(chapter.id);
+      let path: TreeEdge[] = [];
+      if (start) {
+        const from = anchors.get(start.parent);
+        if (!from) {
+          waiting.push(chapter);
+          continue;
         }
-        const edge = edges.get(edgeKey(epd, played.uci));
-        if (!edge) {
-          connected = false;
-          break;
-        }
-        path.push(edge);
-        epd = played.epd;
-      }
-      if (!connected) {
-        waiting.push(chapter);
-        continue;
+        const last = start.sans.at(-1)!;
+        const found = (from.get(`${start.ply}:${last}`) ?? []).filter((candidate) =>
+          start.sans.every((san, i) => bareSan(candidate[candidate.length - start.sans.length + i]?.san ?? '') === san),
+        );
+        const named = moveText(start.ply, last);
+        if (found.length === 0)
+          throw new Error(
+            `${chapter.source}: [Start] branches after ${named} in "${start.parent}", which does not write that move itself`,
+          );
+        if (found.length > 1)
+          throw new Error(
+            `${chapter.source}: [Start] is ambiguous: "${start.parent}" writes ${named} in more than one place; give the moves before it too`,
+          );
+        path = found[0]!;
       }
       startPaths.set(chapter.id, path);
-      write(chapter, epd, path.length, chapter.game.moves);
+      lineage.set(chapter.id, start ? [...lineage.get(start.parent)!, start.parent] : []);
+      anchors.set(chapter.id, new Map());
+      write(chapter, path, chapter.game.moves);
     }
     if (waiting.length === pending.length) {
-      const first = waiting[0]!;
       throw new Error(
-        `${first.source}: [Start "${first.game.tags.Start}"] leaves the tree: no chapter writes all of its moves` +
-          (waiting.length > 1 ? ` (and ${waiting.length - 1} more chapters wait on it)` : ''),
+        `${waiting[0]!.source}: [Start] chapters branch from each other in a circle: ${waiting.map((c) => c.id).join(', ')}`,
       );
     }
     pending = waiting;
@@ -169,11 +204,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
   const lines = new Map<string, TreeLine>();
   for (const chapter of chapters) {
     const path = startPaths.get(chapter.id)!;
-    const parents: string[] = [];
-    for (const edge of path) {
-      const owner = edge.writtenIn[0]!;
-      if (parents.at(-1) !== owner) parents.push(owner);
-    }
+    const parents = lineage.get(chapter.id)!;
     const prefix: PgnMoveNode[] = path.map((edge) => ({
       san: edge.san,
       ...(edge.note.comment ? { comment: edge.note.comment } : {}),

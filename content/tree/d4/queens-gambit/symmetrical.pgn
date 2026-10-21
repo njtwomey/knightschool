@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "2...c5"]
-[Start "1. d4 d5 2. c4"]
+[Start "orthodox 2.c4"]
 
 2... c5 3. cxd5 { Opens the c-file and clears the way for the knight on c3 to hit the queen. } 3... Qxd5 4. Nf3 { Develops and prepares Nc3 so White gains time on the queen. } 4... cxd4 5. Nc3 { Hits the queen and gains time. } 5... Qa5 6. Nxd4 { Takes the pawn back with a developing move. } 6... Nf6 7. Nb3 { Hits the queen again and steps away from the pin and from exchanges. } 7... Qc7 8. e4 { Takes the centre now that Black has wasted time on the queen. Plan: develop the bishops, castle, and keep the pawns on e4 and d-file open. } *

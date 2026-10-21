@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "4...Nc6"]
-[Start "1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. d4"]
+[Start "d5-main-line 4.d4"]
 
 4... Nc6 5. Nf3 Bg4 6. Be2 { Answers the pin by guarding the knight with the bishop. If Black takes on f3, White recaptures and the bishop pair is worth more than the pawn structure. } 6... cxd4 7. cxd4 e6 8. Nc3 { Now that the c-pawn has gone, the knight comes out with tempo on the queen. [%cal Gc3d5] } 8... Qa5 9. O-O Nf6 10. h3 Bxf3 11. Bxf3 Rd8 12. Be3 *

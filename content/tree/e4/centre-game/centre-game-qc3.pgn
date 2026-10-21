@@ -11,6 +11,6 @@
 [For "black"]
 [Kind "for-us"]
 [Opponent "4.Qc3"]
-[Start "1. e4 e5 2. d4 exd4 3. Qxd4 Nc6"]
+[Start "centre-game-queen-takes 3...Nc6"]
 
 4. Qc3 $2 { Moves the queen out of the knight's attack, but it lands on a diagonal the black bishop can reach. } 4... Bb4 { Pins the queen to the king, because White has no d-pawn to block. White loses the queen for a bishop. } 5. Bd2 ( 5. Qxb4 Nxb4 ) 5... Bxc3 6. Bxc3 Nf6 *

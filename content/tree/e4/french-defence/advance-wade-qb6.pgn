@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "3...c5 4.c3 Qb6"]
-[Start "1. e4 e6 2. d4 d5 3. e5 c5 4. c3"]
+[Start "advance-qb6 4.c3"]
 
 4... Qb6 5. Nf3 { Develops and guards d4 a second time. The queen is already aiming at it. } 5... Bd7 ( 5... Nc6 6. a3 ) 6. Be2 { A safe square for the bishop; d3 would let ...cxd4 and ...Nc6 hit the centre before we are ready. } 6... Nc6 7. O-O { Castle first, with the king safe before Black's pieces get active. } 7... cxd4 8. cxd4 Nge7 9. Nc3 { Another guard for d4; the knight can also go to a4 later to hit the queen. } 9... Nf5 10. Na4 { Hits Black's queen and wins a tempo (a free move), since the queen has to move again. } 10... Qd8 11. b3 { Plan: finish development with Bb2, keep d4 guarded and aim the pieces at the king side. } *

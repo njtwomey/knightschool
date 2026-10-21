@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "6...Nb6"]
-[Start "1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. Nf3 Nc6 6. cxd4"]
+[Start "nf6-main-line 5...Nc6 6.cxd4"]
 
 6... Nb6 $2 { The knight goes back without first playing ...d6, so nothing hits the pawn on e5 and nothing stops White's next move. } 7. d5 $1 { Attacks the knight on c6. If it takes on e5, White's knight takes it back and Black has lost a knight for a pawn. } 7... Nb4 ( 7... Nxe5 8. Nxe5 ) 8. Nc3 e6 9. d6 *

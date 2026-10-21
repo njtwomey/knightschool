@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "sideline"]
 [Opponent "3...Nc6"]
-[Start "1. e4 e5 2. Nc3 Nf6 3. f4"]
+[Start "vienna-gambit 3.f4"]
 
 3... Nc6 $6 { Develops, but leaves the knight on f6 without support against fxe5. } 4. fxe5 { Takes the pawn, which also attacks the knight on f6. } 4... Nxe5 ( 4... Nxe4 5. Nxe4 { Wins a whole piece for the pawn. } 5... Qh4+ 6. Ng3 ) 5. d4 { Kicks the knight from e5 and takes the centre. If the knight returns, White keeps the lead. } 5... Ng6 ( 5... Nc6 6. e5 Ng8 7. Nf3 ) 6. e5 { Attacks the knight on f6 again; its only safe square is g8, so Black's pieces end up far from the centre. } 6... Ng8 7. Nf3 { Develops and brings the pieces to bear on the centre. White is simply better developed. } 7... Bb4 8. a3 { Asks the bishop what it wants. If it takes on c3 White recaptures with the b-pawn and keeps the centre. Plan: Bd3, castle, and keep the pawns on d4 and e5 firm. } *

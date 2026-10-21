@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "3...Nh5"]
-[Start "1. d4 d5 2. Bf4 Nf6 3. e3"]
+[Start "vs-d5-nf6 3.e3"]
 
 3... Nh5 $2 { Black hopes to win the bishop pair by taking on f4, but the knight on h5 is loose. } 4. Qxh5 { The queen sees h5 along the diagonal d1-h5, since e2 is empty. Black has dropped a whole knight for nothing. } 4... c6 5. Nd2 *

@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "6...e6"]
-[Start "1. e4 Nc6 2. Nf3 d5 3. exd5 Qxd5 4. Nc3 Qa5 5. d4 Nf6 6. Bd2"]
+[Start "nimzowitsch 6.Bd2"]
 
 6... e6 $2 { A natural developing move that leaves the c7 pawn guarded only by the queen, which is stuck on a5. } 7. Nb5 $1 { The knight moves away with a threat on c7, and in doing so uncovers the bishop on d2 against the queen. Black cannot meet both. } 7... Qb6 { The queen runs and guards c7, but now it can be hit again. } 8. c4 { Threatens c5, which would hit the queen again, and keeps Nxc7+ in the air. Black's pieces are tied up. } 8... Bb4 9. c5 { The pawn attacks the queen. } 9... Qa5 10. a3 { The bishop on b4 shields the queen from the bishop on d2, so it cannot move; and a3 attacks it. Black loses material whatever happens. } 10... Bxd2+ 11. Nxd2 *

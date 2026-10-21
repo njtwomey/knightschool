@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "against-us"]
 [Opponent "6...Nc6"]
-[Start "1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 6. Bd2 Nc6"]
+[Start "queen-hit-nb5 6...Nc6"]
 
 7. Nd5 $2 { Looks like the same discovered attack on the queen, but the queen simply takes the knight on d5. Nb5 was the move. } 7... Qxd5 8. c4 { Hits the queen, but it has done its job and the c4 pawn is only a pawn. } 8... Qe4+ 9. Be2 *

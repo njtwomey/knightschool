@@ -11,6 +11,6 @@
 [For "black"]
 [Kind "for-us"]
 [Opponent "3.fxe5"]
-[Start "1. e4 e5 2. f4 Bc5"]
+[Start "kings-gambit-declined 2...Bc5"]
 
 3. fxe5 $2 { Takes a pawn but leaves the f-file and the king exposed, because nothing guards h4 and g3. } 3... Qh4+ { Check on the e1-h4 diagonal. White has no good block or king move. } 4. g3 ( 4. Ke2 Qxe4# ) 4... Qxe4+ { Check again. It also attacks the rook on h1 behind the e4 pawn. } 5. Qe2 Qxh1 { Wins the rook. White's king is stuck in the centre and Black is far ahead. } *

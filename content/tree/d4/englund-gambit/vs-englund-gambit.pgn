@@ -10,6 +10,6 @@
 [For "white"]
 [Kind "gambit"]
 [Opponent "1...e5"]
-[Start "1. d4"]
+[Start "orthodox 1.d4"]
 
 1... e5 { The Englund Gambit: Black gives a pawn for quick play and some traps. } 2. dxe5 { Take it. The gambit is not sound, and the tricks only work if White goes wrong. } 2... Nc6 ( 2... d6 3. exd6 Bxd6 4. Nc3 ) 3. Nf3 { Defends e5 and develops. } 3... Qe7 ( 3... Bc5 4. Nc3 ) ( 3... Nge7 4. Nc3 ) 4. Bf4 { Defends e5 a second time with the bishop that is already outside the pawn chain. } 4... Qb4+ ( 4... d6 5. exd6 ) 5. Bd2 { The right block. Other blocks lose a piece (see the traps) because the queen on b4 also hits the bishop on f4. } 5... Qxb2 ( 5... Qe7 6. Nc3 ) 6. Nc3 { Brings the knight out and clears the first rank. If the queen takes the rook on a1, the white queen takes it back. } 6... Bb4 7. Rb1 { Attacks the queen, which has to leave b2 with the rook on a1 now safe. } 7... Qa3 8. Rb3 { Attacks the queen again with tempo and keeps her away from the b-file. } 8... Qa5 9. e4 { Takes the centre now that White is a pawn ahead and nearly fully developed. } 9... Nge7 10. a3 { Asks the bishop on b4 what it wants to do. After ...Bxc3 Bxc3 the bishop pair and the extra pawn are safe. Plan: Bd3, castle, and keep the extra pawn. } *

@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "2...exf4 3.Nf3 Be7 4.Bc4 Nf6 5.e5 Nh5 6.Nc3 d6 7.d4 g5"]
-[Start "1. e4 e5 2. f4 exf4 3. Nf3 Be7 4. Bc4 Nf6 5. e5 Nh5 6. Nc3 d6 7. d4"]
+[Start "cunningham-defence 7.d4"]
 
 7... g5 $2 { Black protects f4 with a pawn, but it leaves the knight on h5 with no defender. } 8. Nxg5 $1 { Gives up the knight for a pawn, because if the bishop takes, the queen takes the knight on h5 with a double attack. } 8... Bxg5 9. Qxh5 { The queen takes the stranded knight and attacks both g5 and h8: Black is a piece down. } 9... Rf8 *

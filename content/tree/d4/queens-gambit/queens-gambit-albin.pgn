@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "gambit"]
 [Opponent "2...e5"]
-[Start "1. d4 d5 2. c4 e5 3. dxe5 d4 4. Nf3 Nc6"]
+[Start "albin 4...Nc6"]
 
 5. Nbd2 { Brings the second knight out so that it can reach b3 and attack the d4 pawn. It leaves the c1 bishop free as well. } 5... Nge7 ( 5... a5 6. Nb3 Bb4+ 7. Bd2 Be7 8. e3 ) ( 5... Bg4 6. g3 Qd7 7. h3 ) 6. Nb3 { Attacks the advanced pawn on d4 again, because it only has one defender. } 6... Ng6 7. Nbxd4 { Wins the pawn back. White is still ahead in the centre and Black has nothing to show for the gambit. } 7... Ngxe5 8. Nxe5 { Trades a pair of knights so Black has fewer pieces to attack with. } 8... Nxe5 9. e3 { Opens the bishop on f1 and shuts out the knight's check on d3. } 9... g6 10. b3 { Prepares Bb2 and gives the c1 bishop a long diagonal. } 10... Qe7 11. Be2 { Develops with the intention of castling. } 11... Bg7 12. O-O { Plan: castle, put the bishop on b2, play Qc2 and use the extra space. If Black leaves the book, win back the d4 pawn with a knight, trade pieces and play on the open d-file. } *

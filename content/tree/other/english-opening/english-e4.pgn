@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "sideline"]
 [Opponent "3.e4"]
-[Start "1. c4 Nf6 2. Nc3 e6"]
+[Start "english 2.Nc3 e6"]
 
 3. e4 d5 { Hits the centre at once; White's e4 pawn has to decide whether to take, push or defend. } 4. e5 ( 4. exd5 exd5 5. cxd5 Nxd5 { Regains the pawn, centralises the knight and attacks the c3 knight. } ) 4... d4 { Kicks the c3 knight. After exf6 dxc3 the knights are traded and White's e5 pawn is gone with them. } 5. exf6 dxc3 6. dxc3 ( 6. bxc3 Qxf6 { Takes the knight back; White's broken queenside pawns are a lasting weakness. } ) 6... Qxd1+ { Trades queens; White has to recapture with the king, which can then never castle. } 7. Kxd1 gxf6 { Recapturing with the g-pawn opens the g-file for Black's rook. } 8. Nf3 Nc6 { Develops and aims at d4 and e5 while White's king is stuck in the middle. } 9. Be3 e5 { Builds a centre and gives the c8 bishop the e6 square. Plan: ...Be6, ...Bg7 and ...O-O-O, using the time White spends tidying up its king. } *

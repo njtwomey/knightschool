@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "5...Qg5"]
-[Start "1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2"]
+[Start "accepted-nf6 5.Bxb2"]
 
 5... Qg5 $6 { The queen hits g2 and the rook on h1 behind it, but it leaves Black's king and the f7 pawn short of defenders. } 6. Nf3 { Hits the queen and develops. If the queen takes g2, the rook on h1 gets a free move to hit the queen. } 6... Qxg2 $2 { Grabs a pawn and the rook is attacked, but the queen is far from home. } 7. Rg1 { Attacks the queen and also opens the g-file toward g7. } 7... Qh3 8. Bxf7+ { Check. Black cannot take the bishop, because the knight on f3 then jumps to g5 with check and wins the queen. } 8... Kd8 9. Rxg7 *

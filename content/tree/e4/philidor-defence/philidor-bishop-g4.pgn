@@ -11,6 +11,6 @@
 [For "white"]
 [Kind "for-us"]
 [Opponent "3...Bg4"]
-[Start "1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4"]
+[Start "philidor-defence 6.Bc4"]
 
 6... Nf6 $2 { Develops and attacks e4, but forgets that f7 is already under fire from the bishop and queen. } 7. Qb3 { Attacks f7 and b7 together. Black cannot defend both, so a pawn drops, and the black king is stuck in the centre. } 7... Qe7 8. Nc3 { Brings a new piece in while Black is tied down. } 8... c6 9. Bg5 *

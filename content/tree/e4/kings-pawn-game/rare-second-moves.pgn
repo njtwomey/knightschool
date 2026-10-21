@@ -10,6 +10,6 @@
 [For "black"]
 [Kind "rare"]
 [Opponent "2.d3"]
-[Start "1. e4 e5"]
+[Start "giuoco-piano 1...e5"]
 
 2. d3 { A quiet move that guards e4. It does not fight for the centre, so Black can build calmly. } ( 2. c3 { White prepares d4 to build a big centre. } 2... Nf6 { Hits e4 before White can build that centre. } 3. d4 Nxe4 { Takes the pawn. The knight is safe because ...d5 will support it. } 4. Bd3 d5 { Holds the knight on e4. } 5. dxe5 Nc6 { Develops and attacks e5. } 6. Nf3 Bg4 { Pins the knight on f3 and adds to the pressure on e5 and d4. } ) ( 2. Ne2 { Keeps the f-pawn free and may play d4 next. } 2... Nf6 { Hits e4. } 3. Nbc3 d5 { Takes the centre now that e4 is attacked twice. } ) ( 2. Bb5 { The bishop move leaves e5 alone, so Black can kick the bishop away. } 2... c6 { Attacks the bishop and prepares ...d5. } 3. Ba4 Nf6 4. d3 d5 { Takes space in the centre. } ) 2... Nf6 { Develops with an attack on e4. } 3. Nf3 Nc6 { Develops and guards e5. } 4. g3 Bc5 { Develops with a hit on f2 and prepares castling. } 5. Bg2 d6 { Protects e5 and opens the c8 bishop. } 6. c3 a5 { Stops White's b4, which would chase the bishop away. Plan: castle, ...Be6, and keep the pawns on e5 and d6 solid. } *
