@@ -21,11 +21,12 @@ import { EvalBar } from '@/features/engine/eval-bar';
 import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
-import { decodeMoves, encodeMoves } from '@/router/hash';
+import { encodeMoves } from '@/router/hash';
 import { lineHref, type UnitRef } from '@/features/line/tabs';
 import { courseHref } from '@/features/course/tabs';
+import { startFromAddress } from './resume';
 import { ALL_BRANCHES, playView, usePlay, type PlayMode } from './store';
-import { navigate, readHashState, setHashState, to } from '@/router/location';
+import { navigate, setHashState, to } from '@/router/location';
 
 const MODES: Record<PlayMode, { name: string; blurb: string; icon: typeof BookOpen }> = {
   learn: { name: 'Learn', blurb: 'You play both sides. Every move is shown first.', icon: BookOpen },
@@ -139,8 +140,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
 
   useEffect(() => {
     // The moves played so far are in the URL hash, so a refresh carries on from the same move (and the same part).
-    const hash = readHashState();
-    void usePlay.getState().start(course, line, mode, decodeMoves(hash.m), unit, Number(hash.p) || 0);
+    void startFromAddress(course, line, mode, unit);
     return () => usePlay.getState().stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [course, line, mode, unitKey]);
@@ -148,8 +148,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
   // If the store was reset while this page stayed open (a hot reload while developing does that), start again instead of
   // sitting on a loading skeleton until the page is refreshed.
   useEffect(() => {
-    if (usePlay.getState().phase === 'idle')
-      void usePlay.getState().start(course, line, mode, decodeMoves(readHashState().m), unit);
+    if (usePlay.getState().phase === 'idle') void startFromAddress(course, line, mode, unit);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, course, line, mode, unitKey]);
 

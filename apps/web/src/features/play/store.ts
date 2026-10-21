@@ -108,6 +108,8 @@ export type PlayState = {
 };
 
 let timers: ReturnType<typeof setTimeout>[] = [];
+/** How many times `start` has been called: each call's number, so a slower earlier one can tell it was overtaken. */
+let runs = 0;
 const later = (ms: number, run: () => void) => timers.push(setTimeout(run, ms));
 const clearTimers = () => {
   for (const timer of timers) clearTimeout(timer);
@@ -223,12 +225,16 @@ export const usePlay = create<PlayState>((set, get) => {
     firstIndex: 0,
 
     async start(courseId, variantId, mode, moves = [], unit, part = 0) {
+      // Only the latest start may set the page up: an earlier one still loading (a quick change of unit) gives way.
+      const run = ++runs;
       clearTimers();
       set({ phase: 'loading', error: null, ...FRESH, scope: null, firstIndex: 0 });
       try {
         const content = await loadOpening(courseId);
+        if (run !== runs) return;
         if (unit && mode !== 'branches') {
           const scope = await scopeFor(content, variantId, unit, part);
+          if (run !== runs) return;
           const stretch = scope.parts[scope.part]!;
           const resumed = resumeStretch(content, stretch, moves);
           set({ content, variantId, scope, firstIndex: stretch.from, steps: resumed.steps });
@@ -240,7 +246,7 @@ export const usePlay = create<PlayState>((set, get) => {
         set({ content, variantId, steps: resumed.steps });
         begin(mode, resumed);
       } catch (error) {
-        set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
+        if (run === runs) set({ phase: 'error', error: error instanceof Error ? error.message : String(error) });
       }
     },
 
@@ -311,13 +317,17 @@ export const usePlay = create<PlayState>((set, get) => {
       if (mode !== 'learn' || (phase !== 'playing' && phase !== 'complete')) return;
       clearTimers();
       const index = Math.max(get().firstIndex, Math.min(target, steps.length));
+      const scope = get().scope;
+      // The end of one branch of a side unit is not the end of the unit: carry on to its next branch, as playing does.
+      const morePartsAfter = index >= steps.length && scope !== null && scope.part + 1 < scope.parts.length;
       set((state) => ({
         index,
-        phase: index >= steps.length ? 'complete' : 'playing',
+        phase: index >= steps.length && !morePartsAfter ? 'complete' : 'playing',
         ...FRESH,
         results: state.results.filter((result) => result.index < index),
         startedAt: performance.now(),
       }));
+      if (morePartsAfter) proceed();
     },
 
     hint: () => set((state) => ({ attempt: reduceAttempt(state.attempt, { type: 'hint' }, '') })),

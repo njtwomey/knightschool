@@ -26,11 +26,21 @@ const content = buildOpening('t', testManifest(), [
   },
 ]);
 
-vi.mock('@/data/content', () => ({ loadOpening: () => Promise.resolve(content) }));
+// A test can hold a load back (`gates`, one per call) to see what happens when an earlier start finishes last.
+const gates: Promise<void>[] = [];
+vi.mock('@/data/content', () => ({
+  loadOpening: async () => {
+    await gates.shift();
+    return content;
+  },
+}));
+let hash: Record<string, string> = {};
+vi.mock('@/router/location', () => ({ readHashState: () => hash }));
 // No database: the unit is cut with the default settings and nothing is saved.
 vi.mock('@/data/storage', () => ({ whenStorageReady: () => Promise.reject(new Error('no database in tests')) }));
 
 const { DELAYS, resumeStretch, usePlay } = await import('./store');
+const { startFromAddress } = await import('./resume');
 
 const units = courseUnits(content);
 const played = () =>
@@ -101,6 +111,35 @@ describe('playing one unit of the path', () => {
     await usePlay.getState().start('t', 'main', 'practice', [], { n: 9 });
     expect(usePlay.getState().phase).toBe('error');
     expect(usePlay.getState().error).toMatch(/no unit 9/);
+  });
+
+  it('keeps the latest start when an earlier one finishes last', async () => {
+    let release!: () => void;
+    gates.push(new Promise((resolve) => (release = resolve)));
+    const slow = usePlay.getState().start('t', 'main', 'practice', [], { n: 1 });
+    await usePlay.getState().start('t', 'main', 'practice', [], { n: 2 });
+    release();
+    await slow;
+    expect(usePlay.getState().scope?.unit.id).toBe('main:2');
+    expect(usePlay.getState().firstIndex).toBe(7);
+  });
+
+  it('starts from the part the address names, on every start of the page', async () => {
+    hash = { p: '1' };
+    await startFromAddress('t', 'main', 'practice', { n: 3 });
+    expect(usePlay.getState().scope?.part).toBe(1);
+    hash = {};
+  });
+
+  it('in Learn, going to the end of one branch of a side unit carries on to the next', async () => {
+    await usePlay.getState().start('t', 'main', 'learn', [], { n: 3 });
+    expect(usePlay.getState().scope?.part).toBe(0);
+    usePlay.getState().goTo(usePlay.getState().steps.length);
+    expect(usePlay.getState().phase).toBe('playing');
+    vi.advanceTimersByTime(DELAYS.opponent * 2);
+    expect(usePlay.getState().scope?.part).toBe(1);
+    usePlay.getState().goTo(usePlay.getState().steps.length);
+    expect(usePlay.getState().phase).toBe('complete'); // the last branch's end is the unit's
   });
 
   it('resumes inside a stretch, never before its start', () => {
