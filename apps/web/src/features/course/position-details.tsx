@@ -1,4 +1,4 @@
-import { explainMove, nodeAt, type OpeningContent } from '@knightschool/core';
+import { explainMove, nodeAt, numberedMove, type OpeningContent } from '@knightschool/core';
 import { RichText } from '@/components/rich-text';
 import { currentEpd, useCatalog } from '@/data/catalog-store';
 
@@ -19,7 +19,7 @@ export function PositionDetails({ content }: { content: OpeningContent }) {
   const before = path.length > 1 ? path[path.length - 2]!.to : content.opening.rootEpd;
   const notes = last ? explainMove(before, last.uci, { edge: last }) : [];
   const verdict = last?.annotation?.nag.map((nag) => NAG_WORDS[nag]).find(Boolean);
-  const move = last ? `${Math.floor((path.length - 1) / 2) + 1}${path.length % 2 ? '.' : '...'} ${last.san}` : null;
+  const move = last ? numberedMove(path.length - 1, last.san) : null;
 
   return (
     <div className="grid gap-1.5 rounded-lg border bg-card p-4 text-sm">

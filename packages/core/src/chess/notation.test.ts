@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { moveNumber, moveNumberLabel, numberedLine, numberedMove } from './notation';
+import { moveNumber, moveNumberLabel, numberedLine, numberedMove, runMove } from './notation';
 
 describe('move numbers', () => {
   it.each([
@@ -15,6 +15,12 @@ describe('move numbers', () => {
     expect(numberedLine(['e4', 'e5', 'Nf3'])).toBe('1. e4 e5 2. Nf3');
     expect(numberedLine(['Nf6', 'Ng5', 'd5'], 5)).toBe('3... Nf6 4. Ng5 d5');
     expect(numberedLine([])).toBe('');
+  });
+
+  it('writes one move of a run, numbered for White or when it opens the run', () => {
+    expect(runMove(6, 'b4')).toBe('4. b4');
+    expect(runMove(7, 'Bxb4')).toBe('Bxb4');
+    expect(runMove(7, 'Bxb4', true)).toBe('4... Bxb4');
   });
 
   it('gives the number and its label alone', () => {

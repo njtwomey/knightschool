@@ -1,4 +1,4 @@
-import { inStudyOrder, numberedLine, pathOf } from '@knightschool/core';
+import { inStudyOrder, numberedLine, pathOf, sansOf } from '@knightschool/core';
 import { useMemo } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -31,14 +31,11 @@ export function CurriculumTreePage() {
     return out;
   }, [loaded, courses]);
 
-  // The index groups lines by their first two moves ("1.e4 e5", "1.d4 Nf6"), so each opening folds on its own.
+  // The index groups lines by their first two moves ("1. e4 e5", "1. d4 Nf6"), so each opening folds on its own.
   const groupOf = useMemo(() => {
     if (!loaded) return undefined;
     return (id: string) => {
-      const sans = pathOf(loaded.tree, id)
-        .slice(1, 3)
-        .map((node) => loaded.tree.nodes.get(node)!.san!);
-      const label = numberedLine(sans);
+      const label = numberedLine(sansOf(loaded.tree, pathOf(loaded.tree, id).slice(0, 3).at(-1) ?? ''));
       return { key: label, label };
     };
   }, [loaded]);

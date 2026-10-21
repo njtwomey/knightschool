@@ -1,4 +1,8 @@
 import {
+  numberedMove,
+  pathFromUcis,
+  positionsAlong,
+  runMove,
   type CourseUnit,
   type OpeningContent,
   type UnitProgress,
@@ -53,29 +57,17 @@ type ShownMove = { ply: number; san: string; core: boolean };
 
 /** The SAN of a stretch's moves, from the position where it starts. */
 function stretchMoves(content: OpeningContent, stretch: UnitStretch): { lead: ShownMove[]; own: ShownMove[] } {
-  const moves: ShownMove[] = [];
-  let epd = content.opening.rootEpd;
-  stretch.moves.forEach((uci, ply) => {
-    const edge = content.nodes[epd]?.moves.find((candidate) => candidate.uci === uci);
-    if (!edge) return;
-    moves.push({ ply, san: edge.san, core: stretch.plies.includes(ply) });
-    epd = edge.to;
-  });
+  const moves = pathFromUcis(content, stretch.moves).map((edge, ply): ShownMove => ({
+    ply,
+    san: edge.san,
+    core: stretch.plies.includes(ply),
+  }));
   return { lead: moves.slice(0, stretch.from), own: moves.slice(stretch.from) };
 }
 
-const numbered = (move: ShownMove, first: boolean) =>
-  move.ply % 2 === 0
-    ? `${move.ply / 2 + 1}.${move.san}`
-    : first
-      ? `${Math.floor(move.ply / 2) + 1}...${move.san}`
-      : move.san;
-
 /** The position at the end of a unit's first stretch, for the board. */
 function endOf(content: OpeningContent, stretch: UnitStretch): { epd: string; lastMove?: string } {
-  let epd = content.opening.rootEpd;
-  for (const uci of stretch.moves) epd = content.nodes[epd]?.moves.find((edge) => edge.uci === uci)?.to ?? epd;
-  return { epd, lastMove: stretch.moves.at(-1) };
+  return { epd: positionsAlong(content, pathFromUcis(content, stretch.moves)).at(-1)!, lastMove: stretch.moves.at(-1) };
 }
 
 /** A unit's stretch as numbered moves, the unit's own moves in bold, after the last two moves that lead to it. */
@@ -97,7 +89,7 @@ function StretchMoves({
       {lead.length > 0 && (
         <span className="text-muted-foreground">
           {lead.length > 2 && '… '}
-          {lead.slice(-2).map((move, i) => `${numbered(move, i === 0)} `)}
+          {lead.slice(-2).map((move, i) => `${runMove(move.ply, move.san, i === 0)} `)}
         </span>
       )}
       {own.map((move, i) => (
@@ -105,7 +97,7 @@ function StretchMoves({
           key={move.ply}
           className={move.core ? `font-semibold ${passedPlies.has(move.ply) ? 'text-primary' : ''}` : ''}
         >
-          {numbered(move, i === 0)}{' '}
+          {runMove(move.ply, move.san, i === 0)}{' '}
         </span>
       ))}
     </p>
@@ -119,9 +111,11 @@ function headline(content: OpeningContent, unit: CourseUnit, units: CourseUnit[]
   const opener = own[0];
   if (unit.index === 0) return 'From the start';
   if (unit.prerequisites.length === 0)
-    return opener ? `When ${numbered(opener, true)} is played, open from the start` : 'Open from the start';
+    return opener
+      ? `When ${numberedMove(opener.ply, opener.san)} is played, open from the start`
+      : 'Open from the start';
   if (unit.side) return `Other replies after unit ${unitNumber(units, unit.prerequisites[0])}`;
-  if (unit.branch && opener) return `When ${numbered(opener, true)} is played`;
+  if (unit.branch && opener) return `When ${numberedMove(opener.ply, opener.san)} is played`;
   return `Carries on from unit ${unitNumber(units, unit.prerequisites[0])}`;
 }
 

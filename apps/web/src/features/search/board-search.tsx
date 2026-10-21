@@ -1,4 +1,11 @@
-import { playUci, searchAt, type OpeningIndexEntry, type SearchIndex, type ResultKind } from '@knightschool/core';
+import {
+  numberedMove,
+  type OpeningIndexEntry,
+  playUci,
+  type ResultKind,
+  searchAt,
+  type SearchIndex,
+} from '@knightschool/core';
 import { FlipHorizontal2 } from 'lucide-react';
 import { StepButtons } from '@/components/board/step-buttons';
 import { useState } from 'react';
@@ -85,9 +92,6 @@ export function BoardSearchDialog({
       return false;
     }
   }
-
-  const number =
-    query.played.length % 2 === 0 ? `${query.played.length / 2 + 1}.` : `${Math.ceil(query.played.length / 2)}...`;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -180,7 +184,7 @@ export function BoardSearchDialog({
                       className="h-8 gap-1.5 font-mono"
                       onClick={() => play(move.uci)}
                     >
-                      {number} {move.san}
+                      {numberedMove(query.played.length, move.san)}
                       <span className="font-sans text-xs font-normal text-muted-foreground">
                         {move.lines} {move.lines === 1 ? 'line' : 'lines'}
                       </span>

@@ -1,12 +1,4 @@
-import {
-  playSan,
-  START_EPD,
-  type AuthoredBuild,
-  type AuthoredProblem,
-  type CourseEntry,
-  type CourseUnit,
-  type TreeLine,
-} from '@knightschool/core';
+import { type AuthoredBuild, type AuthoredProblem, type CourseEntry, type CourseUnit } from '@knightschool/core';
 import { useEffect, useState } from 'react';
 import type { AuthoredRows } from '@/data/authored-content';
 import { useStorage } from '@/data/storage';
@@ -14,19 +6,6 @@ import { useAuthor, type DraftCourse } from './store';
 
 export const entryId = (entry: CourseEntry) => (typeof entry === 'string' ? entry : entry.id);
 export const entrySection = (entry: CourseEntry) => (typeof entry === 'string' ? undefined : entry.section);
-
-/** "4...Nf6": a move with its number. */
-export const numbered = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
-
-/** The UCI of each move of a line, for the board's last-move highlight. */
-export function ucisOf(line: TreeLine | undefined): string[] {
-  let epd = START_EPD;
-  return (line?.game.moves ?? []).map((move) => {
-    const played = playSan(epd, move.san);
-    epd = played.epd;
-    return played.uci;
-  });
-}
 
 /** "12 units: Main line (1–4), Two Knights (1–2), …": the path, unit by unit, run together by line. */
 export function unitSummary(units: CourseUnit[], title: (line: string) => string): string {

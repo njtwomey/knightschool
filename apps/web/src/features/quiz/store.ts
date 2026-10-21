@@ -1,31 +1,32 @@
 import {
-  cardFits,
-  createScheduler,
-  freePractice,
-  isQuizCard,
-  followOn,
-  lineQuestions,
-  MOVES_PER_QUESTION,
-  type MovesPerQuestion,
-  matchAnswer,
-  newCard,
-  recordQuizAnswer,
-  type Quiz,
-  nodeAt,
-  pathTo,
-  playUci,
-  planIntroductions,
-  planSession,
-  reduceAttempt,
-  recordAnswer,
-  startAttempt,
-  withPromotion,
   type Attempt,
   type Card,
+  cardFits,
+  createScheduler,
+  followOn,
+  freePractice,
+  isQuizCard,
   type LineEdge,
+  lineQuestions,
+  matchAnswer,
+  MOVES_PER_QUESTION,
+  type MovesPerQuestion,
+  newCard,
+  nodeAt,
   type OpeningContent,
+  pathTo,
+  planIntroductions,
+  planSession,
+  playUci,
+  type Quiz,
   type RatingName,
+  recordAnswer,
+  recordQuizAnswer,
+  reduceAttempt,
+  shuffle,
+  startAttempt,
   type Weighting,
+  withPromotion,
 } from '@knightschool/core';
 import type { Storage } from '@knightschool/storage';
 import { create } from 'zustand';
@@ -290,12 +291,8 @@ export const useQuiz = create<QuizState>((set, get) => {
         const scope = get().scope;
         if (scope) {
           const content = await loadOpening(scope.course);
-          const questions = lineQuestions(content, scope.line);
           // Shuffled, so the quiz is not the line played again in order.
-          for (let i = questions.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [questions[i], questions[j]] = [questions[j]!, questions[i]!];
-          }
+          const questions = shuffle(lineQuestions(content, scope.line));
           const queue = questions.map((definition) => newCard(definition, now));
           set({
             queue,

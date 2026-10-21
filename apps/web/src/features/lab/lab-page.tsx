@@ -10,10 +10,12 @@ import {
   placePiece,
   playSan,
   playUci,
+  replayUcis,
   setupFromFen,
   START_FEN,
   withPromotion,
   type PieceLetter,
+  type Played,
   type Setup,
 } from '@knightschool/core';
 import {
@@ -45,24 +47,6 @@ import { EngineLines } from '@/features/engine/engine-lines';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState } from '@/router/location';
 
-type Played = { uci: string; san: string; epd: string };
-
-/** Replays UCI moves from a start FEN, stopping at the first that does not fit. */
-function replay(startFen: string, ucis: string[]): Played[] {
-  const out: Played[] = [];
-  let epd = fenToEpd(startFen);
-  for (const uci of ucis) {
-    try {
-      const move = playUci(epd, uci);
-      out.push({ uci, san: move.san, epd: move.epd });
-      epd = move.epd;
-    } catch {
-      break;
-    }
-  }
-  return out;
-}
-
 const PIECES: PieceLetter[] = ['K', 'Q', 'R', 'B', 'N', 'P'];
 
 /**
@@ -75,7 +59,7 @@ export function LabPage() {
   const initial = useMemo(() => {
     const hash = readHashState();
     const fen = hash.fen && checkFen(hash.fen) === null ? hash.fen : START_FEN;
-    const moves = replay(fen, decodeMoves(hash.m));
+    const moves = replayUcis(fenToEpd(fen), decodeMoves(hash.m));
     const cursor = Math.min(Number(hash.c ?? moves.length) || 0, moves.length);
     return { fen, moves, cursor, side: hash.side === 'black' ? ('black' as const) : ('white' as const) };
   }, []);

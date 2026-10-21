@@ -1,4 +1,11 @@
-import { numberedLine, type LaneLayout, type MoveTree } from '@knightschool/core';
+import {
+  type LaneLayout,
+  moveNumberLabel,
+  type MoveTree,
+  numberedLine,
+  numberedMove,
+  sansOf,
+} from '@knightschool/core';
 import { Maximize, Minus, Plus } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -13,20 +20,6 @@ const HEAD = 26; // move numbers along the top
 const PAD = 12;
 const PILL_W = COL - 8;
 const PILL_H = 22;
-
-/** "5." for a White move at that ply, "5..." for Black's. */
-const moveNumber = (ply: number) => `${Math.floor((ply - 1) / 2) + 1}${(ply - 1) % 2 ? '...' : '.'}`;
-
-/** The moves from the start to a node, as SAN. */
-function trunkSans(tree: MoveTree, id: string): string[] {
-  const sans: string[] = [];
-  let node = tree.nodes.get(id);
-  while (node && node.san) {
-    sans.unshift(node.san);
-    node = node.parent ? tree.nodes.get(node.parent) : undefined;
-  }
-  return sans;
-}
 
 /**
  * A course's lines drawn like a git history turned on its side: one column per move, so a move number lines up down
@@ -66,7 +59,7 @@ export function LaneTree({
   zoom?: number;
 }) {
   const top = tree.nodes.get(layout.top)!;
-  const trunk = top.ply === 0 ? 'Start' : numberedLine(trunkSans(tree, layout.top));
+  const trunk = top.ply === 0 ? 'Start' : numberedLine(sansOf(tree, layout.top));
   const trunkWidth = Math.max(PILL_W, trunk.length * 6.6 + 16);
   const firstCol = PAD + trunkWidth + 16; // where column 1 starts
   const cx = (row: number) => (row === 0 ? PAD + trunkWidth / 2 : firstCol + (row - 1) * COL + COL / 2);
@@ -193,7 +186,7 @@ export function LaneTree({
                   : 'fill-muted-foreground font-mono text-[10px]'
               }
             >
-              {moveNumber(layout.firstPly + row)}
+              {moveNumberLabel(layout.firstPly + row - 1)}
             </text>
           ))}
 
@@ -279,7 +272,7 @@ export function LaneTree({
                 key={place.id}
                 role="button"
                 tabIndex={0}
-                aria-label={isTop ? trunk : `${moveNumber(node.ply)}${node.san}`}
+                aria-label={isTop ? trunk : numberedMove(node.ply - 1, node.san!)}
                 aria-pressed={focused}
                 opacity={on ? 1 : 0.28}
                 className="cursor-pointer outline-none"

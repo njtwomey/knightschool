@@ -1,17 +1,18 @@
 import {
   gradeGuess,
   guessPoints,
+  type GuessResult,
   guessSuggestions,
   guessTargets,
+  type GuessTargets,
   guessWeight,
-  popularityWeight,
   lastResults,
   lineSteps,
   newId,
-  searchAt,
-  type GuessResult,
-  type GuessTargets,
   type OpeningIndexEntry,
+  pickWeighted,
+  popularityWeight,
+  searchAt,
   type SearchIndex,
   type Weighting,
 } from '@knightschool/core';
@@ -111,8 +112,7 @@ function candidates(from: Deck) {
 function pick(from: Deck, asked: Set<string>): Question | null {
   const pool = candidates(from).filter((candidate) => !asked.has(candidate.epd));
   for (let attempt = 0; attempt < 30 && pool.length > 0; attempt++) {
-    let roll = Math.random() * pool.reduce((sum, candidate) => sum + candidate.weight, 0);
-    const chosen = pool.find((candidate) => (roll -= candidate.weight) < 0) ?? pool[pool.length - 1]!;
+    const chosen = pickWeighted(pool, (candidate) => candidate.weight, 1)[0]!;
     const targets = guessTargets(from.search, chosen.epd, from.courses);
     if (targets.openings.length === 0) continue;
     const found = searchAt(from.search, chosen.epd, 'both');

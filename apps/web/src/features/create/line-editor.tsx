@@ -1,4 +1,4 @@
-import { MOVE_TAGS, type LineKind, type TrapKind } from '@knightschool/core';
+import { type LineKind, MOVE_TAGS, numberedMove, runMove, type TrapKind, uciLine } from '@knightschool/core';
 import { Camera, GitBranch, Scissors, Trash2, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
@@ -24,7 +24,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { navigate } from '@/router/location';
 import { GroupSelect } from './group-select';
-import { numbered, ucisOf, useDraft } from './helpers';
+import { useDraft } from './helpers';
 import { draftChapter, fullLine, positionsOf, useAuthor, type DraftCourse } from './store';
 import { createHref, lineEditHref } from '@/router/hrefs';
 
@@ -47,7 +47,7 @@ export function LineEditor({ course }: { course: DraftCourse }) {
   const line = fullLine(build, lineId);
   const own = lineId ? draftChapter(rows, lineId) : undefined;
   const positions = useMemo(() => positionsOf(line), [line]);
-  const ucis = useMemo(() => ucisOf(line), [line]);
+  const ucis = useMemo(() => uciLine(line), [line]);
 
   // Arrow keys step through the line, unless typing.
   useEffect(() => {
@@ -167,7 +167,7 @@ export function LineEditor({ course }: { course: DraftCourse }) {
           </div>
           <p className="text-sm text-muted-foreground" aria-live="polite">
             {branching !== null
-              ? `Play the first move of the new line, after ${branching === 0 ? 'the start' : numbered(branching - 1, moves[branching - 1]!.san)}.`
+              ? `Play the first move of the new line, after ${branching === 0 ? 'the start' : numberedMove(branching - 1, moves[branching - 1]!.san)}.`
               : ply === length
                 ? mine
                   ? 'Play a move on the board to add it to the line.'
@@ -187,7 +187,7 @@ export function LineEditor({ course }: { course: DraftCourse }) {
           {ply > 0 && (
             <MoveNote
               key={`${lineId}:${ply}`}
-              label={numbered(ply - 1, moves[ply - 1]!.san)}
+              label={numberedMove(ply - 1, moves[ply - 1]!.san)}
               comment={moves[ply - 1]!.comment ?? ''}
               tags={moves[ply - 1]!.tags ?? []}
               editable={mine && ply - 1 >= line.startPly}
@@ -227,7 +227,7 @@ function MoveList({
             onClick={() => useAuthor.getState().setPly(i + 1)}
             title={i + 1 === snapshot ? 'The line is pictured here' : undefined}
           >
-            {i % 2 === 0 || i === 0 ? numbered(i, san) : san}
+            {runMove(i, san, i === 0)}
             {tags[i]!.map((tag) => (
               <Badge key={tag} variant="outline" className="ml-1 px-1 py-0 font-sans text-[10px]">
                 {tag}

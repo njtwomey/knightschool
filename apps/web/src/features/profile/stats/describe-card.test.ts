@@ -36,13 +36,13 @@ const card = (epd: string, expectedUci: string, id = `t:${epd}`) =>
 describe('describeCard', () => {
   it('describes a move in the position it is asked in', () => {
     const afterNc6 = Object.values(content.nodes).find((n) => n.moves.some((m) => m.san === 'Bc4'))!;
-    expect(describeCard(content, card(afterNc6.epd, 'f1c4'))).toBe('after 1. e4 e5 2. Nf3 Nc6, play 3. Bc4');
+    expect(describeCard(content, card(afterNc6.epd, 'f1c4'))).toBe('after 1. e4 e5 2. Nf3 Nc6, play 3.Bc4');
     expect(describeCard(content, card(content.opening.rootEpd, 'e2e4'))).toBe('the first move: e4');
   });
 
   it('numbers a Black move with an ellipsis', () => {
     const afterE4 = Object.values(content.nodes).find((n) => n.moves.some((m) => m.san === 'e5'))!;
-    expect(describeCard(content, card(afterE4.epd, 'e7e5'))).toBe('after 1. e4, play 1... e5');
+    expect(describeCard(content, card(afterE4.epd, 'e7e5'))).toBe('after 1. e4, play 1...e5');
   });
 
   it('gives the question for a quiz card', () => {

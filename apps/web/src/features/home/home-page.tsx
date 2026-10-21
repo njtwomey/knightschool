@@ -1,5 +1,5 @@
 import { Page } from '@/components/page';
-import { playUci, START_EPD } from '@knightschool/core';
+import { numberedMove, replayUcis, START_EPD } from '@knightschool/core';
 import { ArrowRight, Library, Search, Telescope, Timer } from 'lucide-react';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
@@ -30,14 +30,14 @@ const SHOWCASE: { uci: string; why: string }[] = [
 /** The showcase line as positions with their move text, worked out once. */
 function useShowcase() {
   return useMemo(() => {
-    let epd = START_EPD;
-    const frames = [{ epd, label: 'Start', why: 'The usual starting position.' }];
-    SHOWCASE.forEach(({ uci, why }, i) => {
-      const move = playUci(epd, uci);
-      epd = move.epd;
-      frames.push({ epd, label: `${Math.floor(i / 2) + 1}${i % 2 ? '...' : '.'} ${move.san}`, why });
-    });
-    return frames;
+    const played = replayUcis(
+      START_EPD,
+      SHOWCASE.map((move) => move.uci),
+    );
+    return [
+      { epd: START_EPD, label: 'Start', why: 'The usual starting position.' },
+      ...played.map((move, i) => ({ epd: move.epd, label: numberedMove(i, move.san), why: SHOWCASE[i]!.why })),
+    ];
   }, []);
 }
 

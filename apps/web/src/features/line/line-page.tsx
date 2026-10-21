@@ -1,4 +1,12 @@
-import { namedPly, variantPath, type LineEdge, type OpeningContent, type Variant } from '@knightschool/core';
+import {
+  type LineEdge,
+  namedPly,
+  numberedMove,
+  type OpeningContent,
+  runMove,
+  type Variant,
+  variantPath,
+} from '@knightschool/core';
 import { BookOpen, GitBranch, GitFork, ListChecks, PenLine, Target } from 'lucide-react';
 import { EcoLink } from '@/components/eco-link';
 import { MoveTags } from '@/components/move-tags';
@@ -52,9 +60,6 @@ const KIND: Record<string, string> = {
   'for-us': 'Trap to spring',
   'against-us': 'Trap to avoid',
 };
-
-const moveLabel = (ply: number, san: string, numbered: boolean) =>
-  ply % 2 === 0 ? `${ply / 2 + 1}. ${san}` : numbered ? `${Math.floor(ply / 2) + 1}... ${san}` : san;
 
 /** The line as paragraphs: a run of moves, then the comment on the last of them. */
 type Paragraph = { moves: { ply: number; san: string; tags?: string[] }[]; comment?: string };
@@ -254,7 +259,7 @@ function About({
           <div className="flex items-start justify-between gap-2">
             <p className="text-sm">
               <span className="font-medium">
-                {ply === 0 ? 'The start' : `After ${moveLabel(ply - 1, path[ply - 1]!.san, true)}`}
+                {ply === 0 ? 'The start' : `After ${numberedMove(ply - 1, path[ply - 1]!.san)}`}
               </span>
               {positionName && <span className="text-muted-foreground">: {positionName}</span>}
             </p>
@@ -390,7 +395,7 @@ function MoveRun({
             className={`h-auto px-0.5 font-mono font-medium hover:underline ${move.ply + 1 === ply ? 'bg-secondary' : ''}`}
             onClick={() => onPick(move.ply + 1)}
           >
-            {moveLabel(move.ply, move.san, i === 0)}
+            {runMove(move.ply, move.san, i === 0)}
           </Button>
           <MoveTags tags={move.tags} className="ml-0.5" />
         </span>

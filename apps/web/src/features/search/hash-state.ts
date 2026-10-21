@@ -1,5 +1,5 @@
-import { playUci, START_EPD, type CatalogFilter, type ResultKind, type SearchScope } from '@knightschool/core';
-import type { BoardQuery, Played } from './board-query';
+import { replayUcis, START_EPD, type CatalogFilter, type ResultKind, type SearchScope } from '@knightschool/core';
+import type { BoardQuery } from './board-query';
 import { decodeMoves, encodeMoves, type HashParams } from '@/router/hash';
 
 const ROLES: CatalogFilter['role'][] = ['all', 'play', 'against'];
@@ -21,17 +21,7 @@ export function filterFromHash(params: HashParams): CatalogFilter {
 
 /** The moves played on the board search, rebuilt (with SAN and position) from the UCI list in the hash. */
 export function boardQueryFromHash(params: HashParams): BoardQuery {
-  const played: Played[] = [];
-  let epd = START_EPD;
-  for (const uci of decodeMoves(params.bm)) {
-    try {
-      const move = playUci(epd, uci);
-      played.push({ uci, san: move.san, epd: move.epd });
-      epd = move.epd;
-    } catch {
-      break; // an illegal move ends the list: the rest cannot follow it
-    }
-  }
+  const played = replayUcis(START_EPD, decodeMoves(params.bm)); // an illegal move ends the list
   return { played, kind: KINDS.find((kind) => kind === params.bk) ?? 'both' };
 }
 

@@ -12,9 +12,13 @@ export const moveNumberLabel = (ply: number) => `${moveNumber(ply)}${ply % 2 ? '
 /** "1.e4", "1...e5": a move with its number, from the plies before it. */
 export const numberedMove = (ply: number, san: string) => `${moveNumberLabel(ply)}${san}`;
 
+/**
+ * One move of a run written move by move (a list where each move is its own element): "4. b4" for White, "Bxb4" for
+ * Black, or "4... Bxb4" when it opens the run.
+ */
+export const runMove = (ply: number, san: string, first = false) =>
+  first || ply % 2 === 0 ? `${moveNumberLabel(ply)} ${san}` : san;
+
 /** Moves as numbered text, "4. b4 Bxb4 5. c3", where the first is played after `from` plies. */
-export function numberedLine(sans: readonly string[], from = 0): string {
-  return sans
-    .map((san, index) => (index === 0 || (from + index) % 2 === 0 ? `${moveNumberLabel(from + index)} ${san}` : san))
-    .join(' ');
-}
+export const numberedLine = (sans: readonly string[], from = 0): string =>
+  sans.map((san, index) => runMove(from + index, san, index === 0)).join(' ');

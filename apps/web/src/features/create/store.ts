@@ -1,37 +1,38 @@
 import {
   appendMove,
+  type AuthoredBuild,
+  type AuthoredChange,
   buildAuthored,
   chapterText,
   checkUnitOverrides,
-  newChapter,
-  opponentMove,
-  projectCourse,
-  unitOrderFor,
-  fittingPlacements,
-  courseUnits,
-  type UnitOverrides,
-  readContribution,
-  CourseManifest,
   type Contribution,
-  ownOpeningId,
+  type CourseEntry,
+  CourseManifest,
+  courseUnits,
+  fittingPlacements,
   isOwnOpening,
+  type LineKind,
+  newChapter,
+  numberedMove,
+  opponentMove,
+  ownOpeningId,
+  type PgnGame,
   playSan,
+  projectCourse,
   readChapter,
+  readContribution,
   setHeader,
   setMoveNote,
-  slugify,
-  startHeader,
-  START_EPD,
-  truncateMoves,
-  uniqueId,
-  type AuthoredBuild,
-  type AuthoredChange,
-  type CourseEntry,
-  type LineKind,
-  type PgnGame,
   type Side,
+  slugify,
+  START_EPD,
+  startHeader,
   type TrapKind,
   type TreeLine,
+  truncateMoves,
+  uniqueId,
+  unitOrderFor,
+  type UnitOverrides,
 } from '@knightschool/core';
 import { undoTarget } from '@knightschool/storage';
 import { create } from 'zustand';
@@ -138,7 +139,6 @@ const withSection = (entry: CourseEntry, section: string | undefined): CourseEnt
   const said = Object.keys(next).filter((key) => key !== 'id' && !(key === 'alternative' && next[key] === false));
   return said.length === 0 ? (next.id as string) : (next as CourseEntry);
 };
-const moveText = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
 
 /** The live authored courses, parsed loosely: one that does not parse is shown as a problem by the build instead. */
 export function draftCourses(rows: AuthoredRows): DraftCourse[] {
@@ -496,8 +496,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
               branching - 1,
             )
           : undefined;
-        const title = `${line.game.tags.Variation ?? 'Line'}, ${moveText(branching, san)}`;
-        const id = uniqueId(slugify(`${course.id} ${moveText(branching, san)}`), takenIds());
+        const title = `${line.game.tags.Variation ?? 'Line'}, ${numberedMove(branching, san)}`;
+        const id = uniqueId(slugify(`${course.id} ${numberedMove(branching, san)}`), takenIds());
         const chapter = appendMove(
           newChapter({
             title,
@@ -552,9 +552,9 @@ export const useAuthor = create<AuthorState>((set, get) => {
       }
       const saved = await save(
         [chapterChange(lineId, appendMove(own, from, san), line.startPly, prefixOf(line), side)],
-        `Played ${moveText(ply, san)}.`,
+        `Played ${numberedMove(ply, san)}.`,
         false,
-        `play ${moveText(ply, san)} in ${titleOf(lineId)}`,
+        `play ${numberedMove(ply, san)} in ${titleOf(lineId)}`,
       );
       if (saved) set({ ply: ply + 1 });
     },
@@ -570,7 +570,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         [chapterChange(lineId, truncateMoves(own, keep), line.startPly, prefixOf(line), course.manifest.side)],
         `Deleted the moves after this position.`,
         true,
-        `delete the moves of ${titleOf(lineId)} after ${ply > 0 ? moveText(ply - 1, line.game.moves[ply - 1]!.san) : 'the start'}`,
+        `delete the moves of ${titleOf(lineId)} after ${ply > 0 ? numberedMove(ply - 1, line.game.moves[ply - 1]!.san) : 'the start'}`,
       );
     },
 
@@ -591,7 +591,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         ],
         'Saved the note.',
         false,
-        `note ${moveText(ply - 1, line.game.moves[ply - 1]!.san)} in ${titleOf(lineId)}`,
+        `note ${numberedMove(ply - 1, line.game.moves[ply - 1]!.san)} in ${titleOf(lineId)}`,
       );
     },
 
@@ -623,7 +623,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         false,
         ply === undefined || ply === 0
           ? `picture ${titleOf(lineId)} at its end`
-          : `picture ${titleOf(lineId)} after ${moveText(ply - 1, line.game.moves[ply - 1]!.san)}`,
+          : `picture ${titleOf(lineId)} after ${numberedMove(ply - 1, line.game.moves[ply - 1]!.san)}`,
       );
     },
 

@@ -1,23 +1,24 @@
 import {
-  courseUnits,
-  pathSteps,
-  lineSteps,
-  unitStretches,
+  type Attempt,
   type CourseUnit,
-  type UnitStretch,
-  pathFromUcis,
+  courseUnits,
+  type LineStep,
+  lineSteps,
   nextBranchMove,
   nodeAt,
+  type OpeningContent,
+  pathFromUcis,
+  pathSteps,
+  type Played,
+  playUci,
+  type RatingName,
+  reduceAttempt,
   RESERVED_LINE_ID,
   type Rng,
-  reduceAttempt,
   startAttempt,
-  playUci,
+  type UnitStretch,
+  unitStretches,
   withPromotion,
-  type Attempt,
-  type LineStep,
-  type OpeningContent,
-  type RatingName,
 } from '@knightschool/core';
 import { create } from 'zustand';
 import { loadOpening } from '@/data/content';
@@ -52,7 +53,6 @@ type Phase = 'idle' | 'loading' | 'playing' | 'complete' | 'error';
 type PlayScope = { unit: CourseUnit; ref: UnitRef; parts: UnitStretch[]; part: number };
 
 /** A step off the line, played while exploring in Learn. */
-type Explored = { uci: string; san: string; epd: string };
 
 type PlayState = {
   phase: Phase;
@@ -70,7 +70,7 @@ type PlayState = {
   opponentThinking: boolean;
   results: { index: number; rating: RatingName }[];
   /** Learn only: moves played off the line to see what happens. Null while following the line. */
-  explore: Explored[] | null;
+  explore: Played[] | null;
   sessionId: string;
   startedAt: number;
   /** Set when playing one unit of the study path rather than a whole line. */
@@ -126,7 +126,7 @@ const FRESH = {
   badge: null,
   opponentThinking: false,
   results: [] as PlayState['results'],
-  explore: null as Explored[] | null,
+  explore: null as Played[] | null,
 };
 
 export const usePlay = create<PlayState>((set, get) => {

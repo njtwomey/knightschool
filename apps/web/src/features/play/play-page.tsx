@@ -1,5 +1,5 @@
 import { Page } from '@/components/page';
-import { explainMove, type LineStep } from '@knightschool/core';
+import { explainMove, type LineStep, numberedMove } from '@knightschool/core';
 import { EcoLink } from '@/components/eco-link';
 import { BookOpen, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'lucide-react';
 import { useEffect } from 'react';
@@ -42,8 +42,7 @@ const arrowFor = (uci: string) => ({
   endSquare: uci.slice(2, 4),
   color: 'rgb(21 128 61 / 0.85)',
 });
-const label = (step: LineStep, index: number) =>
-  `${Math.floor(index / 2) + 1}${index % 2 ? '...' : '.'} ${step.edge.san}`;
+const label = (step: LineStep, index: number) => numberedMove(index, step.edge.san);
 
 type Props = { course: string; line: string; mode: PlayMode; unit?: UnitRef };
 
