@@ -16,7 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { loadOpening } from '@/data/content';
 import { useStorage } from '@/data/storage';
-import { lastDays, localDay, previousDay } from '@/data/training-settings';
+import { lastDays, localDay, previousDay } from '@/lib/days';
 import { useCatalog } from '@/data/catalog-store';
 import { describeCard } from './describe-card';
 

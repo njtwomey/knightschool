@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useStorage } from '@/data/storage';
 import { to } from '@/router/location';
 import { createExplorer, getToken } from './service';
+import { profileHref } from '@/router/hrefs';
 
 const share = (part: number, whole: number) => (whole === 0 ? 0 : Math.round((part / whole) * 100));
 
@@ -38,7 +39,7 @@ export function ExplorerPanel({ epd, onPlay }: { epd: string; onPlay?: (uci: str
         </p>
         <p className="text-muted-foreground">
           See the moves players at 1000 to 1600 choose from this position, and how those games go.{' '}
-          <a href={to('/profile/settings')} className="font-medium text-foreground underline underline-offset-4">
+          <a href={to(profileHref('settings'))} className="font-medium text-foreground underline underline-offset-4">
             Add your Lichess token
           </a>{' '}
           to turn it on.

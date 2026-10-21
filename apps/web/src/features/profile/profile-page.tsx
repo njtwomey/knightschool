@@ -1,23 +1,26 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { OverviewPage } from '@/features/overview/overview-page';
-import { SettingsPage } from '@/features/settings/settings-page';
-import { StatsPage } from '@/features/stats/stats-page';
-import type { ProfileTab } from '@/router/route';
+import { OverviewPage } from '@/features/profile/overview/overview-page';
+import { SettingsPage } from '@/features/profile/settings/settings-page';
+import { StatsPage } from '@/features/profile/stats/stats-page';
+import { profileHref, type ProfileTab } from '@/router/hrefs';
 import { navigate } from '@/router/location';
+import { PROFILE_TABS } from './tabs';
 
 /** You: what is due and how far through your courses you are, how you are doing, and your settings. One page, three tabs. */
 export function ProfilePage({ tab }: { tab: ProfileTab }) {
   return (
     <Tabs
       value={tab}
-      onValueChange={(value) => navigate(value === 'overview' ? '/profile' : `/profile/${value}`, { replace: true })}
+      onValueChange={(value) => navigate(profileHref(value as ProfileTab), { replace: true })}
       className="gap-0"
     >
       <div className="mx-auto w-full max-w-6xl px-4 pt-6">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="stats">Stats</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          {PROFILE_TABS.map((item) => (
+            <TabsTrigger key={item.tab} value={item.tab}>
+              {item.name}
+            </TabsTrigger>
+          ))}
         </TabsList>
       </div>
       <TabsContent value="overview">

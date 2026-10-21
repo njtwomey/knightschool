@@ -25,6 +25,7 @@ import { WeightingSelect } from '@/components/weighting-select';
 import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
 import { rushCourse, rushSource, SPEED_DELAYS, useSpeed, type SpeedConfig } from './store';
+import { profileHref } from '@/router/hrefs';
 
 /** A stopwatch redrawn ten times a second, only while a line is being played. */
 function useNow(running: boolean): number {
@@ -535,7 +536,7 @@ function Summary() {
           <Settings2 aria-hidden /> Change the set-up
         </Button>
         <Button asChild variant="ghost">
-          <a href={to('/profile/stats')}>Stats</a>
+          <a href={to(profileHref('stats'))}>Stats</a>
         </Button>
       </div>
     </Page>

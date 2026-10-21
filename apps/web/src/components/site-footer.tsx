@@ -1,10 +1,11 @@
 import { to } from '@/router/location';
+import { profileHref } from '@/router/hrefs';
 const LINKS = [
   { href: to('/courses'), label: 'Courses' },
   { href: to('/search'), label: 'Search' },
   { href: to('/quiz'), label: 'Quiz' },
-  { href: to('/profile/stats'), label: 'Stats' },
-  { href: to('/profile/settings'), label: 'Settings' },
+  { href: to(profileHref('stats')), label: 'Stats' },
+  { href: to(profileHref('settings')), label: 'Settings' },
   { href: to('/lab'), label: 'Board lab' },
   { href: to('/credits'), label: 'Credits and licences' },
 ];

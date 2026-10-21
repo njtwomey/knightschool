@@ -31,7 +31,7 @@ import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
 import { MissList } from './miss-list';
 import { currentQuestion, DUE, useQuiz, type LineScope, type QuizQuestion } from './store';
 import { to } from '@/router/location';
-import { lineHref } from '@/router/hrefs';
+import { lineHref, profileHref } from '@/router/hrefs';
 
 /** The moves that reached a position in a course; empty if it is not on a line. */
 function movesInto(content: OpeningContent, epd: string): LineEdge[] {
@@ -304,7 +304,7 @@ function Summary({ results }: { results: readonly string[] }) {
             <Button onClick={() => void useQuiz.getState().start()}>Another ten</Button>
           )}
           <Button asChild variant={useQuiz.getState().source !== DUE ? 'outline' : 'default'}>
-            <a href={to('/profile')}>Back to your overview</a>
+            <a href={to(profileHref())}>Back to your overview</a>
           </Button>
           <Button asChild variant="outline">
             <a href={to('/search')}>Search</a>

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useStorage } from '@/data/storage';
 import { useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
-import { lineHref } from '@/router/hrefs';
+import { lineHref, profileHref } from '@/router/hrefs';
 
 // The Giuoco Piano: a line worth watching, played over and over on the front page, with the idea of each move.
 const SHOWCASE: { uci: string; why: string }[] = [
@@ -186,14 +186,14 @@ export function HomePage() {
       <section className="grid gap-3" aria-label="Your progress">
         <div className="flex items-baseline justify-between">
           <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">Where you are</h2>
-          <a href={to('/profile')} className="text-sm font-medium hover:underline">
+          <a href={to(profileHref())} className="text-sm font-medium hover:underline">
             Open your overview
           </a>
         </div>
         <div className="grid grid-cols-3 gap-3">
           <Tile value={due === null ? '–' : String(due)} label="due in the quiz" href={to('/quiz')} />
-          <Tile value={String(moves)} label="moves learned" href={to('/profile')} />
-          <Tile value={String(courses)} label="courses started" href={to('/profile')} />
+          <Tile value={String(moves)} label="moves learned" href={to(profileHref())} />
+          <Tile value={String(courses)} label="courses started" href={to(profileHref())} />
         </div>
       </section>
 

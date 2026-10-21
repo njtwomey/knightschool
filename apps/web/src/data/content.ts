@@ -10,7 +10,7 @@ import {
 } from '@knightschool/core';
 import { z } from 'zod';
 import { fetchContent } from './fetch-content';
-import { authoredIndexEntries, authoredTreeGraph, loadAuthoredBuild } from './authored';
+import { authoredIndexEntries, authoredTreeGraph, loadAuthoredBuild } from './authored-content';
 
 let shippedIndex: Promise<OpeningIndexEntry[]> | undefined;
 
@@ -25,7 +25,7 @@ export function loadShippedIndex(): Promise<OpeningIndexEntry[]> {
 
 const shippedIds = async () => (await loadShippedIndex()).map((entry) => entry.id);
 
-/** Every course: the shipped ones, then the ones authored in the app (`data/authored.ts`). */
+/** Every course: the shipped ones, then the ones authored in the app (`data/authored-content.ts`). */
 export async function loadIndex(): Promise<OpeningIndexEntry[]> {
   const shipped = await loadShippedIndex();
   const authored = await loadAuthoredBuild(async () => shipped.map((entry) => entry.id)).catch(() => null);

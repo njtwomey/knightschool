@@ -48,6 +48,7 @@ import { HomePage } from '@/features/home/home-page';
 import { ProfilePage } from '@/features/profile/profile-page';
 import { parseRoute, type Route } from '@/router/route';
 import { navigate, to, usePathname } from '@/router/location';
+import { profileHref } from '@/router/hrefs';
 
 export function App() {
   const pathname = usePathname();
@@ -186,18 +187,18 @@ export function App() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-44">
               <DropdownMenuItem asChild>
-                <a href={to('/profile')}>
+                <a href={to(profileHref())}>
                   <LayoutDashboard aria-hidden /> Overview
                 </a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <a href={to('/profile/stats')}>
+                <a href={to(profileHref('stats'))}>
                   <BarChart3 aria-hidden /> Stats
                 </a>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <a href={to('/profile/settings')}>
+                <a href={to(profileHref('settings'))}>
                   <Settings aria-hidden /> Settings
                 </a>
               </DropdownMenuItem>

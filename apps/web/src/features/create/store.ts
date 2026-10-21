@@ -35,8 +35,8 @@ import {
 } from '@knightschool/core';
 import { undoTarget } from '@knightschool/storage';
 import { create } from 'zustand';
-import { loadAuthoredBuild, loadAuthoredRows, loadShippedChapters, type AuthoredRows } from '@/data/authored';
-import { loadUndoLabels, saveAuthored, undoAuthored, type AuthoredChangeInput } from '@/data/authoring';
+import { loadAuthoredBuild, loadAuthoredRows, loadShippedChapters, type AuthoredRows } from '@/data/authored-content';
+import { loadUndoLabels, saveAuthored, undoAuthored, type AuthoredChangeInput } from '@/data/authored-edits';
 import { reminderToExport } from '@/data/backup';
 import { loadShippedIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';

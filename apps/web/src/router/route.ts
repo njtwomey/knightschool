@@ -5,11 +5,9 @@ import {
   type CourseTab,
   type CreateTab,
   type LineTab,
+  type ProfileTab,
   type UnitRef,
 } from './hrefs';
-
-/** Profile's tabs: Overview, Stats and Settings. */
-export type ProfileTab = 'overview' | 'stats' | 'settings';
 
 export type Route =
   | { page: 'home' }

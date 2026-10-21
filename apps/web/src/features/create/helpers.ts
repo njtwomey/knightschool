@@ -8,7 +8,7 @@ import {
   type TreeLine,
 } from '@knightschool/core';
 import { useEffect, useState } from 'react';
-import type { AuthoredRows } from '@/data/authored';
+import type { AuthoredRows } from '@/data/authored-content';
 import { useStorage } from '@/data/storage';
 import { useAuthor, type DraftCourse } from './store';
 

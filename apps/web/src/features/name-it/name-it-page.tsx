@@ -17,7 +17,7 @@ import { useCatalog } from '@/data/catalog-store';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
 import { allSuggestions, SESSION_LENGTH, sessionPoints, useNameIt, type Outcome } from './store';
-import { lineHref } from '@/router/hrefs';
+import { lineHref, profileHref } from '@/router/hrefs';
 
 /** "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts. */
 export function NameItPage() {
@@ -268,10 +268,10 @@ function Summary({ outcomes }: { outcomes: Outcome[] }) {
       <div className="flex flex-wrap gap-2">
         <Button onClick={() => void useNameIt.getState().start()}>Another ten</Button>
         <Button asChild variant="outline">
-          <a href={to('/profile')}>Overview</a>
+          <a href={to(profileHref())}>Overview</a>
         </Button>
         <Button asChild variant="outline">
-          <a href={to('/profile/stats')}>Stats</a>
+          <a href={to(profileHref('stats'))}>Stats</a>
         </Button>
       </div>
     </Page>
