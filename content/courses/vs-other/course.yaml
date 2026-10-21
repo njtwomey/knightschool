@@ -6,6 +6,15 @@ trigger: '1. e4'
 summary: >-
   One short answer to each uncommon reply to 1.e4: the Pirc and Modern, Alekhine, Nimzowitsch, Owen and the odd flank
   moves. Each is a plain setup with a plan you can follow once the opponent leaves the book.
+about:
+  idea: >-
+    These defences let White have the centre, at least for a while. White takes it with pawns on e4 and d4, develops
+    quickly and castles. The opponent's plan is to undermine that centre later, so White's job is simply to keep it well
+    protected.
+  risks: >-
+    The danger is over-reaching. The Alekhine (1...Nf6) invites White's pawns forward so that they can be attacked, and
+    the Pirc and Modern give up the centre on purpose and then hit it with ...c5 or ...e5. Pushing pawns too far,
+    chasing pieces with them, or bringing the queen out early turns White's big centre into a target.
 plans:
   - Take the centre with e4 and d4, then develop; do not chase pawns or send the queen out early.
   - Against Pirc and Modern play Be3, Qd2, f3 and Bh6, then push the h-pawn.

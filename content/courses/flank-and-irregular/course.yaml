@@ -8,6 +8,15 @@ summary: >-
   When White does not open with e4 or d4, Black plays the same few moves every time: ...Nf6, ...e6, ...d5, ...Be7,
   ...O-O, then ...c5 and ...Nc6. Most of these games turn into a Queen's Gambit Declined or a quiet King's Indian
   Attack, and the odd ones (the Bird, the Grob) get a short answer each.
+about:
+  idea: >-
+    White's quiet first moves threaten nothing, so Black does not need theory. One sound setup puts pawns on d5 and e6,
+    develops the pieces, castles and only then strikes with ...c5, which gives Black a full share of the centre and a
+    comfortable game against nearly everything.
+  risks: >-
+    The risk is playing on autopilot. Flank openings often put a bishop on g2 or b2 to aim down the long diagonal, so a
+    loose pawn on b7 or a rook left on a8 can drop. Some odd first moves, such as the Grob (1.g4), set early traps for a
+    careless reply, so read their short lines.
 plans:
   - Build the same setup against everything - ...Nf6, ...e6, ...d5, ...Be7, castle - and do not worry about the move
     order.

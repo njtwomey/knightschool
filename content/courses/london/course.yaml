@@ -7,6 +7,18 @@ trigger: '1. d4'
 summary: >-
   One White setup against almost everything: d4, Bf4, e3, c3 and knights to d2 and f3. Fewer lines to learn, and the
   plans repeat from game to game, so it is the alternative to a full 1.d4 repertoire.
+about:
+  idea: >-
+    The London is a system: the same piece placement against nearly every Black setup, so you spend your time on plans
+    rather than move orders. The pawns on c3, d4 and e3 make a centre that is very hard to break, and with the bishop
+    outside it on f4 White gets a safe game, a strong knight on e5 and chances of a slow kingside attack.
+  risks: >-
+    It is solid rather than ambitious, so a well-prepared Black equalises easily and you win by outplaying the opponent
+    later. With the bishop gone from c1 the pawn on b2 has no defender, which is why ...c5 and ...Qb6 need an answer
+    straight away. Playing the same moves without looking can cost material, for example when ...Nh5 hunts the bishop on
+    f4.
+  origin: >-
+    Named after the London tournament of 1922, where several of the leading players used it.
 plans:
   - Put the bishop on f4 before playing e3, then build the pawn chain with e3, c3 and d4. Retreat the bishop to g3, not
     h2.

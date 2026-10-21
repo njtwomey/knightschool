@@ -7,6 +7,16 @@ trigger: '1. d4 d5'
 summary: >-
   The London System is the most common way 1.d4 d5 continues at club level. This course gives Black one plan against it:
   ...c5, ...Nc6 and ...Qb6 to hit b2, and ...a6 against the Jobava version.
+about:
+  idea: >-
+    Once the London bishop leaves c1 the pawn on b2 has no defender, and d4 is held only by pawns and the knight on f3.
+    Black hits d4 with ...c5 and ...Nc6 and b2 with ...Qb6, so White must react instead of building the usual setup on
+    autopilot.
+  risks: >-
+    Played slowly, with ...e6 before the c8 bishop is out or no ...c5 at all, Black gets the cramped position the London
+    hopes for, and a white knight on e5 leads a kingside attack. Taking on b2 is only safe when the queen can get out
+    again, so look for Nb5 and Rb1 first. Against the Jobava version (2.Nc3 and Bf4) a knight on b5 aims at c7, which is
+    why ...a6 matters.
 plans:
   - Hit d4 at once with ...c5 and ...Nc6; the London bishop on f4 does not guard it.
   - Put the queen on b6 to attack b2, and trade queens if White offers, because the open a-file is Black's.

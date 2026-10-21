@@ -1,3 +1,5 @@
+import type { Motif, Side } from '@knightschool/core';
+
 /** What each label on the Browse page means, shown on hover. One place, so cards and filters say the same thing. */
 export const TIER_HINT = {
   1: 'Tier 1, study first: the openings you will meet most often. Start here.',
@@ -36,6 +38,56 @@ export const TRAP_HINT = {
     'A trap to avoid: the opponent tries a trick, and the natural move is a mistake. You learn the safe move.',
   'for-us': 'A trap you can spring: if the opponent slips, here is how to punish it. Asked as a quiz question.',
 } as const;
+
+/**
+ * The line tags (from each PGN's header), one sentence per value, written for a beginner. `Risk` is about the
+ * learner's own side: how badly a natural slip can cost them.
+ */
+export const RISK_HINT = {
+  low: 'Low risk: a slip usually costs only a little time. A safe line to play while you are still learning it.',
+  medium:
+    'Medium risk: there are a few moves you must know. A natural-looking slip can lose a pawn or a piece, so read the notes.',
+  high: 'High risk: sharp and forcing. One wrong move can lose the game quickly, so know the line well before you play it.',
+} as const;
+
+export const CHARACTER_HINT = {
+  solid: 'Solid: sound and safe, with few weaknesses. Hard for the opponent to attack.',
+  positional: 'Positional: the plan is about pawn structure and good squares rather than quick attacks.',
+  sharp: 'Sharp: the position gets complicated quickly, and one slip can decide the game.',
+  tactical: 'Tactical: the play is about concrete tricks such as forks and pins, so calculate before you move.',
+  gambit: 'Gambit: a pawn (sometimes more) is offered in return for faster development or an attack.',
+} as const;
+
+export const TRICK_HINT: Record<Motif, string> = {
+  trap: 'Trap: a natural-looking move in this line loses material or the game. The notes show which one.',
+  fork: 'Fork: one piece attacks two things at once, so one of them is lost.',
+  pin: 'Pin: a piece cannot move without exposing a more valuable piece, or the king, behind it.',
+  skewer: 'Skewer: a valuable piece is attacked and, when it moves away, the piece behind it is taken.',
+  'discovered-attack':
+    'Discovered attack: one piece moves out of the way and uncovers an attack by the piece behind it.',
+  'hanging-piece': 'Hanging piece: a piece left without a defender, which can simply be taken.',
+  'back-rank': 'Back-rank mate: a rook or queen mates a king shut in behind its own pawns.',
+  'queen-trap': 'Queen trap: the queen goes somewhere it cannot get out of, and is won.',
+  'smothered-mate': 'Smothered mate: a knight gives mate to a king boxed in by its own pieces.',
+  'early-queen': 'Early queen: a queen brought out early is chased by pieces that develop as they attack it.',
+  'pawn-grab': 'Pawn grab: taking a pawn here costs time or opens lines, and the side that grabs it can be punished.',
+  'castling-lost': 'Castling lost: a king is forced to move, cannot castle any more and stays in the centre.',
+  'mate-threat': 'Mate threat: one side threatens mate, and the other must see it in time.',
+};
+
+/** Who has early mating chances, said from the learner's side when it is known. */
+export function earlyMateHint(who: 'white' | 'black' | 'both', side?: Side): string {
+  const name = (colour: Side) => (colour === side ? `you (${colour})` : colour === 'white' ? 'White' : 'Black');
+  const holder = who === 'both' ? 'either side' : name(who);
+  return `Mate chances: in the first 12 moves ${holder} can give mate if the other side slips. Watch the king.`;
+}
+
+/** The short label for early mating chances, from the learner's side when it is known. */
+export function earlyMateLabel(who: 'white' | 'black' | 'both', side?: Side): string {
+  if (who === 'both') return 'mate chances: both';
+  if (!side) return `mate chances: ${who}`;
+  return who === side ? 'mate chances: you' : 'mate chances: them';
+}
 
 export const PRACTICE_HINT = {
   progress: 'How many of this course’s moves you have learned so far.',

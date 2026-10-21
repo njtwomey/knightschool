@@ -5,7 +5,14 @@ opening: vienna-game # an id from content/openings.yaml (add the opening there i
 tier: 2 # 1 study first, 2 next, 3 alternatives and rare replies
 trigger: '1. e4 e5 2. Nc3' # every line passes through this position
 summary: >-
-  Two plain sentences: what the course does, and what the learner will practise.
+  Two plain sentences: what the opening is (the position, and who gives what), and what the learner will practise.
+about: # required: the introduction shown at the top of the course page and on the play page
+  idea: >-
+    Why our side plays it and what it hopes for, in two to four plain sentences a beginner can follow.
+  risks: >-
+    What can go wrong for our side: the weaknesses, the opponent's best try, and for a gambit what the engine thinks.
+  # origin: >-   # optional: where it comes from or who made it popular. Leave it out rather than guess.
+  #   One sentence.
 plans:
   - A plan a 1200 can act on when the opponent leaves the book.
 motifs: [fork] # ids from content/motifs.yaml

@@ -8,6 +8,15 @@ summary: >-
   What to play when White starts 1.d4 but does not play 2.c4: the Colle and Stonewall with e3, the bishop on g5 or the
   Torre, the Veresov, the Blackmar-Diemer Gambit and the quiet fianchetto setups. The same setup (knights out, ...e6,
   ...c5, a bishop on d6 or e7, castle) works against all of them.
+about:
+  idea: >-
+    These systems let White play the same moves every game without learning theory, so Black answers in kind: one setup,
+    with an early ...c5 so that the centre is contested before White's plan gets going. Most of them aim for a slow
+    kingside attack, and hitting d4 first gives White something to defend instead.
+  risks: >-
+    If Black castles and then waits, the Colle and the Stonewall aim a bishop from d3 at h7 and a knight at e5, and a
+    bishop sacrifice on h7 can follow. The Blackmar-Diemer Gambit (2.e4) gives White open lines for a pawn, so Black
+    must develop before grabbing more. Against a bishop on g5, ...Qb6 only works if taking on b2 is really safe.
 plans:
   - Meet quiet systems with ...Nf6, ...e6, ...c5 and ...Nc6, then castle by move eight.
   - Hit d4 early with ...c5 and ...Nc6, before White gets e4 in.

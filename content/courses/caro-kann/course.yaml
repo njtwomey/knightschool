@@ -7,6 +7,17 @@ trigger: '1. e4 c6'
 summary: >-
   A solid reply to 1.e4: the c6 pawn backs up ...d5, and Black's light-squared bishop gets out before ...e6 can shut it
   in. Learn one set-up against each way White can meet it, from the Advance and Exchange to the odd second moves.
+about:
+  idea: >-
+    The pawn on c6 supports ...d5, so Black challenges White's e4 pawn without blocking the light-squared bishop, which
+    the French (...e6) shuts in. Black gets a sound pawn structure with no weak squares and good endgames, and often
+    wins because White over-presses against it.
+  risks: >-
+    It is slow. Black spends a move on c6, often has less space, and the queen's knight goes to the slightly awkward d7.
+    White can use the time to attack, for example by chasing the bishop on f5 with g4 and h4 in the Advance. The ...Nd7
+    lines hide a famous trap: after White's Qe2, ...Ngf6?? allows Nd6, smothered mate.
+  origin: >-
+    Named after Horatio Caro and Marcus Kann, two players who analysed it in the 1880s.
 plans:
   - Play ...d5 on the next move, and take the bishop out to f5 or g4 before you play ...e6.
   - Against the Advance (e5), hit the base of the chain with ...c5 and develop quietly.

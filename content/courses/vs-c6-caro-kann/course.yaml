@@ -7,6 +7,15 @@ trigger: '1. e4 c6'
 summary: >-
   Push the pawn to e5, develop with Nf3 and Be2, castle, and meet Black's ...c5 break with Be3. The setup needs almost
   no memorising.
+about:
+  idea: >-
+    The pawn on e5 takes space and keeps Black's knight off f6, its most natural square. White does not try to refute
+    the Caro-Kann: the calm setup in this course uses the extra space and needs very little memorising, because the plan
+    is the same in almost every line.
+  risks: >-
+    The pawns on d4 and e5 can be attacked at their base: Black's ...c5, ...Nc6 and ...Qb6 all hit d4, and the queen on
+    b6 also eyes b2. If d4 falls, e5 usually falls with it. Unlike in the French, Black's light-squared bishop gets out
+    to f5 before ...e6, so Black has no bad bishop and White's edge is small.
 plans:
   - Play Nf3, Be2 and castle; do not rush an attack.
   - When Black plays ...c5, defend d4 twice (Nf3 and Be3) before anything else.

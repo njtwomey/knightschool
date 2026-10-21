@@ -1,9 +1,10 @@
-import type { OpeningContent, Variant } from '@knightschool/core';
+import type { OpeningContent, Side, Variant } from '@knightschool/core';
 import { BookOpen, Eye, Target } from 'lucide-react';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { IconAction } from '@/features/browse/icon-action';
 import { useBrowse } from '@/features/browse/store';
 import { VariantTags } from '@/features/browse/tag-badge';
+import { TagLegend } from '@/features/browse/tag-legend';
 import { to } from '@/router/location';
 
 type Group = { title: string; note?: string; variants: Variant[] };
@@ -56,7 +57,7 @@ function kindGroups(variants: Variant[]): Group[] {
 }
 
 /** One section of rows: a name, what the opponent does to reach it, its tags, and the three things you can do with it. */
-function Section({ group, courseId }: { group: Group; courseId: string }) {
+function Section({ group, courseId, side }: { group: Group; courseId: string; side: Side }) {
   const showLine = useBrowse((state) => state.showLine);
   return (
     <section className="grid gap-1 rounded-xl border bg-card p-3">
@@ -81,9 +82,14 @@ function Section({ group, courseId }: { group: Group; courseId: string }) {
                     after <span className="font-mono">{variant.opponent}</span>
                   </p>
                 )}
+                <div className="relative z-10 mt-1 w-fit md:hidden">
+                  <VariantTags variant={variant} side={side} visible={2} />
+                </div>
               </TableCell>
               <TableCell className="hidden py-1.5 md:table-cell">
-                <VariantTags variant={variant} />
+                <div className="relative z-10 w-fit">
+                  <VariantTags variant={variant} side={side} />
+                </div>
               </TableCell>
               <TableCell className="relative z-10 w-px whitespace-nowrap py-1.5 text-right">
                 <IconAction label="Show on board" onClick={() => showLine(variant.id)}>
@@ -110,8 +116,9 @@ export function LinesTable({ content }: { content: OpeningContent }) {
   const groups = groupsOf(content.opening.variants);
   return (
     <div className="grid gap-3">
+      <TagLegend variants={content.opening.variants} side={content.opening.side} />
       {groups.map((group) => (
-        <Section key={group.title} group={group} courseId={content.opening.id} />
+        <Section key={group.title} group={group} courseId={content.opening.id} side={content.opening.side} />
       ))}
     </div>
   );

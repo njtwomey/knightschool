@@ -24,6 +24,7 @@ import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { PlayBreadcrumbs } from '@/features/browse/breadcrumbs';
 import { EngineLines } from '@/features/engine/engine-lines';
 import { EvalBar } from '@/features/engine/eval-bar';
+import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
 import { decodeMoves, encodeMoves } from '@/router/hash';
@@ -435,6 +436,16 @@ export function PlayPage({ course, line, mode }: Props) {
               ))}
             </div>
           )}
+
+          <CourseIntroCard
+            key={`${course}:${state.mode}`}
+            name={content.opening.name}
+            summary={content.opening.summary}
+            about={content.opening.about}
+            side={side}
+            variant={variant}
+            defaultOpen={state.mode === 'learn'}
+          />
 
           {state.mode === 'learn' && (
             <ExplorerPanel epd={shownEpd} onPlay={(uci) => usePlay.getState().exploreMove(uci)} />

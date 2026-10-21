@@ -52,7 +52,8 @@ Reference pages (read the one you need): `references/formats.md` (files, yaml, t
    `moves` = SAN to the defining position), and the course in `content/curriculum.yaml` (study order and `prerequisites`, which
    must appear earlier in the list). Motif ids come from `content/motifs.yaml`; add a motif there only if it is genuinely new.
 3. **Scaffold**: copy `templates/` (`course.yaml`, `line.pgn`, `trap.pgn`, `quizzes.yaml`) into the course folder and replace
-   everything. Every PGN must be listed in `course.yaml` the moment it exists, or the whole loader fails.
+   everything. Every PGN must be listed in `course.yaml` the moment it exists, or the whole loader fails. Write the
+   introduction (`summary` plus `about: {idea, risks, origin?}`, writing.md) so a beginner knows what the opening is for.
 4. **Lines**: most common reply first; every likely reply covered; main lines to move 10 to 12 ending with a comment that names
    the plan; sidelines to move 8; `( ... )` variations for the opponent's realistic alternatives (so the every-branch drill
    has branches); exactly one unmarked learner move per position; mistakes marked `?`/`?!`. Take the engine's preferred
@@ -87,6 +88,7 @@ Reference pages (read the one you need): `references/formats.md` (files, yaml, t
 - [ ] Main line = the most common reply; every likely reply has a line or variation with a learner answer.
 - [ ] One unmarked learner move per position; mistakes marked; `for-us` traps are real and end clearly better (+1.5).
 - [ ] The opening is in `openings.yaml`, the course in `curriculum.yaml`, motifs exist.
+- [ ] `about` has an `idea` and `risks` a beginner can follow, true to the engine; `origin` only if certain.
 - [ ] Notes give reasons in plain words, no copied text, no undefined jargon; position links were made with `pnpm fen`.
 - [ ] Quizzes have 3+ match and 3+ miss examples.
 - [ ] Nothing left in a scratch folder that should be in the repo; nothing committed or pushed unasked.

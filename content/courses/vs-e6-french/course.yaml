@@ -7,6 +7,15 @@ trigger: '1. e4 e6'
 summary: >-
   Answer 1...e6 with 2.d4 d5 3.e5, gaining space and building a pawn chain on d4 and e5. Learn how to guard the d4 pawn
   against Black's ...c5, ...Nc6 and ...Qb6, and have a simple answer to the rare replies and the Franco-Sicilian.
+about:
+  idea: >-
+    The pawn on e5 takes space on the kingside and keeps Black's knight off f6, while Black's bishop on c8 stays shut in
+    behind the e6 pawn. Black's whole game is about breaking White's pawn chain, so White knows what Black wants, can
+    prepare for it, and then use the extra space for a kingside attack.
+  risks: >-
+    The chain has a weak point at its base, d4, and Black piles up on it at once with ...c5, ...Nc6, ...Qb6 and often a
+    knight on f5. Lose count of attackers and defenders and d4 falls, and the e5 pawn usually goes with it. With the
+    bishop gone from c1, b2 can drop to the queen on b6. White's edge is small, so do not open the position early.
 plans:
   - Black will attack the base of the chain, the d4 pawn, so count its attackers and its defenders before every move.
   - Develop with Nf3 and c3, put the light-squared bishop on e2 (not d3) when Black plays ...c4, and castle early.

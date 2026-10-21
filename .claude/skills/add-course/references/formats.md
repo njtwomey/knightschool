@@ -19,19 +19,20 @@ content/white/<...>/<course-id>/   or   content/black/<...>/<course-id>/    the 
 
 ## course.yaml
 
-| Key       | Meaning                                                                                                                  |
-| --------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `name`    | The course name; quote it if it has a colon                                                                              |
-| `eco`     | Optional ECO code of the opening                                                                                         |
-| `side`    | The learner's side: must match `white/` or `black/`                                                                      |
-| `opening` | An id in `content/openings.yaml`: who plays that opening decides "play it" versus "play against it"                      |
-| `tier`    | 1 study first, 2 next, 3 alternatives and rare replies                                                                   |
-| `trigger` | SAN to the position the course starts from: `1. e4 e5 2. Nf3`                                                            |
-| `summary` | Two plain sentences (a `>-` block)                                                                                       |
-| `plans`   | A few bullets a 1200 can act on when the opponent leaves the book                                                        |
-| `motifs`  | Ids from `content/motifs.yaml`                                                                                           |
-| `lines`   | Each `{file, opponent, kind: main\|sideline\|rare\|gambit, alternative?, section?, from?}`; `opponent` is what they play |
-| `traps`   | Each `{file, opponent, kind: for-us\|against-us}`                                                                        |
+| Key       | Meaning                                                                                                                        |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `name`    | The course name; quote it if it has a colon                                                                                    |
+| `eco`     | Optional ECO code of the opening                                                                                               |
+| `side`    | The learner's side: must match `white/` or `black/`                                                                            |
+| `opening` | An id in `content/openings.yaml`: who plays that opening decides "play it" versus "play against it"                            |
+| `tier`    | 1 study first, 2 next, 3 alternatives and rare replies                                                                         |
+| `trigger` | SAN to the position the course starts from: `1. e4 e5 2. Nf3`                                                                  |
+| `summary` | Two plain sentences (a `>-` block): what the opening is, and what the course covers                                            |
+| `about`   | Required introduction: `idea` (why our side plays it), `risks` (what can go wrong, the opponent's best try), optional `origin` |
+| `plans`   | A few bullets a 1200 can act on when the opponent leaves the book                                                              |
+| `motifs`  | Ids from `content/motifs.yaml`                                                                                                 |
+| `lines`   | Each `{file, opponent, kind: main\|sideline\|rare\|gambit, alternative?, section?, from?}`; `opponent` is what they play       |
+| `traps`   | Each `{file, opponent, kind: for-us\|against-us}`                                                                              |
 
 Which lines earn cards (`training.ts`): `main` and `gambit` always; `sideline` unless the explorer says too few games reach it;
 `rare` only when the learner turns on "include rare lines"; `alternative` never. `against-us` traps give cards for the move that
@@ -83,4 +84,4 @@ A trap file (`traps/`) is one specific trick: a mistake we must avoid (`against-
 
 ## Position links
 
-In a comment, `summary` or `plans` bullet, `[words](EPD-or-FEN)` makes the words hover-able: the board beside the text shows that position. Get the EPD with `pnpm fen "1. e4 e5 2. Nf3"`. See `content/README.md`, "Position links in text".
+In a comment, `summary`, `about` text or `plans` bullet, `[words](EPD-or-FEN)` makes the words hover-able: the board beside the text shows that position. Get the EPD with `pnpm fen "1. e4 e5 2. Nf3"`. See `content/README.md`, "Position links in text".
