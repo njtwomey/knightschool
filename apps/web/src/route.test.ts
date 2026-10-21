@@ -18,6 +18,11 @@ describe('parseRoute', () => {
       { page: 'play', course: 'italian-game', line: 'two-knights', mode: 'practice' },
     ],
     ['/play/italian-game/two-knights', { page: 'play', course: 'italian-game', line: 'two-knights', mode: 'practice' }],
+    [
+      '/play/caro-kann/exchange/learn',
+      { page: 'play', course: 'caro-kann', line: 'caro-kann-exchange', mode: 'learn' },
+    ],
+    ['/play/qgd/exchange/learn', { page: 'play', course: 'qgd', line: 'exchange', mode: 'learn' }],
     ['/play/caro-kann/all/branches', { page: 'play', course: 'caro-kann', line: 'all', mode: 'branches' }],
     ['/play/caro-kann/all/learn', { page: 'play', course: 'caro-kann', line: 'all', mode: 'branches' }],
     ['/quiz', { page: 'review' }],

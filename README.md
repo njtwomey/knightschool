@@ -21,54 +21,55 @@ make install      # dependencies
 make dev          # the site at http://localhost:5173
 make check        # format, lint, typecheck, tests
 make pre-push     # the same plus a production build: this is what CI runs
+make doctor       # what overlaps in content/ (moves written twice, shared lines)
 ```
 
 Run `make` on its own to list every target.
 
 ## How the repository is laid out
 
-| Path               | What lives there                                                                                 |
-| ------------------ | ------------------------------------------------------------------------------------------------ |
-| `content/`         | The teaching material: courses as YAML and PGN. **Most work happens here.**                      |
-| `packages/core`    | Pure TypeScript: the content schema, how courses become cards, grading, search. No React or DOM. |
-| `packages/storage` | The SQLite database, repositories and migrations.                                                |
-| `packages/engine`  | The Stockfish wrapper (UCI over a worker).                                                       |
-| `apps/web`         | The React app. The only place the other packages meet.                                           |
-| `scripts/`         | Build and authoring tools (`content:build`, `course:eval`, `analyse`, `popularity`, `fen`).      |
-| `docs/`            | `PLAN.md` (architecture), `CURRICULUM.md` (the original curriculum proposal).                    |
-| `.claude/skills/`  | The `add-course` authoring guide that Claude Code follows when you ask it to add content.        |
+| Path               | What lives there                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `content/`         | The teaching material: the theory tree (PGN chapters) and the courses (YAML). **Most work happens here.**     |
+| `packages/core`    | Pure TypeScript: the content schema, how courses become cards, grading, search. No React or DOM.              |
+| `packages/storage` | The SQLite database, repositories and migrations.                                                             |
+| `packages/engine`  | The Stockfish wrapper (UCI over a worker).                                                                    |
+| `apps/web`         | The React app. The only place the other packages meet.                                                        |
+| `scripts/`         | Build and authoring tools (`content:build`, `content:doctor`, `course:eval`, `analyse`, `popularity`, `fen`). |
+| `docs/`            | `PLAN.md` (architecture), `CURRICULUM.md` (the original curriculum proposal).                                 |
+| `.claude/skills/`  | The `add-course` authoring guide that Claude Code follows when you ask it to add content.                     |
 
 `CLAUDE.md` is the longer technical guide (architecture, rules, conventions). `content/README.md` is the exact
 format of every content file.
 
 ## Adding things
 
+### How content is shaped
+
+Opening theory is a tree, so the content is one: `content/tree/` holds every line, for both sides, as **chapters**. A
+chapter is one PGN file that starts where it branches off another chapter, so the moves before it are never typed twice:
+
+```
+content/tree/e4/evans-gambit/accepted-main-line.pgn     [Start "evans-gambit 5.c3"]  then  5... Ba5 6. d4 ...
+```
+
+A **course** is a selection from that tree for one side: `content/courses/<course>/course.yaml` names the trigger
+position, the introduction, the plans and the lines it teaches (by chapter name, in order), and `quizzes.yaml` holds its
+"why" questions. One line can be in several courses, from either side.
+
 ### A new course
-
-A **course** is one side's answer to one starting position, for example "White against 1...e5 after 2.Nf3". It lives
-in a folder under `content/white/<group>/` or `content/black/<group>/`; the folder decides which side you play, and the
-folder name is the course id.
-
-```
-content/white/gambits/kings-gambit/
-  course.yaml        name, trigger position, tier, summary, plans, and the list of lines and traps
-  lines/*.pgn        one file per way the opponent can reply (variations inside are fine)
-  traps/*.pgn        tricks: ones you can spring, and ones you must not fall for
-  quizzes.yaml       short "why" questions, answered by typing
-```
-
-The steps, in order:
 
 1. **Decide** the side, the trigger position (as deep as the course's own idea), the tier (1 study first, 2 next,
    3 alternatives), and which opponent replies get a line.
 2. **Register** it. If the opening is new, add it to `content/openings.yaml` (who plays it decides "play it" versus
    "play against it"). Add the course to `content/curriculum.yaml` (study order and prerequisites). Motifs come from
    `content/motifs.yaml`.
-3. **Write** the lines as PGN with a plain-English reason on every non-obvious move, tags on each file, and quizzes for
-   the traps you can spring.
-4. **Check it**: `pnpm content:build` validates everything and lists warnings, and
-   `pnpm course:eval --dir content/<side>/<group>/<course> --no-cache --depth 16 --threads 1` asks Stockfish whether the
-   moves are sound and the lines end level. Follow the engine, not memory.
+3. **Write** the course folder and the chapters it needs. Reuse every line the tree already has by listing it; write new
+   chapters only from where they branch off. Every non-obvious move gets a plain-English reason, and the traps you can
+   spring get quizzes.
+4. **Check it**: `pnpm content:build` validates everything and lists warnings, `make doctor` shows what overlaps, and
+   `pnpm course:eval <course> --no-cache --depth 16 --threads 1` asks Stockfish whether the moves are sound and the lines
+   end level. Follow the engine, not memory.
 5. **Run `make check`**, then commit.
 
 The easiest way is to ask Claude Code to add the course: the `add-course` skill walks through all of this, including the
@@ -76,24 +77,27 @@ checks. Its guide is in `.claude/skills/add-course/`.
 
 ### Rules the build enforces (so you do not have to remember them)
 
-- **One answer per position.** In one course, every position where you are to move has exactly one repertoire move. A
-  second answer goes in a line marked `alternative: true` (shown, never drilled). This is why each gambit is its own
-  course with a deep trigger.
-- **Every line passes through the trigger**, and every file is listed in `course.yaml`.
+- **One answer per position, per course.** In one course, every position where you are to move has exactly one
+  repertoire move. A second answer goes in a line listed with `alternative: true` (shown, never drilled). The tree itself
+  can hold several (the Italian and the King's Gambit both start from 1.e4 e5); each course picks.
+- **A move has one comment**, wherever it is written.
+- **Every `[Start]` points at a real move** of the chapter it names, and every listed line passes through the trigger.
 - **Transpositions share positions**, so the same position reached two ways is one card.
 - **Quizzes are checked**: the matching and non-matching example answers must behave as written.
 
 ### Smaller additions
 
-| To add                           | Do this                                                                                                                    |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| A line or trap to a course       | Add the PGN under `lines/` or `traps/` and list it in `course.yaml`. Never rename existing files: names appear in history. |
-| A quiz                           | Add an entry to the course's `quizzes.yaml`, with `examples.match` and `examples.miss`.                                    |
-| A group of lines on the page     | Give each line a `section:` in `course.yaml`; the course page groups by it.                                                |
-| Reuse a line from another course | `from: <course id>` on a line (same side only). It is shown but never drilled, and it is not copied.                       |
-| A link in a note to a position   | `[f7](<EPD or FEN>)`: hover shows that position. `pnpm fen "1. e4 e5 2. Nf3"` prints the EPD.                              |
-| A glossary idea                  | Add it to `content/motifs.yaml`, then use its id in a course's `motifs:`.                                                  |
-| A new opening group              | Add it to `content/openings.yaml`.                                                                                         |
+| To add                         | Do this                                                                                                            |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| A line                         | Write a chapter in `content/tree/` with `[Start "<chapter> <move>"]`, then list its name in the course's `lines:`. |
+| A line another course has      | List its name in `lines:`. Nothing is copied.                                                                      |
+| A quiz                         | Add an entry to the course's `quizzes.yaml`, with `examples.match` and `examples.miss`.                            |
+| A group of lines on the page   | Give lines a `section:` in `course.yaml`; the course page groups by it.                                            |
+| A link in a note to a position | `[f7](<EPD or FEN>)`: hover shows that position. `pnpm fen "1. e4 e5 2. Nf3"` prints the EPD.                      |
+| A glossary idea                | Add it to `content/motifs.yaml`, then use its id in a course's `motifs:`.                                          |
+| A new opening group            | Add it to `content/openings.yaml`.                                                                                 |
+
+Never rename a chapter file: its name is the line id, and line ids appear in learners' history.
 
 ### After adding a course
 

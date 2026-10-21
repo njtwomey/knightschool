@@ -18,7 +18,8 @@ real alternative piece sets (licence check first).
 Use `make` (run `make` alone to list targets). It uses a global pnpm if present, else `npx pnpm@<packageManager>`.
 
 - `make dev`: Vite dev server (http://localhost:5173)
-- `make check`: format check, lint, typecheck, tests. `make pre-push` adds the build; this is what CI runs.
+- `make check`: format check, lint, typecheck, tests. `make pre-push` adds the build; this is what CI runs. `make doctor`:
+  overlaps in `content/` worth tidying (a report, never a gate).
 - `make fix`: ESLint autofix plus Prettier. `make hooks` installs a git pre-push hook that runs `make pre-push`.
 - Single test file: `pnpm exec vitest run packages/core/src/epd.test.ts`; by name: `pnpm exec vitest run -t "epdToFen"`.
 - `pnpm content:build`: validate `content/` and write `apps/web/public/content/*.json` (gitignored). Needs no network;
@@ -67,27 +68,33 @@ EPD (FEN without move counters), so transpositions share one node. See `docs/PLA
 
 ### Content
 
-Content is organised by who is to move and what the opponent has done (`content/README.md` is the format; `docs/CURRICULUM.md` is
-the original proposal, kept for its coverage list, not adopted as written). A **course** is a folder under `content/white/` or `content/black/` (the folder decides the side) with
-`course.yaml`, `lines/*.pgn`, `traps/*.pgn` and `quizzes.yaml`; its id is the folder name. `course.yaml` gives the trigger
-position every line passes through, a tier (1 study first, 2 next, 3 alternatives), the opening it belongs to (an id from
-`content/openings.yaml`, which also says who plays the opening: that makes a course "playing it" or "playing against it"),
-a required introduction (`about`: `idea`, `risks` and an optional `origin`, shown on the course and play pages), plans
-and motifs (from `content/motifs.yaml`), and each line's `kind` (main, sideline, rare, gambit; plus `alternative`) and each
-trap's (`for-us` springs it, `against-us` must be avoided). `content/curriculum.yaml` is the study order and prerequisites.
-Gambits and traps are branches inside the course where they arise; there is no separate motifs section. A line or trap
-can name a `section` (the course page then groups by it), and a line can be taken from another course for the same side with
-`from: <course id>`: it is shown here but never drilled (cards are per course, so its home course drills it). A course is for
-one side and holds one drilled answer per position, so each gambit is its own course with a deep trigger, and the Black
-"tour" course (`vs-pawn-gambits`) borrows the Black lines. Folders starting with `_`
-(`_parked`, `_staging`) are never built.
+Content is **one tree of theory plus courses that select lines from it** (`content/README.md` is the format, `docs/TREE.md`
+the design and what is still to do; `docs/CURRICULUM.md` is the original coverage proposal). `content/tree/<first move>/<family>/*.pgn`
+are **chapters**: one line each, for both sides, written from where it branches off another chapter
+(`[Start "evans-gambit 5.c3"]`: that chapter, after that move; earlier moves added when the move is ambiguous). The file
+name is the line id (unique across the tree; it ends up in learner history, so do not rename casually). `[For]` is the
+side the line is written for, which `[Kind]` (main, sideline, rare, gambit; `for-us` / `against-us` traps) and `[Risk]`
+are relative to; `[Opponent]` is the opponent's move that reaches it. A move has one comment across the whole tree, written
+neutrally. `resolveTree` (core `theory-tree.ts`) reads the chapters, parents first; `treeGraph` gives the chapter and move
+graph (built into `public/content/tree.json` for drawing; positions there are `positionId(epd)`, a short hash).
+
+A **course** is `content/courses/<id>/{course.yaml,quizzes.yaml}`, id = folder name: side, trigger, tier (1 study first,
+2 next, 3 alternatives), the opening it belongs to (an id from `content/openings.yaml`, which says who plays it: "playing it"
+or "playing against it"), a required introduction (`about`: `idea`, `risks`, optional `origin`), plans, motifs (from
+`content/motifs.yaml`), and `lines:` (line ids in teaching order, each optionally with `alternative`, `kind`, `opponent`,
+`section`). Any course lists any line of either side; a trap written for the other side flips. `projectCourse` rebuilds each
+listed line from the start and merges them with `buildOpening` into the course's EPD-keyed tree: the shape the app reads,
+unchanged from before the tree. `content/curriculum.yaml` is the study order. `make doctor` reports overlaps (moves written
+twice, unlisted chapters, shared lines); it never fails. A course folder may carry its own `tree/` of new chapters while it is
+being written in `content/_staging`; folders starting with `_` are never built.
 
 Which positions earn review cards is `cardDefinitions` in `training.ts`: main and gambit lines always, sidelines unless the
 explorer says too few games reach them, rare lines only with the "include rare lines" setting, alternatives never, `for-us`
 traps never (they get quizzes), `against-us` traps yes (the avoiding move). The build merges every line of a course into one
-EPD-keyed tree and rejects unknown tag values, files missing from `course.yaml`, a line that misses the trigger, and two
-different repertoire moves for the same position (use `alternative: true` for a second answer). It warns where a White course
-and a Black course disagree at a shared position. File names end up in learner history; do not rename them casually.
+EPD-keyed tree and rejects unknown tag values, unknown line ids, a line that misses the trigger, two comments on one move,
+a bad `[Start]`, and two different repertoire moves for the same position within a course (use `alternative: true` for a
+second answer; the tree itself may hold several). It warns where a White course and a Black course disagree at a shared
+position.
 
 ### Storage
 
