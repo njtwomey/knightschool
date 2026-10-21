@@ -8,6 +8,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +18,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useBrowse } from '@/features/browse/store';
 import { LINE_TABS, lineHref, type LineTab } from '@/features/line/tabs';
-import { to } from '@/router/location';
+import { navigate, to } from '@/router/location';
 
 /**
  * Where you are: Browse, the course and the line, with the line as a menu of every other line of the course (so you can
@@ -84,25 +85,26 @@ export function PlayBreadcrumbs({
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <nav aria-label="Work on this line" className="flex flex-wrap gap-1">
+              {/* One choice of several, so a joined group: a shared border, flat inside, round at the two ends. */}
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                size="sm"
+                value={tab}
+                onValueChange={(next) => next && navigate(lineHref(course, line, next as LineTab))}
+                aria-label="Work on this line"
+              >
                 {LINE_TABS.map((item) => (
-                  <Button
+                  <ToggleGroupItem
                     key={item.tab}
-                    asChild
-                    size="sm"
-                    variant={item.tab === tab ? 'secondary' : 'ghost'}
-                    className="h-7 px-2.5"
+                    value={item.tab}
+                    title={item.blurb}
+                    className="px-3 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
                   >
-                    <a
-                      href={to(lineHref(course, line, item.tab))}
-                      title={item.blurb}
-                      aria-current={item.tab === tab ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </a>
-                  </Button>
+                    {item.name}
+                  </ToggleGroupItem>
                 ))}
-              </nav>
+              </ToggleGroup>
             </BreadcrumbItem>
           </>
         )}
