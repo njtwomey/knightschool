@@ -41,7 +41,7 @@ import { CoursesPage } from '@/features/courses/courses-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { SearchPage } from '@/features/search/search-page';
 import { LinePage } from '@/features/line/line-page';
-import { GuessPage } from '@/features/guess/guess-page';
+import { NameItPage } from '@/features/name-it/name-it-page';
 import { SpeedPage } from '@/features/speed/speed-page';
 import { QuizPage } from '@/features/quiz/quiz-page';
 import { HomePage } from '@/features/home/home-page';
@@ -91,7 +91,13 @@ export function App() {
     { href: to('/tree'), label: 'Tree', active: route.page === 'tree', icon: <GitFork aria-hidden />, group: 0 },
     { href: to('/quiz'), label: 'Quiz', active: route.page === 'quiz', icon: <Library aria-hidden />, group: 1 },
     { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden />, group: 1 },
-    { href: to('/name'), label: 'Name it', active: route.page === 'guess', icon: <Telescope aria-hidden />, group: 1 },
+    {
+      href: to('/name'),
+      label: 'Name it',
+      active: route.page === 'name-it',
+      icon: <Telescope aria-hidden />,
+      group: 1,
+    },
     {
       href: to('/create'),
       label: 'Create',
@@ -240,7 +246,7 @@ export function App() {
             />
           )}
           {route.page === 'quiz' && <QuizPage />}
-          {route.page === 'guess' && <GuessPage />}
+          {route.page === 'name-it' && <NameItPage />}
           {route.page === 'speed' && <SpeedPage />}
           {route.page === 'credits' && <CreditsPage />}
           {route.page === 'lab' && <LabPage />}

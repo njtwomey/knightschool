@@ -27,7 +27,7 @@ export type Route =
    */
   | { page: 'play'; course: string; line: string; tab: LineTab | 'branches'; unit?: UnitRef }
   | { page: 'quiz' }
-  | { page: 'guess' }
+  | { page: 'name-it' }
   | { page: 'speed' }
   | { page: 'glossary' }
   | { page: 'tree' }
@@ -85,8 +85,9 @@ export function parseRoute(pathname: string): Route {
     case 'review':
       return { page: 'quiz' };
     case 'name':
+    case 'name-it':
     case 'guess':
-      return { page: 'guess' };
+      return { page: 'name-it' };
     case 'speed':
       return { page: 'speed' };
     case 'stats':

@@ -16,22 +16,22 @@ import { WeightingSelect } from '@/components/weighting-select';
 import { useCatalog } from '@/data/catalog-store';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
-import { allSuggestions, SESSION_LENGTH, sessionPoints, useGuess, type Outcome } from './store';
+import { allSuggestions, SESSION_LENGTH, sessionPoints, useNameIt, type Outcome } from './store';
 import { lineHref } from '@/router/hrefs';
 
 /** "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts. */
-export function GuessPage() {
-  const { phase, error, question, answer, graded, outcomes, source, weighting } = useGuess();
+export function NameItPage() {
+  const { phase, error, question, answer, graded, outcomes, source, weighting } = useNameIt();
   const index = useCatalog((state) => state.index);
 
   useEffect(() => {
-    void useGuess.getState().start();
-    return () => useGuess.getState().stop();
+    void useNameIt.getState().start();
+    return () => useNameIt.getState().stop();
   }, []);
 
   // Start again if the store was reset while the page stayed open, rather than waiting on a refresh.
   useEffect(() => {
-    if (useGuess.getState().phase === 'idle') void useGuess.getState().start();
+    if (useNameIt.getState().phase === 'idle') void useNameIt.getState().start();
   }, [phase]);
 
   const names = useMemo(() => (phase === 'asking' ? allSuggestions() : []), [phase]);
@@ -65,13 +65,13 @@ export function GuessPage() {
         Positions from
         <SourceSelect
           value={source}
-          onChange={(next) => useGuess.getState().setSource(next)}
+          onChange={(next) => useNameIt.getState().setSource(next)}
           index={index}
           label="Positions from"
         />
         <WeightingSelect
           value={weighting}
-          onChange={(next) => useGuess.getState().setWeighting(next)}
+          onChange={(next) => useNameIt.getState().setWeighting(next)}
           label="How positions are picked"
         />
       </div>
@@ -112,13 +112,13 @@ export function GuessPage() {
               className="grid gap-3"
               onSubmit={(event) => {
                 event.preventDefault();
-                useGuess.getState().submit();
+                useNameIt.getState().submit();
               }}
             >
               <Input
                 autoFocus
                 value={answer}
-                onChange={(event) => useGuess.getState().setAnswer(event.target.value)}
+                onChange={(event) => useNameIt.getState().setAnswer(event.target.value)}
                 placeholder="For example: Caro-Kann, Advance"
                 aria-label="Your answer"
                 autoComplete="off"
@@ -131,7 +131,7 @@ export function GuessPage() {
                       type="button"
                       variant="secondary"
                       size="sm"
-                      onClick={() => useGuess.getState().setAnswer(name)}
+                      onClick={() => useNameIt.getState().setAnswer(name)}
                     >
                       {name}
                     </Button>
@@ -142,7 +142,7 @@ export function GuessPage() {
                 <Button type="submit" disabled={!answer.trim()}>
                   Answer
                 </Button>
-                <Button type="button" variant="outline" onClick={() => useGuess.getState().giveUp()}>
+                <Button type="button" variant="outline" onClick={() => useNameIt.getState().giveUp()}>
                   <CircleHelp aria-hidden /> I don’t know
                 </Button>
               </div>
@@ -201,11 +201,11 @@ export function GuessPage() {
               </ul>
               <div>
                 {graded.result === 'full' ? (
-                  <Button variant="ghost" size="sm" onClick={() => useGuess.getState().next()}>
+                  <Button variant="ghost" size="sm" onClick={() => useNameIt.getState().next()}>
                     Skip ahead
                   </Button>
                 ) : (
-                  <Button autoFocus onClick={() => useGuess.getState().next()}>
+                  <Button autoFocus onClick={() => useNameIt.getState().next()}>
                     Next
                   </Button>
                 )}
@@ -259,14 +259,14 @@ function Summary({ outcomes }: { outcomes: Outcome[] }) {
       <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
         Next positions from
         <SourceSelect
-          value={useGuess.getState().source}
-          onChange={(next) => useGuess.getState().setSource(next)}
+          value={useNameIt.getState().source}
+          onChange={(next) => useNameIt.getState().setSource(next)}
           index={useCatalog.getState().index}
           label="Positions from"
         />
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button onClick={() => void useGuess.getState().start()}>Another ten</Button>
+        <Button onClick={() => void useNameIt.getState().start()}>Another ten</Button>
         <Button asChild variant="outline">
           <a href={to('/profile')}>Overview</a>
         </Button>

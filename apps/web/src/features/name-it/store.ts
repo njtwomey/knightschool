@@ -28,7 +28,7 @@ const WEIGHTING_KEY = 'knightschool.guess.weighting';
 export const SESSION_LENGTH = 10;
 
 /** A right answer is shown for a moment, then the next position comes up. Other answers wait for Next. */
-export const GUESS_DELAYS = { full: 2600 } as const;
+export const NAME_IT_DELAYS = { full: 2600 } as const;
 
 /** A place a position comes from, to link to once it has been answered. */
 export type Source = {
@@ -51,7 +51,7 @@ type Phase = 'idle' | 'loading' | 'asking' | 'answered' | 'summary' | 'error';
 
 export type Outcome = { question: Question; result: GuessResult; answer: string };
 
-type GuessState = {
+type NameItState = {
   phase: Phase;
   error: string | null;
   question: Question | null;
@@ -133,7 +133,7 @@ function pick(from: Deck, asked: Set<string>): Question | null {
   return null;
 }
 
-export const useGuess = create<GuessState>((set, get) => {
+export const useNameIt = create<NameItState>((set, get) => {
   /** Works out, for each source line, the moves that reach the guessed position, so its link can open right there. */
   async function attachMoves(question: Question) {
     const sources = await Promise.all(
@@ -190,7 +190,7 @@ export const useGuess = create<GuessState>((set, get) => {
     void attachMoves(question);
     clearTimeout(timer);
     // A right answer moves on by itself; anything else waits, because there is something to read.
-    if (grade.result === 'full') timer = setTimeout(show, GUESS_DELAYS.full);
+    if (grade.result === 'full') timer = setTimeout(show, NAME_IT_DELAYS.full);
   }
 
   return {
