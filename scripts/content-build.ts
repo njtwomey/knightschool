@@ -3,14 +3,15 @@
  *
  * Reads the theory tree (content/tree) and the courses (content/courses), validates everything against the schemas
  * in packages/core, projects each course's lines into its own tree and writes apps/web/public/content/*.json, plus
- * tree.json (the whole tree, to draw). A broken file fails the build with the file name in the message.
+ * tree.json (the whole tree, to draw). A broken file fails the build with the file name in the message, and leaves the
+ * files of the last good build where they were: everything is written to a staging folder first and swapped in whole.
  *
  * Optional Lichess steps, so reruns are offline:
  *   - opening names: downloads lichess-org/chess-openings (CC0) once into .cache/.
  *   - popularity per position: read from content/popularity/popularity.json (committed; filled by `pnpm popularity`).
  *     This script never asks the network for it.
  */
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   AnalysisFile,
@@ -36,6 +37,7 @@ import {
   rel,
   root,
 } from './content-lib.ts';
+import { replaceDir } from './replace-dir.ts';
 
 const outDir = join(root, 'apps', 'web', 'public', 'content');
 const cacheDir = join(root, '.cache');
@@ -75,9 +77,17 @@ async function main() {
   const names = await openingNames();
   const popularity = loadPopularity();
   if (!popularity) console.warn('  popularity: none yet (run make popularity)');
+  // Built into a staging folder and swapped in at the end: a build that fails leaves the app the content it had.
+  let courses = 0;
+  await replaceDir(outDir, (dir) => void (courses = build(dir, names, popularity)), cacheDir);
+  console.log(`content:build wrote ${courses} courses to ${rel(outDir)}`);
+}
 
-  rmSync(outDir, { recursive: true, force: true });
-  mkdirSync(outDir, { recursive: true });
+function build(
+  outDir: string,
+  names: Awaited<ReturnType<typeof openingNames>>,
+  popularity: PopularityFile | undefined,
+) {
   const index: OpeningIndexEntry[] = [];
   const built: OpeningContent[] = [];
 
@@ -138,7 +148,7 @@ async function main() {
   for (const warning of warnings.slice(0, 20)) console.warn(`  warning: ${warning}`);
   if (warnings.length > 20)
     console.warn(`  warning: and ${warnings.length - 20} more disagreements between the two sides`);
-  console.log(`content:build wrote ${index.length} courses to ${rel(outDir)}`);
+  return index.length;
 }
 
 main().catch((error) => {
