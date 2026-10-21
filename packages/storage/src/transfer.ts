@@ -11,11 +11,11 @@ import {
   Setting,
   SpeedAttempt,
 } from '@knightschool/core/schema';
-import { sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
 import { z } from 'zod';
 import { LATEST_SCHEMA_VERSION } from './migrate';
-import { createDb, statementOf, type StorageInternals } from './repositories';
+import { createDb, IMPORTED_GROUPS_KEY, parseImportedGroups, statementOf, type StorageInternals } from './repositories';
 import * as schema from './schema';
 
 /** The JSON export: every table as an array, readable by a person and importable on another device. */
@@ -149,6 +149,26 @@ export async function importJson(internals: StorageInternals, input: unknown): P
     ),
     ...t.authoredHistory.map((row) => statementOf(db.insert(schema.authoredHistory).values(row).onConflictDoNothing())),
   ];
+  // Actions done on another device stay in history but are never undone here, where they could take back this
+  // device's work: their groups are listed, after the settings above so the list is the union of this device's, the
+  // file's and the new ones. A database with no authored history of its own (a backup restored into a fresh browser)
+  // has nothing to protect, so it takes the file as it is.
+  const known = new Set(
+    (await db.select({ group: schema.authoredHistory.group }).from(schema.authoredHistory)).map((row) => row.group),
+  );
+  const arriving = t.authoredHistory.map((row) => row.group).filter((group) => !known.has(group));
+  if (known.size > 0 && arriving.length) {
+    const local = await db.select().from(schema.settings).where(eq(schema.settings.key, IMPORTED_GROUPS_KEY));
+    const imported = new Set([
+      ...parseImportedGroups(local[0]?.value),
+      ...parseImportedGroups(t.settings.find((row) => row.key === IMPORTED_GROUPS_KEY)?.value),
+      ...arriving,
+    ]);
+    const row = { key: IMPORTED_GROUPS_KEY, value: JSON.stringify([...imported]), at: new Date().toISOString() };
+    statements.push(
+      statementOf(db.insert(schema.settings).values(row).onConflictDoUpdate({ target: schema.settings.key, set: row })),
+    );
+  }
   if (statements.length) await exec.transaction(statements);
   return {
     cards: t.cards.length,

@@ -33,6 +33,7 @@ import {
   type TrapKind,
   type TreeLine,
 } from '@knightschool/core';
+import { undoTarget } from '@knightschool/storage';
 import { create } from 'zustand';
 import { loadAuthoredBuild, loadAuthoredRows, loadShippedChapters, type AuthoredRows } from '@/data/authored';
 import { loadUndoLabels, saveAuthored, undoAuthored, type AuthoredChangeInput } from '@/data/authoring';
@@ -254,7 +255,12 @@ export const useAuthor = create<AuthorState>((set, get) => {
         const build = await loadAuthoredBuild(async () => shipped);
         const { storage } = await whenStorageReady();
         const reminder = await reminderToExport(storage);
-        const undoLabel = describeUndo(await storage.authoring.history(), rows, await loadUndoLabels(storage));
+        const undoLabel = describeUndo(
+          await storage.authoring.history(),
+          rows,
+          await loadUndoLabels(storage),
+          await storage.authoring.importedGroups(),
+        );
         set({ rows, build, shippedCourses: shipped, reminder, undoLabel, status: 'ready', error: null });
         // The pages choose the course and line from the address; keep the position inside the line.
         const line = fullLine(build, get().lineId);
@@ -948,14 +954,14 @@ export function describeUndo(
   history: AuthoredChange[],
   rows: AuthoredRows,
   labels: Record<string, string> = {},
+  imported: ReadonlySet<string> = new Set(),
 ): string | null {
-  const undone = new Set(history.flatMap((row) => (row.undoOf ? [row.undoOf] : [])));
-  const latest = history.find((row) => row.undoOf === null && !undone.has(row.group));
-  if (!latest) return null;
+  const target = undoTarget(history, imported);
+  if (!target) return null;
   // The name the action was saved with; older actions are described from what they changed.
-  const named = labels[latest.group];
+  const named = labels[target];
   if (named) return named;
-  const group = history.filter((row) => row.group === latest.group);
+  const group = history.filter((row) => row.group === target);
   const now = (row: AuthoredChange) =>
     (row.kind === 'chapter' ? rows.chapters : rows.courses).find((item) => item.id === row.itemId);
   const what = (row: AuthoredChange) => (row.kind === 'chapter' ? 'line' : 'course');

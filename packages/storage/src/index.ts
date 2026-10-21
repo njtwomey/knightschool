@@ -4,3 +4,4 @@ export * from './client';
 export type { SqlExecutor } from './executor';
 export type { Storage } from './repositories';
 export type { Dump, ImportReport } from './transfer';
+export { IMPORTED_GROUPS_KEY, undoTarget } from './repositories';

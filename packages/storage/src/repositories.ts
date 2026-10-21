@@ -75,8 +75,13 @@ export interface Storage {
     /** The history, newest first. */
     history(): Promise<AuthoredChange[]>;
     /**
-     * Takes back the newest action not yet undone, recording the undo as an action of its own (`undoOf`), so nothing is
-     * lost. Returns the group undone, or undefined when there is nothing to undo.
+     * The groups of actions that came in with an import from another device: kept in history, never undone here
+     * (Undo takes back what was done on this device).
+     */
+    importedGroups(): Promise<Set<string>>;
+    /**
+     * Takes back the newest action not yet undone (and not imported), recording the undo as an action of its own
+     * (`undoOf`), so nothing is lost. Returns the group undone, or undefined when there is nothing to undo.
      */
     undo(group: string, at: string, newId: () => string): Promise<string | undefined>;
     /** How many history rows were written after `at`: edits since the last export. */
@@ -87,6 +92,28 @@ export interface Storage {
     get(key: string, now: string, ttlMs: number): Promise<ExplorerCache | undefined>;
     put(entry: ExplorerCache): Promise<void>;
   };
+}
+
+/** The settings key listing the history groups that came in with an import (JSON array of group ids). */
+export const IMPORTED_GROUPS_KEY = 'authoringImportedGroups';
+
+/** The groups a stored `IMPORTED_GROUPS_KEY` value lists; anything unreadable lists none. */
+export function parseImportedGroups(value: string | undefined): Set<string> {
+  try {
+    const parsed: unknown = JSON.parse(value ?? '[]');
+    return new Set(Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : []);
+  } catch {
+    return new Set();
+  }
+}
+
+/**
+ * The group Undo takes back: the newest action that is not an undo, not undone and not imported. `history` is newest
+ * first. Shared by `authoring.undo` and the editor's description of it, so the two always agree.
+ */
+export function undoTarget(history: AuthoredChange[], imported: ReadonlySet<string> = new Set()): string | undefined {
+  const undone = new Set(history.flatMap((row) => (row.undoOf ? [row.undoOf] : [])));
+  return history.find((row) => row.undoOf === null && !undone.has(row.group) && !imported.has(row.group))?.group;
 }
 
 /** One change in an authoring action: an item's new text, or null to delete it (softly). */
@@ -326,10 +353,10 @@ export function createStorage(exec: SqlExecutor): StorageInternals {
           .select()
           .from(schema.authoredHistory)
           .orderBy(desc(schema.authoredHistory.at), desc(schema.authoredHistory.id)),
+      importedGroups: async () => parseImportedGroups(await storage.settings.get(IMPORTED_GROUPS_KEY)),
       async undo(group, at, newId) {
         const rows = await storage.authoring.history();
-        const undone = new Set(rows.flatMap((row) => (row.undoOf ? [row.undoOf] : [])));
-        const target = rows.find((row) => row.undoOf === null && !undone.has(row.group))?.group;
+        const target = undoTarget(rows, await storage.authoring.importedGroups());
         if (!target) return undefined;
         const statements: Statement[] = [];
         for (const row of rows.filter((candidate) => candidate.group === target)) {

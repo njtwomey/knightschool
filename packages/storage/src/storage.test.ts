@@ -4,7 +4,7 @@ import { attempt, at, card, evalLine, explorerEntry, guess, speed, review, T0 } 
 import { LATEST_SCHEMA_VERSION, migrate } from './migrate';
 import { MIGRATIONS } from './migrations.generated';
 import * as schema from './schema';
-import { createStorage } from './repositories';
+import { createStorage, undoTarget } from './repositories';
 import { exportJson, importJson } from './transfer';
 import { openMemoryDatabase, openMemoryStorage } from './testing/memory';
 
@@ -435,5 +435,45 @@ describe('authored content', () => {
     expect(await chapter('a')).toMatchObject({ pgn: 'theirs' });
     expect((await s.storage.authoring.history()).map((row) => row.group)).toEqual(['o1', 'g1']);
     other.close();
+  });
+
+  it('never undoes an action that came in with an import, even a newer one', async () => {
+    const other = await openMemoryStorage();
+    await save('g1', 1, 'chapter', 'a', 'mine');
+    await other.storage.authoring.apply({
+      group: 'o1',
+      at: at(5),
+      edits: [{ historyId: 'o-h1', kind: 'chapter', itemId: 'b', body: 'theirs' }],
+    });
+    await importJson(s, await exportJson(other));
+    expect(await s.storage.authoring.importedGroups()).toEqual(new Set(['o1']));
+    // Exporting this device and importing it back adds nothing; the list survives the other device's settings.
+    await importJson(s, await exportJson(s));
+    expect(await s.storage.authoring.importedGroups()).toEqual(new Set(['o1']));
+    expect(await s.storage.authoring.undo('u1', at(6), id)).toBe('g1'); // this device's own action
+    expect(await chapter('b')).toMatchObject({ pgn: 'theirs', deletedAt: null });
+    expect(await s.storage.authoring.undo('u2', at(7), id)).toBeUndefined();
+    other.close();
+  });
+
+  it('chooses what Undo takes back: newest first, skipping undos, what they undid and imports', () => {
+    const row = (group: string, undoOf: string | null = null) => ({
+      id: group,
+      group,
+      at: T0,
+      kind: 'chapter' as const,
+      itemId: 'a',
+      before: null,
+      beforeDeletedAt: null,
+      undoOf,
+    });
+    const cases: [string, ReturnType<typeof row>[], string[], string | undefined][] = [
+      ['the newest action', [row('g2'), row('g1')], [], 'g2'],
+      ['past an undo and what it undid', [row('u1', 'g2'), row('g2'), row('g1')], [], 'g1'],
+      ['past an imported action', [row('o1'), row('g1')], ['o1'], 'g1'],
+      ['nothing left', [row('o1')], ['o1'], undefined],
+    ];
+    for (const [name, history, imported, target] of cases)
+      expect(undoTarget(history, new Set(imported)), name).toBe(target);
   });
 });
