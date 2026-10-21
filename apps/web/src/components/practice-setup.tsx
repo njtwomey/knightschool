@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { FilterToggle } from '@/components/filter-toggle';
 import { useCatalog } from '@/data/catalog-store';
 import {
   describeConfig,
@@ -75,24 +75,14 @@ function Choice<T extends string | number>({
   onChange: (value: T) => void;
 }) {
   return (
-    <ToggleGroup
+    <FilterToggle
       id={id}
-      type="single"
-      variant="outline"
-      aria-label={label}
-      value={String(value)}
-      onValueChange={(next) => {
-        const option = options.find((candidate) => String(candidate.value) === next);
-        if (option) onChange(option.value);
-      }}
+      label={label}
+      value={value}
+      options={options}
+      onChange={onChange}
       className="flex-wrap justify-self-start"
-    >
-      {options.map((option) => (
-        <ToggleGroupItem key={String(option.value)} value={String(option.value)}>
-          {option.label}
-        </ToggleGroupItem>
-      ))}
-    </ToggleGroup>
+    />
   );
 }
 

@@ -1,4 +1,5 @@
 import { type LineKind, MOVE_TAGS, numberedMove, type TrapKind, uciLine } from '@knightschool/core';
+import { KIND_OPTIONS } from '@/components/tags/hints';
 import { Camera, GitBranch, Scissors, Trash2, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useLineStepper } from '@/components/board/line-stepper';
@@ -27,15 +28,6 @@ import { GroupSelect } from './group-select';
 import { useDraft } from './helpers';
 import { draftChapter, fullLine, positionsOf, useAuthor, type DraftCourse } from './store';
 import { createHref, lineEditHref } from '@/router/hrefs';
-
-const KINDS: { value: LineKind | TrapKind; label: string }[] = [
-  { value: 'main', label: 'Main line' },
-  { value: 'gambit', label: 'Gambit' },
-  { value: 'sideline', label: 'Sideline' },
-  { value: 'rare', label: 'Rare' },
-  { value: 'against-us', label: 'Trap to avoid' },
-  { value: 'for-us', label: 'Trap to spring' },
-];
 
 /**
  * One line: its details, the board to play it on, its moves (yours to change are the ones after where it starts), and
@@ -308,7 +300,7 @@ function LineDetails({ course }: { course: DraftCourse }) {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {KINDS.map((option) => (
+              {KIND_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>

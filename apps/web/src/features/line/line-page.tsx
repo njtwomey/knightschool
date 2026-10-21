@@ -1,4 +1,5 @@
 import { namedPly, numberedMove, type OpeningContent, type Variant, variantPath } from '@knightschool/core';
+import { kindLabel } from '@/components/tags/hints';
 import { BookOpen, GitBranch, GitFork, ListChecks, PenLine, Target } from 'lucide-react';
 import { EcoLink } from '@/components/eco-link';
 import { useMemo, useState } from 'react';
@@ -43,15 +44,6 @@ export function LinePage({
   if (tab === 'tree') return <CourseTreePage course={course} line={line} />;
   return <LineAbout course={course} line={line} />;
 }
-
-const KIND: Record<string, string> = {
-  main: 'Main line',
-  sideline: 'Sideline',
-  rare: 'Rare',
-  gambit: 'Gambit',
-  'for-us': 'Trap to spring',
-  'against-us': 'Trap to avoid',
-};
 
 /**
  * The About tab: what the line is, told mostly in words. A picture of the position where the line becomes itself (the
@@ -147,7 +139,7 @@ function About({
             <h1 className="text-2xl font-semibold leading-tight">{variant.name}</h1>
             <div className="flex flex-wrap items-center gap-2">
               <EcoLink eco={variant.eco} course={course} line={variant.id} />
-              {kind && <Badge variant="secondary">{KIND[kind]}</Badge>}
+              {kind && <Badge variant="secondary">{kindLabel(kind)}</Badge>}
               {variant.alternative && <Badge variant="outline">Alternative: shown, not drilled</Badge>}
               <span className="text-sm text-muted-foreground">
                 You play {side}. {variant.opponent && `${other} goes ${variant.opponent}.`}

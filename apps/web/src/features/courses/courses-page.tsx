@@ -7,18 +7,21 @@ import {
   type Side,
   type Tier,
 } from '@knightschool/core';
-import { ArrowDown, ArrowUp, ArrowUpDown, GitFork } from 'lucide-react';
+import { GitFork } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { SIDE_FILTER_OPTIONS } from '@/components/filter-options';
+import { FilterToggle } from '@/components/filter-toggle';
 import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { ABOVE_ROW_LINK, RowLink, SortableHeader, type SortColumn } from '@/components/sortable-table';
+import { useSort } from '@/hooks/use-sort';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { useCatalog } from '@/data/catalog-store';
 import { useProgress } from '@/data/progress-store';
-import { navigate, to } from '@/router/location';
+import { to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
 
 const TIER: Record<Tier, string> = { 1: 'Study first', 2: 'Next', 3: 'Alternative' };
@@ -33,7 +36,7 @@ type Row = {
 };
 type SortKey = 'order' | 'name' | 'side' | 'tier' | 'opening' | 'trigger' | 'lines' | 'learned';
 
-const COLUMNS: { key: SortKey; label: string; className?: string }[] = [
+const COLUMNS: SortColumn<SortKey>[] = [
   { key: 'name', label: 'Course' },
   { key: 'side', label: 'Side' },
   { key: 'tier', label: 'Tier' },
@@ -81,22 +84,14 @@ export function CoursesPage() {
   useEffect(() => {
     void useProgress.getState().refresh();
   }, []);
-  const [side, setSide] = useState<Side | 'both'>('both');
-  const [sort, setSort] = useState<{ key: SortKey; descending: boolean }>({ key: 'order', descending: false });
+  const [side, setSide] = useState<Side | 'all'>('all');
+  const { sort, sortBy, sorted } = useSort(compare, {
+    initial: { key: 'order', descending: false },
+    fallback: compare.order,
+  });
 
-  const rows = rowsOf(index, openings, learned)
-    .filter((row) => side === 'both' || row.course.side === side)
-    .sort((a, b) => (sort.descending ? -1 : 1) * compare[sort.key](a, b) || a.order - b.order);
+  const rows = sorted(rowsOf(index, openings, learned).filter((row) => side === 'all' || row.course.side === side));
   const total = courseProgress(index, learned);
-  // A heading sorts by its column; again reverses it; a third time goes back to the study order.
-  const sortBy = (key: SortKey) =>
-    setSort((current) =>
-      current.key !== key
-        ? { key, descending: false }
-        : current.descending
-          ? { key: 'order', descending: false }
-          : { key, descending: true },
-    );
 
   return (
     <Page className="gap-5">
@@ -109,23 +104,7 @@ export function CoursesPage() {
               : 'Every course in one table.'}
           </p>
         </div>
-        <ToggleGroup
-          type="single"
-          variant="outline"
-          value={side}
-          onValueChange={(value) => value && setSide(value as Side | 'both')}
-          aria-label="Which side you play"
-        >
-          <ToggleGroupItem value="white" className="px-3">
-            White
-          </ToggleGroupItem>
-          <ToggleGroupItem value="black" className="px-3">
-            Black
-          </ToggleGroupItem>
-          <ToggleGroupItem value="both" className="px-3">
-            Both
-          </ToggleGroupItem>
-        </ToggleGroup>
+        <FilterToggle value={side} onChange={setSide} options={SIDE_FILTER_OPTIONS} label="Which side you play" />
       </header>
       {status === 'error' && (
         <Alert variant="destructive">
@@ -137,49 +116,14 @@ export function CoursesPage() {
       {status === 'ready' && (
         <div className="rounded-xl border">
           <Table>
-            <TableHeader>
-              <TableRow>
-                {COLUMNS.map((column) => {
-                  const active = sort.key === column.key;
-                  const Icon = active ? (sort.descending ? ArrowDown : ArrowUp) : ArrowUpDown;
-                  return (
-                    <TableHead
-                      key={column.key}
-                      className={column.className}
-                      aria-sort={active ? (sort.descending ? 'descending' : 'ascending') : undefined}
-                    >
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`-ml-2 h-7 px-2 font-medium ${active ? 'text-foreground' : 'text-muted-foreground'}`}
-                        onClick={() => sortBy(column.key)}
-                      >
-                        {column.label}
-                        <Icon className={active ? '' : 'opacity-40'} aria-hidden />
-                      </Button>
-                    </TableHead>
-                  );
-                })}
-                <TableHead>
-                  <span className="sr-only">Tree</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
+            <SortableHeader columns={COLUMNS} sort={sort} onSort={sortBy} trailing={['Tree']} />
             <TableBody>
               {rows.map(({ course, opening, role, learned: done, total: all }) => {
                 const share = all ? done / all : 0;
                 return (
-                  <TableRow
-                    key={course.id}
-                    className="cursor-pointer"
-                    onClick={(event) => {
-                      if (!(event.target as HTMLElement).closest('a, button')) navigate(courseHref(course.id));
-                    }}
-                  >
+                  <TableRow key={course.id} className="relative">
                     <TableCell className="min-w-40 whitespace-normal font-medium">
-                      <a href={to(courseHref(course.id))} className="hover:underline">
-                        {course.name}
-                      </a>
+                      <RowLink href={courseHref(course.id)}>{course.name}</RowLink>
                     </TableCell>
                     <TableCell className="capitalize">{course.side}</TableCell>
                     <TableCell>
@@ -206,7 +150,7 @@ export function CoursesPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Button asChild variant="ghost" size="sm" className="h-7">
+                      <Button asChild variant="ghost" size="sm" className={`h-7 ${ABOVE_ROW_LINK}`}>
                         <a href={to(courseHref(course.id, 'tree'))} aria-label={`The tree of ${course.name}`}>
                           <GitFork aria-hidden /> Tree
                         </a>

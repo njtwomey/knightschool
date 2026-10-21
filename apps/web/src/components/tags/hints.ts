@@ -1,4 +1,4 @@
-import type { Motif, Side } from '@knightschool/core';
+import type { LineKind, Motif, Side, TrapKind } from '@knightschool/core';
 
 /** What each label on the Search page means, shown on hover. One place, so cards and filters say the same thing. */
 export const TIER_HINT = {
@@ -92,3 +92,22 @@ export function earlyMateLabel(who: 'white' | 'black' | 'both', side?: Side): st
 export const PROGRESS_HINT = {
   progress: 'How many of this course’s moves you have learned so far.',
 } as const;
+
+/** What each kind of line is called, wherever a line's kind is shown or chosen. */
+export const KIND_LABEL = {
+  main: 'Main line',
+  gambit: 'Gambit',
+  sideline: 'Sideline',
+  rare: 'Rare',
+  'against-us': 'Trap to avoid',
+  'for-us': 'Trap to spring',
+} as const satisfies Record<LineKind | TrapKind, string>;
+
+/** The kinds in the order they are offered: lines from most to least important, then the two traps. */
+export const KIND_OPTIONS = (Object.keys(KIND_LABEL) as (LineKind | TrapKind)[]).map((value) => ({
+  value,
+  label: KIND_LABEL[value],
+}));
+
+/** A kind's name; an unknown one (from a hand-written chapter, say) is shown as it is. */
+export const kindLabel = (kind: string): string => (KIND_LABEL as Record<string, string>)[kind] ?? kind;

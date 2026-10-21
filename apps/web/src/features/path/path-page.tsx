@@ -1,3 +1,5 @@
+import { KIND_LABEL } from '@/components/tags/hints';
+import { ABOVE_ROW_LINK, RowLink } from '@/components/sortable-table';
 import {
   numberedMove,
   pathFromUcis,
@@ -36,15 +38,6 @@ import { to } from '@/router/location';
 import { SessionStarters } from './session-starters';
 import { lineHref } from '@/router/hrefs';
 import { useAsync } from '@/hooks/use-async';
-
-const KIND: Record<CourseUnit['kind'], string> = {
-  main: 'Main line',
-  gambit: 'Gambit',
-  sideline: 'Sideline',
-  rare: 'Rare',
-  'against-us': 'Trap to avoid',
-  'for-us': 'Trap to spring',
-};
 
 const STATE: Record<UnitState, { name: string; icon: typeof Lock; blurb: string }> = {
   locked: { name: 'Locked', icon: Lock, blurb: 'Pass the unit it grows from first.' },
@@ -292,10 +285,7 @@ function UnitRow({
 
   return (
     <li
-      className={`grid gap-2 rounded-xl border bg-card p-3 ${selected ? 'ring-2 ring-ring' : ''} ${state === 'locked' ? 'opacity-80' : ''}`}
-      onClick={(event) => {
-        if (!(event.target as HTMLElement).closest('a, button')) onSelect();
-      }}
+      className={`relative grid gap-2 rounded-xl border bg-card p-3 ${selected ? 'ring-2 ring-ring' : ''} ${state === 'locked' ? 'opacity-80' : ''}`}
     >
       <div className="flex flex-wrap items-start gap-x-3 gap-y-1">
         <span
@@ -307,13 +297,14 @@ function UnitRow({
         </span>
         <div className="grid min-w-0 flex-1 gap-0.5">
           <h3 className="font-semibold leading-tight">
-            <span className="sr-only">Unit {unit.index + 1}: </span>
-            {lineName}
+            <RowLink onClick={onSelect} label={`Unit ${unit.index + 1}: ${lineName}, show it on the board`}>
+              {lineName}
+            </RowLink>
           </h3>
           <p className="text-sm text-muted-foreground">{headline(content, unit, units)}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <Badge variant="outline">{KIND[unit.kind]}</Badge>
+        <div className={`flex flex-wrap items-center gap-1.5 ${ABOVE_ROW_LINK}`}>
+          <Badge variant="outline">{KIND_LABEL[unit.kind]}</Badge>
           <Badge
             variant={state === 'locked' ? 'outline' : state === 'unlocked' ? 'secondary' : 'default'}
             title={blurb}
@@ -352,12 +343,12 @@ function UnitRow({
           </p>
         )}
         {(quizzes.length > 0 || traps.length > 0) && (
-          <Extras>
+          <Extras className={ABOVE_ROW_LINK}>
             {traps.map((trap) => (
               <li key={trap.id}>
                 <Swords className="mr-1 inline size-3.5" aria-hidden />
                 <a className="underline-offset-4 hover:underline" href={to(lineHref(course, trap.id, 'about'))}>
-                  {trap.whose === 'for-us' ? 'Trap to spring' : 'Trap to avoid'}: {trap.name}
+                  {KIND_LABEL[trap.whose === 'for-us' ? 'for-us' : 'against-us']}: {trap.name}
                 </a>
               </li>
             ))}
@@ -369,7 +360,7 @@ function UnitRow({
             ))}
           </Extras>
         )}
-        <div className="flex flex-wrap gap-2 pt-1">
+        <div className={`flex flex-wrap gap-2 pt-1 ${ABOVE_ROW_LINK}`}>
           <Button asChild size="sm" variant={state === 'unlocked' ? 'default' : 'outline'}>
             <a href={to(lineHref(course, unit.line, 'learn', ref))}>
               <BookOpen aria-hidden /> Learn
@@ -387,9 +378,9 @@ function UnitRow({
 }
 
 /** Supplementary material: shown with the unit, never needed to pass it. */
-function Extras({ children }: { children: ReactNode }) {
+function Extras({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
-    <div className="grid gap-1 rounded-lg bg-muted/50 p-2 text-sm">
+    <div className={`grid gap-1 rounded-lg bg-muted/50 p-2 text-sm ${className}`}>
       <p className="text-xs font-medium text-muted-foreground">Extras, not needed to pass</p>
       <ul className="grid gap-1">{children}</ul>
     </div>

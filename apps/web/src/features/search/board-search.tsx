@@ -22,11 +22,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import type { FilterOption } from '@/components/filter-options';
+import { FilterToggle } from '@/components/filter-toggle';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
 import { queryEpd, type BoardQuery } from './board-query';
 import { courseHref, lineHref } from '@/router/hrefs';
+
+const KIND_FILTER_OPTIONS: readonly FilterOption<ResultKind>[] = [
+  { value: 'both', label: 'Lines and traps' },
+  { value: 'lines', label: 'Lines' },
+  { value: 'refutations', label: 'Traps' },
+];
 
 type Props = {
   open: boolean;
@@ -138,19 +145,14 @@ export function BoardSearchDialog({
           />
 
           <div className="grid min-h-0 content-start gap-4 md:overflow-y-auto md:pr-1">
-            <ToggleGroup
-              type="single"
-              variant="outline"
+            <FilterToggle
               size="sm"
               value={query.kind}
-              onValueChange={(value) => value && onQueryChange({ ...query, kind: value as ResultKind })}
-              aria-label="What to find"
+              onChange={(kind) => onQueryChange({ ...query, kind })}
+              options={KIND_FILTER_OPTIONS}
+              label="What to find"
               className="justify-self-start"
-            >
-              <ToggleGroupItem value="both">Lines and traps</ToggleGroupItem>
-              <ToggleGroupItem value="lines">Lines</ToggleGroupItem>
-              <ToggleGroupItem value="refutations">Traps</ToggleGroupItem>
-            </ToggleGroup>
+            />
 
             {failed && (
               <Alert variant="destructive">

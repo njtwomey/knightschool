@@ -16,11 +16,11 @@ import {
 import { Search, Swords, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Hint } from '@/components/hint';
+import { SIDE_FILTER_OPTIONS, type FilterOption } from '@/components/filter-options';
+import { FilterToggle } from '@/components/filter-toggle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { loadSearchIndex } from '@/data/content';
 import { useStorage } from '@/data/storage';
 import { useCatalog } from '@/data/catalog-store';
@@ -29,10 +29,27 @@ import { BoardSearchDialog } from './board-search';
 import { useProgress } from '@/data/progress-store';
 import { readHashState, setHashState } from '@/router/location';
 import { CourseCard } from './course-card';
-import { ROLE_HINT, SCOPE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
+import { ROLE_HINT, SCOPE_HINT, TIER_HINT } from '@/components/tags/hints';
 import { VariationCard } from './variation-card';
 import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state';
 import { useAsync } from '@/hooks/use-async';
+
+const SCOPE_OPTIONS: readonly FilterOption<CatalogFilter['scope']>[] = [
+  { value: 'all', label: 'All', hint: SCOPE_HINT.all },
+  { value: 'courses', label: 'Courses', hint: SCOPE_HINT.courses },
+  { value: 'lines', label: 'Lines', hint: SCOPE_HINT.lines },
+];
+const ROLE_OPTIONS: readonly FilterOption<CatalogFilter['role']>[] = [
+  { value: 'all', label: 'Any', hint: 'Show courses whether you play the opening or meet it.' },
+  { value: 'play', label: 'Play it', hint: ROLE_HINT.play },
+  { value: 'against', label: 'Play against it', hint: ROLE_HINT.against },
+];
+// No "all" button: choosing the chosen tier again shows every tier.
+const TIER_OPTIONS: readonly FilterOption<CatalogFilter['tier']>[] = [
+  { value: 1, label: 'Tier 1', hint: TIER_HINT[1] },
+  { value: 2, label: 'Tier 2', hint: TIER_HINT[2] },
+  { value: 3, label: 'Tier 3', hint: TIER_HINT[3] },
+];
 
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
 /** The courses and lines the board search reaches, and the opening the position belongs to ("Englund Gambit"). */
@@ -174,76 +191,34 @@ export function SearchPage() {
             className="pl-9"
           />
         </div>
-        <ToggleGroup
-          type="single"
-          variant="outline"
+        <FilterToggle
           value={filter.scope}
-          onValueChange={(scope) => setFilter({ ...filter, scope: (scope || 'all') as CatalogFilter['scope'] })}
-          aria-label="Show"
-        >
-          <Hint text={SCOPE_HINT.all}>
-            <ToggleGroupItem value="all">All</ToggleGroupItem>
-          </Hint>
-          <Hint text={SCOPE_HINT.courses}>
-            <ToggleGroupItem value="courses">Courses</ToggleGroupItem>
-          </Hint>
-          <Hint text={SCOPE_HINT.lines}>
-            <ToggleGroupItem value="lines">Lines</ToggleGroupItem>
-          </Hint>
-        </ToggleGroup>
-        <ToggleGroup
-          type="single"
-          variant="outline"
+          onChange={(scope) => setFilter({ ...filter, scope })}
+          options={SCOPE_OPTIONS}
+          allValue="all"
+          label="Show"
+        />
+        <FilterToggle
           value={filter.role}
-          onValueChange={(role) => setFilter({ ...filter, role: (role || 'all') as CatalogFilter['role'] })}
-          aria-label="Playing it or against it"
-        >
-          <Hint text={'Show courses whether you play the opening or meet it.'}>
-            <ToggleGroupItem value="all">Any</ToggleGroupItem>
-          </Hint>
-          <Hint text={ROLE_HINT.play}>
-            <ToggleGroupItem value="play">Play it</ToggleGroupItem>
-          </Hint>
-          <Hint text={ROLE_HINT.against}>
-            <ToggleGroupItem value="against">Play against it</ToggleGroupItem>
-          </Hint>
-        </ToggleGroup>
-        <ToggleGroup
-          type="single"
-          variant="outline"
-          value={String(filter.tier)}
-          onValueChange={(tier) =>
-            setFilter({ ...filter, tier: (tier ? Number(tier) : 'all') as CatalogFilter['tier'] })
-          }
-          aria-label="Tier"
-        >
-          <Hint text={TIER_HINT[1]}>
-            <ToggleGroupItem value="1">Tier 1</ToggleGroupItem>
-          </Hint>
-          <Hint text={TIER_HINT[2]}>
-            <ToggleGroupItem value="2">Tier 2</ToggleGroupItem>
-          </Hint>
-          <Hint text={TIER_HINT[3]}>
-            <ToggleGroupItem value="3">Tier 3</ToggleGroupItem>
-          </Hint>
-        </ToggleGroup>
-        <ToggleGroup
-          type="single"
-          variant="outline"
+          onChange={(role) => setFilter({ ...filter, role })}
+          options={ROLE_OPTIONS}
+          allValue="all"
+          label="Playing it or against it"
+        />
+        <FilterToggle
+          value={filter.tier}
+          onChange={(tier) => setFilter({ ...filter, tier })}
+          options={TIER_OPTIONS}
+          allValue="all"
+          label="Tier"
+        />
+        <FilterToggle
           value={filter.side}
-          onValueChange={(side) => setFilter({ ...filter, side: (side || 'all') as CatalogFilter['side'] })}
-          aria-label="Side"
-        >
-          <Hint text={'Show courses for White and for Black.'}>
-            <ToggleGroupItem value="all">Both</ToggleGroupItem>
-          </Hint>
-          <Hint text={SIDE_HINT.white}>
-            <ToggleGroupItem value="white">White</ToggleGroupItem>
-          </Hint>
-          <Hint text={SIDE_HINT.black}>
-            <ToggleGroupItem value="black">Black</ToggleGroupItem>
-          </Hint>
-        </ToggleGroup>
+          onChange={(side) => setFilter({ ...filter, side })}
+          options={SIDE_FILTER_OPTIONS}
+          allValue="all"
+          label="Side"
+        />
         <div className="flex">
           <Button
             variant="outline"

@@ -27,6 +27,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { SIDE_OPTIONS } from '@/components/filter-options';
+import { FilterToggle } from '@/components/filter-toggle';
 import { useCatalog } from '@/data/catalog-store';
 import { GroupActions } from './group-actions';
 import { entryId, entrySection, useDraft } from './helpers';
@@ -111,16 +113,13 @@ export function NewCourseDialog({ compact = false }: { compact?: boolean }) {
           </div>
           <div className="grid gap-1.5">
             <Label>You play</Label>
-            <ToggleGroup
-              type="single"
-              variant="outline"
+            <FilterToggle
               value={side}
-              onValueChange={(value) => value && setSide(value as Side)}
+              onChange={setSide}
+              options={SIDE_OPTIONS}
+              label="You play"
               className="justify-self-start"
-            >
-              <ToggleGroupItem value="white">White</ToggleGroupItem>
-              <ToggleGroupItem value="black">Black</ToggleGroupItem>
-            </ToggleGroup>
+            />
           </div>
           {opening === null ? (
             <Button
@@ -232,20 +231,17 @@ export function CourseForm({ course }: { course: DraftCourse }) {
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="grid gap-1.5">
           <Label>You play</Label>
-          <ToggleGroup
-            type="single"
-            variant="outline"
+          <FilterToggle
             value={manifest.side}
+            onChange={(side) => void useAuthor.getState().setSide(side)}
+            options={SIDE_OPTIONS}
+            label="You play"
             disabled={played}
-            onValueChange={(value) => value && void useAuthor.getState().setSide(value as Side)}
             className="justify-self-start"
             title={
               played ? 'Every move is written for one side, so the side is fixed once a line has moves.' : undefined
             }
-          >
-            <ToggleGroupItem value="white">White</ToggleGroupItem>
-            <ToggleGroupItem value="black">Black</ToggleGroupItem>
-          </ToggleGroup>
+          />
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor="course-tier">Tier</Label>

@@ -1,4 +1,5 @@
 import { courseUnits, lineOrderOf, type CourseUnit } from '@knightschool/core';
+import { KIND_LABEL, kindLabel } from '@/components/tags/hints';
 import { ArrowDown, ArrowUp, GripVertical, ListChecks, Route, Swords } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -8,15 +9,6 @@ import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { entryId, unitSummary } from './helpers';
 import { fullLine, useAuthor, type DraftCourse } from './store';
-
-const KIND: Record<string, string> = {
-  main: 'Main line',
-  gambit: 'Gambit',
-  sideline: 'Sideline',
-  rare: 'Rare',
-  'against-us': 'Trap to avoid',
-  'for-us': 'Trap to spring',
-};
 
 /** One row of the path: a line (on the path or a bonus), or a trap to spring or a quiz shown with a unit. */
 type Row =
@@ -215,8 +207,8 @@ export function PathOrder({ course }: { course: DraftCourse }) {
                   <span className={`truncate ${bonusRow ? '' : 'font-medium text-foreground'}`}>{name}</span>
                   <span className="text-xs text-muted-foreground">
                     {row.type === 'line'
-                      ? `${row.bonus ? `Alternative, shown not drilled (${KIND[kindOf(row.id)] ?? kindOf(row.id)})` : (KIND[kindOf(row.id)] ?? kindOf(row.id))}${variant(row.id)?.opponent ? `, after ${variant(row.id)!.opponent}` : ''}`
-                      : `${row.extra === 'trap' ? 'Trap to spring' : 'Question'}${row.unit ? `, with ${unitLabel(row.unit)}` : ''}`}
+                      ? `${row.bonus ? `Alternative, shown not drilled (${kindLabel(kindOf(row.id))})` : kindLabel(kindOf(row.id))}${variant(row.id)?.opponent ? `, after ${variant(row.id)!.opponent}` : ''}`
+                      : `${row.extra === 'trap' ? KIND_LABEL['for-us'] : 'Question'}${row.unit ? `, with ${unitLabel(row.unit)}` : ''}`}
                   </span>
                 </div>
                 <Button

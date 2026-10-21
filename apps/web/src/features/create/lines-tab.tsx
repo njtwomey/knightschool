@@ -1,5 +1,9 @@
 import { Copy, GitBranch, PenLine, Plus, TextCursorInput, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { FilterToggle } from '@/components/filter-toggle';
+import { ABOVE_ROW_LINK, RowLink, SortableHeader, type SortColumn } from '@/components/sortable-table';
+import { useSort } from '@/hooks/use-sort';
+import { KIND_LABEL, kindLabel } from '@/components/tags/hints';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,8 +30,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { navigate, to } from '@/router/location';
 import { GroupSelect } from './group-select';
@@ -35,21 +38,79 @@ import { entryId, problemsFor } from './helpers';
 import { draftChapter, fullLine, useAuthor, type DraftCourse } from './store';
 import { lineEditHref } from '@/router/hrefs';
 
-const KIND: Record<string, string> = {
-  main: 'Main line',
-  gambit: 'Gambit',
-  sideline: 'Sideline',
-  rare: 'Rare',
-  'against-us': 'Trap to avoid',
-  'for-us': 'Trap to spring',
+/** One line of the table, worked out once so that any column can sort it. */
+type Row = {
+  id: string;
+  /** Where it is in the course's list: the table's own order. */
+  order: number;
+  title: string;
+  kind: string;
+  alternative: boolean;
+  section: string;
+  opponent: string;
+  moves: number;
+  /** The title of the line it grows from; none for a line from the start. */
+  parent: string | undefined;
+  own: boolean;
+  problems: string[];
+};
+type SortKey = 'order' | 'title' | 'kind' | 'section' | 'opponent' | 'moves' | 'parent';
+const COLUMNS: SortColumn<SortKey>[] = [
+  { key: 'title', label: 'Line' },
+  { key: 'kind', label: 'Kind' },
+  { key: 'section', label: 'Group' },
+  { key: 'opponent', label: 'Opponent' },
+  { key: 'moves', label: 'Moves', className: 'text-right' },
+  { key: 'parent', label: 'Grows from' },
+];
+// Kinds sort by importance (main lines first), not by name; an unknown kind goes last.
+const kindRank = (kind: string) => {
+  const rank = Object.keys(KIND_LABEL).indexOf(kind);
+  return rank < 0 ? Infinity : rank;
+};
+const compare: Record<SortKey, (a: Row, b: Row) => number> = {
+  order: (a, b) => a.order - b.order,
+  title: (a, b) => a.title.localeCompare(b.title),
+  kind: (a, b) => kindRank(a.kind) - kindRank(b.kind) || Number(a.alternative) - Number(b.alternative),
+  section: (a, b) => a.section.localeCompare(b.section),
+  opponent: (a, b) => a.opponent.localeCompare(b.opponent),
+  moves: (a, b) => a.moves - b.moves,
+  // Lines from the start first.
+  parent: (a, b) => (a.parent ?? '').localeCompare(b.parent ?? ''),
 };
 
-/** The Lines tab: every line of the course in one table, with what each grows from and what can be done to it. */
+/**
+ * The Lines tab: every line of the course in one table, with what each grows from and what can be done to it. In the
+ * course's order to begin with; a heading sorts by its column.
+ */
 export function LinesTab({ course }: { course: DraftCourse }) {
   const { build, rows } = useAuthor();
   const lines = course.manifest.lines;
+  const { sort, sortBy, sorted } = useSort(compare, {
+    initial: { key: 'order', descending: false },
+    fallback: compare.order,
+  });
   const title = (id: string) =>
     fullLine(build, id)?.game.tags.Variation ?? draftChapter(rows, id)?.tags.Variation ?? id;
+  const data: Row[] = lines.map((entry, order) => {
+    const id = entryId(entry);
+    const line = fullLine(build, id);
+    const own = draftChapter(rows, id);
+    const parent = line?.parents.at(-1);
+    return {
+      id,
+      order,
+      title: title(id),
+      kind: line?.game.tags.Kind ?? own?.tags.Kind ?? '',
+      alternative: typeof entry !== 'string' && Boolean(entry.alternative),
+      section: (typeof entry !== 'string' && entry.section) || '',
+      opponent: line?.game.tags.Opponent ?? '',
+      moves: line ? line.game.moves.length - line.startPly : (own?.moves.length ?? 0),
+      parent: parent === undefined ? undefined : title(parent),
+      own: own !== undefined,
+      problems: problemsFor(build, [id]).map((problem) => problem.message),
+    };
+  });
   return (
     <div className="grid gap-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -60,86 +121,49 @@ export function LinesTab({ course }: { course: DraftCourse }) {
       </div>
       <div className="overflow-x-auto rounded-xl border">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Line</TableHead>
-              <TableHead>Kind</TableHead>
-              <TableHead>Group</TableHead>
-              <TableHead>Opponent</TableHead>
-              <TableHead className="text-right">Moves</TableHead>
-              <TableHead>Grows from</TableHead>
-              <TableHead>
-                <span className="sr-only">Actions</span>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
+          <SortableHeader columns={COLUMNS} sort={sort} onSort={sortBy} trailing={['Actions']} />
           <TableBody>
-            {lines.map((entry) => {
-              const id = entryId(entry);
-              const line = fullLine(build, id);
-              const own = draftChapter(rows, id);
-              const problems = problemsFor(build, [id]);
-              const parent = line?.parents.at(-1);
-              const alternative = typeof entry !== 'string' && entry.alternative;
-              const kind = line?.game.tags.Kind ?? own?.tags.Kind ?? '';
-              return (
-                <TableRow
-                  key={id}
-                  className={own ? 'cursor-pointer' : undefined}
-                  onClick={(event) => {
-                    if (
-                      own &&
-                      !(event.target as HTMLElement).closest(
-                        'a, button, input, form, [role=dialog], [role=alertdialog], [role=option], [role=listbox]',
-                      )
-                    )
-                      navigate(lineEditHref(course.id, id));
-                  }}
-                >
-                  <TableCell className="min-w-40 whitespace-normal font-medium">
-                    {own ? (
-                      <a href={to(lineEditHref(course.id, id))} className="hover:underline">
-                        {title(id)}
-                      </a>
-                    ) : (
-                      <span title="A line of the app: it is listed here but written elsewhere.">{title(id)}</span>
-                    )}
-                    {problems.length > 0 && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Badge variant="destructive" className="ml-2" tabIndex={0}>
-                            Problem
-                          </Badge>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-sm">{problems.map((p) => p.message).join(' ')}</TooltipContent>
-                      </Tooltip>
-                    )}
-                  </TableCell>
-                  <TableCell className="whitespace-normal text-sm">
-                    {KIND[kind] ?? kind}
-                    {alternative && <span className="text-muted-foreground"> (alternative)</span>}
-                  </TableCell>
-                  <TableCell>
-                    <GroupSelect course={course} lineId={id} className="h-8 w-40" />
-                  </TableCell>
-                  <TableCell className="font-mono text-xs">{line?.game.tags.Opponent ?? ''}</TableCell>
-                  <TableCell className="text-right tabular-nums">
-                    {line ? line.game.moves.length - line.startPly : (own?.moves.length ?? 0)}
-                  </TableCell>
-                  <TableCell className="whitespace-normal text-sm">
-                    {parent ? (
-                      <span className="inline-flex items-center gap-1">
-                        <GitBranch className="size-3.5 text-muted-foreground" aria-hidden />
-                        {title(parent)}
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground">the start</span>
-                    )}
-                  </TableCell>
-                  <TableCell>{own && <LineActions courseId={course.id} id={id} title={title(id)} />}</TableCell>
-                </TableRow>
-              );
-            })}
+            {sorted(data).map((row) => (
+              <TableRow key={row.id} className={row.own ? 'relative' : undefined}>
+                <TableCell className="min-w-40 whitespace-normal font-medium">
+                  {row.own ? (
+                    <RowLink href={lineEditHref(course.id, row.id)}>{row.title}</RowLink>
+                  ) : (
+                    <span title="A line of the app: it is listed here but written elsewhere.">{row.title}</span>
+                  )}
+                  {row.problems.length > 0 && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Badge variant="destructive" className={`ml-2 ${ABOVE_ROW_LINK}`} tabIndex={0}>
+                          Problem
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-sm">{row.problems.join(' ')}</TooltipContent>
+                    </Tooltip>
+                  )}
+                </TableCell>
+                <TableCell className="whitespace-normal text-sm">
+                  {kindLabel(row.kind)}
+                  {row.alternative && <span className="text-muted-foreground"> (alternative)</span>}
+                </TableCell>
+                <TableCell>
+                  <GroupSelect course={course} lineId={row.id} className={`h-8 w-40 ${ABOVE_ROW_LINK}`} />
+                </TableCell>
+                <TableCell className="font-mono text-xs">{row.opponent}</TableCell>
+                <TableCell className="text-right tabular-nums">{row.moves}</TableCell>
+                <TableCell className="whitespace-normal text-sm">
+                  {row.parent !== undefined ? (
+                    <span className="inline-flex items-center gap-1">
+                      <GitBranch className="size-3.5 text-muted-foreground" aria-hidden />
+                      {row.parent}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">the start</span>
+                  )}
+                </TableCell>
+                <TableCell>{row.own && <LineActions courseId={course.id} id={row.id} title={row.title} />}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
@@ -155,7 +179,7 @@ function LineActions({ courseId, id, title }: { courseId: string; id: string; ti
     line.parents.includes(id),
   ).length;
   return (
-    <div className="flex justify-end gap-0.5">
+    <div className={`flex justify-end gap-0.5 ${ABOVE_ROW_LINK}`}>
       <Button asChild size="icon" variant="ghost" className="size-8" title="Edit">
         <a href={to(lineEditHref(courseId, id))} aria-label={`Edit ${title}`}>
           <PenLine aria-hidden />
@@ -239,18 +263,16 @@ function NewLineDialog({ course }: { course: DraftCourse }) {
           <DialogDescription>Start from the first move, or branch from a position of another line.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4">
-          <ToggleGroup
-            type="single"
-            variant="outline"
+          <FilterToggle
             value={how}
-            onValueChange={(value) => value && setHow(value as 'start' | 'branch')}
+            onChange={setHow}
+            options={[
+              { value: 'start', label: 'From the start' },
+              { value: 'branch', label: 'Branching from a line', disabled: ids.length === 0 },
+            ]}
+            label="Where the line starts"
             className="justify-self-start"
-          >
-            <ToggleGroupItem value="start">From the start</ToggleGroupItem>
-            <ToggleGroupItem value="branch" disabled={ids.length === 0}>
-              Branching from a line
-            </ToggleGroupItem>
-          </ToggleGroup>
+          />
           {how === 'branch' && (
             <div className="grid gap-1.5">
               <Label htmlFor="branch-from">Branching from</Label>

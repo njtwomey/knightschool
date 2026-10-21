@@ -1,5 +1,4 @@
-import { ArrowDown, ArrowUp, ArrowUpDown, Copy, Eye, PenLine, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { Copy, Eye, PenLine, Trash2 } from 'lucide-react';
 import { Page } from '@/components/page';
 import {
   AlertDialog,
@@ -14,9 +13,11 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ABOVE_ROW_LINK, RowLink, SortableHeader, type SortColumn } from '@/components/sortable-table';
+import { useSort } from '@/hooks/use-sort';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { navigate, to } from '@/router/location';
+import { to } from '@/router/location';
 import { NewCourseDialog } from './course-form';
 import { entryId, lastEdited, problemsFor, shortTime } from './helpers';
 import { ImportContributionDialog } from './publish';
@@ -26,7 +27,7 @@ import { courseHref, createHref } from '@/router/hrefs';
 
 type Row = { course: DraftCourse; lines: number; edited: string; problems: string[] };
 type SortKey = 'name' | 'side' | 'lines' | 'edited' | 'status';
-const COLUMNS: { key: SortKey; label: string; className?: string }[] = [
+const COLUMNS: SortColumn<SortKey>[] = [
   { key: 'name', label: 'Course' },
   { key: 'side', label: 'Side' },
   { key: 'lines', label: 'Lines', className: 'text-right' },
@@ -52,7 +53,7 @@ export function CreatePage() {
 
 function CreateList() {
   const { rows, build } = useAuthor();
-  const [sort, setSort] = useState<{ key: SortKey; descending: boolean }>({ key: 'edited', descending: true });
+  const { sort, sortBy, sorted } = useSort(compare, { initial: { key: 'edited', descending: true } });
   const data: Row[] = draftCourses(rows).map((course) => {
     const ids = [course.id, ...course.manifest.lines.map(entryId)];
     return {
@@ -62,9 +63,7 @@ function CreateList() {
       problems: problemsFor(build, ids).map((problem) => `${problem.id}: ${problem.message}`),
     };
   });
-  const sorted = [...data].sort((a, b) => compare[sort.key](a, b) * (sort.descending ? -1 : 1));
-  const sortBy = (key: SortKey) =>
-    setSort((current) => ({ key, descending: current.key === key ? !current.descending : key === 'edited' }));
+  const shown = sorted(data);
 
   return (
     <Page>
@@ -86,57 +85,17 @@ function CreateList() {
         </div>
       </header>
       <CreateNotices />
-      {sorted.length === 0 ? (
+      {shown.length === 0 ? (
         <p className="text-sm text-muted-foreground">No courses yet. Start one with New course.</p>
       ) : (
         <div className="overflow-x-auto rounded-xl border">
           <Table>
-            <TableHeader>
-              <TableRow>
-                {COLUMNS.map((column) => {
-                  const active = sort.key === column.key;
-                  const Icon = active ? (sort.descending ? ArrowDown : ArrowUp) : ArrowUpDown;
-                  return (
-                    <TableHead
-                      key={column.key}
-                      className={column.className}
-                      aria-sort={active ? (sort.descending ? 'descending' : 'ascending') : undefined}
-                    >
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`-ml-2 h-7 px-2 font-medium ${active ? 'text-foreground' : 'text-muted-foreground'}`}
-                        onClick={() => sortBy(column.key)}
-                      >
-                        {column.label}
-                        <Icon className={active ? '' : 'opacity-40'} aria-hidden />
-                      </Button>
-                    </TableHead>
-                  );
-                })}
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
+            <SortableHeader columns={COLUMNS} sort={sort} onSort={sortBy} trailing={['Actions']} />
             <TableBody>
-              {sorted.map(({ course, lines, edited, problems }) => (
-                <TableRow
-                  key={course.id}
-                  className="cursor-pointer"
-                  onClick={(event) => {
-                    if (
-                      !(event.target as HTMLElement).closest(
-                        'a, button, input, form, [role=dialog], [role=alertdialog], [role=option], [role=listbox]',
-                      )
-                    )
-                      navigate(createHref(course.id));
-                  }}
-                >
+              {shown.map(({ course, lines, edited, problems }) => (
+                <TableRow key={course.id} className="relative">
                   <TableCell className="min-w-40 whitespace-normal font-medium">
-                    <a href={to(createHref(course.id))} className="hover:underline">
-                      {course.manifest.name}
-                    </a>
+                    <RowLink href={createHref(course.id)}>{course.manifest.name}</RowLink>
                   </TableCell>
                   <TableCell className="capitalize">{course.manifest.side}</TableCell>
                   <TableCell className="text-right tabular-nums">{lines}</TableCell>
@@ -147,7 +106,7 @@ function CreateList() {
                     ) : (
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Badge variant="destructive" tabIndex={0}>
+                          <Badge variant="destructive" tabIndex={0} className={ABOVE_ROW_LINK}>
                             {problems.length} {problems.length === 1 ? 'problem' : 'problems'}
                           </Badge>
                         </TooltipTrigger>
@@ -172,7 +131,7 @@ function CreateList() {
 function RowActions({ course }: { course: DraftCourse }) {
   const name = course.manifest.name;
   return (
-    <div className="flex justify-end gap-0.5">
+    <div className={`flex justify-end gap-0.5 ${ABOVE_ROW_LINK}`}>
       <Button asChild size="icon" variant="ghost" className="size-8" title="Open">
         <a href={to(createHref(course.id))} aria-label={`Open ${name}`}>
           <PenLine aria-hidden />
