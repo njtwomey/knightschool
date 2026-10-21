@@ -17,6 +17,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
+import { lineHref } from '@/features/line/tabs';
 import { movesText, queryEpd, type BoardQuery } from './board-query';
 
 type Props = {
@@ -56,6 +57,18 @@ export function BoardSearchDialog({
   };
   const epd = queryEpd(query);
   const here = index ? searchAt(index, epd, query.kind) : undefined;
+  const name = index?.[epd]?.name;
+  // Every line through this position, by its own name, with the course it is in: the line is the answer here.
+  const lines = (here?.lines ?? []).flatMap((hit, i, all) => {
+    if (all.findIndex((other) => other.course === hit.course && other.line === hit.line) !== i) return [];
+    const course = courses.find((candidate) => candidate.id === hit.course);
+    const line = course?.lines.find((candidate) => candidate.id === hit.line);
+    return course && line ? [{ course, line, ends: hit.next === null }] : [];
+  });
+  // Lines before traps, and each course's lines in its teaching order.
+  const rank = ({ course, line }: (typeof lines)[number]) =>
+    (line.kind === 'refutation' ? 1e6 : 0) + courses.indexOf(course) * 1e3 + course.lines.indexOf(line);
+  lines.sort((a, b) => rank(a) - rank(b));
 
   function play(uci: string): boolean {
     try {
@@ -81,9 +94,7 @@ export function BoardSearchDialog({
       <DialogContent className="h-[min(92dvh,44rem)] grid-rows-[auto_minmax(0,1fr)_auto] sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Find by playing moves</DialogTitle>
-          <DialogDescription>
-            Play an opening on the board. The courses that cover it stay in the list.
-          </DialogDescription>
+          <DialogDescription>Play an opening on the board to see the lines that go through it.</DialogDescription>
         </DialogHeader>
 
         <div className="grid min-h-0 gap-5 overflow-y-auto md:grid-cols-[minmax(0,22rem)_1fr] md:overflow-hidden">
@@ -150,6 +161,11 @@ export function BoardSearchDialog({
                 <AlertDescription>{notice}</AlertDescription>
               </Alert>
             )}
+            {name && query.played.length > 0 && (
+              <p className="text-lg font-semibold leading-tight" role="status">
+                {name}
+              </p>
+            )}
             {here && here.moves.length > 0 && (
               <div className="grid gap-1.5">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -166,41 +182,48 @@ export function BoardSearchDialog({
                     >
                       {number} {move.san}
                       <span className="font-sans text-xs font-normal text-muted-foreground">
-                        {move.courses.length} {move.courses.length === 1 ? 'course' : 'courses'}
+                        {move.lines} {move.lines === 1 ? 'line' : 'lines'}
                       </span>
                     </Button>
                   ))}
                 </div>
               </div>
             )}
-            {here && here.courses.length > 0 && (
+            {lines.length > 0 && query.played.length > 0 && (
               <div className="grid gap-1.5">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Courses that cover this
+                  {lines.length} {lines.length === 1 ? 'line goes' : 'lines go'} through here
                 </p>
                 <ul className="-mx-2 grid gap-0.5 text-sm">
-                  {here.courses.map((id) => {
-                    const course = courses.find((candidate) => candidate.id === id);
-                    const lines = new Set(here.lines.filter((line) => line.course === id).map((line) => line.line))
-                      .size;
-                    // Straight to the course, with the moves played here already on its board.
-                    const href =
-                      to(`/course/${id}`) + buildHash({ m: encodeMoves(query.played.map((move) => move.uci)) });
-                    return (
-                      <li key={id}>
-                        <a
-                          href={href}
-                          className="flex items-baseline justify-between gap-2 rounded-md px-2 py-1.5 outline-none transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50"
-                        >
-                          <span className="font-medium">{course?.name ?? id}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {lines} {lines === 1 ? 'line' : 'lines'} · open
-                          </span>
-                        </a>
-                      </li>
-                    );
-                  })}
+                  {lines.map(({ course, line, ends }) => (
+                    <li key={`${course.id}/${line.id}`}>
+                      <a
+                        href={to(lineHref(course.id, line.id))}
+                        className="grid gap-0.5 rounded-md px-2 py-1.5 outline-none transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                      >
+                        <span className="font-medium">
+                          {line.name}
+                          {line.kind === 'refutation' && (
+                            <span className="font-normal text-muted-foreground"> (trap)</span>
+                          )}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {course.name}
+                          {ends ? ' · ends here' : ''}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
                 </ul>
+                <a
+                  href={
+                    to(`/course/${lines[0]!.course.id}`) +
+                    buildHash({ m: encodeMoves(query.played.map((move) => move.uci)) })
+                  }
+                  className="justify-self-start px-0 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                >
+                  Open {lines[0]!.course.name} at this position
+                </a>
               </div>
             )}
             {here && here.moves.length === 0 && (
@@ -214,10 +237,12 @@ export function BoardSearchDialog({
 
         <DialogFooter className="sm:justify-between">
           <p className="self-center text-sm text-muted-foreground" role="status">
-            {matches} {matches === 1 ? 'course matches' : 'courses match'}
+            {query.played.length > 0
+              ? `${lines.length} ${lines.length === 1 ? 'line' : 'lines'} in ${matches} ${matches === 1 ? 'course' : 'courses'}`
+              : `${matches} courses`}
           </p>
           <DialogClose asChild>
-            <Button>Show {matches === 1 ? 'the course' : `${matches} courses`}</Button>
+            <Button>{query.played.length > 0 && lines.length > 0 ? 'Show these lines' : 'Show the courses'}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
