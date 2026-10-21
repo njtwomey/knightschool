@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Albin Countergambit, Tartakower Defense"]
+[ECO "D08"]
+[Character "positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "win-the-d4-pawn,extra-pawn"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...c5"]
+[Start "albin 4.Nf3"]
+
+4... c5 { Backs up the pawn on d4 with another pawn. } ( 4... Bb4+ 5. Nbd2 { Blocks with the knight, which can go to b3 later to win the pawn on d4. } 5... Nc6 6. a3 { Asks the bishop. If it takes on d2, the queen takes back and hits d4. } 6... Bxd2+ 7. Qxd2 ) 5. e3 { Now e3 is safe: the pawn on c5 blocks the bishop's check from b4. White attacks the pawn on d4 again. } 5... Nc6 6. exd4 cxd4 7. Bd3 { Develops and gets ready to castle. Plan: castle, then Bf4 or Re1 to hold the extra pawn on e5, and win the loose pawn on d4. } *

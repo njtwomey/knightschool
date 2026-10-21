@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Marshall Defense"]
+[ECO "D06"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork"]
+[Themes "centre-pawns,tempo-gain"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "2...Nf6"]
+[Start "orthodox 2.c4"]
+
+2... Nf6 { Develops, but leaves the pawn on d5 with no pawn to back it up. } 3. cxd5 { Takes at once. Black has no pawn to recapture with, so a piece must, and White's pawns can chase that piece. } 3... Nxd5 ( 3... Qxd5 4. Nc3 { Develops with a hit on the queen, so Black spends another move on it. } 4... Qd8 5. Nf3 ) ( 3... c6 4. Nc3 cxd5 5. Nf3 { Black has the pawn back, and White has a calm position with the c-file half open. } ) 4. Nf3 { Develops first. White wants e4 to chase the knight, and will play it when it comes with a threat. } 4... Bf5 ( 4... Nf6 5. Nc3 e6 6. e4 { With the knight back on f6, White takes the whole centre with two pawns. } ) ( 4... g6 5. e4 Nb6 6. Nc3 Bg7 7. Be3 { Guards d4, which the bishop on g7 is aiming at. White has the big centre Black allowed. } ) ( 4... Nc6 5. e4 Nb6 6. d5 { Chases the other knight as well. Black's knights have used many moves and stand badly. } ) 5. Nbd2 { Gets ready for e4. The bishop on f5 stops it now, but with a second guard on e4 the pawn push will hit the knight on d5 and the bishop on f5 together. } 5... Nf6 ( 5... e6 $2 6. e4 { The pawn forks the knight on d5 and the bishop on f5, and Black loses one of them. } ) 6. Qb3 { The bishop has left c8, so nothing guards b7. The queen attacks it and Black must spend a move to defend. } 6... Qc8 7. g3 { The bishop goes to g2, where it adds to the pressure on b7 along the long diagonal. } 7... e6 8. Bg2 c6 ( 8... Be7 9. Ne5 { The knight steps off the long diagonal, so the bishop on g2 joins the queen against b7, and the knight hits c6 and f7 too. } ) 9. Nh4 { Hits the bishop on f5. White can take it and keep the two bishops. Plan: Nxf5, castle, then e4 for the centre, with the queen and bishop aimed at the queenside. } *

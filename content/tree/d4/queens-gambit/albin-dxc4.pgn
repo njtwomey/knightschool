@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Albin Countergambit, 3...dxc4"]
+[ECO "D08"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "queen-trade,extra-pawn"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...dxc4"]
+[Start "albin 3.dxe5"]
+
+3... dxc4 { Black takes a pawn back at once instead of pushing ...d4. } ( 3... Nc6 4. cxd5 { Takes the other pawn too. Black wins back e5 but stays a pawn down. } 4... Nxe5 5. Nc3 ) 4. Qxd8+ { Swaps queens. Black's king must take back, so it can no longer castle. } 4... Kxd8 5. Nf3 { Develops and guards the extra pawn on e5. } 5... Nc6 6. Nc3 Be6 ( 6... h6 7. e4 ) 7. e4 { Takes the centre and opens the bishop on f1, which takes back on c4. Plan: Be3, Bxc4 and a rook to d1 against Black's king. } *

@@ -21,8 +21,11 @@ about:
     an opponent than trap them.
 plans:
   - If Black takes on c4, win the pawn back with a developing move (e3 and Bxc4), not by chasing it with pawns.
-  - If Black declines with ...e6, pin the knight with Bg5, then e3, Nf3, castle and use the c-file.
-  - Against the Slav, play a4 so Black cannot defend the pawn with ...b5.
+  - If Black declines with ...e6, pin the knight with Bg5, then e3, Nf3, Rc1 and use the c-file. Against ...c5, take on
+    c5 or d5 and play against the lone pawn left on d5.
+  - When a Black bishop pins a knight from b4, ask it with a3 and take the two bishops.
+  - Against the Slav, play a4 if Black takes on c4 so ...b5 cannot hold the pawn. If the c8 bishop comes out early to f5
+    or g4, swap on d5 and play Qb3 to hit the pawn on b7.
   - Against the Albin, win the d4 pawn back with Nbd2 and Nb3, and never play e3 early (the Lasker Trap).
   - Once the pieces are out, take the centre with e4.
 motifs: [develop-first, centre-pawns, castle-early]
@@ -72,3 +75,15 @@ lines:
     section: Slav (2...c6)
   - id: slav-accepted
     section: Slav (2...c6)
+  - id: albin-tartakower
+    section: Counter-gambits
+  - id: albin-dxc4
+    section: Counter-gambits
+  - id: marshall-defence
+    section: Other replies
+  - id: chigorin-dxc4
+    section: Other replies
+  - id: chigorin-e6
+    section: Other replies
+  - id: baltic-defence
+    section: Other replies

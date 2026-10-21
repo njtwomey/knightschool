@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Chigorin Defense, 3...e6"]
+[ECO "D07"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "pin-on-f6,transposition"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...e6"]
+[Start "chigorin 3.Nf3"]
+
+3... e6 { A solid set-up, like the Queen's Gambit Declined, but the knight on c6 blocks the c-pawn, so Black cannot easily break with ...c5. } ( 3... Nf6 4. cxd5 { Takes at once: whichever piece takes back, White gains time against it. } 4... Nxd5 { The same position as the Marshall Defence with ...Nc6: White plays e4, and d5 if the knight goes to b6. } ( 4... Qxd5 5. Nc3 ) ) ( 3... Bf5 $2 4. cxd5 { Black cannot take back easily: the queen will be chased and the knight on c6 hangs. } 4... Qxd5 ( 4... Bxb1 5. dxc6 ) 5. Nc3 Qa5 6. Bd2 { Lines the bishop up with the queen on a5. When the knight on c3 moves, the queen is attacked. } ) 4. Nc3 Nf6 ( 4... Bb4 5. e3 Nf6 6. Bd2 { Breaks the pin on the knight on c3. } ) ( 4... dxc4 5. e4 { With Black's d-pawn gone, White takes the whole centre. The bishop takes back on c4 next. } ) 5. Bg5 { Pins the knight on f6, the same idea as in the Orthodox. } 5... Be7 { The same position as the Orthodox line with ...Nc6. White plays e3 and Rc1, then Bd3 and castles, and the knight on c6 keeps Black's c-pawn from freeing the game. } *

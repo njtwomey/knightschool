@@ -38,3 +38,44 @@
   examples:
     match: [b5, it stops b5, the pawn push b5]
     miss: [e5, Bf5, it attacks the knight, no idea]
+- id: marshall-e4-fork
+  line: 1. d4 d5 2. c4 Nf6 3. cxd5 Nxd5 4. Nf3 Bf5 5. Nbd2 e6
+  prompt: 'Black has just played ...e6. Which pawn move wins a piece?'
+  accept:
+    - keywords: [[e4]]
+      feedback: Yes. The pawn on e4 attacks the knight on d5 and the bishop on f5 at once, and only one can move away.
+    - keywords: [[fork], [knight, bishop, d5, f5]]
+      all: true
+      partial: true
+      feedback: Close. Say which pawn move makes the fork.
+  reveal: 6.e4 forks the knight on d5 and the bishop on f5. Nbd2 was played to support exactly this push.
+  showMove: e4
+  examples:
+    match: [e4, e4 forks the knight and bishop, the pawn to e4]
+    miss: [Qb3, Nh4, e3, no idea]
+- id: slav-qb3-b7
+  line: 1. d4 d5 2. c4 c6 3. Nf3 Nf6 4. Nc3 Bf5 5. cxd5 cxd5
+  prompt: 'White plays Qb3 next. Which Black pawn does the queen attack, and why is it weak now?'
+  accept:
+    - keywords: [[b7]]
+      feedback: Yes. The bishop has left c8, so nothing guards b7 and Qb3 attacks it.
+  reveal: Qb3 attacks b7. With the bishop on f5 instead of c8, b7 has no guard, so Black must spend a move on it.
+  showMove: Qb3
+  examples:
+    match: [b7, the pawn on b7, it hits b7 because the bishop left]
+    miss: [d5, the knight, f7, no idea]
+- id: albin-e3-safe
+  line: 1. d4 d5 2. c4 e5 3. dxe5 d4 4. Nf3 c5
+  prompt: 'In the Albin, an early e3 walks into the Lasker Trap. Why is 5.e3 safe in this position?'
+  accept:
+    - keywords: [[c5], [bishop, bb4, b4, check, block]]
+      all: true
+      feedback: Yes. The pawn on c5 stands in the bishop's way, so there is no ...Bb4+ and no trap.
+    - keywords: [[bb4, b4], [cannot, no, not, blocked]]
+      all: true
+      feedback: Yes. The pawn on c5 blocks the bishop, so ...Bb4+ is no longer possible.
+  reveal: The pawn on c5 blocks the bishop on f8 from reaching b4, so there is no ...Bb4+ and no Lasker Trap. 5.e3 attacks d4 again.
+  showMove: e3
+  examples:
+    match: [the pawn on c5 blocks the bishop, c5 stops Bb4 check, Bb4 is not possible any more]
+    miss: [it attacks d4, develops the bishop, no idea, Bb5 check]
