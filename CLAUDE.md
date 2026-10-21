@@ -190,7 +190,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
 - `course`: one course's page, Overview, Path and Tree tabs at the end of the breadcrumbs (`COURSE_TABS` in `router/hrefs.ts`). The
   introduction (`CourseIntro`: summary, then idea, risks and who it suits in three columns), plans and motifs, line tags
   explained on hover and in a key (`TagLegend`, wording in `components/tags/hints.ts`), the board with the
-  engine strip (`board-panel.tsx`, `position-details.tsx`), its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
+  engine strip and eval bar (`board-panel.tsx`, a StudyBoard; `position-details.tsx`), its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
   from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
   `lichess` in index.json).
 - `create` (**Create**, the course editor, its own section of the menu). `/create` (`create-page.tsx`) is your courses
@@ -260,8 +260,8 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; how deep: to move 6, 10
   or 15 or the whole line, `cutToMove`; lines from the courses you
   are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
-  instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hints (piece, then move) are
-  counted. The last set-up is kept in localStorage. Runs go to the `speed_attempts` table (no effect on the review
+  instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hint (the piece) and Show
+  me (the move) are counted, a step each. The last set-up is kept in localStorage. Runs go to the `speed_attempts` table (no effect on the review
   schedule), shown on the Stats tab.
   `name-it` ("Name That Opening", menu "Name it", `/name`; `useNameIt`): a position from the courses and you type what it is; `guessTargets` collects every
   opening and variation whose lines reach it (transpositions count) and `gradeGuess` gives full credit for a variation, half
@@ -285,13 +285,27 @@ between lines of a fixed run. Every delay lives in one table, `FEEDBACK_DELAYS` 
 cross, one wrong-move time everywhere, the computer's reply, the next card, a quiz or Name it answer, Speed's countdown,
 "Copied"); session stores schedule them with `createTimers()` and clear the lot when they stop or start again.
 
-All boards are `components/board/app-board.tsx` (colour theme, piece set, legal-move dots, hover and selection
-highlights, tick/cross badge, hint pulse). Its size is one rule, `--board-size` in `index.css`: never wider than its
-column or its cap, never taller than the screen less the header and controls (`--board-chrome`); pages with a board
-column and a panel use the `.board-columns` class (stacked on a phone, side by side from lg and on a phone held sideways;
-`stacked:` and `short:` variants). Page grids use `minmax(0,1fr)` columns so content can never widen a column. Preferences are per device in localStorage (`board/prefs.ts`), default the
-green profile. `StaticBoard` draws a FEN, EPD or PGN-at-a-ply (`resolvePosition` in core). Piece sets are the library's
-drawings with different finishing; a real alternative set needs a licence check first.
+Every board draws through `components/board/app-board.tsx` (colour theme, piece set, legal-move dots, hover and
+selection highlights, tick/cross badge, hint pulse). **Every board you study from is a `StudyBoard`**
+(`components/board/study-board.tsx`): AppBoard plus one control row, always in the same order and each control a prop:
+the settings gear (on by default), flip (`controls.flip`, where the exercise does not fix the side; `onFlip` when the page
+keeps the side, as Lab does in its hash), the step buttons (`stepper`), Hint and Show me (`controls.hint` / `show`: the
+piece, then the move; Speed counts each step), then the page's own `actions`; `controls.evalBar`, `engine` (`strip` with
+the move's cost, or `lines` in a card), `caption` and `below`. Steps come from `useLineStepper`
+(`components/board/line-stepper.ts`): positions and an index (with overrides for a line that is more than that, such
+as Learn playing the next move), and the one binding of Left, Right, Home and End, never while typing, with a modifier, or
+for a key something else handled; one stepper per page has `keys`. Arrows from a move are `uciArrow(uci, tone)` and the
+`BoardArrow` / `BoardBadge` types live in `board/shapes.ts`. Moves are listed with `components/move-list.tsx`
+(`MoveList`: `table` for the moves so far, `inline` for a run in text, `paragraphs` for a line told with its comments;
+moves can be steps). The engine store is `data/engine/`, its UI `components/engine/`. `BoardThumb`, `StaticBoard` and the
+Home hero are plain AppBoards. Size is one rule, `--board-size` in `index.css`: never wider than its column or its cap
+(36rem for a page's main board, 22rem with `size="aside"` / `.board-aside` beside other content), never taller than the
+screen less the header and controls (`--board-chrome`); pages with a board column and a panel use the `.board-columns`
+class (stacked on a phone, side by side from lg and on a phone held sideways; `stacked:` and `short:` variants). Page
+grids use `minmax(0,1fr)` columns so content can never widen a column. Preferences are per device in localStorage
+(`board/prefs.ts`), default the green profile. `StaticBoard` draws a FEN, EPD or PGN-at-a-ply (`resolvePosition` in
+core). Piece sets are the library's drawings with different finishing; a real alternative set needs a licence check
+first.
 
 ### Branch practice and authoring
 
