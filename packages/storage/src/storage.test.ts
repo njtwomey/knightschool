@@ -1,6 +1,6 @@
 import { getTableConfig } from 'drizzle-orm/sqlite-core';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { attempt, at, card, evalLine, explorerEntry, guess, speed, review, T0 } from './fixtures';
+import { attempt, at, card, evalLine, explorerEntry, guess, speed, review, T0 } from './testing/fixtures';
 import { LATEST_SCHEMA_VERSION, migrate } from './migrate';
 import { MIGRATIONS } from './migrations.generated';
 import * as schema from './schema';

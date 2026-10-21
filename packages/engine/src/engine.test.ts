@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { evaluateCached, fromRows, measureLineCached, toRows, type EvalStore } from './cache';
 import { createEngine } from './engine';
-import { FakeStockfish } from './fake-stockfish';
+import { FakeStockfish } from './testing/fake-stockfish';
 import type { Evaluation } from './types';
 import { formatScore, parseBestMove, parseInfo, whiteShare } from './uci';
 

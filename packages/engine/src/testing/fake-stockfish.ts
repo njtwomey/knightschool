@@ -1,4 +1,4 @@
-import type { UciTransport } from './types';
+import type { UciTransport } from '../types';
 
 /**
  * A stand-in for Stockfish that answers UCI the way the real one does: info lines, then `bestmove`.
