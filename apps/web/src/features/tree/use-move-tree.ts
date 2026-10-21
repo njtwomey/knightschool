@@ -1,8 +1,7 @@
 import { buildMoveTree, chapterTitle, type MoveTree, type TreeGraph } from '@knightschool/core';
-import { useEffect, useState } from 'react';
 import { loadTreeGraph } from '@/data/content';
 import { onceRetryable } from '@/data/fetch-content';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 type TreeChapter = TreeGraph['chapters'][number];
 
@@ -27,18 +26,6 @@ const loadMoveTree = onceRetryable((): Promise<LoadedTree> =>
 
 /** The whole tree once it has loaded, or the reason it could not. */
 export function useMoveTree(): { loaded: LoadedTree | null; error: string | null } {
-  const [state, setState] = useState<{ loaded: LoadedTree | null; error: string | null }>({
-    loaded: null,
-    error: null,
-  });
-  useEffect(() => {
-    let live = true;
-    loadMoveTree()
-      .then((loaded) => live && setState({ loaded, error: null }))
-      .catch((error: unknown) => live && setState({ loaded: null, error: errorText(error) }));
-    return () => {
-      live = false;
-    };
-  }, []);
-  return state;
+  const { data, error } = useAsync(loadMoveTree, []);
+  return { loaded: data ?? null, error };
 }

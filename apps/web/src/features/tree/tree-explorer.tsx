@@ -12,6 +12,7 @@ import { laneColour } from './colours';
 import { below, indexModel, type IndexModel } from './index-model';
 import { LaneTree } from './lane-tree';
 import { lineHref } from '@/router/hrefs';
+import { useAsync } from '@/hooks/use-async';
 
 /** A line as the explorer lists it: its id, what to call it, the course to open it in, and its side. */
 export type ExplorerLine = { id: string; name: string; course: string; side: Side };
@@ -21,29 +22,20 @@ const contentOf = (course: string) => loadOpening(course).catch(() => null);
 
 /** The comment on a move, from the first of the given courses that has one. */
 function useMoveComment(courses: readonly string[], fromEpd: string | undefined, uci: string | null): string | null {
-  const [comment, setComment] = useState<{ key: string; text: string | null } | null>(null);
-  const key = `${courses.join(',')}|${fromEpd}|${uci}`;
-  useEffect(() => {
-    if (!fromEpd || !uci) return;
-    let live = true;
-    void (async () => {
-      for (const course of courses) {
-        const content = await contentOf(course);
-        const text = content?.nodes[fromEpd]?.moves.find((move) => move.uci === uci)?.annotation?.text;
-        if (text) {
-          if (live) setComment({ key, text });
-          return;
+  const comment = useAsync(
+    fromEpd && uci
+      ? async () => {
+          for (const course of courses) {
+            const content = await contentOf(course);
+            const text = content?.nodes[fromEpd]?.moves.find((move) => move.uci === uci)?.annotation?.text;
+            if (text) return text;
+          }
+          return null;
         }
-      }
-      if (live) setComment({ key, text: null });
-    })();
-    return () => {
-      live = false;
-    };
-    // `key` stands for courses, fromEpd and uci
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-  return comment?.key === key ? comment.text : null;
+      : null,
+    [courses.join(','), fromEpd, uci],
+  );
+  return fromEpd && uci && !comment.loading ? (comment.data ?? null) : null;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { matchesText, type GlossaryEntry } from '@knightschool/core';
+import { matchesText } from '@knightschool/core';
 import { Search } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Page } from '@/components/page';
@@ -10,19 +10,12 @@ import { glossary } from './use-glossary';
 import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 /** The tactical and structural ideas the courses use, in plain words, with the courses where each turns up. */
 export function GlossaryPage() {
   const index = useCatalog((state) => state.index);
-  const [entries, setEntries] = useState<GlossaryEntry[] | null>(null);
-  const [failure, setFailure] = useState<string | null>(null);
-
-  useEffect(() => {
-    glossary()
-      .then(setEntries)
-      .catch((error: unknown) => setFailure(errorText(error)));
-  }, []);
+  const { data: entries, error: failure } = useAsync(glossary, []);
 
   // A link such as /glossary#fork scrolls to that entry once the list is there.
   useEffect(() => {

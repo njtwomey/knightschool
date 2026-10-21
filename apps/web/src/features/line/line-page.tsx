@@ -29,7 +29,7 @@ import { QuizPage } from '@/features/quiz/quiz-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { to } from '@/router/location';
 import { courseHref, lineHref, lineEditHref, type LineTab, type UnitRef } from '@/router/hrefs';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 /** One line's page: the tab decides what it shows. Learn, Drill and the every-branch drill are the play page. */
 export function LinePage({
@@ -87,19 +87,8 @@ function paragraphsOf(path: LineEdge[], from: number): Paragraph[] {
  */
 function LineAbout({ course, line }: { course: string; line: string }) {
   const index = useCatalog((state) => state.index);
-  const [content, setContent] = useState<OpeningContent | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    // The page is mounted afresh for each line (App keys it by the address), so there is no stale course to clear.
-    let live = true;
-    loadOpening(course)
-      .then((loaded) => live && setContent(loaded))
-      .catch((caught: unknown) => live && setError(errorText(caught)));
-    return () => {
-      live = false;
-    };
-  }, [course]);
+  // The page is mounted afresh for each line (App keys it by the address), so there is no stale course to clear.
+  const { data: content, error } = useAsync(() => loadOpening(course), [course]);
 
   if (error)
     return (

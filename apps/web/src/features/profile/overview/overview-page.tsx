@@ -1,7 +1,6 @@
 import { Page } from '@/components/page';
 import { guessSummary, nextCourses, planIntroductions, type OpeningIndexEntry } from '@knightschool/core';
 import { ArrowRight, Play, Telescope } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { BoardThumb } from '@/components/board/board-thumb';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,7 @@ import { CourseCard } from '@/features/search/course-card';
 import { percent, useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 type Row = { course: OpeningIndexEntry; due: number; fresh: number };
 
@@ -59,35 +58,26 @@ export function OverviewPage() {
   const storage = useStorage((state) => state.storage);
   const { index, openings, prerequisites, indexStatus } = useCatalog();
   const learned = useProgress((state) => state.learned);
-  const [rows, setRows] = useState<Row[] | null>(null);
-  const [failure, setFailure] = useState<string | null>(null);
-  const [guess, setGuess] = useState<ReturnType<typeof guessSummary> | null>(null);
-
-  useEffect(() => {
-    if (!storage || indexStatus !== 'ready') return;
-    let cancelled = false;
-    void useProgress.getState().refresh();
-    loadRows(index)
-      .then((loaded) => !cancelled && setRows(loaded))
-      .catch((caught: unknown) => !cancelled && setFailure(errorText(caught)));
-    return () => {
-      cancelled = true;
-    };
-  }, [storage, index, indexStatus]);
+  const { data: rows, error: failure } = useAsync(
+    storage && indexStatus === 'ready'
+      ? () => {
+          void useProgress.getState().refresh();
+          return loadRows(index);
+        }
+      : null,
+    [storage, index, indexStatus],
+  );
 
   // How Name That Opening went this week, for its card.
-  useEffect(() => {
-    if (!storage) return;
-    let cancelled = false;
-    const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
-    storage.storage.guessAttempts
-      .since(since)
-      .then((attempts) => !cancelled && setGuess(guessSummary(attempts)))
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, [storage]);
+  const { data: guess } = useAsync(
+    storage
+      ? () =>
+          storage.storage.guessAttempts
+            .since(new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString())
+            .then(guessSummary)
+      : null,
+    [storage],
+  );
 
   const due = rows?.reduce((sum, row) => sum + row.due, 0) ?? 0;
   const fresh = rows?.reduce((sum, row) => sum + row.fresh, 0) ?? 0;

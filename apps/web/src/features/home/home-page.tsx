@@ -8,6 +8,7 @@ import { useStorage } from '@/data/storage';
 import { useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
 import { lineHref, profileHref } from '@/router/hrefs';
+import { useAsync } from '@/hooks/use-async';
 
 // The Giuoco Piano: a line worth watching, played over and over on the front page, with the idea of each move.
 const SHOWCASE: { uci: string; why: string }[] = [
@@ -127,20 +128,15 @@ function Feature({
 export function HomePage() {
   const storage = useStorage((state) => state.storage);
   const learned = useProgress((state) => state.learned);
-  const [due, setDue] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!storage) return;
-    let cancelled = false;
-    void useProgress.getState().refresh();
-    storage.storage.cards
-      .countDue(new Date().toISOString())
-      .then((count) => !cancelled && setDue(count))
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, [storage]);
+  const { data: due = null } = useAsync(
+    storage
+      ? () => {
+          void useProgress.getState().refresh();
+          return storage.storage.cards.countDue(new Date().toISOString());
+        }
+      : null,
+    [storage],
+  );
 
   const moves = Object.values(learned).reduce((sum, n) => sum + n, 0);
   const courses = Object.values(learned).filter((n) => n > 0).length;

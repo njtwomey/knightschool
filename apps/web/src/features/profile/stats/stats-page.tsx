@@ -9,7 +9,6 @@ import {
   streak,
   type Missed,
 } from '@knightschool/core';
-import { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -18,7 +17,7 @@ import { useStorage } from '@/data/storage';
 import { lastDays, localDay, previousDay } from '@/lib/days';
 import { useCatalog } from '@/data/catalog-store';
 import { describeCard } from './describe-card';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 type Loaded = {
   total: number;
@@ -83,19 +82,10 @@ export function StatsPage() {
   const storage = useStorage((state) => state.storage);
   const status = useStorage((state) => state.status);
   const index = useCatalog((state) => state.index);
-  const [data, setData] = useState<Loaded | null>(null);
-  const [failure, setFailure] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!storage) return;
-    let cancelled = false;
-    load(new Map(index.map((course) => [course.id, course.name])))
-      .then((loaded) => !cancelled && setData(loaded))
-      .catch((error: unknown) => !cancelled && setFailure(errorText(error)));
-    return () => {
-      cancelled = true;
-    };
-  }, [storage, index]);
+  const { data, error: failure } = useAsync(
+    storage ? () => load(new Map(index.map((course) => [course.id, course.name]))) : null,
+    [storage, index],
+  );
 
   const tallest = Math.max(1, ...(data?.days.map((day) => day.total) ?? [1]));
 

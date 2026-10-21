@@ -19,9 +19,10 @@ const RAW_ELEMENTS = {
   hr: 'Separator',
 };
 
-// The web app's own folders, lowest first: lib (plain helpers), router (addresses), data (loading and stores),
-// components (shared UI), then features (pages), App and main. Nothing below features imports a feature.
-const WEB = ['web', 'web-lib', 'web-router', 'web-data', 'web-components', 'web-features'];
+// The web app's own folders, lowest first: lib (plain helpers), hooks (React hooks over lib), router (addresses), data
+// (loading and stores), components (shared UI), then features (pages), App and main. Nothing below features imports a
+// feature.
+const WEB = ['web', 'web-lib', 'web-hooks', 'web-router', 'web-data', 'web-components', 'web-features'];
 
 // The import table from docs/PLAN.md "Architecture". Arrows point from importer to imported:
 // web -> engine, storage -> core. Core imports no other package and no React.
@@ -70,19 +71,24 @@ const boundaryPolicies = [
     message: 'engine and storage import core types only: use `import type`.',
   },
   {
-    from: { element: { types: ['web-lib', 'web-router', 'web-data', 'web-components'] } },
+    from: { element: { types: ['web-lib', 'web-hooks', 'web-router', 'web-data', 'web-components'] } },
     disallow: { to: [{ element: { type: 'web-features' } }] },
     message: 'only pages import features: move what is shared to components, data, router or lib.',
   },
   {
-    from: { element: { types: ['web-lib', 'web-router', 'web-data'] } },
+    from: { element: { types: ['web-lib', 'web-hooks', 'web-router', 'web-data'] } },
     disallow: { to: [{ element: { type: 'web-components' } }] },
-    message: 'lib, router and data hold no UI: components import them, not the other way round.',
+    message: 'lib, hooks, router and data hold no UI: components import them, not the other way round.',
   },
   {
     from: { element: { type: 'web-lib' } },
-    disallow: { to: [{ element: { types: ['web-router', 'web-data'] } }] },
+    disallow: { to: [{ element: { types: ['web-hooks', 'web-router', 'web-data'] } }] },
     message: 'lib is plain helpers: it imports nothing else from the app.',
+  },
+  {
+    from: { element: { type: 'web-hooks' } },
+    disallow: { to: [{ element: { types: ['web-router', 'web-data'] } }] },
+    message: 'hooks are general React helpers over lib: loading and stores belong in data.',
   },
 ];
 
@@ -115,6 +121,7 @@ export default tseslint.config(
         { type: 'engine', pattern: 'packages/engine/**' },
         { type: 'storage', pattern: 'packages/storage/**' },
         { type: 'web-lib', pattern: 'apps/web/src/lib/**' },
+        { type: 'web-hooks', pattern: 'apps/web/src/hooks/**' },
         { type: 'web-router', pattern: 'apps/web/src/router/**' },
         { type: 'web-data', pattern: 'apps/web/src/data/**' },
         { type: 'web-components', pattern: 'apps/web/src/components/**' },

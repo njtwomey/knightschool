@@ -32,7 +32,7 @@ import { CourseCard } from './course-card';
 import { ROLE_HINT, SCOPE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
 import { VariationCard } from './variation-card';
 import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
 /** The courses and lines the board search reaches, and the opening the position belongs to ("Englund Gambit"). */
@@ -76,23 +76,12 @@ export function SearchPage() {
   // The search, filters and board-search moves live in the URL hash, so a refresh or a shared link shows the same list.
   const [filter, setFilter] = useState<CatalogFilter>(() => filterFromHash(readHashState()));
   const [query, setQuery] = useState<BoardQuery>(() => boardQueryFromHash(readHashState()));
-  const [searchIndex, setSearchIndex] = useState<SearchIndex | null>(null);
-  const [searchFailed, setSearchFailed] = useState<string | null>(null);
+  const { data: searchIndex = null, error: searchFailed } = useAsync(loadSearchIndex, []);
   const [boardOpen, setBoardOpen] = useState(false);
 
   useEffect(() => {
     void useProgress.getState().refresh();
   }, [storage]);
-
-  useEffect(() => {
-    let cancelled = false;
-    loadSearchIndex()
-      .then((loaded) => !cancelled && setSearchIndex(loaded))
-      .catch((error: unknown) => !cancelled && setSearchFailed(errorText(error)));
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   useEffect(() => {
     setHashState(hashFromState(filter, query));

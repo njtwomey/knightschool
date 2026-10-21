@@ -1,12 +1,11 @@
-import { type ExplorerCache } from '@knightschool/core';
 import { Users } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { useStorage } from '@/data/storage';
 import { to } from '@/router/location';
 import { createExplorer, getToken } from './service';
 import { profileHref } from '@/router/hrefs';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 const share = (part: number, whole: number) => (whole === 0 ? 0 : Math.round((part / whole) * 100));
 
@@ -15,22 +14,8 @@ export function ExplorerPanel({ epd, onPlay }: { epd: string; onPlay?: (uci: str
   const storage = useStorage((state) => state.storage?.storage);
   const token = getToken();
   const explorer = useMemo(() => (storage && token ? createExplorer({ storage, token }) : null), [storage, token]);
-  // The latest answer or failure, tagged with the position it is for so a slow reply cannot show on the wrong board.
-  const [outcome, setOutcome] = useState<{ epd: string; row?: ExplorerCache; problem?: string } | null>(null);
-
-  useEffect(() => {
-    if (!explorer) return;
-    let cancelled = false;
-    explorer
-      .lookup(epd)
-      .then((row) => !cancelled && row && setOutcome({ epd, row }))
-      .catch((error: unknown) => {
-        if (!cancelled) setOutcome({ epd, problem: errorText(error) });
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [explorer, epd]);
+  // Only the answer for this position: a slow reply for the last one cannot show on this board.
+  const lookup = useAsync(explorer ? () => explorer.lookup(epd) : null, [explorer, epd]);
 
   if (!token) {
     return (
@@ -49,9 +34,8 @@ export function ExplorerPanel({ epd, onPlay }: { epd: string; onPlay?: (uci: str
     );
   }
   if (!explorer) return null;
-  const current = outcome?.epd === epd ? outcome : null;
-  const here = current?.row ?? null;
-  const problem = current?.problem ?? null;
+  const here = lookup.loading ? null : (lookup.data ?? null);
+  const problem = lookup.loading ? null : lookup.error;
   const games = here ? here.white + here.draws + here.black : 0;
 
   return (

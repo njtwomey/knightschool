@@ -1,6 +1,6 @@
-import { courseProgress, relatedCourses, roleOf, type RelatedCourse } from '@knightschool/core';
+import { courseProgress, relatedCourses, roleOf } from '@knightschool/core';
 import { PenLine } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { EcoLink } from '@/components/eco-link';
 import { Page } from '@/components/page';
@@ -29,6 +29,7 @@ import { ECO_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hin
 import { CourseIntro } from './course-intro';
 import { LinesTable } from './lines-table';
 import { courseHref, createHref } from '@/router/hrefs';
+import { useAsync } from '@/hooks/use-async';
 
 function isTyping(target: EventTarget | null) {
   return (
@@ -62,7 +63,6 @@ export function CoursePage({ courseId }: { courseId: string }) {
   const { content, contentStatus, contentError, index, openings, shownVariant, path } = useCatalog();
   const learned = useProgress((state) => state.learned);
   const autoEngine = useEnginePrefs((state) => state.auto);
-  const [related, setRelated] = useState<RelatedCourse[]>([]);
   const definitions = useGlossary();
   useKeyboardNavigation();
 
@@ -87,18 +87,12 @@ export function CoursePage({ courseId }: { courseId: string }) {
   }, [courseId, contentStatus, shownVariant, path]);
 
   // Courses that reach the same positions, found from the position index.
-  useEffect(() => {
-    if (!content || contentStatus !== 'ready') return;
-    let cancelled = false;
-    loadSearchIndex()
-      .then((search) => {
-        if (!cancelled) setRelated(relatedCourses(courseId, Object.keys(content.nodes), search, index));
-      })
-      .catch(() => undefined);
-    return () => {
-      cancelled = true;
-    };
-  }, [content, contentStatus, courseId, index]);
+  const { data: related = [] } = useAsync(
+    content && contentStatus === 'ready'
+      ? () => loadSearchIndex().then((search) => relatedCourses(courseId, Object.keys(content.nodes), search, index))
+      : null,
+    [content, contentStatus, courseId, index],
+  );
 
   const course = index.find((candidate) => candidate.id === courseId);
   const opening = openings.find((candidate) => candidate.id === course?.opening);

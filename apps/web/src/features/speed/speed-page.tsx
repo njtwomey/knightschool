@@ -1,6 +1,6 @@
 import { formatMs, speedSummary, SPEED_DEPTHS, type SpeedDepth } from '@knightschool/core';
 import { Lightbulb, Play, RotateCcw, Settings2, Timer } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { BoardSettingsButton } from '@/components/board/board-settings';
 import { Page } from '@/components/page';
@@ -27,17 +27,7 @@ import { to } from '@/router/location';
 import { rushCourse, rushSource, useSpeed, type SpeedConfig } from './store';
 import { FEEDBACK_DELAYS } from '@/lib/feedback';
 import { profileHref } from '@/router/hrefs';
-
-/** A stopwatch redrawn ten times a second, only while a line is being played. */
-function useNow(running: boolean): number {
-  const [now, setNow] = useState(() => performance.now());
-  useEffect(() => {
-    if (!running) return;
-    const timer = setInterval(() => setNow(performance.now()), 100);
-    return () => clearInterval(timer);
-  }, [running]);
-  return now;
-}
+import { useNow } from '@/hooks/use-now';
 
 const countdown = (ms: number) => {
   const seconds = Math.max(0, Math.ceil(ms / 1000));

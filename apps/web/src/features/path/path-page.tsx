@@ -20,7 +20,7 @@ import {
   Swords,
   Target,
 } from 'lucide-react';
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -28,13 +28,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { loadCoursePath, isPassed, type CoursePath } from '@/data/course-path';
+import { loadCoursePath, isPassed } from '@/data/course-path';
 import { CourseBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
 import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
 import { SessionStarters } from './session-starters';
 import { lineHref } from '@/router/hrefs';
-import { errorText } from '@/lib/errors';
+import { useAsync } from '@/hooks/use-async';
 
 const KIND: Record<CourseUnit['kind'], string> = {
   main: 'Main line',
@@ -131,21 +131,10 @@ const unitNumber = (units: CourseUnit[], id: string | undefined) =>
 export function CoursePathPage({ course }: { course: string }) {
   const { content, contentStatus, contentError, index } = useCatalog();
   const entry = index.find((candidate) => candidate.id === course);
-  const [path, setPath] = useState<CoursePath | null>(null);
-  const [failure, setFailure] = useState<string | null>(null);
   const [picked, setPicked] = useState<string | null>(null);
 
   const ready = content?.opening.id === course && contentStatus === 'ready' ? content : null;
-  useEffect(() => {
-    if (!ready) return;
-    let live = true;
-    loadCoursePath(ready)
-      .then((loaded) => live && setPath(loaded))
-      .catch((error: unknown) => live && setFailure(errorText(error)));
-    return () => {
-      live = false;
-    };
-  }, [ready]);
+  const { data: path, error: failure } = useAsync(ready ? () => loadCoursePath(ready) : null, [ready]);
 
   const units = useMemo(() => path?.units ?? [], [path]);
   // The unit to show on the board: the one picked, else the first one not yet passed.
