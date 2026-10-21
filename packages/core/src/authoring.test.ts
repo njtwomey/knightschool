@@ -10,7 +10,12 @@ import {
   slugify,
   uniqueId,
 } from './authoring';
+import { reduceAttempt, startAttempt } from './attempt';
+import { nextBranchMove } from './branches';
 import { parsePgn, writePgn } from './pgn';
+import { createScheduler } from './scheduler';
+import { cardDefinitions, followOn, lineQuestions, recordAnswer } from './training';
+import { courseUnits, planIntroductions } from './units';
 import type { Chapter } from './theory-tree';
 import { variantPath } from './tree-helpers';
 import { namedPly } from './tree-helpers';
@@ -207,5 +212,62 @@ describe('courses of their own', () => {
     });
     expect(built.problems).toEqual([]);
     expect(built.courses[0]!.opening.opening).toBe('my-white-courses');
+  });
+});
+
+describe('an authored course in training', () => {
+  // Written the way the editor writes it: a course of its own, a main line, and a branch from it with a note.
+  const main = chapterText('Main', '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3', { Opponent: '1...e5' });
+  const branch = chapterText('Two knights', '3... Nf6 4. d3 { Quiet and safe. [%tag tip] } 4... Bc5 5. c3', {
+    Start: 'mine-main 3.Bc4',
+    Kind: 'sideline',
+    Opponent: '3...Nf6',
+  });
+  const built = buildAuthored([], {
+    chapters: [
+      { id: 'mine-main', pgn: main },
+      { id: 'mine-two-knights', pgn: branch },
+    ],
+    courses: [{ id: 'mine', manifest: course(['mine-main', 'mine-two-knights'], { opening: ownOpeningId('white') }) }],
+  });
+  const content = built.courses[0]!;
+  const ucisOf = (definitions: { expectedUci: string }[]) => definitions.map((definition) => definition.expectedUci);
+
+  it('earns a review card for each of your moves, on both lines', () => {
+    expect(built.problems).toEqual([]);
+    const cards = cardDefinitions(content);
+    expect(new Set(ucisOf(cards))).toEqual(new Set(['e2e4', 'g1f3', 'f1c4', 'c2c3', 'd2d3']));
+    expect(cards.every((card) => card.id.startsWith('mine:'))).toBe(true);
+  });
+
+  it('is cut into units on a study path, and new cards come from it in order', () => {
+    const units = courseUnits(content);
+    expect(units.map((unit) => unit.line)).toContain('mine-two-knights');
+    const covered = units.flatMap((unit) => ucisOf(unit.cards));
+    expect(new Set(covered)).toEqual(new Set(ucisOf(cardDefinitions(content))));
+    const introduced = planIntroductions([{ content, cards: [], reviews: [] }], 10, new Date());
+    expect(ucisOf(introduced).slice(0, 3)).toEqual(['e2e4', 'g1f3', 'f1c4']);
+  });
+
+  it('is drilled, quizzed and practised like a shipped course', () => {
+    // A review: the right move, recorded with a new schedule.
+    const [first] = planIntroductions([{ content, cards: [], reviews: [] }], 1, new Date());
+    const attempt = reduceAttempt(
+      startAttempt(),
+      { type: 'move', uci: first!.expectedUci, elapsedMs: 900 },
+      first!.expectedUci,
+    );
+    const answer = recordAnswer(createScheduler(), first!, attempt, 'session', new Date());
+    expect(answer.review.cardId).toBe(first!.id);
+    expect(answer.card.reps).toBe(1);
+    // A line's own quiz, and a question that runs on along the branch.
+    expect(ucisOf(lineQuestions(content, 'mine-two-knights'))).toContain('d2d3');
+    const beforeBc4 = variantPath(content, 'mine-two-knights')[3]!.to; // after 2...Nc6
+    expect(followOn(content, beforeBc4, 'f1c4', 'mine-two-knights')!.definition.expectedUci).toBe('d2d3');
+    // The every-branch drill plays your move at the start.
+    expect(nextBranchMove(content.nodes[content.opening.rootEpd]!, () => 0)).toMatchObject({ ours: true });
+    // The note and its tag reach the learner.
+    const d3 = variantPath(content, 'mine-two-knights').find((edge) => edge.san === 'd3')!;
+    expect(d3.annotation).toMatchObject({ text: 'Quiet and safe.', tags: ['tip'] });
   });
 });
