@@ -115,10 +115,12 @@
 }
 
 /*
- * Board size: one rule for every board. A board is as wide as its column, never wider than its cap (40rem, or
- * --board-cap where a page sets one), and never taller than the screen less --board-chrome: the header above and the
- * controls below, so a move never needs a scroll. On a phone held sideways the header scrolls away and the board sits
- * beside its panel (the `short` variant), so it can use more of the height.
+ * Board size: one rule for every board. A board is as wide as its column, never wider than its cap, and never taller
+ * than the screen less --board-chrome: the header above and the controls below, so a move never needs a scroll. There
+ * are two caps: 36rem for the board a page is about (Play, Quiz, Speed, Name it, Lab, a course), and 22rem for a board
+ * beside other content (`.board-aside`: a line's About, the tree, the path, board search, Create). On a phone held
+ * sideways the header scrolls away and the board sits beside its panel (the `short` variant), so it can use more of the
+ * height. Every study board is a `StudyBoard` (components/board/study-board.tsx), which applies this.
  */
 @custom-variant short (@media (orientation: landscape) and (max-height: 32rem));
 /* When .board-columns is one column: the board and its panel stacked, on a phone held upright or a narrow window. */
@@ -126,7 +128,7 @@
 
 :root {
   --board-chrome: 11rem;
-  --board-size: min(var(--board-cap, 40rem), max(12rem, calc(100dvh - var(--board-chrome))));
+  --board-cap: 36rem;
 }
 
 @media (orientation: landscape) and (max-height: 32rem) {
@@ -135,12 +137,22 @@
   }
 }
 
+/* Worked out again wherever the cap changes, since a custom property is computed where it is declared. */
+:root,
+.board-columns,
+.board-aside {
+  --board-size: min(var(--board-cap), max(12rem, calc(100dvh - var(--board-chrome))));
+}
+
+.board-aside {
+  --board-cap: 22rem;
+}
+
 /*
  * A page with the board in one column and its panel in the other: stacked on a phone, side by side from lg up and on a
  * phone held sideways. A plain class, outside Tailwind's layers, so the page's own grid classes cannot undo it.
  */
 .board-columns {
-  --board-size: min(var(--board-cap, 40rem), max(12rem, calc(100dvh - var(--board-chrome))));
   grid-template-columns: minmax(0, 1fr);
   @media (width >= 64rem), (orientation: landscape) and (max-height: 32rem) {
     grid-template-columns: minmax(0, var(--board-size)) minmax(0, 1fr);

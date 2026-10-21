@@ -2,7 +2,7 @@ import { pvToSan } from '@knightschool/core';
 import { formatScore } from '@knightschool/engine';
 import { useEffect } from 'react';
 import { isBaked } from '@/data/analysis';
-import { useEngine } from './store';
+import { useEngine } from '@/data/engine/store';
 
 /**
  * The engine's best few lines for a position, each with its score: the full view, for the analysis board. It switches

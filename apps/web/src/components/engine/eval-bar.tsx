@@ -1,5 +1,5 @@
 import { formatScore, whiteShare } from '@knightschool/engine';
-import { useEngine } from './store';
+import { useEngine } from '@/data/engine/store';
 
 /** A thin bar beside the board: the lighter part is White's share of the advantage. */
 export function EvalBar({ orientation }: { orientation: 'white' | 'black' }) {

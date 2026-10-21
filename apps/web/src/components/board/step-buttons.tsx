@@ -1,21 +1,14 @@
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import type { LineStepper } from './line-stepper';
 
 /**
- * First, back, forward and last: the one set of controls for moving through a line on any board you study from (a
- * line's About tab, Learn, the quiz's moves so far, board search, the tree, Lab). Pages that test you (Drill, Speed,
- * Name it) do not have it.
+ * First, back, forward and last: the one set of controls for moving through a line. `StudyBoard` draws them from a
+ * `useLineStepper` wherever there is a line to step through (a course, a line's About, Learn, the quiz's moves so far,
+ * Lab, board search, the tree, the path, Create); the arrow keys do the same.
  */
-export function StepButtons({
-  onFirst,
-  onPrev,
-  onNext,
-  onLast,
-  atStart,
-  atEnd,
-  label = 'Step through the line',
-  disabledTitle,
-}: {
+/** The old props, until every board is a StudyBoard. */
+type LegacyProps = {
   onFirst: () => void;
   onPrev: () => void;
   onNext: () => void;
@@ -23,14 +16,20 @@ export function StepButtons({
   atStart: boolean;
   atEnd: boolean;
   label?: string;
-  /** Shown on every button when there is nothing to step through yet, e.g. "Pick a line to step through it". */
   disabledTitle?: string;
-}) {
+};
+
+export function StepButtons(props: { stepper: LineStepper } | LegacyProps) {
+  const stepper: LineStepper =
+    'stepper' in props
+      ? props.stepper
+      : { ...props, index: 0, first: props.onFirst, prev: props.onPrev, next: props.onNext, last: props.onLast };
+  const { atStart, atEnd, disabledTitle, label = 'Step through the line' } = stepper;
   const buttons = [
-    { name: 'First move', Icon: ChevronsLeft, run: onFirst, off: atStart },
-    { name: 'Previous move', Icon: ChevronLeft, run: onPrev, off: atStart },
-    { name: 'Next move', Icon: ChevronRight, run: onNext, off: atEnd },
-    { name: 'Last move', Icon: ChevronsRight, run: onLast, off: atEnd },
+    { name: 'First move', Icon: ChevronsLeft, run: stepper.first, off: atStart },
+    { name: 'Previous move', Icon: ChevronLeft, run: stepper.prev, off: atStart },
+    { name: 'Next move', Icon: ChevronRight, run: stepper.next, off: atEnd },
+    { name: 'Last move', Icon: ChevronsRight, run: stepper.last, off: atEnd },
   ];
   return (
     <div className="flex gap-1" role="group" aria-label={label}>
@@ -39,7 +38,6 @@ export function StepButtons({
           key={name}
           variant="outline"
           size="icon"
-          className="size-8"
           aria-label={name}
           title={disabledTitle && atStart && atEnd ? disabledTitle : name}
           disabled={off}

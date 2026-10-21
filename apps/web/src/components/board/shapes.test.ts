@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { arrowsOf, squareStylesOf } from './shapes';
+import { arrowsOf, squareStylesOf, uciArrow } from './shapes';
 
 const annotation = (arrows: string[], circles: string[]) => ({ nag: [], motifs: [], arrows, circles });
 
@@ -20,5 +20,13 @@ describe('shapes', () => {
   it('is empty without a move or annotation', () => {
     expect(arrowsOf(undefined)).toEqual([]);
     expect(squareStylesOf(undefined, undefined)).toEqual({});
+  });
+
+  it('draws an arrow along a move, coloured by what it means', () => {
+    expect(uciArrow('e2e4')).toMatchObject({ startSquare: 'e2', endSquare: 'e4' });
+    expect(uciArrow('e7e8q', 'played')).toMatchObject({ startSquare: 'e7', endSquare: 'e8' });
+    const colours = new Set((['answer', 'candidate', 'played'] as const).map((tone) => uciArrow('a2a4', tone).color));
+    expect(colours.size).toBe(3);
+    expect(uciArrow('a2a4').color).toBe(uciArrow('a2a4', 'answer').color);
   });
 });

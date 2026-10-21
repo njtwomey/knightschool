@@ -17,9 +17,9 @@ import { PositionDetails } from '@/features/course/position-details';
 import { currentEpd, useCatalog } from '@/data/catalog-store';
 import { EnrolButton } from '@/features/courses/enrol-button';
 import { percent, useProgress } from '@/data/progress-store';
-import { EngineStrip } from '@/features/engine/engine-strip';
-import { useEnginePrefs } from '@/features/engine/prefs';
-import { useEngine } from '@/features/engine/store';
+import { EngineStrip } from '@/components/engine/engine-strip';
+import { useEnginePrefs } from '@/data/engine/prefs';
+import { useEngine } from '@/data/engine/store';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState, to } from '@/router/location';
@@ -181,7 +181,11 @@ export function CoursePage({ courseId }: { courseId: string }) {
           <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:items-start">
             <div className="grid grid-cols-[minmax(0,1fr)] gap-3 lg:sticky lg:top-16">
               <BoardPanel content={content} />
-              <EngineStrip />
+              <EngineStrip
+                epd={currentEpd(content, path)}
+                before={path.length > 1 ? path[path.length - 2]!.to : content.opening.rootEpd}
+                lastMove={path.at(-1)}
+              />
               <PositionDetails content={content} />
               <ExplorerPanel epd={currentEpd(content, path)} />
             </div>

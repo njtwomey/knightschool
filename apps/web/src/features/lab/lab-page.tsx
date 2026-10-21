@@ -43,7 +43,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { EngineLines } from '@/features/engine/engine-lines';
+import { EngineLines } from '@/components/engine/engine-lines';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState } from '@/router/location';
 import { FEEDBACK_DELAYS } from '@/lib/feedback';

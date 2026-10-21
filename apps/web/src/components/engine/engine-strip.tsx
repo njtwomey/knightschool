@@ -1,31 +1,34 @@
 import { engineExplainer, pvToSan } from '@knightschool/core';
 import { formatScore } from '@knightschool/engine';
 import { useEffect } from 'react';
-import { currentEpd, useCatalog } from '@/data/catalog-store';
 import { isBaked } from '@/data/analysis';
-import { useEngine } from './store';
+import { useEngine } from '@/data/engine/store';
 
 /**
- * One quiet line under the board: what the engine thinks of this position and its best continuation, and, when it has
- * looked at the positions either side of the last move, why that move cost something. Nothing when the engine is off;
- * it is switched on and off in Settings.
+ * One quiet line under the board: what the engine thinks of `epd` and its best continuation, and, when it has looked at
+ * the position before the last move too, why that move cost something. Nothing when the engine is off; it is switched
+ * on and off in Settings.
  */
-export function EngineStrip() {
-  const content = useCatalog((state) => state.content);
-  const path = useCatalog((state) => state.path);
+export function EngineStrip({
+  epd,
+  before,
+  lastMove,
+}: {
+  epd: string;
+  /** The position before the last move, to say what the move cost. */
+  before?: string;
+  lastMove?: { uci: string; san: string };
+}) {
   const { status, current, thinking, seen } = useEngine();
 
-  const epd = content ? currentEpd(content, path) : null;
   useEffect(() => {
-    if (status !== 'off' && epd) void useEngine.getState().analyse(epd);
+    if (status !== 'off') void useEngine.getState().analyse(epd);
   }, [status, epd]);
 
-  if (!content || !epd || status === 'off') return null;
+  if (status === 'off') return null;
 
-  const lastMove = path.at(-1);
-  const before = path.length > 1 ? path[path.length - 2]!.to : content.opening.rootEpd;
   const verdict =
-    lastMove && seen[before] && seen[epd]
+    lastMove && before && seen[before] && seen[epd]
       ? engineExplainer.explain(before, lastMove.uci, { evalBefore: seen[before], evalAfter: seen[epd] })[0]
       : undefined;
   const best = current?.epd === epd ? current.lines[0] : undefined;

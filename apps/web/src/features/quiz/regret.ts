@@ -1,7 +1,7 @@
 import { moveRegret, playUci, positionFromEpd, type EngineScore, type Regret, type Side } from '@knightschool/core';
 import { create } from 'zustand';
 import { bakedEvaluation, loadAnalysis } from '@/data/analysis';
-import { evaluateLive } from '@/features/engine/store';
+import { evaluateLive } from '@/data/engine/store';
 
 /** Depth of a browser search for a position the baked analysis does not cover: about a second each. */
 const REGRET_DEPTH = 14;

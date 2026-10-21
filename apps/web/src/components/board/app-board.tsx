@@ -6,9 +6,8 @@ import { Chessboard } from 'react-chessboard';
 import { useBoardPrefs } from './prefs';
 import { usePreview } from './preview';
 import { piecesFor } from './pieces';
+import type { BoardArrow, BoardBadge } from './shapes';
 import { themeById } from './themes';
-
-export type BoardArrow = { startSquare: string; endSquare: string; color: string };
 
 export type AppBoardProps = {
   id: string;
@@ -24,7 +23,7 @@ export type AppBoardProps = {
   lastMoveTone?: 'yellow' | 'red';
   arrows?: BoardArrow[];
   /** A tick or cross on a square, for right and wrong answers. */
-  badge?: { square: string; kind: 'correct' | 'wrong' } | null;
+  badge?: BoardBadge | null;
   /** A square to point at (a hint): it pulses. */
   hintSquare?: string | null;
   /** Extra square styles, such as rings from an annotation. */

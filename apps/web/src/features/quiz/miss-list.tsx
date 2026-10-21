@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useEnginePrefs } from '@/features/engine/prefs';
+import { useEnginePrefs } from '@/data/engine/prefs';
 import { checkMisses, useMissChecks, type Miss, type MissCheck } from './regret';
 import { useQuiz } from './store';
 

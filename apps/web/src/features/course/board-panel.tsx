@@ -4,7 +4,7 @@ import { AppBoard } from '@/components/board/app-board';
 import { BoardSettingsButton } from '@/components/board/board-settings';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { EvalBar } from '@/features/engine/eval-bar';
+import { EvalBar } from '@/components/engine/eval-bar';
 import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
 import { currentEpd, useCatalog } from '@/data/catalog-store';
 

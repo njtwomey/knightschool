@@ -1,7 +1,29 @@
 import type { Annotation } from '@knightschool/core';
 import type { CSSProperties } from 'react';
 
-type BoardArrow = { startSquare: string; endSquare: string; color: string };
+/** An arrow on the board, as react-chessboard draws it. */
+export type BoardArrow = { startSquare: string; endSquare: string; color: string };
+
+/** A tick or cross on a square, for a right or a wrong answer. */
+export type BoardBadge = { square: string; kind: 'correct' | 'wrong' };
+
+/**
+ * What an arrow drawn from a move means: `answer` the move to play (the course's move, a shown move), `candidate` one
+ * of several moves on offer (fainter), `played` a move that was wrong.
+ */
+export type ArrowTone = 'answer' | 'candidate' | 'played';
+
+// Board arrows take a colour string, not a class.
+const TONES: Record<ArrowTone, string> = {
+  answer: 'rgb(21 128 61 / 0.85)',
+  candidate: 'rgb(21 128 61 / 0.55)',
+  played: 'rgb(220 38 38 / 0.8)',
+};
+
+/** An arrow along a UCI move ('e2e4', 'e7e8q'), in the colour of its tone. */
+export function uciArrow(uci: string, tone: ArrowTone = 'answer'): BoardArrow {
+  return { startSquare: uci.slice(0, 2), endSquare: uci.slice(2, 4), color: TONES[tone] };
+}
 
 // PGN [%cal] / [%csl] colour letters.
 const COLOURS: Record<string, string> = {
