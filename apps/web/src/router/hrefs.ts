@@ -11,6 +11,9 @@ export type ProfileTab = 'overview' | 'stats' | 'settings';
 /** `/profile` (the overview) or `/profile/<tab>`. */
 export const profileHref = (tab: ProfileTab = 'overview') => (tab === 'overview' ? '/profile' : `/profile/${tab}`);
 
+/** The quiz, starting the scheduled session at once (`#start=due`), for links that say "start the quiz". */
+export const dueQuizHref = () => '/quiz#start=due';
+
 /** A course page's views: the overview (introduction, board and lines), the study path in units, and its tree. */
 export const COURSE_TABS = [
   { tab: 'overview', name: 'Overview', blurb: 'What the course is for, its plans and its lines.' },

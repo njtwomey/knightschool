@@ -1,15 +1,7 @@
 import { Page } from '@/components/page';
-import {
-  MOVES_PER_QUESTION,
-  type MovesPerQuestion,
-  explainMove,
-  pathTo,
-  playUci,
-  type LineEdge,
-  type OpeningContent,
-} from '@knightschool/core';
+import { explainMove, pathTo, playUci, type LineEdge, type OpeningContent } from '@knightschool/core';
 import { EcoLink } from '@/components/eco-link';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { useLineStepper } from '@/components/board/line-stepper';
 import { StudyBoard } from '@/components/board/study-board';
 import { MoveList } from '@/components/move-list';
@@ -20,15 +12,13 @@ import { RichText } from '@/components/rich-text';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { SourceSelect } from '@/components/source-select';
-import { WeightingSelect } from '@/components/weighting-select';
-import { useCatalog } from '@/data/catalog-store';
+import { PracticeBar, PracticeSetup } from '@/components/practice-setup';
+import { movesText, type QuizConfig, saveConfig, savedConfig } from '@/data/practice-config';
 import { arrowsOf, squareStylesOf, uciArrow } from '@/components/board/shapes';
 import { MissList } from './miss-list';
 import { currentQuestion, DUE, useQuiz, type LineScope, type MoveQuestion, type QuizQuestion } from './store';
-import { to } from '@/router/location';
+import { readHashState, setHashState, to } from '@/router/location';
 import { lineHref, profileHref } from '@/router/hrefs';
 
 /** The moves that reached a position in a course; empty if it is not on a line. */
@@ -41,124 +31,91 @@ function movesInto(content: OpeningContent, epd: string): LineEdge[] {
   }
 }
 
-/** What sits above the questions instead of the source choice: a line's breadcrumbs and tabs on its Quiz tab. */
-const HeaderSlot = createContext<ReactNode>(null);
-
-/** Chooses between the scheduled session and free practice from any course. Nothing in free practice is saved. */
-function SourceBar() {
-  const header = useContext(HeaderSlot);
-  return (
-    <div className="grid gap-2">
-      {header ?? <SourceChoice />}
-      <MovesChoice />
-    </div>
-  );
-}
-
-/** How many of your moves a question runs for: the line carries on after the answer, up to this many. */
-function MovesChoice() {
-  const moves = useQuiz((state) => state.movesPerQuestion);
-  return (
-    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-      <span>Each question runs for</span>
-      <Select
-        value={String(moves)}
-        onValueChange={(value) => useQuiz.getState().setMovesPerQuestion(Number(value) as MovesPerQuestion)}
-      >
-        <SelectTrigger className="h-8 w-auto" aria-label="Moves per question">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {MOVES_PER_QUESTION.map((n) => (
-            <SelectItem key={n} value={String(n)}>
-              {n === 0 ? 'the rest of the line' : n === 1 ? '1 move' : `up to ${n} moves`}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  );
-}
-
-function SourceChoice() {
-  const source = useQuiz((state) => state.source);
-  const weighting = useQuiz((state) => state.weighting);
-  const index = useCatalog((state) => state.index);
-  return (
-    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-      Questions from
-      <SourceSelect
-        value={source}
-        onChange={(next) => useQuiz.getState().setSource(next)}
-        index={index}
-        extra={[{ value: DUE, label: 'Due today (your schedule)' }]}
-        label="Questions from"
-      />
-      {source !== DUE && (
-        <>
-          <WeightingSelect
-            value={weighting}
-            onChange={(next) => useQuiz.getState().setWeighting(next)}
-            label="How questions are picked"
-          />
-          <span>Free practice: nothing here changes your schedule.</span>
-        </>
-      )}
-    </div>
-  );
-}
-
 /**
- * The quiz. On its own (/quiz) it asks the schedule's due cards or free practice from the courses chosen; given a
- * `scope` it asks every question of one line, shuffled and never saved, with `header` (the line's tabs) on top.
+ * The quiz. On its own (/quiz) it opens on the set-up card, then asks the schedule's due cards or free practice from
+ * the courses chosen (`#start=due` starts the schedule at once). Given a `scope` it asks every question of one line,
+ * shuffled and never saved, at once, with `header` (the line's tabs) on top.
  */
 export function QuizPage({ scope, header }: { scope?: LineScope; header?: ReactNode } = {}) {
-  return (
-    <HeaderSlot.Provider value={header ?? null}>
-      <QuizSession scope={scope} />
-    </HeaderSlot.Provider>
-  );
-}
-
-function QuizSession({ scope }: { scope?: LineScope }) {
   const state = useQuiz();
-  const { phase, error, results } = state;
+  const { phase, error, results, config, queue, index } = state;
   const course = scope?.course;
   const line = scope?.line;
 
   useEffect(() => {
     useQuiz.setState({ scope: course && line ? { course, line } : null });
-    void useQuiz.getState().start();
+    if (course && line) void useQuiz.getState().start();
+    else if (readHashState().start === DUE) {
+      setHashState({});
+      void useQuiz.getState().start({ ...savedConfig('quiz'), source: DUE });
+    } else useQuiz.getState().reset();
     return () => useQuiz.getState().stop();
   }, [course, line]);
 
-  // Start again if the store was reset while the page stayed open, rather than waiting on a refresh.
-  useEffect(() => {
-    if (useQuiz.getState().phase === 'idle') void useQuiz.getState().start();
-  }, [phase]);
+  const only = scope ? LINE_FIELDS : undefined;
+  const begin = (next: QuizConfig) => {
+    saveConfig('quiz', next);
+    void useQuiz.getState().start(next);
+  };
 
-  if (phase === 'idle' || phase === 'loading') return <Skeleton className="mx-auto mt-6 h-[28rem] max-w-5xl" />;
+  if (phase === 'idle') {
+    return (
+      <Page className="max-w-xl gap-4 py-8">
+        {header}
+        <PracticeSetup mode="quiz" initial={savedConfig('quiz')} only={only} onStart={begin} />
+      </Page>
+    );
+  }
+  if (phase === 'loading') return <Skeleton className="mx-auto mt-6 h-[28rem] max-w-5xl" />;
   if (phase === 'error') {
     return (
-      <Page>
+      <Page className="max-w-xl gap-4 py-8">
+        {header}
         <Alert variant="destructive">
           <AlertTitle>The quiz could not start</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
+        <PracticeSetup mode="quiz" initial={config} only={only} onStart={begin} startLabel="Try again" />
       </Page>
     );
   }
-  if (phase === 'summary') return <Summary results={results} />;
+  if (phase === 'summary') return <Summary results={results} header={header} onStart={begin} />;
 
   const question = currentQuestion(state);
   if (!question) return null;
-  if (question.kind === 'quiz') return <QuizView question={question} />;
-  return <MoveView question={question} />;
+  return (
+    <Page className="gap-4">
+      {header}
+      <PracticeBar
+        mode="quiz"
+        config={config}
+        only={only}
+        onStart={begin}
+        title={scope ? LINE_TITLE : undefined}
+        summary={
+          scope
+            ? `Every question of this line, shuffled · ${movesText(config.moves)} per question · not saved`
+            : undefined
+        }
+      />
+      <div className="flex items-center gap-3">
+        <Progress value={(index / queue.length) * 100} className="flex-1" aria-label="Session progress" />
+        <span className="text-sm text-muted-foreground">
+          {index + 1} of {queue.length}
+        </span>
+      </div>
+      {question.kind === 'quiz' ? <QuizView question={question} /> : <MoveView question={question} />}
+    </Page>
+  );
 }
+
+/** A line's quiz is already narrowed to the line: its set-up is only how far each question runs. */
+const LINE_FIELDS = ['moves'] as const;
+const LINE_TITLE = 'Quiz this line';
 
 /** A move to play: the position before it, the moves that led there, hint and show, and what the move is for after. */
 function MoveView({ question }: { question: MoveQuestion }) {
-  const { attempt, queue, index, badge, advancing, viewing, holding } = useQuiz();
+  const { attempt, badge, advancing, viewing, holding } = useQuiz();
   const { card, content, lastEdge, path, expected } = question;
   const stepper = usePathStepper(path.length);
   const side = content.opening.side;
@@ -169,138 +126,132 @@ function MoveView({ question }: { question: MoveQuestion }) {
   const notes = done ? explainMove(card.epd, expected.uci, { edge: expected }) : [];
 
   return (
-    <Page className="gap-4">
-      <SourceBar />
-      <div className="flex items-center gap-3">
-        <Progress value={(index / queue.length) * 100} className="flex-1" aria-label="Session progress" />
-        <span className="text-sm text-muted-foreground">
-          {index + 1} of {queue.length}
-        </span>
-      </div>
-      <div className="board-columns grid gap-6">
-        <StudyBoard
-          id="review"
-          previewable
-          epd={epd}
-          orientation={side}
-          interactive={!advancing && !looking}
-          onMove={(uci) => useQuiz.getState().submitMove(uci)}
-          lastMove={lastMove}
-          lastMoveTone={done && !looking ? 'yellow' : 'red'}
-          arrows={
-            looking ? [] : attempt.shown && !done ? [uciArrow(expected.uci)] : done ? arrowsOf(expected.annotation) : []
-          }
-          squareStyles={done && !looking ? squareStylesOf(undefined, expected.annotation) : undefined}
-          badge={badge}
-          hintSquare={attempt.hintUsed && !done ? card.expectedUci.slice(0, 2) : null}
-          stepper={stepper}
-          controls={{
-            hint: { onHint: () => useQuiz.getState().hint(), disabled: attempt.hintUsed || attempt.shown || done },
-            show: { onShow: () => useQuiz.getState().show(), disabled: attempt.shown || done },
-          }}
-        />
+    <div className="board-columns grid gap-6">
+      <StudyBoard
+        id="review"
+        previewable
+        epd={epd}
+        orientation={side}
+        interactive={!advancing && !looking}
+        onMove={(uci) => useQuiz.getState().submitMove(uci)}
+        lastMove={lastMove}
+        lastMoveTone={done && !looking ? 'yellow' : 'red'}
+        arrows={
+          looking ? [] : attempt.shown && !done ? [uciArrow(expected.uci)] : done ? arrowsOf(expected.annotation) : []
+        }
+        squareStyles={done && !looking ? squareStylesOf(undefined, expected.annotation) : undefined}
+        badge={badge}
+        hintSquare={attempt.hintUsed && !done ? card.expectedUci.slice(0, 2) : null}
+        stepper={stepper}
+        controls={{
+          hint: { onHint: () => useQuiz.getState().hint(), disabled: attempt.hintUsed || attempt.shown || done },
+          show: { onShow: () => useQuiz.getState().show(), disabled: attempt.shown || done },
+        }}
+      />
 
-        <Card className="content-start">
-          <CardHeader>
-            <CardTitle className="text-xl" aria-live="polite">
-              {done
-                ? attempt.shown
-                  ? `${expected.san}. That one comes back soon.`
-                  : `${expected.san}. Right.`
-                : `Your move as ${side}.`}
-            </CardTitle>
-            <CardDescription className="flex flex-wrap items-center gap-2">
-              <span>{content.opening.name}</span>
-              {content.opening.eco && <EcoLink eco={content.opening.eco} course={content.opening.id} />}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4 text-sm">
-            <div className="grid gap-1">
-              <p className="text-muted-foreground">
-                {lastEdge
-                  ? `${side === 'white' ? 'Black' : 'White'} just played ${lastEdge.san}.`
-                  : 'The game is about to begin.'}
+      <Card className="content-start">
+        <CardHeader>
+          <CardTitle className="text-xl" aria-live="polite">
+            {done
+              ? attempt.shown
+                ? `${expected.san}. That one comes back soon.`
+                : `${expected.san}. Right.`
+              : `Your move as ${side}.`}
+          </CardTitle>
+          <CardDescription className="flex flex-wrap items-center gap-2">
+            <span>{content.opening.name}</span>
+            {content.opening.eco && <EcoLink eco={content.opening.eco} course={content.opening.id} />}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4 text-sm">
+          <div className="grid gap-1">
+            <p className="text-muted-foreground">
+              {lastEdge
+                ? `${side === 'white' ? 'Black' : 'White'} just played ${lastEdge.san}.`
+                : 'The game is about to begin.'}
+            </p>
+            <MoveList
+              layout="table"
+              label="Moves so far"
+              empty="The game is about to begin."
+              moves={[...path, ...(done ? [expected] : [])].map((edge, ply) => ({ ply, san: edge.san }))}
+              current={viewing ?? path.length - (done ? 0 : 1)}
+              onSelect={(ply) => useQuiz.getState().view(ply < path.length - 1 ? ply : null)}
+            />
+          </div>
+          {!done && attempt.wrongTries > 0 && !attempt.shown && <p>Not that one. Try again, or use a hint.</p>}
+          {!done && attempt.shown && <p>The move is marked on the board. Play it to carry on.</p>}
+          {holding && (
+            <Button autoFocus className="w-fit" onClick={() => useQuiz.getState().skip()}>
+              Next
+            </Button>
+          )}
+          {done &&
+            notes.slice(0, 2).map((note) => (
+              <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
+                <RichText text={note.text} />
               </p>
-              <MoveList
-                layout="table"
-                label="Moves so far"
-                empty="The game is about to begin."
-                moves={[...path, ...(done ? [expected] : [])].map((edge, ply) => ({ ply, san: edge.san }))}
-                current={viewing ?? path.length - (done ? 0 : 1)}
-                onSelect={(ply) => useQuiz.getState().view(ply < path.length - 1 ? ply : null)}
-              />
-            </div>
-            {!done && attempt.wrongTries > 0 && !attempt.shown && <p>Not that one. Try again, or use a hint.</p>}
-            {!done && attempt.shown && <p>The move is marked on the board. Play it to carry on.</p>}
-            {holding && (
-              <Button autoFocus className="w-fit" onClick={() => useQuiz.getState().skip()}>
-                Next
-              </Button>
-            )}
-            {done &&
-              notes.slice(0, 2).map((note) => (
-                <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
-                  <RichText text={note.text} />
-                </p>
-              ))}
-          </CardContent>
-        </Card>
-      </div>
-    </Page>
+            ))}
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
-function Summary({ results }: { results: readonly string[] }) {
+function Summary({
+  results,
+  header,
+  onStart,
+}: {
+  results: readonly string[];
+  header: ReactNode;
+  onStart: (config: QuizConfig) => void;
+}) {
   const count = (...ratings: string[]) => results.filter((rating) => ratings.includes(rating)).length;
   const scope = useQuiz((state) => state.scope);
-  if (scope) {
-    return (
-      <Page className="max-w-xl gap-4 py-8">
-        <SourceBar />
-        <Card>
-          <CardHeader>
-            <CardTitle>{results.length ? 'Quiz done' : 'Nothing to ask in this line'}</CardTitle>
-            <CardDescription>
-              {results.length
-                ? `${results.length} questions. ${count('easy', 'good')} right first time, ${count('hard')} with help, ${count('again')} missed. Nothing here changes your schedule.`
-                : 'This line has no moves of yours to ask after the course starts.'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            {results.length > 0 && <Button onClick={() => void useQuiz.getState().start()}>Quiz again</Button>}
-            <Button asChild variant="outline">
-              <a href={to(lineHref(scope.course, scope.line, 'drill'))}>Drill it</a>
-            </Button>
-          </CardContent>
-        </Card>
-        <MissList />
-      </Page>
-    );
-  }
+  const config = useQuiz((state) => state.config);
+  const free = config.source !== DUE;
   return (
     <Page className="max-w-xl gap-4 py-8">
-      <SourceBar />
+      {header}
       <Card>
         <CardHeader>
-          <CardTitle>{results.length ? 'Quiz done' : 'Nothing to quiz right now'}</CardTitle>
+          <CardTitle>
+            {results.length ? 'Quiz done' : scope ? 'Nothing to ask in this line' : 'Nothing to quiz right now'}
+          </CardTitle>
           <CardDescription>
             {results.length
-              ? `${results.length} moves. ${count('easy', 'good')} right first time, ${count('hard')} with help, ${count('again')} to see again soon.`
-              : 'Come back later, raise the new cards per day in Settings, or add a course to train.'}
+              ? `${results.length} ${scope ? 'questions' : 'moves'}. ${count('easy', 'good')} right first time, ${count('hard')} with help, ${count('again')} ${scope || free ? 'missed' : 'to see again soon'}.${scope || free ? ' Nothing here changes your schedule.' : ''}`
+              : scope
+                ? 'This line has no moves of yours to ask after the course starts.'
+                : 'Come back later, raise the new cards per day in Settings, add a course to train, or pick free practice below.'}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
-          {useQuiz.getState().source !== DUE && (
-            <Button onClick={() => void useQuiz.getState().start()}>Another ten</Button>
+          {scope ? (
+            <Button asChild variant="outline">
+              <a href={to(lineHref(scope.course, scope.line, 'drill'))}>Drill it</a>
+            </Button>
+          ) : (
+            <>
+              <Button asChild variant="outline">
+                <a href={to(profileHref())}>Back to your overview</a>
+              </Button>
+              <Button asChild variant="outline">
+                <a href={to('/search')}>Search</a>
+              </Button>
+            </>
           )}
-          <Button asChild variant={useQuiz.getState().source !== DUE ? 'outline' : 'default'}>
-            <a href={to(profileHref())}>Back to your overview</a>
-          </Button>
-          <Button asChild variant="outline">
-            <a href={to('/search')}>Search</a>
-          </Button>
         </CardContent>
       </Card>
+      <PracticeSetup
+        mode="quiz"
+        initial={config}
+        only={scope ? LINE_FIELDS : undefined}
+        title={scope ? LINE_TITLE : 'Another quiz'}
+        startLabel="Again"
+        onStart={onStart}
+      />
       <MissList />
     </Page>
   );
@@ -325,7 +276,7 @@ function usePathStepper(length: number) {
 
 /** A question answered in words: type, get feedback or the reveal, and it moves on by itself. */
 function QuizView({ question }: { question: QuizQuestion }) {
-  const { queue, index, quizResult, advancing, viewing, holding } = useQuiz();
+  const { quizResult, advancing, viewing, holding } = useQuiz();
   const [answer, setAnswer] = useState('');
   const { card, content, quiz } = question;
   const path = movesInto(content, quiz.epd);
@@ -350,86 +301,77 @@ function QuizView({ question }: { question: QuizQuestion }) {
   }
 
   return (
-    <Page className="gap-4">
-      <SourceBar />
-      <div className="flex items-center gap-3">
-        <Progress value={(index / queue.length) * 100} className="flex-1" aria-label="Session progress" />
-        <span className="text-sm text-muted-foreground">
-          {index + 1} of {queue.length}
-        </span>
-      </div>
-      <div className="board-columns grid gap-6">
-        <StudyBoard
-          id="quiz"
-          epd={epd}
-          orientation={content.opening.side}
-          interactive={false}
-          lastMove={lastMove}
-          lastMoveTone={tone}
-          stepper={stepper}
-        />
-        <Card className="content-start">
-          <CardHeader>
-            <CardDescription className="flex flex-wrap items-center gap-2">
-              <span>{content.opening.name}</span>
-              <Badge variant="secondary">Question</Badge>
-            </CardDescription>
-            <CardTitle className="text-xl leading-snug">{quiz.prompt}</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            {!quizResult && (
-              <form
-                className="flex gap-2"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  useQuiz.getState().submitAnswer(answer);
-                }}
-              >
-                <Input
-                  key={card.id}
-                  value={answer}
-                  onChange={(event) => setAnswer(event.target.value)}
-                  placeholder="Type your answer…"
-                  aria-label="Your answer"
-                  autoFocus
-                  autoComplete="off"
-                />
-                <Button type="submit" disabled={answer.trim() === ''}>
-                  Check
-                </Button>
-              </form>
-            )}
-            {quizResult && (
-              <Alert variant={quizResult.matched ? 'default' : 'destructive'} role="status">
-                {!quizResult.matched && <AlertTitle>{quizResult.close ? 'Close.' : 'Not quite.'}</AlertTitle>}
-                <AlertDescription className="grid gap-2">
-                  {quizResult.close && <span>{quizResult.close}</span>}
-                  <span>{quizResult.matched ? quizResult.feedback : quiz.reveal}</span>
-                  {!quizResult.matched && <span className="text-xs">You said: {quizResult.answer}</span>}
-                </AlertDescription>
-              </Alert>
-            )}
-            <MoveList
-              layout="table"
-              label="Moves so far"
-              empty="The game is about to begin."
-              moves={path.map((edge, ply) => ({ ply, san: edge.san }))}
-              current={viewing ?? path.length - 1}
-              onSelect={(ply) => useQuiz.getState().view(ply < path.length - 1 ? ply : null)}
-            />
-            {advancing &&
-              (holding ? (
-                <Button autoFocus className="w-fit" onClick={() => useQuiz.getState().skip()}>
-                  Next
-                </Button>
-              ) : (
-                <Button variant="ghost" size="sm" className="w-fit" onClick={() => useQuiz.getState().skip()}>
-                  Skip ahead
-                </Button>
-              ))}
-          </CardContent>
-        </Card>
-      </div>
-    </Page>
+    <div className="board-columns grid gap-6">
+      <StudyBoard
+        id="quiz"
+        epd={epd}
+        orientation={content.opening.side}
+        interactive={false}
+        lastMove={lastMove}
+        lastMoveTone={tone}
+        stepper={stepper}
+      />
+      <Card className="content-start">
+        <CardHeader>
+          <CardDescription className="flex flex-wrap items-center gap-2">
+            <span>{content.opening.name}</span>
+            <Badge variant="secondary">Question</Badge>
+          </CardDescription>
+          <CardTitle className="text-xl leading-snug">{quiz.prompt}</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          {!quizResult && (
+            <form
+              className="flex gap-2"
+              onSubmit={(event) => {
+                event.preventDefault();
+                useQuiz.getState().submitAnswer(answer);
+              }}
+            >
+              <Input
+                key={card.id}
+                value={answer}
+                onChange={(event) => setAnswer(event.target.value)}
+                placeholder="Type your answer…"
+                aria-label="Your answer"
+                autoFocus
+                autoComplete="off"
+              />
+              <Button type="submit" disabled={answer.trim() === ''}>
+                Check
+              </Button>
+            </form>
+          )}
+          {quizResult && (
+            <Alert variant={quizResult.matched ? 'default' : 'destructive'} role="status">
+              {!quizResult.matched && <AlertTitle>{quizResult.close ? 'Close.' : 'Not quite.'}</AlertTitle>}
+              <AlertDescription className="grid gap-2">
+                {quizResult.close && <span>{quizResult.close}</span>}
+                <span>{quizResult.matched ? quizResult.feedback : quiz.reveal}</span>
+                {!quizResult.matched && <span className="text-xs">You said: {quizResult.answer}</span>}
+              </AlertDescription>
+            </Alert>
+          )}
+          <MoveList
+            layout="table"
+            label="Moves so far"
+            empty="The game is about to begin."
+            moves={path.map((edge, ply) => ({ ply, san: edge.san }))}
+            current={viewing ?? path.length - 1}
+            onSelect={(ply) => useQuiz.getState().view(ply < path.length - 1 ? ply : null)}
+          />
+          {advancing &&
+            (holding ? (
+              <Button autoFocus className="w-fit" onClick={() => useQuiz.getState().skip()}>
+                Next
+              </Button>
+            ) : (
+              <Button variant="ghost" size="sm" className="w-fit" onClick={() => useQuiz.getState().skip()}>
+                Skip ahead
+              </Button>
+            ))}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

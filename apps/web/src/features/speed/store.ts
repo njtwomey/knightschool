@@ -1,69 +1,25 @@
 import {
-  lineSteps,
   cutToMove,
-  pathSteps,
-  SPEED_DEPTHS,
-  type SpeedDepth,
-  newId,
-  pickWeighted,
-  popularityWeight,
-  withPromotion,
+  decidingIndex,
+  decidingPosition,
+  lineSteps,
   type LineStep,
+  newId,
   type OpeningContent,
+  pathSteps,
+  pickWeighted,
+  practiceWeight,
   type Weighting,
+  withPromotion,
 } from '@knightschool/core';
 import { create } from 'zustand';
 import type { BoardBadge } from '@/components/board/shapes';
 import { loadIndex, loadOpening } from '@/data/content';
 import { isPassed, loadCoursePath } from '@/data/course-path';
+import { resolvePool, rushCourse, savedConfig, type SpeedConfig } from '@/data/practice-config';
 import { whenStorageReady } from '@/data/storage';
-import { getEnrolled } from '@/data/training-settings';
-import { oneOf, type PrefSchema, readPrefs, writePrefs } from '@/lib/local-prefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { sessionLoader, type SessionPhase } from '@/lib/session';
-
-/** How a run is set up: a fixed number of lines, or as many moves as you can make before the time is up. */
-export type SpeedConfig = {
-  mode: 'lines' | 'timed';
-  /** Lines in a fixed run. */
-  lines: 3 | 5 | 10;
-  /** Seconds in a timed run. */
-  seconds: 30 | 60 | 120;
-  /**
-   * Where the lines come from: the courses you are learning, everything, one course by id, or an opening rush: the
-   * passed units of one course (`rush:<id>`, see `rushSource`).
-   */
-  source: 'learning' | 'all' | (string & {});
-  /** How lines are picked: at random, or favouring the ones more games reach. */
-  weighting: Weighting;
-  /** How deep each line goes: up to this move number, or the whole line (0). */
-  depth: SpeedDepth;
-};
-
-const DEFAULT_CONFIG: SpeedConfig = {
-  mode: 'lines',
-  lines: 5,
-  seconds: 60,
-  source: 'learning',
-  weighting: 'random',
-  depth: 10,
-};
-const CONFIG_KEY = 'knightschool.speed';
-
-const RUSH = 'rush:';
-/** The source for an opening rush on one course: lines made of the units of its path already passed. */
-export const rushSource = (course: string) => `${RUSH}${course}`;
-/** The course of an opening rush source, or undefined for any other source. */
-export const rushCourse = (source: string) => (source.startsWith(RUSH) ? source.slice(RUSH.length) : undefined);
-
-const CONFIG_SCHEMA: PrefSchema<SpeedConfig> = {
-  mode: oneOf(['lines', 'timed']),
-  lines: oneOf([3, 5, 10]),
-  seconds: oneOf([30, 60, 120]),
-  source: (value) => typeof value === 'string' && value !== '',
-  weighting: oneOf(['random', 'popular']),
-  depth: oneOf(SPEED_DEPTHS),
-};
 
 /** A timed run keeps lines coming; this many is far more than anyone gets through in two minutes. */
 const TIMED_QUEUE = 40;
@@ -82,11 +38,12 @@ type LineResult = {
 
 type Queued = { content: OpeningContent; lineId: string; lineName: string; steps: LineStep[] };
 
-type Phase = SessionPhase<'setup' | 'ready' | 'playing' | 'between' | 'summary'>;
+type Phase = SessionPhase<'playing' | 'between' | 'summary'>;
 
 type SpeedState = {
   phase: Phase;
   error: string | null;
+  /** How this run was set up: a copy taken when it started, so changing the saved set-up never touches it. */
   config: SpeedConfig;
   queue: Queued[];
   lineIndex: number;
@@ -109,12 +66,14 @@ type SpeedState = {
   badge: BoardBadge | null;
   results: LineResult[];
 
-  /** Opens the set-up. */
-  openSetup: () => void;
-  setConfig: (config: SpeedConfig) => void;
-  /** Builds the run from the set-up and shows its first line. */
-  prepare: () => Promise<void>;
-  begin: () => void;
+  /** Back to no run: the page shows the set-up card. */
+  reset: () => void;
+  /**
+   * Builds a run set up as `config` (the saved set-up when none is given), then counts down to its first line, whose
+   * name shows meanwhile.
+   */
+  start: (config?: SpeedConfig) => Promise<void>;
+  /** Skips the rest of the countdown before a line. */
   startNow: () => void;
   submitMove: (uci: string) => boolean;
   /** Marks the piece to move (the first step of a hint). */
@@ -203,7 +162,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
   /** The first line starts, and a timed run's clock with it. */
   function launch() {
     const { config } = get();
-    if (config.mode === 'timed') {
+    if (config.run === 'timed') {
       const deadline = performance.now() + config.seconds * 1000;
       set({ deadline });
       clock.clear();
@@ -220,7 +179,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
       set({ results: [...results, result] });
     }
     if (lineIndex + 1 >= queue.length) return endRun();
-    if (config.mode === 'timed') return startLine(lineIndex + 1); // no pause: the clock is running
+    if (config.run === 'timed') return startLine(lineIndex + 1); // no pause: the clock is running
     set({ phase: 'between', betweenEndsAt: performance.now() + FEEDBACK_DELAYS.betweenLines });
     countdown.clear();
     countdown.later(FEEDBACK_DELAYS.betweenLines, () => startLine(lineIndex + 1));
@@ -242,7 +201,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
   return {
     phase: 'idle',
     error: null,
-    config: readPrefs(CONFIG_KEY, CONFIG_SCHEMA, DEFAULT_CONFIG),
+    config: savedConfig('speed'),
     queue: [],
     lineIndex: 0,
     betweenEndsAt: 0,
@@ -257,94 +216,49 @@ export const useSpeed = create<SpeedState>((set, get) => {
     badge: null,
     results: [],
 
-    openSetup() {
+    reset() {
       clearAll();
-      set({ phase: 'setup', error: null, results: [], queue: [] });
+      set({ phase: 'idle', error: null, results: [], queue: [] });
     },
 
-    setConfig(config) {
-      set({ config });
-      writePrefs(CONFIG_KEY, CONFIG_SCHEMA, config);
+    async start(config = savedConfig('speed')) {
+      await load(
+        {
+          config,
+          results: [],
+          queue: [],
+          stepIndex: 0,
+          times: [],
+          errors: 0,
+          hints: 0,
+          hintLevel: 0,
+          lastMs: null,
+          badge: null,
+        },
+        async () => {
+          clearAll();
+          const wanted = config.run === 'timed' ? TIMED_QUEUE : config.lines;
+          const rush = rushCourse(config.source);
+          const queue = rush ? await rushQueue(rush, wanted, config.weighting) : await linesQueue(config, wanted);
+          // lineIndex -1 means "before the first line", so the countdown shows queue[0] as the one up next.
+          set({
+            queue,
+            phase: 'between',
+            lineIndex: -1,
+            betweenEndsAt: performance.now() + FEEDBACK_DELAYS.betweenLines,
+          });
+          countdown.clear();
+          countdown.later(FEEDBACK_DELAYS.betweenLines, launch);
+        },
+      );
     },
 
-    async prepare() {
-      await load({ results: [], queue: [] }, async () => {
-        clearAll();
-        const { config } = get();
-        const rush = rushCourse(config.source);
-        if (rush) {
-          const queue = await rushQueue(rush, config.mode === 'timed' ? TIMED_QUEUE : config.lines, config.weighting);
-          set({ queue, lineIndex: 0, phase: 'ready' });
-          return;
-        }
-        const index = await loadIndex();
-        const enrolled =
-          config.source === 'learning'
-            ? await whenStorageReady()
-                .then(({ storage }) => getEnrolled(storage))
-                .catch(() => [] as string[])
-            : [];
-        // "Learning" falls back to everything when nothing is enrolled: a run is about moves you have met.
-        const pool = index.filter((course) =>
-          config.source === 'all'
-            ? true
-            : config.source === 'learning'
-              ? !enrolled.length || enrolled.includes(course.id)
-              : course.id === config.source,
-        );
-        const candidates = pool.flatMap((course) =>
-          course.lines.filter((line) => line.kind === 'line').map((line) => ({ course: course.id, line })),
-        );
-        // Weighing by popularity needs every course of the pool; a plain draw only the ones picked.
-        const popular =
-          config.weighting === 'popular'
-            ? await Promise.all([...new Set(candidates.map(({ course }) => course))].map(loadOpening))
-            : [];
-        const contents = new Map(popular.map((content) => [content.opening.id, content]));
-        // A line is as popular as the position its first eight moves reach.
-        const reach = ({ course, line }: (typeof candidates)[number]) => {
-          const content = contents.get(course)!;
-          const steps = lineSteps(content, line.id);
-          const last = steps[Math.min(steps.length, 8) - 1];
-          return popularityWeight(last ? content.nodes[last.edge.to]?.popularity : undefined);
-        };
-        const picked = pickWeighted(
-          candidates,
-          config.weighting === 'popular' ? reach : () => 1,
-          config.mode === 'timed' ? TIMED_QUEUE : config.lines,
-        );
-        if (picked.length === 0) throw new Error('There are no lines to play from that choice.');
-        const queue = await Promise.all(
-          picked.map(async ({ course, line }) => {
-            const content = await loadOpening(course);
-            return {
-              content,
-              lineId: line.id,
-              lineName: line.name,
-              steps: cutToMove(lineSteps(content, line.id), config.depth),
-            };
-          }),
-        );
-        set({ queue, lineIndex: 0, phase: 'ready' });
-      });
-    },
-
-    /** Skips the rest of the countdown before a line. */
     startNow() {
       if (get().phase !== 'between') return;
       countdown.clear();
       const next = get().lineIndex + 1;
       if (next === 0) launch();
       else startLine(next);
-    },
-
-    /** Start pressed: the first line's name and a countdown, then the run (and, if timed, its clock) begins. */
-    begin() {
-      if (get().phase !== 'ready') return;
-      // lineIndex -1 means "before the first line", so the countdown shows queue[0] as the one up next.
-      set({ phase: 'between', lineIndex: -1, betweenEndsAt: performance.now() + FEEDBACK_DELAYS.betweenLines });
-      countdown.clear();
-      countdown.later(FEEDBACK_DELAYS.betweenLines, launch);
     },
 
     submitMove(uci) {
@@ -408,13 +322,16 @@ export async function rushQueue(course: string, wanted: number, weighting: Weigh
     .flatMap((unit) => unit.stretches.map((stretch) => ({ unit, stretch })));
   if (candidates.length === 0)
     throw new Error(`No unit of ${content.opening.name} is passed yet. Pass one on the course's path first.`);
-  const end = ({ stretch }: (typeof candidates)[number]) => {
-    const steps = pathSteps(content, stretch.moves);
-    return popularityWeight(content.nodes[steps.at(-1)?.edge.to ?? '']?.popularity);
+  // A unit is decided where it begins: the games that reach the start of its own moves.
+  const weight = ({ stretch }: (typeof candidates)[number]) => {
+    const positions = [content.opening.rootEpd, ...pathSteps(content, stretch.moves).map((step) => step.edge.to)];
+    return practiceWeight(
+      weighting,
+      content.nodes[positions[decidingIndex(positions, { from: stretch.from })]!]?.popularity,
+    );
   };
   const picked: typeof candidates = [];
-  while (picked.length < wanted)
-    picked.push(...pickWeighted(candidates, weighting === 'popular' ? end : () => 1, wanted - picked.length));
+  while (picked.length < wanted) picked.push(...pickWeighted(candidates, weight, wanted - picked.length));
   const names = new Map(content.opening.variants.map((variant) => [variant.id, variant.name]));
   return picked.map(({ unit, stretch }) => ({
     content,
@@ -422,4 +339,42 @@ export async function rushQueue(course: string, wanted: number, weighting: Weigh
     lineName: `${names.get(unit.line) ?? unit.line}, unit ${unit.index + 1}`,
     steps: pathSteps(content, stretch.moves),
   }));
+}
+
+/**
+ * A run's lines from a source of courses: drawn without repeats, at random or each as likely as the games that go its
+ * way (`decidingPosition`: where it parts from the lines before it in its course, no deeper than the run goes).
+ */
+async function linesQueue(config: SpeedConfig, wanted: number): Promise<Queued[]> {
+  const pool = await resolvePool(config.source, await loadIndex());
+  const candidates = pool.flatMap((course) =>
+    course.lines.filter((line) => line.kind === 'line').map((line) => ({ course: course.id, line })),
+  );
+  // Weighing by popularity needs every course of the pool; a plain draw only the ones picked.
+  const contents = new Map(
+    (config.weighting === 'popular'
+      ? await Promise.all([...new Set(candidates.map(({ course }) => course))].map(loadOpening))
+      : []
+    ).map((content) => [content.opening.id, content]),
+  );
+  const plies = config.depth === 0 ? undefined : config.depth * 2;
+  const weight = ({ course, line }: (typeof candidates)[number]) => {
+    const content = contents.get(course);
+    return content
+      ? practiceWeight('popular', content.nodes[decidingPosition(content, line.id, plies)]?.popularity)
+      : 1;
+  };
+  const picked = pickWeighted(candidates, weight, wanted);
+  if (picked.length === 0) throw new Error('There are no lines to play from that choice.');
+  return Promise.all(
+    picked.map(async ({ course, line }) => {
+      const content = await loadOpening(course);
+      return {
+        content,
+        lineId: line.id,
+        lineName: line.name,
+        steps: cutToMove(lineSteps(content, line.id), config.depth),
+      };
+    }),
+  );
 }

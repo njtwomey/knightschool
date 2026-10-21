@@ -1,6 +1,6 @@
 import { Timer } from 'lucide-react';
 import { isPassed } from '@/data/course-path';
-import { rushSource, useSpeed } from '@/features/speed/store';
+import { rushSource, saveConfig, savedConfig } from '@/data/practice-config';
 import type { SessionType } from './types';
 
 /** Opening rush: Speed, with lines made only of the units of this course already passed. */
@@ -16,11 +16,8 @@ export const openingRush: SessionType = {
       ready: true,
       summary: `${passed.length} passed ${passed.length === 1 ? 'unit' : 'units'} to play.`,
       href: '/speed',
-      prepare: () => {
-        const speed = useSpeed.getState();
-        speed.setConfig({ ...speed.config, source: rushSource(content.opening.id) });
-        speed.openSetup();
-      },
+      // Speed opens on its set-up card, with the rush on this course chosen.
+      prepare: () => saveConfig('speed', { ...savedConfig('speed'), source: rushSource(content.opening.id) }),
     };
   },
 };

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useStorage } from '@/data/storage';
 import { useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
-import { lineHref, profileHref } from '@/router/hrefs';
+import { dueQuizHref, lineHref, profileHref } from '@/router/hrefs';
 import { useAsync } from '@/hooks/use-async';
 
 // The Giuoco Piano: a line worth watching, played over and over on the front page, with the idea of each move.
@@ -165,7 +165,7 @@ export function HomePage() {
               </a>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <a href={to('/quiz')}>
+              <a href={to(dueQuizHref())}>
                 <Library aria-hidden /> Quiz{due ? ` (${due})` : ''}
               </a>
             </Button>
@@ -187,7 +187,7 @@ export function HomePage() {
           </a>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          <Tile value={due === null ? '–' : String(due)} label="due in the quiz" href={to('/quiz')} />
+          <Tile value={due === null ? '–' : String(due)} label="due in the quiz" href={to(dueQuizHref())} />
           <Tile value={String(moves)} label="moves learned" href={to(profileHref())} />
           <Tile value={String(courses)} label="courses started" href={to(profileHref())} />
         </div>

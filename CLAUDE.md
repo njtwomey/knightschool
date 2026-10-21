@@ -257,18 +257,35 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
 - `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each, searchable and A to Z.
 - `play`: Learn (you play both sides, every move shown), Drill (the computer plays the other side; once called
   Practise; `PlayMode` is `learn | drill | branches`) and Every branch.
-  `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; how deep: to move 6, 10
-  or 15 or the whole line, `cutToMove`; lines from the courses you
-  are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
-  instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hint (the piece) and Show
-  me (the move) are counted, a step each. The last set-up is kept in localStorage. Runs go to the `speed_attempts` table (no effect on the review
-  schedule), shown on the Stats tab.
+  **One practice set-up for Quiz, Name it and Speed.** Each mode keeps one saved choice (`data/practice-config.ts`:
+  `practiceConfig[mode]`, a `createPrefStore` under `knightschool.practice.<mode>`; the old keys `knightschool.quiz.*`,
+  `knightschool.guess.*` and `knightschool.speed` are carried over once by `migratePracticePrefs` and removed). Every
+  config has a `source` (the courses I am learning, everything, or one course; Quiz adds "Due today (your schedule)",
+  its default, and Speed an opening rush `rush:<course>`) and a `weighting` (hidden for Due today), plus its own fields:
+  Quiz the moves per question (1 to 5 or the rest of the line), Name it the number of positions (5, 10 or 20), Speed
+  the run (a set of 3, 5 or 10 lines, or 30 s, 1 min or 2 min against the clock) and the depth (to move 6, 10 or 15 or the
+  whole line, `cutToMove`). `resolvePool` turns a source into courses for all three. It is shown one way everywhere
+  (`components/practice-setup.tsx`): the page opens on the set-up card (`PracticeSetup`, inside the page); during a
+  session a one-line summary (`PracticeBar`, `describeConfig`) sits above the board with **Change**, which opens the same
+  card in its place. The card edits a copy, so **nothing restarts until Start** (Cancel leaves the session as it was), and
+  Start saves the choice. Each store keeps the `config` its session started with (`start(config)`), so what it saves and
+  asks reads the session's own copy. The end screen shows the card again with **Again**. **Favour popular** means one
+  thing in all three: an item is drawn (`pickWeighted`) with the weight `practiceWeight`, the share of games that reach
+  the position that decides it: the question's position (Quiz, through `freePractice`), the position to name (Name it),
+  for a Speed line `decidingPosition` (where it parts from the lines listed before it in its course, the first line at
+  the trigger, never past the depth played) and for an opening-rush unit where its stretch begins (`decidingIndex` in
+  `training/sampling.ts`). Unknown popularity counts as rare, never as nothing.
+  `speed` (`/speed`): lines played from memory against the clock with the other side answering instantly; Start counts
+  down five seconds with the first line's name, then the run begins. A set of lines scores the mean time per move, a timed
+  run how many moves you make. Hint (the piece) and Show me (the move) are counted, a step each. Runs go to the
+  `speed_attempts` table (no effect on the review schedule), shown on the Stats tab.
   `name-it` ("Name That Opening", menu "Name it", `/name`; `useNameIt`): a position from the courses and you type what it is; `guessTargets` collects every
   opening and variation whose lines reach it (transpositions count) and `gradeGuess` gives full credit for a variation, half
   for just the opening; answers go to the `guess_attempts` table.
-  `quiz` (`useQuiz`): spaced-repetition cards. Quiz, Name it and Speed share a "from" choice (`SourceSelect`, `data/practice-source.ts`):
-  the courses you are learning, everything, or one course. Quiz also has "Due today (your schedule)", the default; any
-  other choice is free practice (`freePractice` in core) that is never saved, so it cannot touch the schedule. At the end
+  `quiz` (`useQuiz`): spaced-repetition cards. "Due today" is the schedule's session (`/quiz#start=due`, `dueQuizHref`,
+  starts it at once: the links from Home and Overview use it); any other source is free practice (`freePractice` in core),
+  never saved, so it cannot touch the schedule. A line's Quiz tab starts at once, is never saved, and its card has only
+  the moves per question. At the end
   of a quiz every wrong move is listed with what it cost by the engine against the course's move (`training/regret.ts` in core:
   under 30cp a memory slip, 30 to 99 an inaccuracy, 100 and more a mistake), from baked analysis or the browser engine at
   depth 14 after the session. `profile`: its tabs (`PROFILE_TABS`) are `overview` (the dashboard), `stats` and
@@ -281,7 +298,7 @@ hint (`Hint`, a tooltip trigger) round an item overwrites its `data-state`.
 replies, the next card appears); a wrong move flashes a cross and snaps back; a miss reveals the move. The exception, asked
 for by the user: in Quiz and Guess a miss (or a partly right Guess, or a move needing a retry) stays up with a **Next** button,
 because there is an explanation to read. In Speed a five second modal, with a countdown and the next opening's name, sits
-between lines of a fixed run. Every delay lives in one table, `FEEDBACK_DELAYS` in `lib/feedback.ts` (the tick and the
+before the first line and between lines of a fixed run. Every delay lives in one table, `FEEDBACK_DELAYS` in `lib/feedback.ts` (the tick and the
 cross, one wrong-move time everywhere, the computer's reply, the next card, a quiz or Name it answer, Speed's countdown,
 "Copied"); session stores schedule them with `createTimers()` and clear the lot when they stop or start again.
 

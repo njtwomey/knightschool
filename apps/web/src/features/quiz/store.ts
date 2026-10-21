@@ -9,8 +9,6 @@ import {
   type LineEdge,
   lineQuestions,
   matchAnswer,
-  MOVES_PER_QUESTION,
-  type MovesPerQuestion,
   newCard,
   nodeAt,
   type OpeningContent,
@@ -25,14 +23,13 @@ import {
   reduceAttempt,
   shuffle,
   startAttempt,
-  type Weighting,
   withPromotion,
 } from '@knightschool/core';
 import type { Storage } from '@knightschool/storage';
 import { create } from 'zustand';
 import type { BoardBadge } from '@/components/board/shapes';
 import { loadIndex, loadOpening } from '@/data/content';
-import { coursesFor, saveChoice, savedChoice, savedWeighting } from '@/data/practice-source';
+import { DUE, type QuizConfig, resolvePool, savedConfig } from '@/data/practice-config';
 import { useStorage, whenStorageReady } from '@/data/storage';
 import { missKey, type Miss } from './regret';
 import {
@@ -47,16 +44,8 @@ import { errorText } from '@/lib/errors';
 import { sessionLoader, type SessionPhase } from '@/lib/session';
 
 const scheduler = createScheduler();
-const SOURCE_KEY = 'knightschool.quiz.source';
-const WEIGHTING_KEY = 'knightschool.quiz.weighting';
-const MOVES_KEY = 'knightschool.quiz.moves';
-const savedMoves = (): MovesPerQuestion => {
-  const value = Number(savedChoice(MOVES_KEY, '1'));
-  return (MOVES_PER_QUESTION as readonly number[]).includes(value) ? (value as MovesPerQuestion) : 1;
-};
 
-/** "due" is the scheduled session; anything else is free practice from those courses. */
-export const DUE = 'due';
+export { DUE };
 
 type Phase = SessionPhase<'asking' | 'summary'>;
 
@@ -78,9 +67,12 @@ type QuizState = {
   advancing: boolean;
   /** The result of the typed answer to the quiz being asked, shown until the next card. */
   quizResult: { matched: boolean; feedback: string | null; close: string | null; answer: string } | null;
-  /** "due" (the review schedule), or where free practice draws from: learning, all, or a course id. */
-  source: string;
-  /** Set on a line's Quiz tab: every question of that one line, shuffled, never saved. Overrides `source`. */
+  /**
+   * How this session was set up (a copy taken when it started, so changing the saved set-up never touches it): its
+   * source is "due" (the review schedule) or where free practice draws from; `moves` how far each question runs.
+   */
+  config: QuizConfig;
+  /** Set on a line's Quiz tab: every question of that one line, shuffled, never saved. Overrides the source. */
   scope: LineScope | null;
   /** An earlier move of the position being asked, picked from the move table to look at; null shows the question. */
   viewing: number | null;
@@ -88,14 +80,10 @@ type QuizState = {
   holding: boolean;
   view: (index: number | null) => void;
 
-  start: () => Promise<void>;
-  setSource: (source: string) => void;
-  /** Free practice only: an even draw, or favouring the positions more games reach. */
-  weighting: Weighting;
-  setWeighting: (weighting: Weighting) => void;
-  /** How many of your moves a question runs for: after the answer the line carries on, up to this many (0: to its end). */
-  movesPerQuestion: MovesPerQuestion;
-  setMovesPerQuestion: (moves: MovesPerQuestion) => void;
+  /** Starts a session set up as `config` (the saved set-up when none is given), throwing away any under way. */
+  start: (config?: QuizConfig) => Promise<void>;
+  /** Back to no session: the page shows the set-up card. */
+  reset: () => void;
   /** The run of follow-on moves under way: how many more may follow, and the line they keep to. */
   chain: { left: number; line: string } | null;
   /** Follow-on questions whose card was never introduced: asked, but not written to the schedule. */
@@ -127,7 +115,7 @@ export type LineScope = { course: string; line: string };
 
 export const useQuiz = create<QuizState>((set, get) => {
   /** Only the schedule's own session is saved; free practice and a line's quiz never touch it. */
-  const saving = () => get().source === DUE && !get().scope;
+  const saving = () => get().config.source === DUE && !get().scope;
   /** Whether this card's answer goes to the schedule. */
   const saves = (card: Card) => saving() && !get().unsaved.includes(card.id);
   function recordMiss(card: Card, content: OpeningContent, playedUci: string) {
@@ -148,11 +136,12 @@ export const useQuiz = create<QuizState>((set, get) => {
     set((state) => ({ misses: [...state.misses, miss] }));
   }
   /**
-   * After a move question: carry on along its line for up to `movesPerQuestion` of your moves (the opponent's reply in
+   * After a move question: carry on along its line for up to `config.moves` of your moves (the opponent's reply in
    * between is shown as the last move), then go on to the next question in the queue.
    */
   function advance() {
-    const { index, queue, contents, chain, movesPerQuestion } = get();
+    const { index, queue, contents, chain, config } = get();
+    const movesPerQuestion = config.moves;
     const card = queue[index];
     const content = card ? contents[card.openingId] : undefined;
     const left = chain ? chain.left : movesPerQuestion === 0 ? Number.POSITIVE_INFINITY : movesPerQuestion - 1;
@@ -234,34 +223,23 @@ export const useQuiz = create<QuizState>((set, get) => {
     badge: null,
     advancing: false,
     quizResult: null,
-    source: savedChoice(SOURCE_KEY, DUE),
+    config: savedConfig('quiz'),
     scope: null,
-    weighting: savedWeighting(WEIGHTING_KEY),
-    movesPerQuestion: savedMoves(),
-    setMovesPerQuestion(moves) {
-      saveChoice(MOVES_KEY, String(moves));
-      set({ movesPerQuestion: moves, chain: null });
-    },
     chain: null,
     unsaved: [],
     following: false,
-    setWeighting(weighting) {
-      saveChoice(WEIGHTING_KEY, weighting);
-      set({ weighting });
-      if (get().source !== DUE) void get().start();
-    },
     viewing: null,
     holding: false,
     view: (viewing) => set({ viewing }),
 
-    setSource(source) {
-      saveChoice(SOURCE_KEY, source);
-      set({ source });
-      void get().start();
+    reset() {
+      clearTimers();
+      set({ phase: 'idle', error: null, queue: [], index: 0, results: [], misses: [], chain: null, holding: false });
     },
 
-    async start() {
+    async start(config = savedConfig('quiz')) {
       const reset = {
+        config,
         chain: null,
         unsaved: [],
         following: false,
@@ -276,10 +254,6 @@ export const useQuiz = create<QuizState>((set, get) => {
         const storage = (await whenStorageReady()).storage;
         const now = new Date();
         const index = await loadIndex();
-        const enrolled = await getEnrolled(
-          storage,
-          index.map((course) => course.id),
-        );
         const scope = get().scope;
         if (scope) {
           const content = await loadOpening(scope.course);
@@ -299,9 +273,9 @@ export const useQuiz = create<QuizState>((set, get) => {
           });
           return;
         }
-        if (get().source !== DUE) {
+        if (config.source !== DUE) {
           // Free practice: random questions, saved nowhere, so the schedule is untouched.
-          const chosen = coursesFor(get().source, index, enrolled);
+          const chosen = await resolvePool(config.source, index);
           const free = await Promise.all(chosen.map((course) => loadOpening(course.id)));
           const queue = freePractice(
             free,
@@ -309,7 +283,7 @@ export const useQuiz = create<QuizState>((set, get) => {
             await getCardOptions(storage),
             Math.random,
             new Date(),
-            get().weighting,
+            config.weighting,
           );
           set({
             queue,
@@ -324,6 +298,10 @@ export const useQuiz = create<QuizState>((set, get) => {
           });
           return;
         }
+        const enrolled = await getEnrolled(
+          storage,
+          index.map((course) => course.id),
+        );
         const loaded = await Promise.all(enrolled.map((id) => loadOpening(id)));
         const contents = Object.fromEntries(loaded.map((content) => [content.opening.id, content]));
 

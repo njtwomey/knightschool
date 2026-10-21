@@ -1,5 +1,4 @@
-import { formatMs, speedSummary, SPEED_DEPTHS, type SpeedDepth } from '@knightschool/core';
-import { Play, RotateCcw, Settings2, Timer } from 'lucide-react';
+import { formatMs, speedSummary } from '@knightschool/core';
 import { useEffect } from 'react';
 import { uciArrow } from '@/components/board/shapes';
 import { StudyBoard } from '@/components/board/study-board';
@@ -15,16 +14,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { WeightingSelect } from '@/components/weighting-select';
+import { PracticeBar, PracticeSetup } from '@/components/practice-setup';
+import { saveConfig, savedConfig, type SpeedConfig } from '@/data/practice-config';
 import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
-import { rushCourse, rushSource, useSpeed, type SpeedConfig } from './store';
+import { useSpeed } from './store';
 import { FEEDBACK_DELAYS } from '@/lib/feedback';
 import { profileHref } from '@/router/hrefs';
 import { useNow } from '@/hooks/use-now';
@@ -96,164 +93,15 @@ function BetweenDialog() {
   );
 }
 
-/** The choices for a run, in a window that opens whenever a new run is started. */
-function SetupDialog() {
-  const phase = useSpeed((state) => state.phase);
-  const config = useSpeed((state) => state.config);
-  const index = useCatalog((state) => state.index);
-  const set = (change: Partial<SpeedConfig>) => useSpeed.getState().setConfig({ ...config, ...change });
-  // An opening rush is started from a course's Path tab; it stays a choice here while it is the one set.
-  const rush = rushCourse(config.source);
-  const rushName = index.find((course) => course.id === rush)?.name ?? rush;
-
-  return (
-    // Not modal, with the dimming drawn below the header, so the navigation stays usable while the window is open.
-    <Dialog open={phase === 'setup'} modal={false}>
-      {phase === 'setup' && (
-        <div className="fixed inset-x-0 top-[3.25rem] bottom-0 z-40 bg-black/55 backdrop-blur-sm" />
-      )}
-      <DialogContent
-        showCloseButton={false}
-        overlay={false}
-        className="sm:max-w-lg"
-        onInteractOutside={(event) => event.preventDefault()}
-      >
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Timer aria-hidden /> Set up a speed run
-          </DialogTitle>
-          <DialogDescription>
-            Play lines you know from memory against the clock. The other side answers the instant you move.
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="grid gap-5">
-          <div className="grid gap-2">
-            <Label>What kind of run</Label>
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              value={config.mode}
-              onValueChange={(mode) => mode && set({ mode: mode as SpeedConfig['mode'] })}
-              className="justify-self-start"
-            >
-              <ToggleGroupItem value="lines">A set of lines</ToggleGroupItem>
-              <ToggleGroupItem value="timed">Against the clock</ToggleGroupItem>
-            </ToggleGroup>
-            <p className="text-sm text-muted-foreground">
-              {config.mode === 'lines'
-                ? 'Play each line through to the end. You get your average time per move.'
-                : 'Lines keep coming until the time is up. How many moves can you make?'}
-            </p>
-          </div>
-
-          {config.mode === 'lines' ? (
-            <div className="grid gap-2">
-              <Label>How many lines</Label>
-              <ToggleGroup
-                type="single"
-                variant="outline"
-                value={String(config.lines)}
-                onValueChange={(value) => value && set({ lines: Number(value) as SpeedConfig['lines'] })}
-                className="justify-self-start"
-              >
-                {[3, 5, 10].map((n) => (
-                  <ToggleGroupItem key={n} value={String(n)}>
-                    {n} lines
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
-          ) : (
-            <div className="grid gap-2">
-              <Label>How long</Label>
-              <ToggleGroup
-                type="single"
-                variant="outline"
-                value={String(config.seconds)}
-                onValueChange={(value) => value && set({ seconds: Number(value) as SpeedConfig['seconds'] })}
-                className="justify-self-start"
-              >
-                {[30, 60, 120].map((n) => (
-                  <ToggleGroupItem key={n} value={String(n)}>
-                    {n === 60 ? '1 minute' : n === 120 ? '2 minutes' : `${n} seconds`}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
-          )}
-
-          {rush ? (
-            <p className="text-sm text-muted-foreground">
-              An opening rush plays each passed unit from the first move to its end.
-            </p>
-          ) : (
-            <div className="grid gap-2">
-              <Label>How deep</Label>
-              <ToggleGroup
-                type="single"
-                variant="outline"
-                value={String(config.depth)}
-                onValueChange={(value) => value && set({ depth: Number(value) as SpeedDepth })}
-                className="justify-self-start"
-                aria-label="How deep each line goes"
-              >
-                {SPEED_DEPTHS.map((depth) => (
-                  <ToggleGroupItem key={depth} value={String(depth)}>
-                    {depth === 0 ? 'Whole line' : `To move ${depth}`}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </div>
-          )}
-
-          <div className="grid gap-2">
-            <Label htmlFor="speed-source">Lines from</Label>
-            <Select value={config.source} onValueChange={(source) => set({ source })}>
-              <SelectTrigger id="speed-source" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {rush && (
-                  <SelectItem value={rushSource(rush)}>
-                    Opening rush: the units of {rushName} you have passed
-                  </SelectItem>
-                )}
-                <SelectItem value="learning">The courses I am learning</SelectItem>
-                <SelectItem value="all">Everything</SelectItem>
-                {index.map((course) => (
-                  <SelectItem key={course.id} value={course.id}>
-                    {course.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid gap-2">
-            <Label htmlFor="speed-weighting">Pick lines</Label>
-            <WeightingSelect
-              value={config.weighting}
-              onChange={(weighting) => set({ weighting })}
-              label="How lines are picked"
-            />
-          </div>
-        </div>
-
-        <DialogFooter>
-          <Button size="lg" onClick={() => void useSpeed.getState().prepare()}>
-            Continue
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
+const begin = (config: SpeedConfig) => {
+  saveConfig('speed', config);
+  void useSpeed.getState().start(config);
+};
 
 /**
  * Speed: lines from your courses played from memory against the clock. The opponent answers the instant you move, so
  * the time is all yours. A run is a set of lines, scored by the average time per move, or a fixed time, scored by how
- * many moves you make.
+ * many moves you make. It opens on the set-up card.
  */
 export function SpeedPage() {
   const state = useSpeed();
@@ -261,35 +109,29 @@ export function SpeedPage() {
 
   // A new run starts with its set-up.
   useEffect(() => {
-    if (useSpeed.getState().phase === 'idle') useSpeed.getState().openSetup();
+    useSpeed.getState().reset();
     return () => useSpeed.getState().stop();
   }, []);
-  useEffect(() => {
-    if (useSpeed.getState().phase === 'idle') useSpeed.getState().openSetup();
-  }, [phase]);
 
   const now = useNow(phase === 'playing');
   const titles = useTitles();
 
-  if (phase === 'idle' || phase === 'setup') {
+  if (phase === 'idle') {
     return (
-      <Page>
-        <SetupDialog />
-        <Skeleton className="mx-auto h-[28rem] w-full max-w-5xl" />
+      <Page className="max-w-xl gap-4 py-8">
+        <PracticeSetup mode="speed" initial={savedConfig('speed')} onStart={begin} />
       </Page>
     );
   }
   if (phase === 'loading') return <Skeleton className="mx-auto mt-6 h-[28rem] max-w-5xl" />;
   if (phase === 'error') {
     return (
-      <Page>
+      <Page className="max-w-xl gap-4 py-8">
         <Alert variant="destructive">
           <AlertTitle>Speed could not start</AlertTitle>
           <AlertDescription>{state.error}</AlertDescription>
         </Alert>
-        <div>
-          <Button onClick={() => useSpeed.getState().openSetup()}>Change the set-up</Button>
-        </div>
+        <PracticeSetup mode="speed" initial={config} onStart={begin} startLabel="Try again" />
       </Page>
     );
   }
@@ -297,7 +139,7 @@ export function SpeedPage() {
 
   const queued = queue[Math.max(lineIndex, 0)];
   if (!queued) return null;
-  const timed = config.mode === 'timed';
+  const timed = config.run === 'timed';
   const side = queued.content.opening.side;
   const steps = queued.steps;
   const finished = stepIndex >= steps.length;
@@ -315,121 +157,97 @@ export function SpeedPage() {
   ]);
 
   return (
-    <Page className="board-columns gap-4">
+    <Page className="gap-4">
       <BetweenDialog />
-      <StudyBoard
-        id="speed"
-        epd={epd}
-        orientation={side}
-        interactive={running}
-        onMove={(uci) => useSpeed.getState().submitMove(uci)}
-        lastMove={previous?.edge.uci}
-        lastMoveTone="red"
-        badge={badge}
-        hintSquare={running && expected && hintLevel >= 1 ? expected.slice(0, 2) : null}
-        arrows={running && expected && hintLevel === 2 ? [uciArrow(expected)] : []}
-        controls={{
-          // Two steps, as in Play and the quiz: the piece first, then the move. Both are counted.
-          hint: running ? { onHint: () => useSpeed.getState().hint(), disabled: hintLevel > 0 || finished } : undefined,
-          show: running
-            ? { onShow: () => useSpeed.getState().show(), disabled: hintLevel === 2 || finished }
-            : undefined,
-        }}
-      />
+      <PracticeBar mode="speed" config={config} onStart={begin} />
+      <div className="board-columns grid gap-6">
+        <StudyBoard
+          id="speed"
+          epd={epd}
+          orientation={side}
+          interactive={running}
+          onMove={(uci) => useSpeed.getState().submitMove(uci)}
+          lastMove={previous?.edge.uci}
+          lastMoveTone="red"
+          badge={badge}
+          hintSquare={running && expected && hintLevel >= 1 ? expected.slice(0, 2) : null}
+          arrows={running && expected && hintLevel === 2 ? [uciArrow(expected)] : []}
+          controls={{
+            // Two steps, as in Play and the quiz: the piece first, then the move. Both are counted.
+            hint: running
+              ? { onHint: () => useSpeed.getState().hint(), disabled: hintLevel > 0 || finished }
+              : undefined,
+            show: running
+              ? { onShow: () => useSpeed.getState().show(), disabled: hintLevel === 2 || finished }
+              : undefined,
+          }}
+        />
 
-      <div className="grid content-start gap-4">
-        <div className="flex items-center gap-3">
-          {timed ? (
-            <Progress
-              value={
-                phase === 'ready' ? 0 : Math.min(100, (1 - Math.max(0, remaining) / (config.seconds * 1000)) * 100)
-              }
-              className="flex-1"
-              aria-label="Time used"
-            />
-          ) : (
-            <Progress
-              value={(Math.max(lineIndex, 0) / queue.length) * 100}
-              className="flex-1"
-              aria-label="Run progress"
-            />
-          )}
-          <span className="text-sm text-muted-foreground" role="status">
-            {timed ? `${config.seconds} seconds` : `Line ${Math.max(lineIndex, 0) + 1} of ${queue.length}`}
-          </span>
+        <div className="grid content-start gap-4">
+          <div className="flex items-center gap-3">
+            {timed ? (
+              <Progress
+                value={
+                  phase === 'between' ? 0 : Math.min(100, (1 - Math.max(0, remaining) / (config.seconds * 1000)) * 100)
+                }
+                className="flex-1"
+                aria-label="Time used"
+              />
+            ) : (
+              <Progress
+                value={(Math.max(lineIndex, 0) / queue.length) * 100}
+                className="flex-1"
+                aria-label="Run progress"
+              />
+            )}
+            <span className="text-sm text-muted-foreground" role="status">
+              {timed ? `${config.seconds} seconds` : `Line ${Math.max(lineIndex, 0) + 1} of ${queue.length}`}
+            </span>
+          </div>
+
+          {
+            <>
+              <Card>
+                <CardHeader>
+                  <CardDescription>
+                    {phase === 'between' ? 'Up next, playing ' : 'Playing '}
+                    {upNext?.content.opening.side ?? side}
+                  </CardDescription>
+                  <CardTitle className="text-2xl font-semibold leading-tight">{shown.opening}</CardTitle>
+                  <p className="text-lg font-medium">{shown.variation}</p>
+                  <p className="text-5xl font-semibold tabular-nums">
+                    {phase === 'between' ? 'Get ready' : timed ? countdown(remaining) : formatMs(clock)}
+                  </p>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  {phase === 'between' ? (
+                    <>
+                      {results.at(-1) &&
+                        `Last line: ${formatMs(results.at(-1)!.totalMs / Math.max(1, results.at(-1)!.moves))} per move. `}
+                      {upNext && 'Starting in a moment.'}
+                    </>
+                  ) : timed ? (
+                    <>This move: {formatMs(clock)}. Hints are counted, and the clock keeps running.</>
+                  ) : (
+                    <>
+                      The other side answers at once. Stuck? Hint marks the piece and Show me the move: each is counted,
+                      and the clock keeps running.
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+                <Big
+                  label={timed ? 'moves made' : 'last move'}
+                  value={timed ? String(soFar.moves) : formatMs(lastMs)}
+                />
+                <Big label="average so far" value={formatMs(soFar.averageMs)} />
+                <Big label="wrong moves" value={String(soFar.errors)} />
+                <Big label="hints used" value={String(soFar.hints)} />
+              </div>
+            </>
+          }
         </div>
-
-        {phase === 'ready' ? (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Timer aria-hidden /> {timed ? 'Against the clock' : 'Speed'}
-              </CardTitle>
-              <CardDescription>
-                {timed
-                  ? `${config.seconds} seconds. Make as many right moves as you can; the next line starts the moment one ends.`
-                  : `${queue.length} lines, played from memory. Your average time per move is the score.`}{' '}
-                The other side replies the instant you move. A wrong move is counted and the clock keeps running.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              <div className="grid gap-0.5 rounded-lg border bg-muted/40 p-3">
-                <p className="text-xs uppercase tracking-wide text-muted-foreground">First line</p>
-                <p className="text-xl font-semibold leading-tight">{shown.opening}</p>
-                <p className="font-medium">{shown.variation}</p>
-                <p className="text-sm text-muted-foreground">
-                  You play {side}.{!timed && ' The other lines follow on their own.'}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Button size="lg" onClick={() => useSpeed.getState().begin()}>
-                  <Play aria-hidden /> Start
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => useSpeed.getState().openSetup()}>
-                  <Settings2 aria-hidden /> Change the set-up
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
-          <>
-            <Card>
-              <CardHeader>
-                <CardDescription>
-                  {phase === 'between' ? 'Up next, playing ' : 'Playing '}
-                  {upNext?.content.opening.side ?? side}
-                </CardDescription>
-                <CardTitle className="text-2xl font-semibold leading-tight">{shown.opening}</CardTitle>
-                <p className="text-lg font-medium">{shown.variation}</p>
-                <p className="text-5xl font-semibold tabular-nums">
-                  {phase === 'between' ? 'Get ready' : timed ? countdown(remaining) : formatMs(clock)}
-                </p>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                {phase === 'between' ? (
-                  <>
-                    {results.at(-1) &&
-                      `Last line: ${formatMs(results.at(-1)!.totalMs / Math.max(1, results.at(-1)!.moves))} per move. `}
-                    {upNext && 'Starting in a moment.'}
-                  </>
-                ) : timed ? (
-                  <>This move: {formatMs(clock)}. Hints are counted, and the clock keeps running.</>
-                ) : (
-                  <>
-                    The other side answers at once. Stuck? Hint marks the piece and Show me the move: each is counted,
-                    and the clock keeps running.
-                  </>
-                )}
-              </CardContent>
-            </Card>
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              <Big label={timed ? 'moves made' : 'last move'} value={timed ? String(soFar.moves) : formatMs(lastMs)} />
-              <Big label="average so far" value={formatMs(soFar.averageMs)} />
-              <Big label="wrong moves" value={String(soFar.errors)} />
-              <Big label="hints used" value={String(soFar.hints)} />
-            </div>
-          </>
-        )}
       </div>
     </Page>
   );
@@ -439,7 +257,7 @@ function Summary() {
   const results = useSpeed((state) => state.results);
   const config = useSpeed((state) => state.config);
   const summary = speedSummary(results);
-  const timed = config.mode === 'timed';
+  const timed = config.run === 'timed';
   const titles = useTitles();
   const courses = useCatalog((state) => state.index);
   const titleOfResult = (result: (typeof results)[number]) =>
@@ -478,6 +296,7 @@ function Summary() {
         <Big label="wrong moves" value={String(summary.errors)} />
         <Big label="hints used" value={String(summary.hints)} />
       </div>
+      <PracticeSetup mode="speed" initial={config} onStart={begin} title="Another run" startLabel="Again" />
       <Card>
         <CardContent className="pt-6">
           <Table aria-label="Lines in this run">
@@ -512,13 +331,7 @@ function Summary() {
         </CardContent>
       </Card>
       <div className="flex flex-wrap gap-2">
-        <Button onClick={() => void useSpeed.getState().prepare()}>
-          <RotateCcw aria-hidden /> Same again
-        </Button>
-        <Button variant="outline" onClick={() => useSpeed.getState().openSetup()}>
-          <Settings2 aria-hidden /> Change the set-up
-        </Button>
-        <Button asChild variant="ghost">
+        <Button asChild variant="outline">
           <a href={to(profileHref('stats'))}>Stats</a>
         </Button>
       </div>

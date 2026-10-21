@@ -10,41 +10,50 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { SourceSelect } from '@/components/source-select';
-import { WeightingSelect } from '@/components/weighting-select';
-import { useCatalog } from '@/data/catalog-store';
+import { PracticeBar, PracticeSetup } from '@/components/practice-setup';
+import { type NameItConfig, saveConfig, savedConfig } from '@/data/practice-config';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
-import { allSuggestions, SESSION_LENGTH, sessionPoints, useNameIt, type Outcome } from './store';
+import { allSuggestions, sessionPoints, useNameIt, type Outcome } from './store';
 import { lineHref, profileHref } from '@/router/hrefs';
 
-/** "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts. */
+const begin = (config: NameItConfig) => {
+  saveConfig('name-it', config);
+  void useNameIt.getState().start(config);
+};
+
+/**
+ * "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts.
+ * It opens on the set-up card; a session runs for the number of positions chosen there.
+ */
 export function NameItPage() {
-  const { phase, error, question, answer, graded, outcomes, source, weighting } = useNameIt();
-  const index = useCatalog((state) => state.index);
+  const { phase, error, question, answer, graded, outcomes, config } = useNameIt();
 
   useEffect(() => {
-    void useNameIt.getState().start();
+    useNameIt.getState().reset();
     return () => useNameIt.getState().stop();
   }, []);
-
-  // Start again if the store was reset while the page stayed open, rather than waiting on a refresh.
-  useEffect(() => {
-    if (useNameIt.getState().phase === 'idle') void useNameIt.getState().start();
-  }, [phase]);
 
   const names = useMemo(() => (phase === 'asking' ? allSuggestions() : []), [phase]);
   const hints = phase === 'asking' ? suggest(names, answer) : [];
 
-  if (phase === 'idle' || phase === 'loading') return <Skeleton className="mx-auto mt-6 h-[28rem] max-w-5xl" />;
+  if (phase === 'idle') {
+    return (
+      <Page className="max-w-xl gap-4 py-8">
+        <PracticeSetup mode="name-it" initial={savedConfig('name-it')} onStart={begin} />
+      </Page>
+    );
+  }
+  if (phase === 'loading') return <Skeleton className="mx-auto mt-6 h-[28rem] max-w-5xl" />;
   if (phase === 'summary') return <Summary outcomes={outcomes} />;
   if (phase === 'error' || !question) {
     return (
-      <Page>
+      <Page className="max-w-xl gap-4 py-8">
         <Alert variant="destructive">
           <AlertTitle>Could not start</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
+        <PracticeSetup mode="name-it" initial={config} onStart={begin} startLabel="Try again" />
       </Page>
     );
   }
@@ -60,24 +69,11 @@ export function NameItPage() {
 
   return (
     <Page className="gap-4">
-      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        Positions from
-        <SourceSelect
-          value={source}
-          onChange={(next) => useNameIt.getState().setSource(next)}
-          index={index}
-          label="Positions from"
-        />
-        <WeightingSelect
-          value={weighting}
-          onChange={(next) => useNameIt.getState().setWeighting(next)}
-          label="How positions are picked"
-        />
-      </div>
+      <PracticeBar mode="name-it" config={config} onStart={begin} />
       <div className="flex items-center gap-3">
-        <Progress value={(outcomes.length / SESSION_LENGTH) * 100} className="flex-1" aria-label="Session progress" />
+        <Progress value={(outcomes.length / config.positions) * 100} className="flex-1" aria-label="Session progress" />
         <span className="text-sm text-muted-foreground" role="status">
-          {Math.min(outcomes.length + (answered ? 0 : 1), SESSION_LENGTH)} of {SESSION_LENGTH}
+          {Math.min(outcomes.length + (answered ? 0 : 1), config.positions)} of {config.positions}
         </span>
       </div>
       <div className="board-columns grid gap-6">
@@ -207,6 +203,7 @@ export function NameItPage() {
 }
 
 function Summary({ outcomes }: { outcomes: Outcome[] }) {
+  const config = useNameIt((state) => state.config);
   const points = sessionPoints(outcomes);
   const misses = outcomes.filter((outcome) => outcome.result !== 'full');
   return (
@@ -218,6 +215,7 @@ function Summary({ outcomes }: { outcomes: Outcome[] }) {
           sooner.
         </p>
       </header>
+      <PracticeSetup mode="name-it" initial={config} onStart={begin} title="Another round" startLabel="Again" />
       {misses.length > 0 && (
         <section className="grid gap-2">
           <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">To look at again</h3>
@@ -244,17 +242,7 @@ function Summary({ outcomes }: { outcomes: Outcome[] }) {
           </ul>
         </section>
       )}
-      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        Next positions from
-        <SourceSelect
-          value={useNameIt.getState().source}
-          onChange={(next) => useNameIt.getState().setSource(next)}
-          index={useCatalog.getState().index}
-          label="Positions from"
-        />
-      </div>
       <div className="flex flex-wrap gap-2">
-        <Button onClick={() => void useNameIt.getState().start()}>Another ten</Button>
         <Button asChild variant="outline">
           <a href={to(profileHref())}>Overview</a>
         </Button>

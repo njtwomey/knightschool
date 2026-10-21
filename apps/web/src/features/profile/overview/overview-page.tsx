@@ -14,7 +14,7 @@ import { useCatalog } from '@/data/catalog-store';
 import { CourseCard } from '@/features/search/course-card';
 import { percent, useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
-import { courseHref } from '@/router/hrefs';
+import { courseHref, dueQuizHref } from '@/router/hrefs';
 import { useAsync } from '@/hooks/use-async';
 
 type Row = { course: OpeningIndexEntry; due: number; fresh: number };
@@ -107,7 +107,7 @@ export function OverviewPage() {
         </div>
         {rows && rows.length > 0 && (
           <Button asChild size="lg" disabled={total === 0}>
-            <a href={to('/quiz')}>
+            <a href={to(dueQuizHref())}>
               <Play aria-hidden /> {total === 0 ? 'Nothing due' : `Start the quiz (${total})`}
             </a>
           </Button>

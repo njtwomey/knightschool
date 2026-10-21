@@ -28,17 +28,17 @@ vi.mock('@/data/content', () => ({
 }));
 
 const { currentQuestion, useQuiz, DUE } = await import('./store');
+const { saveConfig, savedConfig } = await import('@/data/practice-config');
 const review = () => useQuiz.getState();
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
-async function startSession({ newPerDay = 10, moves = 2 as const } = {}) {
+async function startSession({ newPerDay = 10, moves = 2 as 0 | 1 | 2 | 3 | 4 | 5 } = {}) {
   memory = (await openMemoryStorage()) as unknown as BrowserStorage;
   const now = new Date();
   await setEnrolled(memory.storage, ['t'], now);
   await setNewPerDay(memory.storage, newPerDay, now);
-  useQuiz.setState({ phase: 'idle', source: DUE, scope: null });
-  review().setMovesPerQuestion(moves);
-  await review().start();
+  useQuiz.setState({ phase: 'idle', scope: null });
+  await review().start({ source: DUE, weighting: 'random', moves });
 }
 
 /** Answers the card being asked with its move and moves on. Returns the card's id. */
@@ -96,12 +96,36 @@ describe('the quiz session', () => {
     await memory.storage.cards.insertMissing(stale);
     await setEnrolled(memory.storage, ['t'], past);
     await setNewPerDay(memory.storage, 0, past);
-    useQuiz.setState({ phase: 'idle', source: DUE, scope: null });
-    await review().start();
+    useQuiz.setState({ phase: 'idle', scope: null });
+    await review().start({ source: DUE, weighting: 'random', moves: 1 });
     expect(review().phase).toBe('summary');
     expect(review().queue).toEqual([]);
     // Asked anyway, such a card shows nothing rather than throwing.
     expect(currentQuestion({ queue: stale, index: 0, contents: { t: content } })).toBeNull();
     expect(currentQuestion({ queue: stale, index: 1, contents: { t: content } })).toBeNull();
+  });
+
+  it('keeps the session as it was set up when the set-up changes, until Start', async () => {
+    await startSession({ moves: 1 });
+    const { sessionId, queue } = review();
+    expect(queue.length).toBeGreaterThan(1);
+    // Changing the saved set-up (the card's Start saves it) does nothing to the session under way.
+    saveConfig('quiz', { source: 'all', weighting: 'popular', moves: 3 });
+    expect(savedConfig('quiz')).toEqual({ source: 'all', weighting: 'popular', moves: 3 });
+    expect(review()).toMatchObject({ phase: 'asking', sessionId, index: 0, config: { source: DUE, moves: 1 } });
+    // Its answers still go to the schedule.
+    await answer();
+    await flush();
+    const saved = await memory.storage.reviews.since('1970-01-01T00:00:00.000Z');
+    expect(saved).toHaveLength(1);
+    expect(review().index).toBe(1);
+
+    // Start begins a new session from the new set-up: free practice, which saves nothing.
+    await review().start();
+    expect(review().sessionId).not.toBe(sessionId);
+    expect(review()).toMatchObject({ phase: 'asking', index: 0, config: { source: 'all', moves: 3 } });
+    await answer();
+    await flush();
+    expect(await memory.storage.reviews.since('1970-01-01T00:00:00.000Z')).toHaveLength(1);
   });
 });

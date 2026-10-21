@@ -53,7 +53,8 @@ vi.mock('@/data/course-path', async (original) => ({
   loadCoursePath: () => Promise.resolve(path()),
 }));
 
-const { rushCourse, rushQueue, rushSource } = await import('./store');
+const { rushQueue } = await import('./store');
+const { rushCourse, rushSource } = await import('@/data/practice-config');
 
 describe('opening rush', () => {
   it('names its source after the course', () => {

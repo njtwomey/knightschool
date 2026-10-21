@@ -11,26 +11,16 @@ import {
   newId,
   type OpeningIndexEntry,
   pickWeighted,
-  popularityWeight,
+  practiceWeight,
   searchAt,
   type SearchIndex,
-  type Weighting,
 } from '@knightschool/core';
 import { create } from 'zustand';
 import { loadIndex, loadOpening, loadSearchIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
-import { coursesFor, saveChoice, savedChoice, savedWeighting, type PracticeSource } from '@/data/practice-source';
-import { getEnrolled } from '@/data/training-settings';
+import { type NameItConfig, resolvePool, savedConfig } from '@/data/practice-config';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { sessionLoader, type SessionPhase } from '@/lib/session';
-
-const SOURCE_KEY = 'knightschool.guess.source';
-const WEIGHTING_KEY = 'knightschool.guess.weighting';
-
-/** Positions in one sitting, as a review session has cards. */
-export const SESSION_LENGTH = 10;
-
-/** A right answer is shown for a moment, then the next position comes up. Other answers wait for Next. */
 
 /** A place a position comes from, to link to once it has been answered. */
 export type Source = {
@@ -62,14 +52,16 @@ type NameItState = {
   /** Every answer this session, in order. */
   outcomes: Outcome[];
   shownAt: number;
-  /** Which courses the positions come from. Answers are always judged against every course. */
-  source: PracticeSource;
-  /** Random, or favouring the positions more games reach. */
-  weighting: Weighting;
+  /**
+   * How this session was set up (a copy taken when it started): which courses the positions come from (answers are
+   * always judged against every course), how they are picked, and how many there are.
+   */
+  config: NameItConfig;
 
-  start: () => Promise<void>;
-  setSource: (source: PracticeSource) => void;
-  setWeighting: (weighting: Weighting) => void;
+  /** Starts a session set up as `config` (the saved set-up when none is given). */
+  start: (config?: NameItConfig) => Promise<void>;
+  /** Back to no session: the page shows the set-up card. */
+  reset: () => void;
   stop: () => void;
   setAnswer: (answer: string) => void;
   submit: () => void;
@@ -82,8 +74,10 @@ type Deck = {
   /** The courses positions are asked from (all of them, unless the source narrows it). */
   pool: OpeningIndexEntry[];
   search: SearchIndex;
+  /** How positions are picked: at random, or by the share of games that reach them (`practiceWeight`). */
+  weighting: NameItConfig['weighting'];
   /** How many games reach each position (0 to 1), when the questions are weighted by popularity. */
-  reach: Map<string, number> | null;
+  reach: Map<string, number>;
   /** How each position went last time, so missed ones come back sooner. */
   history: Map<string, GuessResult>;
 };
@@ -102,7 +96,7 @@ function candidates(from: Deck) {
         seen.set(epd, {
           epd,
           side: course.side,
-          weight: depth * guessWeight(from.history.get(epd)) * (from.reach ? popularityWeight(from.reach.get(epd)) : 1),
+          weight: depth * guessWeight(from.history.get(epd)) * practiceWeight(from.weighting, from.reach.get(epd)),
         });
       });
     }
@@ -157,7 +151,7 @@ export const useNameIt = create<NameItState>((set, get) => {
   function show() {
     timers.clear();
     const { outcomes } = get();
-    if (outcomes.length >= SESSION_LENGTH) return set({ phase: 'summary', question: null });
+    if (outcomes.length >= get().config.positions) return set({ phase: 'summary', question: null });
     const question = deck ? pick(deck, new Set(outcomes.map((outcome) => outcome.question.epd))) : null;
     if (!question) {
       return outcomes.length > 0
@@ -204,50 +198,37 @@ export const useNameIt = create<NameItState>((set, get) => {
     graded: null,
     outcomes: [],
     shownAt: 0,
-    source: savedChoice(SOURCE_KEY, 'all'),
-    weighting: savedWeighting(WEIGHTING_KEY),
+    config: savedConfig('name-it'),
 
-    async start() {
-      await load({}, async () => {
+    reset() {
+      timers.clear();
+      set({ phase: 'idle', error: null, question: null, outcomes: [], graded: null });
+    },
+
+    async start(config = savedConfig('name-it')) {
+      await load({ config }, async () => {
+        timers.clear();
         const [courses, search] = await Promise.all([loadIndex(), loadSearchIndex()]);
         const history = await whenStorageReady()
           .then(({ storage }) => storage.guessAttempts.since('1970-01-01T00:00:00.000Z'))
           .then(lastResults)
           .catch(() => new Map<string, GuessResult>());
-        const enrolled =
-          get().source === 'learning'
-            ? await whenStorageReady()
-                .then(({ storage }) => getEnrolled(storage))
-                .catch(() => [] as string[])
-            : [];
-        const pool = coursesFor(get().source, courses, enrolled);
-        let reach: Map<string, number> | null = null;
-        if (get().weighting === 'popular') {
-          reach = new Map();
+        const pool = await resolvePool(config.source, courses);
+        // A position's popularity belongs to the position, so any course that has counted it will do.
+        const reach = new Map<string, number>();
+        if (config.weighting === 'popular') {
           for (const content of await Promise.all(pool.map((course) => loadOpening(course.id)))) {
-            for (const node of Object.values(content.nodes)) {
-              if (node.popularity !== undefined)
-                reach.set(node.epd, Math.max(reach.get(node.epd) ?? 0, node.popularity));
-            }
+            for (const node of Object.values(content.nodes))
+              if (node.popularity !== undefined && !reach.has(node.epd)) reach.set(node.epd, node.popularity);
           }
         }
-        deck = { courses, pool, reach, search, history };
+        deck = { courses, pool, weighting: config.weighting, reach, search, history };
         set({ outcomes: [] });
         show();
       });
     },
     stop() {
       timers.clear();
-    },
-    setWeighting(weighting) {
-      saveChoice(WEIGHTING_KEY, weighting);
-      set({ weighting });
-      void get().start();
-    },
-    setSource(source) {
-      saveChoice(SOURCE_KEY, source);
-      set({ source });
-      void get().start();
     },
     setAnswer: (answer) => set({ answer }),
     submit() {
