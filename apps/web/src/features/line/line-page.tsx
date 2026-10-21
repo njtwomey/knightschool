@@ -37,7 +37,7 @@ export function LinePage({
 }) {
   if (tab === 'branches') return <PlayPage course={course} line={line} mode="branches" />;
   if (tab === 'learn') return <PlayPage course={course} line={line} mode="learn" unit={unit} />;
-  if (tab === 'drill') return <PlayPage course={course} line={line} mode="practice" unit={unit} />;
+  if (tab === 'drill') return <PlayPage course={course} line={line} mode="drill" unit={unit} />;
   if (tab === 'quiz')
     return <QuizPage scope={{ course, line }} header={<PlayBreadcrumbs course={course} line={line} tab="quiz" />} />;
   if (tab === 'tree') return <CourseTreePage course={course} line={line} />;

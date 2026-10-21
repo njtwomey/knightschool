@@ -28,7 +28,7 @@ ${moves}`);
 
 const content = buildOpening('t', testManifest(), [{ id: 'main', kind: 'line', game, source: 'main.pgn' }]);
 
-async function begin(mode: 'learn' | 'practice') {
+async function begin(mode: 'learn' | 'drill') {
   usePlay.setState({ content, variantId: 'main', steps: [], phase: 'idle' });
   const { lineSteps } = await import('@knightschool/core');
   usePlay.setState({ steps: lineSteps(content, 'main') });
@@ -48,8 +48,8 @@ describe('line play', () => {
     vi.useRealTimers();
   });
 
-  it('practice: the computer replies by itself after each correct move, with no click to continue', async () => {
-    await begin('practice');
+  it('drill: the computer replies by itself after each correct move, with no click to continue', async () => {
+    await begin('drill');
     expect(usePlay.getState().phase).toBe('playing');
     expect(usePlay.getState().submitMove('e2e4')).toBe(true);
     expect(usePlay.getState().badge).toEqual({ square: 'e4', kind: 'correct' });
@@ -63,8 +63,8 @@ describe('line play', () => {
     expect(usePlay.getState().badge).toBeNull();
   });
 
-  it('practice: a wrong move is refused with a cross and the same move is asked again', async () => {
-    await begin('practice');
+  it('drill: a wrong move is refused with a cross and the same move is asked again', async () => {
+    await begin('drill');
     expect(usePlay.getState().submitMove('d2d4')).toBe(false);
     expect(usePlay.getState().badge).toEqual({ square: 'd4', kind: 'wrong' });
     expect(san()).toEqual([]);
@@ -74,8 +74,8 @@ describe('line play', () => {
     expect(usePlay.getState().results[0]).toMatchObject({ index: 0, rating: 'hard' });
   });
 
-  it('practice: two wrong moves reveal the move, and it must still be played', async () => {
-    await begin('practice');
+  it('drill: two wrong moves reveal the move, and it must still be played', async () => {
+    await begin('drill');
     usePlay.getState().submitMove('d2d4');
     usePlay.getState().submitMove('c2c4');
     expect(usePlay.getState().attempt.shown).toBe(true);
@@ -84,16 +84,16 @@ describe('line play', () => {
     expect(usePlay.getState().results[0]?.rating).toBe('again');
   });
 
-  it('practice: a hint marks the piece to move and lowers the rating', async () => {
-    await begin('practice');
+  it('drill: a hint marks the piece to move and lowers the rating', async () => {
+    await begin('drill');
     usePlay.getState().hint();
     expect(usePlay.getState().attempt.hintUsed).toBe(true);
     usePlay.getState().submitMove('e2e4');
     expect(usePlay.getState().results[0]?.rating).toBe('hard');
   });
 
-  it('practice: plays the whole line through to the end by itself', async () => {
-    await begin('practice');
+  it('drill: plays the whole line through to the end by itself', async () => {
+    await begin('drill');
     for (const uci of ['e2e4', 'g1f3', 'f1c4']) {
       expect(usePlay.getState().submitMove(uci)).toBe(true);
       vi.advanceTimersByTime(DELAYS.afterCorrect + DELAYS.opponent);
@@ -113,7 +113,7 @@ describe('line play', () => {
   });
 
   it('ignores an illegal move and moves made while the computer is replying', async () => {
-    await begin('practice');
+    await begin('drill');
     expect(usePlay.getState().submitMove('e2e5')).toBe(false);
     expect(usePlay.getState().badge).toBeNull();
     usePlay.getState().submitMove('e2e4');
@@ -122,7 +122,7 @@ describe('line play', () => {
   });
 
   it('restart goes back to the start of the line', async () => {
-    await begin('practice');
+    await begin('drill');
     usePlay.getState().submitMove('e2e4');
     usePlay.getState().restart();
     expect(usePlay.getState().index).toBe(0);
@@ -183,12 +183,12 @@ describe('every branch', () => {
 describe('resuming from the moves in a URL', () => {
   it('resumes a fixed line after the moves that match, and ignores moves that do not', async () => {
     const { resumeFrom } = await import('./store');
-    expect(resumeFrom(content, 'main', 'practice', ['e2e4', 'e7e5']).index).toBe(2);
-    expect(resumeFrom(content, 'main', 'practice', ['e2e4', 'a7a6']).index).toBe(1);
-    expect(resumeFrom(content, 'main', 'practice', []).index).toBe(0);
-    expect(
-      resumeFrom(content, 'main', 'practice', ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1c4', 'f8c5', 'a2a3']).index,
-    ).toBe(6);
+    expect(resumeFrom(content, 'main', 'drill', ['e2e4', 'e7e5']).index).toBe(2);
+    expect(resumeFrom(content, 'main', 'drill', ['e2e4', 'a7a6']).index).toBe(1);
+    expect(resumeFrom(content, 'main', 'drill', []).index).toBe(0);
+    expect(resumeFrom(content, 'main', 'drill', ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1c4', 'f8c5', 'a2a3']).index).toBe(
+      6,
+    );
   });
 
   it('rebuilds the branch that was being played', async () => {

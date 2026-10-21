@@ -74,7 +74,7 @@ describe('playing one unit of the path', () => {
   });
 
   it('starts after the moves that lead to the unit and stops at its end', async () => {
-    await usePlay.getState().start('t', 'main', 'practice', [], { n: 2 });
+    await usePlay.getState().start('t', 'main', 'drill', [], { n: 2 });
     expect(usePlay.getState().scope?.unit.id).toBe('main:2');
     expect(usePlay.getState().firstIndex).toBe(7);
     // Black's 4...Nf6 is the computer's, then the unit asks for 5.d3.
@@ -87,7 +87,7 @@ describe('playing one unit of the path', () => {
   });
 
   it('plays the branches of a side unit one after another, and restart goes back to the first', async () => {
-    await usePlay.getState().start('t', 'main', 'practice', [], { n: 3 });
+    await usePlay.getState().start('t', 'main', 'drill', [], { n: 3 });
     expect(usePlay.getState().scope?.parts).toHaveLength(2);
     playThrough();
     expect(usePlay.getState().phase).toBe('complete');
@@ -108,7 +108,7 @@ describe('playing one unit of the path', () => {
   });
 
   it('says so when the unit is not there', async () => {
-    await usePlay.getState().start('t', 'main', 'practice', [], { n: 9 });
+    await usePlay.getState().start('t', 'main', 'drill', [], { n: 9 });
     expect(usePlay.getState().phase).toBe('error');
     expect(usePlay.getState().error).toMatch(/no unit 9/);
   });
@@ -116,8 +116,8 @@ describe('playing one unit of the path', () => {
   it('keeps the latest start when an earlier one finishes last', async () => {
     let release!: () => void;
     gates.push(new Promise((resolve) => (release = resolve)));
-    const slow = usePlay.getState().start('t', 'main', 'practice', [], { n: 1 });
-    await usePlay.getState().start('t', 'main', 'practice', [], { n: 2 });
+    const slow = usePlay.getState().start('t', 'main', 'drill', [], { n: 1 });
+    await usePlay.getState().start('t', 'main', 'drill', [], { n: 2 });
     release();
     await slow;
     expect(usePlay.getState().scope?.unit.id).toBe('main:2');
@@ -126,7 +126,7 @@ describe('playing one unit of the path', () => {
 
   it('starts from the part the address names, on every start of the page', async () => {
     hash = { p: '1' };
-    await startFromAddress('t', 'main', 'practice', { n: 3 });
+    await startFromAddress('t', 'main', 'drill', { n: 3 });
     expect(usePlay.getState().scope?.part).toBe(1);
     hash = {};
   });

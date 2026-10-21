@@ -25,12 +25,12 @@ const cardFor = (content: OpeningContent, step: LineStep, now: Date) =>
 /** Only the move the repertoire wants makes a card; a move marked as a mistake never does. */
 const hasCard = (step: LineStep) => step.ours && step.edge.isRepertoire;
 
-/** Learn mode: make sure the card exists so it turns up in reviews, without grading it. */
+/** Learn: make sure the card exists so it turns up in reviews, without grading it. */
 export async function introduceStep(storage: Storage, content: OpeningContent, step: LineStep, now = new Date()) {
   if (hasCard(step)) await storage.cards.insertMissing([cardFor(content, step, now)]);
 }
 
-/** Practice mode: the answer is graded and scheduled exactly like a review. */
+/** Drill: the answer is graded and scheduled exactly like a review. */
 export async function recordStep(
   storage: Storage,
   content: OpeningContent,

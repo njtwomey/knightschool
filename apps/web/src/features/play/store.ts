@@ -26,7 +26,7 @@ import { getCardOptions } from '@/data/training-settings';
 import { introduceStep, recordStep } from './record';
 import type { UnitRef } from '@/router/hrefs';
 
-export type PlayMode = 'learn' | 'practice' | 'branches';
+export type PlayMode = 'learn' | 'drill' | 'branches';
 
 /** The line id that means "every branch" in routes and in `variantId`. */
 export const ALL_BRANCHES = RESERVED_LINE_ID;
@@ -213,7 +213,7 @@ export const usePlay = create<PlayState>((set, get) => {
   return {
     phase: 'idle',
     error: null,
-    mode: 'practice',
+    mode: 'drill',
     content: null,
     variantId: null,
     steps: [],

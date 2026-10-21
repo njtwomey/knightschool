@@ -29,7 +29,7 @@ import { courseHref, lineHref, branchesHref, type UnitRef } from '@/router/hrefs
 
 const MODES: Record<PlayMode, { name: string; blurb: string; icon: typeof BookOpen }> = {
   learn: { name: 'Learn', blurb: 'You play both sides. Every move is shown first.', icon: BookOpen },
-  practice: { name: 'Drill', blurb: 'The computer plays the other side. Recall your moves.', icon: Target },
+  drill: { name: 'Drill', blurb: 'The computer plays the other side. Recall your moves.', icon: Target },
   branches: {
     name: 'Every branch',
     blurb: 'The computer varies its replies each time. Know the answer to every one.',
@@ -202,13 +202,14 @@ export function PlayPage({ course, line, mode, unit }: Props) {
   }
 
   const variants = content.opening.variants;
-  const drill = line === ALL_BRANCHES;
+  const everyBranch = line === ALL_BRANCHES;
   const firstLine = variants.find((candidate) => candidate.kind === 'line') ?? variants[0]!;
   // In an every-branch drill the line is whichever one the moves so far belong to.
-  const variant = drill
+  const variant = everyBranch
     ? (variants.find((candidate) => steps.slice(0, index).at(-1)?.edge.variants.includes(candidate.id)) ?? null)
     : variants.find((candidate) => candidate.id === line)!;
-  const next = drill || scope ? undefined : variants[variants.findIndex((candidate) => candidate.id === line) + 1];
+  const next =
+    everyBranch || scope ? undefined : variants[variants.findIndex((candidate) => candidate.id === line) + 1];
   const pathHref = to(courseHref(course, 'path'));
   const unitName = scope ? `Unit ${scope.unit.index + 1}` : undefined;
 
@@ -219,7 +220,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
    */
   function chooseMode(next: PlayMode) {
     if (next === 'branches') navigate(branchesHref(course));
-    else navigate(lineHref(course, drill ? firstLine.id : line, next === 'practice' ? 'drill' : 'learn', unit));
+    else navigate(lineHref(course, everyBranch ? firstLine.id : line, next, unit));
   }
   const side = content.opening.side;
   const other = side === 'white' ? 'Black' : 'White';
@@ -252,12 +253,12 @@ export function PlayPage({ course, line, mode, unit }: Props) {
         <PlayBreadcrumbs
           course={course}
           line={line}
-          lineName={drill ? 'Every branch' : variant!.name}
-          tab={state.mode === 'practice' ? 'drill' : state.mode}
+          lineName={everyBranch ? 'Every branch' : variant!.name}
+          tab={state.mode}
         />
-        {!drill && <EcoLink eco={variant!.eco} course={course} line={variant!.id} />}
-        {!drill && variant!.kind === 'refutation' && <Badge variant="secondary">Trap</Badge>}
-        {drill && variant && <Badge variant="outline">now in {variant.name}</Badge>}
+        {!everyBranch && <EcoLink eco={variant!.eco} course={course} line={variant!.id} />}
+        {!everyBranch && variant!.kind === 'refutation' && <Badge variant="secondary">Trap</Badge>}
+        {everyBranch && variant && <Badge variant="outline">now in {variant.name}</Badge>}
         {scope && (
           <Badge variant="outline" asChild>
             <a href={pathHref} title="Back to the course's path">
@@ -298,7 +299,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <BoardSettingsButton />
-            {state.mode === 'learn' && !drill && (
+            {state.mode === 'learn' && !everyBranch && (
               <StepButtons
                 onFirst={() => {
                   usePlay.getState().leaveExplore();
@@ -314,12 +315,12 @@ export function PlayPage({ course, line, mode, unit }: Props) {
                 atEnd={complete || !view.upcoming || exploring}
               />
             )}
-            {!drill && (
+            {!everyBranch && (
               <Button variant="outline" onClick={() => chooseMode('branches')} title={MODES.branches.blurb}>
                 <GitBranch aria-hidden /> Every branch
               </Button>
             )}
-            {state.mode === 'practice' && !complete && (
+            {state.mode === 'drill' && !complete && (
               <>
                 <Button
                   variant="outline"
@@ -341,7 +342,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
               <RotateCcw aria-hidden /> Restart
             </Button>
           </div>
-          {state.mode === 'practice' && !drill && (
+          {state.mode === 'drill' && !everyBranch && (
             <p className="text-sm text-muted-foreground">
               Not sure of it yet?{' '}
               <Button variant="link" className="h-auto p-0" onClick={() => chooseMode('learn')}>
@@ -378,8 +379,8 @@ export function PlayPage({ course, line, mode, unit }: Props) {
                 <CardTitle className="text-xl" aria-live="polite">
                   {exploring ? `Exploring: ${explore!.map((move) => move.san).join(' ')}` : instruction}
                 </CardTitle>
-                {state.mode === 'learn' && !drill && (
-                  <Button size="sm" onClick={() => chooseMode('practice')}>
+                {state.mode === 'learn' && !everyBranch && (
+                  <Button size="sm" onClick={() => chooseMode('drill')}>
                     <Target aria-hidden /> Drill this {scope ? 'unit' : 'line'}
                   </Button>
                 )}
@@ -396,7 +397,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
-              {drill ? (
+              {everyBranch ? (
                 <p className="text-xs text-muted-foreground">
                   {index} moves so far. Each run takes a different branch.
                 </p>
@@ -417,10 +418,10 @@ export function PlayPage({ course, line, mode, unit }: Props) {
               <MoveTable
                 steps={steps}
                 index={index}
-                learn={state.mode === 'learn' && !drill}
+                learn={state.mode === 'learn' && !everyBranch}
                 explore={exploring ? explore! : []}
               />
-              {state.mode === 'learn' && !drill && (
+              {state.mode === 'learn' && !everyBranch && (
                 <p className="text-xs text-muted-foreground">
                   Right arrow plays the next move, left arrow goes back. Click a move to jump to it.
                 </p>
@@ -474,17 +475,17 @@ export function PlayPage({ course, line, mode, unit }: Props) {
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {state.mode === 'learn' ? (
-                  <Button onClick={() => chooseMode('practice')}>
+                  <Button onClick={() => chooseMode('drill')}>
                     <Target aria-hidden /> Now drill it
                   </Button>
                 ) : (
                   <Button onClick={() => usePlay.getState().restart()}>
-                    <RotateCcw aria-hidden /> {drill ? 'Another branch' : 'Drill again'}
+                    <RotateCcw aria-hidden /> {everyBranch ? 'Another branch' : 'Drill again'}
                   </Button>
                 )}
                 {next && (
                   <Button asChild variant="outline">
-                    <a href={to(lineHref(course, next.id, state.mode === 'practice' ? 'drill' : 'learn'))}>
+                    <a href={to(lineHref(course, next.id, state.mode === 'drill' ? 'drill' : 'learn'))}>
                       Next: {next.name}
                     </a>
                   </Button>
