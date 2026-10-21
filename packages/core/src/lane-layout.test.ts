@@ -65,4 +65,12 @@ describe('laneLayout', () => {
     expect(subtreeOf(layout, 'evans')).toEqual(['evans', 'copy']);
     expect(subtreeOf(layout, 'main')).toHaveLength(5);
   });
+
+  it('starts no deeper than asked, so one line alone still shows its moves', () => {
+    const alone = laneLayout(tree, ['main']);
+    expect(alone.places.size).toBe(2); // left alone it shares everything with itself
+    const shown = laneLayout(tree, ['main'], { maxPly: 5 });
+    expect(shown.top).toBe(prefixId(ITALIAN));
+    expect(shown.places.size).toBe(7);
+  });
 });

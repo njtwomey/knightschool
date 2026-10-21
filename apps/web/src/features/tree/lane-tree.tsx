@@ -48,6 +48,7 @@ export function LaneTree({
   scrollTo,
   onFocus,
   onPick,
+  labelOf,
   className,
   zoom: initialZoom = 1,
 }: {
@@ -61,6 +62,8 @@ export function LaneTree({
   scrollTo?: string | null;
   onFocus: (id: string) => void;
   onPick: (id: string) => void;
+  /** A line's name, written in its colour just left of where it starts. */
+  labelOf?: (line: string) => string;
   className?: string;
   zoom?: number;
 }) {
@@ -111,6 +114,10 @@ export function LaneTree({
     element.addEventListener('wheel', onWheel, { passive: false });
     return () => element.removeEventListener('wheel', onWheel);
   }, []); // zoomTo reads the box and the current zoom through refs
+  // A different set of lines starts from its beginning.
+  useEffect(() => {
+    box.current?.scrollTo({ left: 0, top: 0 });
+  }, [layout]);
   useEffect(() => {
     const place = scrollTo ? layout.places.get(scrollTo) : undefined;
     const element = box.current;
@@ -208,13 +215,47 @@ export function LaneTree({
             );
           })}
 
+          {labelOf &&
+            [...layout.laneOf].map(([line, lane]) => {
+              // A line's name in its colour, just left of its first own move (the main line's over the shared moves).
+              const first = layout.pathOf
+                .get(line)
+                ?.find((id) => layout.places.get(id)?.line === line && id !== layout.top);
+              const place = first ? layout.places.get(first) : undefined;
+              if (!place) return null;
+              const main = lane === 0 && place.row === 1;
+              const right = main ? PAD + trunkWidth : cx(place.row) - PILL_W / 2 - 8;
+              const room = right - PAD;
+              const full = labelOf(line);
+              const fits = Math.max(0, Math.floor(room / 6.3));
+              if (fits < 6) return null;
+              const text = full.length > fits ? `${full.slice(0, fits - 1)}…` : full;
+              const width = text.length * 6.3 + 8;
+              const y = main ? cy(0) - PILL_H / 2 - 7 : cy(lane);
+              const on = !dimming || lit.has(line);
+              return (
+                <g key={`label-${line}`} opacity={on ? 1 : 0.35} aria-hidden>
+                  {!main && <rect x={right - width} y={y - 9} width={width} height={18} rx={4} fill="var(--card)" />}
+                  <text
+                    x={main ? PAD : right - 4}
+                    y={y + 4}
+                    textAnchor={main ? 'start' : 'end'}
+                    className="text-[11px] font-medium"
+                    style={{ fill: colourOf(line) }}
+                  >
+                    <title>{full}</title>
+                    {text}
+                  </text>
+                </g>
+              );
+            })}
+
           {[...layout.places.values()].map((place) => {
             const node = tree.nodes.get(place.id)!;
             const isTop = place.id === layout.top;
             const on = !dimming || litNodes.has(place.id);
             const focused = place.id === focus;
             const colour = colourOf(place.line);
-            const filled = dimming && litNodes.has(place.id);
             const w = isTop ? trunkWidth : PILL_W;
             const left = cx(place.row) - w / 2;
             return (
@@ -224,7 +265,7 @@ export function LaneTree({
                 tabIndex={0}
                 aria-label={isTop ? trunk : `${moveNumber(node.ply)}${node.san}`}
                 aria-pressed={focused}
-                opacity={on ? 1 : 0.3}
+                opacity={on ? 1 : 0.28}
                 className="cursor-pointer outline-none"
                 onMouseEnter={() => onFocus(place.id)}
                 onFocus={() => onFocus(place.id)}
@@ -242,15 +283,15 @@ export function LaneTree({
                   width={w}
                   height={PILL_H}
                   rx={PILL_H / 2}
-                  fill={filled ? colour : 'var(--background)'}
+                  fill={colour}
                   stroke={focused ? 'var(--ring)' : colour}
-                  strokeWidth={focused ? 3 : place.lane === 0 ? 2 : 1.5}
+                  strokeWidth={focused ? 3 : 1}
                 />
                 <text
                   x={cx(place.row)}
                   y={cy(place.lane) + 4}
                   textAnchor="middle"
-                  className={`font-mono text-[11px] ${filled ? 'fill-background font-semibold' : 'fill-foreground'}`}
+                  className="fill-background font-mono text-[11px] font-semibold"
                 >
                   {isTop ? trunk : node.san}
                 </text>

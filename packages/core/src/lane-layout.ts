@@ -41,7 +41,15 @@ export function subtreeOf(layout: LaneLayout, line: string): string[] {
  * another. Moves shared by several lines belong to the first of them in `order`. Rows start at the last move every
  * line shares, so a course does not spend rows on its trigger.
  */
-export function laneLayout(tree: MoveTree, order: readonly string[]): LaneLayout {
+export function laneLayout(
+  tree: MoveTree,
+  order: readonly string[],
+  /**
+   * `maxPly`: start no deeper than this ply, so a few lines drawn on their own (one line alone shares every move with
+   * itself) still show their moves rather than one pill for all of them.
+   */
+  options: { maxPly?: number } = {},
+): LaneLayout {
   const lines = order.filter((line) => tree.paths.has(line));
   const paths = new Map(lines.map((line) => [line, pathOf(tree, line)]));
   // The top: the deepest node every line passes through.
@@ -50,7 +58,8 @@ export function laneLayout(tree: MoveTree, order: readonly string[]): LaneLayout
   while (
     topIndex + 1 < first.length &&
     lines.every((line) => paths.get(line)![topIndex + 1] === first[topIndex + 1]) &&
-    lines.every((line) => paths.get(line)!.length > topIndex + 2)
+    lines.every((line) => paths.get(line)!.length > topIndex + 2) &&
+    (options.maxPly === undefined || topIndex + 1 <= options.maxPly)
   )
     topIndex++;
   const top = first[topIndex] ?? tree.root;

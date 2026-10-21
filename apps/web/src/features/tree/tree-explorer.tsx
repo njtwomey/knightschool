@@ -106,36 +106,44 @@ export function TreeExplorer({
   const groupLines = useMemo(() => new Map(model.groups.map((group) => [group.key, group.lines])), [model]);
   /** Folded lines and groups: a group's key is kept with a "group:" prefix so it cannot clash with a line id. */
   const [folded, setFolded] = useState<ReadonlySet<string>>(new Set());
-  const [lighted, setLighted] = useState<string | null>(null);
+  /**
+   * What the tree draws: everything (null), or what was chosen in the index. Clicking a line draws it and every line
+   * under it; its crosshair (`solo`) draws that line alone; clicking a group draws the group's lines. What is folded in
+   * the index never matters: folding only tidies the list.
+   */
+  const [view, setView] = useState<{ key: string; solo: boolean } | null>(null);
   const [query, setQuery] = useState('');
-  const hidden = useMemo(() => {
-    const out = new Set<string>();
-    for (const key of folded) {
-      if (key.startsWith('group:')) for (const id of groupLines.get(key.slice(6)) ?? []) out.add(id);
-      else for (const id of below(model, key)) out.add(id);
-    }
-    return out;
-  }, [model, groupLines, folded]);
+  const scopeOf = (key: string, solo: boolean) =>
+    key.startsWith('group:') ? (groupLines.get(key.slice(6)) ?? []) : solo ? [key] : [key, ...below(model, key)];
   const layout = useMemo(() => {
-    const shown = ids.filter((id) => !hidden.has(id));
-    return shown.length === ids.length ? full : laneLayout(tree, shown);
-  }, [tree, full, ids, hidden]);
+    if (!view) return full;
+    const scope = new Set(
+      view.key.startsWith('group:')
+        ? (groupLines.get(view.key.slice(6)) ?? [])
+        : view.solo
+          ? [view.key]
+          : [view.key, ...below(model, view.key)],
+    );
+    // Never start deeper than the whole tree does, so a line on its own still shows its moves one by one.
+    return laneLayout(
+      tree,
+      ids.filter((id) => scope.has(id)),
+      { maxPly: full.firstPly },
+    );
+  }, [tree, full, ids, model, groupLines, view]);
 
-  const [picked, setPicked] = useState<string | null>(initialPicked ?? null);
+  /** A line picked out without changing what is drawn: the line of a line's Tree tab, or a move clicked in the tree. */
+  const [highlight, setHighlight] = useState<string | null>(initialPicked ?? null);
   const [pointed, setPointed] = useState<string | null>(null);
   const [focus, setFocus] = useState<string | null>(null);
-  const [scrollTo, setScrollTo] = useState<string | null>(null);
 
   const indexOf = new Map(ids.map((id, i) => [id, i]));
   const colourOf = (id: string) => laneColour(indexOf.get(id) ?? 0);
   const name = (line: ExplorerLine) =>
     shortNames && line.name.includes(':') ? line.name.slice(line.name.indexOf(':') + 1).trim() || line.name : line.name;
-  /** The lines a crosshair lights: a group's lines, or a line and everything under it. */
-  const lightOf = (key: string) =>
-    key.startsWith('group:') ? (groupLines.get(key.slice(6)) ?? []) : [key, ...below(model, key)];
-  const lit = new Set<string>(
-    pointed ? [pointed] : [...(lighted ? lightOf(lighted) : []), ...(picked ? [picked] : [])],
-  );
+  const viewLine = view && !view.key.startsWith('group:') ? view.key : null;
+  const picked = viewLine ?? highlight;
+  const lit = new Set<string>([pointed ?? picked].filter((id): id is string => id !== null));
   const endOf = (id: string) => full.pathOf.get(id)?.at(-1) ?? null;
   const shownId = focus ?? (picked ? endOf(picked) : null) ?? layout.top;
   const shown = tree.nodes.get(shownId)!;
@@ -143,23 +151,20 @@ export function TreeExplorer({
   const through = shown.lines.filter((id) => byId.has(id));
   const comment = useMoveComment([...new Set(through.map((id) => byId.get(id)!.course))], parent?.epd, shown.uci);
   const pickedLine = picked ? byId.get(picked) : undefined;
-  const foldedCounts = new Map(
-    [...folded]
-      .filter((key) => !key.startsWith('group:') && !hidden.has(key))
-      .map((id) => [id, below(model, id).length] as const),
-  );
 
-  const pick = (id: string | null) => {
-    setPicked(id);
-    if (id) {
-      setFocus(endOf(id));
-      setScrollTo(full.branchAt.get(id) ?? null);
+  /** Clicking a line draws it and every line under it; clicking it again draws everything. */
+  const choose = (key: string, solo: boolean) => {
+    const same = view?.key === key && view.solo === solo;
+    setView(same ? null : { key, solo });
+    if (!key.startsWith('group:')) {
+      setHighlight(key);
+      setFocus(endOf(key));
     }
   };
   const pickNode = (id: string) => {
     setFocus(id);
-    const ours = tree.nodes.get(id)!.lines.filter((line) => byId.has(line) && !hidden.has(line));
-    if (ours.length === 1) setPicked(ours[0]!);
+    const ours = tree.nodes.get(id)!.lines.filter((line) => byId.has(line) && layout.laneOf.has(line));
+    if (ours.length === 1) setHighlight(ours[0]!);
   };
   const point = (id: string | null) => {
     setPointed(id);
@@ -171,12 +176,6 @@ export function TreeExplorer({
       if (!next.delete(key)) next.add(key);
       return next;
     });
-  const light = (key: string) => {
-    const next = key === lighted ? null : key;
-    setLighted(next);
-    const first = next ? lightOf(next)[0] : undefined;
-    if (first) setScrollTo(full.branchAt.get(first) ?? null);
-  };
   const matches = query.trim() ? lines.filter((line) => matchesText(query, `${line.name} ${line.course}`)) : null;
   const grouped = model.groups.length > 1;
 
@@ -184,13 +183,13 @@ export function TreeExplorer({
     model,
     byId,
     picked,
-    lighted,
+    view,
     folded,
     colourOf,
     name,
     onPoint: point,
-    onPick: (id: string) => pick(id === picked ? null : id),
-    onLight: light,
+    onPick: (id: string) => choose(id, false),
+    onLight: (id: string) => choose(id, true),
     onFold: toggleFold,
   };
 
@@ -222,9 +221,9 @@ export function TreeExplorer({
                   Open all
                 </Button>
               )}
-              {lighted && (
-                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => setLighted(null)}>
-                  <X aria-hidden /> Clear
+              {view && (
+                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => setView(null)}>
+                  <X aria-hidden /> Show all
                 </Button>
               )}
             </div>
@@ -257,11 +256,16 @@ export function TreeExplorer({
                           aria-hidden
                         />
                       </Button>
-                      <span className="flex-1 py-1 font-mono text-xs font-semibold">
-                        {group.label}{' '}
+                      <Button
+                        variant="ghost"
+                        className={`h-auto flex-1 justify-start px-1 py-1 font-mono text-xs font-semibold hover:bg-transparent ${view?.key === key ? 'text-primary' : ''}`}
+                        aria-pressed={view?.key === key}
+                        onClick={() => choose(key, false)}
+                        title={`Show the ${group.lines.length} lines that start ${group.label}`}
+                      >
+                        {group.label}
                         <span className="font-sans font-normal text-muted-foreground">{group.lines.length}</span>
-                      </span>
-                      <CrosshairButton active={lighted === key} onClick={() => light(key)} />
+                      </Button>
                     </div>
                     {open && (
                       <ul className="ml-3 border-l pl-1">
@@ -284,22 +288,49 @@ export function TreeExplorer({
         </nav>
 
         <section aria-label="The tree" className="order-3 grid min-w-0 gap-2 lg:order-none">
+          {view && (
+            <div className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="text-muted-foreground">
+                {view.key.startsWith('group:') ? (
+                  <>
+                    Showing the {scopeOf(view.key, false).length} lines that start{' '}
+                    <span className="font-mono font-medium text-foreground">
+                      {model.groups.find((group) => group.key === view.key.slice(6))?.label}
+                    </span>
+                    .
+                  </>
+                ) : view.solo ? (
+                  <>
+                    Showing only <span className="font-medium text-foreground">{name(byId.get(view.key)!)}</span>.
+                  </>
+                ) : (
+                  <>
+                    Showing <span className="font-medium text-foreground">{name(byId.get(view.key)!)}</span> and every
+                    line under it ({scopeOf(view.key, false).length}).
+                  </>
+                )}
+              </span>
+              <Button variant="outline" size="sm" className="h-7" onClick={() => setView(null)}>
+                <X aria-hidden /> Show all
+              </Button>
+            </div>
+          )}
           <LaneTree
             tree={tree}
             layout={layout}
             colourOf={colourOf}
             lit={lit}
             focus={focus}
-            folded={foldedCounts}
-            scrollTo={scrollTo}
             onFocus={setFocus}
             onPick={pickNode}
+            labelOf={(id) => name(byId.get(id)!)}
             zoom={zoom}
             className="max-h-[70dvh] lg:max-h-[calc(100dvh-8rem)]"
           />
           <p className="text-xs text-muted-foreground">
             One column per move; the main line runs straight across the top. Point at a move or a line to see it on the
-            board; fold a line in the list to tuck its branches away, or use the crosshair to light up a branch.
+            board. Click a line in the list to show it and every line under it, or its crosshair to show it alone;
+            folding only tidies the list.
           </p>
         </section>
 
@@ -355,7 +386,7 @@ export function TreeExplorer({
 }
 
 function CrosshairButton({ active, onClick }: { active: boolean; onClick: () => void }) {
-  const label = active ? 'Stop lighting this branch' : 'Light up this branch and everything under it';
+  const label = active ? 'Show every line again' : 'Show only this line';
   return (
     <Button
       variant={active ? 'secondary' : 'ghost'}
@@ -375,7 +406,7 @@ type EntryProps = {
   model: IndexModel;
   byId: ReadonlyMap<string, ExplorerLine>;
   picked: string | null;
-  lighted: string | null;
+  view: { key: string; solo: boolean } | null;
   folded: ReadonlySet<string>;
   colourOf: (id: string) => string;
   name: (line: ExplorerLine) => string;
@@ -386,7 +417,7 @@ type EntryProps = {
 };
 
 function IndexEntry(props: EntryProps & { id: string; depth: number; flat?: boolean }) {
-  const { model, byId, id, depth, picked, lighted, folded, colourOf, name, onPoint, onPick, onLight, onFold, flat } =
+  const { model, byId, id, depth, picked, view, folded, colourOf, name, onPoint, onPick, onLight, onFold, flat } =
     props;
   const line = byId.get(id)!;
   const children = model.children.get(id) ?? [];
@@ -424,7 +455,7 @@ function IndexEntry(props: EntryProps & { id: string; depth: number; flat?: bool
             {!open && under > 0 && <span className="ml-1 text-xs text-muted-foreground">+{under}</span>}
           </span>
         </Button>
-        {children.length > 0 && <CrosshairButton active={lighted === id} onClick={() => onLight(id)} />}
+        <CrosshairButton active={view?.key === id && view.solo} onClick={() => onLight(id)} />
       </div>
       {!flat && open && children.length > 0 && (
         <ul className={depth >= 0 ? 'ml-3 border-l pl-1' : ''}>
