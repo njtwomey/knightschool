@@ -1,5 +1,6 @@
 import { Page } from '@/components/page';
 import { explainMove, pathTo, playUci, type LineEdge, type OpeningContent } from '@knightschool/core';
+import { EcoLink } from '@/components/eco-link';
 import { Eye, Lightbulb } from 'lucide-react';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
@@ -180,7 +181,7 @@ function Review({ scope }: { scope?: LineScope }) {
             </CardTitle>
             <CardDescription className="flex flex-wrap items-center gap-2">
               <span>{content.opening.name}</span>
-              <Badge variant="outline">{content.opening.eco}</Badge>
+              {content.opening.eco && <EcoLink eco={content.opening.eco} course={content.opening.id} />}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4 text-sm">

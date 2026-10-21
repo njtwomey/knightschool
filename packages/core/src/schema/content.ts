@@ -188,6 +188,8 @@ export const OpeningIndexEntry = Opening.pick({
   variants: z.number().int(),
   /** How many cards the course produces, for progress bars. */
   cards: z.number().int(),
+  /** The course's opening page on Lichess (`lichessUrlForCourse`). */
+  lichess: z.string().optional(),
   /** A mid-line position (EPD) to draw as the course thumbnail. */
   keyEpd: z.string(),
   /** The lines, in teaching order, so the list can be shown without loading the whole course. */
@@ -204,6 +206,8 @@ export const OpeningIndexEntry = Opening.pick({
       epd: z.string(),
       /** The position after each of the first plies (from the second), for "Name That Opening". */
       epds: z.array(z.string()),
+      /** The line's opening page on Lichess (`lichessUrlForLine`). */
+      lichess: z.string().optional(),
       /** Other courses that list this line too ("also in"). */
       alsoIn: z.array(Slug).default([]),
       /** Where the line grows out of the tree: the chapter it branches from and the move it follows ("5.c3"). */

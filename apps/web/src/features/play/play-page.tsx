@@ -1,5 +1,6 @@
 import { Page } from '@/components/page';
 import { explainMove, type LineStep } from '@knightschool/core';
+import { EcoLink } from '@/components/eco-link';
 import { BookOpen, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { AppBoard } from '@/components/board/app-board';
@@ -243,7 +244,7 @@ export function PlayPage({ course, line, mode }: Props) {
           lineName={drill ? 'Every branch' : variant!.name}
           tab={state.mode === 'practice' ? 'drill' : state.mode}
         />
-        {!drill && <Badge variant="outline">{variant!.eco}</Badge>}
+        {!drill && <EcoLink eco={variant!.eco} course={course} line={variant!.id} />}
         {!drill && variant!.kind === 'refutation' && <Badge variant="secondary">Trap</Badge>}
         {drill && variant && <Badge variant="outline">now in {variant.name}</Badge>}
       </div>

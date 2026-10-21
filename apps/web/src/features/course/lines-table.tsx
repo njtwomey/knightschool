@@ -1,5 +1,6 @@
 import type { OpeningContent, Side, Variant } from '@knightschool/core';
 import { BookOpen, Eye, Target } from 'lucide-react';
+import { EcoLink } from '@/components/eco-link';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { IconAction } from '@/features/browse/icon-action';
 import { useBrowse } from '@/features/browse/store';
@@ -76,7 +77,12 @@ function Section({ group, courseId, side }: { group: Group; courseId: string; si
                 >
                   {variant.name}
                 </a>{' '}
-                <span className="text-xs text-muted-foreground">{variant.eco}</span>
+                <EcoLink
+                  eco={variant.eco}
+                  course={courseId}
+                  line={variant.id}
+                  className="relative z-10 px-1.5 py-0 text-[11px] font-normal"
+                />
                 {variant.opponent && (
                   <p className="text-xs text-muted-foreground">
                     after <span className="font-mono">{variant.opponent}</span>

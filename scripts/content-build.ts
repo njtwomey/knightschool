@@ -25,6 +25,8 @@ import {
   applyPopularity,
   parseOpeningsTsv,
   treeGraph,
+  lichessUrlForCourse,
+  lichessUrlForLine,
   type OpeningContent,
 } from '../packages/core/src/index.ts';
 import {
@@ -108,6 +110,7 @@ async function main() {
         order: order.get(opening.id) ?? 0,
         variants: opening.variants.length,
         cards: introductionOrder(content, { minPopularity: 0 }).length,
+        lichess: lichessUrlForCourse(content),
         keyEpd: main[Math.min(5, main.length - 1)]?.to ?? opening.rootEpd,
         lines: opening.variants.map(({ id, name, kind, opponent, weight, whose, alternative }) => {
           // A position partway along the line, for its thumbnail.
@@ -123,6 +126,7 @@ async function main() {
             epd: path[Math.min(7, path.length - 1)]?.to ?? opening.rootEpd,
             epds: path.slice(1, 14).map((edge) => edge.to),
             alsoIn: (listedBy.get(id) ?? []).filter((course) => course !== opening.id),
+            lichess: lichessUrlForLine(content, id),
             branch: branches.get(id),
           };
         }),

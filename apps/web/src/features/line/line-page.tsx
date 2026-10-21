@@ -1,5 +1,6 @@
 import { namedPly, variantPath, type LineEdge, type OpeningContent, type Variant } from '@knightschool/core';
 import { BookOpen, GitBranch, ListChecks, Target } from 'lucide-react';
+import { EcoLink } from '@/components/eco-link';
 import { useEffect, useMemo, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { Page } from '@/components/page';
@@ -161,7 +162,7 @@ function About({
           <header className="grid gap-2">
             <h1 className="text-2xl font-semibold leading-tight">{variant.name}</h1>
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="outline">{variant.eco}</Badge>
+              <EcoLink eco={variant.eco} course={course} line={variant.id} />
               {kind && <Badge variant="secondary">{KIND[kind]}</Badge>}
               {variant.alternative && <Badge variant="outline">Alternative: shown, not drilled</Badge>}
               <span className="text-sm text-muted-foreground">

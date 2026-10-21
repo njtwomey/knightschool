@@ -1,5 +1,6 @@
 import { courseProgress, relatedCourses, roleOf, type RelatedCourse } from '@knightschool/core';
 import { useEffect, useRef, useState } from 'react';
+import { EcoLink } from '@/components/eco-link';
 import { Page } from '@/components/page';
 import { RichText } from '@/components/rich-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -120,7 +121,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
               <h2 className="text-3xl font-semibold tracking-tight">{course.name}</h2>
               {course.eco && (
                 <Hint text={ECO_HINT}>
-                  <Badge variant="outline">{course.eco}</Badge>
+                  <EcoLink eco={course.eco} course={course.id} />
                 </Hint>
               )}
               <Hint text={SIDE_HINT[course.side]}>
