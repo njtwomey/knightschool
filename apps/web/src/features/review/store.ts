@@ -1,4 +1,5 @@
 import {
+  cardFits,
   createScheduler,
   freePractice,
   isQuizCard,
@@ -101,6 +102,8 @@ type ReviewState = {
   chain: { left: number; line: string } | null;
   /** Follow-on questions whose card was never introduced: asked, but not written to the schedule. */
   unsaved: string[];
+  /** True while a follow-on question is being put next, so Skip cannot put a second one. */
+  following: boolean;
   /** Returns true when the move was the expected one. Illegal moves are ignored. */
   submitMove: (uci: string) => boolean;
   /** A typed answer to a quiz card. */
@@ -168,19 +171,38 @@ export const useReview = create<ReviewState>((set, get) => {
     set({ chain: null });
     nextInQueue();
   }
-  /** Puts a follow-on question next: the stored card when there is one, so its schedule carries on. */
+  /**
+   * Puts a follow-on question next: the stored card when there is one, so its schedule carries on. A copy of it already
+   * in the session is the latest (answers update every copy); a later copy is taken out, so it is asked once.
+   */
   async function askNext(definition: Parameters<typeof newCard>[0], line: string, left: number) {
+    const session = get().sessionId;
+    set({ following: true });
     let card = newCard(definition, new Date());
     let unsaved = false;
     if (saving()) {
-      const stored = await storageOrThrow().cards.get(definition.id);
+      let stored: Card | undefined;
+      try {
+        stored =
+          get().queue.find((candidate) => candidate.id === definition.id) ??
+          (await storageOrThrow().cards.get(definition.id));
+      } catch (error) {
+        set({ phase: 'error', error: error instanceof Error ? error.message : String(error), following: false });
+        return;
+      }
       if (stored && stored.expectedUci === definition.expectedUci) card = stored;
       else unsaved = true; // never introduce a card outside the path, nor overwrite another answer's schedule
     }
+    if (get().sessionId !== session) return; // a new session started meanwhile
     set((state) => ({
-      queue: [...state.queue.slice(0, state.index + 1), card, ...state.queue.slice(state.index + 1)],
+      queue: [
+        ...state.queue.slice(0, state.index + 1),
+        card,
+        ...state.queue.slice(state.index + 1).filter((candidate) => candidate.id !== card.id),
+      ],
       chain: { left, line },
       unsaved: unsaved ? [...state.unsaved, card.id] : state.unsaved,
+      following: false,
     }));
     nextInQueue();
   }
@@ -225,6 +247,7 @@ export const useReview = create<ReviewState>((set, get) => {
     },
     chain: null,
     unsaved: [],
+    following: false,
     setWeighting(weighting) {
       saveChoice(WEIGHTING_KEY, weighting);
       set({ weighting });
@@ -248,6 +271,7 @@ export const useReview = create<ReviewState>((set, get) => {
         phase: 'loading',
         chain: null,
         unsaved: [],
+        following: false,
         error: null,
         advancing: false,
         badge: null,
@@ -327,7 +351,10 @@ export const useReview = create<ReviewState>((set, get) => {
         await storage.cards.insertMissing(fresh);
         if (fresh.length) await addIntroducedToday(storage, fresh.length, now);
 
-        const due = (await storage.cards.due(now.toISOString())).filter((card) => enrolled.includes(card.openingId));
+        // A card whose position or move its course no longer has (a line cut short or rewritten) cannot be asked.
+        const due = (await storage.cards.due(now.toISOString())).filter(
+          (card) => enrolled.includes(card.openingId) && cardFits(contents[card.openingId], card),
+        );
         const queue = planSession(due);
         set({
           queue,
@@ -373,6 +400,10 @@ export const useReview = create<ReviewState>((set, get) => {
       }));
       if (saves(card)) {
         const answer = recordAnswer(scheduler, card, next, get().sessionId, new Date());
+        // Every copy in the session takes the new schedule, so a later answer builds on this one.
+        set((state) => ({
+          queue: state.queue.map((candidate) => (candidate.id === answer.card.id ? answer.card : candidate)),
+        }));
         void storageOrThrow()
           .reviews.record(answer.card, answer.review)
           .catch((error: unknown) =>
@@ -419,7 +450,7 @@ export const useReview = create<ReviewState>((set, get) => {
     },
 
     skip() {
-      if (!get().advancing) return;
+      if (!get().advancing || get().following) return;
       clearTimers();
       advance();
     },
@@ -452,7 +483,7 @@ export type ReviewQuestion = MoveQuestion | QuizQuestion;
 export function currentQuestion(state: Pick<ReviewState, 'queue' | 'index' | 'contents'>): ReviewQuestion | null {
   const card = state.queue[state.index];
   const content = card ? state.contents[card.openingId] : undefined;
-  if (!card || !content) return null;
+  if (!card || !content || !cardFits(content, card)) return null;
   if (isQuizCard(card)) {
     const quiz = quizFor(content, card);
     return quiz ? { kind: 'quiz', card, content, quiz } : null;

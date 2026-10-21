@@ -8,6 +8,7 @@ import { createScheduler, newCard, scheduleReview } from './scheduler';
 import type { OpeningContent } from './schema/content';
 import {
   cardDefinitions,
+  cardFits,
   cardId,
   freePractice,
   introductionOrder,
@@ -317,6 +318,22 @@ describe('quiz cards', () => {
     expect(defs.map((def) => def.id)).toEqual([quizCardId('t', 'one'), quizCardId('t', 'two')]);
     expect(defs.every((def) => def.expectedUci === '' && isQuizCard(def))).toBe(true);
     expect(isQuizCard({ id: cardId('t', 'x') })).toBe(false);
+  });
+
+  it('fit the course only while their quiz, position and move are still in it (cardFits)', () => {
+    const c = withQuizzes();
+    const [first] = cardDefinitions(c);
+    const after = Object.values(c.nodes).find((node) => node.ply > 6)!;
+    const cases: [string, Parameters<typeof cardFits>[1], OpeningContent | undefined, boolean][] = [
+      ['a card the course still asks', first!, c, true],
+      ['a position the course no longer reaches', { ...first!, epd: '8/8/8/8/8/8/8/8 w - -' }, c, false],
+      ['a move the course no longer plays there', { ...first!, expectedUci: 'a2a3' }, c, false],
+      ['a quiz still in the course', { id: quizCardId('t', 'one'), epd: c.opening.rootEpd, expectedUci: '' }, c, true],
+      ['a quiz taken out', { id: quizCardId('t', 'gone'), epd: c.opening.rootEpd, expectedUci: '' }, c, false],
+      ['a course that is not loaded', first!, undefined, false],
+      ['a position at the end of a line', { id: 'x', epd: after.epd, expectedUci: 'a2a3' }, c, false],
+    ];
+    for (const [name, card, course, fits] of cases) expect(cardFits(course, card), name).toBe(fits);
   });
 
   it('arrive after every fourth move card, the rest at the end', () => {

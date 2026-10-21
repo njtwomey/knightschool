@@ -122,6 +122,16 @@ export function planSession(due: Card[], size = SESSION_SIZE): Card[] {
   return [...seen, ...fresh].slice(0, size);
 }
 
+/**
+ * Whether a stored card can still be asked from a course as it is now: its quiz is still there, or its position is and
+ * the course still plays its expected move from it. A line cut short or rewritten leaves cards behind that do not.
+ */
+export function cardFits(content: OpeningContent | undefined, card: Pick<Card, 'id' | 'epd' | 'expectedUci'>): boolean {
+  if (!content) return false;
+  if (isQuizCard(card)) return content.quizzes.some((quiz) => card.id === quizCardId(content.opening.id, quiz.id));
+  return content.nodes[card.epd]?.moves.some((move) => move.uci === card.expectedUci) ?? false;
+}
+
 /** The new schedule and the log row for a finished attempt. */
 export function recordAnswer(
   scheduler: FSRS,
