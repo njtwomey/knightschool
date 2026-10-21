@@ -6,7 +6,7 @@ import {
   type OpeningContent,
   type Side,
 } from '@knightschool/core';
-import { BookOpen, ChevronRight, Crosshair, Target, X } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Crosshair, Target, X } from 'lucide-react';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { RichText } from '@/components/rich-text';
@@ -107,69 +107,83 @@ export function TreeExplorer({
   /** Folded lines and groups: a group's key is kept with a "group:" prefix so it cannot clash with a line id. */
   const [folded, setFolded] = useState<ReadonlySet<string>>(new Set());
   /**
-   * What the tree draws: everything (null), or what was chosen in the index. Clicking a line draws it and every line
-   * under it; its crosshair (`solo`) draws that line alone; clicking a group draws the group's lines. What is folded in
-   * the index never matters: folding only tidies the list.
+   * What the tree draws: everything (null), or a subtree chosen in the index: a line and every line under it (its
+   * crosshair), or a group's lines (its name). Nothing else changes what is drawn: picking a line only picks it out,
+   * and what is folded in the index only tidies the list.
    */
-  const [view, setView] = useState<{ key: string; solo: boolean } | null>(null);
+  const [subtree, setSubtree] = useState<string | null>(null);
   const [query, setQuery] = useState('');
-  const scopeOf = (key: string, solo: boolean) =>
-    key.startsWith('group:') ? (groupLines.get(key.slice(6)) ?? []) : solo ? [key] : [key, ...below(model, key)];
+  const scopeOf = (key: string) =>
+    key.startsWith('group:') ? (groupLines.get(key.slice(6)) ?? []) : [key, ...below(model, key)];
   const layout = useMemo(() => {
-    if (!view) return full;
+    if (!subtree) return full;
     const scope = new Set(
-      view.key.startsWith('group:')
-        ? (groupLines.get(view.key.slice(6)) ?? [])
-        : view.solo
-          ? [view.key]
-          : [view.key, ...below(model, view.key)],
+      subtree.startsWith('group:') ? (groupLines.get(subtree.slice(6)) ?? []) : [subtree, ...below(model, subtree)],
     );
-    // Never start deeper than the whole tree does, so a line on its own still shows its moves one by one.
+    // Never start deeper than the whole tree does, so a small subtree still shows its moves one by one.
     return laneLayout(
       tree,
       ids.filter((id) => scope.has(id)),
       { maxPly: full.firstPly },
     );
-  }, [tree, full, ids, model, groupLines, view]);
+  }, [tree, full, ids, model, groupLines, subtree]);
 
-  /** A line picked out without changing what is drawn: the line of a line's Tree tab, or a move clicked in the tree. */
-  const [highlight, setHighlight] = useState<string | null>(initialPicked ?? null);
+  /**
+   * The line being worked through and where on it: the board's buttons (and the arrow keys) step along it. Picking a
+   * line in the index or a move in the tree sets both; pointing at a move only previews it.
+   */
+  const [picked, setPicked] = useState<string | null>(initialPicked ?? null);
+  const pathOfLine = (line: string) => full.pathOf.get(line) ?? [];
+  const [cursor, setCursor] = useState<string | null>(
+    initialPicked ? (pathOfLine(initialPicked).at(-1) ?? null) : null,
+  );
   const [pointed, setPointed] = useState<string | null>(null);
-  const [focus, setFocus] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [scrollTo, setScrollTo] = useState<string | null>(null);
 
   const indexOf = new Map(ids.map((id, i) => [id, i]));
   const colourOf = (id: string) => laneColour(indexOf.get(id) ?? 0);
   const name = (line: ExplorerLine) =>
     shortNames && line.name.includes(':') ? line.name.slice(line.name.indexOf(':') + 1).trim() || line.name : line.name;
-  const viewLine = view && !view.key.startsWith('group:') ? view.key : null;
-  const picked = viewLine ?? highlight;
   const lit = new Set<string>([pointed ?? picked].filter((id): id is string => id !== null));
-  const endOf = (id: string) => full.pathOf.get(id)?.at(-1) ?? null;
-  const shownId = focus ?? (picked ? endOf(picked) : null) ?? layout.top;
-  const shown = tree.nodes.get(shownId)!;
+  const shownId = preview ?? cursor ?? layout.top;
+  const shown = tree.nodes.get(shownId) ?? tree.nodes.get(layout.top)!;
   const parent = shown.parent ? tree.nodes.get(shown.parent) : undefined;
   const through = shown.lines.filter((id) => byId.has(id));
   const comment = useMoveComment([...new Set(through.map((id) => byId.get(id)!.course))], parent?.epd, shown.uci);
   const pickedLine = picked ? byId.get(picked) : undefined;
+  // Where the cursor is on the picked line's moves (from the first shown), for the step buttons.
+  const steps = picked ? pathOfLine(picked) : [];
+  const at = cursor ? steps.indexOf(cursor) : -1;
 
-  /** Clicking a line draws it and every line under it; clicking it again draws everything. */
-  const choose = (key: string, solo: boolean) => {
-    const same = view?.key === key && view.solo === solo;
-    setView(same ? null : { key, solo });
-    if (!key.startsWith('group:')) {
-      setHighlight(key);
-      setFocus(endOf(key));
-    }
+  const goTo = (node: string | undefined) => {
+    if (!node) return;
+    setCursor(node);
+    setPreview(null);
+    setScrollTo(node);
   };
+  /** Picking a line picks it out and puts the board on the move where it becomes itself; the tree stays as it is. */
+  const pickLine = (line: string) => {
+    setPicked(line);
+    const branch = full.branchAt.get(line);
+    const path = pathOfLine(line);
+    goTo(path[Math.min(path.length - 1, (branch ? path.indexOf(branch) : 0) + 1)]);
+  };
+  /** Clicking a move picks its line and puts the board there. */
   const pickNode = (id: string) => {
-    setFocus(id);
     const ours = tree.nodes.get(id)!.lines.filter((line) => byId.has(line) && layout.laneOf.has(line));
-    if (ours.length === 1) setHighlight(ours[0]!);
+    // The picked line if it passes here; else the line the move belongs to (its lane); else the first through it.
+    const owner = layout.places.get(id)?.line;
+    const line = picked && ours.includes(picked) ? picked : owner && ours.includes(owner) ? owner : ours[0];
+    if (line) setPicked(line);
+    setCursor(id);
+    setPreview(null);
   };
   const point = (id: string | null) => {
     setPointed(id);
-    if (id) setFocus(endOf(id));
+    setPreview(id ? (pathOfLine(id).at(-1) ?? null) : null);
   };
+  const zoomInto = (key: string) => setSubtree(key === subtree ? null : key);
   const toggleFold = (key: string) =>
     setFolded((current) => {
       const next = new Set(current);
@@ -179,24 +193,47 @@ export function TreeExplorer({
   const matches = query.trim() ? lines.filter((line) => matchesText(query, `${line.name} ${line.course}`)) : null;
   const grouped = model.groups.length > 1;
 
+  // The arrow keys step along the picked line; Home and End go to its first and last move.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
+      if (!steps.length) return;
+      const target =
+        event.key === 'ArrowLeft'
+          ? steps[Math.max(0, at - 1)]
+          : event.key === 'ArrowRight'
+            ? steps[Math.min(steps.length - 1, at + 1)]
+            : event.key === 'Home'
+              ? steps[0]
+              : event.key === 'End'
+                ? steps.at(-1)
+                : undefined;
+      if (!target) return;
+      event.preventDefault();
+      goTo(target);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
+
   const entryProps: EntryProps = {
     model,
     byId,
     picked,
-    view,
+    subtree,
     folded,
     colourOf,
     name,
     onPoint: point,
-    onPick: (id: string) => choose(id, false),
-    onLight: (id: string) => choose(id, true),
+    onPick: pickLine,
+    onZoom: zoomInto,
     onFold: toggleFold,
   };
 
   return (
     <div className="grid gap-3 pb-6">
       <div className="px-4 pt-4">{header}</div>
-      <div className="grid gap-4 px-4 lg:grid-cols-[17rem_minmax(0,1fr)_17rem] lg:items-start">
+      <div className="grid gap-4 px-4 lg:grid-cols-[16rem_minmax(0,1fr)_22rem] lg:items-start">
         <nav
           aria-label="Lines"
           className="order-2 grid max-h-[50dvh] content-start gap-1 overflow-y-auto overscroll-contain rounded-xl border bg-card p-2 lg:sticky lg:top-20 lg:order-none lg:max-h-[calc(100dvh-6rem)] lg:self-start"
@@ -221,8 +258,8 @@ export function TreeExplorer({
                   Open all
                 </Button>
               )}
-              {view && (
-                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => setView(null)}>
+              {subtree && (
+                <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => setSubtree(null)}>
                   <X aria-hidden /> Show all
                 </Button>
               )}
@@ -258,9 +295,9 @@ export function TreeExplorer({
                       </Button>
                       <Button
                         variant="ghost"
-                        className={`h-auto flex-1 justify-start px-1 py-1 font-mono text-xs font-semibold hover:bg-transparent ${view?.key === key ? 'text-primary' : ''}`}
-                        aria-pressed={view?.key === key}
-                        onClick={() => choose(key, false)}
+                        className={`h-auto flex-1 justify-start px-1 py-1 font-mono text-xs font-semibold hover:bg-transparent ${subtree === key ? 'text-primary' : ''}`}
+                        aria-pressed={subtree === key}
+                        onClick={() => zoomInto(key)}
                         title={`Show the ${group.lines.length} lines that start ${group.label}`}
                       >
                         {group.label}
@@ -288,29 +325,25 @@ export function TreeExplorer({
         </nav>
 
         <section aria-label="The tree" className="order-3 grid min-w-0 gap-2 lg:order-none">
-          {view && (
+          {subtree && (
             <div className="flex flex-wrap items-center gap-2 text-sm">
               <span className="text-muted-foreground">
-                {view.key.startsWith('group:') ? (
+                {subtree.startsWith('group:') ? (
                   <>
-                    Showing the {scopeOf(view.key, false).length} lines that start{' '}
+                    Showing the {scopeOf(subtree).length} lines that start{' '}
                     <span className="font-mono font-medium text-foreground">
-                      {model.groups.find((group) => group.key === view.key.slice(6))?.label}
+                      {model.groups.find((group) => group.key === subtree.slice(6))?.label}
                     </span>
                     .
                   </>
-                ) : view.solo ? (
-                  <>
-                    Showing only <span className="font-medium text-foreground">{name(byId.get(view.key)!)}</span>.
-                  </>
                 ) : (
                   <>
-                    Showing <span className="font-medium text-foreground">{name(byId.get(view.key)!)}</span> and every
-                    line under it ({scopeOf(view.key, false).length}).
+                    Showing <span className="font-medium text-foreground">{name(byId.get(subtree)!)}</span> and every
+                    line under it ({scopeOf(subtree).length}).
                   </>
                 )}
               </span>
-              <Button variant="outline" size="sm" className="h-7" onClick={() => setView(null)}>
+              <Button variant="outline" size="sm" className="h-7" onClick={() => setSubtree(null)}>
                 <X aria-hidden /> Show all
               </Button>
             </div>
@@ -320,8 +353,9 @@ export function TreeExplorer({
             layout={layout}
             colourOf={colourOf}
             lit={lit}
-            focus={focus}
-            onFocus={setFocus}
+            focus={shownId}
+            onFocus={setPreview}
+            scrollTo={scrollTo}
             onPick={pickNode}
             labelOf={(id) => name(byId.get(id)!)}
             zoom={zoom}
@@ -329,8 +363,8 @@ export function TreeExplorer({
           />
           <p className="text-xs text-muted-foreground">
             One column per move; the main line runs straight across the top. Point at a move or a line to see it on the
-            board. Click a line in the list to show it and every line under it, or its crosshair to show it alone;
-            folding only tidies the list.
+            board. Pick a line, in the list or by clicking a move, to step through it with the arrows; the crosshair
+            shows a line and every line under it; folding only tidies the list.
           </p>
         </section>
 
@@ -344,9 +378,34 @@ export function TreeExplorer({
             interactive={false}
             lastMove={shown.uci ?? undefined}
           />
-          <p className="text-sm font-medium">
-            {shown.san ? `After ${numberedMove(shown.ply - 1, shown.san)}` : 'The start'}
-          </p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-medium">
+              {shown.san ? `After ${numberedMove(shown.ply - 1, shown.san)}` : 'The start'}
+            </p>
+            <div className="flex gap-1" role="group" aria-label="Step through the line">
+              {(
+                [
+                  ['First move', ChevronsLeft, steps[0], at <= 0],
+                  ['Previous move', ChevronLeft, steps[at - 1], at <= 0],
+                  ['Next move', ChevronRight, steps[at + 1], at < 0 || at >= steps.length - 1],
+                  ['Last move', ChevronsRight, steps.at(-1), at < 0 || at >= steps.length - 1],
+                ] as const
+              ).map(([label, Icon, target, off]) => (
+                <Button
+                  key={label}
+                  variant="outline"
+                  size="icon"
+                  className="size-8"
+                  aria-label={label}
+                  title={picked ? label : 'Pick a line to step through it'}
+                  disabled={!picked || off}
+                  onClick={() => goTo(target)}
+                >
+                  <Icon aria-hidden />
+                </Button>
+              ))}
+            </div>
+          </div>
           {comment && (
             <p className="text-sm text-muted-foreground">
               <RichText text={comment} />
@@ -386,7 +445,7 @@ export function TreeExplorer({
 }
 
 function CrosshairButton({ active, onClick }: { active: boolean; onClick: () => void }) {
-  const label = active ? 'Show every line again' : 'Show only this line';
+  const label = active ? 'Show every line again' : 'Show only this line and every line under it';
   return (
     <Button
       variant={active ? 'secondary' : 'ghost'}
@@ -406,18 +465,18 @@ type EntryProps = {
   model: IndexModel;
   byId: ReadonlyMap<string, ExplorerLine>;
   picked: string | null;
-  view: { key: string; solo: boolean } | null;
+  subtree: string | null;
   folded: ReadonlySet<string>;
   colourOf: (id: string) => string;
   name: (line: ExplorerLine) => string;
   onPoint: (id: string | null) => void;
   onPick: (id: string) => void;
-  onLight: (id: string) => void;
+  onZoom: (id: string) => void;
   onFold: (id: string) => void;
 };
 
 function IndexEntry(props: EntryProps & { id: string; depth: number; flat?: boolean }) {
-  const { model, byId, id, depth, picked, view, folded, colourOf, name, onPoint, onPick, onLight, onFold, flat } =
+  const { model, byId, id, depth, picked, subtree, folded, colourOf, name, onPoint, onPick, onZoom, onFold, flat } =
     props;
   const line = byId.get(id)!;
   const children = model.children.get(id) ?? [];
@@ -455,7 +514,7 @@ function IndexEntry(props: EntryProps & { id: string; depth: number; flat?: bool
             {!open && under > 0 && <span className="ml-1 text-xs text-muted-foreground">+{under}</span>}
           </span>
         </Button>
-        <CrosshairButton active={view?.key === id && view.solo} onClick={() => onLight(id)} />
+        {children.length > 0 && <CrosshairButton active={subtree === id} onClick={() => onZoom(id)} />}
       </div>
       {!flat && open && children.length > 0 && (
         <ul className={depth >= 0 ? 'ml-3 border-l pl-1' : ''}>
