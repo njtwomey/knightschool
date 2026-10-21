@@ -14,7 +14,7 @@ import { Hint } from '@/components/hint';
 import { Progress } from '@/components/ui/progress';
 import { percent } from '@/features/courses/progress';
 import { to } from '@/router/location';
-import { ECO_HINT, PRACTICE_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from './explanations';
+import { ECO_HINT, PROGRESS_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
 
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
 
@@ -149,7 +149,7 @@ export function CourseCard({
         {matches && matches.length > 0 && <MatchedLines matches={matches} />}
         <div className="mt-auto grid gap-1.5">
           {progress.total > 0 && (
-            <Hint text={PRACTICE_HINT.progress}>
+            <Hint text={PROGRESS_HINT.progress}>
               <Progress value={percent(progress.learned, progress.total)} aria-label={`${course.name} progress`} />
             </Hint>
           )}

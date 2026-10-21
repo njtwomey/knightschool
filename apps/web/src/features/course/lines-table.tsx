@@ -2,10 +2,10 @@ import type { OpeningContent, Side, Variant } from '@knightschool/core';
 import { BookOpen, Eye, Target } from 'lucide-react';
 import { EcoLink } from '@/components/eco-link';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { IconAction } from '@/features/browse/icon-action';
-import { useBrowse } from '@/features/browse/store';
-import { VariantTags } from '@/features/browse/tag-badge';
-import { TagLegend } from '@/features/browse/tag-legend';
+import { IconAction } from '@/components/icon-action';
+import { useCatalog } from '@/data/catalog-store';
+import { VariantTags } from '@/components/tags/tag-badge';
+import { TagLegend } from '@/components/tags/tag-legend';
 import { to } from '@/router/location';
 
 type Group = { title: string; note?: string; variants: Variant[] };
@@ -59,7 +59,7 @@ function kindGroups(variants: Variant[]): Group[] {
 
 /** One section of rows: a name, what the opponent does to reach it, its tags, and the three things you can do with it. */
 function Section({ group, courseId, side }: { group: Group; courseId: string; side: Side }) {
-  const showLine = useBrowse((state) => state.showLine);
+  const showLine = useCatalog((state) => state.showLine);
   return (
     <section className="grid gap-1 rounded-xl border bg-card p-3">
       <header className="px-1">

@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CourseBreadcrumbs, PlayBreadcrumbs } from '@/features/browse/breadcrumbs';
-import { useBrowse } from '@/features/browse/store';
+import { CourseBreadcrumbs, PlayBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
+import { useCatalog } from '@/data/catalog-store';
 import { TreeExplorer, type ExplorerLine } from './tree-explorer';
 import { useMoveTree } from './use-move-tree';
 
 /** A course's lines as a tree (/course/<id>/tree), or a line's Tree tab with that line picked. */
 export function CourseTreePage({ course, line }: { course: string; line?: string }) {
   const { loaded, error } = useMoveTree();
-  const entry = useBrowse((state) => state.index.find((candidate) => candidate.id === course));
+  const entry = useCatalog((state) => state.index.find((candidate) => candidate.id === course));
   const lines = useMemo<ExplorerLine[]>(
     () =>
       (entry?.lines ?? [])

@@ -1,6 +1,6 @@
 import { explainMove, nodeAt, type OpeningContent } from '@knightschool/core';
 import { RichText } from '@/components/rich-text';
-import { currentEpd, useBrowse } from './store';
+import { currentEpd, useCatalog } from '@/data/catalog-store';
 
 const NAG_WORDS: Record<number, string> = {
   1: 'a good move',
@@ -13,7 +13,7 @@ const NAG_WORDS: Record<number, string> = {
 
 /** What the last move does, in order of trust: the author's note, then what the board shows. Nothing if there is nothing to say. */
 export function PositionDetails({ content }: { content: OpeningContent }) {
-  const path = useBrowse((state) => state.path);
+  const path = useCatalog((state) => state.path);
   const node = nodeAt(content, currentEpd(content, path));
   const last = path.at(-1);
   const before = path.length > 1 ? path[path.length - 2]!.to : content.opening.rootEpd;

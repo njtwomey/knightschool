@@ -5,8 +5,8 @@ import { RichText } from '@/components/rich-text';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { VariantTags } from '@/features/browse/tag-badge';
-import { RISK_HINT } from '@/features/openings/explanations';
+import { VariantTags } from '@/components/tags/tag-badge';
+import { RISK_HINT } from '@/components/tags/hints';
 
 type Intro = { summary: string; about: CourseAbout };
 

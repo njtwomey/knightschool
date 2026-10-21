@@ -196,8 +196,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
     try {
       await get().load();
       set({ message: { text: message, undo } });
-      const { useBrowse } = await import('@/features/browse/store');
-      void useBrowse.getState().reload();
+      const { useCatalog } = await import('@/data/catalog-store');
+      void useCatalog.getState().reload();
     } catch (error) {
       set({ message: { text: errorText(error), undo: false, error: true } });
     }
@@ -931,8 +931,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
         const undone = await undoAuthored();
         await get().load();
         set({ message: { text: undone ? 'Undone.' : 'There is nothing to undo.', undo: false } });
-        const { useBrowse } = await import('@/features/browse/store');
-        void useBrowse.getState().reload();
+        const { useCatalog } = await import('@/data/catalog-store');
+        void useCatalog.getState().reload();
       } catch (error) {
         set({ message: { text: errorText(error), undo: false, error: true } });
       }

@@ -6,7 +6,7 @@ import {
   TRICK_HINT,
   earlyMateHint,
   earlyMateLabel,
-} from '@/features/openings/explanations';
+} from '@/components/tags/hints';
 
 // One colour per kind of tag, so a row can be read at a glance: green is safe, amber needs care, red is dangerous.
 export const TONE_CLASS = {

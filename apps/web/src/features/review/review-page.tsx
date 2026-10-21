@@ -26,8 +26,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { SourceSelect } from '@/components/source-select';
 import { WeightingSelect } from '@/components/weighting-select';
-import { useBrowse } from '@/features/browse/store';
-import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
+import { useCatalog } from '@/data/catalog-store';
+import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
 import { MissList } from './miss-list';
 import { currentQuestion, DUE, useReview, type LineScope, type QuizQuestion } from './store';
 import { to } from '@/router/location';
@@ -90,7 +90,7 @@ function MovesChoice() {
 function SourceChoice() {
   const source = useReview((state) => state.source);
   const weighting = useReview((state) => state.weighting);
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
       Questions from

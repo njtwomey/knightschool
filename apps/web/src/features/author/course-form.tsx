@@ -27,7 +27,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { GroupActions } from './group-actions';
 import { entryId, entrySection, useDraft } from './helpers';
 import { createHref } from './tabs';
@@ -39,7 +39,7 @@ const FROM_START = '__start';
 
 /** The app's openings a course can add to (not the "My courses" groups), with the first ECO code of each. */
 function useOpenings() {
-  const openings = useBrowse((state) => state.openings);
+  const openings = useCatalog((state) => state.openings);
   return openings
     .filter((opening) => !isOwnOpening(opening.id))
     .map((opening) => ({ id: opening.id, name: opening.name, eco: opening.eco?.slice(0, 3) ?? '' }));
@@ -86,7 +86,7 @@ export function NewCourseDialog({ compact = false }: { compact?: boolean }) {
   const chosen = openings.find((candidate) => candidate.id === opening);
   const [from, setFrom] = useState(FROM_START);
   // The lines of the app's courses in that opening, for your side, to carry on from.
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
   const lines = index
     .filter((course) => course.opening === opening && course.side === side)
     .flatMap((course) =>

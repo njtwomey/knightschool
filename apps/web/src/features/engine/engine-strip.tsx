@@ -1,7 +1,7 @@
 import { engineExplainer, pvToSan } from '@knightschool/core';
 import { formatScore } from '@knightschool/engine';
 import { useEffect } from 'react';
-import { currentEpd, useBrowse } from '@/features/browse/store';
+import { currentEpd, useCatalog } from '@/data/catalog-store';
 import { isBaked } from '@/data/analysis';
 import { useEngine } from './store';
 
@@ -11,8 +11,8 @@ import { useEngine } from './store';
  * it is switched on and off in Settings.
  */
 export function EngineStrip() {
-  const content = useBrowse((state) => state.content);
-  const path = useBrowse((state) => state.path);
+  const content = useCatalog((state) => state.content);
+  const path = useCatalog((state) => state.path);
   const { status, current, thinking, seen } = useEngine();
 
   const epd = content ? currentEpd(content, path) : null;

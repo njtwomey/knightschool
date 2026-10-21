@@ -14,7 +14,7 @@ import { loadCurriculum, loadIndex, loadOpening, loadOpenings } from '@/data/con
 
 type Status = 'idle' | 'loading' | 'ready' | 'error';
 
-type BrowseState = {
+type CatalogState = {
   index: OpeningIndexEntry[];
   /** The openings that courses are grouped under, with who plays each. */
   openings: OpeningGroup[];
@@ -56,7 +56,7 @@ type BrowseState = {
   tryMove: (uci: string) => boolean;
 };
 
-export const useBrowse = create<BrowseState>((set, get) => ({
+export const useCatalog = create<CatalogState>((set, get) => ({
   index: [],
   openings: [],
   prerequisites: {},
@@ -189,10 +189,10 @@ export const useBrowse = create<BrowseState>((set, get) => ({
   },
 }));
 
-type Position = Pick<BrowseState, 'content' | 'line'>;
+type Position = Pick<CatalogState, 'content' | 'line'>;
 
 /** Moves to a path. The displayed line is kept when the path is within it, and follows the path otherwise. */
-function withPath(state: Position, path: LineEdge[]): Pick<BrowseState, 'path' | 'line' | 'notice'> {
+function withPath(state: Position, path: LineEdge[]): Pick<CatalogState, 'path' | 'line' | 'notice'> {
   const within = path.every((edge, i) => state.line[i]?.uci === edge.uci);
   return { path, line: within || !state.content ? state.line : continueLine(state.content, path), notice: null };
 }

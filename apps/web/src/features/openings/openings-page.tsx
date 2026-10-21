@@ -23,13 +23,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { loadSearchIndex } from '@/data/content';
 import { useStorage } from '@/data/storage';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { isActive, movesText, queryEpd, START_QUERY, type BoardQuery } from '@/features/courses/board-query';
 import { BoardSearchDialog } from '@/features/courses/board-search';
 import { useProgress } from '@/features/courses/progress';
 import { readHashState, setHashState } from '@/router/location';
 import { CourseCard } from './course-card';
-import { ROLE_HINT, SCOPE_HINT, SIDE_HINT, TIER_HINT } from './explanations';
+import { ROLE_HINT, SCOPE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
 import { VariationCard } from './variation-card';
 import { boardQueryFromHash, filterFromHash, hashFromState } from './hash-state';
 
@@ -65,11 +65,11 @@ type Item =
   | { kind: 'line'; hit: LineHit; name: string; score: number };
 
 /**
- * Browse: courses in the order to study them, and every line in them. Courses and lines are the same kind of card, so one
+ * Search: courses in the order to study them, and every line in them. Courses and lines are the same kind of card, so one
  * search covers both. Filters say which side you play, whether you are playing an opening or against it, and the tier.
  */
 export function OpeningsPage() {
-  const { index, openings, indexStatus, indexError } = useBrowse();
+  const { index, openings, indexStatus, indexError } = useCatalog();
   const learned = useProgress((state) => state.learned);
   const storage = useStorage((state) => state.storage);
   // The search, filters and board-search moves live in the URL hash, so a refresh or a shared link shows the same list.

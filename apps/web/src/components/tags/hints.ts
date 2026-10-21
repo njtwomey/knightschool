@@ -1,6 +1,6 @@
 import type { Motif, Side } from '@knightschool/core';
 
-/** What each label on the Browse page means, shown on hover. One place, so cards and filters say the same thing. */
+/** What each label on the Search page means, shown on hover. One place, so cards and filters say the same thing. */
 export const TIER_HINT = {
   1: 'Tier 1, study first: the openings you will meet most often. Start here.',
   2: 'Tier 2, study next: common, but less often than tier 1, or sharper. Take these once tier 1 feels comfortable.',
@@ -89,6 +89,6 @@ export function earlyMateLabel(who: 'white' | 'black' | 'both', side?: Side): st
   return who === side ? 'mate chances: you' : 'mate chances: them';
 }
 
-export const PRACTICE_HINT = {
+export const PROGRESS_HINT = {
   progress: 'How many of this course’s moves you have learned so far.',
 } as const;

@@ -24,7 +24,7 @@ function useSeen<T extends Element>(margin = '300px') {
 }
 
 /**
- * A small picture of a position. It is only drawn once it is near the screen, so a long page of them (Browse lists
+ * A small picture of a position. It is only drawn once it is near the screen, so a long page of them (Search lists
  * more than a hundred) does not build every board up front.
  */
 export function BoardThumb({ id, epd, side }: { id: string; epd: string; side: 'white' | 'black' }) {

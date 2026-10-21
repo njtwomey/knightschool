@@ -25,8 +25,8 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { loadCoursePath, isPassed, type CoursePath } from '@/data/course-path';
-import { CourseBreadcrumbs } from '@/features/browse/breadcrumbs';
-import { useBrowse } from '@/features/browse/store';
+import { CourseBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
+import { useCatalog } from '@/data/catalog-store';
 import { lineHref } from '@/features/line/tabs';
 import { to } from '@/router/location';
 import { SessionStarters } from './session-starters';
@@ -134,7 +134,7 @@ const unitNumber = (units: CourseUnit[], id: string | undefined) =>
  * that belong with a unit are listed as extras, never required.
  */
 export function CoursePathPage({ course }: { course: string }) {
-  const { content, contentStatus, contentError, index } = useBrowse();
+  const { content, contentStatus, contentError, index } = useCatalog();
   const entry = index.find((candidate) => candidate.id === course);
   const [path, setPath] = useState<CoursePath | null>(null);
   const [failure, setFailure] = useState<string | null>(null);

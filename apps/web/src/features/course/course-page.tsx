@@ -8,14 +8,14 @@ import { Page } from '@/components/page';
 import { RichText } from '@/components/rich-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { CourseBreadcrumbs } from '@/features/browse/breadcrumbs';
+import { CourseBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
 import { Hint } from '@/components/hint';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { loadSearchIndex } from '@/data/content';
-import { BoardPanel } from '@/features/browse/board-panel';
-import { PositionDetails } from '@/features/browse/position-details';
-import { currentEpd, useBrowse } from '@/features/browse/store';
+import { BoardPanel } from '@/features/course/board-panel';
+import { PositionDetails } from '@/features/course/position-details';
+import { currentEpd, useCatalog } from '@/data/catalog-store';
 import { EnrolButton } from '@/features/courses/enrol-button';
 import { percent, useProgress } from '@/features/courses/progress';
 import { EngineStrip } from '@/features/engine/engine-strip';
@@ -26,7 +26,7 @@ import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState, to } from '@/router/location';
 import { MotifChip } from '@/features/glossary/motif-chip';
 import { useGlossary } from '@/features/glossary/use-glossary';
-import { ECO_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/features/openings/explanations';
+import { ECO_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
 import { CourseIntro } from './course-intro';
 import { LinesTable } from './lines-table';
 
@@ -38,7 +38,7 @@ function isTyping(target: EventTarget | null) {
 
 /** Left and right step through the line, Home and End jump to its ends. */
 function useKeyboardNavigation() {
-  const { stepBack, stepForward, toStart, toEnd } = useBrowse();
+  const { stepBack, stepForward, toStart, toEnd } = useCatalog();
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isTyping(event.target)) return;
@@ -59,7 +59,7 @@ const TIER_NAME = { 1: 'Study first', 2: 'Study next', 3: 'Alternative or rare' 
  * much it matters. Beside it, the same opening from the other side, and the courses that reach the same positions.
  */
 export function CoursePage({ courseId }: { courseId: string }) {
-  const { content, contentStatus, contentError, index, openings, shownVariant, path } = useBrowse();
+  const { content, contentStatus, contentError, index, openings, shownVariant, path } = useCatalog();
   const learned = useProgress((state) => state.learned);
   const autoEngine = useEnginePrefs((state) => state.auto);
   const [related, setRelated] = useState<RelatedCourse[]>([]);
@@ -78,7 +78,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
     if (contentStatus !== 'ready' || restored.current === courseId) return;
     restored.current = courseId;
     const hash = readHashState();
-    if (hash.v || hash.m) useBrowse.getState().restoreView({ variant: hash.v, moves: decodeMoves(hash.m) });
+    if (hash.v || hash.m) useCatalog.getState().restoreView({ variant: hash.v, moves: decodeMoves(hash.m) });
   }, [contentStatus, courseId]);
   useEffect(() => {
     if (restored.current !== courseId || contentStatus !== 'ready') return;

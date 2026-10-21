@@ -22,7 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { WeightingSelect } from '@/components/weighting-select';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
 import { rushCourse, rushSource, SPEED_DELAYS, useSpeed, type SpeedConfig } from './store';
 
@@ -54,7 +54,7 @@ const Big = ({ label, value }: { label: string; value: string }) => (
  * Ne7 System"), never the variation alone. A variation name that starts with the opening's own name loses that start.
  */
 function useTitles() {
-  const openings = useBrowse((state) => state.openings);
+  const openings = useCatalog((state) => state.openings);
   return (content: { opening: { opening: string; name: string } }, lineName: string) => {
     const opening =
       openings.find((candidate) => candidate.id === content.opening.opening)?.name ?? content.opening.name;
@@ -108,7 +108,7 @@ function BetweenDialog() {
 function SetupDialog() {
   const phase = useSpeed((state) => state.phase);
   const config = useSpeed((state) => state.config);
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
   const set = (change: Partial<SpeedConfig>) => useSpeed.getState().setConfig({ ...config, ...change });
   // An opening rush is started from a course's Path tab; it stays a choice here while it is the one set.
   const rush = rushCourse(config.source);
@@ -457,7 +457,7 @@ function Summary() {
   const summary = speedSummary(results);
   const timed = config.mode === 'timed';
   const titles = useTitles();
-  const courses = useBrowse((state) => state.index);
+  const courses = useCatalog((state) => state.index);
   const titleOfResult = (result: (typeof results)[number]) =>
     titles(
       {

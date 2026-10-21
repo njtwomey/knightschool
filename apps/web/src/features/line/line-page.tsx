@@ -13,9 +13,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { loadOpening } from '@/data/content';
-import { PlayBreadcrumbs } from '@/features/browse/breadcrumbs';
-import { useBrowse } from '@/features/browse/store';
-import { VariantTags } from '@/features/browse/tag-badge';
+import { PlayBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
+import { useCatalog } from '@/data/catalog-store';
+import { VariantTags } from '@/components/tags/tag-badge';
 import { CourseIntro } from '@/features/course/course-intro';
 import { PlayPage } from '@/features/play/play-page';
 import { ReviewPage } from '@/features/review/review-page';
@@ -81,7 +81,7 @@ function paragraphsOf(path: LineEdge[], from: number): Paragraph[] {
  * it, and the line move by move with the reason for each commented move. Clicking a move puts it on the board.
  */
 function LineAbout({ course, line }: { course: string; line: string }) {
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
   const [content, setContent] = useState<OpeningContent | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -131,7 +131,7 @@ function About({
 }: {
   content: OpeningContent;
   variant: Variant;
-  index: ReturnType<typeof useBrowse.getState>['index'];
+  index: ReturnType<typeof useCatalog.getState>['index'];
 }) {
   const { opening } = content;
   const course = opening.id;

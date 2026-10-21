@@ -8,7 +8,8 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
-import { CrumbMenu, TabGroup, type MenuItem } from '@/features/browse/breadcrumbs';
+import { CrumbMenu, type MenuItem } from '@/components/breadcrumbs/crumb-menu';
+import { TabGroup } from '@/components/breadcrumbs/tab-group';
 import { navigate, to } from '@/router/location';
 import { entryId } from './helpers';
 import { draftCourses, fullLine, useAuthor } from './store';

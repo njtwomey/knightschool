@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { courseHref } from '@/features/course/tabs';
 import { navigate } from '@/router/location';
 import { TreeExplorer, type ExplorerLine } from './tree-explorer';
@@ -16,7 +16,7 @@ import { useMoveTree } from './use-move-tree';
  */
 export function CurriculumTreePage() {
   const { loaded, error } = useMoveTree();
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
   const courses = useMemo(() => inStudyOrder(index), [index]);
   const lines = useMemo<ExplorerLine[]>(() => {
     if (!loaded) return [];

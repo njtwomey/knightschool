@@ -17,7 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { loadOpening } from '@/data/content';
 import { useStorage } from '@/data/storage';
 import { lastDays, localDay, previousDay } from '@/data/training-settings';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { describeCard } from './describe-card';
 
 type Loaded = {
@@ -84,7 +84,7 @@ function Tile({ label, value, note }: { label: string; value: string; note?: str
 export function StatsPage() {
   const storage = useStorage((state) => state.storage);
   const status = useStorage((state) => state.status);
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
   const [data, setData] = useState<Loaded | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
 

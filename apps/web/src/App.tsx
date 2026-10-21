@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useStorage } from '@/data/storage';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { CreditsPage } from '@/features/credits/credits-page';
 import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
@@ -52,8 +52,8 @@ import { navigate, to, usePathname } from '@/router/location';
 export function App() {
   const pathname = usePathname();
   const route: Route = parseRoute(pathname);
-  const selectCourse = useBrowse((state) => state.selectCourse);
-  const loadIndex = useBrowse((state) => state.loadIndex);
+  const selectCourse = useCatalog((state) => state.selectCourse);
+  const loadIndex = useCatalog((state) => state.loadIndex);
   const courseId = route.page === 'course' ? route.id : null;
   const status = useStorage((state) => state.status);
 
@@ -71,7 +71,7 @@ export function App() {
     if (/^\/profile\/author\/?$/.test(pathname)) navigate('/create', { replace: true });
   }, [pathname]);
 
-  // In the order you use them: find and look (Courses, Browse, Tree), practise (Quiz, Speed, Name it), write your own
+  // In the order you use them: find and look (Courses, Search, Tree), practise (Quiz, Speed, Name it), write your own
   // (Create), look things up (Glossary).
   const links: { href: string; label: string; active: boolean; icon: ReactNode; group: number }[] = [
     {

@@ -5,12 +5,12 @@ import { BoardSettingsButton } from '@/components/board/board-settings';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { EvalBar } from '@/features/engine/eval-bar';
-import { arrowsOf, squareStylesOf } from './shapes';
-import { currentEpd, useBrowse } from './store';
+import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
+import { currentEpd, useCatalog } from '@/data/catalog-store';
 
 /** The board on the course page for exploring: step through a line, or play a move to see if the course has it. */
 export function BoardPanel({ content }: { content: OpeningContent }) {
-  const { path, notice, tryMove, stepBack, stepForward, toStart, toEnd } = useBrowse();
+  const { path, notice, tryMove, stepBack, stepForward, toStart, toEnd } = useCatalog();
   const epd = currentEpd(content, path);
   const last = path.at(-1);
   const atEnd = nodeAt(content, epd).moves.length === 0;

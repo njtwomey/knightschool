@@ -3,9 +3,9 @@ import { BookOpen, Target } from 'lucide-react';
 import { BoardThumb } from '@/components/board/board-thumb';
 import { Hint } from '@/components/hint';
 import { Badge } from '@/components/ui/badge';
-import { IconAction } from '@/features/browse/icon-action';
+import { IconAction } from '@/components/icon-action';
 import { to } from '@/router/location';
-import { ROLE_HINT, SIDE_HINT, TRAP_HINT, WEIGHT_HINT } from './explanations';
+import { ROLE_HINT, SIDE_HINT, TRAP_HINT, WEIGHT_HINT } from '@/components/tags/hints';
 import { lineHref } from '@/features/line/tabs';
 
 /** A variation found by search, drawn like an opening: its board, name and where it lives. Click to see it on the board. */

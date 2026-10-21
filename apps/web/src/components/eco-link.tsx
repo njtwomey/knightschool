@@ -1,7 +1,7 @@
 import { ExternalLink } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from 'cn';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 
 /**
  * An ECO code as a link to the opening's page on Lichess (its moves, games and statistics), opening in a new tab, with
@@ -19,7 +19,7 @@ export function EcoLink({
   line?: string;
   className?: string;
 }) {
-  const href = useBrowse((state) => {
+  const href = useCatalog((state) => {
     const entry = state.index.find((candidate) => candidate.id === course);
     return line ? entry?.lines.find((candidate) => candidate.id === line)?.lichess : entry?.lichess;
   });

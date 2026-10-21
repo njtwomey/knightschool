@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { loadOpening } from '@/data/content';
 import { useStorage } from '@/data/storage';
 import { getCardOptions, getEnrolled, getIntroducedToday, getNewPerDay } from '@/data/training-settings';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { CourseCard } from '@/features/openings/course-card';
 import { percent, useProgress } from '@/features/courses/progress';
 import { to } from '@/router/location';
@@ -55,7 +55,7 @@ function Stat({ label, value, note }: { label: string; value: number; note?: str
 export function OverviewPage() {
   const status = useStorage((state) => state.status);
   const storage = useStorage((state) => state.storage);
-  const { index, openings, prerequisites, indexStatus } = useBrowse();
+  const { index, openings, prerequisites, indexStatus } = useCatalog();
   const learned = useProgress((state) => state.learned);
   const [rows, setRows] = useState<Row[] | null>(null);
   const [failure, setFailure] = useState<string | null>(null);

@@ -15,12 +15,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { PlayBreadcrumbs } from '@/features/browse/breadcrumbs';
+import { PlayBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
 import { EngineLines } from '@/features/engine/engine-lines';
 import { EvalBar } from '@/features/engine/eval-bar';
 import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
-import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
+import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
 import { encodeMoves } from '@/router/hash';
 import { lineHref, type UnitRef } from '@/features/line/tabs';
 import { courseHref } from '@/features/course/tabs';

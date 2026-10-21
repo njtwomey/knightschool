@@ -1,7 +1,7 @@
 import { GraduationCap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useStorage } from '@/data/storage';
-import { IconAction } from '@/features/browse/icon-action';
+import { IconAction } from '@/components/icon-action';
 import { getEnrolled, setEnrolled } from '@/data/training-settings';
 
 /** Adds or removes a course from the set that the Overview and the quiz use. */

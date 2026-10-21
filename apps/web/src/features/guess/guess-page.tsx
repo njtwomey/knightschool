@@ -13,7 +13,7 @@ import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SourceSelect } from '@/components/source-select';
 import { WeightingSelect } from '@/components/weighting-select';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
 import { allSuggestions, SESSION_LENGTH, sessionPoints, useGuess, type Outcome } from './store';
@@ -21,7 +21,7 @@ import { allSuggestions, SESSION_LENGTH, sessionPoints, useGuess, type Outcome }
 /** "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts. */
 export function GuessPage() {
   const { phase, error, question, answer, graded, outcomes, source, weighting } = useGuess();
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
 
   useEffect(() => {
     void useGuess.getState().start();
@@ -260,7 +260,7 @@ function Summary({ outcomes }: { outcomes: Outcome[] }) {
         <SourceSelect
           value={useGuess.getState().source}
           onChange={(next) => useGuess.getState().setSource(next)}
-          index={useBrowse.getState().index}
+          index={useCatalog.getState().index}
           label="Positions from"
         />
       </div>

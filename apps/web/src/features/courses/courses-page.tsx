@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { courseHref } from '@/features/course/tabs';
 import { useProgress } from '@/features/courses/progress';
 import { navigate, to } from '@/router/location';
@@ -70,13 +70,13 @@ function rowsOf(index: OpeningIndexEntry[], openings: OpeningGroup[], learned: R
 
 /**
  * Every course as one plain table (/courses): a row per course, in study order to begin with, filtered by the side you
- * play and sorted by any column (click its heading). A row opens the course. Browse is for searching; this is the list.
+ * play and sorted by any column (click its heading). A row opens the course. Search is for searching; this is the list.
  */
 export function CoursesPage() {
-  const index = useBrowse((state) => state.index);
-  const openings = useBrowse((state) => state.openings);
-  const status = useBrowse((state) => state.indexStatus);
-  const error = useBrowse((state) => state.indexError);
+  const index = useCatalog((state) => state.index);
+  const openings = useCatalog((state) => state.openings);
+  const status = useCatalog((state) => state.indexStatus);
+  const error = useCatalog((state) => state.indexError);
   const learned = useProgress((state) => state.learned);
   useEffect(() => {
     void useProgress.getState().refresh();

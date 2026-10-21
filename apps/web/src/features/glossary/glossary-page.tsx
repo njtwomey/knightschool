@@ -7,12 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { glossary } from './use-glossary';
-import { useBrowse } from '@/features/browse/store';
+import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
 
 /** The tactical and structural ideas the courses use, in plain words, with the courses where each turns up. */
 export function GlossaryPage() {
-  const index = useBrowse((state) => state.index);
+  const index = useCatalog((state) => state.index);
   const [entries, setEntries] = useState<GlossaryEntry[] | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
 
