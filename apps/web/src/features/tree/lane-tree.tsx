@@ -37,6 +37,7 @@ export function LaneTree({
   colourOf,
   lit,
   focus,
+  folded,
   scrollTo,
   onFocus,
   onPick,
@@ -47,6 +48,8 @@ export function LaneTree({
   colourOf: (line: string) => string;
   lit: ReadonlySet<string>;
   focus: string | null;
+  /** Lines whose branches are folded away, with how many: a "+N" after the line's last move. */
+  folded?: ReadonlyMap<string, number>;
   scrollTo?: string | null;
   onFocus: (id: string) => void;
   onPick: (id: string) => void;
@@ -58,7 +61,7 @@ export function LaneTree({
   const firstCol = PAD + trunkWidth + 16; // where column 1 starts
   const cx = (row: number) => (row === 0 ? PAD + trunkWidth / 2 : firstCol + (row - 1) * COL + COL / 2);
   const cy = (lane: number) => HEAD + PAD + lane * LANE + LANE / 2;
-  const width = firstCol + (layout.rows - 1) * COL + PAD;
+  const width = firstCol + (layout.rows - 1) * COL + PAD + 36;
   const height = HEAD + PAD * 2 + layout.lanes * LANE;
 
   const box = useRef<HTMLDivElement>(null);
@@ -167,6 +170,34 @@ export function LaneTree({
                 className={`font-mono text-[11px] ${filled ? 'fill-background font-semibold' : 'fill-foreground'}`}
               >
                 {isTop ? trunk : node.san}
+              </text>
+            </g>
+          );
+        })}
+        {[...(folded ?? [])].map(([line, count]) => {
+          const end = layout.pathOf.get(line)?.at(-1);
+          const place = end ? layout.places.get(end) : undefined;
+          if (!place) return null;
+          const left = cx(place.row) + PILL_W / 2 + 4;
+          return (
+            <g key={`fold-${line}`} aria-hidden>
+              <rect
+                x={left}
+                y={cy(place.lane) - 9}
+                width={30}
+                height={18}
+                rx={9}
+                fill="var(--muted)"
+                stroke={colourOf(line)}
+                strokeDasharray="3 2"
+              />
+              <text
+                x={left + 15}
+                y={cy(place.lane) + 4}
+                textAnchor="middle"
+                className="fill-muted-foreground text-[10px]"
+              >
+                +{count}
               </text>
             </g>
           );

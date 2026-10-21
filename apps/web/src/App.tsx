@@ -29,7 +29,7 @@ import { CreditsPage } from '@/features/credits/credits-page';
 import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
 import { GlossaryPage } from '@/features/glossary/glossary-page';
-import { TreePage } from '@/features/tree/tree-page';
+import { CurriculumTreePage } from '@/features/tree/curriculum-tree-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { OpeningsPage } from '@/features/openings/openings-page';
 import { LinePage } from '@/features/line/line-page';
@@ -197,7 +197,7 @@ export function App() {
             <CoursePage courseId={route.id} />
           ))}
         {route.page === 'glossary' && <GlossaryPage />}
-        {route.page === 'tree' && <TreePage />}
+        {route.page === 'tree' && <CurriculumTreePage />}
         {route.page === 'play' && (
           <LinePage
             key={`${route.course}/${route.line}/${route.tab}`}
