@@ -1,5 +1,5 @@
 // Written by `pnpm content:build`. Served from the same origin, so offline caching can precache them.
-export const contentUrl = (file: string) => `${import.meta.env.BASE_URL}content/${file}`;
+const contentUrl = (file: string) => `${import.meta.env.BASE_URL}content/${file}`;
 
 /** A content file was asked for that is not there: a course that has been removed or renamed, or no build yet. */
 export class MissingContent extends Error {}

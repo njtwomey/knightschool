@@ -49,12 +49,12 @@ type Phase = 'idle' | 'loading' | 'playing' | 'complete' | 'error';
  * Learn or Drill scoped to a unit of the study path: its stretches (one, or one per short branch of a side unit), played
  * one after another. Each starts part-way along: the moves before `from` are already on the board.
  */
-export type PlayScope = { unit: CourseUnit; ref: UnitRef; parts: UnitStretch[]; part: number };
+type PlayScope = { unit: CourseUnit; ref: UnitRef; parts: UnitStretch[]; part: number };
 
 /** A step off the line, played while exploring in Learn. */
-export type Explored = { uci: string; san: string; epd: string };
+type Explored = { uci: string; san: string; epd: string };
 
-export type PlayState = {
+type PlayState = {
   phase: Phase;
   error: string | null;
   mode: PlayMode;

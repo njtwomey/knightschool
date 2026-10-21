@@ -9,7 +9,7 @@ export const PIECE_SETS = [
 
 export type PieceSetId = (typeof PIECE_SETS)[number]['id'];
 
-export type BoardPrefs = {
+type BoardPrefs = {
   theme: BoardThemeId;
   pieces: PieceSetId;
   /** Dots on the squares the selected piece can go to. */

@@ -1,4 +1,3 @@
-import type { LineEdge, OpeningContent } from '@knightschool/core';
 import {
   createEngine,
   evaluateCached,
@@ -15,7 +14,7 @@ import { useStorage } from '@/data/storage';
 import { createWorkerTransport } from './worker-transport';
 
 /** Deep enough to be far stronger than any beginner, shallow enough to answer in about a second. */
-export const ANALYSIS = { depth: 14, multipv: 3 } as const;
+const ANALYSIS = { depth: 14, multipv: 3 } as const;
 
 type EngineState = {
   status: 'off' | 'starting' | 'ready' | 'error';
@@ -138,9 +137,4 @@ export async function evaluateLive(
   if (!engine || signal?.aborted) return undefined;
   const result = await evaluateCached(engine, evalStore(), epd, { depth, multipv: 1 }, signal);
   return result.partial ? undefined : result;
-}
-
-/** The positions of a line, from the start through each move, for measuring it. */
-export function lineEpds(content: OpeningContent, line: LineEdge[]): string[] {
-  return [content.opening.rootEpd, ...line.map((move) => move.to)];
 }

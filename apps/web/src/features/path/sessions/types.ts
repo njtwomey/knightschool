@@ -3,10 +3,10 @@ import type { LucideIcon } from 'lucide-react';
 import type { CoursePath } from '@/data/course-path';
 
 /** What a session type picks from: the course and where the learner is on its path. */
-export type PathContext = { content: OpeningContent; path: CoursePath };
+type PathContext = { content: OpeningContent; path: CoursePath };
 
 /** A session ready to start (an address, and anything to set before going there), or why there is none now. */
-export type SessionPick =
+type SessionPick =
   { ready: true; summary: string; href: string; prepare?: () => void } | { ready: false; reason: string };
 
 /**

@@ -6,7 +6,7 @@ import { whenStorageReady } from './storage';
  * The settings key holding what each recent editor action was called ("reorder the path"), by its history group, so
  * Undo can say what it takes back. Kept in settings so it travels with an export; only the latest ones are kept.
  */
-export const UNDO_LABELS_KEY = 'authoringUndoLabels';
+const UNDO_LABELS_KEY = 'authoringUndoLabels';
 const LABELS_KEPT = 100;
 
 /** What recent actions were called, by history group. Empty when none are known. */

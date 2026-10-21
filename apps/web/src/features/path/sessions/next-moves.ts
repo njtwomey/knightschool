@@ -3,7 +3,7 @@ import { currentUnit, nothingLeft, unitLabel, type SessionType } from './types';
 import { lineHref } from '@/router/hrefs';
 
 /** How many moves "next three moves" asks for. */
-export const NEXT_MOVES = 3;
+const NEXT_MOVES = 3;
 
 /**
  * Next three moves: carry on with the unit being learned, from its first move not yet passed. Drilled when those moves

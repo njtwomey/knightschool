@@ -2,15 +2,15 @@ import { buildMoveTree, chapterTitle, type MoveTree, type TreeGraph } from '@kni
 import { useEffect, useState } from 'react';
 import { loadTreeGraph } from '@/data/content';
 
-export type TreeChapter = TreeGraph['chapters'][number];
+type TreeChapter = TreeGraph['chapters'][number];
 
 /** Every line of the theory tree as one prefix tree, with each line's chapter (name, opening, side, courses). */
-export type LoadedTree = { tree: MoveTree; chapters: Map<string, TreeChapter> };
+type LoadedTree = { tree: MoveTree; chapters: Map<string, TreeChapter> };
 
 let cached: Promise<LoadedTree> | undefined;
 
 /** tree.json is fetched and built into a move tree once per page load, and shared by every tree on the site. */
-export function loadMoveTree(): Promise<LoadedTree> {
+function loadMoveTree(): Promise<LoadedTree> {
   cached ??= loadTreeGraph()
     .then((graph) => ({
       tree: buildMoveTree(

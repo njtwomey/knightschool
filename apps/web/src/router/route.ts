@@ -30,12 +30,10 @@ export type Route =
   | { page: 'glossary' }
   | { page: 'tree' }
   | { page: 'credits' }
-  | { page: 'lab' }
-  | { page: 'settings' };
+  | { page: 'lab' };
 
 const slug = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** The page for a path such as `/course/caro-kann` (without the site's base). Unknown paths show the home page. */
 /** Line ids that clashed when content became one tree (docs/TREE.md), so old links still open the line. */
 const RENAMED_LINES: Record<string, string> = {
   'vs-e6-french/rare-third-moves': 'vs-e6-french-rare-third-moves',
@@ -45,6 +43,7 @@ const RENAMED_LINES: Record<string, string> = {
   'queens-gambit/albin': 'queens-gambit-albin',
 };
 
+/** The page for a path such as `/course/caro-kann` (without the site's base). Unknown paths show the home page. */
 export function parseRoute(pathname: string): Route {
   const [first, a, b, c, d, e] = pathname.split('/').filter(Boolean);
   switch (first) {

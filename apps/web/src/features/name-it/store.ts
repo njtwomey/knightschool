@@ -28,7 +28,7 @@ const WEIGHTING_KEY = 'knightschool.guess.weighting';
 export const SESSION_LENGTH = 10;
 
 /** A right answer is shown for a moment, then the next position comes up. Other answers wait for Next. */
-export const NAME_IT_DELAYS = { full: 2600 } as const;
+const NAME_IT_DELAYS = { full: 2600 } as const;
 
 /** A place a position comes from, to link to once it has been answered. */
 export type Source = {

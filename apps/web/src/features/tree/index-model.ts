@@ -1,7 +1,7 @@
 import type { LaneLayout } from '@knightschool/core';
 
 /** A group of lines in the index: lines that start with the same moves ("1.e4 e5"), or every line when not grouped. */
-export type IndexGroup = { key: string; label: string; roots: string[]; lines: string[] };
+type IndexGroup = { key: string; label: string; roots: string[]; lines: string[] };
 
 /**
  * The index beside a tree: lines in groups, each line under the line it grows out of when that line is in the same

@@ -36,7 +36,7 @@ export type SpeedConfig = {
   depth: SpeedDepth;
 };
 
-export const DEFAULT_CONFIG: SpeedConfig = {
+const DEFAULT_CONFIG: SpeedConfig = {
   mode: 'lines',
   lines: 5,
   seconds: 60,
@@ -76,7 +76,7 @@ const TIMED_QUEUE = 40;
 /** How long the next line's name is held up before it begins (fixed runs), and how long a wrong-move cross shows. */
 export const SPEED_DELAYS = { betweenLines: 5000, wrongBadge: 600 } as const;
 
-export type LineResult = {
+type LineResult = {
   courseId: string;
   courseName: string;
   lineId: string;

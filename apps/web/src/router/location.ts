@@ -2,12 +2,12 @@ import { useSyncExternalStore } from 'react';
 import { buildHash, parseHash, type HashParams } from './hash';
 
 /** Where the site is served from: '' at the root, '/knightschool' on a project site. Paths below are without it. */
-export const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /** A link target for a path inside the site, e.g. `to('/opening/caro-kann')`. */
 export const to = (path: string) => `${BASE}${path}`;
 
-export const stripBase = (pathname: string) =>
+const stripBase = (pathname: string) =>
   BASE && pathname.startsWith(BASE) ? pathname.slice(BASE.length) || '/' : pathname;
 
 type Snapshot = { pathname: string; hash: string };

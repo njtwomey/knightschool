@@ -4,7 +4,7 @@ import { bakedEvaluation, loadAnalysis } from '@/data/analysis';
 import { evaluateLive } from '@/features/engine/store';
 
 /** Depth of a browser search for a position the baked analysis does not cover: about a second each. */
-export const REGRET_DEPTH = 14;
+const REGRET_DEPTH = 14;
 
 /** A wrong move played in the quiz: kept for the session only, never saved. */
 export type Miss = {

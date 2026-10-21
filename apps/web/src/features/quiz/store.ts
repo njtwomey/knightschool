@@ -54,7 +54,7 @@ const savedMoves = (): MovesPerQuestion => {
 export const DUE = 'due';
 
 /** Nothing waits for a click: a right answer shows a tick and the next card follows by itself. */
-export const QUIZ_DELAYS = {
+const QUIZ_DELAYS = {
   afterCorrect: 700,
   wrongBadge: 900,
   quizRight: 2200,
@@ -464,7 +464,7 @@ export const useQuiz = create<QuizState>((set, get) => {
 export const quizFor = (content: OpeningContent | undefined, card: Card): Quiz | undefined =>
   content?.quizzes.find((quiz) => card.id === `quiz:${content.opening.id}:${quiz.id}`);
 
-export type MoveQuestion = {
+type MoveQuestion = {
   kind: 'move';
   card: Card;
   content: OpeningContent;
@@ -477,7 +477,7 @@ export type MoveQuestion = {
 
 export type QuizQuestion = { kind: 'quiz'; card: Card; content: OpeningContent; quiz: Quiz };
 
-export type SessionQuestion = MoveQuestion | QuizQuestion;
+type SessionQuestion = MoveQuestion | QuizQuestion;
 
 /** What the board and panel need for the card being asked. */
 export function currentQuestion(state: Pick<QuizState, 'queue' | 'index' | 'contents'>): SessionQuestion | null {

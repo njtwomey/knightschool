@@ -44,7 +44,7 @@ import { whenStorageReady } from '@/data/storage';
 /** A course as the editor holds it: its id and its course.yaml, lines as entries. */
 export type DraftCourse = { id: string; manifest: CourseManifest & { lines: CourseEntry[] } };
 
-export type AuthorState = {
+type AuthorState = {
   status: 'idle' | 'loading' | 'ready' | 'error';
   error: string | null;
   rows: AuthoredRows;
@@ -950,7 +950,7 @@ function descendants(build: AuthoredBuild | null, id: string): string[] {
  * What Undo would take back, in a few words ("delete line 2...Bc5", "change to course My Scotch"), from the newest
  * action not yet undone. Null when there is nothing to undo.
  */
-export function describeUndo(
+function describeUndo(
   history: AuthoredChange[],
   rows: AuthoredRows,
   labels: Record<string, string> = {},

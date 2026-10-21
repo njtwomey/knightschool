@@ -2,7 +2,7 @@ import { exportReminder } from '@knightschool/core';
 import type { BrowserStorage, Storage } from '@knightschool/storage';
 
 /** The settings key holding when the data was last exported, for the reminder to export. */
-export const LAST_EXPORT_KEY = 'lastExportAt';
+const LAST_EXPORT_KEY = 'lastExportAt';
 
 /** Saves `data` as a file in the browser's downloads. */
 export function download(name: string, data: BlobPart, type: string) {

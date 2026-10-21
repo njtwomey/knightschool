@@ -56,7 +56,7 @@ export async function setIncludeRare(storage: Storage, value: boolean, now: Date
 }
 
 /** The share of games (in percent) a sideline position must reach to earn a card. 0 means no cut. */
-export const DEFAULT_MIN_POPULARITY_PERCENT = MIN_POPULARITY_FOR_CARD * 100;
+const DEFAULT_MIN_POPULARITY_PERCENT = MIN_POPULARITY_FOR_CARD * 100;
 
 export async function getMinPopularityPercent(storage: Storage): Promise<number> {
   const stored = await storage.settings.get(MIN_POPULARITY);

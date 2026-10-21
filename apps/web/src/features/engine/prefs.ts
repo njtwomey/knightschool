@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 const KEY = 'knightschool.engine';
 
-export type EnginePrefs = {
+type EnginePrefs = {
   /** Start the engine on course pages, so the evaluation bar is there without asking. */
   auto: boolean;
 };
