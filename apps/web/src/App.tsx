@@ -47,6 +47,7 @@ import { QuizPage } from '@/features/quiz/quiz-page';
 import { HomePage } from '@/features/home/home-page';
 import { ProfilePage } from '@/features/profile/profile-page';
 import { parseRoute, type Route } from '@/router/route';
+import { headerItemOf, type HeaderItem } from '@/router/menu';
 import { navigate, to, usePathname } from '@/router/location';
 import { profileHref } from '@/router/hrefs';
 
@@ -74,46 +75,17 @@ export function App() {
 
   // In the order you use them: find and look (Courses, Search, Tree), practise (Quiz, Speed, Name it), write your own
   // (Create), look things up (Glossary).
-  const links: { href: string; label: string; active: boolean; icon: ReactNode; group: number }[] = [
-    {
-      href: to('/courses'),
-      label: 'Courses',
-      active: route.page === 'courses' || route.page === 'course',
-      icon: <GraduationCap aria-hidden />,
-      group: 0,
-    },
-    {
-      href: to('/search'),
-      label: 'Search',
-      active: route.page === 'search' || route.page === 'play',
-      icon: <Search aria-hidden />,
-      group: 0,
-    },
-    { href: to('/tree'), label: 'Tree', active: route.page === 'tree', icon: <GitFork aria-hidden />, group: 0 },
-    { href: to('/quiz'), label: 'Quiz', active: route.page === 'quiz', icon: <Library aria-hidden />, group: 1 },
-    { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden />, group: 1 },
-    {
-      href: to('/name'),
-      label: 'Name it',
-      active: route.page === 'name-it',
-      icon: <Telescope aria-hidden />,
-      group: 1,
-    },
-    {
-      href: to('/create'),
-      label: 'Create',
-      active: route.page === 'create' || route.page === 'create-course' || route.page === 'create-line',
-      icon: <PenLine aria-hidden />,
-      group: 2,
-    },
-    {
-      href: to('/glossary'),
-      label: 'Glossary',
-      active: route.page === 'glossary',
-      icon: <BookText aria-hidden />,
-      group: 3,
-    },
+  const links: { item: HeaderItem; href: string; label: string; icon: ReactNode; group: number }[] = [
+    { item: 'courses', href: to('/courses'), label: 'Courses', icon: <GraduationCap aria-hidden />, group: 0 },
+    { item: 'search', href: to('/search'), label: 'Search', icon: <Search aria-hidden />, group: 0 },
+    { item: 'tree', href: to('/tree'), label: 'Tree', icon: <GitFork aria-hidden />, group: 0 },
+    { item: 'quiz', href: to('/quiz'), label: 'Quiz', icon: <Library aria-hidden />, group: 1 },
+    { item: 'speed', href: to('/speed'), label: 'Speed', icon: <Timer aria-hidden />, group: 1 },
+    { item: 'name-it', href: to('/name'), label: 'Name it', icon: <Telescope aria-hidden />, group: 1 },
+    { item: 'create', href: to('/create'), label: 'Create', icon: <PenLine aria-hidden />, group: 2 },
+    { item: 'glossary', href: to('/glossary'), label: 'Glossary', icon: <BookText aria-hidden />, group: 3 },
   ];
+  const here = headerItemOf(route);
   const startsGroup = (i: number) => i > 0 && links[i]!.group !== links[i - 1]!.group;
 
   return (
@@ -132,14 +104,14 @@ export function App() {
               <SheetTitle>Knight School</SheetTitle>
             </SheetHeader>
             <nav className="grid gap-1 px-2" aria-label="Main">
-              {links.map(({ href, label, active, icon }, i) => (
+              {links.map(({ item, href, label, icon }, i) => (
                 <SheetClose asChild key={label}>
                   <Button
                     asChild
-                    variant={active ? 'secondary' : 'ghost'}
+                    variant={item === here ? 'secondary' : 'ghost'}
                     className={`h-11 justify-start text-base ${startsGroup(i) ? 'mt-3' : ''}`}
                   >
-                    <a href={href} aria-current={active ? 'page' : undefined}>
+                    <a href={href} aria-current={item === here ? 'page' : undefined}>
                       {icon}
                       {label}
                     </a>
@@ -154,11 +126,11 @@ export function App() {
           <span className="truncate text-lg font-semibold">Knight School</span>
         </a>
         <nav className="hidden min-w-0 items-center gap-1 md:flex" aria-label="Main">
-          {links.map(({ href, label, active, icon }, i) => (
+          {links.map(({ item, href, label, icon }, i) => (
             <Button
               key={label}
               asChild
-              variant={active ? 'secondary' : 'ghost'}
+              variant={item === here ? 'secondary' : 'ghost'}
               size="sm"
               className={
                 startsGroup(i)
@@ -166,7 +138,7 @@ export function App() {
                   : undefined
               }
             >
-              <a href={href} aria-current={active ? 'page' : undefined}>
+              <a href={href} aria-current={item === here ? 'page' : undefined}>
                 {icon}
                 {label}
               </a>
@@ -177,7 +149,7 @@ export function App() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                variant={route.page === 'profile' ? 'secondary' : 'ghost'}
+                variant={here === 'profile' ? 'secondary' : 'ghost'}
                 size="icon"
                 className="pointer-coarse:size-10"
                 aria-label="Profile"
