@@ -1,6 +1,7 @@
 import { fold } from '../search/text-match';
 import { playSan } from '../chess/chess';
 import { START_EPD } from '../chess/epd';
+import { numberedMove } from '../chess/notation';
 import { parsePgn, type PgnGame, type PgnMoveNode } from '../chess/pgn';
 import { positionId } from '../chess/position-id';
 import {
@@ -74,7 +75,6 @@ const hasNote = (move: PgnMoveNode) =>
  */
 export type StartPoint = { parent: string; ply: number; sans: string[] };
 
-const moveText = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
 const bareSan = (san: string) => san.replace(/[+#!?]+$/, '');
 
 /** Reads a [Start] header. Missing or empty: the chapter starts from the initial position. */
@@ -123,7 +123,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
       try {
         played = playSan(epd, move.san);
       } catch {
-        throw new Error(`${chapter.source}: illegal move ${moveText(ply, move.san)}`);
+        throw new Error(`${chapter.source}: illegal move ${numberedMove(ply, move.san)}`);
       }
       const key = edgeKey(epd, played.uci);
       const edge = edges.get(key) ?? {
@@ -141,7 +141,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
         if (move.comment && note.comment && move.comment !== note.comment) {
           const others = edge.writtenIn.filter((id) => id !== chapter.id).map((id) => ids.get(id));
           throw new Error(
-            `${chapter.source}: ${moveText(ply, move.san)} is commented differently in ${others.join(', ')}: ` +
+            `${chapter.source}: ${numberedMove(ply, move.san)} is commented differently in ${others.join(', ')}: ` +
               `"${note.comment}" / "${move.comment}". A move has one comment, wherever it is written.`,
           );
         }
@@ -186,7 +186,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
         const found = (from.get(`${start.ply}:${last}`) ?? []).filter((candidate) =>
           start.sans.every((san, i) => bareSan(candidate[candidate.length - start.sans.length + i]?.san ?? '') === san),
         );
-        const named = moveText(start.ply, last);
+        const named = numberedMove(start.ply, last);
         if (found.length === 0)
           throw new Error(
             `${chapter.source}: [Start] branches after ${named} in "${start.parent}", which does not write that move itself`,
@@ -300,7 +300,7 @@ export function treeGraph(tree: TheoryTree, coursesOf: (line: string) => string[
         opening: line.game.tags.Opening ?? '',
         side: line.side,
         parent: line.parents.at(-1) ?? null,
-        after: branch ? moveText(line.startPly - 1, branch.san) : null,
+        after: branch ? numberedMove(line.startPly - 1, branch.san) : null,
         from: positionId(line.startEpd),
         ply: line.startPly,
         moves: uciLine(line),

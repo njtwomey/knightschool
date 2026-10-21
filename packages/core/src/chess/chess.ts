@@ -1,5 +1,6 @@
 import { Chess, type Move } from 'chess.js';
 import { epdToFen, fenToEpd } from './epd';
+import { numberedLine } from './notation';
 
 export type Square = Move['to'];
 
@@ -50,20 +51,17 @@ export function epdAfterPgn(pgn: string): string {
  */
 export function pvToSan(epd: string, pv: string[], maxPlies = 8): string {
   const chess = positionFromEpd(epd);
-  const out: string[] = [];
-  const startsWithBlack = sideToMove(epd) === 'black';
-  for (const [index, uci] of pv.slice(0, maxPlies).entries()) {
+  const sans: string[] = [];
+  for (const uci of pv.slice(0, maxPlies)) {
     let move;
     try {
       move = chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4) || undefined });
     } catch {
       break;
     }
-    const number = chess.moveNumber() - (move.color === 'w' ? 0 : 1);
-    if (move.color === 'w') out.push(`${number}. ${move.san}`);
-    else out.push(index === 0 && startsWithBlack ? `${number}... ${move.san}` : move.san);
+    sans.push(move.san);
   }
-  return out.join(' ');
+  return numberedLine(sans, sideToMove(epd) === 'black' ? 1 : 0);
 }
 
 const isLegal = (epd: string, uci: string) => {

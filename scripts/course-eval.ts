@@ -25,6 +25,8 @@ import { createInterface } from 'node:readline';
 import {
   AnalysisFile,
   BIG_SWING_CP,
+  moveNumberLabel,
+  numberedMove,
   positionFromEpd,
   playUci,
   swingFor,
@@ -255,7 +257,7 @@ async function evaluateOpening(content: OpeningContent, only: Set<string>): Prom
       const ours = whiteMoved === learnerIsWhite;
       const swing = swingOf(fromEpd, edge);
       const marked = edge.annotation?.nag.some((nag) => nag === 2 || nag === 4 || nag === 6);
-      const number = `${Math.floor(ply / 2) + 1}${whiteMoved ? '.' : '...'}`;
+      const number = moveNumberLabel(ply);
       const costs = swing !== null && swing <= -loseCp;
       let note = '';
       if (costs) {
@@ -264,7 +266,7 @@ async function evaluateOpening(content: OpeningContent, only: Set<string>): Prom
         if (ours && !marked) {
           findings.push({
             where: `${opening.id}/${variant.id}`,
-            text: `${number} ${edge.san} costs the learner ${Math.round(-swing!)} cp${best ? ` (engine prefers ${best})` : ''}`,
+            text: `${numberedMove(ply, edge.san)} costs the learner ${Math.round(-swing!)} cp${best ? ` (engine prefers ${best})` : ''}`,
           });
           note += '  <-- FINDING';
         } else if (marked) note += '  (marked as a mistake)';

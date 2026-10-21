@@ -1,5 +1,6 @@
 import { playUci } from '../chess/chess';
 import { START_EPD } from '../chess/epd';
+import { numberedLine } from '../chess/notation';
 import { positionId } from '../chess/position-id';
 import type { Side } from '../schema/content';
 
@@ -212,16 +213,6 @@ export function compress(tree: MoveTree, keep?: (node: MoveNode) => boolean): Co
   };
   runFrom(tree.nodes.get(tree.root)!, null, []);
   return { root: tree.root, runs };
-}
-
-/** "1.e4", "1...e5": a move with its number, from the plies before it. */
-export const numberedMove = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
-
-/** Moves as numbered text, "4.b4 Bxb4 5.c3", where the first is played after `from` plies. */
-export function numberedLine(sans: readonly string[], from = 0): string {
-  return sans
-    .map((san, index) => (index === 0 || (from + index) % 2 === 0 ? numberedMove(from + index, san) : san))
-    .join(' ');
 }
 
 /** A run's moves as numbered text. */

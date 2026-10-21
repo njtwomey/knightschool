@@ -7,6 +7,7 @@ export * from './ids';
 export * from './chess/board-edit';
 export * from './chess/chess';
 export * from './chess/epd';
+export * from './chess/notation';
 export * from './chess/pgn';
 export * from './chess/position';
 export * from './chess/position-id';

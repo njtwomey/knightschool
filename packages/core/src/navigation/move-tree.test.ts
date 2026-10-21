@@ -5,8 +5,6 @@ import {
   buildMoveTree,
   compress,
   everyMove,
-  numberedLine,
-  numberedMove,
   pathOf,
   prefixId,
   runText,
@@ -135,7 +133,14 @@ describe('compress', () => {
   it('keeps only the root, branch points and line ends, each with the moves that lead to it', () => {
     const texts = (id: string): string[] =>
       runs.get(id)!.children.flatMap((child) => [runText(runs.get(child)!), ...texts(child)]);
-    expect(texts(root)).toEqual(['1.e4 e5 2.Nf3', '2...Nc6 3.Bc4', '3...Bc5', '4.c3', '4.b4 Bxb4 5.c3', '3...Nf6']);
+    expect(texts(root)).toEqual([
+      '1. e4 e5 2. Nf3',
+      '2... Nc6 3. Bc4',
+      '3... Bc5',
+      '4. c3',
+      '4. b4 Bxb4 5. c3',
+      '3... Nf6',
+    ]);
     expect(runs.size).toBe(7);
   });
 
@@ -165,7 +170,7 @@ describe('trunkEnd and everyMove', () => {
   it('keeps every move below the shared trunk, which is one node', () => {
     const { root, runs } = everyMove(tree);
     const trunk = runs.get(runs.get(root)!.children[0]!)!;
-    expect(runText(trunk)).toBe('1.e4 e5 2.Nf3 Nc6 3.Bc4');
+    expect(runText(trunk)).toBe('1. e4 e5 2. Nf3 Nc6 3. Bc4');
     expect(
       [...runs.values()].filter((run) => run.id !== root && run.id !== trunk.id).every((run) => run.moves.length === 1),
     ).toBe(true);
@@ -174,22 +179,5 @@ describe('trunkEnd and everyMove', () => {
 
   it('keeps every move when told to', () => {
     expect(compress(tree, () => true).runs.size).toBe(tree.nodes.size);
-  });
-});
-
-describe('numberedMove and numberedLine', () => {
-  it.each([
-    [0, 'e4', '1.e4'],
-    [1, 'e5', '1...e5'],
-    [8, 'c3', '5.c3'],
-    [9, 'Nf6', '5...Nf6'],
-  ])('ply %i %s reads %s', (ply, san, text) => {
-    expect(numberedMove(ply, san)).toBe(text);
-  });
-
-  it('numbers from the start or from a Black move', () => {
-    expect(numberedLine(['e4', 'e5', 'Nf3'])).toBe('1.e4 e5 2.Nf3');
-    expect(numberedLine(['Nf6', 'Ng5', 'd5'], 5)).toBe('3...Nf6 4.Ng5 d5');
-    expect(numberedLine([])).toBe('');
   });
 });

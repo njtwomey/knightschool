@@ -3,6 +3,7 @@ import { START_EPD } from '../chess/epd';
 import { playSan, sideToMove } from '../chess/chess';
 import type { PgnGame, PgnMoveNode } from '../chess/pgn';
 import { epdAfterPgn } from '../chess/chess';
+import { numberedMove } from '../chess/notation';
 import { matchAnswer } from '../training/quiz';
 import { parseVariantHeader } from './tags';
 import {
@@ -169,9 +170,7 @@ export function buildOpening(
         try {
           played = playSan(epd, move.san);
         } catch {
-          throw new Error(
-            `${variant.source}: illegal move ${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'} ${move.san}`,
-          );
+          throw new Error(`${variant.source}: illegal move ${numberedMove(ply, move.san)}`);
         }
         const from = nodeAt(epd, ply);
         const to = nodeAt(played.epd, ply + 1);

@@ -1,4 +1,5 @@
 import { parseGame } from '@mliebelt/pgn-parser';
+import { moveNumberLabel } from './notation';
 
 /** One move of a parsed PGN line, with the comment, NAGs and drawn shapes attached to it. */
 export type PgnMoveNode = {
@@ -67,9 +68,7 @@ function writeLine(moves: PgnMoveNode[], startPly: number): string {
   let needNumber = true;
   moves.forEach((node, index) => {
     const ply = startPly + index;
-    const number = Math.floor(ply / 2) + 1;
-    if (ply % 2 === 0) out.push(`${number}.`);
-    else if (needNumber) out.push(`${number}...`);
+    if (ply % 2 === 0 || needNumber) out.push(moveNumberLabel(ply));
     out.push(node.san);
     for (const nag of node.nags) out.push(`$${nag}`);
     const hasComment =

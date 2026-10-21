@@ -12,7 +12,14 @@
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { PopularityFile, sideToMove, START_EPD, type OpeningContent, type Side } from '../packages/core/src/index.ts';
+import {
+  numberedMove,
+  PopularityFile,
+  sideToMove,
+  START_EPD,
+  type OpeningContent,
+  type Side,
+} from '../packages/core/src/index.ts';
 import { loadCourses, root } from './content-lib.ts';
 
 const args = process.argv.slice(2);
@@ -80,8 +87,7 @@ function gapsFor(side: Side, courses: OpeningContent[]): Gap[] {
     const next = new Map<string, { to: string; san: string }>();
     for (const content of courses)
       for (const edge of content.nodes[epd]?.moves ?? []) next.set(edge.uci, { to: edge.to, san: edge.san });
-    for (const { to, san } of next.values())
-      walk(to, [...path, `${Math.floor(node.ply / 2) + 1}${node.ply % 2 ? '...' : '.'}${san}`]);
+    for (const { to, san } of next.values()) walk(to, [...path, numberedMove(node.ply, san)]);
   };
   walk(START_EPD, []);
   return gaps.sort((a, b) => b.games - a.games);

@@ -1,4 +1,5 @@
 import { playSan } from '../chess/chess';
+import { numberedMove } from '../chess/notation';
 import { parsePgn, writePgn, type PgnGame, type PgnMoveNode } from '../chess/pgn';
 import type { LineKind, Side, TrapKind } from '../schema/content';
 
@@ -11,7 +12,6 @@ import type { LineKind, Side, TrapKind } from '../schema/content';
 /** Supplementary tags offered for a move: shown while studying, never asked. Any other word is allowed too. */
 export const MOVE_TAGS = ['tip', 'trap', 'blunder'] as const;
 
-const moveText = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
 const bare = (san: string) => san.replace(/[+#!?]+$/, '');
 /** The side to move after `ply` moves from the start. */
 const sideAt = (ply: number): Side => (ply % 2 === 0 ? 'white' : 'black');
@@ -114,7 +114,7 @@ export function startHeader(owner: PgnGame, ownerId: string, ownerStartPly: numb
     .map((i, n) => {
       const at = ownerStartPly + i;
       const san = bare(owner.moves[i]!.san);
-      return n === 0 ? moveText(at, san) : at % 2 === 0 ? `${at / 2 + 1}.${san}` : san;
+      return n === 0 || at % 2 === 0 ? numberedMove(at, san) : san;
     })
     .join(' ');
   return `${ownerId} ${text}`;
@@ -127,8 +127,8 @@ export function startHeader(owner: PgnGame, ownerId: string, ownerStartPly: numb
  */
 export function opponentMove(sans: string[], startPly: number, side: Side): string {
   const theirs = (ply: number) => sideAt(ply) !== side;
-  if (sans[startPly] && theirs(startPly)) return moveText(startPly, sans[startPly]!);
-  if (startPly > 0 && theirs(startPly - 1)) return moveText(startPly - 1, sans[startPly - 1]!);
+  if (sans[startPly] && theirs(startPly)) return numberedMove(startPly, sans[startPly]!);
+  if (startPly > 0 && theirs(startPly - 1)) return numberedMove(startPly - 1, sans[startPly - 1]!);
   const first = sans.findIndex((_, ply) => ply >= startPly && theirs(ply));
-  return first >= 0 ? moveText(first, sans[first]!) : 'any move';
+  return first >= 0 ? numberedMove(first, sans[first]!) : 'any move';
 }
