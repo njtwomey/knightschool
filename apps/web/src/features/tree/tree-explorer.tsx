@@ -1,6 +1,7 @@
 import {
   laneLayout,
   matchesText,
+  pathOf,
   numberedMove,
   type MoveTree,
   type OpeningContent,
@@ -133,7 +134,8 @@ export function TreeExplorer({
    * line in the index or a move in the tree sets both; pointing at a move only previews it.
    */
   const [picked, setPicked] = useState<string | null>(initialPicked ?? null);
-  const pathOfLine = (line: string) => full.pathOf.get(line) ?? [];
+  /** A line's whole path from the starting position, through every line it grows out of: what the steps walk. */
+  const pathOfLine = (line: string) => pathOf(tree, line);
   const [cursor, setCursor] = useState<string | null>(
     initialPicked ? (pathOfLine(initialPicked).at(-1) ?? null) : null,
   );
@@ -152,15 +154,24 @@ export function TreeExplorer({
   const through = shown.lines.filter((id) => byId.has(id));
   const comment = useMoveComment([...new Set(through.map((id) => byId.get(id)!.course))], parent?.epd, shown.uci);
   const pickedLine = picked ? byId.get(picked) : undefined;
-  // Where the cursor is on the picked line's moves (from the first shown), for the step buttons.
+  // Where the cursor is on the picked line's whole path (from the starting position), for the step buttons.
   const steps = picked ? pathOfLine(picked) : [];
   const at = cursor ? steps.indexOf(cursor) : -1;
 
+  /**
+   * The pill that stands for a move: the move itself if it is drawn, else the nearest drawn move before it (the first
+   * pill stands for the moves every line shares, and a subtree's first pill for the moves above it).
+   */
+  const drawn = (id: string) => {
+    let node = tree.nodes.get(id);
+    while (node && !layout.places.has(node.id)) node = node.parent ? tree.nodes.get(node.parent) : undefined;
+    return node && layout.places.has(node.id) ? node.id : layout.top;
+  };
   const goTo = (node: string | undefined) => {
     if (!node) return;
     setCursor(node);
     setPreview(null);
-    setScrollTo(node);
+    setScrollTo(drawn(node));
   };
   /** Picking a line picks it out and puts the board on the move where it becomes itself; the tree stays as it is. */
   const pickLine = (line: string) => {
@@ -353,7 +364,7 @@ export function TreeExplorer({
             layout={layout}
             colourOf={colourOf}
             lit={lit}
-            focus={shownId}
+            focus={drawn(shownId)}
             onFocus={setPreview}
             scrollTo={scrollTo}
             onPick={pickNode}
