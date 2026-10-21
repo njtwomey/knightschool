@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "French Defence: Advance Variation"]
+[Variation "French Defense: Normal Variation"]
+[ECO "C00"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "space,quick-development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "2...d6"]
+[Start "advance-qb6 2.d4"]
+
+2... d6 { Leaves the centre to White. Black waits behind a small pawn wall instead of striking with ...d5. } ( 2... b6 3. Bd3 { Guards e4 before Black's bishop on b7 can attack it. } 3... Bb7 { The same position as Owen's Defence after 1.e4 b6 2.d4 Bb7 3.Bd3 e6, where White plays Nf3. } ) ( 2... c6 3. Nf3 { Develops and guards d4. Black will play ...d5 next, so there is no need to defend e4 yet. } 3... d5 4. e5 { Gains space, as in the Advance French. Black's c-pawn needs two moves to reach c5, so Black is a move slower than usual. } 4... c5 5. c3 { Backs up d4 against the c5 pawn. } 5... Nc6 6. Be2 { A safe square for the bishop. Plan: castle, keep d4 guarded and answer ...Qb6 with a3 and b4, as in the main lines. } ) 3. Nc3 { Develops and guards e4, so White keeps both centre pawns side by side. } 3... Nf6 4. Nf3 Be7 5. Bd3 { The bishop guards e4 a second time and points at h7, where Black's king will castle. } 5... O-O 6. O-O { Castles. Plan: Re1, h3 and Bf4 or Be3, then push e5 when it hits the knight on f6. White has more space and an easy game. } *

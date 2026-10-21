@@ -27,6 +27,7 @@ plans:
   - When Black's queen sits on b6, keep the bishop on c1 so that b2 stays guarded, or play a3 and b4 first.
   - Break with b4 or b3 on the queenside, or build a kingside attack if Black has moved the knight from f6.
   - If Black's bishop on c8 is still shut in behind e6, play for space and do not rush to open the position.
+  - If Black does not play ...d5 on move two (2...d6, 2...b6, 2...c6), keep both centre pawns, develop and castle.
 motifs: [pawn-chain, attack-the-base, bad-bishop, greek-gift, counting, space]
 tags: [e4, french, advance]
 lines:
@@ -36,6 +37,8 @@ lines:
   - advance-lputian-nh6
   - advance-cxd4-exchange
   - franco-sicilian-d5
+  - advance-nc6
+  - french-second-move-sidelines
   - vs-e6-french-rare-third-moves
   - be3-qxb2
   - greek-gift-bxh7

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "French Defence: Advance Variation"]
+[Variation "French Defense: Advance Variation, 3...Nc6"]
+[ECO "C02"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "pawn-chain,space"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Nc6"]
+[Start "advance-qb6 3.e5"]
+
+3... Nc6 { Develops, but the knight blocks Black's c-pawn, so the usual ...c5 strike at d4 is gone for now. Black will hit e5 with ...f6 instead. } 4. Nf3 { Develops and guards both d4 and e5. } 4... f6 ( 4... Bd7 5. Be2 { Calm development: Black has no pressure on d4, so White castles first. } 5... Nge7 6. O-O { Plan: c3, Re1 and Nbd2, keeping the pawn chain. } ) ( 4... Nge7 { The same position as 3...Ne7 4.Nf3 Nbc6, where White plays Bd3. } ) 5. Bb5 { Pins the knight on c6 to the king, so it cannot help win the e5 pawn. } 5... Bd7 6. O-O { Castles before the f-file opens. } 6... a6 7. Bd3 { Steps back to a diagonal aiming at h7 and Black's king. } 7... fxe5 8. Nxe5 { Takes back with the knight, which stands well on e5. } 8... Nxe5 9. dxe5 { Plan: Black has a weak pawn on e6 and a bad bishop. Play Qh5+ or Qg4 ideas against the king, Re1 and Nd2-f3. } *
