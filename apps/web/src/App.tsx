@@ -61,19 +61,28 @@ export function App() {
     void selectCourse(courseId);
   }, [courseId, selectCourse]);
 
-  const links: { href: string; label: string; active: boolean; icon: ReactNode }[] = [
+  // In the order you use them: find and look (Browse, Tree), practise (Quiz, Speed, Guess), look things up (Glossary).
+  const links: { href: string; label: string; active: boolean; icon: ReactNode; group: number }[] = [
     {
       href: to('/browse'),
       label: 'Browse',
       active: route.page === 'openings' || route.page === 'course' || route.page === 'play',
       icon: <Search aria-hidden />,
+      group: 0,
     },
-    { href: to('/quiz'), label: 'Quiz', active: route.page === 'review', icon: <Library aria-hidden /> },
-    { href: to('/guess'), label: 'Guess', active: route.page === 'guess', icon: <Telescope aria-hidden /> },
-    { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden /> },
-    { href: to('/tree'), label: 'Tree', active: route.page === 'tree', icon: <GitFork aria-hidden /> },
-    { href: to('/glossary'), label: 'Glossary', active: route.page === 'glossary', icon: <BookText aria-hidden /> },
+    { href: to('/tree'), label: 'Tree', active: route.page === 'tree', icon: <GitFork aria-hidden />, group: 0 },
+    { href: to('/quiz'), label: 'Quiz', active: route.page === 'review', icon: <Library aria-hidden />, group: 1 },
+    { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden />, group: 1 },
+    { href: to('/guess'), label: 'Guess', active: route.page === 'guess', icon: <Telescope aria-hidden />, group: 1 },
+    {
+      href: to('/glossary'),
+      label: 'Glossary',
+      active: route.page === 'glossary',
+      icon: <BookText aria-hidden />,
+      group: 2,
+    },
   ];
+  const startsGroup = (i: number) => i > 0 && links[i]!.group !== links[i - 1]!.group;
 
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
@@ -91,9 +100,13 @@ export function App() {
               <SheetTitle>Knight School</SheetTitle>
             </SheetHeader>
             <nav className="grid gap-1 px-2" aria-label="Main">
-              {links.map(({ href, label, active, icon }) => (
+              {links.map(({ href, label, active, icon }, i) => (
                 <SheetClose asChild key={label}>
-                  <Button asChild variant={active ? 'secondary' : 'ghost'} className="h-11 justify-start text-base">
+                  <Button
+                    asChild
+                    variant={active ? 'secondary' : 'ghost'}
+                    className={`h-11 justify-start text-base ${startsGroup(i) ? 'mt-3' : ''}`}
+                  >
                     <a href={href} aria-current={active ? 'page' : undefined}>
                       {icon}
                       {label}
@@ -109,8 +122,18 @@ export function App() {
           <span className="truncate text-lg font-semibold">Knight School</span>
         </a>
         <nav className="hidden min-w-0 items-center gap-1 md:flex" aria-label="Main">
-          {links.map(({ href, label, active, icon }) => (
-            <Button key={label} asChild variant={active ? 'secondary' : 'ghost'} size="sm">
+          {links.map(({ href, label, active, icon }, i) => (
+            <Button
+              key={label}
+              asChild
+              variant={active ? 'secondary' : 'ghost'}
+              size="sm"
+              className={
+                startsGroup(i)
+                  ? 'ml-2 before:absolute before:-left-1.5 before:h-4 before:w-px before:bg-border relative'
+                  : undefined
+              }
+            >
               <a href={href} aria-current={active ? 'page' : undefined}>
                 {icon}
                 {label}
