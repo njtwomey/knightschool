@@ -1,4 +1,5 @@
 import type { OpeningIndexEntry, Weighting } from '@knightschool/core';
+import { readPref, writePref } from '@/lib/local-prefs';
 
 /** Where free practice draws from: the courses being learned, every course, or one course by id. */
 export type PracticeSource = 'learning' | 'all' | (string & {});
@@ -11,21 +12,10 @@ export function coursesFor(source: PracticeSource, index: OpeningIndexEntry[], e
 }
 
 /** A choice kept per device in localStorage, so a page opens the way it was left. */
-export function savedChoice(key: string, fallback: string): string {
-  try {
-    return localStorage.getItem(key) || fallback;
-  } catch {
-    return fallback;
-  }
-}
+export const savedChoice = (key: string, fallback: string): string =>
+  readPref(key, (raw) => raw || undefined, fallback);
 
-export function saveChoice(key: string, value: string) {
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    // the choice just will not be remembered
-  }
-}
+export const saveChoice = (key: string, value: string) => writePref(key, value);
 
 /** A saved "random or popular" choice; anything unrecognised means random. */
 export const savedWeighting = (key: string): Weighting =>

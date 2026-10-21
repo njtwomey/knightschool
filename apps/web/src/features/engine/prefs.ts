@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { createPrefStore, isBoolean, parsePrefs, type PrefSchema } from '@/lib/local-prefs';
 
 const KEY = 'knightschool.engine';
 
@@ -7,34 +7,11 @@ type EnginePrefs = {
   auto: boolean;
 };
 
-/** Reads the saved choice. Anything other than an explicit "off" means on: the engine is on by default. */
-export function parseEnginePrefs(raw: string | null): EnginePrefs {
-  try {
-    const parsed: unknown = JSON.parse(raw ?? '{}');
-    if (parsed && typeof parsed === 'object' && (parsed as { auto?: unknown }).auto === false) return { auto: false };
-  } catch {
-    // fall through to the default
-  }
-  return { auto: true };
-}
+const SCHEMA: PrefSchema<EnginePrefs> = { auto: isBoolean };
+/** The engine is on by default: anything other than an explicit "off" means on. */
+const DEFAULTS: EnginePrefs = { auto: true };
 
-const read = (): EnginePrefs => {
-  try {
-    return parseEnginePrefs(localStorage.getItem(KEY));
-  } catch {
-    return { auto: true };
-  }
-};
+export const parseEnginePrefs = (raw: string | null): EnginePrefs => parsePrefs(raw, SCHEMA, DEFAULTS);
 
 /** Per-device, so it lives in localStorage and applies before the database is open. */
-export const useEnginePrefs = create<EnginePrefs & { setAuto: (auto: boolean) => void }>((set) => ({
-  ...read(),
-  setAuto(auto) {
-    set({ auto });
-    try {
-      localStorage.setItem(KEY, JSON.stringify({ auto }));
-    } catch {
-      // not saved; the choice still applies for this visit
-    }
-  },
-}));
+export const useEnginePrefs = createPrefStore(KEY, SCHEMA, DEFAULTS);

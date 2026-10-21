@@ -17,6 +17,7 @@ import { loadIndex, loadOpening } from '@/data/content';
 import { isPassed, loadCoursePath } from '@/data/course-path';
 import { whenStorageReady } from '@/data/storage';
 import { getEnrolled } from '@/data/training-settings';
+import { oneOf, type PrefSchema, readPrefs, writePrefs } from '@/lib/local-prefs';
 
 /** How a run is set up: a fixed number of lines, or as many moves as you can make before the time is up. */
 export type SpeedConfig = {
@@ -52,23 +53,14 @@ export const rushSource = (course: string) => `${RUSH}${course}`;
 /** The course of an opening rush source, or undefined for any other source. */
 export const rushCourse = (source: string) => (source.startsWith(RUSH) ? source.slice(RUSH.length) : undefined);
 
-function savedConfig(): SpeedConfig {
-  try {
-    const raw = localStorage.getItem(CONFIG_KEY);
-    if (!raw) return DEFAULT_CONFIG;
-    const parsed = JSON.parse(raw) as Partial<SpeedConfig>;
-    return {
-      mode: parsed.mode === 'timed' ? 'timed' : 'lines',
-      lines: parsed.lines === 3 || parsed.lines === 10 ? parsed.lines : 5,
-      seconds: parsed.seconds === 30 || parsed.seconds === 120 ? parsed.seconds : 60,
-      source: typeof parsed.source === 'string' && parsed.source ? parsed.source : 'learning',
-      weighting: parsed.weighting === 'popular' ? 'popular' : 'random',
-      depth: SPEED_DEPTHS.includes(parsed.depth as SpeedDepth) ? (parsed.depth as SpeedDepth) : 10,
-    };
-  } catch {
-    return DEFAULT_CONFIG;
-  }
-}
+const CONFIG_SCHEMA: PrefSchema<SpeedConfig> = {
+  mode: oneOf(['lines', 'timed']),
+  lines: oneOf([3, 5, 10]),
+  seconds: oneOf([30, 60, 120]),
+  source: (value) => typeof value === 'string' && value !== '',
+  weighting: oneOf(['random', 'popular']),
+  depth: oneOf(SPEED_DEPTHS),
+};
 
 /** A timed run keeps lines coming; this many is far more than anyone gets through in two minutes. */
 const TIMED_QUEUE = 40;
@@ -239,7 +231,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
   return {
     phase: 'idle',
     error: null,
-    config: savedConfig(),
+    config: readPrefs(CONFIG_KEY, CONFIG_SCHEMA, DEFAULT_CONFIG),
     queue: [],
     lineIndex: 0,
     betweenEndsAt: 0,
@@ -262,11 +254,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
 
     setConfig(config) {
       set({ config });
-      try {
-        localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
-      } catch {
-        // the choice just is not remembered
-      }
+      writePrefs(CONFIG_KEY, CONFIG_SCHEMA, config);
     },
 
     async prepare() {

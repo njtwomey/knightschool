@@ -1,3 +1,4 @@
+import { readPref, writePref } from '@/lib/local-prefs';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 export type Theme = 'light' | 'dark' | 'system';
@@ -14,15 +15,9 @@ type ThemeContextValue = {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-// localStorage can throw (private windows, blocked site data), so the theme must work without it.
-function readStoredTheme(): Theme {
-  try {
-    const value = localStorage.getItem(STORAGE_KEY);
-    return value === 'light' || value === 'dark' ? value : 'system';
-  } catch {
-    return 'system';
-  }
-}
+// Kept as the bare word, and nothing for 'system', because index.html reads it before the app loads.
+const readStoredTheme = (): Theme =>
+  readPref<Theme>(STORAGE_KEY, (raw) => (raw === 'light' || raw === 'dark' ? raw : undefined), 'system');
 
 function resolve(theme: Theme): 'light' | 'dark' {
   if (theme !== 'system') return theme;
@@ -48,12 +43,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme]);
 
   const setTheme = useCallback((next: Theme) => {
-    try {
-      if (next === 'system') localStorage.removeItem(STORAGE_KEY);
-      else localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      // Not persisted; the choice still applies for this visit.
-    }
+    writePref(STORAGE_KEY, next === 'system' ? null : next);
     setThemeState(next);
   }, []);
 

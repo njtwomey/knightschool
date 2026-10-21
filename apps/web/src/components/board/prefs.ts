@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { createPrefStore, isBoolean, oneOf, parsePrefs, type PrefSchema } from '@/lib/local-prefs';
 import { BOARD_THEMES, type BoardThemeId } from './themes';
 
 export const PIECE_SETS = [
@@ -29,50 +29,16 @@ export const DEFAULT_BOARD_PREFS: BoardPrefs = {
 
 const KEY = 'knightschool.board';
 
+const SCHEMA: PrefSchema<BoardPrefs> = {
+  theme: oneOf(BOARD_THEMES.map((theme) => theme.id)),
+  pieces: oneOf(PIECE_SETS.map((set) => set.id)),
+  legalMoves: isBoolean,
+  hover: isBoolean,
+  coordinates: isBoolean,
+};
+
 /** Reads saved preferences, keeping only valid values so an old or damaged value cannot break the board. */
-export function parseBoardPrefs(raw: string | null): BoardPrefs {
-  let saved: Partial<Record<keyof BoardPrefs, unknown>> = {};
-  try {
-    const parsed: unknown = JSON.parse(raw ?? '{}');
-    if (parsed && typeof parsed === 'object') saved = parsed as typeof saved;
-  } catch {
-    // fall through to the defaults
-  }
-  const flag = (key: 'legalMoves' | 'hover' | 'coordinates') =>
-    typeof saved[key] === 'boolean' ? (saved[key] as boolean) : DEFAULT_BOARD_PREFS[key];
-  return {
-    theme: BOARD_THEMES.some((theme) => theme.id === saved.theme)
-      ? (saved.theme as BoardThemeId)
-      : DEFAULT_BOARD_PREFS.theme,
-    pieces: PIECE_SETS.some((set) => set.id === saved.pieces)
-      ? (saved.pieces as PieceSetId)
-      : DEFAULT_BOARD_PREFS.pieces,
-    legalMoves: flag('legalMoves'),
-    hover: flag('hover'),
-    coordinates: flag('coordinates'),
-  };
-}
-
-function read(): BoardPrefs {
-  try {
-    return parseBoardPrefs(localStorage.getItem(KEY));
-  } catch {
-    return DEFAULT_BOARD_PREFS;
-  }
-}
-
-type Store = BoardPrefs & { set: (patch: Partial<BoardPrefs>) => void };
+export const parseBoardPrefs = (raw: string | null): BoardPrefs => parsePrefs(raw, SCHEMA, DEFAULT_BOARD_PREFS);
 
 /** Per-device convenience, so it lives in localStorage and works before the database is open. */
-export const useBoardPrefs = create<Store>((set, get) => ({
-  ...read(),
-  set(patch) {
-    set(patch);
-    const { theme, pieces, legalMoves, hover, coordinates } = get();
-    try {
-      localStorage.setItem(KEY, JSON.stringify({ theme, pieces, legalMoves, hover, coordinates }));
-    } catch {
-      // not saved; the choice still applies for this visit
-    }
-  },
-}));
+export const useBoardPrefs = createPrefStore(KEY, SCHEMA, DEFAULT_BOARD_PREFS);

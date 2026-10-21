@@ -8,27 +8,16 @@ import {
   type ExplorerCache,
 } from '@knightschool/core';
 import type { Storage } from '@knightschool/storage';
+import { readPref, writePref } from '@/lib/local-prefs';
 
 const TOKEN_KEY = 'knightschool.explorerToken';
 export const PAUSE_AFTER_429_MS = 60_000;
 
 /** The token lives only in this browser, never in the database, so exports and backups cannot leak it. */
-export function getToken(): string | null {
-  try {
-    return localStorage.getItem(TOKEN_KEY) || null;
-  } catch {
-    return null;
-  }
-}
+export const getToken = (): string | null => readPref<string | null>(TOKEN_KEY, (raw) => raw || undefined, null);
 
-export function setToken(token: string | null): void {
-  try {
-    if (token) localStorage.setItem(TOKEN_KEY, token);
-    else localStorage.removeItem(TOKEN_KEY);
-  } catch {
-    // not saved; the explorer simply stays off
-  }
-}
+/** Saves the token (none removes it); if it cannot be saved the explorer simply stays off. */
+export const setToken = (token: string | null): void => writePref(TOKEN_KEY, token || null);
 
 export class ExplorerPausedError extends Error {
   constructor(public readonly untilMs: number) {
