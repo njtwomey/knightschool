@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Smith-Morra Declined"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "e5-wedge,space-advantage,quick-development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "5...e6 6.cxd4 Nc6"]
+[Start "nf6-main-line 5...e6 6.cxd4"]
+
+6... Nc6 ( 6... Bb4+ 7. Bd2 { Blocks the check and offers a trade. If Black takes, White takes back with the knight, which then heads for e4 or c4. } 7... Bxd2+ 8. Nbxd2 ) ( 6... Be7 7. Bc4 ) ( 6... b6 7. Bc4 ) 7. Bc4 { Hits the knight on d5, which has only one guard, the pawn on e6. Black usually backs it up or moves it again. } 7... Be7 ( 7... d6 8. O-O ) ( 7... Nb6 8. Bb3 { Keeps the bishop on the diagonal towards f7, out of reach of the knight. } ) 8. O-O d6 9. Qe2 { Guards the bishop on c4 and the pawn on e5 at once, and makes room for a rook on d1. } 9... O-O 10. Nc3 { Plan: trade on d5 if the knight stays there, keep the pawn on e5 as long as it cramps Black, and use the extra space for Rd1 and Bf4. } *

@@ -86,3 +86,16 @@
   examples:
     match: [Qa4+, queen to a4 with check, Qa4 check]
     miss: [a3, Nc3, Bb5+, no idea]
+- id: knight-in-front-of-d5
+  line: 1. e4 c5 2. c3 e6 3. d4 d5 4. exd5 exd5 5. Nf3 Nf6 6. Bb5+ Bd7 7. Bxd7+ Nbxd7 8. O-O Be7 9. dxc5 Nxc5 10. Nd4
+  prompt: "White's knight went to d4, right in front of Black's pawn on d5. Why is it so well placed there?"
+  accept:
+    - keywords: [[block, blockade, front, stop, stops]]
+      feedback: Yes. The knight blocks the d5 pawn, and since Black has no c- or e-pawn left, no pawn can ever chase it away.
+    - keywords: [[pawn], [chase, kick, attack, move, push]]
+      all: true
+      feedback: Yes. Black has no c- or e-pawn left, so no pawn can ever drive the knight away, and it blocks the d5 pawn too.
+  reveal: The knight blocks the lone pawn on d5, and Black has no c- or e-pawn left to chase it away.
+  examples:
+    match: [no pawn can chase it away, it blocks the d5 pawn, it stops the pawn from moving]
+    miss: [it attacks e6, to castle, no idea, it defends c3]

@@ -6,7 +6,8 @@ tier: 2
 trigger: '1. e4 c5 2. c3'
 summary: >-
   2.c3 prepares d4, so White gets a pair of centre pawns whatever Black does and avoids the long theory of the open
-  Sicilian. You will learn the plan against Black's three main replies and a short answer to each rarer one.
+  Sicilian. You will learn the plan against Black's five main replies (2...Nc6, 2...d6, 2...e6, 2...d5 and
+  2...Nf6) and a short answer to each rarer one.
 about:
   idea: >-
     The open Sicilian (2.Nf3 and 3.d4) gives Black lots of counterplay and needs a lot of theory. 2.c3 sidesteps it:
@@ -24,25 +25,58 @@ plans:
   - Play d4 next move. If Black takes, recapture with the c-pawn and keep pawns on d4 and e4 or e5.
   - Develop the knights and the king's bishop, castle, and only then look for a second centre break.
   - Against 2...Nf6, kick the knight with e5, then use Bc4 and Bb5 to win time while Black untangles.
+  - Against 2...Nc6, after 3.d4 cxd4 4.cxd4, if Black does not play ...d5 at once, push d4-d5 and chase the knight.
+  - When the c-pawns have been traded and Black's queen sits on d5, Nc3 hits it with gain of time.
   - Against 2...d5, take the pawn, play d4 and Nf3, and do not hit the queen with c4, which drops d4.
   - Against 2...e6, trade on d5 and aim for pressure on the isolated d5 pawn, with a knight blockading on d4.
 motifs: [tempo-on-queen, pawn-wedge, isolated-queens-pawn, centre-pawns, pin-absolute]
 tags: [e4, semi-open, sicilian]
 lines:
-  - nf6-main-line
-  - d5-main-line
-  - d5-bg4
-  - d5-nc6-bg4
-  - e6-main-line
+  - id: nf6-main-line
+    section: 2...Nf6
+  - id: nf6-e6-nc6
+    section: 2...Nf6
+  - id: nb6-retreat
+    section: 2...Nf6
+  - id: pinned-knight-e6
+    section: 2...Nf6
+  - id: nc6-main-line
+    section: 2...Nc6
+  - id: nc6-queen-chased
+    section: 2...Nc6
+  - id: nc6-push-d5
+    section: 2...Nc6
+  - id: nc6-e6-push
+    section: 2...Nc6
+  - id: nc6-qxd4-bxc6
+    section: 2...Nc6
+  - id: d6-main-line
+    section: 2...d6
+  - id: e6-main-line
+    section: 2...e6
+  - id: e6-cxd4-sidelines
+    section: 2...e6
+  - id: e6-cxd4-queen
+    section: 2...e6
+  - id: e6-symmetry
+    section: 2...e6
+  - id: e6-d5-nf6
+    section: 2...e6
   - id: e6-advance
     alternative: true
-  - minor-second-moves
-  - nc6-main-line
-  - nc6-queen-chased
-  - nc6-push-d5
-  - nc6-e6-push
-  - nc6-qxd4-bxc6
-  - c4-hits-the-queen
-  - bd3-leaves-g2
-  - nb6-retreat
-  - pinned-knight-e6
+    section: 2...e6
+  - id: d5-main-line
+    section: 2...d5
+  - id: d5-bg4
+    section: 2...d5
+  - id: d5-nc6-bg4
+    section: 2...d5
+  - id: d5-cxd4
+    section: 2...d5
+  - id: c4-hits-the-queen
+    section: 2...d5
+  - id: bd3-leaves-g2
+    section: 2...d5
+  - id: minor-second-moves
+    section: Other replies
+    opponent: '2...Nc6 3.d4 d5, 2...g6, 2...e5, 2...b6'
