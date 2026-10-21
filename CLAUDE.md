@@ -110,7 +110,7 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 
 ### Web app
 
-Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/browse` (aliases `/search`, `/openings`; courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/tree` its tree),
+Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/search` (aliases `/browse`, `/openings`; the page called Search: courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/tree` its tree),
 `/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill),
 `/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
@@ -119,7 +119,7 @@ course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=�
 `#m=<moves played>`; lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
 and `404.html` is copied from `index.html` at build; dev and preview already fall back). Features in `apps/web/src/features/*`:
 
-- `openings` (the Browse page): courses in study order and every line, as cards of one kind (lines have a board thumbnail).
+- `openings` (the Search page, once called Browse): courses in study order and every line, as cards of one kind (lines have a board thumbnail).
   Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all / courses / lines); search ranked
   by relevance with "why it matched" (`filterCourses`, `searchLines`, `relevance`); and **board search** in a modal:
   `search.json` maps every position to the lines through it, so transpositions match.

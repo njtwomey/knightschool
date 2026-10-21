@@ -265,7 +265,7 @@ function Summary({ results }: { results: readonly string[] }) {
             <a href={to('/profile')}>Back to your overview</a>
           </Button>
           <Button asChild variant="outline">
-            <a href={to('/browse')}>Browse</a>
+            <a href={to('/search')}>Search</a>
           </Button>
         </CardContent>
       </Card>

@@ -163,7 +163,7 @@ export function HomePage() {
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <a href={to('/browse')}>
+              <a href={to('/search')}>
                 <Search aria-hidden /> Start learning
               </a>
             </Button>
@@ -197,7 +197,7 @@ export function HomePage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" aria-label="What you can do">
-        <Feature href={to('/browse')} icon={<Search aria-hidden />} title="Browse what there is to learn">
+        <Feature href={to('/search')} icon={<Search aria-hidden />} title="Search what there is to learn">
           Openings, single lines and motifs like the Traxler and the Fried Liver. Search by name, or play the moves on a
           board.
         </Feature>

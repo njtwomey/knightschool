@@ -160,7 +160,7 @@ export function OpeningsPage() {
   return (
     <Page>
       <header className="grid gap-1">
-        <h2 className="text-3xl font-semibold tracking-tight">Browse</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">Search</h2>
         <p className="text-muted-foreground">
           Courses are listed in the order to study them. Find a course or a single line, or play moves on a board to
           find what covers them.

@@ -1,6 +1,7 @@
 import { to } from '@/router/location';
 const LINKS = [
-  { href: to('/browse'), label: 'Browse' },
+  { href: to('/courses'), label: 'Courses' },
+  { href: to('/search'), label: 'Search' },
   { href: to('/quiz'), label: 'Quiz' },
   { href: to('/profile/stats'), label: 'Stats' },
   { href: to('/profile/settings'), label: 'Settings' },

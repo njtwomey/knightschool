@@ -209,7 +209,7 @@ export function OverviewPage() {
           </CardHeader>
           <CardContent>
             <Button asChild>
-              <a href={to('/browse')}>Find an opening</a>
+              <a href={to('/search')}>Find an opening</a>
             </Button>
           </CardContent>
         </Card>

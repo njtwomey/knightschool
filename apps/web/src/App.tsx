@@ -74,8 +74,8 @@ export function App() {
       group: 0,
     },
     {
-      href: to('/browse'),
-      label: 'Browse',
+      href: to('/search'),
+      label: 'Search',
       active: route.page === 'openings' || route.page === 'play',
       icon: <Search aria-hidden />,
       group: 0,

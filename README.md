@@ -7,7 +7,7 @@ SQLite database in the browser, and you can export it.
 - **Learn and practise** lines move by move, with the computer playing the other side.
 - **Quiz** the moves due today, or free-practise any course without touching your schedule.
 - **Guess** an opening from a position, and **Speed** run lines from memory against the clock.
-- **Browse** courses and lines, search by moves, and read the glossary of ideas.
+- **Courses** in one table; **Search** courses and lines, or by moves; read the glossary of ideas.
 
 React 19, TypeScript, Vite, pnpm workspace, SQLite-WASM, ts-fsrs. Stockfish runs as a separate program (GPL) fetched
 at runtime and spoken to over UCI; our code never imports it.

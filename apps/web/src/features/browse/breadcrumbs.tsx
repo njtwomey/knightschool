@@ -148,7 +148,7 @@ function TabGroup<T extends string>({
   );
 }
 
-/** Browse, then the course as a menu of every course, then the course's views: the breadcrumbs of a course page. */
+/** Courses, then the course as a menu of every course, then the course's views: the breadcrumbs of a course page. */
 export function CourseBreadcrumbs({ course, tab = 'overview' }: { course: string; tab?: CourseTab }) {
   const index = useBrowse((state) => state.index);
   const courses = useCourseItems();
@@ -157,7 +157,7 @@ export function CourseBreadcrumbs({ course, tab = 'overview' }: { course: string
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href={to('/browse')}>Browse</BreadcrumbLink>
+          <BreadcrumbLink href={to('/courses')}>Courses</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
@@ -182,7 +182,7 @@ export function CourseBreadcrumbs({ course, tab = 'overview' }: { course: string
 }
 
 /**
- * Where you are: Browse, the course (a menu of every course) and the line (a menu of every line of the course), then
+ * Where you are: Courses, the course (a menu of every course) and the line (a menu of every line of the course), then
  * the line's tabs: About, Learn, Drill and Quiz. The tabs are the only control for how you are working on a line, so
  * they sit where you look to see where you are.
  */
@@ -215,7 +215,7 @@ export function PlayBreadcrumbs({
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href={to('/browse')}>Browse</BreadcrumbLink>
+          <BreadcrumbLink href={to('/courses')}>Courses</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
