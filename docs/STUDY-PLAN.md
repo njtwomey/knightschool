@@ -1,7 +1,7 @@
 # Study paths, spaced repetition and authoring: analysis and plan
 
-Status: proposal for review (2026-10-21). Nothing here is built. Decisions that change stored data are listed at the end
-and wait for an answer.
+Status: D1 to D3 approved as recommended (2026-10-21). Stage 1 is built (see §4 for what changed from this proposal). Decisions
+that change stored data are listed at the end.
 
 ## 1. What exists today
 
@@ -145,7 +145,19 @@ with the shipped tree exactly as the build does. Then:
 Each stage stands on its own and is small enough to review.
 
 1. **Units and the Path view.** `courseUnits` in core with tests, unit state derived from cards, a Path tab per course
-   with learn and drill per unit. No data change.
+   with learn and drill per unit. No data change. **Done.** As built, differing from §3:
+   - Units cover branches inside a line's file too (its side variations), not only lines' main paths: more than half of
+     the cards are in them. A branch inside a file belongs to that line.
+   - Branches of half a unit or less (one or two learner moves) leaving the same unit, of the same importance, are grouped
+     into one "other replies" unit with a short stretch each, played one after another; otherwise a course like the
+     Caro-Kann was 90 one-move units out of 140.
+   - "Popularity at the branch point" is the popularity of the position the branch leads to, so branches from the same
+     point are ordered by how often each is met.
+   - Passed counts a move graduated on its own (a single easy answer can put it at a week) as passed.
+   - Traps attach to the unit they leave from; quizzes to the unit reaching their position, else to their trap's unit.
+   - The path is cut with the learner's card settings (rare lines, popularity cut), so it matches the cards.
+   - `/play/<course>/<line>/<learn|drill>/<n>[/<first>-<last>]` plays one unit (or some of its moves); one new read
+     query, `reviews.byOpening`, and no schema change.
 2. **Sessions from the path.** "Next unit", "next three moves", "opening rush" on top of Learn, Drill and Speed, through a
    small session registry. No data change.
 3. **Path-ordered introductions.** New cards come from unlocked units in path order; the daily queue stays as it is.

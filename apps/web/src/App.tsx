@@ -29,6 +29,7 @@ import { useBrowse } from '@/features/browse/store';
 import { CreditsPage } from '@/features/credits/credits-page';
 import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
+import { CoursePathPage } from '@/features/path/path-page';
 import { GlossaryPage } from '@/features/glossary/glossary-page';
 import { CurriculumTreePage } from '@/features/tree/curriculum-tree-page';
 import { CoursesPage } from '@/features/courses/courses-page';
@@ -203,6 +204,8 @@ export function App() {
         {route.page === 'course' &&
           (route.tab === 'tree' ? (
             <CourseTreePage key={route.id} course={route.id} />
+          ) : route.tab === 'path' ? (
+            <CoursePathPage key={route.id} course={route.id} />
           ) : (
             <CoursePage courseId={route.id} />
           ))}
@@ -211,10 +214,11 @@ export function App() {
         {route.page === 'courses' && <CoursesPage />}
         {route.page === 'play' && (
           <LinePage
-            key={`${route.course}/${route.line}/${route.tab}`}
+            key={`${route.course}/${route.line}/${route.tab}/${JSON.stringify(route.unit ?? null)}`}
             course={route.course}
             line={route.line}
             tab={route.tab}
+            unit={route.unit}
           />
         )}
         {route.page === 'review' && <ReviewPage />}

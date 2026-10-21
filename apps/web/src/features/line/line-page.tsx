@@ -19,13 +19,24 @@ import { PlayPage } from '@/features/play/play-page';
 import { ReviewPage } from '@/features/review/review-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { to } from '@/router/location';
-import { lineHref, type LineTab } from './tabs';
+import { lineHref, type LineTab, type UnitRef } from './tabs';
 
 /** One line's page: the tab decides what it shows. Learn, Drill and the every-branch drill are the play page. */
-export function LinePage({ course, line, tab }: { course: string; line: string; tab: LineTab | 'branches' }) {
+export function LinePage({
+  course,
+  line,
+  tab,
+  unit,
+}: {
+  course: string;
+  line: string;
+  tab: LineTab | 'branches';
+  /** Learn and Drill: one unit of the course's study path. */
+  unit?: UnitRef;
+}) {
   if (tab === 'branches') return <PlayPage course={course} line={line} mode="branches" />;
-  if (tab === 'learn') return <PlayPage course={course} line={line} mode="learn" />;
-  if (tab === 'drill') return <PlayPage course={course} line={line} mode="practice" />;
+  if (tab === 'learn') return <PlayPage course={course} line={line} mode="learn" unit={unit} />;
+  if (tab === 'drill') return <PlayPage course={course} line={line} mode="practice" unit={unit} />;
   if (tab === 'quiz')
     return <ReviewPage scope={{ course, line }} header={<PlayBreadcrumbs course={course} line={line} tab="quiz" />} />;
   if (tab === 'tree') return <CourseTreePage course={course} line={line} />;

@@ -1,13 +1,17 @@
-import { parseLineTab, type LineTab } from '@/features/line/tabs';
+import type { CourseTab } from '@/features/course/tabs';
+import { parseLineTab, parseUnitRef, type LineTab, type UnitRef } from '@/features/line/tabs';
 
 export type Route =
   | { page: 'home' }
   | { page: 'profile'; tab: 'overview' | 'stats' | 'settings' }
   | { page: 'openings' }
   | { page: 'courses' }
-  | { page: 'course'; id: string; tab: 'overview' | 'tree' }
-  /** A line's page and tab; line `all` is the every-branch drill of the whole course. */
-  | { page: 'play'; course: string; line: string; tab: LineTab | 'branches' }
+  | { page: 'course'; id: string; tab: CourseTab }
+  /**
+   * A line's page and tab; line `all` is the every-branch drill of the whole course. `unit` scopes Learn or Drill to one
+   * unit of the study path (`/play/<course>/<line>/learn/<n>`), or some of its moves (`.../<n>/<first>-<last>`).
+   */
+  | { page: 'play'; course: string; line: string; tab: LineTab | 'branches'; unit?: UnitRef }
   | { page: 'review' }
   | { page: 'guess' }
   | { page: 'speed' }
@@ -30,7 +34,7 @@ const RENAMED_LINES: Record<string, string> = {
 };
 
 export function parseRoute(pathname: string): Route {
-  const [first, a, b, c] = pathname.split('/').filter(Boolean);
+  const [first, a, b, c, d, e] = pathname.split('/').filter(Boolean);
   switch (first) {
     case 'browse':
     case 'search':
@@ -44,16 +48,16 @@ export function parseRoute(pathname: string): Route {
     case 'today':
       return { page: 'profile', tab: 'overview' };
     case 'course':
-      return a && slug.test(a) ? { page: 'course', id: a, tab: b === 'tree' ? 'tree' : 'overview' } : { page: 'home' };
-    case 'play':
-      return a && b && slug.test(a) && slug.test(b)
-        ? {
-            page: 'play',
-            course: a,
-            line: RENAMED_LINES[`${a}/${b}`] ?? b,
-            tab: b === 'all' ? 'branches' : parseLineTab(c),
-          }
+      return a && slug.test(a)
+        ? { page: 'course', id: a, tab: b === 'tree' || b === 'path' ? b : 'overview' }
         : { page: 'home' };
+    case 'play':
+      if (!a || !b || !slug.test(a) || !slug.test(b)) return { page: 'home' };
+      {
+        const tab = b === 'all' ? 'branches' : parseLineTab(c);
+        const unit = tab === 'learn' || tab === 'drill' ? parseUnitRef(d, e) : undefined;
+        return { page: 'play', course: a, line: RENAMED_LINES[`${a}/${b}`] ?? b, tab, ...(unit ? { unit } : {}) };
+      }
     case 'quiz':
     case 'review':
       return { page: 'review' };

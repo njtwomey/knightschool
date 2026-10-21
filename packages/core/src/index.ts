@@ -25,6 +25,7 @@ export * from './schema';
 export * from './stats';
 export * from './tags';
 export * from './training';
+export * from './units';
 export * from './tree';
 export * from './theory-tree';
 export * from './position-id';

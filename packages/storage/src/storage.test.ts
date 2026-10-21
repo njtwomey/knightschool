@@ -152,6 +152,18 @@ describe('reviews', () => {
     await s.storage.reviews.append(review('r0', 'a', { at: at(-10) }));
     expect((await s.storage.reviews.since(at(0))).map((r) => r.id)).toEqual(['r1', 'r2']);
   });
+
+  it("lists the reviews of one opening's cards, oldest first", async () => {
+    await s.storage.cards.insertMissing([card('a'), card('b'), card('c', { openingId: 'scotch-game' })]);
+    await s.storage.reviews.append(review('r2', 'b', { at: at(20) }));
+    await s.storage.reviews.append(review('r1', 'a', { at: at(10) }));
+    await s.storage.reviews.append(review('r3', 'c', { at: at(5) }));
+    await s.storage.reviews.append(review('r4', 'gone', { at: at(1) }));
+    expect(await s.storage.reviews.byOpening('italian-game')).toEqual([
+      review('r1', 'a', { at: at(10) }),
+      review('r2', 'b', { at: at(20) }),
+    ]);
+  });
 });
 
 describe('quiz attempts, evals, settings, explorer', () => {

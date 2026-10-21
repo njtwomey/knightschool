@@ -21,7 +21,8 @@ import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
 import { decodeMoves, encodeMoves } from '@/router/hash';
-import { lineHref } from '@/features/line/tabs';
+import { lineHref, type UnitRef } from '@/features/line/tabs';
+import { courseHref } from '@/features/course/tabs';
 import { ALL_BRANCHES, playView, usePlay, type PlayMode } from './store';
 import { navigate, readHashState, setHashState, to } from '@/router/location';
 
@@ -43,7 +44,7 @@ const arrowFor = (uci: string) => ({
 const label = (step: LineStep, index: number) =>
   `${Math.floor(index / 2) + 1}${index % 2 ? '...' : '.'} ${step.edge.san}`;
 
-type Props = { course: string; line: string; mode: PlayMode };
+type Props = { course: string; line: string; mode: PlayMode; unit?: UnitRef };
 
 /**
  * The line as a table of full moves. Moves played are solid and the latest is marked. In Learn the rest of the line is
@@ -129,27 +130,35 @@ function MoveTable({
   );
 }
 
-export function PlayPage({ course, line, mode }: Props) {
+export function PlayPage({ course, line, mode, unit }: Props) {
   const state = usePlay();
-  const { phase, content, steps, index, attempt, badge, opponentThinking, results, explore } = state;
+  const { phase, content, steps, index, attempt, badge, opponentThinking, results, explore, scope, firstIndex } = state;
+  // The address names the unit; the effects below must not restart for a new object with the same contents.
+  const unitKey = unit ? `${unit.n}/${unit.first ?? ''}-${unit.last ?? ''}` : '';
 
   useEffect(() => {
-    // The moves played so far are in the URL hash, so a refresh carries on from the same move.
-    void usePlay.getState().start(course, line, mode, decodeMoves(readHashState().m));
+    // The moves played so far are in the URL hash, so a refresh carries on from the same move (and the same part).
+    const hash = readHashState();
+    void usePlay.getState().start(course, line, mode, decodeMoves(hash.m), unit, Number(hash.p) || 0);
     return () => usePlay.getState().stop();
-  }, [course, line, mode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [course, line, mode, unitKey]);
 
   // If the store was reset while this page stayed open (a hot reload while developing does that), start again instead of
   // sitting on a loading skeleton until the page is refreshed.
   useEffect(() => {
     if (usePlay.getState().phase === 'idle')
-      void usePlay.getState().start(course, line, mode, decodeMoves(readHashState().m));
-  }, [phase, course, line, mode]);
+      void usePlay.getState().start(course, line, mode, decodeMoves(readHashState().m), unit);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, course, line, mode, unitKey]);
 
   useEffect(() => {
     if (phase !== 'playing' && phase !== 'complete') return;
-    setHashState({ m: index > 0 ? encodeMoves(steps.slice(0, index).map((step) => step.edge.uci)) : undefined });
-  }, [phase, index, steps]);
+    setHashState({
+      m: index > 0 ? encodeMoves(steps.slice(0, index).map((step) => step.edge.uci)) : undefined,
+      p: scope && scope.part > 0 ? String(scope.part) : undefined,
+    });
+  }, [phase, index, steps, scope]);
 
   // Learn: the arrow keys go forward (playing the move shown) and back through the line. They do nothing when you are
   // recalling the line yourself. The mode is read from the store, since it can be switched on the page without the
@@ -200,7 +209,9 @@ export function PlayPage({ course, line, mode }: Props) {
   const variant = drill
     ? (variants.find((candidate) => steps.slice(0, index).at(-1)?.edge.variants.includes(candidate.id)) ?? null)
     : variants.find((candidate) => candidate.id === line)!;
-  const next = drill ? undefined : variants[variants.findIndex((candidate) => candidate.id === line) + 1];
+  const next = drill || scope ? undefined : variants[variants.findIndex((candidate) => candidate.id === line) + 1];
+  const pathHref = to(courseHref(course, 'path'));
+  const unitName = scope ? `Unit ${scope.unit.index + 1}` : undefined;
 
   /**
    * Switching how you play changes the address, so a refresh or a shared link comes back to exactly this: the course,
@@ -209,7 +220,7 @@ export function PlayPage({ course, line, mode }: Props) {
    */
   function chooseMode(next: PlayMode) {
     if (next === 'branches') navigate(`/play/${course}/${ALL_BRANCHES}/branches`);
-    else navigate(lineHref(course, drill ? firstLine.id : line, next === 'practice' ? 'drill' : 'learn'));
+    else navigate(lineHref(course, drill ? firstLine.id : line, next === 'practice' ? 'drill' : 'learn', unit));
   }
   const side = content.opening.side;
   const other = side === 'white' ? 'Black' : 'White';
@@ -226,7 +237,7 @@ export function PlayPage({ course, line, mode }: Props) {
   const missed = results.filter((result) => result.rating === 'again').length;
 
   let instruction: string;
-  if (complete) instruction = 'Line complete.';
+  if (complete) instruction = scope ? 'Unit complete.' : 'Line complete.';
   else if (opponentThinking) instruction = `${other} replies…`;
   else if (view.expected && state.mode === 'learn') instruction = `Play ${label(view.upcoming!, index)}.`;
   else if (attempt.shown) instruction = 'The move is marked on the board. Play it to carry on.';
@@ -248,6 +259,14 @@ export function PlayPage({ course, line, mode }: Props) {
         {!drill && <EcoLink eco={variant!.eco} course={course} line={variant!.id} />}
         {!drill && variant!.kind === 'refutation' && <Badge variant="secondary">Trap</Badge>}
         {drill && variant && <Badge variant="outline">now in {variant.name}</Badge>}
+        {scope && (
+          <Badge variant="outline" asChild>
+            <a href={pathHref} title="Back to the course's path">
+              {unitName} of the path
+              {scope.parts.length > 1 ? `, branch ${scope.part + 1} of ${scope.parts.length}` : ''}
+            </a>
+          </Badge>
+        )}
       </div>
 
       <div className="board-columns grid gap-6 stacked:gap-4">
@@ -292,7 +311,7 @@ export function PlayPage({ course, line, mode }: Props) {
                   usePlay.getState().leaveExplore();
                   usePlay.getState().goTo(steps.length);
                 }}
-                atStart={index === 0 && !exploring}
+                atStart={index <= firstIndex && !exploring}
                 atEnd={complete || !view.upcoming || exploring}
               />
             )}
@@ -327,7 +346,7 @@ export function PlayPage({ course, line, mode }: Props) {
             <p className="text-sm text-muted-foreground">
               Not sure of it yet?{' '}
               <Button variant="link" className="h-auto p-0" onClick={() => chooseMode('learn')}>
-                <BookOpen aria-hidden /> Go back to learning this line
+                <BookOpen aria-hidden /> Go back to learning this {scope ? 'unit' : 'line'}
               </Button>
             </p>
           )}
@@ -362,7 +381,7 @@ export function PlayPage({ course, line, mode }: Props) {
                 </CardTitle>
                 {state.mode === 'learn' && !drill && (
                   <Button size="sm" onClick={() => chooseMode('practice')}>
-                    <Target aria-hidden /> Drill this line
+                    <Target aria-hidden /> Drill this {scope ? 'unit' : 'line'}
                   </Button>
                 )}
               </div>
@@ -382,11 +401,14 @@ export function PlayPage({ course, line, mode }: Props) {
               ) : (
                 <div className="grid gap-1">
                   <Progress
-                    value={(Math.min(index, steps.length) / steps.length) * 100}
-                    aria-label="Progress through the line"
+                    value={
+                      ((Math.min(index, steps.length) - firstIndex) / Math.max(1, steps.length - firstIndex)) * 100
+                    }
+                    aria-label={scope ? 'Progress through the unit' : 'Progress through the line'}
                   />
                   <p className="text-xs text-muted-foreground">
-                    {Math.min(index, steps.length)} of {steps.length} moves
+                    {Math.min(index, steps.length) - firstIndex} of {steps.length - firstIndex} moves
+                    {firstIndex > 0 && ', after the moves that lead here'}
                   </p>
                 </div>
               )}
@@ -434,7 +456,7 @@ export function PlayPage({ course, line, mode }: Props) {
               <CardHeader>
                 <CardTitle>
                   {results.length === 0
-                    ? 'You have played through the line.'
+                    ? `You have played through the ${scope ? 'unit' : 'line'}.`
                     : `${clean} of ${results.length} moves right first time`}
                 </CardTitle>
                 <CardDescription>
@@ -462,7 +484,7 @@ export function PlayPage({ course, line, mode }: Props) {
                   </Button>
                 )}
                 <Button asChild variant="ghost">
-                  <a href={to(`/course/${course}`)}>Back to the course</a>
+                  <a href={scope ? pathHref : to(`/course/${course}`)}>Back to the {scope ? 'path' : 'course'}</a>
                 </Button>
               </CardContent>
             </Card>

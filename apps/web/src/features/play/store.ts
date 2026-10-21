@@ -1,5 +1,9 @@
 import {
+  courseUnits,
   lineSteps,
+  unitStretches,
+  type CourseUnit,
+  type UnitStretch,
   pathFromUcis,
   nextBranchMove,
   nodeAt,
@@ -17,6 +21,8 @@ import {
 import { create } from 'zustand';
 import { loadOpening } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
+import { getCardOptions } from '@/data/training-settings';
+import type { UnitRef } from '@/features/line/tabs';
 import { introduceStep, recordStep } from './record';
 
 export type PlayMode = 'learn' | 'practice' | 'branches';
@@ -37,6 +43,12 @@ export const setRandom = (rng: Rng) => {
 export const DELAYS = { afterCorrect: 350, opponent: 500, wrongBadge: 900 } as const;
 
 type Phase = 'idle' | 'loading' | 'playing' | 'complete' | 'error';
+
+/**
+ * Learn or Drill scoped to a unit of the study path: its stretches (one, or one per short branch of a side unit), played
+ * one after another. Each starts part-way along: the moves before `from` are already on the board.
+ */
+export type PlayScope = { unit: CourseUnit; ref: UnitRef; parts: UnitStretch[]; part: number };
 
 /** A step off the line, played while exploring in Learn. */
 export type Explored = { uci: string; san: string; epd: string };
@@ -60,9 +72,23 @@ export type PlayState = {
   explore: Explored[] | null;
   sessionId: string;
   startedAt: number;
+  /** Set when playing one unit of the study path rather than a whole line. */
+  scope: PlayScope | null;
+  /** Where the current run starts: 0 for a whole line, a stretch's `from` in a unit. */
+  firstIndex: number;
 
-  /** `moves` (UCI) are the moves already played, from a saved URL: the line carries on from there. */
-  start: (courseId: string, variantId: string, mode: PlayMode, moves?: string[]) => Promise<void>;
+  /**
+   * `moves` (UCI) are the moves already played, from a saved URL: the line carries on from there. `unit` plays one unit
+   * of the course's path instead of the whole line, from its part `part`.
+   */
+  start: (
+    courseId: string,
+    variantId: string,
+    mode: PlayMode,
+    moves?: string[],
+    unit?: UnitRef,
+    part?: number,
+  ) => Promise<void>;
   setMode: (mode: PlayMode) => void;
   restart: () => void;
   submitMove: (uci: string) => boolean;
@@ -115,6 +141,24 @@ export const usePlay = create<PlayState>((set, get) => {
       }
     }
     index = get().index;
+    const scope = get().scope;
+    if (index >= steps.length && scope && content && scope.part + 1 < scope.parts.length) {
+      // A side unit: on to its next short branch, after a pause to see the end of this one.
+      set({ opponentThinking: true });
+      later(DELAYS.opponent * 2, () => {
+        const part = scope.part + 1;
+        const stretch = scope.parts[part]!;
+        set({
+          scope: { ...scope, part },
+          steps: pathSteps(content, stretch.moves),
+          index: stretch.from,
+          firstIndex: stretch.from,
+          badge: null,
+        });
+        proceed();
+      });
+      return;
+    }
     if (index >= steps.length) {
       set({ phase: 'complete', opponentThinking: false });
       return;
@@ -143,12 +187,19 @@ export const usePlay = create<PlayState>((set, get) => {
 
   function begin(mode: PlayMode, from?: { steps: LineStep[]; index: number }) {
     clearTimers();
+    // A unit starts again from its first part.
+    const { scope, content } = get();
+    const first =
+      scope && content && !from
+        ? { steps: pathSteps(content, scope.parts[0]!.moves), index: scope.parts[0]!.from }
+        : null;
+    if (scope && first) set({ scope: { ...scope, part: 0 }, firstIndex: first.index });
     // A new run of every branch draws its own line, so the old steps are dropped; a fixed line keeps its steps.
     set({
       ...FRESH,
       mode,
-      index: from?.index ?? 0,
-      steps: from?.steps ?? (mode === 'branches' ? [] : get().steps),
+      index: from?.index ?? first?.index ?? 0,
+      steps: from?.steps ?? first?.steps ?? (mode === 'branches' ? [] : get().steps),
       phase: 'playing',
       sessionId: crypto.randomUUID(),
       startedAt: performance.now(),
@@ -167,12 +218,22 @@ export const usePlay = create<PlayState>((set, get) => {
     ...FRESH,
     sessionId: '',
     startedAt: 0,
+    scope: null,
+    firstIndex: 0,
 
-    async start(courseId, variantId, mode, moves = []) {
+    async start(courseId, variantId, mode, moves = [], unit, part = 0) {
       clearTimers();
-      set({ phase: 'loading', error: null, ...FRESH });
+      set({ phase: 'loading', error: null, ...FRESH, scope: null, firstIndex: 0 });
       try {
         const content = await loadOpening(courseId);
+        if (unit && mode !== 'branches') {
+          const scope = await scopeFor(content, variantId, unit, part);
+          const stretch = scope.parts[scope.part]!;
+          const resumed = resumeStretch(content, stretch, moves);
+          set({ content, variantId, scope, firstIndex: stretch.from, steps: resumed.steps });
+          begin(mode, resumed);
+          return;
+        }
         // Every branch has no fixed line: the steps are chosen as the drill goes.
         const resumed = resumeFrom(content, variantId, mode, moves);
         set({ content, variantId, steps: resumed.steps });
@@ -248,7 +309,7 @@ export const usePlay = create<PlayState>((set, get) => {
       const { mode, steps, phase } = get();
       if (mode !== 'learn' || (phase !== 'playing' && phase !== 'complete')) return;
       clearTimers();
-      const index = Math.max(0, Math.min(target, steps.length));
+      const index = Math.max(get().firstIndex, Math.min(target, steps.length));
       set((state) => ({
         index,
         phase: index >= steps.length ? 'complete' : 'playing',
@@ -308,4 +369,37 @@ export function resumeFrom(
   let index = 0;
   while (index < moves.length && index < steps.length && steps[index]!.edge.uci === moves[index]) index++;
   return { steps, index };
+}
+
+/** A run of moves (UCI) from the start position as steps, as far as the course knows them. */
+export function pathSteps(content: OpeningContent, moves: string[]): LineStep[] {
+  const edges = pathFromUcis(content, moves);
+  return edges.map((edge, i) => {
+    const fromEpd = i === 0 ? content.opening.rootEpd : edges[i - 1]!.to;
+    return { fromEpd, edge, ours: nodeAt(content, fromEpd).isOurTurn };
+  });
+}
+
+/** A stretch resumed after the moves of it already played (from a saved URL); never before its own start. */
+export function resumeStretch(
+  content: OpeningContent,
+  stretch: UnitStretch,
+  moves: string[],
+): { steps: LineStep[]; index: number } {
+  const steps = pathSteps(content, stretch.moves);
+  let index = 0;
+  while (index < moves.length && index < steps.length && steps[index]!.edge.uci === moves[index]) index++;
+  return { steps, index: Math.max(stretch.from, index) };
+}
+
+/** The unit a Learn or Drill address names, cut with the learner's card settings as the Path tab cuts it. */
+async function scopeFor(content: OpeningContent, line: string, ref: UnitRef, part: number): Promise<PlayScope> {
+  const options = await whenStorageReady()
+    .then(({ storage }) => getCardOptions(storage))
+    .catch(() => ({}));
+  const unit = courseUnits(content, options).find((candidate) => candidate.line === line && candidate.n === ref.n);
+  if (!unit)
+    throw new Error(`${content.opening.name} has no unit ${ref.n} of this line now. Pick one from the course's path.`);
+  const parts = unitStretches(unit, ref.first, ref.last);
+  return { unit, ref, parts, part: Math.min(Math.max(0, part), parts.length - 1) };
 }

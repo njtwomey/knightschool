@@ -33,6 +33,8 @@ export interface Storage {
     append(review: Review): Promise<void>;
     forCard(cardId: string): Promise<Review[]>;
     since(at: string): Promise<Review[]>;
+    /** Every review of the cards of one opening, oldest first. */
+    byOpening(openingId: string): Promise<Review[]>;
     /** Writes the new schedule and the log row together or not at all. */
     record(card: Card, review: Review): Promise<void>;
   };
@@ -143,6 +145,15 @@ export function createStorage(exec: SqlExecutor): StorageInternals {
       forCard: (cardId) =>
         db.select().from(schema.reviews).where(eq(schema.reviews.cardId, cardId)).orderBy(asc(schema.reviews.at)),
       since: (at) => db.select().from(schema.reviews).where(gte(schema.reviews.at, at)).orderBy(asc(schema.reviews.at)),
+      async byOpening(openingId) {
+        const rows = await db
+          .select({ review: schema.reviews })
+          .from(schema.reviews)
+          .innerJoin(schema.cards, eq(schema.reviews.cardId, schema.cards.id))
+          .where(eq(schema.cards.openingId, openingId))
+          .orderBy(asc(schema.reviews.at));
+        return rows.map((row) => row.review);
+      },
       async record(card, review) {
         await exec.transaction([statementOf(upsertCard(db, card)), statementOf(insertReview(db, review))]);
       },

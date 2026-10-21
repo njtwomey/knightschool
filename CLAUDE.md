@@ -111,13 +111,14 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 
 ### Web app
 
-Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/search` (aliases `/browse`, `/openings`; the page called Search: courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/tree` its tree),
-`/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill),
+Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/search` (aliases `/browse`, `/openings`; the page called Search: courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/path` its study path, `/course/:id/tree` its tree),
+`/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill; learn and drill
+take `/<n>` for unit n of that line on the path, or `/<n>/<first>-<last>` for some of its moves),
 `/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
 `setHashState` as the page changes and read once when it opens, so a refresh or shared link restores it exactly:
 course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=…&scope=…&bm=<moves>&bk=<kind>`; play
-`#m=<moves played>`; lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
+`#m=<moves played>` (and `&p=<part>` in a unit with several branches); lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
 and `404.html` is copied from `index.html` at build; dev and preview already fall back). Features in `apps/web/src/features/*`:
 
 The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Glossary (`App.tsx`).
@@ -129,12 +130,18 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
   courses / lines); a forgiving search (words run together, small slips: `editDistance` in `catalog.ts`) ranked by
   relevance with "why it matched"; and **board search** in a modal: `search.json` maps every position to the lines
   through it, so transpositions match.
-- `course`: one course's page, Overview and Tree tabs at the end of the breadcrumbs (`features/course/tabs.ts`). The
+- `course`: one course's page, Overview, Path and Tree tabs at the end of the breadcrumbs (`features/course/tabs.ts`). The
   introduction (`CourseIntro`: summary, then idea, risks and who it suits in three columns), plans and motifs, line tags
   explained on hover and in a key (`TagLegend`, wording in `features/openings/explanations.ts`), the board with the
   engine strip, its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
   from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
   `lichess` in index.json).
+- `path` (a course's Path tab, `features/path`): the course cut into units (`courseUnits` in core, see Training) in
+  study order, each with its state, its moves (yours in bold), what unlocks it if locked, its extras (traps and quizzes,
+  never needed to pass) and Learn / Drill buttons for just that unit. `data/course-path.ts` loads it: units cut with the
+  learner's card settings, state from `cards.byOpening` and `reviews.byOpening`. A unit address plays only that unit:
+  the play store's `scope` holds its stretches, each started part-way along (`firstIndex`), one after another for a side
+  unit.
 - `line`: one line's page, `/play/<course>/<line>/<tab>` with About, Learn, Drill, Quiz and Tree as a joined button group
   at the end of the breadcrumbs (`features/line/tabs.ts`; old `/practice` links are Drill). About is the line in words:
   a board on the position that names it (`namedPly`), the moves with their comments, where it branches from and what
@@ -209,6 +216,20 @@ Pure logic is in core: `autoGrade` and the `reduceAttempt` state machine (hint, 
 starts, up to the daily limit; they are given due times one millisecond apart in the past so sorting by due date keeps
 main-line-first order. Practice answers in `play` feed the same cards through `features/play/record.ts`; Learn only
 introduces them. A review is card by card: the position before our move, the opponent's last move highlighted.
+
+**Units (the study path, `units.ts` in core, docs/STUDY-PLAN.md).** `courseUnits(content, options)` cuts a course into
+units of about four learner moves. The tree is the learner's: at their turn only the repertoire move, at the opponent's
+every move leading on to a card position (`cardDefinitions` decides what is core, so the card settings apply). The first
+line's main line comes first, then branch after branch: of every move leaving covered ground, the one whose line matters
+most (main and gambit, then sideline and traps to avoid, then rare), then the most popular (`node.popularity` of the
+position it leads to), then the shallowest. A branch follows its line's own main line, else the most popular way on.
+Each branch's new learner moves are cut by `cutIntoUnits` (runs near four, cuts preferred where another branch leaves);
+branches of half a unit or less leaving the same unit, of the same importance, are grouped into one side unit with a
+stretch each. Ids are `<line>:<n>`. A branch's first unit depends on the unit holding its last learner move before it
+leaves, a later unit on the one before. Quizzes and traps are attached as extras. State is derived, never stored
+(`unitProgress`): passed when every move's last two answers were good or easy (or the move is graduated), graduated when
+every card is in FSRS review at 7 days or more, learning once a card exists, otherwise unlocked or locked by its
+prerequisites. A unit with progress shows it even if its prerequisites are not passed.
 
 ### Engine
 

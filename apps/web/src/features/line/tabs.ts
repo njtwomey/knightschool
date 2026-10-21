@@ -18,8 +18,24 @@ export const LINE_TABS: { tab: LineTab; name: string; blurb: string }[] = [
   { tab: 'tree', name: 'Tree', blurb: "The course's tree of moves, with this line picked out." },
 ];
 
-/** The address of a line's tab. */
-export const lineHref = (course: string, line: string, tab: LineTab = 'about') => `/play/${course}/${line}/${tab}`;
+/** One unit of a course's study path (its number within the line), or some of its moves (1-based, inclusive). */
+export type UnitRef = { n: number; first?: number; last?: number };
+
+/** Reads `<n>` and `<first>-<last>` after a Learn or Drill address; anything else is no unit. */
+export function parseUnitRef(n: string | undefined, moves: string | undefined): UnitRef | undefined {
+  if (!n || !/^[1-9]\d*$/.test(n)) return undefined;
+  const range = moves?.match(/^([1-9]\d*)-([1-9]\d*)$/);
+  return range ? { n: Number(n), first: Number(range[1]), last: Number(range[2]) } : { n: Number(n) };
+}
+
+/** The address of a line's tab. Learn and Drill can be scoped to a unit of the study path. */
+export function lineHref(course: string, line: string, tab: LineTab = 'about', unit?: UnitRef): string {
+  const base = `/play/${course}/${line}/${tab}`;
+  if (!unit || (tab !== 'learn' && tab !== 'drill')) return base;
+  return unit.first !== undefined && unit.last !== undefined
+    ? `${base}/${unit.n}/${unit.first}-${unit.last}`
+    : `${base}/${unit.n}`;
+}
 
 /** Reads the last part of a line's address; an old `practice` link is the Drill tab, and anything else is About. */
 export function parseLineTab(segment: string | undefined): LineTab {
