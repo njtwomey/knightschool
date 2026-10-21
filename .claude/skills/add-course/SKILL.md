@@ -110,9 +110,13 @@ chapter there. `check-course` builds one course as the real build does.
     warnings), then `make doctor` and read what names your chapters (moves written twice: start the later chapter after
     them; a chapter no course lists: list it or remove it), then `make check` (`scripts/content.test.ts` builds the real
     content).
-12. **Afterwards, offer** (heavy, so ask): `pnpm analyse <id>` (native Stockfish at depth 24, committed) and, for the card
+12. **Look at it in the app** (`pnpm dev`, or headless Chrome with puppeteer-core): `/course/<id>/tree` shows the course as
+    a tree, one column per move and one lane per line. Lines should branch where you meant them to; a lane that adds
+    nothing, or a line that hangs off an unexpected parent, means a `[Start]` or a duplicate to fix. Open a line's About
+    tab to read it as a learner will.
+13. **Afterwards, offer** (heavy, so ask): `pnpm analyse <id>` (native Stockfish at depth 24, committed) and, for the card
     threshold, `make popularity` (needs `LICHESS_TOKEN`; fills only the new positions).
-13. **Report**: files, `opening:` id, tier and trigger, the lines and traps (new chapters and listed existing ones) with
+14. **Report**: files, `opening:` id, tier and trigger, the lines and traps (new chapters and listed existing ones) with
     the final eval of each, any comment you changed on a shared move, every departure from the plan because the engine
     disagreed, and anything unresolved.
 

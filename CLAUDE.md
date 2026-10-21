@@ -119,18 +119,37 @@ course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=�
 `#m=<moves played>`; lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
 and `404.html` is copied from `index.html` at build; dev and preview already fall back). Features in `apps/web/src/features/*`:
 
-- `openings` (the Search page, once called Browse): courses in study order and every line, as cards of one kind (lines have a board thumbnail).
-  Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all / courses / lines); search ranked
-  by relevance with "why it matched" (`filterCourses`, `searchLines`, `relevance`); and **board search** in a modal:
-  `search.json` maps every position to the lines through it, so transpositions match.
-- `course`: one course's page: the introduction (`CourseIntro`: summary, idea, risks; the play page shows it compact as
-  `CourseIntroCard` with the line's tags), its plans and motifs, line tags explained on hover and in a key (`TagLegend`,
-  wording in `features/openings/explanations.ts`), the board with the engine strip (on by default, off in
-  Settings), its lines and traps grouped by kind (main, gambits, sidelines, rare, alternatives, traps to avoid, traps to spring;
-  click a row = learn, icon buttons show / learn / practise), and the same ground from the other side (courses in the same
-  opening, and courses that reach the same positions: `relatedCourses`). The browse store keeps the displayed `line`.
+The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Glossary (`App.tsx`).
+
+- `courses` (`/courses`): every course in one table, filtered by side (White / Black / Both), every column sortable, a
+  row opens the course.
+- `openings` (the Search page, once called Browse): courses in study order and every line, as cards of one kind (lines
+  have a board thumbnail). Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all /
+  courses / lines); a forgiving search (words run together, small slips: `editDistance` in `catalog.ts`) ranked by
+  relevance with "why it matched"; and **board search** in a modal: `search.json` maps every position to the lines
+  through it, so transpositions match.
+- `course`: one course's page, Overview and Tree tabs at the end of the breadcrumbs (`features/course/tabs.ts`). The
+  introduction (`CourseIntro`: summary, then idea, risks and who it suits in three columns), plans and motifs, line tags
+  explained on hover and in a key (`TagLegend`, wording in `features/openings/explanations.ts`), the board with the
+  engine strip, its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
+  from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
+  `lichess` in index.json).
+- `line`: one line's page, `/play/<course>/<line>/<tab>` with About, Learn, Drill, Quiz and Tree as a joined button group
+  at the end of the breadcrumbs (`features/line/tabs.ts`; old `/practice` links are Drill). About is the line in words:
+  a board on the position that names it (`namedPly`), the moves with their comments, where it branches from and what
+  grows from it, other courses that teach it. Quiz is every question of that one line, shuffled and never saved
+  (`lineQuestions`). The breadcrumbs' course and line are menus of every course and every line, the current one ticked.
+- `tree` (`/tree`, a course's Tree tab, a line's Tree tab): `TreeExplorer`, full width in three columns. Left an index
+  shaped like the tree (`index-model.ts`: the curriculum grouped by first two moves, a line under the line it grows out
+  of within its group; folding only tidies the list). Middle the tree, one column per move and one lane per line, the
+  main line across the top, branches below with the latest nearest so no lines cross (`laneLayout` in core, nodes keyed by
+  move prefix in `move-tree.ts`); pills filled in the line's colour, the line's name left of where it starts; zoom
+  buttons and pinch. Right a board with step buttons (and the arrow keys) along the picked line's whole path from the
+  start. Only a click changes anything: a line or a move picks a line; the crosshair (or a group's name) draws only that
+  subtree.
 - `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each, searchable and A to Z.
-- `play`: Learn (you play both sides, every move shown), Practise (the computer plays the other side) and Every branch.
+- `play`: Learn (you play both sides, every move shown), Drill (the computer plays the other side; once called
+  Practise) and Every branch.
   `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; lines from the courses you
   are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
   instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hints (piece, then move) are
@@ -141,7 +160,13 @@ and `404.html` is copied from `index.html` at build; dev and preview already fal
   for just the opening; answers go to the `guess_attempts` table.
   `review`: spaced-repetition cards. Quiz, Guess and Speed share a "from" choice (`SourceSelect`, `data/practice-source.ts`):
   the courses you are learning, everything, or one course. Quiz also has "Due today (your schedule)", the default; any
-  other choice is free practice (`freePractice` in core) that is never saved, so it cannot touch the schedule. `today`: dashboard. `settings`, `lab` (render any PGN at a ply, or a FEN).
+  other choice is free practice (`freePractice` in core) that is never saved, so it cannot touch the schedule. At the end
+  of a quiz every wrong move is listed with what it cost by the engine against the course's move (`regret.ts` in core:
+  under 30cp a memory slip, 30 to 99 an inaccuracy, 100 and more a mistake), from baked analysis or the browser engine at
+  depth 14 after the session. `today`: dashboard. `settings`, `lab` (render any PGN at a ply, or a FEN).
+
+Toggle groups mark the chosen item from `aria-checked` / `aria-pressed` (`components/ui/toggle.tsx`), because a hover
+hint (`Hint`, a tooltip trigger) round an item overwrites its `data-state`.
 
 **Nothing waits for a click when you are right.** A right move flashes a tick and play carries on by itself (the computer
 replies, the next card appears); a wrong move flashes a cross and snaps back; a miss reveals the move. The exception, asked
