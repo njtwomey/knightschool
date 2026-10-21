@@ -34,7 +34,8 @@ export function EngineStrip() {
     <div className="grid gap-1.5 text-sm" aria-live="polite">
       <p className="flex items-baseline gap-3">
         <span className="w-14 shrink-0 font-mono font-medium">{best ? formatScore(best) : thinking ? '…' : ''}</span>
-        <span className="min-w-0 truncate font-mono text-muted-foreground" title="The engine's best continuation">
+        {/* No width of its own (w-0 flex-1), so a long line is cut short instead of widening the page. */}
+        <span className="w-0 flex-1 truncate font-mono text-muted-foreground" title="The engine's best continuation">
           {best ? pvToSan(epd, best.pv, 8) : thinking ? 'The engine is looking…' : ''}
         </span>
         {best && current && (

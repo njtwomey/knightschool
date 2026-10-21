@@ -190,8 +190,8 @@ export function CoursePage({ courseId }: { courseId: string }) {
             )}
           </header>
 
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:items-start">
-            <div className="grid gap-3 lg:sticky lg:top-16">
+          <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:items-start">
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-3 lg:sticky lg:top-16">
               <BoardPanel content={content} />
               <EngineStrip />
               <PositionDetails content={content} />

@@ -92,3 +92,36 @@
   --board-light: oklch(0.8 0.03 100);
   --board-dark: oklch(0.45 0.06 165);
 }
+
+/*
+ * Board size: one rule for every board. A board is as wide as its column, never wider than its cap (40rem, or
+ * --board-cap where a page sets one), and never taller than the screen less --board-chrome: the header above and the
+ * controls below, so a move never needs a scroll. On a phone held sideways the header scrolls away and the board sits
+ * beside its panel (the `short` variant), so it can use more of the height.
+ */
+@custom-variant short (@media (orientation: landscape) and (max-height: 32rem));
+/* When .board-columns is one column: the board and its panel stacked, on a phone held upright or a narrow window. */
+@custom-variant stacked (@media (width < 64rem) and (not ((orientation: landscape) and (max-height: 32rem))));
+
+:root {
+  --board-chrome: 11rem;
+  --board-size: min(var(--board-cap, 40rem), max(12rem, calc(100dvh - var(--board-chrome))));
+}
+
+@media (orientation: landscape) and (max-height: 32rem) {
+  :root {
+    --board-chrome: 6rem;
+  }
+}
+
+/*
+ * A page with the board in one column and its panel in the other: stacked on a phone, side by side from lg up and on a
+ * phone held sideways. A plain class, outside Tailwind's layers, so the page's own grid classes cannot undo it.
+ */
+.board-columns {
+  --board-size: min(var(--board-cap, 40rem), max(12rem, calc(100dvh - var(--board-chrome))));
+  grid-template-columns: minmax(0, 1fr);
+  @media (width >= 64rem), (orientation: landscape) and (max-height: 32rem) {
+    grid-template-columns: minmax(0, var(--board-size)) minmax(0, 1fr);
+  }
+}

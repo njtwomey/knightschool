@@ -4,6 +4,7 @@ import {
   CircleUser,
   LayoutDashboard,
   Library,
+  Menu,
   Search,
   Settings,
   Telescope,
@@ -13,6 +14,7 @@ import { useEffect, type ReactNode } from 'react';
 import { SiteFooter } from '@/components/site-footer';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,38 +58,71 @@ export function App() {
     void selectCourse(courseId);
   }, [courseId, selectCourse]);
 
-  const link = (href: string, label: string, active: boolean, icon: ReactNode) => (
-    <Button asChild variant={active ? 'secondary' : 'ghost'} size="sm">
-      <a href={href} aria-current={active ? 'page' : undefined}>
-        {icon}
-        {label}
-      </a>
-    </Button>
-  );
+  const links: { href: string; label: string; active: boolean; icon: ReactNode }[] = [
+    {
+      href: to('/browse'),
+      label: 'Browse',
+      active: route.page === 'openings' || route.page === 'course' || route.page === 'play',
+      icon: <Search aria-hidden />,
+    },
+    { href: to('/quiz'), label: 'Quiz', active: route.page === 'review', icon: <Library aria-hidden /> },
+    { href: to('/guess'), label: 'Guess', active: route.page === 'guess', icon: <Telescope aria-hidden /> },
+    { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden /> },
+    { href: to('/glossary'), label: 'Glossary', active: route.page === 'glossary', icon: <BookText aria-hidden /> },
+  ];
 
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
-      <header className="sticky top-0 z-30 flex items-center gap-3 border-b bg-background/90 px-4 py-2 backdrop-blur">
-        <a href={to('/')} className="flex items-center gap-2.5" aria-label="Knight School home">
+      {/* On a phone held sideways the header scrolls away, so the board can have the height. */}
+      <header className="sticky top-0 z-30 flex items-center gap-3 border-b bg-background/90 px-4 py-2 backdrop-blur short:static">
+        {/* Below md the links do not fit beside the name, so they move into a menu. */}
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="-ml-2 size-10 md:hidden" aria-label="Menu">
+              <Menu className="size-5" aria-hidden />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64" aria-describedby={undefined}>
+            <SheetHeader>
+              <SheetTitle>Knight School</SheetTitle>
+            </SheetHeader>
+            <nav className="grid gap-1 px-2" aria-label="Main">
+              {links.map(({ href, label, active, icon }) => (
+                <SheetClose asChild key={label}>
+                  <Button asChild variant={active ? 'secondary' : 'ghost'} className="h-11 justify-start text-base">
+                    <a href={href} aria-current={active ? 'page' : undefined}>
+                      {icon}
+                      {label}
+                    </a>
+                  </Button>
+                </SheetClose>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <a href={to('/')} className="flex min-w-0 items-center gap-2.5" aria-label="Knight School home">
           <img src={`${import.meta.env.BASE_URL}icon.svg`} alt="" className="size-8" />
-          <span className="hidden text-lg font-semibold sm:block">Knight School</span>
+          <span className="truncate text-lg font-semibold">Knight School</span>
         </a>
-        <nav className="flex min-w-0 items-center gap-1 overflow-x-auto" aria-label="Main">
-          {link(
-            to('/browse'),
-            'Browse',
-            route.page === 'openings' || route.page === 'course' || route.page === 'play',
-            <Search aria-hidden />,
-          )}
-          {link(to('/quiz'), 'Quiz', route.page === 'review', <Library aria-hidden />)}
-          {link(to('/guess'), 'Guess', route.page === 'guess', <Telescope aria-hidden />)}
-          {link(to('/speed'), 'Speed', route.page === 'speed', <Timer aria-hidden />)}
-          {link(to('/glossary'), 'Glossary', route.page === 'glossary', <BookText aria-hidden />)}
+        <nav className="hidden min-w-0 items-center gap-1 md:flex" aria-label="Main">
+          {links.map(({ href, label, active, icon }) => (
+            <Button key={label} asChild variant={active ? 'secondary' : 'ghost'} size="sm">
+              <a href={href} aria-current={active ? 'page' : undefined}>
+                {icon}
+                {label}
+              </a>
+            </Button>
+          ))}
         </nav>
         <div className="ml-auto flex items-center gap-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant={route.page === 'profile' ? 'secondary' : 'ghost'} size="icon" aria-label="Profile">
+              <Button
+                variant={route.page === 'profile' ? 'secondary' : 'ghost'}
+                size="icon"
+                className="pointer-coarse:size-10"
+                aria-label="Profile"
+              >
                 <CircleUser className="size-5" aria-hidden />
               </Button>
             </DropdownMenuTrigger>

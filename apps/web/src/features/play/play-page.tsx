@@ -256,8 +256,9 @@ export function PlayPage({ course, line, mode }: Props) {
         {drill && variant && <Badge variant="outline">now in {variant.name}</Badge>}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,min(40rem,calc(100dvh-11rem)))_1fr]">
-        <div className="grid content-start gap-3">
+      <div className="board-columns grid gap-6 stacked:gap-4">
+        {/* Stacked on a phone, the panel with the move to play follows the board and its buttons; the engine comes last. */}
+        <div className="grid content-start gap-3 stacked:contents">
           <div className="flex gap-2">
             {state.mode === 'learn' && <EvalBar orientation={side} />}
             <AppBoard
@@ -354,7 +355,7 @@ export function PlayPage({ course, line, mode }: Props) {
             </p>
           )}
           {state.mode === 'learn' && (
-            <Card>
+            <Card className="stacked:order-1">
               <CardHeader className="flex-row items-center justify-between gap-2 space-y-0">
                 <CardTitle className="text-base">Engine</CardTitle>
                 {exploring && (

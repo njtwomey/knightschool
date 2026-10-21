@@ -5,7 +5,8 @@ import { useEngine } from './store';
 export function EvalBar({ orientation }: { orientation: 'white' | 'black' }) {
   const current = useEngine((state) => state.current);
   const status = useEngine((state) => state.status);
-  if (status !== 'ready') return null;
+  // Drawn (empty) while the engine starts, so the board beside it does not narrow when the first score arrives.
+  if (status !== 'ready' && status !== 'starting') return null;
 
   const best = current?.lines[0];
   const share = best ? whiteShare(best) : 0.5;

@@ -163,7 +163,7 @@ export function LabPage() {
   const shownEpd = editing ? fenToEpd(setupFen!) : epd;
 
   return (
-    <Page className="gap-4 lg:grid-cols-[minmax(0,34rem)_1fr]">
+    <Page className="board-columns gap-4 [--board-cap:34rem]">
       <div className="grid content-start gap-3">
         <AppBoard
           id="lab"

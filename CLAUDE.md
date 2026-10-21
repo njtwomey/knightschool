@@ -151,7 +151,10 @@ because there is an explanation to read. In Speed a five second modal, with a co
 between lines of a fixed run. Delays live in `DELAYS` / `REVIEW_DELAYS` / `GUESS_DELAYS` / `SPEED_DELAYS`.
 
 All boards are `components/board/app-board.tsx` (colour theme, piece set, legal-move dots, hover and selection
-highlights, tick/cross badge, hint pulse). Preferences are per device in localStorage (`board/prefs.ts`), default the
+highlights, tick/cross badge, hint pulse). Its size is one rule, `--board-size` in `index.css`: never wider than its
+column or its cap, never taller than the screen less the header and controls (`--board-chrome`); pages with a board
+column and a panel use the `.board-columns` class (stacked on a phone, side by side from lg and on a phone held sideways;
+`stacked:` and `short:` variants). Page grids use `minmax(0,1fr)` columns so content can never widen a column. Preferences are per device in localStorage (`board/prefs.ts`), default the
 green profile. `StaticBoard` draws a FEN, EPD or PGN-at-a-ply (`resolvePosition` in core). Piece sets are the library's
 drawings with different finishing; a real alternative set needs a licence check first.
 
