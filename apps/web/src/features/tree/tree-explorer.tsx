@@ -365,9 +365,9 @@ export function TreeExplorer({
             className="max-h-[70dvh] lg:max-h-[calc(100dvh-8rem)]"
           />
           <p className="text-xs text-muted-foreground">
-            One column per move; the main line runs straight across the top. Point at a move or a line to see it on the
-            board. Pick a line, in the list or by clicking a move, to step through it with the arrows; the crosshair
-            shows a line and every line under it; folding only tidies the list.
+            One column per move; the main line runs straight across the top. Click a move, or a line in the list, to put
+            it on the board and step through it with the arrows; the crosshair shows a line and every line under it;
+            folding only tidies the list.
           </p>
         </section>
 
