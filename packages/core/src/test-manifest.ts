@@ -13,7 +13,7 @@ export function manifestOf(
     tier: 1,
     trigger: '',
     summary: 'x',
-    about: { idea: 'x', risks: 'x' },
+    about: { idea: 'x', risks: 'x', suits: 'x' },
     plans: [],
     motifs: [],
     tags: [],

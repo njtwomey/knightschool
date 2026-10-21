@@ -9,13 +9,16 @@ summary: >-
   Black cannot keep the pawn, so this is one of the safest gambits.
 about:
   idea: >-
-    The c-pawn attacks d5 from the side, so Black must either give up the centre or tie a pawn or piece to holding it.
-    White then develops, castles and slowly builds pressure, often down the half-open c-file. The play is about plans
-    more than tricks, and a mistake rarely loses quickly.
+    The c-pawn attacks d5 from the side, so Black must either give up the centre or tie a pawn or piece to holding
+    it. White then develops, castles and slowly builds pressure, often down the half-open c-file. The play is about
+    plans more than tricks, and a mistake rarely loses quickly.
   risks: >-
-    Black's main defences, the Declined, the Slav and the Accepted, are all sound, so White's edge is small and games
-    are long. The traps are in the rarer replies: against the Albin (2...e5) the natural e3 walks into the Lasker Trap,
-    and chasing the pawn on c4 with pawns instead of developing loosens White's position.
+    Black's main defences, the Declined, the Slav and the Accepted, are all sound, so White's edge is small and
+    games are long. The traps are in the rarer replies: against the Albin (2...e5) the natural e3 walks into the
+    Lasker Trap, and chasing the pawn on c4 with pawns instead of developing loosens White's position.
+  suits: >-
+    Positional players who like slow pressure and clear plans after 1.d4. It suits anyone who would rather outplay
+    an opponent than trap them.
 plans:
   - If Black takes on c4, win the pawn back with a developing move (e3 and Bxc4), not by chasing it with pawns.
   - If Black declines with ...e6, pin the knight with Bg5, then e3, Nf3, castle and use the c-file.

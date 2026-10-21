@@ -5,25 +5,28 @@ opening: italian-game
 tier: 1
 trigger: '1. e4 e5 2. Nf3'
 summary: >-
-  White aims the bishop at [f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -), castles early and builds
-  slowly with c3 and d3. This half of the course covers Black's 2...Nc6 and every third move after it, including the
-  sharp Two Knights, [Fried Liver](r1bqkb1r/ppp2Npp/2n5/3np3/2B5/8/PPPP1PPP/RNBQK2R b KQkq -) and Traxler lines and the
-  traps.
+  White aims the bishop at [f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -), castles early and
+  builds slowly with c3 and d3. This half of the course covers Black's 2...Nc6 and every third move after it,
+  including the sharp Two Knights, [Fried Liver](r1bqkb1r/ppp2Npp/2n5/3np3/2B5/8/PPPP1PPP/RNBQK2R b KQkq -) and
+  Traxler lines and the traps.
 about:
   idea: >-
-    Every White move develops a piece or prepares to castle, so the opening builds good habits, and the pressure on f7
-    makes Black's natural moves riskier than they look. White keeps the centre under control without committing early,
-    so the play stays calm and the plans are clear.
+    Every White move develops a piece or prepares to castle, so the opening builds good habits, and the pressure on
+    f7 makes Black's natural moves riskier than they look. White keeps the centre under control without committing
+    early, so the play stays calm and the plans are clear.
   risks: >-
     The quiet c3 and d3 setup gives Black time to equalise, so White's edge is small and games are won later, in the
-    middlegame. Black has sharp tries: after 3...Nf6 4.Ng5 the Traxler (4...Bc5) gives up material for an attack that
-    needs exact answers, and 3...Nd4 sets the Blackburne Shilling trap for a greedy Nxe5. Black's bishop on c5 aims at
-    f2 just as White's aims at f7.
+    middlegame. Black has sharp tries: after 3...Nf6 4.Ng5 the Traxler (4...Bc5) gives up material for an attack
+    that needs exact answers, and 3...Nd4 sets the Blackburne Shilling trap for a greedy Nxe5. Black's bishop on c5
+    aims at f2 just as White's aims at f7.
   origin: >-
     One of the oldest openings in chess, named after the Italian players who studied it about four hundred years ago.
+  suits: >-
+    Beginners who want a first 1.e4 opening that builds good habits: develop, castle, then make a plan. It suits
+    players who like steady pressure more than early sacrifices.
 plans:
-  - Bc4 points at [f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -); castle by move six and keep the
-    pieces protected before attacking.
+  - Bc4 points at [f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -); castle by move six and keep
+    the pieces protected before attacking.
   - Build with c3 and d3, not an early d4; then Re1, Bb3, h3 and Nbd2-f1-g3 is the middlegame.
   - Do not play Nc3 while Black's knight can take on e4 and ...d5 hits the bishop and knight together.
   - When Black offers a pawn (Rousseau, Traxler) take what is safe, refuse what is not, and keep developing.

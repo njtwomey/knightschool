@@ -5,17 +5,21 @@ opening: open-games
 tier: 1
 trigger: '1. e4 e5'
 summary: >-
-  Meet 1.e4 with 1...e5, then follow one plan against White's third move: Nc6 and Bc5 against the Italian Game, a closed
-  Ruy Lopez setup, and a handful of simple answers to the Scotch, Four Knights and rare moves.
+  Meet 1.e4 with 1...e5, then follow one plan against White's third move: Nc6 and Bc5 against the Italian Game, a
+  closed Ruy Lopez setup, and a handful of simple answers to the Scotch, Four Knights and rare moves.
 about:
   idea: >-
-    1...e5 puts a pawn in the centre straight away and opens lines for the queen and the bishop on f8, so Black gets a
-    fair share of the centre and develops as freely as White. The positions are open and teach the basics: develop the
-    knights and bishops, castle, and fight for the centre.
+    1...e5 puts a pawn in the centre straight away and opens lines for the queen and the bishop on f8, so Black gets
+    a fair share of the centre and develops as freely as White. The positions are open and teach the basics: develop
+    the knights and bishops, castle, and fight for the centre.
   risks: >-
-    Open lines cut both ways. The pawn on f7 is guarded only by the king, so Black meets more early attacks here than in
-    most defences: Scholar's Mate, the Fried Liver, and gambits such as the King's and the Evans. White chooses which
-    opening to play, so there is a lot of ground to know, and a slip costs more than in a closed position.
+    Open lines cut both ways. The pawn on f7 is guarded only by the king, so Black meets more early attacks here
+    than in most defences: Scholar's Mate, the Fried Liver, and gambits such as the King's and the Evans. White
+    chooses which opening to play, so there is a lot of ground to know, and a slip costs more than in a closed
+    position.
+  suits: >-
+    Players who want to learn chess through open positions: development, the centre and tactics. A good first
+    defence to 1.e4, because it teaches the most, though you meet more of White's ideas than in any other defence.
 plans:
   - Play 2...Nc6, then meet 3.Bc4 with 3...Bc5, 4...Nf6, 5...d6 and castle by move six.
   - Against 3.Bb5 play ...a6, ...Nf6, ...Be7, ...b5, ...d6 and ...O-O, and keep the centre closed.

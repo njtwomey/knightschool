@@ -156,7 +156,7 @@ function About({
     <Page className="gap-6">
       <PlayBreadcrumbs course={course} line={variant.id} tab="about" />
 
-      <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+      <div className="grid gap-x-8 gap-y-6 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] md:grid-rows-[auto_1fr]">
         <div className="grid min-w-0 content-start gap-6">
           <header className="grid gap-2">
             <h1 className="text-2xl font-semibold leading-tight">{variant.name}</h1>
@@ -188,7 +188,32 @@ function About({
               </a>
             </Button>
           </div>
+        </div>
 
+        <aside className="grid content-start gap-2 md:sticky md:top-20 md:col-start-2 md:row-span-2 md:row-start-1 md:self-start">
+          <AppBoard
+            id="line-about"
+            previewable
+            className="aspect-square w-full"
+            epd={epd}
+            orientation={side}
+            interactive={false}
+            lastMove={ply > 0 ? path[ply - 1]?.uci : undefined}
+          />
+          <p className="text-sm">
+            <span className="font-medium">
+              {ply === 0 ? 'The start' : `After ${moveLabel(ply - 1, path[ply - 1]!.san, true)}`}
+            </span>
+            {positionName && <span className="text-muted-foreground">: {positionName}</span>}
+          </p>
+          {ply !== named && (
+            <Button variant="link" className="h-auto justify-start p-0 text-sm" onClick={() => setPly(named)}>
+              Back to the position that names the line
+            </Button>
+          )}
+        </aside>
+
+        <div className="grid min-w-0 content-start gap-6">
           <section className="grid gap-3" aria-labelledby="line-moves">
             <h2 id="line-moves" className="text-lg font-semibold">
               The line, move by move
@@ -277,29 +302,6 @@ function About({
             <CourseIntro summary={opening.summary} about={opening.about} />
           </section>
         </div>
-
-        <aside className="grid content-start gap-2 md:sticky md:top-20 md:self-start">
-          <AppBoard
-            id="line-about"
-            previewable
-            className="aspect-square w-full"
-            epd={epd}
-            orientation={side}
-            interactive={false}
-            lastMove={ply > 0 ? path[ply - 1]?.uci : undefined}
-          />
-          <p className="text-sm">
-            <span className="font-medium">
-              {ply === 0 ? 'The start' : `After ${moveLabel(ply - 1, path[ply - 1]!.san, true)}`}
-            </span>
-            {positionName && <span className="text-muted-foreground">: {positionName}</span>}
-          </p>
-          {ply !== named && (
-            <Button variant="link" className="h-auto justify-start p-0 text-sm" onClick={() => setPly(named)}>
-              Back to the position that names the line
-            </Button>
-          )}
-        </aside>
       </div>
     </Page>
   );

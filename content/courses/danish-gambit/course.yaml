@@ -6,17 +6,20 @@ tier: 2
 trigger: '1. e4 e5 2. d4 exd4 3. c3'
 summary: >-
   White gives up two pawns with [3.c3](rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq -) to get both bishops
-  pointing at Black's king and a big lead in development. You learn what to play when Black takes the pawns, when Black
-  hands one back with ...d5, and how to meet the other replies.
+  pointing at Black's king and a big lead in development. You learn what to play when Black takes the pawns, when
+  Black hands one back with ...d5, and how to meet the other replies.
 about:
   idea: >-
-    Black spends three moves taking pawns while White develops, so White's pieces arrive first and Black's king is still
-    in the centre. The attack is easy to learn because the plan barely changes, and defenders who do not know the safe
-    replies can lose quickly.
+    Black spends three moves taking pawns while White develops, so White's pieces arrive first and Black's king is
+    still in the centre. The attack is easy to learn because the plan barely changes, and defenders who do not know
+    the safe replies can lose quickly.
   risks: >-
     Two pawns is a lot to give. With careful defence, often by handing one back with ...d5, Black is fine, and the
-    engine rates Black a little better. If the attack runs out, or White trades queens without winning material back,
-    White is simply worse in the endgame.
+    engine rates Black a little better. If the attack runs out, or White trades queens without winning material
+    back, White is simply worse in the endgame.
+  suits: >-
+    Attacking players who enjoy open lines and quick development, especially in fast games. Against a defender who
+    knows ...d5 it is only level, so play it for fun and for practice in attacking.
 plans:
   - Develop at top speed. Bring the bishops to c4 and b2, then knights to c3 and f3, and castle by move ten.
   - Aim the bishops at the king. The one on b2 hits g7 along the long diagonal and the one on c4 hits f7.

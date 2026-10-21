@@ -5,26 +5,29 @@ opening: pawn-gambits
 tier: 2
 trigger: '1. e4 e5 2. f4'
 summary: >-
-  White offers the f-pawn so that Black's e-pawn leaves the centre and the f-file opens. If Black takes it, White wins
-  the centre with d4 or hunts the extra pawn; if Black declines, White develops calmly. The sharp [Kieseritzky
-  line](rnbqkbnr/pppp1p1p/8/4N3/4PppP/8/PPPP2P1/RNBQKB1R b KQkq -) is the main line here, and the engine rates Black a
-  little better in most lines, so this is a course for players who enjoy attacking chess.
+  White offers the f-pawn so that Black's e-pawn leaves the centre and the f-file opens. If Black takes it, White
+  wins the centre with d4 or hunts the extra pawn; if Black declines, White develops calmly. The sharp [Kieseritzky
+  line](rnbqkbnr/pppp1p1p/8/4N3/4PppP/8/PPPP2P1/RNBQKB1R b KQkq -) is the main line here, and the engine rates Black
+  a little better in most lines, so this is a course for players who enjoy attacking chess.
 about:
   idea: >-
-    White wants Black's e-pawn off the centre, so that d4 gives White two centre pawns, and wants the f-file open for
-    the rook once the king has castled. It leads to open, attacking games where both kings can come under fire, and many
-    defenders go wrong early.
+    White wants Black's e-pawn off the centre, so that d4 gives White two centre pawns, and wants the f-file open
+    for the rook once the king has castled. It leads to open, attacking games where both kings can come under fire,
+    and many defenders go wrong early.
   risks: >-
-    Pushing the f-pawn weakens White's own king: the diagonal from h4 to e1 opens, so ...Qh4+ is a constant danger, and
-    castling takes longer. Black can hold the extra pawn with ...g5 or hit back in the centre with ...d5. The lines are
-    sharp, and one slip often decides the game.
+    Pushing the f-pawn weakens White's own king: the diagonal from h4 to e1 opens, so ...Qh4+ is a constant danger,
+    and castling takes longer. Black can hold the extra pawn with ...g5 or hit back in the centre with ...d5. The
+    lines are sharp, and one slip often decides the game.
   origin: >-
     One of the oldest gambits, and the favourite attack of the great players of the 1800s.
+  suits: >-
+    Players who love attacking chess and accept that a careful defender stands a little better. Choose it for fast
+    games and for learning how open lines and king safety work.
 plans:
   - Take the centre with d4 and develop fast; the f-pawn is bait, not an investment you must defend.
   - If Black holds the extra pawn with ...g5, attack that pawn with h4 and win f4 back with the bishop.
-  - Never take on e5 while Black's [bishop on c5](rnbqk1nr/pppp1ppp/8/2b1p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq -) and queen
-    can give check on h4; play Nf3 first.
+  - Never take on e5 while Black's [bishop on c5](rnbqk1nr/pppp1ppp/8/2b1p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq -) and
+    queen can give check on h4; play Nf3 first.
   - Against ...Be7 or ...Nf6, push e5 to gain time and leave Black's knight with few squares; after
     [...g5?](rnbqk2r/ppp1bp1p/3p4/4P1pn/2BP1p2/2N2N2/PPP3PP/R1BQK2R w KQkq -) the knight on h5 is loose.
   - Against the Falkbeer (...d5), take the pawns, develop with Nf3 and Qe2, and trade queens only when you are ahead.

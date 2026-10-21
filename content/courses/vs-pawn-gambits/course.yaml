@@ -5,19 +5,22 @@ opening: pawn-gambits
 tier: 3
 trigger: ''
 summary: >-
-  The same gambits as the White courses, seen from Black's chair. Most lines here are borrowed from the Open Games and
-  Queen's Gambit Declined courses and are drilled there; they are gathered by gambit so you can read them side by side.
-  The Falkbeer and Albin lines are gambits Black plays. For the Rousseau Gambit see its own course.
+  The same gambits as the White courses, seen from Black's chair. Most lines here are borrowed from the Open Games
+  and Queen's Gambit Declined courses and are drilled there; they are gathered by gambit so you can read them side
+  by side. The Falkbeer and Albin lines are gambits Black plays. For the Rousseau Gambit see its own course.
 about:
   idea: >-
     Seen from the defender's side, every gambit works the same way: White gives a pawn for time and open lines, and
-    Black's job is to finish developing and castle before that time turns into an attack. Black can take the pawn and
-    hand it back at a good moment, decline it calmly, or hit back in the centre with a gambit of its own, the Falkbeer
-    (2...d5) or the Albin (2...e5).
+    Black's job is to finish developing and castle before that time turns into an attack. Black can take the pawn
+    and hand it back at a good moment, decline it calmly, or hit back in the centre with a gambit of its own, the
+    Falkbeer (2...d5) or the Albin (2...e5).
   risks: >-
     The danger is greed. Holding on to the extra pawn at any cost leaves Black's king in the middle with f7 or the
-    e-file open, and that is how most quick losses against gambits happen. The Falkbeer and the Albin are sharp, and the
-    engine gives White a clear edge against the Albin, so learn their main lines before you play them.
+    e-file open, and that is how most quick losses against gambits happen. The Falkbeer and the Albin are sharp, and
+    the engine gives White a clear edge against the Albin, so learn their main lines before you play them.
+  suits: >-
+    Anyone who keeps meeting gambits and wants to see the defender's side of each one together. It is a course for
+    reading: its lines are drilled in their home courses.
 plans:
   - Take the pawn only when you know how to give it back; otherwise decline calmly and develop.
   - Fight for the centre with a pawn (Falkbeer, Albin) when White's lead in development is not yet dangerous.

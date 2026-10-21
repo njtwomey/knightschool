@@ -10,11 +10,15 @@ summary: >-
 about:
   idea: >-
     Every move Black spends on the queen is a move White spends developing. White hits the queen with Nc3 and later
-    pieces, builds a centre with d4 and gets a comfortable game with more space; the engine rates White a little better. The same simple plan works whether Black takes back with the queen or the knight.
+    pieces, builds a centre with d4 and gets a comfortable game with more space; the engine rates White a little
+    better. The same simple plan works whether Black takes back with the queen or the knight.
   risks: >-
     The Scandinavian is solid, so White's edge is modest and can slip away if White does not develop with a purpose.
-    Black has tricks too: a knight on f3 can be pinned by ...Bg4, and a black queen on a5 is ready to snap up any piece
-    White leaves loose. Keep pieces protected before you attack.
+    Black has tricks too: a knight on f3 can be pinned by ...Bg4, and a black queen on a5 is ready to snap up any
+    piece White leaves loose. Keep pieces protected before you attack.
+  suits: >-
+    Anyone who meets the Scandinavian: the plan is simple and the same against every recapture. It suits players who
+    like to punish an early queen move by developing with tempo.
 plans:
   - After ...Qxd5 play Nc3 with tempo, then d4, Nf3 and Bd2 or Bc4, and castle.
   - If the black bishop goes to g4, play h3 to ask it a question; do not walk the f3 knight away.

@@ -80,7 +80,7 @@ graph (built into `public/content/tree.json` for drawing; positions there are `p
 
 A **course** is `content/courses/<id>/{course.yaml,quizzes.yaml}`, id = folder name: side, trigger, tier (1 study first,
 2 next, 3 alternatives), the opening it belongs to (an id from `content/openings.yaml`, which says who plays it: "playing it"
-or "playing against it"), a required introduction (`about`: `idea`, `risks`, optional `origin`), plans, motifs (from
+or "playing against it"), a required introduction (`about`: `idea`, `risks`, `suits`, optional `origin`), plans, motifs (from
 `content/motifs.yaml`), and `lines:` (line ids in teaching order, each optionally with `alternative`, `kind`, `opponent`,
 `section`). Any course lists any line of either side; a trap written for the other side flips. `projectCourse` rebuilds each
 listed line from the start and merges them with `buildOpening` into the course's EPD-keyed tree: the shape the app reads,

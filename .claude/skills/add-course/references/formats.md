@@ -59,20 +59,20 @@ content/courses/<id>/quizzes.yaml                     optional
 
 ## course.yaml
 
-| Key       | Meaning                                                                                                                        |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `name`    | The course name; quote it if it has a colon                                                                                    |
-| `eco`     | Optional ECO code of the opening                                                                                               |
-| `side`    | The learner's side, `white` or `black` (the folder no longer says it)                                                          |
-| `opening` | An id in `content/openings.yaml`: who plays that opening decides "play it" versus "play against it"                            |
-| `tier`    | 1 study first, 2 next, 3 alternatives and rare replies                                                                         |
-| `trigger` | SAN to the position every listed line passes through: `1. e4 e5 2. Nf3` (`''` is the initial position)                         |
-| `summary` | Two plain sentences (a `>-` block): what the opening is, and what the course covers                                            |
-| `about`   | Required introduction: `idea` (why our side plays it), `risks` (what can go wrong, the opponent's best try), optional `origin` |
-| `plans`   | A few bullets a 1200 can act on when the opponent leaves the book                                                              |
-| `motifs`  | Ids from `content/motifs.yaml`                                                                                                 |
-| `tags`    | Optional, searchable                                                                                                           |
-| `lines`   | Teaching order, the first is the main line. Each entry is a line id, or `{id, kind?, opponent?, alternative?, section?}`       |
+| Key       | Meaning                                                                                                                                                                   |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`    | The course name; quote it if it has a colon                                                                                                                               |
+| `eco`     | Optional ECO code of the opening                                                                                                                                          |
+| `side`    | The learner's side, `white` or `black` (the folder no longer says it)                                                                                                     |
+| `opening` | An id in `content/openings.yaml`: who plays that opening decides "play it" versus "play against it"                                                                       |
+| `tier`    | 1 study first, 2 next, 3 alternatives and rare replies                                                                                                                    |
+| `trigger` | SAN to the position every listed line passes through: `1. e4 e5 2. Nf3` (`''` is the initial position)                                                                    |
+| `summary` | Two plain sentences (a `>-` block): what the opening is, and what the course covers                                                                                       |
+| `about`   | Required introduction: `idea` (why our side plays it), `risks` (what can go wrong, the opponent's best try), `suits` (who it suits, when to choose it), optional `origin` |
+| `plans`   | A few bullets a 1200 can act on when the opponent leaves the book                                                                                                         |
+| `motifs`  | Ids from `content/motifs.yaml`                                                                                                                                            |
+| `tags`    | Optional, searchable                                                                                                                                                      |
+| `lines`   | Teaching order, the first is the main line. Each entry is a line id, or `{id, kind?, opponent?, alternative?, section?}`                                                  |
 
 ```yaml
 lines:

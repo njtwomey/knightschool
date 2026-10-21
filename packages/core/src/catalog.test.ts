@@ -34,7 +34,7 @@ const course = (over: Partial<OpeningIndexEntry>): OpeningIndexEntry => ({
   tier: 1,
   trigger: '1. e4',
   summary: '',
-  about: { idea: '', risks: '' },
+  about: { idea: '', risks: '', suits: '' },
   plans: [],
   motifs: [],
   tags: [],

@@ -75,7 +75,7 @@ chapter there. `check-course` builds one course as the real build does.
    `moves` = SAN to the defining position), and the course in `content/curriculum.yaml` (study order and `prerequisites`, which
    must appear earlier in the list). Motif ids come from `content/motifs.yaml`; add a motif there only if it is genuinely new.
 3. **Scaffold** the course: copy `templates/course.yaml` (and `quizzes.yaml`) into the course folder and replace everything.
-   Write the introduction (`summary` plus `about: {idea, risks, origin?}`, writing.md) so a beginner knows what the
+   Write the introduction (`summary` plus `about: {idea, risks, suits, origin?}`, writing.md) so a beginner knows what the
    opening is for.
 4. **List what exists** first: every tree line the course should teach goes into `lines:` by id, with `kind`, `opponent`,
    `section` or `alternative` overrides where this course sees it differently.
@@ -124,7 +124,7 @@ chapter there. `check-course` builds one course as the real build does.
 - [ ] Main line = the most common reply; every likely reply has a line or variation with a learner answer.
 - [ ] One unmarked learner move per position; mistakes marked; `for-us` traps are real and end clearly better (+1.5).
 - [ ] The opening is in `openings.yaml`, the course in `curriculum.yaml`, motifs exist.
-- [ ] `about` has an `idea` and `risks` a beginner can follow, true to the engine; `origin` only if certain.
+- [ ] `about` has an `idea`, `risks` and `suits` a beginner can follow, true to the engine; `origin` only if certain.
 - [ ] Notes give reasons in plain words and neutral sides, no copied text, no undefined jargon; position links were made
       with `pnpm fen`.
 - [ ] Quizzes have 3+ match and 3+ miss examples.

@@ -101,6 +101,8 @@ export const CourseAbout = z.object({
   idea: z.string().min(1),
   /** Its weaknesses and risks for our side, and the opponent's best try against it. */
   risks: z.string().min(1),
+  /** Who it suits: the kind of player and game it fits, and when to choose it over the alternatives. */
+  suits: z.string().min(1),
   /** Optional: where the opening comes from or who made it popular. Left out rather than guessed. */
   origin: z.string().min(1).optional(),
 });

@@ -5,18 +5,21 @@ opening: pawn-gambits
 tier: 2
 trigger: '1. e4 e5 2. Nc3 Nf6 3. f4'
 summary: >-
-  White plays the f-pawn to open the f-file and build a big centre, as in the King's Gambit but with the knight on c3
-  already guarding e4. This course teaches the best defence,
+  White plays the f-pawn to open the f-file and build a big centre, as in the King's Gambit but with the knight on
+  c3 already guarding e4. This course teaches the best defence,
   [3...d5](rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq -), and every other reply, with the traps.
 about:
   idea: >-
-    The f-pawn attacks e5, so Black has to decide at once whether to take, defend or hit back. After fxe5 the knight on
-    f6 loses its best square, White gets more pawns in the centre with d4, and the f-file opens for the rook once White
-    has castled.
+    The f-pawn attacks e5, so Black has to decide at once whether to take, defend or hit back. After fxe5 the knight
+    on f6 loses its best square, White gets more pawns in the centre with d4, and the f-file opens for the rook once
+    White has castled.
   risks: >-
-    The best reply, 3...d5, gives Black an active knight on e4 and an equal game; the engine rates the gambit level at
-    best. Like the King's Gambit it loosens White's king, because the diagonal from h4 to e1 opens, and bringing the
-    queen out early to h5 to chase the knight is a known trap for White. Castle before you attack.
+    The best reply, 3...d5, gives Black an active knight on e4 and an equal game; the engine rates the gambit level
+    at best. Like the King's Gambit it loosens White's king, because the diagonal from h4 to e1 opens, and bringing
+    the queen out early to h5 to chase the knight is a known trap for White. Castle before you attack.
+  suits: >-
+    Players who want an aggressive weapon against 1...e5 with less risk than the King's Gambit. It suits those who
+    like a sharp centre but want the e4 pawn protected.
 plans:
   - Take on e5 first (fxe5), develop Nf3, play d4 and Bd3 and castle; the extra centre pawns are the compensation.
   - Against 3...d5 4.fxe5 Nxe4, answer 5.Nf3, not 5.Qh5; the queen comes out only after the pieces.

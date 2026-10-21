@@ -69,7 +69,7 @@ export function buildOpening(
   quizEntries: QuizEntry[] = [],
 ): OpeningContent {
   const { about } = manifest;
-  for (const text of [manifest.summary, about.idea, about.risks, about.origin ?? '', ...manifest.plans])
+  for (const text of [manifest.summary, about.idea, about.risks, about.suits, about.origin ?? '', ...manifest.plans])
     checkRichText(text, `${id}/course.yaml`);
   const lineIds = manifest.lines.map((line) => line.file);
   const trapIds = manifest.traps.map((trap) => trap.file);

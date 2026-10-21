@@ -9,19 +9,22 @@ summary: >-
   plans repeat from game to game, so it is the alternative to a full 1.d4 repertoire.
 about:
   idea: >-
-    The London is a system: the same piece placement against nearly every Black setup, so you spend your time on plans
-    rather than move orders. The pawns on c3, d4 and e3 make a centre that is very hard to break, and with the bishop
-    outside it on f4 White gets a safe game, a strong knight on e5 and chances of a slow kingside attack.
+    The London is a system: the same piece placement against nearly every Black setup, so you spend your time on
+    plans rather than move orders. The pawns on c3, d4 and e3 make a centre that is very hard to break, and with the
+    bishop outside it on f4 White gets a safe game, a strong knight on e5 and chances of a slow kingside attack.
   risks: >-
-    It is solid rather than ambitious, so a well-prepared Black equalises easily and you win by outplaying the opponent
-    later. With the bishop gone from c1 the pawn on b2 has no defender, which is why ...c5 and ...Qb6 need an answer
-    straight away. Playing the same moves without looking can cost material, for example when ...Nh5 hunts the bishop on
-    f4.
+    It is solid rather than ambitious, so a well-prepared Black equalises easily and you win by outplaying the
+    opponent later. With the bishop gone from c1 the pawn on b2 has no defender, which is why ...c5 and ...Qb6 need
+    an answer straight away. Playing the same moves without looking can cost material, for example when ...Nh5 hunts
+    the bishop on f4.
   origin: >-
     Named after the London tournament of 1922, where several of the leading players used it.
+  suits: >-
+    Players who want one 1.d4 setup for nearly every game and little theory to learn. It suits those who like solid
+    positions and slow kingside attacks.
 plans:
-  - Put the bishop on f4 before playing e3, then build the pawn chain with e3, c3 and d4. Retreat the bishop to g3, not
-    h2.
+  - Put the bishop on f4 before playing e3, then build the pawn chain with e3, c3 and d4. Retreat the bishop to g3,
+    not h2.
   - Develop Nd2, Ngf3 and Bd3, castle, and aim for a knight on e5 backed by the pawn on d4.
   - If Black plays ...c5 and ...Qb6, protect or counter b2 straight away (Nc3 or Qc1) before castling.
   - Against a fianchetto or an odd first move, play the same pieces and leave the centre alone until you are castled.

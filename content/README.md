@@ -97,6 +97,8 @@ about: # required: the introduction at the top of the course page and on the pla
     Two to four plain sentences.
   risks: >- # its weaknesses for our side, and the opponent's best try against it
     Two to four plain sentences.
+  suits: >- # who it suits and when to choose it over the alternatives
+    One or two plain sentences.
   origin: >- # optional: where it comes from or who made it popular; leave it out rather than guess
     One sentence.
 plans: # a few bullets a 1200 can act on when the opponent leaves the book
@@ -116,7 +118,7 @@ lines: # teaching order, any line of the tree by id; the first is the main line
 
 **The introduction.** Nobody should land on a course without knowing what it is. `summary` says what the opening is,
 `about.idea` why our side plays it, `about.risks` what can go wrong for our side (including the opponent's best try and,
-for a gambit, what the engine thinks of it), and the optional `about.origin` where it comes from. Write for a beginner, a
+for a gambit, what the engine thinks of it), `about.suits` who it suits and when to choose it, and the optional `about.origin` where it comes from. Write for a beginner, a
 few sentences each, without repeating the summary or the plans. Leave `origin` out unless you are sure of the history.
 
 **What `kind` does to cards.** `main` and `gambit` lines always produce cards. `sideline` lines do unless the explorer says

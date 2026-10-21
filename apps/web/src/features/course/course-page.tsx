@@ -157,7 +157,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
             </div>
             <CourseIntro summary={course.summary} about={course.about} />
             {course.plans.length > 0 && (
-              <section aria-label="Plans" className="grid max-w-3xl gap-1">
+              <section aria-label="Plans" className="grid gap-1">
                 <h3 className="text-sm font-semibold">Plans to remember</h3>
                 <ul className="grid list-disc gap-1 pl-5 text-sm">
                   {course.plans.map((plan) => (

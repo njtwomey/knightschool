@@ -9,14 +9,17 @@ summary: >-
   Sicilian. You will learn the plan against Black's three main replies and a short answer to each rarer one.
 about:
   idea: >-
-    The open Sicilian (2.Nf3 and 3.d4) gives Black lots of counterplay and needs a lot of theory. 2.c3 sidesteps it: it
-    prepares d4, so that if Black takes, White recaptures with a pawn and keeps two pawns side by side in the centre.
-    The plans are clear and repeat from game to game.
+    The open Sicilian (2.Nf3 and 3.d4) gives Black lots of counterplay and needs a lot of theory. 2.c3 sidesteps it:
+    it prepares d4, so that if Black takes, White recaptures with a pawn and keeps two pawns side by side in the
+    centre. The plans are clear and repeat from game to game.
   risks: >-
     The pawn on c3 takes the knight's best square, so White develops a little more slowly, and Black can hit back at
-    once with ...d5 or ...Nf6, attacking e4 before d4 is played. White often ends up with an isolated pawn on d4 (one
-    with no pawns beside it to guard it), which gives active play but can become a target. With good play Black
+    once with ...d5 or ...Nf6, attacking e4 before d4 is played. White often ends up with an isolated pawn on d4
+    (one with no pawns beside it to guard it), which gives active play but can become a target. With good play Black
     equalises.
+  suits: >-
+    Players who want to meet the Sicilian without learning the long theory of the open lines. It suits anyone who
+    likes a clear centre and the same plans from game to game.
 plans:
   - Play d4 next move. If Black takes, recapture with the c-pawn and keep pawns on d4 and e4 or e5.
   - Develop the knights and the king's bishop, castle, and only then look for a second centre break.

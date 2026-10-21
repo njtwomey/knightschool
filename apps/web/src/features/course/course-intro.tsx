@@ -1,5 +1,5 @@
 import type { CourseAbout, Side, Variant } from '@knightschool/core';
-import { ChevronDown, Lightbulb, TriangleAlert } from 'lucide-react';
+import { ChevronDown, Lightbulb, TriangleAlert, UserRound } from 'lucide-react';
 import { useState, type ComponentType } from 'react';
 import { RichText } from '@/components/rich-text';
 import { Button } from '@/components/ui/button';
@@ -42,20 +42,22 @@ function Origin({ text }: { text: string }) {
 }
 
 /**
- * The introduction at the top of a course page: what the opening is (the summary), why it is played and what can go
- * wrong, so nobody lands on a course without knowing what it is for.
+ * The introduction at the top of a course page: what the opening is (the summary), why it is played, what can go wrong
+ * and who it suits, so nobody lands on a course without knowing what it is for. It spans the page: three columns on a
+ * wide screen, stacked on a phone.
  */
 export function CourseIntro({ summary, about }: Intro) {
   return (
-    <section aria-label="Introduction" className="grid max-w-3xl gap-3">
+    <section aria-label="Introduction" className="grid gap-3">
       <p className="leading-relaxed">
         <RichText text={summary} />
       </p>
-      <div className="grid gap-3 rounded-xl border bg-card p-3 sm:grid-cols-2 sm:gap-4 sm:p-4">
+      <div className="grid gap-3 rounded-xl border bg-card p-3 sm:grid-cols-2 sm:gap-4 sm:p-4 lg:grid-cols-3">
         <Part icon={Lightbulb} title="The idea" text={about.idea} />
         <Part icon={TriangleAlert} title="What can go wrong" text={about.risks} />
+        <Part icon={UserRound} title="Who it suits" text={about.suits} />
         {about.origin && (
-          <div className="sm:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-3">
             <Origin text={about.origin} />
           </div>
         )}
@@ -101,6 +103,7 @@ export function CourseIntroCard({
           <CardContent className="grid gap-3 px-4">
             <Part icon={Lightbulb} title="The idea" text={about.idea} />
             <Part icon={TriangleAlert} title="What can go wrong" text={about.risks} />
+            <Part icon={UserRound} title="Who it suits" text={about.suits} />
             {variant && (
               <div className="grid gap-1.5 border-t pt-3">
                 <h3 className="text-sm font-semibold">

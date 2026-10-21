@@ -52,13 +52,19 @@ describe('buildOpening with a reused line', () => {
 describe('buildOpening with an introduction', () => {
   const lines = [variant('main', 'line', '1. e4 e5 *')];
   it('carries the idea, the risks and the origin through to the course', () => {
-    const about = { idea: 'Aim at [f7](4k3/5p2/8/8/8/8/8/4K3 w - -).', risks: 'f2 is weak too.', origin: 'Old.' };
+    const about = {
+      idea: 'Aim at [f7](4k3/5p2/8/8/8/8/8/4K3 w - -).',
+      risks: 'f2 is weak too.',
+      suits: 'Everyone.',
+      origin: 'Old.',
+    };
     expect(buildOpening('test', manifest({ about }), lines).opening.about).toEqual(about);
   });
   it.each([
-    ['idea', { idea: 'bad [f7](rnbqkbnr/9/8/8/8/8/8/8 w - -)', risks: 'x' }],
-    ['risks', { idea: 'x', risks: 'bad [f7](rnbqkbnr/9/8/8/8/8/8/8 w - -)' }],
-    ['origin', { idea: 'x', risks: 'x', origin: 'bad [f7](rnbqkbnr/9/8/8/8/8/8/8 w - -)' }],
+    ['idea', { idea: 'bad [f7](rnbqkbnr/9/8/8/8/8/8/8 w - -)', risks: 'x', suits: 'x' }],
+    ['risks', { idea: 'x', risks: 'bad [f7](rnbqkbnr/9/8/8/8/8/8/8 w - -)', suits: 'x' }],
+    ['suits', { idea: 'x', risks: 'x', suits: 'bad [f7](rnbqkbnr/9/8/8/8/8/8/8 w - -)' }],
+    ['origin', { idea: 'x', risks: 'x', suits: 'x', origin: 'bad [f7](rnbqkbnr/9/8/8/8/8/8/8 w - -)' }],
   ])('rejects a broken position link in the %s', (_, about) => {
     expect(() => buildOpening('test', manifest({ about }), lines)).toThrow(/course\.yaml/);
   });

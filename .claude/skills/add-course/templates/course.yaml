@@ -11,6 +11,8 @@ about: # required: the introduction shown at the top of the course page and on t
     Why our side plays it and what it hopes for, in two to four plain sentences a beginner can follow.
   risks: >-
     What can go wrong for our side: the weaknesses, the opponent's best try, and for a gambit what the engine thinks.
+  suits: >-
+    Who it suits: the kind of player and game it fits, and when to choose it over the alternatives. One or two sentences.
   # origin: >-   # optional: where it comes from or who made it popular. Leave it out rather than guess.
   #   One sentence.
 plans:

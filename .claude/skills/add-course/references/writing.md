@@ -23,6 +23,8 @@ The course page and the play page open with it, so a learner who has never heard
   repeatable plan). Two to four sentences.
 - `risks`: what can go wrong for our side: the structural cost (a shut-in bishop, a weakened king, a pawn down), the
   opponent's best try, and for a gambit what the engine thinks of it (check with `course:eval` or native Stockfish).
+- `suits`: who it suits and when to choose it: the style of player (attacker, solid, low on study time), the kind of
+  game, and how it compares with the other courses for the same moment. One or two sentences.
 - `origin` (optional): one sentence on where the name comes from or who made it popular. Only what you are sure of; leave
   it out rather than guess.
 
