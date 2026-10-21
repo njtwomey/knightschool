@@ -1,0 +1,31 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Indian Defense: Accelerated London System, 2...e6"]
+[ECO "A45"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "hanging-piece"]
+[Themes "h2-retreat,e4-break"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "1...Nf6 2.Bf4 e6 3.e3 c5"]
+[Start "vs-nf6-g6 2...e6 3.e3"]
+
+3... c5
+( 3... b6 4. Nd2 { The usual knight route to f3, leaving the c-pawn free. } 4... Bb7 5. Ngf3 Be7 6. h3 { Gives the bishop the h2 square, so ...Nh5 can be met by Bh2 and the bishop keeps its diagonal. } 6... O-O 7. Bd3 { Points at h7 and gets ready to castle. Qe2 and e4 can follow. } )
+( 3... Be7 4. Nd2 O-O ( 4... c5 5. c3 { Transposes to 3...c5 4.c3 Be7 5.Nd2. } ) 5. h3 )
+( 3... Nc6 4. Nd2 )
+( 3... Bb4+ 4. c3 Be7 5. Nd2 )
+( 3... d6 4. h3 )
+4. c3 { Backs up d4, so after ...cxd4 a pawn recaptures. If ...Qb6 comes, the queen meets it on b3. }
+4... Be7
+( 4... d5 { Transposes to 1...d5 2.Bf4 e6 3.e3 c5 4.c3 Nf6. } )
+( 4... Nc6 { Transposes to 1...e6 2.Bf4 c5 3.e3 Nc6 4.c3 Nf6. } )
+( 4... Qb6 5. Qb3 { Offers a queen trade, which takes away the piece hitting b2. } 5... Nc6 6. Nd2 )
+( 4... cxd4 5. exd4 )
+( 4... b6 5. Nd2 )
+5. Nd2 O-O
+( 5... d5 6. Ngf3 )
+6. h3 { Gives the bishop the h2 square. Without it, ...Nh5 would force the bishop off its good diagonal. }
+6... b6 ( 6... d5 7. Ngf3 Nc6 8. Bd3 ) 7. Ngf3 Bb7 8. Bd3 { The bishop aims at h7. Plan: castle, Qe2, then e4 to take more of the centre. If ...Nh5, Bh2 keeps the bishop. } *

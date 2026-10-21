@@ -1,0 +1,30 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Indian Defense: Accelerated London System, 2...c5"]
+[ECO "A45"]
+[Character "solid"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "fork,pawn-grab"]
+[Themes "b2-pressure,transposition"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "1...Nf6 2.Bf4 c5"]
+[Start "vs-nf6-g6 2.Bf4"]
+
+2... c5 { Hits d4 at once, while the bishop on f4 cannot guard it. }
+3. e3 { Keeps a pawn behind d4. If ...cxd4, exd4 and the centre stays solid. }
+3... Qb6
+( 3... d5 { Transposes to 1...d5 2.Bf4 Nf6 3.e3 c5. } )
+( 3... e6 { Transposes to 1...Nf6 2.Bf4 e6 3.e3 c5. } )
+( 3... cxd4 4. exd4 )
+( 3... g6 4. c3 Bg7 5. Nf3 )
+( 3... Nc6 4. d5 { Hits the knight. It has to go to the edge or back home, and the pawn on d5 cramps Black. } )
+4. Nc3 { Guards b2 with a counter: if the queen takes it, Nb5 heads for c7, where a knight would fork the king and the rook on a8. }
+4... cxd4
+( 4... Qxb2 5. Nb5 { Threatens Nc7+. Black has to spend a move guarding c7, and the queen on b2 is a long way from home. } )
+( 4... d6 5. Rb1 { Guards b2 calmly. Next Nf3 and Be2, and the queen on b6 has nothing to bite on. } )
+5. exd4 { Recaptures with the pawn, so the e-file opens and d4 stays guarded by the queen. }
+5... e6
+( 5... Qxb2 $2 6. Nb5 { Threatens Nc7+, forking the king and the rook on a8. Black's queen is far away and cannot help. } )
+6. Nf3 Be7 7. Bd3 { Develops and gets ready to castle. Plan: O-O, Re1 and a knight to e5, with the bishop on d3 aiming at h7. } *

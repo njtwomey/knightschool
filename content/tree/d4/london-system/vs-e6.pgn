@@ -1,0 +1,37 @@
+[Event "Knight School"]
+[Opening "Horwitz Defense"]
+[Variation "Horwitz Defense: London set-up"]
+[ECO "A40"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork"]
+[Themes "transposition,b2-pressure"]
+[For "white"]
+[Kind "main"]
+[Opponent "1...e6"]
+[Start "orthodox 1.d4"]
+
+1... e6 { Keeps Black's options open: ...d5, ...Nf6, ...c5 or ...b6 can follow, and after e4 it would be a French Defence. }
+2. Bf4 { The same bishop move as against 1...d5. Most of Black's replies now lead to positions this course already covers. }
+2... c5
+( 2... d5 { Transposes to 1...d5 2.Bf4 e6. } )
+( 2... Nf6 { Transposes to 1...Nf6 2.Bf4 e6. } )
+( 2... f5 { Transposes to the Dutch line, 1...f5 2.Bf4 e6. } )
+( 2... b6 3. e3 Bb7 4. Nd2 Nf6 { Transposes to 1...Nf6 2.Bf4 e6 3.e3 b6. } )
+( 2... Bd6 3. Bxd6 { Trades off Black's only developed piece. Black has to take back with the c-pawn. } 3... cxd6 4. e4 { With the bishop gone, nothing stops White taking the whole centre. } )
+( 2... Bb4+ 3. c3 { Asks the bishop where it is going. It has to go back, and Black has lost time. } 3... Be7 4. e3 )
+3. e3 { Keeps a pawn behind d4. Black's natural replies now transpose to lines with ...d5 or ...Nf6. }
+3... Nc6
+( 3... d5 { Transposes to 1...d5 2.Bf4 e6 3.e3 c5. } )
+( 3... Nf6 { Transposes to 1...Nf6 2.Bf4 e6 3.e3 c5. } )
+( 3... Qb6 4. Nc3 { Guards b2 with a trick: if the queen takes it, Nb5 threatens Nc7+, forking the king and the rook on a8. } 4... Nf6 ( 4... Qxb2 $2 5. Nb5 { Threatens Nc7+ and also a3 and Ra2 to trap the queen. Black cannot stop everything. } ) ( 4... cxd4 5. exd4 ) 5. Nf3 )
+( 3... cxd4 4. exd4 )
+4. c3 { Backs up d4, so a capture there is answered by a pawn. }
+4... Nf6
+( 4... d5 { Transposes to 1...d5 2.Bf4 e6 3.e3 c5 4.c3 Nc6. } )
+5. Nd2 { The knight goes to f3 by way of d2. With e2 and f3 empty, ...Nh5 would drop the knight to Qxh5. }
+5... d5 { Transposes to the main line, 1...d5 2.Bf4 Nf6 3.e3 e6 4.Nd2 c5 5.c3 Nc6. }
+( 5... Be7 6. h3 { Gives the bishop the h2 square, so ...Nh5 can be met by Bh2. } )
+( 5... Qb6 6. Nc4 { Hits the queen. If it drops back to d8, dxc5 and Nd6+ follow, because the bishop on f4 backs up d6. } )
+( 5... cxd4 6. exd4 ) *

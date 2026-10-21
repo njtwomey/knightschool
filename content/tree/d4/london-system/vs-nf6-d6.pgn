@@ -1,0 +1,24 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Indian Defense: Accelerated London System, 2...d6"]
+[ECO "A45"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "hanging-piece,early-queen"]
+[Themes "h2-retreat,transposition"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "1...Nf6 2.Bf4 d6"]
+[Start "vs-nf6-g6 2.Bf4"]
+
+2... d6 { Prepares ...e5, which would chase the bishop on f4, or ...g6 and a King's Indian set-up. }
+3. e3 { Supports d4 and opens the queen's diagonal to h5, so ...Nh5 would hang the knight. }
+3... g6
+( 3... Nbd7 4. h3 { Gives the bishop h2. If ...e5 comes, the bishop steps back and still presses on e5. } 4... e5 5. Bh2 Be7 ( 5... g6 6. Nf3 ) 6. Nf3 )
+( 3... Nh5 $2 4. Qxh5 { The queen sees h5 along the d1-h5 diagonal. Black has lost a knight. } )
+( 3... e5 $2 4. dxe5 dxe5 5. Qxd8+ Kxd8 6. Bxe5 { White has won a pawn, and Black's king has lost the right to castle. } )
+( 3... c5 4. c3 )
+( 3... Bf5 4. Bd3 { Offers a trade of light-squared bishops; after ...Bxd3 the queen recaptures and develops. } )
+4. h3 { Against ...d6 set-ups the bishop gets its escape square early, so neither ...Nh5 nor ...e5 can hunt it. }
+4... Bg7 5. Nf3 { Transposes to 1...Nf6 2.Bf4 g6 3.e3 Bg7 4.Nf3 d6 5.h3. } *
