@@ -11,6 +11,7 @@ import {
   roleOf,
   searchLines,
   type CatalogFilter,
+  editDistance,
 } from './catalog';
 import type { OpeningIndexEntry } from './schema/content';
 
@@ -137,6 +138,20 @@ describe('forgiving search', () => {
 
   it('does not match unrelated words', () => {
     expect(filterCourses(both, { ...base, query: 'queens rook' }, openings)).toEqual([]);
+    expect(filterCourses(both, { ...base, query: 'xyzzy' }, openings)).toEqual([]);
+  });
+
+  it('finds words run together and small typing slips', () => {
+    for (const query of ['carokann', 'CaroKann', 'carokan', 'karo-kann', 'caro kan defense', 'exchnage']) {
+      expect(ids(filterCourses(both, { ...base, query }, openings)), query).toEqual(['caro']);
+    }
+    expect(ids(filterCourses(both, { ...base, query: 'queensgambit' }, openings))).toEqual(['qgd']);
+    expect(searchLines(both, 'carokann').map((hit) => hit.line.id)).toEqual(['exchange']);
+  });
+
+  it('ranks an exact match above a forgiven one', () => {
+    expect(relevance('Caro-Kann Defence', '', 'caro')).toBeGreaterThan(relevance('Caro-Kann Defence', '', 'carokan'));
+    expect(relevance('Caro-Kann Defence', '', 'carokan')).toBeGreaterThan(relevance('Scotch Game', 'caro', 'caro'));
   });
 });
 
@@ -192,6 +207,16 @@ describe('relevance and why a course matched', () => {
     expect(matchReason(black!, 'classical')).toEqual({ kind: 'lines', names: ['Classical Variation'] });
     expect(matchReason(black!, 'caro')).toEqual({ kind: 'name' });
     expect(matchReason(black!, 'zzz')).toEqual({ kind: 'text' });
+  });
+});
+
+describe('editDistance', () => {
+  it('counts insertions, deletions, changes and neighbouring swaps, and gives up past the limit', () => {
+    expect(editDistance('caro', 'caro', 1)).toBe(0);
+    expect(editDistance('scandanavian', 'scandinavian', 2)).toBe(1);
+    expect(editDistance('exchnage', 'exchange', 2)).toBe(1);
+    expect(editDistance('evans', 'evens', 1)).toBe(1);
+    expect(editDistance('italian', 'sicilian', 1)).toBe(2);
   });
 });
 
