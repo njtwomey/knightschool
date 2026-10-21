@@ -22,8 +22,10 @@ Use `make` (run `make` alone to list targets). It uses a global pnpm if present,
   popular replies no course answers, per side, ranked by explorer games (`scripts/gaps.ts`). `make doctor`:
   overlaps in `content/` worth tidying (a report, never a gate).
 - `make fix`: ESLint autofix plus Prettier. `make hooks` installs a git pre-push hook that runs `make pre-push`.
-- Single test file: `pnpm exec vitest run packages/core/src/epd.test.ts`; by name: `pnpm exec vitest run -t "epdToFen"`.
-- `pnpm content:build`: validate `content/` and write `apps/web/public/content/*.json` (gitignored). Needs no network;
+- Single test file: `pnpm exec vitest run packages/core/src/chess/epd.test.ts`; by name: `pnpm exec vitest run -t "epdToFen"`.
+- `pnpm content:build`: validate `content/` and write `apps/web/public/content/*.json` (gitignored). It builds into a
+  staging folder under `.cache/` and swaps it in only when everything passed (`scripts/replace-dir.ts`), so a failed build
+  leaves the last good content in place. Needs no network;
   fetches Lichess opening names once into `.cache/`. Popularity is read from the committed `content/popularity/popularity.json`;
   the build never asks the network. `make popularity` (needs `LICHESS_TOKEN`) fills it in: only positions on lines that earn
   cards, resumable, one request at a time, a first full run takes hours. It holds counts per position and per move (the
@@ -58,13 +60,31 @@ Four workspace packages with a one-way dependency rule, enforced by `eslint-plug
 (check the policies there before changing imports; the failure message names the rule):
 
 - `packages/core`: pure TypeScript. Imports no React, DOM, engine, storage or ui. Everything testable without a browser.
+  `"sideEffects": false`. Grouped by folder, with one barrel `index.ts` (the public `@knightschool/core` API) grouped the
+  same way: `chess/` (chess.js wrappers, `epd`, `position`, `position-id`, `board-edit`, `pgn`, `notation`), `content/`
+  (`theory-tree`, `course-build` (`buildOpening`, clean positions), `course-index`, `opening-groups`, `openings-list`,
+  `lichess`, `related`, `rich-text`, `tags`, `explorer`), `navigation/` (`content-walk`, `move-tree`, `lane-layout`),
+  `training/` (`attempt`, `grading`, `scheduler`, `cards`, `sampling`, `branches`, `quiz`, `regret`, `stats`, and `units/`:
+  `types`, `cut`, `overrides`, `extras`, `progress`, `introductions`, `path-edit`), `modes/` (`speed`, `guess`), `search/`
+  (`filter`, `text-match`, `progress`, `position-search`), `authoring/` (`authoring`, `chapter-edit`, `contribution`),
+  `explain/`, `schema/` (`content.ts` is a barrel of `tags`, `course`, `built`, `quiz-entry`, `catalog`; plus `user`,
+  `analysis`, `popularity`), `testing/`, and `constants.ts`, `ids.ts` at the root. One of each helper, used everywhere:
+  - **Move numbers** (`chess/notation.ts`): a single move is a label with no space, "1.e4", "1...e5" (`numberedMove`,
+    `moveNumberLabel`); a run of moves has a space after each number, "1. e4 e5 2. Nf3", "3... Nf6 4. Ng5"
+    (`numberedLine`, or `runMove` for a run drawn move by move). Never format a move number by hand.
+  - **Walking a course** (`navigation/content-walk.ts`): `pathFromUcis(content, ucis, { strict })` (stops at the first
+    move the course does not have, or throws when strict), `walkMoves` for any tree of moves, `positionsAlong`.
+  - **Replaying moves** (`chess/chess.ts`): `replayUcis(startEpd, ucis)` gives `Played` (`{ uci, san, epd }`) moves,
+    stopping at the first illegal one. `uciLine` (a chapter's moves as UCI), `sansOf` (a move-tree node's moves),
+    `noteToMove`, `shuffle` and `pickWeighted` (`training/sampling.ts`) are the others.
 - `packages/engine`, `packages/storage`: may import core **types only** (`import type`), plus core's Zod schemas via
   `@knightschool/core/schema`; never each other or React. (A package-root value import is blocked by
   `no-restricted-imports`, a relative one by the boundaries policy.)
 - `apps/web`: the only place engine, storage, core and React meet. Inside `apps/web/src` the folders are layered, lowest
-  first, and the same plugin enforces it: `lib` (plain helpers such as `days.ts`; imports nothing else from the app),
-  `router` (addresses), `data` (loading and shared stores), `components` (shared UI), then `features` (pages), `App.tsx`
-  and `main.tsx`. Only features (and App) import features; lib, router and data never import components.
+  first, and the same plugin enforces it: `lib` (plain helpers; imports nothing else from the app), `hooks` (React hooks
+  over lib; never data or router), `router` (addresses), `data` (loading and shared stores), `components` (shared UI),
+  then `features` (pages), `App.tsx` and `main.tsx`. Only features (and App) import features; lib, hooks, router and data
+  never import components.
   `eslint-alias-resolver.js` teaches the rules the `@/` alias.
 
 Data is split into content (authored, shipped, read-only) and user state (written by the app, exportable). Both are Zod
@@ -80,7 +100,7 @@ are **chapters**: one line each, for both sides, written from where it branches 
 name is the line id (unique across the tree; it ends up in learner history, so do not rename casually). `[For]` is the
 side the line is written for, which `[Kind]` (main, sideline, rare, gambit; `for-us` / `against-us` traps) and `[Risk]`
 are relative to; `[Opponent]` is the opponent's move that reaches it. A move has one comment across the whole tree, written
-neutrally. `resolveTree` (core `theory-tree.ts`) reads the chapters, parents first; `treeGraph` gives the chapter and move
+neutrally. `resolveTree` (core `content/theory-tree.ts`) reads the chapters, parents first; `treeGraph` gives the chapter and move
 graph (built into `public/content/tree.json` for drawing; positions there are `positionId(epd)`, a short hash).
 
 A **course** is `content/courses/<id>/{course.yaml,quizzes.yaml}`, id = folder name: side, trigger, tier (1 study first,
@@ -92,7 +112,7 @@ listed line from the start and merges them with `buildOpening` into the course's
 unchanged from before the tree. `content/curriculum.yaml` is the study order. `make doctor` reports overlaps (moves written
 twice, unlisted chapters, shared lines); it never fails.
 
-Which positions earn review cards is `cardDefinitions` in `training.ts`: main and gambit lines always, sidelines unless the
+Which positions earn review cards is `cardDefinitions` in core `training/cards.ts`: main and gambit lines always, sidelines unless the
 explorer says too few games reach them, rare lines only with the "include rare lines" setting, alternatives never, `for-us`
 traps never (they get quizzes), `against-us` traps yes (the avoiding move). The build merges every line of a course into one
 EPD-keyed tree and rejects unknown tag values, unknown line ids, a line that misses the trigger, two comments on one move,
@@ -108,7 +128,9 @@ enforced with a Web Lock that the newest tab _steals_: the older tab is told (`o
 a banner with "use it in this tab"; opening is retried briefly while the old tab lets go of the files). In tests it is an in-memory sqlite-wasm in Node
 (`testing/memory.ts`; row fixtures in `testing/fixtures.ts`), the same code path. Repositories (`Storage` interface) are Drizzle over the proxy driver; write
 multi-statement changes by building statements with `toSQL()` and calling `exec.transaction`, never `db.batch`.
-Import merges by `at` (logs keep existing rows) and writes nothing if any row fails validation.
+Import merges by `at` (logs keep existing rows) and writes nothing if any row fails validation. The authoring history
+groups that arrive with an import are listed in the `authoringImportedGroups` setting and are never undone: Undo only takes
+back actions made on this device.
 
 **Authored content (schema 5, `authoring` repository).** `authored_chapters` (PGN text in the content/tree format),
 `authored_courses` (course.yaml as JSON text, validated only when projected, so an old row never blocks) and
@@ -141,7 +163,16 @@ Where things live in `apps/web/src`: `router/route.ts` (`parseRoute`, route page
 `branchesHref`, `createHref`, `lineEditHref`, `profileHref`, plus `parseLineTab` / `parseUnitRef`: build every link with
 these, never by hand), `router/location.ts` and `router/hash.ts`. `data/` holds loading and the shared stores:
 `catalog-store.ts` (`useCatalog`: the course index, the open course and the board's place in it), `progress-store.ts`
-(`useProgress`), `authored-content.ts` and `authored-edits.ts`, `training-settings.ts`, `content.ts`, `storage.ts`.
+(`useProgress`), `authored-content.ts` and `authored-edits.ts`, `training-settings.ts`, `storage.ts`, `content.ts` (every
+`load*`; `loadOpening` keeps each course once, cleared when the authored build changes) and `fetch-content.ts`
+(`contentUrl`, `fetchContent`, and `onceRetryable(load)`: one shared load that tries again after a failure; use it for
+anything loaded once). `lib/` holds plain helpers: `local-prefs.ts` (every localStorage read and write: `readPref` /
+`writePref`, `readPrefs` / `writePrefs` for an object checked field by field, `createPrefStore(key, schema, defaults)` for
+a Zustand store of them; board and engine preferences are two such stores; keys and stored formats are kept, so an old
+value still reads), `feedback.ts` (`FEEDBACK_DELAYS`, `createTimers`), `errors.ts` (`errorText(error)`), `session.ts`
+(`SessionPhase` and `sessionLoader`, the loading phase, the guard against a second start and the error phase that the
+session stores share), `days.ts`. `hooks/` holds `use-async.ts` (`useAsync(load, deps)` gives `{ data, error, loading }`:
+use it for any effect that loads something, never a hand-written cancelled flag) and `use-now.ts` (a ticking clock).
 `components/` holds shared UI: `ui` (shadcn), `board` (with `shapes.ts`), `breadcrumbs` (`CrumbMenu`, `TabGroup`,
 `CourseBreadcrumbs`, `PlayBreadcrumbs`), `tags` (`TagBadge`, `TagLegend`, `tag-specs.ts`, and `hints.ts`, the hover
 wording for tags and filters), `icon-action.tsx`. Features in `apps/web/src/features/*`, one folder per page, named as
@@ -153,7 +184,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   row opens the course.
 - `search` (the Search page, once called Browse; `search-page.tsx`): courses in study order and every line, as cards of one kind (lines
   have a board thumbnail). Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all /
-  courses / lines); a forgiving search (words run together, small slips: `editDistance` in `catalog.ts`) ranked by
+  courses / lines); a forgiving search (words run together, small slips: `editDistance` in core `search/text-match.ts`) ranked by
   relevance with "why it matched"; and **board search** in a modal (`board-search.tsx`, `board-query.ts`): `search.json` maps every position to the lines
   through it, so transpositions match.
 - `course`: one course's page, Overview, Path and Tree tabs at the end of the breadcrumbs (`COURSE_TABS` in `router/hrefs.ts`). The
@@ -173,7 +204,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   line editor with course and line menus and previous/next. `shell.tsx` gates on the database and shows notices and
   problems where they occur. The learner's course page and line About show **Edit** for an authored course
   (`authored` in index.json). `store.ts` (`useAuthor`; pages choose the course and line with `open`) turns each action into chapter PGN and
-  course JSON with core's `chapter-edit.ts` (`newChapter`, `appendMove`, `truncateMoves`, `setMoveNote`, `setHeader`,
+  course JSON with core's `authoring/chapter-edit.ts` (`newChapter`, `appendMove`, `truncateMoves`, `setMoveNote`, `setHeader`,
   `startHeader`, `opponentMove`) and saves it as one undoable action (`data/authored-edits.ts`). A new course is a course of
   its own by default (opening `my-<side>-courses`, grouped as "My courses" by `ownOpeningGroups`); it can instead add to
   one of the app's openings and start from the end of one of its lines (`[Start]` into the shipped chapter). Moves are
@@ -190,7 +221,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   instead of saving. A hand-written `after` or `drop` is kept, and placements while they still fit (`fittingPlacements`).
   A line's group is a Select with "New group…" (`group-select.tsx`), on the Lines table and the line page alike. Deletes ask first, take what grows from a line with it, and offer
   Undo; the reminder to export shows above the editor. Learners see notes, tags (`components/move-tags.tsx`) and the
-  description in About, Learn and Drill. **Publish** (`publish.tsx`, `contribution.ts` in core) writes the course as one
+  description in About, Learn and Drill. **Publish** (`publish.tsx`, `authoring/contribution.ts` in core) writes the course as one
   YAML contribution (course entry plus chapters, moves as PGN) and opens GitHub's contribution form
   (`.github/ISSUE_TEMPLATE/contribution.yml`, field `contribution`); over 7,500 characters of URL the link carries a
   short note and the YAML is copied and downloaded instead. **Import** reads a contribution back into your courses.
@@ -218,8 +249,8 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
 - `tree` (`/tree`, a course's Tree tab, a line's Tree tab): `TreeExplorer`, full width in three columns. Left an index
   shaped like the tree (`index-model.ts`: the curriculum grouped by first two moves, a line under the line it grows out
   of within its group; folding only tidies the list). Middle the tree, one column per move and one lane per line, the
-  main line across the top, branches below with the latest nearest so no lines cross (`laneLayout` in core, nodes keyed by
-  move prefix in `move-tree.ts`); pills filled in the line's colour, the line's name left of where it starts; zoom
+  main line across the top, branches below with the latest nearest so no lines cross (`laneLayout` in core
+  `navigation/lane-layout.ts`, nodes keyed by move prefix in `navigation/move-tree.ts`); pills filled in the line's colour, the line's name left of where it starts; zoom
   buttons and pinch. Right a board with step buttons (and the arrow keys) along the picked line's whole path from the
   start. Only a click changes anything: a line or a move picks a line; the crosshair (or a group's name) draws only that
   subtree.
@@ -238,7 +269,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   `quiz` (`useQuiz`): spaced-repetition cards. Quiz, Name it and Speed share a "from" choice (`SourceSelect`, `data/practice-source.ts`):
   the courses you are learning, everything, or one course. Quiz also has "Due today (your schedule)", the default; any
   other choice is free practice (`freePractice` in core) that is never saved, so it cannot touch the schedule. At the end
-  of a quiz every wrong move is listed with what it cost by the engine against the course's move (`regret.ts` in core:
+  of a quiz every wrong move is listed with what it cost by the engine against the course's move (`training/regret.ts` in core:
   under 30cp a memory slip, 30 to 99 an inaccuracy, 100 and more a mistake), from baked analysis or the browser engine at
   depth 14 after the session. `profile`: its tabs (`PROFILE_TABS`) are `overview` (the dashboard), `stats` and
   `settings`, each a folder under `features/profile`. `lab` (render any PGN at a ply, or a FEN).
@@ -250,7 +281,9 @@ hint (`Hint`, a tooltip trigger) round an item overwrites its `data-state`.
 replies, the next card appears); a wrong move flashes a cross and snaps back; a miss reveals the move. The exception, asked
 for by the user: in Quiz and Guess a miss (or a partly right Guess, or a move needing a retry) stays up with a **Next** button,
 because there is an explanation to read. In Speed a five second modal, with a countdown and the next opening's name, sits
-between lines of a fixed run. Delays live in `DELAYS` / `QUIZ_DELAYS` / `NAME_IT_DELAYS` / `SPEED_DELAYS`.
+between lines of a fixed run. Every delay lives in one table, `FEEDBACK_DELAYS` in `lib/feedback.ts` (the tick and the
+cross, one wrong-move time everywhere, the computer's reply, the next card, a quiz or Name it answer, Speed's countdown,
+"Copied"); session stores schedule them with `createTimers()` and clear the lot when they stop or start again.
 
 All boards are `components/board/app-board.tsx` (colour theme, piece set, legal-move dots, hover and selection
 highlights, tick/cross badge, hint pulse). Its size is one rule, `--board-size` in `index.css`: never wider than its
@@ -264,7 +297,7 @@ drawings with different finishing; a real alternative set needs a licence check 
 
 One learner side and one repertoire move per position per course; a second answer is an `alternative` line. `/play/<course>/all/branches` is the
 every-branch drill: `nextBranchMove` walks the tree, the learner gets their repertoire move and the computer a weighted
-random known reply. Positions after a mistake the learner's own side makes are never cards (`tree.ts`, "clean" positions).
+random known reply. Positions after a mistake the learner's own side makes are never cards (core `content/course-build.ts`, "clean" positions).
 `pnpm course:eval [course[/line] | --dir <course-folder>]` checks courses with Stockfish (native when installed; swings, how lines end); the `add-course` skill
 (`.claude/skills/add-course`) is the authoring guide: use it for any content change.
 
@@ -283,7 +316,7 @@ Pure logic is in core: `autoGrade` and the `reduceAttempt` state machine (hint, 
 `planIntroductions` / `planSession`, and `recordAnswer` (new schedule plus the `Review` row, written together by
 `reviews.record`). Which openings are trained and the new-cards-per-day limit live in the settings table
 (`apps/web/src/data/training-settings.ts`), so they export with everything else. New cards are introduced when a quiz
-session starts, up to the daily limit, in **path order** (`planIntroductions` in `units.ts`: each enrolled course offers
+session starts, up to the daily limit, in **path order** (`planIntroductions` in core `training/units/introductions.ts`: each enrolled course offers
 the cards of its unlocked units and units being learned, in unit order, taking turns between courses; a locked unit
 waits until the unit it grows from is passed; quizzes are never introduced). Due reviews are never limited by this:
 `planSession` puts them first. New cards get due times one millisecond apart in the past so sorting by due date keeps
@@ -291,7 +324,7 @@ the introduction order. `introductionOrder` (moves and quizzes, flat) is still w
 counts use. Practice answers in `play` feed the same cards through `features/play/record.ts`; Learn only
 introduces them. A review is card by card: the position before our move, the opponent's last move highlighted.
 
-**Units (the study path, `units.ts` in core, docs/STUDY-PLAN.md).** `courseUnits(content, options)` cuts a course into
+**Units (the study path, core `training/units/`, docs/STUDY-PLAN.md; `courseUnits` in `cut.ts`).** `courseUnits(content, options)` cuts a course into
 units of about four learner moves. The tree is the learner's: at their turn only the repertoire move, at the opponent's
 every move leading on to a card position (`cardDefinitions` decides what is core, so the card settings apply). The first
 line's main line comes first, then branch after branch: of every move leaving covered ground, the one whose line matters

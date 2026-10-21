@@ -1,6 +1,7 @@
 # Formats: layout, chapters, course.yaml, tags
 
-Code is the authority: `packages/core/src/{theory-tree,tree,tags,training,openings}.ts`, `packages/core/src/schema/content.ts`,
+Code is the authority: `packages/core/src/content/{theory-tree,course-build,tags,opening-groups}.ts`,
+`packages/core/src/training/cards.ts`, `packages/core/src/schema/{tags,course,built,quiz-entry}.ts`,
 `scripts/content-lib.ts`. The full format reference is `content/README.md`; read it first. This page is the working summary.
 
 ```
@@ -99,7 +100,7 @@ earlier than the first unit that reaches it). A trap can be `alternative: true` 
 order (ids are checked with the default card settings). Editing a course's lines can renumber units: re-check `units:`.
 See `content/README.md`.
 
-Which lines earn cards (`training.ts`): `main` and `gambit` always; `sideline` unless the explorer says too few games reach it;
+Which lines earn cards (`training/cards.ts`): `main` and `gambit` always; `sideline` unless the explorer says too few games reach it;
 `rare` only when the learner turns on "include rare lines"; `alternative` never. `against-us` traps give cards for the move that
 avoids the trap (the repertoire move of another listed line; the trap shows the mistake marked `?`). `for-us` traps give no
 move cards: give each one a quiz.

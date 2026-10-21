@@ -44,7 +44,7 @@ course, courses for one side that disagree.
 ## Still to do
 
 1. **Draw the tree.** Done in a first form: `tree.json` carries each chapter's whole main line (UCI) and the courses
-   that list it; core `move-tree.ts` builds a prefix tree keyed by the moves (not the position, so it stays a tree),
+   that list it; core `navigation/move-tree.ts` builds a prefix tree keyed by the moves (not the position, so it stays a tree),
    with `scopeTree`, `pathOf`, `compress` and `everyMove`, and `tree-layout.ts` lays it out. One component
    (`features/tree/tree-view.tsx`) draws it top-down on `/tree` (the curriculum, only branch points), on the course page
    and on a line's Tree tab (every move a node, coloured by line). Still to do: put a clicked position on the course

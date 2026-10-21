@@ -166,7 +166,7 @@ Each stage stands on its own and is small enough to review.
    end (the depth choice does not apply), repeated to fill the run when few are passed. "Standard" is stage 3.
 3. **Path-ordered introductions.** New cards come from unlocked units in path order; the daily queue stays as it is.
    Supplementary items stop being cards if D3 says so (a data change: see below). **Done**, with no data change:
-   `planIntroductions` (now in `units.ts`) takes each course's cards and reviews and offers the cards of unlocked units
+   `planIntroductions` (now in `training/units/introductions.ts`) takes each course's cards and reviews and offers the cards of unlocked units
    and units being learned, in path order, taking turns between courses, up to the daily limit. Quizzes are no longer
    introduced; quiz cards already stored stay and are still asked when due (nothing is deleted). Due reviews always come
    first (`planSession`, unchanged). Learn and Drill in `features/play/record.ts` are unchanged: what you choose to

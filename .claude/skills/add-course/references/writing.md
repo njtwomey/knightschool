@@ -78,7 +78,7 @@ A quiz is a review card: board at a position, a prompt, a typed answer, matched 
 Two to four per course, about one per trap and per prevention move. Ask **why**, not "what is the next move"; the answer
 should be two to eight words. Position = after the last move of `line` (SAN from move 1).
 
-Matching (`packages/core/src/quiz.ts`): lowercase, punctuation to spaces, one plural `s` stripped from words over 3 letters,
+Matching (`packages/core/src/training/quiz.ts`): lowercase, punctuation to spaces, one plural `s` stripped from words over 3 letters,
 synonyms collapsed to one word each, then **whole-word** containment. A group matches if any word is present; an entry
 matches if all groups (`all: true`) or any group (default) matches; the first matching entry wins.
 
