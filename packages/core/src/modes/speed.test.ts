@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { cutToMove, formatMs, speedSummary } from './speed';
+import { cutToMove, decidingPosition, formatMs, speedSummary } from './speed';
+import { parsePgn } from '../chess/pgn';
+import { buildOpening } from '../content/course-build';
+import { variantPath } from '../navigation/content-walk';
+import { manifestOf } from '../testing/manifest';
 
 describe('speedSummary', () => {
   it('is empty before anything is played', () => {
@@ -46,5 +50,35 @@ describe('cutToMove', () => {
     expect(cutToMove(plies, 10).at(-1)).toBe(19);
     expect(cutToMove(plies, 0)).toHaveLength(31);
     expect(cutToMove(plies.slice(0, 8), 15)).toHaveLength(8);
+  });
+});
+
+describe('decidingPosition', () => {
+  const game = (moves: string, name: string) =>
+    parsePgn(`[Event "x"]
+[Opening "T"]
+[Variation "${name}"]
+[ECO "C20"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+
+${moves}`);
+  const content = buildOpening('t', manifestOf({ name: 'T', lines: ['main', 'side'], trigger: '1. e4 e5' }), [
+    { id: 'main', kind: 'line', game: game('1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *', 'main'), source: 'main.pgn' },
+    { id: 'side', kind: 'line', game: game('1. e4 e5 2. Nf3 Nf6 3. Nxe5 *', 'side'), source: 'side.pgn' },
+  ]);
+  const after = (id: string, plies: number) => {
+    const path = variantPath(content, id);
+    return plies === 0 ? content.opening.rootEpd : path[plies - 1]!.to;
+  };
+
+  it.each([
+    ['the first line is decided at the trigger', 'main', undefined, 2],
+    ['a later line where it parts from the lines before it', 'side', undefined, 4],
+    ['cut short before it parts: where play stops', 'side', 3, 3],
+  ] as const)('%s', (_, line, plies, ply) => {
+    expect(decidingPosition(content, line, plies)).toBe(after(line, ply));
   });
 });

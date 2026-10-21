@@ -1,6 +1,6 @@
 import { MIN_POPULARITY_FOR_CARD, SESSION_SIZE } from '../constants';
 import { newId } from '../ids';
-import { pickWeighted, popularityWeight, type Weighting } from './sampling';
+import { pickWeighted, practiceWeight, type Weighting } from './sampling';
 import type { Attempt } from './attempt';
 import { newCard, scheduleReview } from './scheduler';
 import type { LineNode, OpeningContent } from '../schema/content';
@@ -93,7 +93,7 @@ export function cardDefinitions(content: OpeningContent, options: number | CardO
 /**
  * Free practice: a handful of questions from the given courses, whether or not they are being learned. The cards are
  * made fresh and are never saved, so nothing here touches the review schedule. Picked at random, or (`popular`)
- * favouring the positions more games reach. `random` is injectable for tests.
+ * favouring the positions more games reach (`practiceWeight`: the position asked). `random` is injectable for tests.
  */
 export function freePractice(
   contents: OpeningContent[],
@@ -109,9 +109,9 @@ export function freePractice(
       popularity: content.nodes[definition.epd]?.popularity,
     })),
   );
-  const weight = (entry: { popularity: number | undefined }) =>
-    weighting === 'popular' ? popularityWeight(entry.popularity) : 1;
-  return pickWeighted(pool, weight, size, random).map(({ definition }) => newCard(definition, now));
+  return pickWeighted(pool, (entry) => practiceWeight(weighting, entry.popularity), size, random).map(
+    ({ definition }) => newCard(definition, now),
+  );
 }
 
 /** The cards to study now: seen cards first (most overdue first), then new ones in the order introduced. */

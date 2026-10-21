@@ -1,4 +1,7 @@
 import type { SpeedAttempt } from '../schema/user';
+import { variantPath } from '../navigation/content-walk';
+import type { OpeningContent } from '../schema/content';
+import { decidingIndex } from '../training/sampling';
 
 export type SpeedSummary = {
   lines: number;
@@ -45,4 +48,21 @@ export const SPEED_DEPTHS: readonly SpeedDepth[] = [6, 10, 15, 0];
  */
 export function cutToMove<T>(steps: readonly T[], move: SpeedDepth): T[] {
   return move === 0 ? [...steps] : steps.slice(0, move * 2);
+}
+
+/**
+ * The position that decides a line of a course for a popularity-weighted Speed run (see `decidingIndex`): where, from
+ * the course's trigger on, it parts from the lines listed before it in the course; the first line is decided at the
+ * trigger. `plies` is how much of it is played (a run's depth); the position is never later than that.
+ */
+export function decidingPosition(content: OpeningContent, lineId: string, plies?: number): string {
+  const along = (id: string) => [content.opening.rootEpd, ...variantPath(content, id).map((edge) => edge.to)];
+  const positions = along(lineId);
+  const seen = new Set<string>();
+  for (const variant of content.opening.variants) {
+    if (variant.id === lineId) break;
+    if (variant.kind === 'line') for (const epd of along(variant.id)) seen.add(epd);
+  }
+  const trigger = positions.indexOf(content.opening.triggerEpd);
+  return positions[decidingIndex(positions, { from: Math.max(0, trigger), to: plies, seen })]!;
 }
