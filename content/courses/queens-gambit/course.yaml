@@ -29,11 +29,11 @@ motifs: [develop-first, centre-pawns, castle-early]
 tags: [d4, queens-gambit]
 lines:
   - id: queens-gambit-orthodox
-    section: If Black declines
+    section: Declined (2...e6)
   - id: accepted
-    section: If Black takes the pawn
+    section: Accepted (2...dxc4)
   - id: slav
-    section: If Black declines
+    section: Slav (2...c6)
   - id: queens-gambit-albin
     section: Counter-gambits
   - id: chigorin
@@ -44,3 +44,13 @@ lines:
     section: Traps
   - id: accepted-e5
     section: Traps
+  - id: qgd-ragozin
+    section: Declined (2...e6)
+  - id: qgd-bb4
+    section: Declined (2...e6)
+  - id: qgd-dxc4
+    section: Declined (2...e6)
+  - id: qgd-c6
+    section: Declined (2...e6)
+  - id: qgd-tarrasch
+    section: Declined (2...e6)

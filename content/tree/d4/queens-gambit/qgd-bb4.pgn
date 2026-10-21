@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Queen's Knight Variation, 3...Bb4"]
+[ECO "D31"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-pair,centre-pawns"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Bb4"]
+[Start "orthodox 3.Nc3"]
+
+3... Bb4 { Pins the knight on c3 so that it does less to fight for e4 and d5. } 4. a3 { Asks the bishop at once. If it takes on c3, White gets the two bishops and an extra pawn on c3 to guard d4. } 4... Bxc3+ ( 4... Be7 5. Nf3 { Black has spent two moves to put the bishop on e7. White just develops and is a move ahead. } ) ( 4... Ba5 $2 5. b4 Bb6 6. c5 { The bishop is trapped: the b-pawn covers a5 and Black's own pawns block a7 and c7. } ) 5. bxc3 { Takes towards the centre. The doubled pawns look untidy, but the pawn on c3 supports d4 and White has the two bishops. } 5... Nf6 ( 5... dxc4 6. e3 { The pawn on c4 cannot be held. The bishop takes it back next move. } ) ( 5... c5 6. e3 ) 6. e3 { Opens the bishop on f1 and adds a guard to d4. } 6... O-O ( 6... c5 7. cxd5 exd5 8. Bd3 ) 7. cxd5 { Swaps so that Black's pawn stands on d5. Later White plays f3 and e4 to hit it and open lines for the bishops. } 7... exd5 8. Bd3 c5 9. Ne2 { The knight goes to e2, not f3, so the f-pawn is free to go to f3 and support e4. Plan: castle, then f3 and e4 to open the centre for the two bishops. } *

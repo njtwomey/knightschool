@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Queen's Knight Variation, 3...dxc4"]
+[ECO "D31"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pawn-grab"]
+[Themes "regain-the-pawn,central-pawns"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...dxc4"]
+[Start "orthodox 3.Nc3"]
+
+3... dxc4 { Takes the pawn a move later than in the Queen's Gambit Accepted. The pawn on e6 now shuts in Black's bishop on c8. } 4. e3 { Opens the bishop on f1, which takes back the pawn on c4. } 4... Nf6 ( 4... a6 5. a4 { Stops ...b5, so Black cannot keep the extra pawn. } 5... c5 6. Bxc4 ) ( 4... c5 5. Bxc4 cxd4 6. exd4 { White has a lone pawn on d4, but it gives the pieces free squares on e5 and c5 and open lines for the bishops. } ) ( 4... b5 $2 5. Nxb5 { The pawn on b5 had no guard, so White takes it and is a pawn up. } ) 5. Bxc4 { Pawn regained with a developing move. } 5... c5 ( 5... a6 6. a4 c5 7. Nf3 ) 6. Nf3 a6 7. a4 { Stops ...b5, which would chase the bishop and give Black's c8 bishop a diagonal. } 7... Nc6 8. O-O Be7 9. Qe2 { Plan: Rd1 to put a rook against the queen on the open d-file, then e4 when ready. Black's bishop on c8 is still shut in. } *

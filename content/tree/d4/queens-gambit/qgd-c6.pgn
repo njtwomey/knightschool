@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Semi-Slav Defense: Accelerated Move Order"]
+[ECO "D31"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "transposition,solid-centre"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...c6"]
+[Start "orthodox 3.Nc3"]
+
+3... c6 { Builds a wall of pawns on c6, d5 and e6, the Semi-Slav triangle. Black may want ...dxc4 and ...b5, or the Stonewall with ...f5. } 4. e3 { Calm and safe: if Black takes on c4, the bishop on f1 takes back at once, so Black cannot hold the extra pawn. } 4... Nf6 ( 4... Nd7 5. Nf3 Ngf6 { The same position as the Semi-Slav in the Slav line. } ) ( 4... f5 5. Bd3 Nf6 6. Nf3 Bd6 7. O-O { Black's pawns on d5 and f5 leave a hole on e5. White castles and puts a knight there next. } ) ( 4... dxc4 5. Bxc4 Nf6 6. Nf3 ) 5. Nf3 { Develops, and reaches the Semi-Slav position from the Slav line, where White plays Bd3 and castles. } *

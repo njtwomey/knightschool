@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Tarrasch Defense: Rubinstein System"]
+[ECO "D33"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "isolated-pawn,long-diagonal"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...c5"]
+[Start "orthodox 3.Nc3"]
+
+3... c5 { Black hits the centre at once and accepts a lone pawn on d5 in return for free piece play. } 4. cxd5 { Swaps so that Black has to take back with the e-pawn, which leaves a pawn on d5 that can become isolated. } 4... exd5 ( 4... cxd4 5. Qa4+ { Checks before taking back, so Black has to block. } 5... Bd7 6. Qxd4 exd5 7. Qxd5 Nf6 8. Qd1 { White has won a pawn and the queen is safe at home. } ) 5. Nf3 Nc6 ( 5... Nf6 6. Bg5 { Pins the knight that guards d5. } ) 6. g3 { The bishop goes to g2, where it aims straight down the long diagonal at the pawn on d5. } 6... Nf6 7. Bg2 Be7 8. O-O O-O 9. dxc5 { Takes on c5 so the pawn on d5 is alone, with no pawn beside it to protect it. } 9... Bxc5 10. Bg5 { Pins the knight that guards d5. Plan: take on f6 if useful, then pile up on d5 with the knights, bishop and queen. } *

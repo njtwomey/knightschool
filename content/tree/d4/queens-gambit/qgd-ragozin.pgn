@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Declined: Ragozin-style 4...Bb4"]
+[ECO "D50"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "carlsbad-structure,pin-on-f6"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...Bb4"]
+[Start "queens-gambit-orthodox 4.Bg5"]
+
+4... Bb4 { Black answers the pin with a pin of its own on the knight on c3. } 5. cxd5 { Swaps first, so Black must decide how to take back before the bishops start trading. } 5... exd5 ( 5... Qxd5 6. Bxf6 gxf6 7. e3 { Black's kingside pawns are broken, and the queen in the middle will be chased. } ) 6. e3 { Opens the bishop on f1 and backs up d4. Black's pawn on d5 now blocks the bishop on c8 less, but the structure is fixed. } 6... O-O ( 6... h6 7. Bh4 O-O 8. Bd3 ) ( 6... c5 7. Bb5+ Bd7 8. Bxd7+ Nbxd7 9. Ne2 ) 7. Bd3 h6 8. Bh4 c5 9. Ne2 { The knight on e2 guards c3, so the pin no longer hurts. Plan: castle, then take on c5 or play Rc1 and aim at Black's lone d5 pawn. } *
