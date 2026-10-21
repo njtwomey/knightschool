@@ -6,6 +6,9 @@ import {
   newChapter,
   opponentMove,
   overridesFromYaml,
+  readContribution,
+  CourseManifest,
+  type Contribution,
   ownOpeningId,
   playSan,
   readChapter,
@@ -18,7 +21,6 @@ import {
   uniqueId,
   type AuthoredBuild,
   type CourseEntry,
-  type CourseManifest,
   type LineKind,
   type PgnGame,
   type Side,
@@ -81,6 +83,10 @@ export type AuthorState = {
   /** Returns an error message, or null when the overrides were saved. */
   setOverrides: (yaml: string) => Promise<string | null>;
   undo: () => Promise<void>;
+  /** The contribution for a course: its course.yaml and the authored chapters it needs. Throws when it is not valid. */
+  contribution: (courseId: string) => Contribution;
+  /** Saves a contribution's chapters and course (replacing any of yours with the same ids; Undo restores them). */
+  importContribution: (text: string) => Promise<string | null>;
 };
 
 const entryId = (entry: CourseEntry) => (typeof entry === 'string' ? entry : entry.id);
@@ -547,6 +553,54 @@ export const useAuthor = create<AuthorState>((set, get) => {
       delete manifest.units;
       if (units) manifest.units = units;
       await save([courseChange({ ...course, manifest })], 'Saved the path changes.');
+      return null;
+    },
+
+    contribution(courseId) {
+      const course = courseOf(courseId);
+      if (!course) throw new Error('There is no such course of yours.');
+      const manifest = CourseManifest.safeParse(course.manifest);
+      if (!manifest.success)
+        throw new Error(
+          `The course is not complete yet: ${manifest.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join('; ')}`,
+        );
+      // The authored chapters it lists, with the authored chapters they grow from, parents first.
+      const { rows, build } = get();
+      const ids: string[] = [];
+      for (const entry of course.manifest.lines) {
+        const id = entryId(entry);
+        for (const chapter of [...(fullLine(build, id)?.parents ?? []), id])
+          if (!ids.includes(chapter) && draftChapter(rows, chapter)) ids.push(chapter);
+      }
+      const chapters = ids.map((id) => ({
+        id,
+        pgn: rows.chapters.find((row) => row.id === id && !row.deletedAt)!.pgn,
+      }));
+      return { courseId, manifest: manifest.data, chapters };
+    },
+
+    async importContribution(text) {
+      let read: Contribution;
+      try {
+        read = readContribution(text);
+      } catch (error) {
+        return errorText(error);
+      }
+      if (get().shippedCourses.includes(read.courseId))
+        return `The course id "${read.courseId}" is already a course of the app.`;
+      await save(
+        [
+          ...read.chapters.map((chapter): AuthoredChangeInput => ({
+            kind: 'chapter',
+            itemId: chapter.id,
+            body: chapter.pgn,
+          })),
+          { kind: 'course', itemId: read.courseId, body: JSON.stringify(read.manifest) },
+        ],
+        `Imported ${read.manifest.name}, with ${read.chapters.length} ${read.chapters.length === 1 ? 'line' : 'lines'}.`,
+        true,
+      );
+      get().selectCourse(read.courseId);
       return null;
     },
 

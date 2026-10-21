@@ -1,6 +1,6 @@
 # Study paths, spaced repetition and authoring: analysis and plan
 
-Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 to 6 are built (see §4 for what changed from this proposal). Decisions
+Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 to 7 are built (see §4 for what changed from this proposal). Decisions
 that change stored data are listed at the end.
 
 ## 1. What exists today
@@ -206,6 +206,16 @@ Each stage stands on its own and is small enough to review.
    that the shipped tree already gives a move is shown read-only (the move can still be tagged), because a move has one
    comment wherever it is played. Learners see descriptions, comments and tags in About, Learn and Drill.
 7. **Publishing:** YAML serialisation and reading, issue form template, link, clipboard and download fallback.
+   **Done** (`contribution.ts` in core, the editor's Publish tab and Import). One YAML document: `knightschool:
+contribution`, `version: 1`, the `course` (course.yaml with its `id`) and the authored `chapters` it needs (parents
+   first), each with its `headers` and its `moves` as PGN movetext numbered from its `[Start]`; `readContribution` reads
+   it back with the same parsers (round trip tested: YAML, chapters, YAML). The link is
+   `https://github.com/njtwomey/knightschool/issues/new?template=contribution.yml&title=…&contribution=…`: issue forms
+   prefill a field by its id, so the YAML goes in the form's `contribution` field rather than `body`. The limit is
+   **7,500 characters** of URL (`MAX_ISSUE_URL`); past it the link carries a short note instead, the YAML is copied to
+   the clipboard and downloaded as `<course>-contribution.txt` to paste or attach, and Copy and Download stay on the
+   page. `.github/ISSUE_TEMPLATE/contribution.yml` labels the issue `contribution`. Import (in the editor) loads a
+   contribution as one of your courses, replacing yours with the same ids (undoable), to check it locally.
 
 ## 5. Decisions needed before building (hard to reverse)
 

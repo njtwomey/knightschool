@@ -156,7 +156,10 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
   Lines have a title, a description, a kind, a group (course `section`) and a snapshot. The Path tab edits `units:` as
   YAML, checked against the units before saving. Deletes ask first, take what grows from a line with it, and offer
   Undo; the reminder to export shows above the editor. Learners see notes, tags (`components/move-tags.tsx`) and the
-  description in About, Learn and Drill.
+  description in About, Learn and Drill. **Publish** (`publish.tsx`, `contribution.ts` in core) writes the course as one
+  YAML contribution (course entry plus chapters, moves as PGN) and opens GitHub's contribution form
+  (`.github/ISSUE_TEMPLATE/contribution.yml`, field `contribution`); over 7,500 characters of URL the link carries a
+  short note and the YAML is copied and downloaded instead. **Import** reads a contribution back into your courses.
 - **Authored courses** are ordinary courses: `data/content.ts` merges them into `loadIndex`, `loadOpening` and
   `loadTreeGraph` through `data/authored.ts`, which reads the live authored rows and runs `buildAuthored` (core) over
   them and the shipped chapters as written (`public/content/chapters.json`, from the build, fetched only when something

@@ -11,6 +11,7 @@ import { GroupActions } from './group-actions';
 import { entryId, entrySection } from './helpers';
 import { LineEditor } from './line-editor';
 import { PathOverrides } from './path-overrides';
+import { ImportContributionDialog, PublishPanel } from './publish';
 import { draftCourses, fullLine, useAuthor } from './store';
 
 /**
@@ -88,6 +89,7 @@ export function AuthorPage() {
               <TabsTrigger value="line">Line</TabsTrigger>
               <TabsTrigger value="course">Course</TabsTrigger>
               <TabsTrigger value="path">Path</TabsTrigger>
+              <TabsTrigger value="publish">Publish</TabsTrigger>
             </TabsList>
             <TabsContent value="line">
               <LineEditor course={course} />
@@ -97,6 +99,9 @@ export function AuthorPage() {
             </TabsContent>
             <TabsContent value="path">
               <PathOverrides key={course.id} course={course} />
+            </TabsContent>
+            <TabsContent value="publish">
+              <PublishPanel key={course.id} course={course} />
             </TabsContent>
           </Tabs>
         ) : (
@@ -143,6 +148,7 @@ function Sidebar() {
     <aside className="grid content-start gap-4" aria-label="Your courses">
       <div className="flex flex-wrap gap-2">
         <NewCourseDialog compact />
+        <ImportContributionDialog />
         <Button
           size="sm"
           variant="outline"

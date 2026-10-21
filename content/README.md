@@ -238,6 +238,15 @@ To teach the Evans Gambit's 5...Bd6 (not in the tree yet) in the White Evans cou
 3. Add `evans-bd6` to `lines:` in `courses/evans-gambit/course.yaml`.
 4. `pnpm content:build`, then `make doctor`.
 
+## Contributions from the app
+
+Courses written in the app (Profile, Author) are proposed as GitHub issues labelled `contribution`, holding one YAML
+document: `course` is a course.yaml (plus its `id`), and each entry of `chapters` is a chapter file: its `headers` are the
+PGN headers and its `moves` the movetext. To accept one, write each chapter to `content/tree/` as `<id>.pgn` (headers,
+a blank line, the moves and ` *`), the course to `content/courses/<id>/course.yaml`, and add it to `curriculum.yaml`. A
+course of its own says `opening: my-white-courses` (or `my-black-courses`): give it a real opening in `openings.yaml`.
+The app can load the YAML too (Author, Import), to see the course as a learner would before accepting it.
+
 ## Sources
 
 See docs/PLAN.md "Opening content" for licences. Lichess chess-openings and the puzzle database are CC0; Wikibooks text

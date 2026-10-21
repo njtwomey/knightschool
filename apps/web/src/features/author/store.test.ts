@@ -1,4 +1,4 @@
-import { readChapter } from '@knightschool/core';
+import { contributionYaml, readChapter } from '@knightschool/core';
 import { openMemoryStorage } from '@knightschool/storage/testing';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
@@ -118,5 +118,19 @@ describe('writing a course in the editor', () => {
     await author().deleteGroup('Sharp');
     expect(draftCourses(author().rows)[0]!.manifest.lines).toHaveLength(2);
     expect(draftCourses(author().rows)[0]!.manifest.lines[1]).not.toHaveProperty('section');
+  });
+
+  it('publishes the course as a contribution, and imports it back', async () => {
+    const contribution = author().contribution('my-italian');
+    expect(contribution.chapters.map((chapter) => chapter.id)).toHaveLength(2);
+    const yaml = contributionYaml(contribution);
+    await author().deleteCourse();
+    expect(draftCourses(author().rows)).toEqual([]);
+    expect(await author().importContribution(yaml)).toBeNull();
+    expect(author().courseId).toBe('my-italian');
+    expect(draftCourses(author().rows)[0]!.manifest.lines).toHaveLength(2);
+    expect(author().build!.problems).toEqual([]);
+    expect(contributionYaml(author().contribution('my-italian'))).toBe(yaml);
+    expect(await author().importContribution('nope: 1')).toMatch(/not a Knight School contribution/);
   });
 });
