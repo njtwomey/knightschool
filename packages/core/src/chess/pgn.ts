@@ -14,6 +14,26 @@ export type PgnMoveNode = {
   variations: PgnMoveNode[][];
 };
 
+/** What a move says beyond its SAN: its comment, NAGs, drawn shapes and tags. */
+export type PgnNote = Pick<PgnMoveNode, 'comment' | 'nags' | 'arrows' | 'circles' | 'tags'>;
+
+/** Whether a move carries any note. */
+export const hasNote = (note: PgnNote) =>
+  Boolean(note.comment) ||
+  note.nags.length > 0 ||
+  note.arrows.length > 0 ||
+  note.circles.length > 0 ||
+  (note.tags?.length ?? 0) > 0;
+
+/** A note as the fields of a PGN move, leaving out a missing comment and tags. */
+export const noteToMove = (note: PgnNote): PgnNote => ({
+  ...(note.comment ? { comment: note.comment } : {}),
+  nags: note.nags,
+  arrows: note.arrows,
+  circles: note.circles,
+  ...(note.tags ? { tags: note.tags } : {}),
+});
+
 export type PgnGame = {
   tags: Record<string, string>;
   moves: PgnMoveNode[];

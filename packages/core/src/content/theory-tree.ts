@@ -2,7 +2,7 @@ import { fold } from '../search/text-match';
 import { playSan } from '../chess/chess';
 import { START_EPD } from '../chess/epd';
 import { numberedMove } from '../chess/notation';
-import { parsePgn, type PgnGame, type PgnMoveNode } from '../chess/pgn';
+import { hasNote, noteToMove, parsePgn, type PgnGame, type PgnMoveNode, type PgnNote } from '../chess/pgn';
 import { positionId } from '../chess/position-id';
 import {
   LineKind,
@@ -31,7 +31,7 @@ export type TreeEdge = {
   san: string;
   uci: string;
   /** The move's annotation, merged over every chapter that writes it. */
-  note: Pick<PgnMoveNode, 'comment' | 'nags' | 'arrows' | 'circles' | 'tags'>;
+  note: PgnNote;
   /** Chapters that write this move themselves (not through their [Start]). More than one is worth tidying. */
   writtenIn: string[];
 };
@@ -60,13 +60,6 @@ export function sanMoves(text: string, source: string): string[] {
   if (!text.trim()) return [];
   return parsePgn(`[Event "start"]\n\n${text} *`, source).moves.map((move) => move.san);
 }
-
-const hasNote = (move: PgnMoveNode) =>
-  Boolean(move.comment) ||
-  move.nags.length > 0 ||
-  move.arrows.length > 0 ||
-  move.circles.length > 0 ||
-  (move.tags?.length ?? 0) > 0;
 
 /**
  * `[Start "evans-gambit 6.d4"]`: the chapter this one branches from, and the move of that chapter it follows. When the
@@ -217,16 +210,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
       const variations = move.variations.map((variation) => withTreeNotes(epd, variation));
       const edge = edges.get(edgeKey(epd, playSan(epd, move.san).uci))!;
       epd = edge.to;
-      const { note } = edge;
-      return {
-        ...move,
-        ...(note.comment ? { comment: note.comment } : {}),
-        nags: note.nags,
-        arrows: note.arrows,
-        circles: note.circles,
-        ...(note.tags ? { tags: note.tags } : {}),
-        variations,
-      };
+      return { ...move, ...noteToMove(edge.note), variations };
     });
   };
 
@@ -234,15 +218,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
   for (const chapter of chapters) {
     const path = startPaths.get(chapter.id)!;
     const parents = lineage.get(chapter.id)!;
-    const prefix: PgnMoveNode[] = path.map((edge) => ({
-      san: edge.san,
-      ...(edge.note.comment ? { comment: edge.note.comment } : {}),
-      nags: edge.note.nags,
-      arrows: edge.note.arrows,
-      circles: edge.note.circles,
-      ...(edge.note.tags ? { tags: edge.note.tags } : {}),
-      variations: [],
-    }));
+    const prefix: PgnMoveNode[] = path.map((edge) => ({ san: edge.san, ...noteToMove(edge.note), variations: [] }));
     const tags = { ...chapter.game.tags };
     delete tags.Start;
     delete tags.For;
@@ -275,10 +251,10 @@ export function chapterTitle(chapter: { name: string; opening: string }): string
   return `${opening}: ${chapter.name}`;
 }
 
-/** A line's main line as UCI moves from the initial position. */
-const uciLine = (line: TreeLine) => {
+/** A line's main line as UCI moves from the initial position (none for no line). */
+export const uciLine = (line: Pick<TreeLine, 'game'> | undefined): string[] => {
   let epd = START_EPD;
-  return line.game.moves.map((move) => {
+  return (line?.game.moves ?? []).map((move) => {
     const played = playSan(epd, move.san);
     epd = played.epd;
     return played.uci;

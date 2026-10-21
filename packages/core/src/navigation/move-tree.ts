@@ -143,6 +143,14 @@ export function pathOf(tree: MoveTree, line: string): string[] {
   return [tree.root, ...path.moves.map((_, index) => prefixId(path.moves.slice(0, index + 1)))];
 }
 
+/** The moves from the start to a node, as SAN; none for the root or an unknown node. */
+export function sansOf(tree: MoveTree, nodeId: string): string[] {
+  const sans: string[] = [];
+  for (let node = tree.nodes.get(nodeId); node?.san; node = node.parent ? tree.nodes.get(node.parent) : undefined)
+    sans.unshift(node.san);
+  return sans;
+}
+
 /** A stretch of single moves drawn as one edge, ending at a branch point, the end of a line, or both. */
 export type MoveRun = {
   /** The id of its last move node. */

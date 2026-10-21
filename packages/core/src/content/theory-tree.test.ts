@@ -7,6 +7,7 @@ import {
   rewrittenMoves,
   sanMoves,
   treeGraph,
+  uciLine,
   type Chapter,
 } from './theory-tree';
 import { positionId } from '../chess/position-id';
@@ -67,6 +68,8 @@ describe('resolveTree', () => {
     expect(line.parents).toEqual(['italian']);
     expect(tree.lines.get('two-knights')!.parents).toEqual(['italian']);
     expect(tree.lines.get('italian')!.parents).toEqual([]);
+    expect(uciLine(line).slice(0, 3)).toEqual(['e2e4', 'e7e5', 'g1f3']);
+    expect(uciLine(undefined)).toEqual([]);
   });
 
   it('does not care about the order of the chapters', () => {

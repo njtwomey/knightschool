@@ -1,7 +1,7 @@
 import { checkRichText } from './rich-text';
 import { START_EPD } from '../chess/epd';
 import { playSan, sideToMove } from '../chess/chess';
-import type { PgnGame, PgnMoveNode } from '../chess/pgn';
+import { hasNote, type PgnGame, type PgnMoveNode } from '../chess/pgn';
 import { epdAfterPgn } from '../chess/chess';
 import { numberedMove } from '../chess/notation';
 import { matchAnswer } from '../training/quiz';
@@ -40,8 +40,7 @@ type MutableEdge = Omit<LineEdge, 'variants'> & { variants: Set<string> };
 type MutableNode = Omit<LineNode, 'moves'> & { moves: MutableEdge[] };
 
 function annotationOf(move: PgnMoveNode): Annotation | undefined {
-  if (!move.comment && !move.nags.length && !move.arrows.length && !move.circles.length && !move.tags?.length)
-    return undefined;
+  if (!hasNote(move)) return undefined;
   return {
     text: move.comment,
     nag: move.nags,

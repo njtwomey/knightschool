@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parsePgn, writePgn } from './pgn';
+import { hasNote, noteToMove, parsePgn, writePgn } from './pgn';
 
 const SAMPLE = `[Event "Knight School"]
 [Opening "Italian Game"]
@@ -36,5 +36,27 @@ describe('PGN round trip', () => {
     expect(() => parsePgn('1. e4 e5 2. (', 'content/openings/x/lines/y.pgn')).toThrow(
       /content\/openings\/x\/lines\/y\.pgn/,
     );
+  });
+});
+
+describe('move notes', () => {
+  const bare = { nags: [], arrows: [], circles: [] };
+
+  it('says whether a move carries a note', () => {
+    expect(hasNote(bare)).toBe(false);
+    expect(hasNote({ ...bare, tags: [] })).toBe(false);
+    expect(hasNote({ ...bare, comment: 'Develops.' })).toBe(true);
+    expect(hasNote({ ...bare, nags: [2] })).toBe(true);
+    expect(hasNote({ ...bare, tags: ['tip'] })).toBe(true);
+  });
+
+  it('gives a note as move fields, leaving out a missing comment and tags', () => {
+    expect(noteToMove(bare)).toEqual(bare);
+    expect(noteToMove(bare)).not.toHaveProperty('comment');
+    expect(noteToMove({ ...bare, comment: 'Pins.', tags: ['trap'] })).toEqual({
+      ...bare,
+      comment: 'Pins.',
+      tags: ['trap'],
+    });
   });
 });

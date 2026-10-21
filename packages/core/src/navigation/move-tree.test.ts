@@ -8,6 +8,7 @@ import {
   pathOf,
   prefixId,
   runText,
+  sansOf,
   scopeTree,
   trunkEnd,
   type MovePath,
@@ -56,6 +57,12 @@ describe('buildMoveTree', () => {
     expect(tree.nodes.get(prefixId(short.moves))!.ends).toEqual(['short']);
     expect(tree.nodes.get(prefixId(short.moves))!.children).toHaveLength(1);
     expect(tree.nodes.get(prefixId(evans.moves))!.ends).toEqual(['evans']);
+  });
+
+  it('gives the moves from the start to a node as SAN', () => {
+    expect(sansOf(tree, prefixId(short.moves))).toEqual(['e4', 'e5', 'Nf3']);
+    expect(sansOf(tree, tree.root)).toEqual([]);
+    expect(sansOf(tree, 'nowhere')).toEqual([]);
   });
 
   it('starts from a root at ply 0 holding every line', () => {
