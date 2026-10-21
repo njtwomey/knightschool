@@ -181,6 +181,20 @@ describe('courseUnits', () => {
     expect(new Set(ids)).toEqual(new Set(cardDefinitions(content).map((card) => card.id)));
   });
 
+  it('gives a unit to a move that transposes into covered ground from where another line stopped', () => {
+    // "short" walks first and stops after 2...e5, where White has a card (3.Nf3, from "long") that transposes into the
+    // main line after 3.Bc4: no branch leaves that position for new ground, yet its card still needs a unit.
+    const c = course([
+      { id: 'main', moves: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5', kind: 'main' },
+      { id: 'short', moves: '1. e4 Nc6 2. Bc4 e5', kind: 'sideline' },
+      { id: 'long', moves: '1. e4 Nc6 2. Bc4 e5 3. Nf3 Bc5', kind: 'sideline' },
+    ]);
+    const all = courseUnits(c);
+    const ids = all.flatMap((unit) => unit.cards.map((card) => card.id));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(new Set(ids)).toEqual(new Set(cardDefinitions(c).map((card) => card.id)));
+  });
+
   it('makes a branch wait for the unit it leaves, and a line wait for its unit before', () => {
     expect(units.map((unit) => [unit.id, unit.prerequisites])).toEqual([
       ['main:1', []],

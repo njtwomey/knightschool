@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cardDefinitions, ourMoveNodes } from '../packages/core/src/index.ts';
+import { cardDefinitions, courseUnits, ourMoveNodes, type CardOptions } from '../packages/core/src/index.ts';
 import { loadCourses, loadCurriculum, loadGlossary, loadOpeningGroups } from './content-lib.ts';
 
 // Builds the real files under content/, so a bad PGN, tag or course.yaml fails `make test`, not just `pnpm content:build`.
@@ -38,4 +38,21 @@ describe('content', () => {
       expect(content.opening.variants[0]!.kind).toBe('line');
     },
   );
+
+  // The study path introduces cards unit by unit: a card in no unit would never be introduced, one in two would be
+  // counted twice. Checked under each card setting the app offers.
+  const settings: [string, CardOptions][] = [
+    ['default settings', {}],
+    ['rare lines included', { includeRare: true }],
+    ['no popularity cut', { minPopularity: 0 }],
+  ];
+  it.each(
+    courses.flatMap((content) =>
+      settings.map(([name, options]) => [content.opening.id, name, content, options] as const),
+    ),
+  )('%s puts every card in exactly one unit (%s)', (_id, _name, content, options) => {
+    const ids = courseUnits(content, options).flatMap((unit) => unit.cards.map((card) => card.id));
+    expect(ids.length).toBe(new Set(ids).size);
+    expect(new Set(ids)).toEqual(new Set(cardDefinitions(content, options).map((card) => card.id)));
+  });
 });

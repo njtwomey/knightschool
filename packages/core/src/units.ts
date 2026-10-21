@@ -230,8 +230,10 @@ export function courseUnits(content: OpeningContent, options: UnitOptions = {}):
       const node = nodes[from];
       if (!node) continue;
       for (const edge of allowed(from)) {
-        if (covered.has(edge.to)) continue;
         const pending = node.isOurTurn && definitions.has(from) && !assigned.has(from);
+        // A card where a walk stopped, whose move leads into covered ground (a transposition), is a branch of one move:
+        // nothing else would ever give it a unit.
+        if (covered.has(edge.to) && !pending) continue;
         if (!pending && !isUseful(edge.to)) continue;
         const owner = ownerOf(edge);
         const key = [
