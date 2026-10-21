@@ -30,7 +30,7 @@ so folder names must be unique across the whole tree.
 
 ```
 <course>/
-  course.yaml                 name, side, tier, opening, trigger, summary, plans, motifs, the lines and traps
+  course.yaml                 name, side, tier, opening, trigger, summary, about, plans, motifs, the lines and traps
   lines/<file>.pgn            one PGN per opponent choice; `( ... )` variations inside are fine
   traps/<file>.pgn            tricks inside the course (see below)
   quizzes.yaml                optional questions about positions
@@ -48,7 +48,14 @@ opening: italian-game # an id from content/openings.yaml
 tier: 1 # 1: study first. 2: next. 3: alternatives and rare replies
 trigger: '1. e4 e5 2. Nf3' # SAN to the position every line of the course passes through
 summary: >-
-  Two plain sentences.
+  Two plain sentences: what the opening is (the position, and who gives what) and what the course covers.
+about: # required: the introduction at the top of the course page and on the play page
+  idea: >- # why our side plays it and what it hopes for
+    Two to four plain sentences.
+  risks: >- # its weaknesses for our side, and the opponent's best try against it
+    Two to four plain sentences.
+  origin: >- # optional: where it comes from or who made it popular; leave it out rather than guess
+    One sentence.
 plans: # a few bullets a 1200 can act on when the opponent leaves the book
   - Castle by move six; Re1, Nbd2, Bb3, h3 and Nf1-g3 is the middlegame.
 motifs: [f7-weakness, fork-trick] # ids from motifs.yaml
@@ -77,6 +84,11 @@ traps:
     opponent: '3...d6 4.Nc3 Bg4'
     kind: for-us # what we spring when the opponent errs
 ```
+
+**The introduction.** Nobody should land on a course without knowing what it is. `summary` says what the opening is,
+`about.idea` why our side plays it, `about.risks` what can go wrong for our side (including the opponent's best try and,
+for a gambit, what the engine thinks of it), and the optional `about.origin` where it comes from. Write for a beginner, a
+few sentences each, without repeating the summary or the plans. Leave `origin` out unless you are sure of the history.
 
 **What `kind` does to cards.** `main` and `gambit` lines always produce cards. `sideline` lines do unless the explorer says
 too few games reach them. `rare` lines produce cards only when the learner turns on "include rare lines" in Settings.
@@ -142,9 +154,12 @@ Motif ids (shared with `Annotation.motifs` and the MotifExplainer, so a quiz ans
 
 Move-level tags (a trick at one specific move) belong in that move's annotation, not the header.
 
+The app explains every tag value to the learner (a hover on each badge and a key above the lines), in
+`apps/web/src/features/openings/explanations.ts`. A new value needs its explanation there too.
+
 ## Position links in text
 
-A comment, a course `summary` and a `plans` bullet may point at a position, so a reader can see what the words mean:
+A comment, a course `summary`, the `about` texts and a `plans` bullet may point at a position, so a reader can see what the words mean:
 `[f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -)`. The words in square brackets are shown; the part in
 parentheses is any legal FEN or EPD. Beside a board, hovering (or tapping) the words puts that position on the board and
 it goes back when the pointer leaves. `pnpm fen "1. e4 e5 2. Nf3 Nc6 3. Bc4"` prints the EPD for a move list. A target that

@@ -7,6 +7,16 @@ trigger: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4'
 summary: >-
   White gives the b-pawn so that the bishop on c5 must move and White can build a big centre with c3 and d4. It is a
   gambit for fast development: the engine thinks it is roughly level, and Black must defend with care.
+about:
+  idea: >-
+    The pawn on b4 is bait. Taking it costs Black time, because the bishop has to move again when c3 hits it, and c3 and
+    d4 then give White a strong centre. For one pawn White gets fast development and open lines towards Black's king.
+  risks: >-
+    White is a pawn down, so the attack has to keep going; if Black gives the pawn back at the right moment, White's
+    edge is gone. Move order matters: taking back on d4 before castling allows ...Bb4+, which wins time or material.
+    Black can also decline with 4...Bb6 and simply develop.
+  origin: >-
+    Named after Captain William Evans, a Welsh sea captain who introduced it in the 1820s.
 plans:
   - After 4...Bxb4 play 5.c3 and 6.d4, then castle before you recapture on d4; the king first, the pawn second.
   - Never recapture 7.cxd4 before castling when the bishop can check on b4.

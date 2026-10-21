@@ -30,6 +30,7 @@ import { readHashState, setHashState, to } from '@/router/location';
 import { MotifChip } from '@/features/glossary/motif-chip';
 import { useGlossary } from '@/features/glossary/use-glossary';
 import { ECO_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/features/openings/explanations';
+import { CourseIntro } from './course-intro';
 import { LinesTable } from './lines-table';
 
 function isTyping(target: EventTarget | null) {
@@ -154,17 +155,18 @@ export function CoursePage({ courseId }: { courseId: string }) {
                 <EnrolButton openingId={courseId} />
               </span>
             </div>
-            <p className="max-w-3xl text-muted-foreground">
-              <RichText text={course.summary} />
-            </p>
+            <CourseIntro summary={course.summary} about={course.about} />
             {course.plans.length > 0 && (
-              <ul className="grid max-w-3xl list-disc gap-1 pl-5 text-sm">
-                {course.plans.map((plan) => (
-                  <li key={plan}>
-                    <RichText text={plan} />
-                  </li>
-                ))}
-              </ul>
+              <section aria-label="Plans" className="grid max-w-3xl gap-1">
+                <h3 className="text-sm font-semibold">Plans to remember</h3>
+                <ul className="grid list-disc gap-1 pl-5 text-sm">
+                  {course.plans.map((plan) => (
+                    <li key={plan}>
+                      <RichText text={plan} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
             )}
             {course.motifs.length > 0 && (
               <p className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">

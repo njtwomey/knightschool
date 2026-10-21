@@ -8,6 +8,18 @@ summary: >-
   Black answers c4 with e6 and keeps a pawn on d5, holding the centre without taking the gambit pawn. The same setup
   works against every move order. Learn the Orthodox and Exchange lines first, then the answers to 3.Nf3, 4.Bf4 and the
   Catalan.
+about:
+  idea: >-
+    The pawn on e6 holds d5, so Black never has to give up the centre and White never gets an easy e4. Black develops
+    behind that wall, castles, and only then frees the position with a pawn break, ...c5 or ...e5. It is one of the most
+    solid defences there is: Black is rarely in danger early.
+  risks: >-
+    The price is the bishop on c8, shut in behind the e6 pawn, which is often Black's worst piece until ...dxc4 and
+    ...e5 or ...b6 lets it out. Black has less space at first, so a passive player can be slowly squeezed if the freeing
+    break never comes. In the Exchange Variation White pushes b4 and b5 (the minority attack) to leave Black a weak pawn
+    on c6.
+  origin: >-
+    One of the oldest answers to 1.d4, and a favourite of world champions for about a hundred years.
 plans:
   - Develop with ...Nf6, ...Be7, ...O-O, ...c6 and ...Nbd7, then free the position with ...dxc4 and ...e5 or ...c5.
   - Take on c4 only once White's bishop has gone to d3, so White cannot recapture with a tempo.

@@ -64,7 +64,8 @@ Content is organised by who is to move and what the opponent has done (`docs/CUR
 the format). A **course** is a folder under `content/white/` or `content/black/` (the folder decides the side) with
 `course.yaml`, `lines/*.pgn`, `traps/*.pgn` and `quizzes.yaml`; its id is the folder name. `course.yaml` gives the trigger
 position every line passes through, a tier (1 study first, 2 next, 3 alternatives), the opening it belongs to (an id from
-`content/openings.yaml`, which also says who plays the opening: that makes a course "playing it" or "playing against it"), plans
+`content/openings.yaml`, which also says who plays the opening: that makes a course "playing it" or "playing against it"),
+a required introduction (`about`: `idea`, `risks` and an optional `origin`, shown on the course and play pages), plans
 and motifs (from `content/motifs.yaml`), and each line's `kind` (main, sideline, rare, gambit; plus `alternative`) and each
 trap's (`for-us` springs it, `against-us` must be avoided). `content/curriculum.yaml` is the study order and prerequisites.
 Gambits and traps are branches inside the course where they arise; there is no separate motifs section. A line or trap
@@ -109,7 +110,9 @@ and `404.html` is copied from `index.html` at build; dev and preview already fal
   Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all / courses / lines); search ranked
   by relevance with "why it matched" (`filterCourses`, `searchLines`, `relevance`); and **board search** in a modal:
   `search.json` maps every position to the lines through it, so transpositions match.
-- `course`: one course's page: what it is for, its plans and motifs, the board with the engine strip (on by default, off in
+- `course`: one course's page: the introduction (`CourseIntro`: summary, idea, risks; the play page shows it compact as
+  `CourseIntroCard` with the line's tags), its plans and motifs, line tags explained on hover and in a key (`TagLegend`,
+  wording in `features/openings/explanations.ts`), the board with the engine strip (on by default, off in
   Settings), its lines and traps grouped by kind (main, gambits, sidelines, rare, alternatives, traps to avoid, traps to spring;
   click a row = learn, icon buttons show / learn / practise), and the same ground from the other side (courses in the same
   opening, and courses that reach the same positions: `relatedCourses`). The browse store keeps the displayed `line`.

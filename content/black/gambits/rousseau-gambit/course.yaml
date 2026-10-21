@@ -5,9 +5,18 @@ opening: rousseau-gambit
 tier: 3
 trigger: '1. e4 e5 2. Nf3 Nc6 3. Bc4 f5'
 summary: >-
-  A surprise weapon for Black against the Italian Game: 3...f5 offers the e-pawn to open the f-file. The engine thinks it
-  is dubious, because White's calm 4.d3 leaves Black about a pawn worse, but White's natural-looking tries lose quickly and
-  the course teaches the sound replies and the traps.
+  A surprise weapon for Black against the Italian Game: 3...f5 hits White's e4 pawn and offers the f-pawn, to open the
+  f-file. The engine thinks it is dubious, because White's calm 4.d3 leaves Black about a pawn worse, but White's
+  natural-looking tries lose quickly and the course teaches the sound replies and the traps.
+about:
+  idea: >-
+    Black hits White's e4 pawn with the f-pawn at once. If White takes on f5, or lets Black take on e4, the f-file opens
+    for Black's rook and ...d5 follows with a hit on the bishop on c4, so Black gets a big centre and quick development.
+    Few club players have met it, and the natural replies 4.exf5, 4.Nc3 and 4.Nxe5 all give Black a good game.
+  risks: >-
+    Moving the f-pawn opens the diagonal from c4 to Black's king and lets a white knight on g5 eye f7. Against the calm
+    4.d3, which keeps e4 guarded, Black has no tricks left and the engine rates White about a pawn better, so this is a
+    surprise weapon, not a sound opening. Taking on e4 at the wrong moment can lose to a knight fork on f7.
 plans:
   - Meet 4.d3 with ...Nf6 and ...Bc5, develop fast, and take on e4 only when dxe4 helps you.
   - After a grab on f5 or e5, win the material back or punish it, because White's pieces are not yet developed.

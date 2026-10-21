@@ -92,6 +92,20 @@ export const CourseTrap = z.object({
 });
 export type CourseTrap = z.infer<typeof CourseTrap>;
 
+/**
+ * The introduction to a course, for a beginner who has never heard of the opening: why it is played and what can go
+ * wrong. The `summary` says what the opening is; these say what it is for. Each is a few plain sentences.
+ */
+export const CourseAbout = z.object({
+  /** The main idea: why our side plays this, and what it hopes for. */
+  idea: z.string().min(1),
+  /** Its weaknesses and risks for our side, and the opponent's best try against it. */
+  risks: z.string().min(1),
+  /** Optional: where the opening comes from or who made it popular. Left out rather than guessed. */
+  origin: z.string().min(1).optional(),
+});
+export type CourseAbout = z.infer<typeof CourseAbout>;
+
 /** The contents of course.yaml, before the variants are read. */
 export const OpeningManifest = z.object({
   name: z.string().min(1),
@@ -107,6 +121,8 @@ export const OpeningManifest = z.object({
   /** SAN from the start to the position every line of the course passes through: "1. e4 e5 2. Nf3". Empty means the start. */
   trigger: z.string(),
   summary: z.string().min(1),
+  /** The introduction: the main idea and the risks, shown at the top of the course page and on the play page. */
+  about: CourseAbout,
   /** Short plan bullets a player can act on when the opponent leaves the book. */
   plans: z.array(z.string().min(1)).default([]),
   /** Ids from content/motifs.yaml. */
@@ -136,6 +152,7 @@ export const OpeningIndexEntry = Opening.pick({
   tier: true,
   trigger: true,
   summary: true,
+  about: true,
   plans: true,
   motifs: true,
   tags: true,

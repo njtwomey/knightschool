@@ -9,6 +9,17 @@ summary: >-
   the centre with d4 or hunts the extra pawn; if Black declines, White develops calmly. The sharp [Kieseritzky
   line](rnbqkbnr/pppp1p1p/8/4N3/4PppP/8/PPPP2P1/RNBQKB1R b KQkq -) is the main line here, and the engine
   rates Black a little better in most lines, so this is a course for players who enjoy attacking chess.
+about:
+  idea: >-
+    White wants Black's e-pawn off the centre, so that d4 gives White two centre pawns, and wants the f-file open for
+    the rook once the king has castled. It leads to open, attacking games where both kings can come under fire, and many
+    defenders go wrong early.
+  risks: >-
+    Pushing the f-pawn weakens White's own king: the diagonal from h4 to e1 opens, so ...Qh4+ is a constant danger, and
+    castling takes longer. Black can hold the extra pawn with ...g5 or hit back in the centre with ...d5. The lines are
+    sharp, and one slip often decides the game.
+  origin: >-
+    One of the oldest gambits, and the favourite attack of the great players of the 1800s.
 plans:
   - Take the centre with d4 and develop fast; the f-pawn is bait, not an investment you must defend.
   - If Black holds the extra pawn with ...g5, attack that pawn with h4 and win f4 back with the bishop.

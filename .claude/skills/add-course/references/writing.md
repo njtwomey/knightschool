@@ -11,6 +11,21 @@
 - Variation inside the file for a short sideline (about 4 moves); separate file when it needs its own name or tags.
 - Transpositions are fine: same position = same card. Say so in a comment when a variation transposes.
 
+## The introduction (`about` in course.yaml)
+
+The course page and the play page open with it, so a learner who has never heard of the opening knows what it is for.
+`summary` says what the opening is (the position, and who gives what). Then:
+
+- `idea`: why our side plays it and what it hopes for (space, a lead in development, a target such as f7, a simple
+  repeatable plan). Two to four sentences.
+- `risks`: what can go wrong for our side: the structural cost (a shut-in bishop, a weakened king, a pawn down), the
+  opponent's best try, and for a gambit what the engine thinks of it (check with `course:eval` or native Stockfish).
+- `origin` (optional): one sentence on where the name comes from or who made it popular. Only what you are sure of; leave
+  it out rather than guess.
+
+Do not repeat the summary or the plans; say why, not which moves. The same rules as for notes apply (plain words, define
+any jargon in the same sentence, no exclamation marks).
+
 ## Explaining moves (this is what makes a course good)
 
 A comment sits on a move: `3. Bc4 { Aims at f7, the square only Black's king protects. }`. In Play and Review the learner
