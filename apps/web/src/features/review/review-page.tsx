@@ -1,7 +1,7 @@
 import { Page } from '@/components/page';
 import { explainMove, pathTo, playUci, type LineEdge, type OpeningContent } from '@knightschool/core';
 import { Eye, Lightbulb } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { MoveTable } from '@/components/move-table';
 import { BoardSettingsButton } from '@/components/board/board-settings';
@@ -17,7 +17,7 @@ import { SourceSelect } from '@/components/source-select';
 import { WeightingSelect } from '@/components/weighting-select';
 import { useBrowse } from '@/features/browse/store';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
-import { currentQuestion, DUE, useReview, type QuizQuestion } from './store';
+import { currentQuestion, DUE, useReview, type LineScope, type QuizQuestion } from './store';
 import { to } from '@/router/location';
 
 /** The moves that reached a position in a course; empty if it is not on a line. */
@@ -36,8 +36,16 @@ const arrow = (uci: string) => ({
   color: 'rgb(21 128 61 / 0.85)',
 });
 
+/** What sits above the questions instead of the source choice: a line's breadcrumbs and tabs on its Quiz tab. */
+const HeaderSlot = createContext<ReactNode>(null);
+
 /** Chooses between the scheduled session and free practice from any course. Nothing in free practice is saved. */
 function SourceBar() {
+  const header = useContext(HeaderSlot);
+  return header ?? <SourceChoice />;
+}
+
+function SourceChoice() {
   const source = useReview((state) => state.source);
   const weighting = useReview((state) => state.weighting);
   const index = useBrowse((state) => state.index);
@@ -65,14 +73,29 @@ function SourceBar() {
   );
 }
 
-export function ReviewPage() {
+/**
+ * The quiz. On its own (/quiz) it asks the schedule's due cards or free practice from the courses chosen; given a
+ * `scope` it asks every question of one line, shuffled and never saved, with `header` (the line's tabs) on top.
+ */
+export function ReviewPage({ scope, header }: { scope?: LineScope; header?: ReactNode } = {}) {
+  return (
+    <HeaderSlot.Provider value={header ?? null}>
+      <Review scope={scope} />
+    </HeaderSlot.Provider>
+  );
+}
+
+function Review({ scope }: { scope?: LineScope }) {
   const state = useReview();
   const { phase, error, attempt, queue, index, results, badge, advancing, viewing, holding } = state;
+  const course = scope?.course;
+  const line = scope?.line;
 
   useEffect(() => {
+    useReview.setState({ scope: course && line ? { course, line } : null });
     void useReview.getState().start();
     return () => useReview.getState().stop();
-  }, []);
+  }, [course, line]);
 
   // Start again if the store was reset while the page stayed open, rather than waiting on a refresh.
   useEffect(() => {
@@ -195,6 +218,30 @@ export function ReviewPage() {
 
 function Summary({ results }: { results: readonly string[] }) {
   const count = (...ratings: string[]) => results.filter((rating) => ratings.includes(rating)).length;
+  const scope = useReview((state) => state.scope);
+  if (scope) {
+    return (
+      <Page className="max-w-xl gap-4 py-8">
+        <SourceBar />
+        <Card>
+          <CardHeader>
+            <CardTitle>{results.length ? 'Quiz done' : 'Nothing to ask in this line'}</CardTitle>
+            <CardDescription>
+              {results.length
+                ? `${results.length} questions. ${count('easy', 'good')} right first time, ${count('hard')} with help, ${count('again')} missed. Nothing here changes your schedule.`
+                : 'This line has no moves of yours to ask after the course starts.'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            {results.length > 0 && <Button onClick={() => void useReview.getState().start()}>Quiz again</Button>}
+            <Button asChild variant="outline">
+              <a href={to(`/play/${scope.course}/${scope.line}/drill`)}>Drill it</a>
+            </Button>
+          </CardContent>
+        </Card>
+      </Page>
+    );
+  }
   return (
     <Page className="max-w-xl gap-4 py-8">
       <SourceBar />

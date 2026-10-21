@@ -4,6 +4,7 @@ import { pickWeighted, popularityWeight, type Weighting } from './sampling';
 import type { Attempt } from './attempt';
 import { newCard, scheduleReview } from './scheduler';
 import type { LineNode, OpeningContent } from './schema/content';
+import { variantPath } from './tree-helpers';
 
 /** What decides which positions earn cards: the popularity cut-off, and whether rare lines are included. */
 export type CardOptions = { minPopularity?: number; includeRare?: boolean };
@@ -190,4 +191,33 @@ export function recordQuizAnswer(
     review: { id: newId(), cardId: card.id, at, rating, playedUci: null, msToAnswer, hintUsed: false, sessionId },
     attempt: { id: newId(), quizId: card.id, at, answer: result.answer, matched: result.matched, msToAnswer },
   };
+}
+
+const MISTAKE_NAGS = new Set([2, 4, 6]); // ?, ??, ?!
+
+/**
+ * Every question one line asks, in the order it asks them: our move at each position from the course's trigger to the
+ * end of the line, and the course's quizzes about positions on it. Unlike `cardDefinitions` it asks the line's own move
+ * even where the line is an alternative, and it stops at a mistake of ours (a trap shows it; nothing after it is asked).
+ * For quizzing one line on its own page; these are never saved to the schedule.
+ */
+export function lineQuestions(content: OpeningContent, lineId: string): CardDefinition[] {
+  const { opening } = content;
+  if (!opening.variants.some((variant) => variant.id === lineId)) return [];
+  const path = variantPath(content, lineId);
+  const positions = [opening.rootEpd, ...path.map((edge) => edge.to)];
+  const from = Math.max(0, positions.indexOf(opening.triggerEpd));
+  const quizzes = quizDefinitions(content);
+  const questions: CardDefinition[] = [];
+  for (let i = 0; i < path.length; i++) {
+    const epd = positions[i]!;
+    const edge = path[i]!;
+    const ours = content.nodes[epd]?.isOurTurn ?? false;
+    if (ours && edge.annotation?.nag.some((nag) => MISTAKE_NAGS.has(nag))) break;
+    if (i < from) continue;
+    questions.push(...quizzes.filter((quiz) => quiz.epd === epd));
+    if (ours) questions.push({ id: cardId(opening.id, epd), openingId: opening.id, epd, expectedUci: edge.uci });
+  }
+  questions.push(...quizzes.filter((quiz) => quiz.epd === positions[path.length]));
+  return questions;
 }

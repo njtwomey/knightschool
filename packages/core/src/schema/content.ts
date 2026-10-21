@@ -204,6 +204,8 @@ export const OpeningIndexEntry = Opening.pick({
       epds: z.array(z.string()),
       /** Other courses that list this line too ("also in"). */
       alsoIn: z.array(Slug).default([]),
+      /** Where the line grows out of the tree: the chapter it branches from and the move it follows ("5.c3"). */
+      branch: z.object({ parent: Slug, after: z.string() }).optional(),
     }),
   ),
 });

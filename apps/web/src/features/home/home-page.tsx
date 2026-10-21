@@ -72,7 +72,7 @@ function HeroBoard() {
       </p>
       <div className="flex items-center justify-end text-sm">
         <a
-          href={to('/play/italian-game/giuoco-pianissimo/learn')}
+          href={to('/play/vs-e5-italian/giuoco-piano/about')}
           className="flex items-center gap-1 font-medium hover:underline"
         >
           Learn this line <ArrowRight className="size-3.5" aria-hidden />

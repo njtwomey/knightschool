@@ -1,6 +1,6 @@
 import { Page } from '@/components/page';
 import { explainMove, type LineStep } from '@knightschool/core';
-import { BookOpen, Ellipsis, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'lucide-react';
+import { BookOpen, Eye, GitBranch, Lightbulb, RotateCcw, Target, Undo2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { BoardSettingsButton } from '@/components/board/board-settings';
@@ -9,16 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { RichText } from '@/components/rich-text';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Progress } from '@/components/ui/progress';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { PlayBreadcrumbs } from '@/features/browse/breadcrumbs';
@@ -28,12 +19,13 @@ import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
 import { decodeMoves, encodeMoves } from '@/router/hash';
+import { lineHref } from '@/features/line/tabs';
 import { ALL_BRANCHES, playView, usePlay, type PlayMode } from './store';
 import { navigate, readHashState, setHashState, to } from '@/router/location';
 
 const MODES: Record<PlayMode, { name: string; blurb: string; icon: typeof BookOpen }> = {
   learn: { name: 'Learn', blurb: 'You play both sides. Every move is shown first.', icon: BookOpen },
-  practice: { name: 'Practise', blurb: 'The computer plays the other side. Recall your moves.', icon: Target },
+  practice: { name: 'Drill', blurb: 'The computer plays the other side. Recall your moves.', icon: Target },
   branches: {
     name: 'Every branch',
     blurb: 'The computer varies its replies each time. Know the answer to every one.',
@@ -210,12 +202,12 @@ export function PlayPage({ course, line, mode }: Props) {
 
   /**
    * Switching how you play changes the address, so a refresh or a shared link comes back to exactly this: the course,
-   * the line and the mode are all in the path (/play/<course>/<line>/<learn | practice>, and /play/<course>/all/branches
+   * the line and the tab are all in the path (/play/<course>/<line>/<learn | drill>, and /play/<course>/all/branches
    * for the every-branch drill).
    */
   function chooseMode(next: PlayMode) {
     if (next === 'branches') navigate(`/play/${course}/${ALL_BRANCHES}/branches`);
-    else navigate(`/play/${course}/${drill ? firstLine.id : line}/${next}`);
+    else navigate(lineHref(course, drill ? firstLine.id : line, next === 'practice' ? 'drill' : 'learn'));
   }
   const side = content.opening.side;
   const other = side === 'white' ? 'Black' : 'White';
@@ -249,7 +241,7 @@ export function PlayPage({ course, line, mode }: Props) {
           course={course}
           line={line}
           lineName={drill ? 'Every branch' : variant!.name}
-          mode={state.mode}
+          tab={state.mode === 'practice' ? 'drill' : state.mode}
         />
         {!drill && <Badge variant="outline">{variant!.eco}</Badge>}
         {!drill && variant!.kind === 'refutation' && <Badge variant="secondary">Trap</Badge>}
@@ -286,44 +278,11 @@ export function PlayPage({ course, line, mode }: Props) {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <BoardSettingsButton />
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              value={state.mode === 'learn' || state.mode === 'practice' ? state.mode : ''}
-              onValueChange={(value) => value && chooseMode(value as PlayMode)}
-              aria-label="Learn or practise"
-            >
-              <ToggleGroupItem value="learn">
-                <BookOpen aria-hidden /> Learn
-              </ToggleGroupItem>
-              <ToggleGroupItem value="practice">
-                <Target aria-hidden /> Practise
-              </ToggleGroupItem>
-            </ToggleGroup>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant={state.mode === 'branches' ? 'secondary' : 'outline'}
-                  size="icon"
-                  aria-label="More ways to play"
-                >
-                  <Ellipsis aria-hidden />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-72">
-                <DropdownMenuLabel>More ways to play</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={state.mode} onValueChange={(value) => chooseMode(value as PlayMode)}>
-                  {(Object.keys(MODES) as PlayMode[]).map((key) => (
-                    <DropdownMenuRadioItem key={key} value={key} className="items-start">
-                      <span className="grid gap-0.5">
-                        <span className="font-medium">{MODES[key].name}</span>
-                        <span className="text-xs text-muted-foreground">{MODES[key].blurb}</span>
-                      </span>
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {!drill && (
+              <Button variant="outline" onClick={() => chooseMode('branches')} title={MODES.branches.blurb}>
+                <GitBranch aria-hidden /> Every branch
+              </Button>
+            )}
             {state.mode === 'practice' && !complete && (
               <>
                 <Button
@@ -385,7 +344,7 @@ export function PlayPage({ course, line, mode }: Props) {
                 </CardTitle>
                 {state.mode === 'learn' && !drill && (
                   <Button size="sm" onClick={() => chooseMode('practice')}>
-                    <Target aria-hidden /> Practise this line
+                    <Target aria-hidden /> Drill this line
                   </Button>
                 )}
               </div>
@@ -445,7 +404,7 @@ export function PlayPage({ course, line, mode }: Props) {
             about={content.opening.about}
             side={side}
             variant={variant}
-            defaultOpen={state.mode === 'learn'}
+            defaultOpen={false}
           />
 
           {state.mode === 'learn' && (
@@ -470,16 +429,18 @@ export function PlayPage({ course, line, mode }: Props) {
               <CardContent className="flex flex-wrap gap-2">
                 {state.mode === 'learn' ? (
                   <Button onClick={() => chooseMode('practice')}>
-                    <Target aria-hidden /> Now practise it
+                    <Target aria-hidden /> Now drill it
                   </Button>
                 ) : (
                   <Button onClick={() => usePlay.getState().restart()}>
-                    <RotateCcw aria-hidden /> {drill ? 'Another branch' : 'Practise again'}
+                    <RotateCcw aria-hidden /> {drill ? 'Another branch' : 'Drill again'}
                   </Button>
                 )}
                 {next && (
                   <Button asChild variant="outline">
-                    <a href={to(`/play/${course}/${next.id}/${state.mode}`)}>Next: {next.name}</a>
+                    <a href={to(lineHref(course, next.id, state.mode === 'practice' ? 'drill' : 'learn'))}>
+                      Next: {next.name}
+                    </a>
                   </Button>
                 )}
                 <Button asChild variant="ghost">

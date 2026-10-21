@@ -29,7 +29,7 @@ import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
 import { GlossaryPage } from '@/features/glossary/glossary-page';
 import { OpeningsPage } from '@/features/openings/openings-page';
-import { PlayPage } from '@/features/play/play-page';
+import { LinePage } from '@/features/line/line-page';
 import { GuessPage } from '@/features/guess/guess-page';
 import { SpeedPage } from '@/features/speed/speed-page';
 import { ReviewPage } from '@/features/review/review-page';
@@ -165,7 +165,14 @@ export function App() {
         {route.page === 'openings' && <OpeningsPage />}
         {route.page === 'course' && <CoursePage courseId={route.id} />}
         {route.page === 'glossary' && <GlossaryPage />}
-        {route.page === 'play' && <PlayPage course={route.course} line={route.line} mode={route.mode} />}
+        {route.page === 'play' && (
+          <LinePage
+            key={`${route.course}/${route.line}/${route.tab}`}
+            course={route.course}
+            line={route.line}
+            tab={route.tab}
+          />
+        )}
         {route.page === 'review' && <ReviewPage />}
         {route.page === 'guess' && <GuessPage />}
         {route.page === 'speed' && <SpeedPage />}

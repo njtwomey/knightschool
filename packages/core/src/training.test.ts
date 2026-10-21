@@ -12,6 +12,7 @@ import {
   freePractice,
   introductionOrder,
   isQuizCard,
+  lineQuestions,
   planIntroductions,
   planSession,
   quizCardId,
@@ -20,6 +21,7 @@ import {
   recordQuizAnswer,
 } from './training';
 import { buildOpening } from './tree';
+import { namedPly, variantPath } from './tree-helpers';
 
 const NOW = new Date('2026-10-13T10:00:00.000Z');
 
@@ -359,5 +361,41 @@ describe('freePractice', () => {
     }
     expect(ids.length).toBeGreaterThan(1);
     expect(firstPicks).toBeGreaterThan(200);
+  });
+});
+
+describe('lineQuestions', () => {
+  it("asks the line's own moves from the trigger on, alternatives included", () => {
+    const alternative = content(withKinds('main', 'against-us', true));
+    const asked = (id: string, c = content()) => lineQuestions(c, id).map((card) => card.expectedUci);
+    expect(asked('main')).toEqual(['e2e4', 'g1f3', 'f1c4']);
+    expect(asked('side', alternative)).toEqual(['e2e4', 'g1f3', 'f3e5']);
+    expect(lineQuestions(content(), 'nope')).toEqual([]);
+  });
+
+  it('starts at the trigger and stops at a mistake of ours', () => {
+    const triggered = buildOpening('t', { ...manifest, trigger: '1. e4 e5 2. Nf3' }, [
+      { id: 'main', kind: 'line', game: game('1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *', 'main'), source: 'main.pgn' },
+      { id: 'side', kind: 'line', game: game('1. e4 e5 2. Nf3 Nf6 3. Nxe5 *', 'side'), source: 'side.pgn' },
+      {
+        id: 'trap',
+        kind: 'refutation',
+        game: game('1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4 4. Nxe5? Qg5 *', 'trap'),
+        source: 'trap.pgn',
+      },
+    ]);
+    expect(lineQuestions(triggered, 'main').map((card) => card.expectedUci)).toEqual(['f1c4']);
+    expect(lineQuestions(triggered, 'trap').map((card) => card.expectedUci)).toEqual(['f1c4']);
+  });
+});
+
+describe('namedPly', () => {
+  it('picks the deepest named position along the line, or ply 8 without names', () => {
+    const c = content();
+    expect(namedPly(c, 'main')).toBe(6); // a 6-ply line, nothing named
+    const path = variantPath(c, 'main');
+    c.nodes[path[2]!.to]!.name = "King's Knight Opening";
+    c.nodes[path[4]!.to]!.name = 'Italian Game';
+    expect(namedPly(c, 'main')).toBe(5);
   });
 });

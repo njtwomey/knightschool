@@ -152,8 +152,8 @@ export function StatsPage() {
       )}
       {data && data.total === 0 && data.guess.total === 0 && data.speed.lines === 0 && (
         <p className="py-8 text-center text-muted-foreground">
-          No answers yet. Practise a line, take the quiz, try Name That Opening or run a Speed test and your numbers
-          will appear here.
+          No answers yet. Drill a line, take the quiz, try Name That Opening or run a Speed test and your numbers will
+          appear here.
         </p>
       )}
       {data && data.total > 0 && (

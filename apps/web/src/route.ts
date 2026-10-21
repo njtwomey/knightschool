@@ -1,11 +1,12 @@
-import type { PlayMode } from '@/features/play/store';
+import { parseLineTab, type LineTab } from '@/features/line/tabs';
 
 export type Route =
   | { page: 'home' }
   | { page: 'profile'; tab: 'overview' | 'stats' | 'settings' }
   | { page: 'openings' }
   | { page: 'course'; id: string }
-  | { page: 'play'; course: string; line: string; mode: PlayMode }
+  /** A line's page and tab; line `all` is the every-branch drill of the whole course. */
+  | { page: 'play'; course: string; line: string; tab: LineTab | 'branches' }
   | { page: 'review' }
   | { page: 'guess' }
   | { page: 'speed' }
@@ -47,7 +48,7 @@ export function parseRoute(pathname: string): Route {
             page: 'play',
             course: a,
             line: RENAMED_LINES[`${a}/${b}`] ?? b,
-            mode: b === 'all' ? 'branches' : c === 'learn' ? 'learn' : 'practice',
+            tab: b === 'all' ? 'branches' : parseLineTab(c),
           }
         : { page: 'home' };
     case 'quiz':

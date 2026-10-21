@@ -2,7 +2,9 @@ import {
   createScheduler,
   freePractice,
   isQuizCard,
+  lineQuestions,
   matchAnswer,
+  newCard,
   recordQuizAnswer,
   type Quiz,
   nodeAt,
@@ -67,6 +69,8 @@ type ReviewState = {
   quizResult: { matched: boolean; feedback: string | null; close: string | null; answer: string } | null;
   /** "due" (the review schedule), or where free practice draws from: learning, all, or a course id. */
   source: string;
+  /** Set on a line's Quiz tab: every question of that one line, shuffled, never saved. Overrides `source`. */
+  scope: LineScope | null;
   /** An earlier move of the position being asked, picked from the move table to look at; null shows the question. */
   viewing: number | null;
   /** True when an answer is shown and waits for Next: a miss has something to read. */
@@ -102,7 +106,11 @@ const storageOrThrow = (): Storage => {
   return storage.storage;
 };
 
+export type LineScope = { course: string; line: string };
+
 export const useReview = create<ReviewState>((set, get) => {
+  /** Only the schedule's own session is saved; free practice and a line's quiz never touch it. */
+  const saving = () => get().source === DUE && !get().scope;
   function advance() {
     const { index, queue } = get();
     if (index + 1 >= queue.length)
@@ -134,6 +142,7 @@ export const useReview = create<ReviewState>((set, get) => {
     advancing: false,
     quizResult: null,
     source: savedChoice(SOURCE_KEY, DUE),
+    scope: null,
     weighting: savedWeighting(WEIGHTING_KEY),
     setWeighting(weighting) {
       saveChoice(WEIGHTING_KEY, weighting);
@@ -171,6 +180,28 @@ export const useReview = create<ReviewState>((set, get) => {
           storage,
           index.map((course) => course.id),
         );
+        const scope = get().scope;
+        if (scope) {
+          const content = await loadOpening(scope.course);
+          const questions = lineQuestions(content, scope.line);
+          // Shuffled, so the quiz is not the line played again in order.
+          for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j]!, questions[i]!];
+          }
+          const queue = questions.map((definition) => newCard(definition, now));
+          set({
+            queue,
+            index: 0,
+            contents: { [content.opening.id]: content },
+            results: [],
+            sessionId: crypto.randomUUID(),
+            attempt: startAttempt(),
+            shownAt: performance.now(),
+            phase: queue.length ? 'asking' : 'summary',
+          });
+          return;
+        }
         if (get().source !== DUE) {
           // Free practice: random questions, saved nowhere, so the schedule is untouched.
           const chosen = coursesFor(get().source, index, enrolled);
@@ -250,7 +281,7 @@ export const useReview = create<ReviewState>((set, get) => {
         advancing: true,
         results: [...state.results, next.rating!],
       }));
-      if (get().source === DUE) {
+      if (saving()) {
         const answer = recordAnswer(scheduler, card, next, get().sessionId, new Date());
         void storageOrThrow()
           .reviews.record(answer.card, answer.review)
@@ -287,7 +318,7 @@ export const useReview = create<ReviewState>((set, get) => {
           answer,
         },
       }));
-      if (get().source === DUE)
+      if (saving())
         void storageOrThrow()
           .quizAttempts.record(done.card, done.review, done.attempt)
           .catch((error: unknown) =>

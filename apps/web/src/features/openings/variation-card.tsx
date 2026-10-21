@@ -4,15 +4,15 @@ import { BoardThumb } from '@/components/board/board-thumb';
 import { Hint } from '@/components/hint';
 import { Badge } from '@/components/ui/badge';
 import { IconAction } from '@/features/browse/icon-action';
-import { buildHash } from '@/router/hash';
 import { to } from '@/router/location';
 import { ROLE_HINT, SIDE_HINT, TRAP_HINT, WEIGHT_HINT } from './explanations';
+import { lineHref } from '@/features/line/tabs';
 
 /** A variation found by search, drawn like an opening: its board, name and where it lives. Click to see it on the board. */
 export function VariationCard({ hit, openings }: { hit: LineHit; openings: OpeningGroup[] }) {
   const { course, line } = hit;
   const role = roleOf(course, openings);
-  const href = to(`/course/${course.id}`) + buildHash({ v: line.id });
+  const href = to(lineHref(course.id, line.id));
   return (
     <li className="group relative flex gap-3 rounded-xl border bg-card p-3 text-card-foreground transition-colors hover:bg-accent">
       <div className="w-24 shrink-0 sm:w-28">
@@ -67,7 +67,7 @@ export function VariationCard({ hit, openings }: { hit: LineHit; openings: Openi
         <IconAction label="Learn it first" href={to(`/play/${course.id}/${line.id}/learn`)}>
           <BookOpen aria-hidden />
         </IconAction>
-        <IconAction label="Practise" href={to(`/play/${course.id}/${line.id}/practice`)}>
+        <IconAction label="Drill it" href={to(`/play/${course.id}/${line.id}/drill`)}>
           <Target aria-hidden />
         </IconAction>
       </div>

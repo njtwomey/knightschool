@@ -85,6 +85,12 @@ async function main() {
   const courses = loadCourses();
   const curriculum = loadCurriculum(courses);
   const order = new Map(curriculum.map((entry, i) => [entry.id, i]));
+  const graph = treeGraph(loadTree());
+  const branches = new Map(
+    graph.chapters.flatMap((chapter) =>
+      chapter.parent && chapter.after ? [[chapter.id, { parent: chapter.parent, after: chapter.after }] as const] : [],
+    ),
+  );
   const listedBy = new Map<string, string[]>();
   for (const content of courses)
     for (const variant of content.opening.variants)
@@ -117,6 +123,7 @@ async function main() {
             epd: path[Math.min(7, path.length - 1)]?.to ?? opening.rootEpd,
             epds: path.slice(1, 14).map((edge) => edge.to),
             alsoIn: (listedBy.get(id) ?? []).filter((course) => course !== opening.id),
+            branch: branches.get(id),
           };
         }),
       }),
@@ -124,7 +131,7 @@ async function main() {
     console.log(`  ${opening.id}: ${Object.keys(content.nodes).length} positions, ${opening.variants.length} variants`);
   }
   writeFileSync(join(outDir, 'index.json'), JSON.stringify(index));
-  writeFileSync(join(outDir, 'tree.json'), JSON.stringify(treeGraph(loadTree())));
+  writeFileSync(join(outDir, 'tree.json'), JSON.stringify(graph));
   writeFileSync(join(outDir, 'search.json'), JSON.stringify(buildSearchIndex(built)));
   // Native-Stockfish analysis from `pnpm analyse`, trimmed to the positions some course reaches.
   const analysisFile = join(root, 'content', 'analysis', 'analysis.json');
