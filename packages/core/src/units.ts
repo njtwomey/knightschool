@@ -345,7 +345,7 @@ export function courseUnits(content: OpeningContent, options: UnitOptions = {}):
   for (const unit of units) if (unit.side && unit.stretches.length === 1) unit.side = false;
 
   const ordered = applyOverrides(units, opening.units, options.strict ?? false);
-  attachSupplementary(content, ordered);
+  attachSupplementary(content, ordered, opening.units?.place, options.strict ?? false);
   return ordered;
 }
 
@@ -523,8 +523,17 @@ export function stretchPositions(content: OpeningContent, stretch: Pick<UnitStre
   return positions.slice(stretch.from);
 }
 
-/** Quizzes and traps go to the first unit whose stretches reach their position (for a trap, where it leaves). */
-function attachSupplementary(content: OpeningContent, units: CourseUnit[]) {
+/**
+ * Quizzes and traps go to the first unit whose stretches reach their position (for a trap, where it leaves), unless
+ * course.yaml `units.place` puts one with a later unit. Strict (the build): a placement naming no trap or quiz, no unit,
+ * or a unit before the natural one throws; otherwise such a placement is ignored.
+ */
+function attachSupplementary(
+  content: OpeningContent,
+  units: CourseUnit[],
+  place: Record<string, string> = {},
+  strict = false,
+) {
   const reached = (from?: number) =>
     units.map(
       (unit) =>
@@ -537,24 +546,59 @@ function attachSupplementary(content: OpeningContent, units: CourseUnit[]) {
   const stretches = reached();
   const wholePaths = reached(0);
   // Each trap's positions, with the unit it leaves from.
+  const trapAt = new Map<string, number>();
   const traps: { positions: Set<string>; unit: number }[] = [];
   for (const trap of content.opening.variants.filter((variant) => variant.kind === 'refutation')) {
     const positions = stretchPositions(content, { moves: trap.mainLine, from: 0 });
     for (let p = positions.length - 1; p >= 0; p--) {
       const i = stretches.findIndex((set) => set.has(positions[p]!));
       if (i >= 0) {
-        units[i]!.traps.push(trap.id);
+        trapAt.set(trap.id, i);
         traps.push({ positions: new Set(positions), unit: i });
         break;
       }
     }
   }
   // A quiz goes with the unit that reaches its position, else with the trap it is about, else with a unit on the way.
+  const quizAt = new Map<string, number>();
   for (const quiz of content.quizzes) {
     let at = stretches.findIndex((set) => set.has(quiz.epd));
     if (at < 0) at = traps.find((trap) => trap.positions.has(quiz.epd))?.unit ?? -1;
     if (at < 0) at = wholePaths.findIndex((set) => set.has(quiz.epd));
-    if (at >= 0) units[at]!.quizzes.push(quiz.id);
+    if (at >= 0) quizAt.set(quiz.id, at);
+  }
+
+  const index = new Map(units.map((unit, i) => [unit.id, i]));
+  const trapIds = new Set(content.opening.variants.filter((variant) => variant.kind === 'refutation').map((v) => v.id));
+  const quizIds = new Set(content.quizzes.map((quiz) => quiz.id));
+  const fail = (message: string) => {
+    if (strict) throw new Error(`units.place: ${message}`);
+  };
+  for (const [item, unitId] of Object.entries(place)) {
+    const maps = [...(trapIds.has(item) ? [trapAt] : []), ...(quizIds.has(item) ? [quizAt] : [])];
+    if (maps.length === 0) {
+      fail(`"${item}" is not a trap or a quiz of this course`);
+      continue;
+    }
+    const target = index.get(unitId);
+    if (target === undefined) {
+      fail(`"${unitId}" is not a unit of this course (with the default card settings)`);
+      continue;
+    }
+    for (const map of maps) {
+      const natural = map.get(item);
+      if (natural !== undefined && target < natural) {
+        fail(`"${item}" cannot come before "${units[natural]!.id}", the first unit to reach its position`);
+        continue;
+      }
+      map.set(item, target);
+    }
+  }
+  for (const [id, at] of trapAt) units[at]!.traps.push(id);
+  // Quizzes keep the course's order within a unit.
+  for (const quiz of content.quizzes) {
+    const at = quizAt.get(quiz.id);
+    if (at !== undefined) units[at]!.quizzes.push(quiz.id);
   }
 }
 
@@ -759,4 +803,26 @@ export function unitOrderFor(
     sequence.push(next.id);
   }
   return sequence.join(' ') === base.map((unit) => unit.id).join(' ') ? undefined : sequence;
+}
+
+/**
+ * The placements of `units.place` that still fit a course: a trap or quiz of it, a unit it has, and not before the
+ * first unit that reaches the item. After the path is reordered, the others would be rejected by the build.
+ */
+export function fittingPlacements(content: OpeningContent, place: Record<string, string>): Record<string, string> {
+  const units = courseUnits({
+    ...content,
+    opening: { ...content.opening, units: { order: [], after: {}, drop: {}, ...content.opening.units, place: {} } },
+  });
+  const natural = (item: string) => units.findIndex((unit) => unit.traps.includes(item) || unit.quizzes.includes(item));
+  const items = new Set([
+    ...content.opening.variants.filter((variant) => variant.kind === 'refutation').map((variant) => variant.id),
+    ...content.quizzes.map((quiz) => quiz.id),
+  ]);
+  return Object.fromEntries(
+    Object.entries(place).filter(([item, unitId]) => {
+      const at = units.findIndex((unit) => unit.id === unitId);
+      return items.has(item) && at >= 0 && at >= natural(item);
+    }),
+  );
 }

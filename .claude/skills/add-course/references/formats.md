@@ -94,7 +94,8 @@ lines:
 
 **`units:` (optional)** changes the course's study path, by unit id `<line>:<n>` (hover a unit's number on the Path tab):
 `order: [ids]` puts units first, as early as their prerequisites allow; `after: {unit: [ids]}` adds prerequisites;
-`drop: {unit: [ids]}` removes default ones. The build fails, naming the file, on an unknown id, a cycle or an impossible
+`drop: {unit: [ids]}` removes default ones; `place: {trap-or-quiz: unit}` shows a trap or quiz with a later unit (never
+earlier than the first unit that reaches it). A trap can be `alternative: true` too (shown, not drilled). The build fails, naming the file, on an unknown id, a cycle or an impossible
 order (ids are checked with the default card settings). Editing a course's lines can renumber units: re-check `units:`.
 See `content/README.md`.
 

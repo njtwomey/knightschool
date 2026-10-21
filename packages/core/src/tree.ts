@@ -116,14 +116,22 @@ export function buildOpening(
       section: line.section,
     });
   for (const trap of manifest.traps)
-    listing.set(trap.file, { opponent: trap.opponent, whose: trap.kind, alternative: false, section: trap.section });
+    listing.set(trap.file, {
+      opponent: trap.opponent,
+      whose: trap.kind,
+      alternative: trap.alternative ?? false,
+      section: trap.section,
+    });
 
   const ourSide = manifest.side;
   const nodes = new Map<string, MutableNode>();
   const mainLine = new Set<string>(); // `${from}>${san}` for the main line of the first line
-  const alternativeIds = new Set(
-    manifest.lines.filter((line) => line.alternative || byId.get(line.file)?.reused === true).map((line) => line.file),
-  );
+  const alternativeIds = new Set([
+    ...manifest.lines
+      .filter((line) => line.alternative || byId.get(line.file)?.reused === true)
+      .map((line) => line.file),
+    ...manifest.traps.filter((trap) => trap.alternative).map((trap) => trap.file),
+  ]);
   const metas: Variant[] = [];
 
   const nodeAt = (epd: string, ply: number): MutableNode => {

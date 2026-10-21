@@ -142,6 +142,8 @@ units:
     elephant-gambit:1: [two-knights-na5:1]
   drop: # prerequisites to remove: stafford-gambit:1 no longer waits for petrov-classical:1
     stafford-gambit:1: [petrov-classical:1]
+  place: # a trap or quiz (by id) shown with a later unit than the first one that reaches it, never an earlier one
+    legal-mate: giuoco-piano:2
 ```
 
 The other units keep their default order, and every unit still comes after what it waits for. The build checks the ids

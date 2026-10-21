@@ -30,7 +30,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { navigate, to } from '@/router/location';
-import { entryId, entrySection, problemsFor } from './helpers';
+import { GroupSelect } from './group-select';
+import { entryId, problemsFor } from './helpers';
 import { draftChapter, fullLine, useAuthor, type DraftCourse } from './store';
 import { lineEditHref } from './tabs';
 
@@ -86,7 +87,12 @@ export function LinesTab({ course }: { course: DraftCourse }) {
                   key={id}
                   className={own ? 'cursor-pointer' : undefined}
                   onClick={(event) => {
-                    if (own && !(event.target as HTMLElement).closest('a, button, [role=dialog]'))
+                    if (
+                      own &&
+                      !(event.target as HTMLElement).closest(
+                        'a, button, input, form, [role=dialog], [role=alertdialog], [role=option], [role=listbox]',
+                      )
+                    )
                       navigate(lineEditHref(course.id, id));
                   }}
                 >
@@ -113,7 +119,9 @@ export function LinesTab({ course }: { course: DraftCourse }) {
                     {KIND[kind] ?? kind}
                     {alternative && <span className="text-muted-foreground"> (alternative)</span>}
                   </TableCell>
-                  <TableCell className="text-sm">{entrySection(entry) ?? '–'}</TableCell>
+                  <TableCell>
+                    <GroupSelect course={course} lineId={id} className="h-8 w-40" />
+                  </TableCell>
                   <TableCell className="font-mono text-xs">{line?.game.tags.Opponent ?? ''}</TableCell>
                   <TableCell className="text-right tabular-nums">
                     {line ? line.game.moves.length - line.startPly : (own?.moves.length ?? 0)}

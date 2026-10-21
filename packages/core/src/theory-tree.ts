@@ -352,8 +352,14 @@ export function projectCourse(
     const game = { tags, moves: line.game.moves };
     const trap = TrapKind.safeParse(kind);
     if (trap.success) {
-      if (entry.alternative) throw new Error(`${where}: "${entry.id}" is a trap and cannot be an alternative`);
-      traps.push({ file: entry.id, opponent, kind: trap.data, ...(entry.section ? { section: entry.section } : {}) });
+      // A trap can be an alternative too: shown and playable, but its avoiding move is not drilled.
+      traps.push({
+        file: entry.id,
+        opponent,
+        kind: trap.data,
+        ...(entry.alternative ? { alternative: true } : {}),
+        ...(entry.section ? { section: entry.section } : {}),
+      });
       sources.push({ id: entry.id, kind: 'refutation', game, source: line.source });
       continue;
     }

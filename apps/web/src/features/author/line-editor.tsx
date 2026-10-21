@@ -23,7 +23,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { navigate } from '@/router/location';
-import { entryId, entrySection, numbered, ucisOf, useDraft } from './helpers';
+import { GroupSelect } from './group-select';
+import { numbered, ucisOf, useDraft } from './helpers';
 import { createHref, lineEditHref } from './tabs';
 import { draftChapter, fullLine, positionsOf, useAuthor, type DraftCourse } from './store';
 
@@ -35,8 +36,6 @@ const KINDS: { value: LineKind | TrapKind; label: string }[] = [
   { value: 'against-us', label: 'Trap to avoid' },
   { value: 'for-us', label: 'Trap to spring' },
 ];
-const NO_GROUP = '__none';
-const NEW_GROUP = '__new';
 
 /**
  * One line: its details, the board to play it on, its moves (yours to change are the ones after where it starts), and
@@ -330,14 +329,10 @@ function LineDetails({ course }: { course: DraftCourse }) {
   const { build, rows, lineId } = useAuthor();
   const line = fullLine(build, lineId);
   const own = lineId ? draftChapter(rows, lineId) : undefined;
-  const entry = course.manifest.lines.find((candidate) => entryId(candidate) === lineId);
-  const groups = [...new Set(course.manifest.lines.map(entrySection).filter((name): name is string => Boolean(name)))];
   const [title, setTitle] = useDraft(own?.tags.Variation ?? '');
   const [description, setDescription] = useDraft(own?.tags.Description ?? '');
   const [kind, setKind] = useDraft((own?.tags.Kind ?? 'sideline') as LineKind | TrapKind);
-  const [newGroup, setNewGroup] = useState<string | null>(null);
   if (!own || !line) return null;
-  const group = entry ? entrySection(entry) : undefined;
   const children = [...(build?.tree.lines.values() ?? [])].filter((other) => other.parents.includes(line.id)).length;
   return (
     <div className="grid gap-3 rounded-xl border bg-card p-3">
@@ -363,48 +358,7 @@ function LineDetails({ course }: { course: DraftCourse }) {
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor="line-group">Group</Label>
-          {newGroup === null ? (
-            <Select
-              value={group ?? NO_GROUP}
-              onValueChange={(value) => {
-                if (value === NEW_GROUP) setNewGroup('');
-                else void useAuthor.getState().setGroup(value === NO_GROUP ? undefined : value);
-              }}
-            >
-              <SelectTrigger id="line-group" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NO_GROUP}>No group</SelectItem>
-                {groups.map((name) => (
-                  <SelectItem key={name} value={name}>
-                    {name}
-                  </SelectItem>
-                ))}
-                <SelectItem value={NEW_GROUP}>New group…</SelectItem>
-              </SelectContent>
-            </Select>
-          ) : (
-            <form
-              className="flex gap-1"
-              onSubmit={(event) => {
-                event.preventDefault();
-                void useAuthor.getState().setGroup(newGroup);
-                setNewGroup(null);
-              }}
-            >
-              <Input
-                id="line-group"
-                autoFocus
-                value={newGroup}
-                onChange={(event) => setNewGroup(event.target.value)}
-                placeholder="Name"
-              />
-              <Button type="submit" size="sm">
-                Add
-              </Button>
-            </form>
-          )}
+          <GroupSelect id="line-group" course={course} lineId={line.id} />
         </div>
       </div>
       <div className="grid gap-1.5">

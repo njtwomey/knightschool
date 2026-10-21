@@ -36,7 +36,7 @@ Build errors start with the file. The ones whose fix is not obvious:
   comment in place, checking every course that passes there.
 - `<course>/course.yaml: there is no line "x" in content/tree`: a typo, or a staged chapter checked without its folder.
 - `no [Kind], and <course>/course.yaml does not give one` (or `[Opponent]`): add the header.
-- `"x" is a trap and cannot be an alternative`; `lists only traps; a course needs at least one line`.
+- `lists only traps; a course needs at least one line`.
 - `<course>: two repertoire moves for the same position <epd>: A (x) vs B (y). Mark the wrong one ?`: two listed lines
   (or a variation) teach different learner moves. Usual causes now: a line written for the other side, or one another
   course answers differently. List it with `alternative: true`, or drop it. Mark a move `?` only if it really is a

@@ -207,4 +207,55 @@ describe('writing a course in the editor', () => {
     ).toEqual(['my-italian', copyId].sort());
     expect(author().build!.problems).toEqual([]);
   });
+
+  it('shows a trap to spring with a later unit, never an earlier one, and keeps a trap to avoid as a bonus', async () => {
+    // Moves of White's on the 2...Nf6 branch, so the course has a second unit.
+    author().open('my-italian', 'my-italian-2-nf6');
+    await play('f1c4', 'f8c5', 'c2c3');
+    // A line played from the start that leaves after 2...Nc6: a trap to spring.
+    const trap = (await author().createLine())!;
+    await play('e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1c4', 'd7d6');
+    await author().setLineMeta({ title: 'Legal trap', description: '', kind: 'for-us' });
+    expect(author().build!.problems).toEqual([]);
+    const units = () => courseUnits(author().build!.courses.find((c) => c.opening.id === 'my-italian')!);
+    const holder = () => units().findIndex((unit) => unit.traps.includes(trap));
+    const natural = holder();
+    expect(natural).toBeGreaterThanOrEqual(0);
+    const later = units()[natural + 1]!;
+    expect(await author().placeExtra(trap, later.id)).toBeNull();
+    expect(draftCourses(author().rows)[0]!.manifest.units?.place).toEqual({ [trap]: later.id });
+    expect(holder()).toBe(natural + 1);
+    if (natural > 0) expect(await author().placeExtra(trap, units()[0]!.id)).toMatch(/cannot come before/);
+    // Back where it falls by itself: nothing is written.
+    expect(await author().placeExtra(trap, null)).toBeNull();
+    expect(draftCourses(author().rows)[0]!.manifest.units?.place).toBeUndefined();
+
+    // The same line as a trap to avoid: on the path, and the Bonus switch makes it an alternative.
+    await author().setLineMeta({ title: 'Legal trap', description: '', kind: 'against-us' });
+    const lines = draftCourses(author().rows)[0]!.manifest.lines.map((entry) =>
+      typeof entry === 'string' ? entry : entry.id,
+    );
+    const bonus = draftCourses(author().rows)[0]!
+      .manifest.lines.filter((entry) => typeof entry !== 'string' && entry.alternative)
+      .map((entry) => (typeof entry === 'string' ? entry : entry.id));
+    const path = lines.filter((id) => !bonus.includes(id) && id !== trap);
+    expect(await author().setPath(path, [...bonus, trap])).toBeNull();
+    expect(
+      draftCourses(author().rows)[0]!.manifest.lines.find((entry) => typeof entry !== 'string' && entry.id === trap),
+    ).toMatchObject({ alternative: true });
+    expect(author().build!.problems).toEqual([]);
+  });
+
+  it('sets a group from the Lines table (any line, not just the open one), and undo takes it back', async () => {
+    author().open('my-italian');
+    const section = (id: string) =>
+      draftCourses(author().rows)[0]!.manifest.lines.find(
+        (entry) => (typeof entry === 'string' ? entry : entry.id) === id,
+      );
+    await author().setGroup('Openers', 'my-italian-main');
+    expect(section('my-italian-main')).toMatchObject({ id: 'my-italian-main', section: 'Openers' });
+    expect(author().undoLabel).toBe('change to course My Italian');
+    await author().undo();
+    expect(section('my-italian-main')).toBe('my-italian-main');
+  });
 });

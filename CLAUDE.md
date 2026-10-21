@@ -166,11 +166,14 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Cr
   where you move is listed `alternative`, since a course has one answer per position). A move's note has free text and
   tags (tip, trap, common blunder, any word); a comment another line already gives is read-only (one comment per move).
   Lines have a title, a description, a kind, a group (course `section`) and a snapshot. The Path tab (`path-order.tsx`)
-  orders the drilled lines (drag by the handle, or the arrows) beside a Bonus column (traps to spring, alternatives,
-  quizzes); a line moves between them with a button (to Bonus makes it an `alternative`). `setPath` writes `lines:` in
+  is one list in study order: lines, and each trap to spring and quiz under the unit it is shown with (drag by the
+  handle, or the arrows; a trap or quiz moves by unit, never before the first unit that reaches it, written to
+  `units.place` only when it differs: `placeExtra`). Each row has a Bonus switch: on makes a line or a trap to avoid an
+  `alternative` (shown, not drilled); traps to spring and quizzes are always bonus. Bonus rows are muted. `setPath` writes `lines:` in
   that order and, through `unitOrderFor` in core (a stable topological sort, prerequisites always first), a `units.order`
   only when the order differs from the default; an order giving a position two answers shows the build's problem
-  instead of saving. A hand-written `after` or `drop` is kept. Deletes ask first, take what grows from a line with it, and offer
+  instead of saving. A hand-written `after` or `drop` is kept, and placements while they still fit (`fittingPlacements`).
+  A line's group is a Select with "New group…" (`group-select.tsx`), on the Lines table and the line page alike. Deletes ask first, take what grows from a line with it, and offer
   Undo; the reminder to export shows above the editor. Learners see notes, tags (`components/move-tags.tsx`) and the
   description in About, Learn and Drill. **Publish** (`publish.tsx`, `contribution.ts` in core) writes the course as one
   YAML contribution (course entry plus chapters, moves as PGN) and opens GitHub's contribution form
@@ -285,7 +288,7 @@ leaves, a later unit on the one before. Quizzes and traps are attached as extras
 (`unitProgress`): passed when every move's last two answers were good or easy (or the move is graduated), graduated when
 every card is in FSRS review at 7 days or more, learning once a card exists, otherwise unlocked or locked by its
 prerequisites. A unit with progress shows it even if its prerequisites are not passed. A course can change its path in
-course.yaml `units:` (`order`, `after`, `drop`; `UnitOverrides`, `content/README.md`): applied at the end of
+course.yaml `units:` (`order`, `after`, `drop`, `place`; `UnitOverrides`, `content/README.md`): applied at the end of
 `courseUnits` as a topological sort that keeps the default order where it can. The build checks it strictly
 (`checkUnitOverrides`, default card settings); the app ignores entries for units its settings do not cut, and keeps the
 default path if what is left fails.

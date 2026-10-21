@@ -93,6 +93,8 @@ export const CourseTrap = z.object({
   section: z.string().min(1).optional(),
   opponent: z.string().min(1),
   kind: TrapKind,
+  /** Shown and playable but not drilled: a trap to avoid kept as a bonus, its avoiding move earning no card. */
+  alternative: z.boolean().optional(),
 });
 export type CourseTrap = z.infer<typeof CourseTrap>;
 
@@ -127,6 +129,11 @@ export const UnitOverrides = z
     after: z.record(UnitId, z.array(UnitId)).default({}),
     /** Prerequisites to remove from a unit (it no longer waits for these). */
     drop: z.record(UnitId, z.array(UnitId)).default({}),
+    /**
+     * Where a trap or a quiz (by its id) is shown: with this unit rather than the first one whose stretch reaches it.
+     * Never an earlier unit than that one.
+     */
+    place: z.record(z.string().min(1), UnitId).optional(),
   })
   .strict();
 export type UnitOverrides = z.infer<typeof UnitOverrides>;

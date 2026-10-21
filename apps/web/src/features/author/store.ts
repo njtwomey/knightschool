@@ -7,6 +7,9 @@ import {
   opponentMove,
   projectCourse,
   unitOrderFor,
+  fittingPlacements,
+  courseUnits,
+  type UnitOverrides,
   readContribution,
   CourseManifest,
   type Contribution,
@@ -93,7 +96,8 @@ export type AuthorState = {
   setNote: (comment: string, tags: string[]) => Promise<void>;
   setLineMeta: (meta: { title: string; description: string; kind: LineKind | TrapKind }) => Promise<void>;
   setSnapshot: (ply: number | undefined) => Promise<void>;
-  setGroup: (group: string | undefined) => Promise<void>;
+  /** Puts a line (the open one by default) in a group, or none. */
+  setGroup: (group: string | undefined, lineId?: string) => Promise<void>;
   renameGroup: (from: string, to: string) => Promise<void>;
   deleteGroup: (name: string) => Promise<void>;
   /** Changes the side the course is for, while none of its lines has a move yet. */
@@ -111,6 +115,11 @@ export type AuthorState = {
    * far as prerequisites allow. Returns the build's problem instead of saving when the order does not fit.
    */
   setPath: (path: string[], bonus: string[]) => Promise<string | null>;
+  /**
+   * Shows a trap or quiz with a unit (`units.place`), or where it falls by itself when `unitId` is null or that unit.
+   * Returns the build's problem instead of saving when it does not fit (a unit before the one that reaches it).
+   */
+  placeExtra: (item: string, unitId: string | null) => Promise<string | null>;
   undo: () => Promise<void>;
   /** The contribution for a course: its course.yaml and the authored chapters it needs. Throws when it is not valid. */
   contribution: (courseId: string) => Contribution;
@@ -572,9 +581,9 @@ export const useAuthor = create<AuthorState>((set, get) => {
       );
     },
 
-    async setGroup(group) {
+    async setGroup(group, id) {
       const course = courseOf(get().courseId);
-      const { lineId } = get();
+      const lineId = id ?? get().lineId;
       if (!course || !lineId) return;
       const name = group?.trim() || undefined;
       const lines = course.manifest.lines.map((entry) =>
@@ -698,17 +707,16 @@ export const useAuthor = create<AuthorState>((set, get) => {
       if (!course || !tree) return 'No course is open.';
       const byId = new Map(course.manifest.lines.map((entry) => [entryId(entry), entry]));
       const content = get().build?.courses.find((candidate) => candidate.opening.id === course.id);
-      // A trap is never an alternative: one we spring is a bonus by its kind already.
-      const isTrap = (id: string) => {
+      // A trap we spring is a bonus by its kind already; anything else in the bonus is an alternative.
+      const springs = (id: string) => {
         const variant = content?.opening.variants.find((candidate) => candidate.id === id);
-        const kind = variant ? (variant.whose ?? variant.weight) : tree.lines.get(id)?.game.tags.Kind;
-        return kind === 'for-us' || kind === 'against-us';
+        return (variant ? variant.whose : tree.lines.get(id)?.game.tags.Kind) === 'for-us';
       };
       const entry = (id: string, alternative: boolean): CourseEntry => {
         const old = byId.get(id) ?? id;
         const next: Record<string, unknown> = typeof old === 'string' ? { id: old } : { ...old };
         delete next.alternative;
-        if (alternative && !isTrap(id)) next.alternative = true;
+        if (alternative && !springs(id)) next.alternative = true;
         return withSection(next as CourseEntry, entrySection(old));
       };
       const lines = [...path.map((id) => entry(id, false)), ...bonus.map((id) => entry(id, true))];
@@ -724,8 +732,11 @@ export const useAuthor = create<AuthorState>((set, get) => {
       const custom = course.manifest.units;
       const kept = { after: custom?.after ?? {}, drop: custom?.drop ?? {} };
       const order = unitOrderFor(projected, path, kept);
-      if (order || Object.keys(kept.after).length || Object.keys(kept.drop).length) {
-        manifest.units = { order: order ?? [], ...kept };
+      // Placements of traps and quizzes stay where they still fit the new order.
+      const ordered = { ...projected, opening: { ...projected.opening, units: { order: order ?? [], ...kept } } };
+      const place = fittingPlacements(ordered, custom?.place ?? {});
+      if (order || Object.keys(kept.after).length || Object.keys(kept.drop).length || Object.keys(place).length) {
+        manifest.units = { order: order ?? [], ...kept, ...(Object.keys(place).length ? { place } : {}) };
         try {
           checkUnitOverrides({ ...projected, opening: { ...projected.opening, units: manifest.units } });
         } catch (error) {
@@ -733,6 +744,38 @@ export const useAuthor = create<AuthorState>((set, get) => {
         }
       }
       await save([courseChange({ ...course, manifest })], 'Saved the order of the path.');
+      return null;
+    },
+
+    async placeExtra(item, unitId) {
+      const course = courseOf(get().courseId);
+      const content = get().build?.courses.find((candidate) => candidate.opening.id === course?.id);
+      if (!course || !content) return 'No course is open.';
+      const units: UnitOverrides = { order: [], after: {}, drop: {}, ...course.manifest.units };
+      const place = { ...units.place };
+      // Only a placement that differs from where it would be anyway is written.
+      const natural = courseUnits({
+        ...content,
+        opening: {
+          ...content.opening,
+          units: { ...units, place: Object.fromEntries(Object.entries(place).filter(([key]) => key !== item)) },
+        },
+      }).find((unit) => unit.traps.includes(item) || unit.quizzes.includes(item))?.id;
+      if (unitId && unitId !== natural) place[item] = unitId;
+      else delete place[item];
+      const next: UnitOverrides = { ...units, place };
+      if (Object.keys(place).length === 0) delete next.place;
+      try {
+        checkUnitOverrides({ ...content, opening: { ...content.opening, units: next } });
+      } catch (error) {
+        return errorText(error);
+      }
+      const manifest = { ...course.manifest };
+      const empty =
+        !next.order.length && !Object.keys(next.after).length && !Object.keys(next.drop).length && !next.place;
+      if (empty) delete manifest.units;
+      else manifest.units = next;
+      await save([courseChange({ ...course, manifest })], 'Saved where it is shown.');
       return null;
     },
 

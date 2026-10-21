@@ -126,7 +126,11 @@ function CreateList() {
                   key={course.id}
                   className="cursor-pointer"
                   onClick={(event) => {
-                    if (!(event.target as HTMLElement).closest('a, button, [role=dialog]'))
+                    if (
+                      !(event.target as HTMLElement).closest(
+                        'a, button, input, form, [role=dialog], [role=alertdialog], [role=option], [role=listbox]',
+                      )
+                    )
                       navigate(createHref(course.id));
                   }}
                 >

@@ -9,6 +9,7 @@ import { buildOpening } from './tree';
 import {
   checkUnitOverrides,
   courseUnits,
+  fittingPlacements,
   lineOrderOf,
   unitOrderFor,
   cutIntoUnits,
@@ -36,14 +37,18 @@ ${moves} *`);
 type Source = { id: string; moves: string; kind: LineKind | TrapKind };
 
 /** A white course from lines and traps, each given its kind. */
-function course(sources: Source[]): OpeningContent {
+function course(sources: Source[], alternativeTraps: string[] = []): OpeningContent {
   const lines = sources.filter((source) => !['for-us', 'against-us'].includes(source.kind));
   const traps = sources.filter((source) => ['for-us', 'against-us'].includes(source.kind));
   const base = manifestOf({ lines: lines.map((line) => line.id), traps: traps.map((trap) => trap.id) });
   const manifest = {
     ...base,
     lines: base.lines.map((line, i) => ({ ...line, kind: lines[i]!.kind as LineKind })),
-    traps: base.traps.map((trap, i) => ({ ...trap, kind: traps[i]!.kind as TrapKind })),
+    traps: base.traps.map((trap, i) => ({
+      ...trap,
+      kind: traps[i]!.kind as TrapKind,
+      ...(alternativeTraps.includes(trap.file) ? { alternative: true } : {}),
+    })),
   };
   return buildOpening(
     't',
@@ -519,5 +524,59 @@ describe('ordering lines into units.order', () => {
       drop: {},
     })!;
     expect(result.indexOf('avoid:1')).toBeGreaterThan(result.indexOf('side:1'));
+  });
+});
+
+describe('units.place: where a trap or quiz is shown', () => {
+  const quiz = (id: string, epd: string) => ({ id, epd, prompt: 'Why?', accept: [], reveal: 'x' });
+  const withPlace = (place: Record<string, string> | undefined) => ({
+    ...content,
+    quizzes: [quiz('on-gambit', after(content, 'e4 e5 Nf3 d5 exd5'))],
+    opening: { ...content.opening, units: { order: [], after: {}, drop: {}, place } },
+  });
+  const holder = (units: CourseUnit[], item: string) =>
+    units.find((unit) => unit.traps.includes(item) || unit.quizzes.includes(item))?.id;
+
+  it('shows each with the first unit to reach it by default', () => {
+    const units = courseUnits(withPlace(undefined));
+    expect(holder(units, 'spring')).toBe('main:1');
+    expect(holder(units, 'on-gambit')).toBe('gambit:1');
+  });
+
+  it('moves a trap or a quiz to a later unit', () => {
+    const placed = withPlace({ spring: 'main:2', 'on-gambit': 'side:1' });
+    expect(() => checkUnitOverrides(placed)).not.toThrow();
+    const units = courseUnits(placed);
+    expect(holder(units, 'spring')).toBe('main:2');
+    expect(units.find((unit) => unit.id === 'main:1')!.traps).not.toContain('spring');
+    expect(holder(units, 'on-gambit')).toBe('side:1');
+  });
+
+  it.each([
+    ['before the unit that reaches it', { avoid: 'main:1' }, /"avoid" cannot come before "avoid:1"/],
+    ['something that is no trap or quiz', { main: 'main:2' }, /"main" is not a trap or a quiz/],
+    ['a unit that does not exist', { spring: 'main:9' }, /"main:9" is not a unit/],
+  ])('is rejected by the build when placed %s, and ignored in the app', (_name, place, message) => {
+    expect(() => checkUnitOverrides(withPlace(place))).toThrow(message);
+    const units = courseUnits(withPlace(place));
+    expect(holder(units, 'avoid')).toBe('avoid:1');
+    expect(holder(units, 'spring')).toBe('main:1');
+  });
+});
+
+describe('a trap to avoid kept as a bonus', () => {
+  it('is an alternative: shown, its avoiding move not drilled', () => {
+    const bonus = course(SOURCES, ['avoid']);
+    expect(bonus.opening.variants.find((variant) => variant.id === 'avoid')!.alternative).toBe(true);
+    expect(courseUnits(bonus).map((unit) => unit.id)).not.toContain('avoid:1');
+    expect(cardDefinitions(bonus).length).toBe(cardDefinitions(content).length - 1);
+  });
+});
+
+describe('fittingPlacements', () => {
+  it('keeps only placements the course still allows', () => {
+    expect(
+      fittingPlacements(content, { spring: 'main:2', avoid: 'main:1', nope: 'main:2', 'spring-2': 'main:9' }),
+    ).toEqual({ spring: 'main:2' });
   });
 });
