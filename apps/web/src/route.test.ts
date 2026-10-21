@@ -8,7 +8,8 @@ describe('parseRoute', () => {
     ['/browse', { page: 'openings' }],
     ['/search', { page: 'openings' }],
     ['/courses', { page: 'openings' }],
-    ['/course/caro-kann-panov', { page: 'course', id: 'caro-kann-panov' }],
+    ['/course/caro-kann-panov', { page: 'course', id: 'caro-kann-panov', tab: 'overview' }],
+    ['/course/caro-kann-panov/tree', { page: 'course', id: 'caro-kann-panov', tab: 'tree' }],
     [
       '/play/italian-game/two-knights/learn',
       { page: 'play', course: 'italian-game', line: 'two-knights', tab: 'learn' },

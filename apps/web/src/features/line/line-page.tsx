@@ -16,7 +16,7 @@ import { VariantTags } from '@/features/browse/tag-badge';
 import { CourseIntro } from '@/features/course/course-intro';
 import { PlayPage } from '@/features/play/play-page';
 import { ReviewPage } from '@/features/review/review-page';
-import { TreeView } from '@/features/tree/tree-view';
+import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { to } from '@/router/location';
 import { lineHref, type LineTab } from './tabs';
 
@@ -27,13 +27,7 @@ export function LinePage({ course, line, tab }: { course: string; line: string; 
   if (tab === 'drill') return <PlayPage course={course} line={line} mode="practice" />;
   if (tab === 'quiz')
     return <ReviewPage scope={{ course, line }} header={<PlayBreadcrumbs course={course} line={line} tab="quiz" />} />;
-  if (tab === 'tree')
-    return (
-      <Page className="gap-4">
-        <PlayBreadcrumbs course={course} line={line} tab="tree" />
-        <TreeView courses={[course]} line={line} preferCourse={course} depth={99} beside />
-      </Page>
-    );
+  if (tab === 'tree') return <CourseTreePage course={course} line={line} />;
   return <LineAbout course={course} line={line} />;
 }
 

@@ -30,6 +30,7 @@ import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
 import { GlossaryPage } from '@/features/glossary/glossary-page';
 import { TreePage } from '@/features/tree/tree-page';
+import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { OpeningsPage } from '@/features/openings/openings-page';
 import { LinePage } from '@/features/line/line-page';
 import { GuessPage } from '@/features/guess/guess-page';
@@ -166,7 +167,12 @@ export function App() {
         {route.page === 'home' && <HomePage />}
         {route.page === 'profile' && <ProfilePage tab={route.tab} />}
         {route.page === 'openings' && <OpeningsPage />}
-        {route.page === 'course' && <CoursePage courseId={route.id} />}
+        {route.page === 'course' &&
+          (route.tab === 'tree' ? (
+            <CourseTreePage key={route.id} course={route.id} />
+          ) : (
+            <CoursePage courseId={route.id} />
+          ))}
         {route.page === 'glossary' && <GlossaryPage />}
         {route.page === 'tree' && <TreePage />}
         {route.page === 'play' && (

@@ -28,6 +28,7 @@ export * from './tree';
 export * from './theory-tree';
 export * from './position-id';
 export * from './lichess';
+export * from './lane-layout';
 export * from './tree-helpers';
 export * from './rich-text';
 export * from './move-tree';

@@ -4,7 +4,7 @@ export type Route =
   | { page: 'home' }
   | { page: 'profile'; tab: 'overview' | 'stats' | 'settings' }
   | { page: 'openings' }
-  | { page: 'course'; id: string }
+  | { page: 'course'; id: string; tab: 'overview' | 'tree' }
   /** A line's page and tab; line `all` is the every-branch drill of the whole course. */
   | { page: 'play'; course: string; line: string; tab: LineTab | 'branches' }
   | { page: 'review' }
@@ -42,7 +42,7 @@ export function parseRoute(pathname: string): Route {
     case 'today':
       return { page: 'profile', tab: 'overview' };
     case 'course':
-      return a && slug.test(a) ? { page: 'course', id: a } : { page: 'home' };
+      return a && slug.test(a) ? { page: 'course', id: a, tab: b === 'tree' ? 'tree' : 'overview' } : { page: 'home' };
     case 'play':
       return a && b && slug.test(a) && slug.test(b)
         ? {

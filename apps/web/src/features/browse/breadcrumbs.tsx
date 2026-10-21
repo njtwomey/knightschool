@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useBrowse } from '@/features/browse/store';
+import { COURSE_TABS, courseHref, type CourseTab } from '@/features/course/tabs';
 import { LINE_TABS, lineHref, type LineTab } from '@/features/line/tabs';
 import { navigate, to } from '@/router/location';
 
@@ -112,8 +113,43 @@ function useCourseItems(): MenuItem[] {
   }));
 }
 
-/** Browse, then the course as a menu of every course: the breadcrumbs of a course page. */
-export function CourseBreadcrumbs({ course }: { course: string }) {
+/** One choice of several, so a joined group: a shared border, flat inside, round at the two ends. */
+function TabGroup<T extends string>({
+  tabs,
+  value,
+  onPick,
+  label,
+}: {
+  tabs: readonly { tab: T; name: string; blurb: string }[];
+  value: T;
+  onPick: (tab: T) => void;
+  label: string;
+}) {
+  return (
+    <ToggleGroup
+      type="single"
+      variant="outline"
+      size="sm"
+      value={value}
+      onValueChange={(next) => next && onPick(next as T)}
+      aria-label={label}
+    >
+      {tabs.map((item) => (
+        <ToggleGroupItem
+          key={item.tab}
+          value={item.tab}
+          title={item.blurb}
+          className="px-3 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+        >
+          {item.name}
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
+  );
+}
+
+/** Browse, then the course as a menu of every course, then the course's views: the breadcrumbs of a course page. */
+export function CourseBreadcrumbs({ course, tab = 'overview' }: { course: string; tab?: CourseTab }) {
   const index = useBrowse((state) => state.index);
   const courses = useCourseItems();
   const name = index.find((candidate) => candidate.id === course)?.name ?? course;
@@ -130,6 +166,15 @@ export function CourseBreadcrumbs({ course }: { course: string }) {
           ) : (
             <BreadcrumbPage>{name}</BreadcrumbPage>
           )}
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <TabGroup
+            tabs={COURSE_TABS}
+            value={tab}
+            onPick={(next) => navigate(courseHref(course, next))}
+            label="Views of this course"
+          />
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
@@ -194,26 +239,12 @@ export function PlayBreadcrumbs({
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              {/* One choice of several, so a joined group: a shared border, flat inside, round at the two ends. */}
-              <ToggleGroup
-                type="single"
-                variant="outline"
-                size="sm"
+              <TabGroup
+                tabs={LINE_TABS}
                 value={tab}
-                onValueChange={(next) => next && navigate(lineHref(course, line, next as LineTab))}
-                aria-label="Work on this line"
-              >
-                {LINE_TABS.map((item) => (
-                  <ToggleGroupItem
-                    key={item.tab}
-                    value={item.tab}
-                    title={item.blurb}
-                    className="px-3 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-                  >
-                    {item.name}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
+                onPick={(next) => navigate(lineHref(course, line, next))}
+                label="Work on this line"
+              />
             </BreadcrumbItem>
           </>
         )}
