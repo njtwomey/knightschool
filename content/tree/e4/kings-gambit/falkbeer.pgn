@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "King's Gambit"]
+[Variation "King's Gambit: Falkbeer Countergambit"]
+[ECO "C31"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "counter-gambit,centre-pawns"]
+[For "black"]
+[Kind "gambit"]
+[Opponent "2.f4"]
+[Start "1. e4 e5 2. f4"]
+
+2... d5 { The Falkbeer: instead of taking White's pawn, Black offers one back and fights for the centre at once. } 3. exd5 { Accepts the second pawn. Black's next move cramps White but costs Black a pawn. } 3... e4 { The e-pawn cramps White's knight, which cannot use f3. } 4. d3 { Attacks the e4 pawn straight away, before Black can support it. } 4... Nf6 { Develops with an attack on the pawn on d5 and keeps the e4 pawn defended. } 5. dxe4 { Takes the pawn on e4. After Black recaptures White is a pawn up, and the d-file is open for the queen. } 5... Nxe4 { Black has regained the pawn and the knight sits in the centre. } 6. Nf3 { Develops a piece and prepares to castle. White is a pawn up, so finish development before anything fancy. } 6... Bc5 { Develops with an eye on g1 and f2. White still has to find a safe place for the king. } 7. Qe2 Bf5 { Pins nothing yet but threatens ...Nc3-style forks and develops the last minor piece with tempo. } *

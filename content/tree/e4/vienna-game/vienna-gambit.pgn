@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Game: Vienna Gambit, Breyer Variation"]
+[ECO "C29"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "white"]
+[Tricks "none"]
+[Themes "counter-in-the-centre,e4-pawn"]
+[For "black"]
+[Kind "gambit"]
+[Opponent "3.f4"]
+[Start "1. e4 e5 2. Nc3 Nf6"]
+
+3. f4 { The Vienna Gambit. Like the King's Gambit, White offers the f-pawn to open the f-file and build a big centre, while the knight on c3 already guards e4. } 3... d5 { The right answer. Black hits e4 first, so taking on f4 would only help White. } 4. fxe5 { Takes the pawn first. The pawn on e5 kicks the knight on f6, so White has the extra pawn for the moment and Black must act fast. } ( 4. exd5 Nxd5 { Recaptures, and the knight is safe on d5 with a fine centre. } 5. fxe5 Nxc3 6. dxc3 Qh4+ ) 4... Nxe4 { Takes the pawn back, and the knight attacks c3 and the pawn on d2. The centre is now Black's. } 5. Nf3 { Develops a piece and stops ...Qh4+. If Black takes on c3, White recaptures with a pawn and keeps building, so the knight need not be saved. } ( 5. Qf3 Nc6 { Develops with a hit on e5 and keeps the f-pawn pinned down. } 6. Bb5 Nxc3 7. bxc3 Qh4+ ) ( 5. d3 Nxc3 { Trades off the knight before it can be kicked, and bxc3 leaves White with a ragged pawn structure. } 6. bxc3 Be7 ) 5... Be7 { Develops and gets ready to castle. } 6. d4 O-O 7. Bd3 f5 { Supports the centre knight and breaks open the position. } 8. exf6 Bxf6 9. O-O Nc6 10. Nxe4 dxe4 11. Bxe4 *

@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Rapport-Jobava System, Nb5 and c7"]
+[ECO "D01"]
+[Character "tactical"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap,fork"]
+[Themes "c7-square"]
+[RefutedBy "1. d4 d5 2. Nc3 Nf6 3. Bf4 c5 4. e3 Nc6 5. Nb5"]
+[For "black"]
+[Kind "against-us"]
+[Opponent "5.Nb5"]
+[Start "1. d4 d5 2. Nc3 Nf6 3. Bf4"]
+
+3... c5 $6 { Not a bad move in itself, but it leaves the b5 square open, and the next move is easy to get wrong. } 4. e3 Nc6 $2 { Develops, but c7 is guarded only by the queen, and the knight on b5 will land on c7 with check. } 5. Nb5 { Threatens Nc7+, which forks the king and the rook on a8. } 5... a6 $2 { Attacks the knight, but ignores c7. } 6. Nc7+ Kd7 7. Nxa8 { White has won a whole rook. } *

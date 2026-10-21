@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Hillbilly Attack, Schaeffer Gambit"]
+[ECO "B10"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,early-queen"]
+[Refutes "1. e4 c6 2. Bc4 d5 3. Bb3 dxe4 4. Qh5 g6 5. Qe5"]
+[For "black"]
+[Kind "for-us"]
+[Opponent "4.Qh5"]
+[Start "1. e4 c6 2. Bc4 d5 3. Bb3 dxe4"]
+
+4. Qh5 { The queen and bishop both aim at f7, so White threatens Qxf7 mate. } 4... g6 { Attacks the queen with a pawn and blocks the h5 to f7 diagonal. } 5. Qe5 $2 { Threatens the rook on h8, but the queen is now far from the rest of White's army. } 5... Nf6 { Blocks the attack on h8, develops, and leaves White's queen offside. Black is a pawn up with an easy game. } 6. Nc3 Bf5 *

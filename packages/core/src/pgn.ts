@@ -72,8 +72,11 @@ function writeLine(moves: PgnMoveNode[], startPly: number): string {
   return out.join(' ');
 }
 
-/** Writes a game back to PGN text. Parsing the result gives the same moves, comments, NAGs and shapes. */
-export function writePgn(game: PgnGame): string {
+/**
+ * Writes a game back to PGN text. Parsing the result gives the same moves, comments, NAGs and shapes. `startPly`
+ * numbers the moves of a game that begins later on (a book chapter): 7 starts with "4... ".
+ */
+export function writePgn(game: PgnGame, startPly = 0): string {
   const header = Object.entries(game.tags).map(([key, value]) => `[${key} "${value}"]`);
-  return `${header.join('\n')}\n\n${writeLine(game.moves, 0)} *\n`;
+  return `${header.join('\n')}\n\n${writeLine(game.moves, startPly)} *\n`;
 }

@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "King's Gambit Declined"]
+[Variation "King's Gambit Declined: Classical Variation"]
+[ECO "C30"]
+[Character "tactical"]
+[Risk "high"]
+[EarlyMate "none"]
+[Tricks "trap,fork"]
+[Themes "queen-check,fork-king-rook"]
+[Refutes "1. e4 e5 2. f4 Bc5 3. fxe5 Qh4+"]
+[For "white"]
+[Kind "against-us"]
+[Opponent "2...Bc5 3.fxe5 Qh4+"]
+[Start "1. e4 e5 2. f4 Bc5 3. fxe5 Qh4+"]
+
+4. g3 $2 { Blocks the check, but the pawn on e4 is now unprotected and the rook on h1 sits on the same diagonal behind it. } 4... Qxe4+ { Check again. It also attacks the rook on h1 behind the e4 pawn. } 5. Qe2 Qxh1 *

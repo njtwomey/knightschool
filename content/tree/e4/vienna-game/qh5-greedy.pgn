@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Game: Vienna Gambit, Breyer Variation, 5.Qh5"]
+[ECO "C29"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "early-queen"]
+[Themes "early-queen"]
+[For "white"]
+[Kind "against-us"]
+[Opponent "3...d5 4.fxe5 Nxe4 5.Qh5"]
+[Start "1. e4 e5 2. Nc3 Nf6 3. f4 d5 4. fxe5 Nxe4"]
+
+5. Qh5 $2 { Looks tempting because the queen eyes the pawn on f7 and the knight on e4, but Black simply kicks it with ...g6. } 5... g6 6. Qf3 { The queen must retreat. } 6... Bg7 7. Nxe4 dxe4 8. Qxe4 { White has the pawn back but Black is better developed and has the safer king. Develop with Nf3 first, as in the main line. } *

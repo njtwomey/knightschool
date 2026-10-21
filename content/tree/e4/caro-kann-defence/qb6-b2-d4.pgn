@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence: Advance Variation"]
+[Variation "Early Be3 against Qb6"]
+[ECO "B12"]
+[Character "positional,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "counting"]
+[Refutes "1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 c5 6. O-O Qb6"]
+[For "white"]
+[Kind "against-us"]
+[Opponent "6...Qb6"]
+[Start "1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2 c5 6. O-O Qb6"]
+
+7. Be3 $2 { Defends d4 but moves the only guard of b2. Count first: the bishop on c1 guards b2, and nothing else does. The strong reply is 7.c4. } 7... Qxb2 { Black wins a pawn and White's big advantage is gone. } 8. c4 Ne7 *

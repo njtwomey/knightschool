@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Ruy Lopez: Steinitz Defense Deferred, Noah's Ark Trap"]
+[ECO "C71"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,queen-trap"]
+[Themes "pawn-trap,trapped-bishop"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. d4 b5 6. Bb3 Nxd4 7. Nxd4 exd4 8. Qxd4"]
+[For "black"]
+[Kind "for-us"]
+[Opponent "8.Qxd4"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4"]
+
+4... d6 $6 { Sound but passive, so our course plays 4...Nf6. It is shown here because it sets the Noah's Ark Trap for a White player who grabs pawns. } 5. d4 b5 { Hits the bishop and gets it to b3, where it has little room. } 6. Bb3 Nxd4 { Gives up the knight for a pawn, because the queen takes on d4 and walks into the trap. } 7. Nxd4 exd4 8. Qxd4 $2 { Wins the pawn back, but leaves the bishop on b3 with only two squares to go to. } 8... c5 { Attacks the queen and starts to wall in the bishop on b3. } 9. Qd5 Be6 { Offers a trade and hits the queen again. } 10. Qc6+ Bd7 11. Qd5 c4 { The pawn walls the bishop in on b3, and the queen cannot protect it forever. } 12. Bxc4 bxc4 13. Qxc4 *

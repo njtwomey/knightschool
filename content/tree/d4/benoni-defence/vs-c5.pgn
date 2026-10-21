@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Benoni Defense"]
+[Variation "Benoni Defense: Old Benoni"]
+[ECO "A43"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "space-advantage,d5-wedge"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "1...c5"]
+[Start "1. d4"]
+
+1... c5 2. d5 { Against 1...c5 the bishop on f4 can be hit by ...cxd4 and ...Qb6 ideas, so White grabs space instead. The pawn on d5 cramps Black's pieces. } 2... Nf6 ( 2... e6 3. c4 ) ( 2... e5 3. e4 ) ( 2... d6 3. e4 ) 3. Nc3 d6 4. e4 { Builds a big centre. Black can only hit it with ...e6 or ...b5, and neither breaks it easily. } 4... g6 5. Nf3 Bg7 6. Be2 { Gets the king ready to castle and keeps the e4 pawn solid. } 6... O-O 7. O-O { King safe. The pawns on d5 and e4 stop Black's pieces: aim for Bf4 or Bg5, Nd2 and f4 or a quiet queenside. } *

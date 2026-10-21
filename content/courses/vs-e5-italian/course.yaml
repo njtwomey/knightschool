@@ -1,0 +1,66 @@
+name: Italian Game
+eco: C50
+side: white
+opening: italian-game
+tier: 1
+trigger: '1. e4 e5 2. Nf3'
+summary: >-
+  White aims the bishop at [f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -), castles early and builds
+  slowly with c3 and d3. This half of the course covers Black's 2...Nc6 and every third move after it, including the
+  sharp Two Knights, [Fried Liver](r1bqkb1r/ppp2Npp/2n5/3np3/2B5/8/PPPP1PPP/RNBQK2R b KQkq -) and Traxler lines and the
+  traps.
+plans:
+  - Bc4 points at [f7](r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -); castle by move six and keep the
+    pieces protected before attacking.
+  - Build with c3 and d3, not an early d4; then Re1, Bb3, h3 and Nbd2-f1-g3 is the middlegame.
+  - Do not play Nc3 while Black's knight can take on e4 and ...d5 hits the bishop and knight together.
+  - When Black offers a pawn (Rousseau, Traxler) take what is safe, refuse what is not, and keep developing.
+  - Take the pawn on e5 only when the move order is safe (Petrov, Latvian), and know why.
+  - Against gambits, take the pawn, develop calmly and give the material back only if it helps you.
+  - Castle early; keep f2 protected until your king is safe.
+  - Do not let a knight reach g4 with a bishop on c5 aiming at f2.
+motifs:
+  [
+    f7-weakness,
+    fork-trick,
+    legal-mate,
+    develop-first,
+    castle-early,
+    decline-the-gambit,
+    pin-relative,
+    pin-absolute,
+    discovered-attack,
+    hanging-piece,
+    fork,
+  ]
+tags: [e4, open, italian]
+lines:
+  - giuoco-piano
+  - two-knights-na5
+  - fried-liver
+  - traxler
+  - fritz-ulvestad
+  - vs-be7
+  - vs-d6
+  - vs-h6
+  - vs-nd4
+  - rousseau-gambit
+  - id: two-knights-quiet-d3
+    alternative: true
+  - petrov-classical
+  - stafford-gambit
+  - philidor-defence
+  - elephant-gambit
+  - latvian-gambit
+  - damiano-defence
+  - other-second-moves
+  - blackburne-shilling
+  - fork-trick-nc3
+  - legal-mate
+  - petrov-greedy-nxe4
+  - philidor-bishop-g4
+  - stafford-nc3
+  - stafford-e5
+  - elephant-bishop-check
+  - elephant-knight-g5
+  - elephant-forgotten-knight

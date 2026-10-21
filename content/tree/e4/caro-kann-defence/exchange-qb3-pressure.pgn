@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Exchange Variation, Bf4 and Qb3"]
+[ECO "B13"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab"]
+[For "black"]
+[Kind "against-us"]
+[Opponent "6.Bf4"]
+[Start "1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3"]
+
+5... Nf6 $6 { Fine in itself, but without ...Qc7 White gets Bf4 and Qb3 in, attacking b7 and d5 at once. } 6. Bf4 Bg4 7. Qb3 { Hits b7 and d5 together. } 7... e6 $2 { Guards d5 but forgets b7, which the queen now takes for free. } ( 7... Qd7 { The right way: the queen guards both b7 and d5 at once. } 8. Nd2 e6 9. Ngf3 Bd6 ) 8. Qxb7 { A free pawn, and the queen on b7 also hits the knight on c6 and the a8 rook. } *

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Advance Variation, Short Variation"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "c5-break,good-bishop,attack-the-base"]
+[For "black"]
+[Kind "main"]
+[Opponent "3.e5"]
+[Start "1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6"]
+
+5. Be2 ( 5. c3 c5 6. Be2 Nc6 7. O-O ) ( 5. Nc3 c5 6. Be2 Nc6 7. O-O ) ( 5. Bd3 Bxd3 6. Qxd3 c5 7. dxc5 Bxc5 ) 5... c5 { Attacks the base of White's pawn chain at d4. If that pawn goes, the pawn on e5 loses its support. } 6. Be3 ( 6. dxc5 Bxc5 7. O-O Ne7 ) 6... cxd4 { Opens the c-file and gains time: White must recapture, and Black can then attack the piece that took. } 7. Nxd4 ( 7. Bxd4 Nc6 8. Bb5 ) 7... Ne7 { If White takes on f5, the knight recaptures. That keeps Black's pawns healthy, where ...exf5 would double them. } 8. Nd2 Nbc6 { Develops and attacks d4 again, so White must keep guarding it. } 9. N2f3 Bg4 { Attacks the knight on f3, which guards both d4 and e5. Trading it loosens White's grip on the centre. } 10. O-O Bxf3 { Takes the knight that guards e5 and d4. The bishop has done its job, and the e5 pawn loses a protector. } 11. Nxf3 Nf5 { Heads for d4 and hits the bishop on e3. If White leaves the book, trade pieces, castle after ...Be7, and keep aiming at d4 and e5. } *

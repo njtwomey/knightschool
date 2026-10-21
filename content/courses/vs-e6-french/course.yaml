@@ -1,0 +1,27 @@
+name: 'French Defence: Advance Variation'
+eco: C02
+side: white
+opening: french-defence
+tier: 2
+trigger: '1. e4 e6'
+summary: >-
+  Answer 1...e6 with 2.d4 d5 3.e5, gaining space and building a pawn chain on d4 and e5. Learn how to guard the d4 pawn
+  against Black's ...c5, ...Nc6 and ...Qb6, and have a simple answer to the rare replies and the Franco-Sicilian.
+plans:
+  - Black will attack the base of the chain, the d4 pawn, so count its attackers and its defenders before every move.
+  - Develop with Nf3 and c3, put the light-squared bishop on e2 (not d3) when Black plays ...c4, and castle early.
+  - When Black's queen sits on b6, keep the bishop on c1 so that b2 stays guarded, or play a3 and b4 first.
+  - Break with b4 or b3 on the queenside, or build a kingside attack if Black has moved the knight from f6.
+  - If Black's bishop on c8 is still shut in behind e6, play for space and do not rush to open the position.
+motifs: [pawn-chain, attack-the-base, bad-bishop, greek-gift, counting, space]
+tags: [e4, french, advance]
+lines:
+  - advance-qb6
+  - advance-euwe-bd7
+  - advance-wade-qb6
+  - advance-lputian-nh6
+  - advance-cxd4-exchange
+  - franco-sicilian-d5
+  - vs-e6-french-rare-third-moves
+  - be3-qxb2
+  - greek-gift-bxh7

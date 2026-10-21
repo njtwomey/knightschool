@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Grob Opening"]
+[Variation "Grob Opening: Grob Gambit Declined"]
+[ECO "A00"]
+[Character "gambit,solid"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "long-diagonal,e4-space"]
+[For "black"]
+[Kind "gambit"]
+[Opponent "1.g4"]
+
+1. g4 d5 { Takes the centre. White's g-pawn has loosened the king's side, and the real danger is the bishop on the long diagonal. } 2. Bg2 c6 { Covers b7 and d5, so the bishop on g2 has nothing to hit. The g4 pawn can wait. } 3. h3 ( 3. c4 dxc4 { Takes the pawn; with ...c6 played, Bxb7 would just lose the bishop. } ) ( 3. d3 Bxg4 { Wins a pawn: nothing defends g4 and the bishop is safe. } ) 3... e5 { Takes space in the centre while White's king's side is loosened. } 4. d4 e4 { Shuts the g2 bishop in behind its own pawns. Plan: ...Nf6, ...Bd6 and castle queenside or kingside once White commits. } *

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Pianissimo"]
+[ECO "C54"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "castle-early,solid-centre"]
+[For "black"]
+[Kind "main"]
+[Opponent "3.Bc4"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6 8. Bb3 Ba7 9. h3 h6 10. Nbd2"]
+
+10... Be6 { Develops the last minor piece and offers a trade for White's strong bishop. Plan: ...Re8, ...Qd7 and ...Rad8. If White plays d4, take with ...exd4 and recapture to keep the pieces active. } *

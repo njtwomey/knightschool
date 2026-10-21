@@ -1,0 +1,31 @@
+name: Against queen's-pawn systems
+eco: D00
+side: black
+opening: d4-systems
+tier: 2
+trigger: '1. d4 d5'
+summary: >-
+  What to play when White starts 1.d4 but does not play 2.c4: the Colle and Stonewall with e3, the bishop on g5 or the
+  Torre, the Veresov, the Blackmar-Diemer Gambit and the quiet fianchetto setups. The same setup (knights out, ...e6,
+  ...c5, a bishop on d6 or e7, castle) works against all of them.
+plans:
+  - Meet quiet systems with ...Nf6, ...e6, ...c5 and ...Nc6, then castle by move eight.
+  - Hit d4 early with ...c5 and ...Nc6, before White gets e4 in.
+  - When White's bishop is out on g5, play ...h6 and ...Qb6; the queen attacks b2 and White must spend a move on it.
+  - Against the Blackmar-Diemer Gambit take the pawns, develop calmly and castle.
+  - Do not push ...g5 or ...e5 to chase a bishop; it loses a pawn and opens lines against your king.
+motifs: [attack-the-base, develop-first, give-back-material, tempo-on-queen, poisoned-pawn]
+tags: [d4, queens-pawn, systems]
+lines:
+  - colle-system
+  - stonewall-e3
+  - pseudo-trompowsky
+  - torre-attack
+  - quiet-setups
+  - veresov
+  - blackmar-diemer
+  - colle-qb3-c4
+  - torre-bxb8
+  - bdg-queen-recapture
+  - torre-g5-kick
+  - veresov-e5-break

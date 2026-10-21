@@ -1,0 +1,55 @@
+name: King's Gambit
+eco: C30
+side: white
+opening: pawn-gambits
+tier: 2
+trigger: '1. e4 e5 2. f4'
+summary: >-
+  White offers the f-pawn so that Black's e-pawn leaves the centre and the f-file opens. If Black takes it, White wins
+  the centre with d4 or hunts the extra pawn; if Black declines, White develops calmly. The sharp [Kieseritzky
+  line](rnbqkbnr/pppp1p1p/8/4N3/4PppP/8/PPPP2P1/RNBQKB1R b KQkq -) is the main line here, and the engine rates Black a
+  little better in most lines, so this is a course for players who enjoy attacking chess.
+plans:
+  - Take the centre with d4 and develop fast; the f-pawn is bait, not an investment you must defend.
+  - If Black holds the extra pawn with ...g5, attack that pawn with h4 and win f4 back with the bishop.
+  - Never take on e5 while Black's [bishop on c5](rnbqk1nr/pppp1ppp/8/2b1p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq -) and queen
+    can give check on h4; play Nf3 first.
+  - Against ...Be7 or ...Nf6, push e5 to gain time and leave Black's knight with few squares; after
+    [...g5?](rnbqk2r/ppp1bp1p/3p4/4P1pn/2BP1p2/2N2N2/PPP3PP/R1BQK2R w KQkq -) the knight on h5 is loose.
+  - Against the Falkbeer (...d5), take the pawns, develop with Nf3 and Qe2, and trade queens only when you are ahead.
+  - If Black plays ...Qh4+ with a pawn on h4 behind the rook, check whether the rook takes the queen.
+motifs:
+  [
+    decline-the-gambit,
+    develop-first,
+    centre-pawns,
+    give-back-material,
+    open-file,
+    hanging-piece,
+    queen-trap,
+    fork,
+    counter-in-the-centre,
+    castle-early,
+  ]
+tags: [e4, gambit, kings-gambit]
+lines:
+  - id: kieseritzky
+    section: If Black takes the pawn
+  - id: fischer-defence
+    section: If Black takes the pawn
+  - id: schallopp-defence
+    section: If Black takes the pawn
+  - id: cunningham-defence
+    section: If Black takes the pawn
+  - id: declined-classical
+    section: If Black declines
+  - id: falkbeer-countergambit
+    section: Counter-gambits
+  - id: bishop-c5-fxe5
+    section: Traps
+  - id: kieseritzky-qxh4
+    section: Traps
+  - id: cunningham-g5
+    section: Traps
+  - id: falkbeer-qxd5
+    section: Traps

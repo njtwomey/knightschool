@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Evans Gambit"]
+[Variation "Italian Game: Evans Gambit, Tartakower Attack"]
+[ECO "C52"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "queen-b3,centre-fight"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...Bxb4 5.c3 Ba5 6.d4 d6"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4"]
+
+6... d6 { Black keeps the e5 pawn and leaves White's centre to be dealt with later. } 7. Qb3 { Attacks f7 with the queen and the bishop together, so Black has to react. } 7... Qd7 8. dxe5 { Opens the centre while Black's pieces are undeveloped. } 8... dxe5 9. O-O { Gets the king safe before the position opens further. } 9... Bb6 10. Ba3 { Stops Black castling, because the bishop covers f8. The queen on b3 and bishop on c4 also point at f7. } 10... Na5 11. Nxe5 { Wins the e5 pawn back and attacks the queen on d7, so after the queens come off the b-pawn has been repaid. Plan: castled king, healthy pieces, equal material. } 11... Nxb3 12. axb3 Nh6 13. Nxd7 Bxd7 *

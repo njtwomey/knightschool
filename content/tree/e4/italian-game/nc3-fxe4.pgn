@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Rousseau Gambit, 4.Nc3"]
+[ECO "C50"]
+[Character "gambit,tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork,hanging-piece"]
+[Themes "pawn-grab,open-f-file"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.Nc3"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5"]
+
+4. Nc3 $2 { Defends e4 with a piece, but fxe4 then wins a pawn and hits the knight on f3. } 4... fxe4 { Takes the pawn. White's knight on f3 is attacked, and the bishop on c4 has to watch out too. } 5. Bxg8 ( 5. Nxe4 $2 d5 { Hits the bishop and the knight on e4 at once; White loses a piece. } 6. Bd3 dxe4 7. Bxe4 ) 5... exf3 { Takes the knight in return. Black is a pawn up and White's king is without its knight. } 6. Bd5 fxg2 { Takes another pawn and attacks the rook on h1. } 7. Bxg2 d6 { Frees the bishop and keeps e5 solid. Black has the extra pawn. Plan: complete development with ...Be7 and ...Nf6, and keep the extra pawn safe. } *

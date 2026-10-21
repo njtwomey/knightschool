@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Pawn Game"]
+[Variation "Pseudo-Catalan"]
+[ECO "D02"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "same-setup,attack-d4"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "2.g3, 2.c3 or 2.Nf3 and g3"]
+[Start "1. d4 d5"]
+
+2. Nf3 ( 2. g3 Nf6 3. Bg2 e6 4. Nf3 Be7 ) ( 2. c3 Nf6 3. Nf3 e6 4. Bg5 h6 { Asks the bishop what it wants. } 5. Bxf6 Qxf6 6. Nbd2 c5 ) 2... Nf6 3. g3 e6 { Black builds the same set-up: ...Nf6, ...e6, ...Be7, castle, ...c5, ...Nc6. A bishop on g2 changes little, but the diagonal pressure on d5 means Black must keep the centre solid. } 4. Bg2 Be7 { Covers f6 and d6 and gets ready to castle. } 5. O-O O-O { Safe king first, then the central break. } 6. Nbd2 c5 { Strikes at d4 and takes the centre fight to White's side. } 7. c3 Nc6 { Another attacker on d4. White cannot keep both the centre and the pawn on d4 easily. } 8. dxc5 Bxc5 { Plan: ...b6 and ...Bb7, or ...e5 to take the centre. White's bishop on g2 will not do much if Black keeps d5 protected. } *

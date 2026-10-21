@@ -1,0 +1,30 @@
+name: 'Sicilian: Alapin Variation'
+eco: B22
+side: white
+opening: sicilian-defence
+tier: 2
+trigger: '1. e4 c5 2. c3'
+summary: >-
+  2.c3 prepares d4, so White gets a pair of centre pawns whatever Black does and avoids the long theory of the open
+  Sicilian. You will learn the plan against Black's three main replies and a short answer to each rarer one.
+plans:
+  - Play d4 next move. If Black takes, recapture with the c-pawn and keep pawns on d4 and e4 or e5.
+  - Develop the knights and the king's bishop, castle, and only then look for a second centre break.
+  - Against 2...Nf6, kick the knight with e5, then use Bc4 and Bb5 to win time while Black untangles.
+  - Against 2...d5, take the pawn, play d4 and Nf3, and do not hit the queen with c4, which drops d4.
+  - Against 2...e6, trade on d5 and aim for pressure on the isolated d5 pawn, with a knight blockading on d4.
+motifs: [tempo-on-queen, pawn-wedge, isolated-queens-pawn, centre-pawns, pin-absolute]
+tags: [e4, semi-open, sicilian]
+lines:
+  - nf6-main-line
+  - d5-main-line
+  - d5-bg4
+  - d5-nc6-bg4
+  - e6-main-line
+  - id: e6-advance
+    alternative: true
+  - minor-second-moves
+  - c4-hits-the-queen
+  - bd3-leaves-g2
+  - nb6-retreat
+  - pinned-knight-e6

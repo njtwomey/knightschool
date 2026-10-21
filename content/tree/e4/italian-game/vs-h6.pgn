@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Anti-Fried Liver Defence"]
+[ECO "C50"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "solid-centre,slow-build"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...h6"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4"]
+
+3... h6 4. c3 { Prepares d4. Black spent a move on h6, so there is no hurry and White can build a strong centre. } 4... Nf6 ( 4... Bc5 5. d4 { Hits the bishop and takes the centre now that Black has not castled. } 5... exd4 6. cxd4 ) 5. d3 { Guards e4 and keeps the position calm. } 5... d6 6. O-O { Gets the king safe. } 6... Be7 7. Re1 { Defends e4 so the knight on f3 is free to move. Plan: Nbd2, Nf1 and Ng3, then d4 when the pieces are ready. } *

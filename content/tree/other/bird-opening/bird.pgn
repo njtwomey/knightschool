@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Bird Opening"]
+[Variation "Bird Opening: Dutch Variation"]
+[ECO "A03"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-out,d5-wall"]
+[For "black"]
+[Kind "main"]
+[Opponent "1.f4"]
+
+1. f4 d5 { Takes the centre. Black does not play ...e5, which invites the sharp From's Gambit. } 2. Nf3 ( 2. e4 $2 { Gives away a pawn for very little. } 2... dxe4 { Black simply takes it. } 3. Nc3 Nf6 { Develops and attacks the e4 pawn again, so Black keeps the extra pawn. } 4. d3 Bf5 { Guards the pawn on e4. Taking on d3 would lose time and open the d-file for White's queen. } 5. dxe4 Qxd1+ { Trades queens while White still cannot castle safely; Black keeps the extra pawn. } 6. Kxd1 Nxe4 ) 2... Nf6 3. e3 ( 3. g3 Bg4 4. Bg2 e6 ) ( 3. b3 Bg4 4. Bb2 e6 ) 3... Bg4 { Develops the bishop outside the pawn chain before ...e6 closes it in. It also eyes the knight on f3. } 4. Be2 ( 4. h3 Bxf3 { Trades the bishop for the knight now instead of retreating; White's h3 gained nothing. } 5. Qxf3 e6 ) 4... e6 { Backs up d5 and opens the way for the other bishop. } 5. O-O Bd6 { The bishop eyes the f4 pawn and the e5 square, where a Black pawn would be strong. } 6. d3 Nbd7 { Develops and supports a later ...e5. The c-pawn stays free for ...c6. } 7. Nbd2 c6 { Makes d5 solid. Plan: castle, ...Qe7, then break with ...e5 when White's pieces allow it. If White leaves the book, keep developing and do not rush ...e5. } *

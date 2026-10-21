@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Hillbilly Attack, 3.Bxd5 blunder"]
+[ECO "B10"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Refutes "1. e4 c6 2. Bc4 d5 3. Bxd5"]
+[For "black"]
+[Kind "for-us"]
+[Opponent "3.Bxd5"]
+[Start "1. e4 c6 2. Bc4 d5"]
+
+3. Bxd5 $2 { White grabs a pawn with the bishop, but the c6 pawn is guarding d5. } 3... cxd5 { Black wins a whole bishop for a pawn. } 4. exd5 Qxd5 *

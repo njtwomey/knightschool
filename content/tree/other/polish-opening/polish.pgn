@@ -1,0 +1,14 @@
+[Event "Knight School"]
+[Opening "Polish Opening"]
+[Variation "Polish Opening: Bishop Takes Pawn"]
+[ECO "A00"]
+[Character "tactical,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "centre-for-flank-pawn"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "1.b4"]
+
+1. b4 e5 { Takes the centre. White is offering a flank pawn for a centre pawn, which is a good deal for Black. } 2. Bb2 ( 2. a3 d5 ) 2... Bxb4 { Takes the pawn on offer. White's bishop will take on e5, but that just gets the pawn back. } 3. Bxe5 Nf6 { Develops with a move that also prepares castling. The bishop on e5 is exposed to ...Nc6 and ...d6. } 4. c4 ( 4. Nf3 O-O ) ( 4. Nc3 Be7 ) 4... O-O { Castles. The bishop on b4 is loose but White's pieces are too far back to hit it. } 5. Nf3 Re8 { Pressure on the bishop on e5: it must move or be traded. } 6. e3 d5 { Claims the centre. Plan: ...Nbd7 (kicks the e5 bishop), ...c6 and ...Bf5. If White leaves the book, develop and trade pieces. } *

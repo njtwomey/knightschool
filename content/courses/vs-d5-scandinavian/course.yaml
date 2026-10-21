@@ -1,0 +1,29 @@
+name: Scandinavian Defence
+eco: B01
+side: white
+opening: scandinavian-defence
+tier: 2
+trigger: '1. e4 d5'
+summary: >-
+  Black takes the pawn back with the queen or a knight, and White uses the lost time to build a big centre. You will
+  learn the replies to every way Black recaptures and the little traps that punish a careless queen.
+plans:
+  - After ...Qxd5 play Nc3 with tempo, then d4, Nf3 and Bd2 or Bc4, and castle.
+  - If the black bishop goes to g4, play h3 to ask it a question; do not walk the f3 knight away.
+  - When Black's queen stands on a5, keep the bishop behind the c3 knight; Nb5 hits the queen if c6 is missing.
+  - After ...Nf6 take the centre with d4 and c4, then castle and play with the bishop pair.
+motifs: [tempo-on-queen, bishop-trap, early-queen, queen-trap, discovered-attack, develop-first]
+tags: [e4, scandinavian]
+lines:
+  - qa5-classical
+  - nf6-marshall
+  - qa5-bg4
+  - qd6
+  - qd8
+  - id: nf6-bb5
+    alternative: true
+  - c6-gambit
+  - queen-hit-nb5
+  - bishop-squeezed-on-g6
+  - knight-d5-hangs
+  - knight-e5-hangs-queen

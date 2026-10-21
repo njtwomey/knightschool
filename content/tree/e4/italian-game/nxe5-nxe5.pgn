@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Rousseau Gambit, 4.Nxe5"]
+[ECO "C50"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. Nxe5"]
+[Themes "piece-for-pawn,bishop-attacked"]
+[For "black"]
+[Kind "for-us"]
+[Opponent "4.Nxe5"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5"]
+
+4. Nxe5 $2 { Grabs the pawn, but nothing protects the knight on e5, so Black simply takes it. } 4... Nxe5 { Takes the knight for a pawn, and now the knight attacks the bishop on c4. } 5. Bxg8 ( 5. d4 Nxc4 { The pawn attacks the knight, but the knight takes the bishop first, so White has lost two pieces for a pawn. } 6. O-O d5 ) ( 5. Bb3 fxe4 ) 5... Rxg8 { Takes the bishop back: Black has won a knight and a bishop for a knight and a pawn. } 6. d4 Ng6 { Steps out of the pawn's way to a safe square and eyes f4 and h4. } 7. O-O fxe4 { Takes the pawn and opens the f-file against the white king. Black is a clear piece up. } *

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Philidor Defense"]
+[Variation "Philidor Defense: Exchange Variation"]
+[ECO "C41"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "centre-pawns,development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "2...d6"]
+[Start "1. e4 e5 2. Nf3"]
+
+2... d6 { The Philidor: Black guards e5 with a pawn. It is solid but passive, because the bishop on c8 is shut in behind it. } 3. d4 { Fights for the centre at once, before Black's pieces are out. If Black keeps the pawn on e5, White can trade it off with dxe5. } 3... exd4 ( 3... Bg4 $6 4. dxe5 { Takes the pawn first. Black can win it back with ...Bxf3 and ...dxe5, but then White's queen and bishop aim at f7. } 4... Bxf3 5. Qxf3 dxe5 6. Bc4 { Aims at f7, a pawn only the king guards. } 6... Qf6 7. Qb3 { Attacks b7 and f7 together (the bishop on c4 also hits f7). Black cannot guard both easily, so White wins a pawn or gets a lasting edge. } ) ( 3... Nf6 4. Nc3 { Guards e4 and develops. } 4... Nbd7 5. Bc4 Be7 6. O-O O-O 7. Qe2 { Keeps e4 guarded and lets the rook come to d1. } 7... c6 8. a4 { Stops ...b5, which would chase the bishop off its good diagonal. } ) 4. Nxd4 { The knight lands in the centre. Black has no pawn on d4 to kick it away. } 4... Nf6 5. Nc3 { Develops and guards e4, so Black's knight has nothing to hit. } 5... Be7 6. Be2 { A safe square that clears the way to castle. } 6... O-O 7. O-O Nc6 8. Nxc6 { Trades to damage Black's pawns: after ...bxc6 Black has two pawns on the c-file and a weak pawn on c6 to defend. } 8... bxc6 9. Bf3 { Aims at c6 and guards e4 at the same time. } 9... Nd7 10. Be3 { Develops the last bishop and puts it on the safest diagonal. } 10... Ba6 11. Re1 { Puts the rook behind the e-pawn. Plan: play on the e-file and push e5 when the time is right, aiming at the weak pawn on c6. } *

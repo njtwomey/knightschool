@@ -1,0 +1,28 @@
+name: Queen's Gambit Declined
+eco: D30
+side: black
+opening: queens-gambit-declined
+tier: 1
+trigger: '1. d4 d5 2. c4 e6'
+summary: >-
+  Black answers c4 with e6 and keeps a pawn on d5, holding the centre without taking the gambit pawn. The same setup
+  works against every move order. Learn the Orthodox and Exchange lines first, then the answers to 3.Nf3, 4.Bf4 and the
+  Catalan.
+plans:
+  - Develop with ...Nf6, ...Be7, ...O-O, ...c6 and ...Nbd7, then free the position with ...dxc4 and ...e5 or ...c5.
+  - Take on c4 only once White's bishop has gone to d3, so White cannot recapture with a tempo.
+  - Against 4.Bf4 or the Catalan, play ...Be7 and castle, then hit the centre with ...c5 or take on c4 and hold it with
+    ...a6 and ...b5.
+  - Against the Exchange, play ...Nf8 and ...Ne4 and expect White's minority attack with b4 and b5.
+motifs: [pin-relative, freeing-break, minority-attack, isolated-queens-pawn]
+tags: [d4, closed, solid]
+lines:
+  - orthodox
+  - exchange
+  - knight-first
+  - bf4
+  - catalan
+  - cambridge-springs
+  - elephant-trap
+  - cambridge-springs-trap
+  - early-dxc4

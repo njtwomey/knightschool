@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Rousseau Gambit, 4.d3 Nf6 5.Nc3"]
+[ECO "C50"]
+[Character "gambit,solid"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pin,fork"]
+[Themes "pin-on-c3,pawn-structure"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.d3 Nf6 5.Nc3"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. d3 Nf6"]
+
+5. Nc3 fxe4 { With a knight on c3, the exchange now suits Black: dxe4 leaves White no centre pawn on d3 to guard, and the f-file is open. } 6. dxe4 ( 6. Nxe4 $2 { Takes with the knight, but then the black pawn forks it. } 6... d5 { Hits the bishop on c4 and the knight on e4 together. } 7. Nxf6+ gxf6 8. Bb3 Rg8 { The pawns are doubled but the g-file and the centre are Black's. } ) 6... Bb4 { Pins the knight on c3 to the king, which takes away the main guard of e4 and d5. } 7. O-O Bxc3 { Trades the bishop to double White's pawns. After bxc3 the pawn on e4 is weak. } 8. bxc3 d6 { Supports e5 and develops the c8 bishop. White has the bishop pair, so keep the position closed. } 9. a4 Qe7 { Develops and watches e4 and a3. The game is roughly level. Plan: castle long or short, then hit e4 with ...Nd7-c5 or ...Bg4. } *

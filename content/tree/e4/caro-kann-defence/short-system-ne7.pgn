@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence: Advance Variation"]
+[Variation "Short Variation, 5...Ne7"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "pawn-chain,space"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "5...Ne7"]
+[Start "1. e4 c6 2. d4 d5 3. e5 Bf5 4. Nf3 e6 5. Be2"]
+
+5... Ne7 6. O-O h6 7. Nbd2 Nd7 8. Nb3 *

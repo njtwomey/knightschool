@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Two Knights: Fritz and Ulvestad"]
+[ECO "C57"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "piece-safety,extra-pawn"]
+[For "white"]
+[Kind "rare"]
+[Opponent "3...Nf6 4.Ng5 d5 5.exd5 Nd4"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5"]
+
+5... Nd4 ( 5... b5 6. Bf1 { Retreats out of the pawn's reach. The pawn on b5 is now loose, because the bishop on f1 looks straight at it. } 6... Nxd5 7. Bxb5 { Wins the loose pawn and attacks the knight on c6, which is the piece guarding e5. } 7... Bb7 8. d4 exd4 9. O-O ) 6. c3 { Kicks the knight off d4, where it was eyeing the bishop and the c2 square. } 6... b5 7. Bf1 { Steps out of the way of the b-pawn and keeps an eye on the pawn on b5. } 7... Nxd5 8. Ne4 { Saves the knight on g5, which the black queen now attacks. The pawn on c3 still hits the knight on d4. Plan: develop, castle and keep the extra pawn. } *

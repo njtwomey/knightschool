@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Advance Variation, Van der Wiel Attack"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "c5-break,bishop-retreat"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.Nc3"]
+[Start "1. e4 c6 2. d4 d5 3. e5 Bf5"]
+
+4. Nc3 e6 { Supports d5 and keeps everything protected. If White now plays 5.Nf3, we reach the main line by a different move order. } 5. g4 { Chases the bishop, but it also loosens White's own kingside. } 5... Bg6 { The bishop keeps its diagonal and stays outside the pawn chain. Do not take material on c2 or e4: the bishop is worth more than the pawn. } 6. Nge2 ( 6. h4 h5 7. Bg5 Be7 8. Bxe7 Qxe7 ) 6... c5 { Hits d4 straight away, before White can build up with h4 and Bg5. } 7. h4 h6 { Stops h5, which would trap the bishop on g6 and win it. } 8. Be3 Nc6 { Another attacker on d4. White's kingside pawns have moved far from home, so Black can play against d4 and keep the bishop safe. If White leaves the book, keep hitting d4 and keep ...h6. } *

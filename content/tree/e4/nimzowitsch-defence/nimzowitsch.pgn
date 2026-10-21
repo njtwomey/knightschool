@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Nimzowitsch Defence"]
+[Variation "Nimzowitsch Defence: Declined Variation"]
+[ECO "B00"]
+[Character "positional,solid"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "develop-fast,queen-harassment"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "1...Nc6"]
+[Start "1. e4"]
+
+1... Nc6 2. Nf3 { Develops a piece and guards e4. Black's knight has not committed to a pawn move, so keep it simple. } 2... d5 ( 2... e5 { This is just the Italian-style Open Game: 1.e4 e5 2.Nf3 Nc6. Use the Italian Game course from here. } ) ( 2... d6 3. d4 { Take the centre; Black cannot stop it. } 3... Nf6 4. Nc3 Bg4 5. Be3 ) ( 2... Nf6 3. e5 { Attacks the knight and gains space. } 3... Ng4 4. d4 d6 5. h3 { Kicks the knight again; it has few safe squares. } 5... Nh6 6. exd6 ) 3. exd5 { Wins a pawn for the moment. Black has to recapture with the queen, which then becomes a target. } 3... Qxd5 4. Nc3 { Attacks the queen while developing a piece. } 4... Qa5 5. d4 { Takes the centre now that Black's queen is off the d-file, and opens the c1 bishop. } 5... Nf6 6. Bd2 { Lines up on the queen behind the knight on c3. If that knight ever moves with a threat, the queen is attacked as well. } 6... a6 7. h3 { Stops ...Bg4, which would pin the knight on f3 against the queen. } 7... e6 ( 7... Bf5 8. Bc4 ) 8. Be2 { Develops and prepares to castle. } 8... Bd6 9. O-O { Plan: castle, then look for Ne4 or Nb5 with a threat to Black's queen, which stays short of squares on a5. Keep d4 and e4 protected and finish development. } *

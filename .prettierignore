@@ -8,3 +8,4 @@ docs/PLAN.md
 docs/CURRICULUM.md
 content/popularity/popularity.json
 .content/
+.claude/worktrees/

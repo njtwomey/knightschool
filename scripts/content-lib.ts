@@ -6,64 +6,55 @@ import { parse as parseYaml } from 'yaml';
 import {
   CurriculumEntry,
   MotifEntry,
-  OpeningManifest,
+  CourseManifest,
   OpeningMeta,
   QuizEntry,
-  buildOpening,
+  projectCourse,
+  resolveTree,
   buildOpeningGroups,
   parsePgn,
   sideToMove,
   type GlossaryEntry,
   type OpeningContent,
   type OpeningGroup,
-  type VariantSource,
+  type TheoryTree,
+  type Chapter,
 } from '../packages/core/src/index.ts';
 
 export const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-/** Everything authored: white/ and black/ hold the courses, plus openings.yaml, curriculum.yaml and motifs.yaml. */
+/**
+ * Everything authored: tree/ holds the theory (chapters of one tree, for both sides), courses/ the courses that take
+ * lines from it, plus openings.yaml, curriculum.yaml and motifs.yaml.
+ */
 export const contentDir = join(root, 'content');
+export const treeDir = join(contentDir, 'tree');
+export const coursesDir = join(contentDir, 'courses');
 export const rel = (path: string) => relative(root, path);
 
-function readVariants(courseDir: string, kind: 'lines' | 'traps'): VariantSource[] {
-  const dir = join(courseDir, kind);
+/** Every chapter (.pgn) under a folder, at any depth. A chapter's id is its file name. */
+export function readChapters(dir: string): Chapter[] {
   if (!existsSync(dir)) return [];
-  return readdirSync(dir)
+  return readdirSync(dir, { recursive: true, encoding: 'utf8' })
     .filter((file) => file.endsWith('.pgn'))
     .sort()
     .map((file) => {
       const path = join(dir, file);
-      return {
-        id: file.slice(0, -'.pgn'.length),
-        kind: kind === 'lines' ? ('line' as const) : ('refutation' as const),
-        game: parsePgn(readFileSync(path, 'utf8'), rel(path)),
-        source: rel(path),
-      };
+      return { id: basename(file, '.pgn'), source: rel(path), game: parsePgn(readFileSync(path, 'utf8'), rel(path)) };
     });
 }
 
-/** The lines and traps that a course takes from another course's folder (`from:` in course.yaml). */
-function readReused(manifest: OpeningManifest): VariantSource[] {
-  const homes = new Map(courseDirs().map(({ dir, side }) => [basename(dir), { dir, side }]));
-  return manifest.lines.flatMap((entry) => {
-    if (!entry.from) return [];
-    const home = homes.get(entry.from);
-    if (!home) throw new Error(`${manifest.name}: "${entry.file}" is from "${entry.from}", which is not a course`);
-    if (home.side !== manifest.side)
-      throw new Error(
-        `${manifest.name}: "${entry.file}" is from "${entry.from}", a course for ${home.side}; only lines for the same side can be reused`,
-      );
-    const path = join(home.dir, 'lines', `${entry.file}.pgn`);
-    if (!existsSync(path)) throw new Error(`${manifest.name}: ${rel(path)} does not exist (from: ${entry.from})`);
-    return [
-      {
-        id: entry.file,
-        kind: 'line' as const,
-        game: parsePgn(readFileSync(path, 'utf8'), rel(path)),
-        source: rel(path),
-        reused: true,
-      },
-    ];
-  });
+const trees = new Map<string, TheoryTree>();
+/**
+ * The theory tree: every chapter under content/tree. `extra` is a folder of chapters to read along with it (a course
+ * being written in content/_staging keeps its new chapters in its own tree/ folder until they move into content/tree).
+ */
+export function loadTree(extra?: string): TheoryTree {
+  const key = extra ?? '';
+  const cached = trees.get(key);
+  if (cached) return cached;
+  const tree = resolveTree([...readChapters(treeDir), ...(extra ? readChapters(extra) : [])]);
+  trees.set(key, tree);
+  return tree;
 }
 
 function readYaml<T>(path: string, schema: z.ZodType<T>): T {
@@ -74,47 +65,35 @@ function readYaml<T>(path: string, schema: z.ZodType<T>): T {
   return parsed.data;
 }
 
-/** Every directory under white/ and black/ that holds a course.yaml, at any depth. Folders starting with _ are skipped. */
-export function courseDirs(): { dir: string; side: 'white' | 'black' }[] {
-  const found: { dir: string; side: 'white' | 'black' }[] = [];
-  const walk = (dir: string, side: 'white' | 'black') => {
-    if (existsSync(join(dir, 'course.yaml'))) found.push({ dir, side });
-    for (const name of readdirSync(dir).sort()) {
-      const child = join(dir, name);
-      if (name.startsWith('_') || name.startsWith('.') || !statSync(child).isDirectory()) continue;
-      if (basename(dir) === 'lines' || basename(dir) === 'traps') continue;
-      walk(child, side);
-    }
-  };
-  for (const side of ['white', 'black'] as const) {
-    const dir = join(contentDir, side);
-    if (existsSync(dir)) walk(dir, side);
-  }
-  return found;
-}
-
-/** Reads and validates one course folder. Pass `side` to require that the course's `side` matches its folder. */
-export function loadCourseAt(dir: string, side?: 'white' | 'black'): OpeningContent {
-  const id = basename(dir);
-  const manifestPath = join(dir, 'course.yaml');
-  const manifest = readYaml(manifestPath, OpeningManifest);
-  if (side && manifest.side !== side) {
-    throw new Error(`${rel(manifestPath)}: side is ${manifest.side} but the course is under content/${side}/`);
-  }
-  const variants = [...readVariants(dir, 'lines'), ...readVariants(dir, 'traps'), ...readReused(manifest)];
-  const quizPath = join(dir, 'quizzes.yaml');
-  const quizzes: QuizEntry[] = existsSync(quizPath) ? readYaml(quizPath, z.array(QuizEntry)) : [];
-  return buildOpening(id, manifest, variants, quizzes);
+/** Every course folder: content/courses/<id>/ with a course.yaml. Folders starting with _ are skipped. */
+export function courseDirs(): string[] {
+  if (!existsSync(coursesDir)) return [];
+  return readdirSync(coursesDir)
+    .sort()
+    .map((name) => join(coursesDir, name))
+    .filter(
+      (dir) => !basename(dir).startsWith('_') && statSync(dir).isDirectory() && existsSync(join(dir, 'course.yaml')),
+    );
 }
 
 /**
- * Reads and validates every course under content/white and content/black. A course's id is its folder name, and its
- * `side` must match the folder it is in. Throws on the first problem, naming the file.
+ * Reads and validates one course folder: its course.yaml and quizzes, with its lines taken from the tree. A course
+ * folder may hold a tree/ of its own chapters (while it is being written in content/_staging).
  */
+export function loadCourseAt(dir: string): OpeningContent {
+  const id = basename(dir);
+  const manifest = readYaml(join(dir, 'course.yaml'), CourseManifest);
+  const quizPath = join(dir, 'quizzes.yaml');
+  const quizzes: QuizEntry[] = existsSync(quizPath) ? readYaml(quizPath, z.array(QuizEntry)) : [];
+  const own = join(dir, 'tree');
+  return projectCourse(id, manifest, loadTree(existsSync(own) ? own : undefined), quizzes);
+}
+
+/** Reads and validates every course under content/courses. A course's id is its folder name. Throws on the first problem, naming the file. */
 export function loadCourses(): OpeningContent[] {
   const result: OpeningContent[] = [];
-  for (const { dir, side } of courseDirs()) {
-    const content = loadCourseAt(dir, side);
+  for (const dir of courseDirs()) {
+    const content = loadCourseAt(dir);
     if (result.some((existing) => existing.opening.id === content.opening.id)) {
       throw new Error(`${rel(dir)}: the course id "${content.opening.id}" is used twice: folder names must be unique`);
     }

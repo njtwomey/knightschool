@@ -1,0 +1,37 @@
+name: Evans Gambit
+eco: C51
+side: white
+opening: pawn-gambits
+tier: 2
+trigger: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4'
+summary: >-
+  White gives the b-pawn so that the bishop on c5 must move and White can build a big centre with c3 and d4. It is a
+  gambit for fast development: the engine thinks it is roughly level, and Black must defend with care.
+plans:
+  - After 4...Bxb4 play 5.c3 and 6.d4, then castle before you recapture on d4; the king first, the pawn second.
+  - Never recapture 7.cxd4 before castling when the bishop can check on b4.
+  - Aim for the centre pawns on d4 and e4, then Nc3, Bd3 or Ba3 and a break with d5 or e5.
+  - If Black returns the pawn or declines, develop calmly and use the open b-file and the bishop on c4.
+motifs: [centre-pawns, give-back-material, develop-first, castle-early, decline-the-gambit, f7-weakness]
+tags: [e4, open, italian, gambit]
+lines:
+  - id: accepted-main-line
+    section: If Black takes the pawn
+  - id: compromised-defence
+    section: If Black takes the pawn
+  - id: mcdonnell-bc5
+    section: If Black takes the pawn
+  - id: anderssen-be7
+    section: If Black takes the pawn
+  - id: bronstein-d6
+    section: If Black takes the pawn
+  - id: declined-bb6
+    section: If Black declines
+  - id: hein-countergambit
+    section: Counter-gambits
+  - id: knight-recapture
+    section: Traps
+  - id: nf6-cxd4
+    section: Traps
+  - id: nf6-a5
+    section: Traps

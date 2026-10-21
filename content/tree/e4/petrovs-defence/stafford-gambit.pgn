@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Petrov's Defense"]
+[Variation "Petrov's Defense: Stafford Gambit Accepted"]
+[ECO "C42"]
+[Character "gambit,sharp"]
+[Risk "medium"]
+[EarlyMate "black"]
+[Tricks "trap,pawn-grab"]
+[Themes "quick-development,knight-g4"]
+[For "white"]
+[Kind "gambit"]
+[Opponent "3...Nc6"]
+[Start "1. e4 e5 2. Nf3 Nf6 3. Nxe5"]
+
+3... Nc6 $6 { The Stafford Gambit: Black gives up a pawn for fast development and tricks against f2. It is common online and wins many games against careless play. } 4. Nxc6 { Removes the knight that was developing with tempo. Black has less to attack with, and White keeps the extra pawn. } 4... dxc6 5. d3 { Guards e4 and opens the c1 bishop. A quiet move is enough: White is a clean pawn up and only has to stay safe. } 5... Bc5 6. Be2 { Prepares to castle and covers g4, the square Black's knight wants for the attack on f2. } 6... h5 ( 6... Ng4 7. Bxg4 { Takes the attacker at once. } 7... Qh4 8. Qf3 { Defends the bishop and f2 together. } 8... Qxg4 9. Qxg4 Bxg4 ) 7. c3 { Makes room for d4, which will hit the c5 bishop. Without that bishop, Black's whole attack on f2 collapses. } 7... Ng4 ( 7... Be6 8. d4 { Hits the bishop and takes the centre. } 8... Be7 9. Nd2 h4 10. O-O Qd7 11. Qc2 ) 8. d4 { Attacks the bishop. Once it moves, Black's pieces no longer aim together at f2 and the knight on g4 is far from home. } 8... Bd6 9. e5 { Hits the bishop again and takes e5 and f6 away from the knight on g4, whose only safe retreat is h6. } 9... Be7 10. h3 { Asks the knight to leave. It must go to h6, so the attack on f2 is over and White keeps the extra pawn. } 10... Nh6 11. O-O { Castle now: the king is safe and the extra pawn is intact. Plan: finish development with Nd2-f3 and Bf4, and keep f2 covered until the king is castled. } *

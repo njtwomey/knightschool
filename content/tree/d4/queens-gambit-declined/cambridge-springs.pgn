@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit Declined"]
+[Variation "Cambridge Springs Defence"]
+[ECO "D52"]
+[Character "tactical,positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "queen-sortie,pin-on-c3"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "5.Nf3"]
+[Start "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7"]
+
+5. Nf3 c6 { Guards d5 and prepares the queen move that follows. } 6. e3 Qa5 { The queen pins the knight on c3 to the king and will hit the bishop on g5 as soon as the d5 pawn moves away. } 7. Nd2 ( 7. Bd3 dxc4 8. Bxc4 Ne4 ) ( 7. Qc2 Ne4 ) 7... Bb4 { A second attacker on the pinned knight. } 8. Qc2 O-O 9. Be2 e5 { The freeing move: Black strikes in the centre while White's pieces are tied up. } *

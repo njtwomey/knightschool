@@ -1,0 +1,25 @@
+name: Against the London System
+eco: D02
+side: black
+opening: london-system
+tier: 1
+trigger: '1. d4 d5'
+summary: >-
+  The London System is the most common way 1.d4 d5 continues at club level. This course gives Black one plan against it:
+  ...c5, ...Nc6 and ...Qb6 to hit b2, and ...a6 against the Jobava version.
+plans:
+  - Hit d4 at once with ...c5 and ...Nc6; the London bishop on f4 does not guard it.
+  - Put the queen on b6 to attack b2, and trade queens if White offers, because the open a-file is Black's.
+  - Bring the c8 bishop out to f5 or g4 before playing ...e6, so it is never shut in.
+  - Against 2.Nc3 and Bf4 play ...a6 so the knight can never jump to b5 and c7.
+motifs: [counting, attack-the-base, good-bishop-out, fork-trick, tempo-on-queen]
+tags: [d4, london, queens-pawn]
+lines:
+  - london-main
+  - london-nbd2
+  - london-bf4-first
+  - jobava-a6
+  - bd3-c4
+  - nb5-axb5
+  - nh5-too-early
+  - jobava-nb5

@@ -1,0 +1,24 @@
+name: 'Caro-Kann: Advance Variation'
+eco: B12
+side: white
+opening: caro-kann-defence
+tier: 2
+trigger: '1. e4 c6'
+summary: >-
+  Push the pawn to e5, develop with Nf3 and Be2, castle, and meet Black's ...c5 break with Be3. The setup needs almost
+  no memorising.
+plans:
+  - Play Nf3, Be2 and castle; do not rush an attack.
+  - When Black plays ...c5, defend d4 twice (Nf3 and Be3) before anything else.
+  - Never trade our light bishop for Black's bad bishop for free.
+motifs: [pawn-chain, space, counting]
+tags: [e4, caro-kann, advance]
+lines:
+  - short-system
+  - short-system-nd7
+  - short-system-ne7
+  - advance-c5
+  - id: exchange-bd3
+    alternative: true
+  - bd3-trade
+  - qb6-b2-d4

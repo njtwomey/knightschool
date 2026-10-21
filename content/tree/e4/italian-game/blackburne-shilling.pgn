@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Blackburne Shilling Gambit: 4.Nxe5?"]
+[ECO "C50"]
+[Character "tactical"]
+[Risk "high"]
+[EarlyMate "black"]
+[Tricks "trap,pawn-grab"]
+[Themes "development-lead"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4"]
+[For "white"]
+[Kind "against-us"]
+[Opponent "3...Nd4"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4"]
+
+4. Nxe5 $2 { Grabs a pawn and walks into [...Qg5](r1b1kbnr/pppp1ppp/8/4N1q1/2BnP3/8/PPPP1PPP/RNBQK2R w KQkq -), which attacks the knight on e5 and the pawn on g2 at once. } 4... Qg5 5. Nxf7 $2 { Tries to win material back but the queen takes g2. } 5... Qxg2 6. Rf1 $2 Qxe4+ 7. Be2 $2 Nf3# *

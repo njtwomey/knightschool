@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Game: Stanley Variation"]
+[ECO "C26"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-trade,d5-break"]
+[For "black"]
+[Kind "main"]
+[Opponent "2.Nc3"]
+[Start "1. e4 e5"]
+
+2. Nc3 { White guards e4 so that the f-pawn can advance later. } 2... Nf6 { Develops with an attack on e4. It is the usual reply and handles both 3.Bc4 and 3.f4 well. } 3. Bc4 ( 3. Nf3 { This is the Four Knights. After 3...Nc6 the game continues as in the Italian lines. } 3... Nc6 ) ( 3. g3 Bc5 { Develops the bishop on a diagonal aimed at f2 and gets ready to castle. } 4. Bg2 Nc6 ) ( 3. d3 d5 { Strikes at the centre right away, before White has a chance to build there. } 4. exd5 Nxd5 5. Nf3 Nc6 ) 3... Nc6 { Develops and guards e5. Taking on e4 first invites 4.Qh5 and a messy fight. } 4. d3 { Protects e4 and opens the c1 bishop. The game now matches the Bishop's Opening line, so the same plan works. } ( 4. Nf3 { This is the Four Knights with Bc4, which comes up after 2.Nf3 as well. Black plays 4...Nxe4 and the fork trick. } 4... Nxe4 ) 4... Na5 5. Bb3 Nxb3 6. axb3 d5 *

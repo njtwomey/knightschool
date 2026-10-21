@@ -1,0 +1,32 @@
+name: London System
+eco: D02
+side: white
+opening: london-system
+tier: 3
+trigger: '1. d4'
+summary: >-
+  One White setup against almost everything: d4, Bf4, e3, c3 and knights to d2 and f3. Fewer lines to learn, and the
+  plans repeat from game to game, so it is the alternative to a full 1.d4 repertoire.
+plans:
+  - Put the bishop on f4 before playing e3, then build the pawn chain with e3, c3 and d4. Retreat the bishop to g3, not
+    h2.
+  - Develop Nd2, Ngf3 and Bd3, castle, and aim for a knight on e5 backed by the pawn on d4.
+  - If Black plays ...c5 and ...Qb6, protect or counter b2 straight away (Nc3 or Qc1) before castling.
+  - Against a fianchetto or an odd first move, play the same pieces and leave the centre alone until you are castled.
+motifs: [good-bishop-out, pawn-chain, outpost, poisoned-pawn, counting, tempo-on-queen, hanging-piece, bishop-trap]
+tags: [d4, closed, system]
+lines:
+  - vs-d5-nf6
+  - vs-d5-c5-qb6
+  - id: vs-d5-c5-qb6-qc1
+    alternative: true
+  - vs-d5-bf5
+  - vs-nf6-g6
+  - vs-englund-gambit
+  - vs-c5
+  - vs-f5
+  - nh5-queen-takes-knight
+  - poisoned-b2
+  - englund-bc3-pin
+  - englund-qd2-fork
+  - englund-nbd2-hangs-bishop

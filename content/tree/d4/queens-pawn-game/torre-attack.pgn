@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Pawn Game"]
+[Variation "Torre Attack"]
+[ECO "D03"]
+[Character "solid,tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "queen-trap"]
+[Themes "knight-to-e4,hit-b2"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "2.Nf3 Nf6 3.Bg5"]
+[Start "1. d4 d5 2. Nf3 Nf6"]
+
+3. Bg5 Ne4 { Puts the knight on e4, where it attacks the bishop on g5. White has to choose where the bishop goes, and either way it has left the pawn on b2 without a defender. } 4. Bf4 ( 4. Bh4 c5 { Hits d4 and clears the way for ...Qb6. } 5. e3 Qb6 6. Nc3 Nxc3 7. bxc3 Qa5 ) 4... c5 { Attacks d4 and gets ready for ...Qb6, which will hit b2. } 5. e3 Qb6 { Attacks b2, which White's bishop no longer guards. White has to defend it or give the pawn away. } 6. Nbd2 Nxd2 { Trades the knight that White wants to use to chase the one on e4, and makes White recapture instead of defending b2. } 7. Nxd2 cxd4 { Trades Black's c-pawn for White's e-pawn and opens the c-file. } 8. exd4 Nc6 { Develops and attacks d4 a second time. Taking on b2 with the queen is possible, but the rook, bishop and knights soon chase it. } 9. Nb3 Bf5 { Brings the c8 bishop out before ...e6 closes it in, and it eyes the c2 pawn. } 10. Bd3 Bxd3 { Trades White's most active bishop before it can harass the one on f5. } 11. Qxd3 e6 { Closes the centre and frees the bishop on f8. Plan: ...Be7, castle, then ...Rc8 or ...a5-a4 to chase the knight on b3. The queen on b6 keeps White's b2 pawn tied down for the rest of the game. } *

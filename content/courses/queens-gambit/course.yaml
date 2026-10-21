@@ -1,0 +1,34 @@
+name: Queen's Gambit
+eco: D06
+side: white
+opening: pawn-gambits
+tier: 2
+trigger: '1. d4 d5 2. c4'
+summary: >-
+  White offers the c-pawn to pull Black's d-pawn off the centre, then takes the pawn back or builds a bigger centre.
+  Black cannot keep the pawn, so this is one of the safest gambits.
+plans:
+  - If Black takes on c4, win the pawn back with a developing move (e3 and Bxc4), not by chasing it with pawns.
+  - If Black declines with ...e6, pin the knight with Bg5, then e3, Nf3, castle and use the c-file.
+  - Against the Slav, play a4 so Black cannot defend the pawn with ...b5.
+  - Against the Albin, win the d4 pawn back with Nbd2 and Nb3, and never play e3 early (the Lasker Trap).
+  - Once the pieces are out, take the centre with e4.
+motifs: [develop-first, centre-pawns, castle-early]
+tags: [d4, queens-gambit]
+lines:
+  - id: queens-gambit-orthodox
+    section: If Black declines
+  - id: accepted
+    section: If Black takes the pawn
+  - id: slav
+    section: If Black declines
+  - id: queens-gambit-albin
+    section: Counter-gambits
+  - id: chigorin
+    section: Other replies
+  - id: symmetrical
+    section: Other replies
+  - id: lasker-trap
+    section: Traps
+  - id: accepted-e5
+    section: Traps

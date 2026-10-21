@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "French Defence: Advance Variation"]
+[Variation "Advance Variation, Euwe Variation"]
+[ECO "C02"]
+[Character "positional,solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "pawn-chain,space,kingside-attack"]
+[For "white"]
+[Kind "main"]
+[Opponent "3...c5 4.c3 Nc6 5.Nf3 Bd7"]
+[Start "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3"]
+
+5... Bd7 ( 5... cxd4 6. cxd4 { Take back with the pawn to keep the centre. } 6... Bb4+ 7. Bd2 { Block the check with the bishop; trading it off is fine for us. } 7... Bxd2+ 8. Qxd2 ) ( 5... f6 6. Bd3 { Develops and aims at the king side. If Black takes on e5 we retake in the centre and the bishop on d3 does the rest. } 6... fxe5 7. dxe5 ) 6. Be2 { Black has not yet put the queen on b6, so we have time for a quiet developing move and castling. } 6... Nge7 ( 6... cxd4 7. cxd4 Nge7 8. Nc3 { Another guard for d4, and the knight heads for b5 or a4 later. } 8... Nf5 9. O-O ) 7. O-O { Castles first; Black's attacks on d4 are not dangerous while the pieces behind it are guarded. } 7... Ng6 ( 7... Nf5 8. dxc5 { Black's knight left e7, so we can take on c5 safely. } 8... Bxc5 9. Bd3 ) 8. Be3 { Guards d4 with a bishop and keeps b2 safe. We now have three guards on d4: pawn, knight and bishop. } 8... Be7 9. Nbd2 { Brings the last piece out. From d2 the knight can go to b3 to add yet another guard on d4. } 9... O-O 10. Re1 { The rook backs up the e5 pawn, which Black's knights and f-pawn will try to hit. } 10... a5 11. a3 { Plan: keep d4 guarded, answer ...f6 with Bd3 or exf6, and think about h4-h5 to chase Black's knight from g6. Do not trade the pawn on d4 unless it helps us. } *

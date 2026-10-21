@@ -1,0 +1,69 @@
+name: Open Games (1...e5)
+eco: C40
+side: black
+opening: open-games
+tier: 1
+trigger: '1. e4 e5'
+summary: >-
+  Meet 1.e4 with 1...e5, then follow one plan against White's third move: Nc6 and Bc5 against the Italian Game, a closed
+  Ruy Lopez setup, and a handful of simple answers to the Scotch, Four Knights and rare moves.
+plans:
+  - Play 2...Nc6, then meet 3.Bc4 with 3...Bc5, 4...Nf6, 5...d6 and castle by move six.
+  - Against 3.Bb5 play ...a6, ...Nf6, ...Be7, ...b5, ...d6 and ...O-O, and keep the centre closed.
+  - Take every gambit pawn (Evans, Scotch Gambit) but give material back or trade pieces to stay safe.
+  - Never play 2...Nf6 3.Nxe5 (Stafford) or 3...Nd4 (Blackburne Shilling); the course never needs them.
+  - Do not pin ...Bg4 against Nc3 and Bc4 while your queen is on d1's line of fire; the Légal trap wins at once.
+  - Develop a knight to f6 and c6 and keep the pawn on e5 defended.
+  - Against a gambit, give the pawn back or take it only when you can keep your king safe, then castle.
+  - Fight for the centre with ...d5 whenever White's pieces are not yet ready.
+  - Do not bring the queen out early, and chase White's queen when it comes out.
+motifs:
+  [
+    develop-first,
+    castle-early,
+    fork-trick,
+    noahs-ark,
+    legal-mate,
+    counter-in-the-centre,
+    f7-weakness,
+    give-back-material,
+    decline-the-gambit,
+    tempo-on-queen,
+    scholar-mate,
+    pin-absolute,
+  ]
+tags: [e4, open, black]
+lines:
+  - italian-pianissimo
+  - italian-d4-break
+  - italian-quiet-fourths
+  - evans-gambit
+  - ruy-lopez-setup
+  - scotch-game
+  - scotch-gambit
+  - goring-gambit
+  - four-knights
+  - ponziani
+  - rare-third-moves
+  - id: two-knights-ng5
+    alternative: true
+  - bishops-opening
+  - vienna-bishop
+  - vienna-gambit
+  - kings-gambit-declined
+  - id: kings-gambit-fischer
+    alternative: true
+  - danish-gambit-declined
+  - centre-game-queen-takes
+  - centre-game-knight-takes
+  - wayward-queen
+  - rare-second-moves
+  - noahs-ark
+  - fork-trick-four-knights
+  - legal-mate-pattern
+  - kings-gambit-fxe5
+  - wayward-queen-qb3
+  - centre-game-qc3
+  - scholars-mate
+  - vienna-f4-exf4
+  - danish-qxd4

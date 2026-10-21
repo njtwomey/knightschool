@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Ponziani Opening: Jaenisch Counterattack"]
+[ECO "C44"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "fork"]
+[Themes "counter-in-the-centre,king-hunt"]
+[For "black"]
+[Kind "rare"]
+[Opponent "3.c3"]
+[Start "1. e4 e5 2. Nf3 Nc6"]
+
+3. c3 { White wants d4 to build a big centre. } 3... Nf6 { Counterattacks e4, so White's d4 plan has a cost. } 4. d4 Nxe4 { Takes the pawn. After d4 the knight on e4 is hard to attack. } 5. d5 Bc5 { Ignores the attack on the knight on c6 and hits f2: after dxc6 Bxf2+ the white king has to walk. } 6. dxc6 Bxf2+ { Check wins the pawn back and drives the king out. } 7. Ke2 Bb6 { The bishop retreats safely and White's king is stuck in the middle. } *

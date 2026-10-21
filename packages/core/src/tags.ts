@@ -16,6 +16,9 @@ export const KNOWN_TAGS = [
   'RefutedBy',
   'Themes',
   'Kind',
+  'Start', // tree chapters: the moves before the chapter's own
+  'For', // tree chapters: the side the line is written for, which [Kind] and [Risk] are relative to
+  'Opponent', // tree chapters: what the opponent does to reach the line ("3...Bc5")
 ] as const;
 
 const list = (value: string | undefined) =>

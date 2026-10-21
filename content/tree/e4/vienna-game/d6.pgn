@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Game: Omaha Gambit"]
+[ECO "C25"]
+[Character "positional,gambit"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "development-lead,f-pawn-tension"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...d6"]
+[Start "1. e4 e5 2. Nc3 Nf6 3. f4"]
+
+3... d6 { A quiet reply: Black guards e5 and keeps the position closed. White does not need to force anything. } 4. Nf3 { Develops and keeps all the options open: White can still take on e5 or let Black take on f4. } 4... Be7 ( 4... exf4 5. d4 { Takes the centre first; the f4 pawn can be won back later with Bxf4. } 5... Nh5 6. g3 { Opens the way for the bishop to take the pawn on f4 or the queen to attack it. } 6... Be7 7. Qd3 ) ( 4... Nc6 5. Bb5 { Pins the knight and lines up castling; the bishop also takes some pressure off the centre. } 5... exf4 6. d4 a6 7. Be2 ) ( 4... Bg4 5. Be2 { Develops and prepares to castle. If Black takes on f3 the bishop recaptures. } 5... Nc6 6. O-O ) 5. Bc4 { Develops the bishop on the diagonal aimed at the f7 pawn. } 5... O-O ( 5... exf4 6. d3 { Supports the e4 pawn so that ...Nxe4 is not a threat, and clears the bishop on c1. } 6... Nh5 7. O-O O-O ) 6. d3 { Supports the e4 pawn so that ...Nxe4 is not a threat, and opens the bishop on c1. } 6... Nc6 7. O-O { Castles. The king is safe and the rook sits behind the f-pawn. } 7... exf4 ( 7... Bg4 8. h3 Bxf3 9. Qxf3 ) 8. Bxf4 { Wins the pawn back with the bishop developing at the same time. Plan: Qd2 or Qe1, then Rae1 and a central push with e5 when it is safe. } *

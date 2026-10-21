@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit Declined"]
+[Variation "Elephant Trap"]
+[ECO "D51"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pin"]
+[Refutes "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. cxd5 exd5 6. Nxd5"]
+[For "black"]
+[Kind "for-us"]
+[Opponent "5.cxd5"]
+[Start "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7"]
+
+5. cxd5 exd5 6. Nxd5 $2 { The knight on f6 looks pinned, so d5 looks free. It is not. } 6... Nxd5 $1 7. Bxd8 Bb4+ { Check, so White has no time to save the bishop. } 8. Qd2 Bxd2+ 9. Kxd2 Kxd8 { Black is a piece for a pawn up. } *

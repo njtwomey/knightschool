@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Main Line, Mieses Variation"]
+[ECO "B01"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-behind-knight,quick-development"]
+[For "white"]
+[Kind "main"]
+[Opponent "2...Qxd5 3.Nc3 Qa5"]
+[Start "1. e4"]
+
+1... d5 2. exd5 { Takes the pawn. Black has to recapture with the queen, which comes out early and can be chased with tempo (a free developing move). } 2... Qxd5 3. Nc3 { Develops a piece and attacks the queen, so White gets a free move. } 3... Qa5 4. d4 { Claims the centre and opens the c1 bishop. The queen on a5 has few squares and little to do there. } 4... Nf6 ( 4... c6 5. Bd2 Nf6 6. Nf3 Bf5 7. Bc4 e6 ) ( 4... Bf5 5. Nf3 Nf6 6. Bd2 ) ( 4... Nc6 5. d5 { Gains space with tempo: the knight must retreat. } 5... Nb8 6. Bd2 c6 7. Nf3 Nf6 ) 5. Nf3 { Develops and guards d4, so the centre pawn stays safe while the bishops come out. } 5... Bf5 ( 5... c6 6. Bd2 Bf5 7. Bc4 e6 ) ( 5... Nc6 6. Bd2 Bf5 7. Nb5 Qb6 8. c4 ) 6. Bd2 { Tucks the bishop behind the c3 knight. If that knight moves, the bishop attacks the queen on a5, so Nb5 or Nd5 ideas come with tempo. [%cal Gd2a5] } 6... c6 { Covers both b5 and d5, the right way to stop those knight jumps. } 7. Bc4 { Develops toward f7 and the e6 square, and gets ready to castle. } 7... e6 8. Qe2 { Clears d1 so White can castle long, and keeps an eye on the e-file. } 8... Bb4 9. O-O-O { Castles long: the king is safe on c1 and the rook already stands on d1 behind the d4 pawn. When Black leaves the book, develop, castle and keep d4 guarded. } *

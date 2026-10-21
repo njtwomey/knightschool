@@ -1,0 +1,38 @@
+name: Danish Gambit
+eco: C21
+side: white
+opening: pawn-gambits
+tier: 2
+trigger: '1. e4 e5 2. d4 exd4 3. c3'
+summary: >-
+  White gives up two pawns with [3.c3](rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq -) to get both bishops
+  pointing at Black's king and a big lead in development. You learn what to play when Black takes the pawns, when Black
+  hands one back with ...d5, and how to meet the other replies.
+plans:
+  - Develop at top speed. Bring the bishops to c4 and b2, then knights to c3 and f3, and castle by move ten.
+  - Aim the bishops at the king. The one on b2 hits g7 along the long diagonal and the one on c4 hits f7.
+  - Win a pawn back where you can, and trade queens only when it wins a pawn or ends the danger.
+  - If Black plays ...d5 and returns the pawn, take on d5, retake on d4 and you are fine with a good centre.
+  - Look for the shot Bxf7+ whenever Black's king is still in the middle and f7 is only guarded by the king.
+motifs: [f7-weakness, pawn-chain, give-back-material, hanging-piece, remove-the-defender, queen-trap]
+tags: [e4, open, gambit]
+lines:
+  - id: accepted-nf6
+    section: If Black takes the pawns
+  - id: accepted-schlechter-d5
+    section: If Black takes the pawns
+  - id: accepted-qe7
+    section: If Black takes the pawns
+  - id: accepted-nxc3
+    alternative: true
+    section: If Black takes the pawns
+  - id: declined-d5
+    section: If Black declines
+  - id: declined-nf6
+    section: If Black declines
+  - id: greedy-nxe4
+    section: Traps
+  - id: queen-grabs-g2
+    section: Traps
+  - id: declined-qxd4
+    section: Traps

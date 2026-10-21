@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Danish Gambit"]
+[Variation "Danish Gambit Declined: Sorensen Defense"]
+[ECO "C21"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "isolated-pawn,piece-activity"]
+[For "white"]
+[Kind "main"]
+[Opponent "3...d5"]
+[Start "1. e4 e5 2. d4 exd4 3. c3 d5 4. exd5 Qxd5 5. cxd4 Nc6 6. Nf3 Bb4+ 7. Nc3 Bg4 8. Be2 Bxf3 9. Bxf3"]
+
+9... Qc4 ( 9... Qxd4 10. Bxc6+ bxc6 11. Qxd4 ) 10. Bxc6+ { Gives up the bishop pair, but ruins Black's pawns and wins time. } 10... bxc6 11. Qe2+ { Check on the e-file. } 11... Qxe2+ 12. Kxe2 { Plan: keep the king safe, put the rooks in the centre and use the pawn on d4. } *

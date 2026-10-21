@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Barmen Defense, Modern Line"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "tempo-gain,d4-pawn-centre"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "5...Bg4"]
+[Start "1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. d4 Nf6 5. Nf3"]
+
+5... Bg4 6. Be2 { Develops, and answers the pin on f3: if Black takes the knight, the bishop recaptures and White keeps both bishops. } 6... e6 ( 6... Nc6 7. Be3 cxd4 8. cxd4 e6 9. Nc3 { Now the c-pawn has gone from c3, so the knight can come out with tempo and hit the queen. [%cal Gc3d5] } ) 7. h3 { Asks the bishop what it wants to do. If it takes on f3, White gets the two bishops. } 7... Bh5 ( 7... Bxf3 $6 8. Bxf3 { Now the bishop attacks the queen and the pawn on b7 at once, so Black loses time and can hardly cover both. [%cal Gf3d5,Gf3b7] } 8... Qd7 9. dxc5 ) 8. O-O Nc6 9. Be3 { Develops the last minor piece and guards d4 before Black captures there. } 9... cxd4 10. Nxd4 { Recaptures with the knight, which sits well on d4 and stops ...Bb4 ideas, and keeps the c-pawn at home. } 10... Bxe2 11. Qxe2 Be7 12. Rd1 *

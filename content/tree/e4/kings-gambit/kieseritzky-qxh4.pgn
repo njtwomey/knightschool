@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "King's Gambit Accepted"]
+[Variation "King's Gambit Accepted: Kieseritzky Gambit"]
+[ECO "C39"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "queen-trap"]
+[Refutes "1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 Qxh4+"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "2...exf4 3.Nf3 g5 4.h4 g4 5.Ne5 Qxh4+"]
+[Start "1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5"]
+
+5... Qxh4+ $2 { Takes a pawn with check, but the rook on h1 is lined up behind the h4 pawn. } 6. Rxh4 { The rook takes the queen. The h-pawn was bait: it was protected by the rook all along. } 6... Nf6 *

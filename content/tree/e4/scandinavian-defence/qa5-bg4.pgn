@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Lasker Variation"]
+[ECO "B01"]
+[Character "positional,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "h3-bishop-question,bishop-pair"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "5...Bg4"]
+[Start "1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3"]
+
+5... Bg4 { Pins the f3 knight to the queen on d1, so that knight cannot move without losing the queen. } 6. h3 { Asks the bishop what it wants. Taking on f3 gives White the bishop pair; going to h5 lets g4 push it back. } 6... Bxf3 ( 6... Bh5 7. g4 { The pawn takes f5 and g4 away from the bishop, so it can only go to g6. } 7... Bg6 8. Ne5 Nbd7 9. Nc4 { Attacks the queen, and Black has to find a safe square for it. } 9... Qa6 10. Bf4 ) 7. Qxf3 { Takes back with the queen, which now eyes b7 and keeps d4 guarded. } 7... c6 8. Bd2 { Frees the queenside so White can castle long, and the bishop stands behind the c3 knight again. } 8... Nbd7 9. O-O-O e6 10. Kb1 { Steps off the c-file before the black queen and bishop can use it. Plan: g4 and h4 on the kingside, using the bishop pair against the knights. } *

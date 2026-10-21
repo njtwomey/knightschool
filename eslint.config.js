@@ -68,7 +68,14 @@ const boundaryPolicies = [
 
 export default tseslint.config(
   {
-    ignores: ['**/dist/**', '**/coverage/**', 'apps/web/public/**', '**/node_modules/**'],
+    ignores: [
+      '**/dist/**',
+      '**/coverage/**',
+      'apps/web/public/**',
+      '**/node_modules/**',
+      '.claude/worktrees/**',
+      '.content/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

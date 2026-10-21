@@ -117,6 +117,30 @@ export const OpeningManifest = z.object({
 });
 export type OpeningManifest = z.infer<typeof OpeningManifest>;
 
+/**
+ * One entry of `lines:` in course.yaml: a line of the book for the course's side, by id, optionally with what this
+ * course says differently about it. Traps are listed here too; the chapter's [Kind] says which is which.
+ */
+export const CourseEntry = z.union([
+  Slug,
+  z.object({
+    id: Slug,
+    /** Overrides the chapter's [Kind] for this course: a main line elsewhere can be a sideline here. */
+    kind: z.union([LineKind, TrapKind]).optional(),
+    alternative: z.boolean().default(false),
+    section: z.string().min(1).optional(),
+    /** Overrides the chapter's [Opponent]. */
+    opponent: z.string().min(1).optional(),
+  }),
+]);
+export type CourseEntry = z.infer<typeof CourseEntry>;
+
+/** course.yaml: the course-level material and the lines it takes from its side's book, in teaching order. */
+export const CourseManifest = OpeningManifest.omit({ lines: true, traps: true }).extend({
+  lines: z.array(CourseEntry).min(1),
+});
+export type CourseManifest = z.infer<typeof CourseManifest>;
+
 export const Opening = OpeningManifest.omit({ lines: true, traps: true }).extend({
   id: Slug, // the folder name
   rootEpd: z.string(),

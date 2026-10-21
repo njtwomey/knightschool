@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Piano, Main Line"]
+[ECO "C54"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "centre-fight,bishop-check"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.c3 Nf6 5.d4"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6"]
+
+5. d4 { White opens the centre at once. This is the one sharp line to learn. } 5... exd4 { Take the pawn. If Black ignores it, e5 comes with a tempo on the knight and White gets a huge centre. } 6. cxd4 Bb4+ { A check that gains time: White has to block it, and every block gives Black something. } 7. Bd2 { The normal answer. } ( 7. Nc3 Nxe4 { Black grabs the pawn. The bishop on b4 pins the knight on c3, so White cannot easily win the knight on e4. } 8. O-O Bxc3 9. d5 Bf6 10. Re1 Ne7 11. Rxe4 d6 { White has open lines for the pawn, so Black must play carefully and give material back if needed. } ) 7... Bxd2+ { The trade makes White recapture with a knight, which lands on an awkward square on d2. } 8. Nbxd2 d5 { Breaks in the centre now, while White's king is still on e1. After exd5 Nxd5 Black's pieces are active. } 9. exd5 Nxd5 { Recaptures with the knight, which now sits in the centre and attacks White's pieces. } 10. Qb3 { Attacks the knight on d5 and the pawn on b7 together. } 10... Nce7 { Defends d5 a second time and prepares ...c6, which also shuts off the b7 attack. } 11. O-O O-O { Both kings are safe. Plan: ...c6, ...Be6 and ...Rb8 or ...Qd7. Black's knights on d5 and e7 are solid, and the pawn on d4 is White's only target. } *

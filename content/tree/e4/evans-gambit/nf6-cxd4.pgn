@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Evans Gambit"]
+[Variation "Italian Game: Evans Gambit, McDonnell Defense, Nf6 mistake"]
+[ECO "C51"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "bishop-in-trouble"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. O-O Nf6"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "4...Bxb4 5.c3 Bc5 6.d4 exd4 7.O-O Nf6"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. O-O"]
+
+7... Nf6 $2 { Attacks e4 but leaves the bishop on c5 where a pawn can attack it. } 8. cxd4 { Hits the bishop and keeps e5 in reserve. Whichever way it goes, Black loses time or material. } 8... Bb6 9. e5 { Kicks the knight, which has no good square, and the centre pawns roll forward. } 9... Ng4 10. Nc3 { Another piece in; White threatens Bxf7+, h3 and Nd5 with a big edge. } *

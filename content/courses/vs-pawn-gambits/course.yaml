@@ -1,0 +1,53 @@
+name: Pawn Gambits (as Black)
+eco: C30
+side: black
+opening: pawn-gambits
+tier: 3
+trigger: ''
+summary: >-
+  The same gambits as the White courses, seen from Black's chair. Most lines here are borrowed from the Open Games and
+  Queen's Gambit Declined courses and are drilled there; they are gathered by gambit so you can read them side by side.
+  The Falkbeer and Albin lines are gambits Black plays. For the Rousseau Gambit see its own course.
+plans:
+  - Take the pawn only when you know how to give it back; otherwise decline calmly and develop.
+  - Fight for the centre with a pawn (Falkbeer, Albin) when White's lead in development is not yet dangerous.
+  - Count White's developing moves against the pawn you took before you grab a second one.
+motifs: [decline-the-gambit, develop-first]
+tags: [e4, d4, gambit]
+lines:
+  - id: kings-gambit-declined
+    alternative: true
+    section: King's Gambit
+  - id: kings-gambit-fischer
+    alternative: true
+    section: King's Gambit
+  - id: vienna-gambit
+    alternative: true
+    section: Vienna Gambit
+  - id: danish-gambit-declined
+    alternative: true
+    section: Danish, Scotch and Göring gambits
+  - id: scotch-gambit
+    alternative: true
+    section: Danish, Scotch and Göring gambits
+  - id: goring-gambit
+    alternative: true
+    section: Danish, Scotch and Göring gambits
+  - id: evans-gambit
+    alternative: true
+    section: Evans Gambit
+  - id: orthodox
+    alternative: true
+    section: Queen's Gambit
+  - id: exchange
+    alternative: true
+    section: Queen's Gambit
+  - id: cambridge-springs
+    alternative: true
+    section: Queen's Gambit
+  - id: falkbeer
+    alternative: true
+    section: Gambits Black can play
+  - id: albin
+    alternative: true
+    section: Gambits Black can play

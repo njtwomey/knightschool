@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Nimzo-Larsen Attack"]
+[Variation "Nimzo-Larsen Attack: Classical Variation"]
+[ECO "A01"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "long-diagonal"]
+[Refutes "1. b3 d5 2. Bb2 Nf6 3. e3 e6 4. Bxf6 Qxf6 5. Nf3"]
+[For "black"]
+[Kind "for-us"]
+[Opponent "4.Bxf6"]
+[Start "1. b3 d5 2. Bb2 Nf6 3. e3 e6 4. Bxf6 Qxf6"]
+
+5. Nf3 $2 { Natural development, but the bishop that guarded the long diagonal is gone and nothing protects the rook on a1. } 5... Qxa1 { The queen takes the rook; the knight on b1 does not guard a1. } 6. Nc3 Qxd1+ { Black trades queens as well and stays a whole rook ahead. } 7. Kxd1 *

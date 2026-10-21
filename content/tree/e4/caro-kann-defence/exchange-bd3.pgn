@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence: Advance Variation"]
+[Variation "Exchange Variation"]
+[ECO "B13"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "open-centre,piece-activity"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "2...d5"]
+[Start "1. e4 c6 2. d4 d5"]
+
+3. exd5 { A simple alternative: trade pawns and play a normal open game without learning the Advance. } 3... cxd5 { Recapturing with the c-pawn keeps the centre even and opens the c-file for Black's rooks. } 4. Bd3 { Aims at h7 and the kingside; the bishop is not bothered by the closed centre. } 4... Nc6 5. c3 { Props up d4 and leaves the queen a square on c2. } 5... Nf6 6. Bf4 { Develops the bishop outside the pawn chain, before ...e6 can lock it out. } 6... Bg4 7. Qb3 { Hits b7 and d5 together. } 7... Qd7 8. Nd2 e6 *

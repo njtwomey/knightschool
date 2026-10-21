@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Modern Variation, Bishop Check"]
+[ECO "B01"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "simple-development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "2...Nf6"]
+[Start "1. e4 d5 2. exd5 Nf6"]
+
+3. Bb5+ { A calmer way to play: check first and keep the pawn, avoiding the sharper lines with c4 and d4. } 3... Bd7 4. Bc4 { Keeps the extra pawn for now. The bishop stays on its good diagonal and White follows with d3 or Nf3. } 4... Bg4 5. f3 Bf5 6. Nc3 c6 7. dxc6 Nxc6 8. Nge2 { Develops without blocking the f-pawn. Plan: castle, then d4 with a healthy extra pawn and a calm position. } *

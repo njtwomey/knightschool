@@ -1,0 +1,37 @@
+name: Against flank openings and irregular first moves
+eco: A00
+side: black
+opening: flank-openings
+tier: 2
+trigger: ''
+summary: >-
+  When White does not open with e4 or d4, Black plays the same few moves every time: ...Nf6, ...e6, ...d5, ...Be7,
+  ...O-O, then ...c5 and ...Nc6. Most of these games turn into a Queen's Gambit Declined or a quiet King's Indian
+  Attack, and the odd ones (the Bird, the Grob) get a short answer each.
+plans:
+  - Build the same setup against everything - ...Nf6, ...e6, ...d5, ...Be7, castle - and do not worry about the move
+    order.
+  - Strike at the centre with ...c5 once you are castled, and develop the queen's knight to c6.
+  - Keep the bishop on c8 active (outside the pawns) when White has no pawn on e4 to stop it.
+  - If White plays e4 against your d5 pawn, take on e4 or push ...d4 only when a piece is attacked, not by default.
+motifs: [centre-pawns, develop-first, castle-early, long-diagonal, hanging-piece, fork]
+tags: [flank, irregular, qgd-setup]
+lines:
+  - english
+  - english-e4
+  - english-g3
+  - reti-c4
+  - reti-kia
+  - reti-b3
+  - bird
+  - nimzo-larsen
+  - hungarian-g3
+  - polish
+  - van-geet
+  - grob
+  - flank-and-irregular-odd-first-moves
+  - larsen-long-diagonal
+  - bird-williams-g4
+  - kadas-beginners-trap
+  - grob-qb3-fork
+  - english-bb4-pin

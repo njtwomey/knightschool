@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Vienna Game"]
+[Variation "Vienna Game: Vienna Gambit, 3...Bc5"]
+[ECO "C25"]
+[Character "gambit,sharp"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "centre-fight"]
+[For "white"]
+[Kind "rare"]
+[Opponent "3...Bc5"]
+[Start "1. e4 e5 2. Nc3 Nf6 3. f4"]
+
+3... Bc5 $2 { Develops the bishop towards f2, but it does not stop fxe5. } 4. fxe5 { Takes the pawn, which kicks the knight. The knight cannot safely go anywhere active. } 4... Ng8 ( 4... Nxe4 5. Nxe4 { Takes the knight. If the bishop grabs the rook on g1, Rxg1 leaves White a piece up. } 5... Bxg1 6. Rxg1 d5 7. Ng3 ) ( 4... Nc6 5. exf6 Qxf6 6. Nf3 ) 5. d4 { Hits the bishop and builds the centre. The knight has been pushed back to g8. } 5... Bb6 ( 5... Bxd4 6. Qxd4 { Wins the bishop for a pawn, and the queen is well placed in the centre, attacking g7. } ) 6. Qg4 { Attacks g7, which Black cannot defend easily. Black must give up castling or lose a pawn, and White stays a pawn up. } 6... Kf8 *

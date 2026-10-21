@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Elephant Gambit"]
+[Variation "Elephant Gambit: Paulsen Countergambit"]
+[ECO "C40"]
+[Character "tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,hanging-piece"]
+[Themes "hanging-knight"]
+[Refutes "1. e4 e5 2. Nf3 d5?! 3. exd5 e4 4. Ng5"]
+[For "white"]
+[Kind "against-us"]
+[Opponent "3...e4"]
+[Start "1. e4 e5 2. Nf3 d5 3. exd5 e4"]
+
+4. Ng5 $2 { Dodges the pawn, but lands on a square the black queen already covers along the diagonal from d8. } 4... Qxg5 { Takes the knight for nothing. } 5. Nc3 Qe5 { Escapes the attack and keeps the queen in the centre, while Black is a whole piece up. } 6. Qe2 Nf6 *

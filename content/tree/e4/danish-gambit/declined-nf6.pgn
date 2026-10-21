@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Danish Gambit"]
+[Variation "Danish Gambit: Declined, Knight to f6"]
+[ECO "C21"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "space,centre-pawns"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Nf6"]
+[Start "1. e4 e5 2. d4 exd4 3. c3"]
+
+3... Nf6 4. e5 { Hits the knight and gains space. The knight has no easy squares and the pawn on e5 cannot be taken. } 4... Nd5 5. cxd4 { Takes back the pawn and builds the centre. Black's knight on d5 is well placed but White's pawn centre is bigger. } 5... d6 6. Nf3 { Develops and adds a third attacker to e5. } 6... Nc6 7. Bc4 { Hits the knight on d5 and eyes f7. } 7... Nb6 8. Bb5 *

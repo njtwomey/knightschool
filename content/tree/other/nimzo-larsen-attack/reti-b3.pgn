@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Nimzo-Larsen Attack"]
+[Variation "Nimzo-Larsen Attack: Réti Move Order"]
+[ECO "A06"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "qgd-setup"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "2.b3"]
+[Start "1. Nf3 d5"]
+
+2. b3 Nf6 { Develops and waits. The d5 pawn already holds the centre, so Black has no need to hurry. } 3. Bb2 e6 { Backs up d5 and frees the c8 bishop. } 4. e3 Be7 5. c4 O-O 6. Be2 c5 7. O-O Nc6 8. cxd5 exd5 *

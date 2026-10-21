@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Italian Game"]
+[Variation "Two Knights Defence: 5...Na5"]
+[ECO "C57"]
+[Character "solid,positional"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "extra-pawn,development-lead"]
+[For "white"]
+[Kind "main"]
+[Opponent "3...Nf6 4.Ng5 d5 5.exd5 Na5"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4"]
+
+3... Nf6 { A second option, and a sharp one. Our course plays 3...Bc5 instead, so this line is only shown and never drilled. } 4. Ng5 { Hits f7 a second time, together with the bishop on c4, so Black has to deal with the threat of Nxf7 right now. [%cal Gg5f7,Gc4f7] } 4... d5 { Strikes in the centre and blocks the bishop's diagonal to f7. } ( 4... Nxe4 5. Bxf7+ { Takes the pawn with check and drags the king to e7, where it can no longer castle. } 5... Ke7 6. d4 { Opens the centre while Black's king is stuck in the middle and hits the pawn on e5. } 6... h6 7. Nxe4 Kxf7 8. d5 ) ( 4... h6 5. Nxf7 { The bishop on c4 protects this knight, so the king cannot take it, and the knight forks the queen and the rook. } 5... Qe7 6. Nxh8 ) 5. exd5 { Takes the pawn and opens the e-file. Black will now attack the bishop, and White's job is to keep the extra pawn safe. } 5... Na5 { Chases the bishop away. Never play 5...Nxd5? 6.Nxf7, the Fried Liver Attack, which wins for White. } 6. Bb5+ { The bishop leaves with check, so Black has no time to take back on d5. } 6... c6 ( 6... Bd7 7. Qe2 { Defends the bishop on b5. After ...Bxb5 the queen recaptures and White keeps the extra pawn. } 7... Be7 8. Nf3 ) ( 6... Nfd7 7. Ne6 ) 7. dxc6 { Takes the pawn that attacks the bishop and d5, so Black cannot win the pawn back with ...cxd5. } 7... bxc6 8. Be2 { Keeps the bishop safe and on the kingside, where it still protects the knight and the king. } 8... h6 ( 8... e4 9. d3 ) 9. Nf3 { Retreats before the knight is trapped on g5. } 9... e4 10. Ne5 { A strong square: the knight eyes c6 and f7 and Black has no pawn to chase it away. } 10... Bd6 ( 10... Qd4 11. f4 ) 11. d4 { Supports the knight on e5 and opens the c1 bishop. } 11... exd3 12. Nxd3 { Recaptures with the knight so the pieces stay together. White is a pawn up but Black has the bishops and open lines. Castle, develop the queenside and swap pieces; every trade makes the extra pawn count for more. } 12... O-O *

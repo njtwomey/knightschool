@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "London System"]
+[Variation "Accelerated London System, Poisoned Pawn"]
+[ECO "D00"]
+[Character "tactical,sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,fork"]
+[Refutes "1. d4 d5 2. Bf4 c5 3. e3 Qb6 4. Nc3 Qxb2"]
+[Themes "nd5-c7-fork,b2-poisoned"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "4...Qxb2"]
+[Start "1. d4 d5 2. Bf4 c5 3. e3 Qb6 4. Nc3"]
+
+4... Qxb2 $6 { Takes the b2 pawn, but the queen has left d5 unguarded and the king is still in the centre. } 5. Nxd5 { Wins the pawn the queen used to guard and threatens Nc7+, which forks king and rook, and Rb1, which traps the queen. } 5... e6 ( 5... cxd4 6. Nc7+ Kd8 7. Qxd4+ Qxd4 8. exd4 ) 6. Nc7+ { Check from a square no black piece covers; the king must move and the rook on a8 is lost. } 6... Kd8 7. Be2 { Brings out a piece and keeps the threat of Nxa8 alive. Black cannot save the rook and the queen both. } 7... Nf6 8. Nxa8 *

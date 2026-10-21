@@ -1,0 +1,34 @@
+name: Caro-Kann Defence
+eco: B10
+side: black
+opening: caro-kann-defence
+tier: 3
+trigger: '1. e4 c6'
+summary: >-
+  A solid reply to 1.e4: the c6 pawn backs up ...d5, and Black's light-squared bishop gets out before ...e6 can shut it
+  in. Learn one set-up against each way White can meet it, from the Advance and Exchange to the odd second moves.
+plans:
+  - Play ...d5 on the next move, and take the bishop out to f5 or g4 before you play ...e6.
+  - Against the Advance (e5), hit the base of the chain with ...c5 and develop quietly.
+  - Against the Exchange, put the queen on c7 and trade the light bishops; Black has no weaknesses.
+  - Check every White move that attacks something for a free piece before you reply.
+motifs: [good-bishop-out, attack-the-base, smothered-mate, isolated-queens-pawn, counting, hanging-piece]
+tags: [e4, semi-open, solid]
+lines:
+  - advance-short
+  - advance-h4
+  - advance-nc3
+  - advance-g4
+  - caro-kann-exchange
+  - classical
+  - panov-attack
+  - two-knights
+  - fantasy-f3
+  - king-indian-attack
+  - accelerated-panov
+  - hillbilly
+  - classical-smothered-mate
+  - exchange-qb3-pressure
+  - exchange-bf4-blunder
+  - hillbilly-bxd5
+  - hillbilly-qh5

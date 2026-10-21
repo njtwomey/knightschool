@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Evans Gambit"]
+[Variation "Italian Game: Evans Gambit, Compromised Defense"]
+[ECO "C52"]
+[Character "gambit,sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pawn-grab"]
+[Themes "second-pawn,queen-sortie"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...Bxb4 5.c3 Ba5 6.d4 exd4 7.O-O dxc3"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O"]
+
+7... dxc3 { Black takes a second pawn. White does not hurry to take it back, because pieces out matter more. } 8. Qb3 { Hits f7 twice, with the queen and the bishop, and also eyes b7. Black has to meet the threat of Bxf7+. } 8... Qf6 9. e5 { Hits the queen with a pawn and opens the diagonal for the bishop on c4. } 9... Qg6 10. Nxc3 { Wins a pawn back with a developing move, so the gambit pawns are repaid and White leads in development. } 10... Nge7 11. Ba3 { Stops Black castling, because the bishop covers f8. Plan: Rad1 and Ne4 so that the pieces aim at Black's uncastled king. } *

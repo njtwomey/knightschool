@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Evans Gambit"]
+[Variation "Italian Game: Evans Gambit Declined, Showalter Variation"]
+[ECO "C51"]
+[Character "gambit,solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "queenside-space,quiet-development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...Bb6"]
+[Start "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4"]
+
+4... Bb6 { Black declines and keeps the bishop safe on b6. White has lost no pawn, but the bishop now eyes f2. } 5. a4 { Threatens a5, which would trap the bishop. Black has to spend a move on it. } 5... a6 ( 5... d6 6. a5 { Black ignored the threat: the bishop on b6 has no safe square, so White wins it. } 6... Bxa5 7. bxa5 ) 6. Nc3 { Brings out a piece and eyes d5. The b4 pawn gives White space on the queenside. } 6... Nf6 7. d3 { Guards e4 and opens the way for the bishop on c1. } 7... d6 8. Rb1 { Puts the rook on the b-file. Plan: a5 to win space, Bg5 or Be3, and castle. } *
