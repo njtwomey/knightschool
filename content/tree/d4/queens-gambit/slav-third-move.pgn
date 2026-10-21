@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Slav Defense: Modern Line, early bishop"]
+[ECO "D11"]
+[Character "positional,tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pawn-grab"]
+[Themes "hit-b7,transposition"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Bf5"]
+[Start "slav 3.Nf3"]
+
+3... Bf5 { The bishop comes out before Black has played ...Nf6, so b7 and d5 are both a little loose. } ( 3... Bg4 4. Ne5 { Hits the bishop at once. It must move again, and from h5 or f5 it no longer guards b7. } 4... Bh5 ( 4... Bf5 5. cxd5 { Takes first. If Black takes back with the c-pawn, Qb3 hits b7. } 5... cxd5 6. Qb3 ) ( 4... Bc8 5. cxd5 cxd5 6. Nc3 { The bishop is back home and White is two moves ahead in development. } ) 5. Qb3 { Attacks b7, which the bishop on h5 cannot guard. } ) ( 3... e6 4. e3 { Keeps it simple: if Black takes on c4, the bishop takes back. } 4... Nf6 ( 4... dxc4 5. Bxc4 Nf6 6. O-O ) 5. Nc3 { The same Semi-Slav position as in the Slav line. } ) 4. cxd5 { Swaps on d5 so the queen can go to b3 and hit b7. } 4... cxd5 5. Qb3 { Attacks b7, which the bishop on f5 no longer guards. } 5... Nc6 ( 5... Qb6 6. Qxd5 { Nothing guards d5 any more, so White simply takes it. } ) ( 5... Nf6 6. Nc3 { The same position as the Slav with 4...Bf5 and 6.Qb3. } ) 6. Nc3 { Develops and adds a second attacker on d5. } 6... Nf6 { The same position as in the Slav with 4...Bf5: White can take on b7. } *

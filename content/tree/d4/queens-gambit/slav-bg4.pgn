@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Slav Defense: Three Knights Variation, 4...Bg4"]
+[ECO "D15"]
+[Character "positional,tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pawn-grab"]
+[Themes "hit-b7,queen-trade"]
+[For "white"]
+[Kind "main"]
+[Opponent "4...Bg4"]
+[Start "slav 4.Nc3"]
+
+4... Bg4 { Pins the knight on f3 to nothing yet, but takes the bishop out of c8, so b7 has no guard. } 5. cxd5 { Swaps first, so the queen can come to b3 without ...dxc4 hitting it. } 5... cxd5 ( 5... Nxd5 6. e4 { Chases the knight with a pawn and takes the centre. } 6... Nxc3 7. bxc3 ) 6. Qb3 { Attacks b7 again, the same idea as against ...Bf5. } 6... Qb6 ( 6... Bxf3 7. Qxb7 { Takes on b7 first. White takes back on f3 next move and is a pawn up. } 7... Nbd7 8. exf3 ) ( 6... Nc6 7. Qxb7 Bd7 { The same position as against 4...Bf5: the queen goes back to b3 a pawn up. } ) 7. Qxb6 axb6 8. Nb5 { Hits c7. Black's doubled b-pawns and the hole on c7 are White's targets. Plan: Bf4 and Nc7+, then Rc1. } *

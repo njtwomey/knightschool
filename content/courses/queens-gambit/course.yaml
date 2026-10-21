@@ -54,3 +54,15 @@ lines:
     section: Declined (2...e6)
   - id: qgd-tarrasch
     section: Declined (2...e6)
+  - id: slav-bf5
+    section: Slav (2...c6)
+  - id: slav-bg4
+    section: Slav (2...c6)
+  - id: semi-slav
+    section: Slav (2...c6)
+  - id: semi-slav-meran
+    section: Slav (2...c6)
+  - id: slav-third-move
+    section: Slav (2...c6)
+  - id: slav-accepted
+    section: Slav (2...c6)

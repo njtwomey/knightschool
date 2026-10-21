@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Semi-Slav Defense: Normal Variation"]
+[ECO "D45"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-pair,quiet-development"]
+[For "white"]
+[Kind "main"]
+[Opponent "4...e6 5.e3 Bb4"]
+[Start "slav 5.e3"]
+
+5... Bb4 { Pins the knight on c3. Black can take it later to double White's pawns. } ( 5... Be7 6. Bd3 ) ( 5... Bd6 6. Bd3 { Both sides develop. If Black now plays ...Nbd7, this is the usual Semi-Slav with the bishop on d6. } ) 6. Bd3 { Develops towards the kingside and gets ready to castle. If Black takes on c4, this bishop takes back. } 6... O-O ( 6... dxc4 7. Bxc4 { Pawn regained, and the bishop stands well on c4. } ) 7. O-O Nbd7 ( 7... c5 8. cxd5 exd5 9. dxc5 { Black is left with a lone pawn on d5, which White can attack. } ) 8. a3 { Asks the bishop. Taking on c3 gives White the two bishops; retreating costs Black time. } 8... Bxc3 ( 8... Bd6 9. e4 { The bishop has gone back, so White takes the centre with e4 at once. } ) 9. bxc3 { Plan: the pawn on c3 guards d4. Play cxd5, then Nd2, f3 and e4 to open the centre for the two bishops. } *

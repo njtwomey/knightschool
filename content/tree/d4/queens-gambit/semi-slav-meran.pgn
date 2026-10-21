@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Semi-Slav Defense: Meran Variation"]
+[ECO "D47"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "regain-the-pawn,e4-break"]
+[For "white"]
+[Kind "main"]
+[Opponent "5...Nbd7 6.Bd3 dxc4"]
+[Start "slav 6.Bd3"]
+
+6... dxc4 { Black waited for the bishop to move to d3 before taking, so it has to move again. } ( 6... Bd6 7. O-O O-O 8. e4 { With the king safe, White takes the centre. If Black takes on e4, the knight takes back. } ) ( 6... Be7 7. O-O ) ( 6... Bb4 7. O-O ) 7. Bxc4 b5 { Gains time on the bishop and makes room for ...Bb7. This is the Meran Variation. } 8. Bd3 { The bishop goes back to d3, where it supports e4 and looks at the kingside. } 8... Bb7 ( 8... a6 9. e4 { Takes the centre while Black is busy on the queenside. } ) 9. O-O { Castles first. Plan: e4 next, then e5 to push the knight off f6 and aim at Black's king. } *
