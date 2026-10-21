@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit Declined"]
+[Variation "Queen's Gambit Declined: Exchange Variation, 5.Nf3"]
+[ECO "D35"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "bishop-outside,bishop-trade,minority-attack"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.cxd5 exd5 5.Nf3, 5.e3 or 5.g3"]
+[Start "exchange 4...exd5"]
+
+5. Nf3 { Develops before deciding where the c1 bishop goes. With the knight on f3, White no longer has the Nge2 and f3 plan. } ( 5. e3 c6 6. Bd3 Bd6 { The bishop aims at h2 and White's king. Next come ...O-O, ...Re8 and ...Nbd7. } 7. Nf3 O-O 8. O-O Re8 ) ( 5. g3 Be7 { A bishop on g2 will press on d5, so Black keeps the position solid and castles first. } 6. Bg2 O-O 7. Nf3 c6 ) 5... Be7 { Develops and gets ready to castle. If Bg5 comes, the bishop on e7 already guards the knight on f6. } 6. Bg5 ( 6. Bf4 c6 7. e3 Bf5 8. Bd3 Bxd3 9. Qxd3 O-O ) ( 6. e3 Bf5 { The pawn on e6 has gone, so the c8 bishop comes out before ...Nbd7 can block it. } 7. Bd3 Bxd3 8. Qxd3 O-O ) ( 6. g3 O-O 7. Bg2 c6 ) ( 6. Qc2 c6 7. Bg5 g6 { Prepares ...Bf5. The queen on c2 eyes f5, and the pawn on g6 guards that square. } 8. e3 Bf5 ) 6... c6 { Guards d5 a second time and gives the queen the b6 and a5 squares. } 7. e3 Bf5 { The bishop develops outside the pawn chain, before ...Nbd7 shuts it in. } 8. Bd3 ( 8. Qb3 Qb6 { Offers to swap queens. Black does not need to defend b7 with a passive move. } ) 8... Bxd3 { Trades the bishops. In the Exchange Variation Black's light-squared bishop is often the hardest piece to use, so swapping it for White's best attacker suits Black. } 9. Qxd3 Nbd7 10. O-O O-O { Both kings are safe and the position is level. Plan: ...Re8 and ...Nf8 or ...Ne4, and if White starts the minority attack with b4, meet it with ...a6 or ...a5 to slow the pawns down. } *

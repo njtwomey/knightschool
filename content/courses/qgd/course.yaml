@@ -36,6 +36,10 @@ lines:
   - exchange
   - knight-first
   - bf4
+  - three-knights
+  - qgd-nc3-e3
+  - qgd-3-e3
+  - exchange-nf3
   - catalan
   - cambridge-springs
   - elephant-trap

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Réti Opening"]
+[Variation "Queen's Pawn Game: Zukertort Variation"]
+[ECO "D02"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "transposition,qgd-setup"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "1.Nf3 d5 2.d4"]
+[Start "reti-c4 1...d5"]
+
+2. d4 { The same position as 1.d4 d5 2.Nf3, so Black answers as after 1.d4: ...Nf6, then ...e6 against 3.c4 (the Queen's Gambit Declined) and ...c5 against 3.Bf4 (the London). } 2... Nf6 *

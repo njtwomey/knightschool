@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit Declined"]
+[Variation "Queen's Gambit Declined: Normal Defense, 4.e3"]
+[ECO "D37"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "c5-break,isolated-pawn,qgd-setup"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.e3"]
+[Start "orthodox 3...Nf6"]
+
+4. e3 { A quiet move: it guards d4 and opens the f1 bishop, but the c1 bishop is now shut in behind the e3 pawn. } 4... Be7 { With no pin on f6 to worry about, Black develops calmly and gets ready to castle. } 5. Nf3 ( 5. Bd3 { After 5...O-O 6.Nf3 this is the main line again. } 5... O-O 6. Nf3 ) 5... O-O 6. Bd3 { The bishop develops, but it will move again if Black takes on c4. } ( 6. b3 c5 { Hits d4 straight away, while White's bishop is still on f1. } ) ( 6. Qc2 c5 { The queen on c2 does not guard d4, so Black hits it. } ) ( 6. Be2 dxc4 7. Bxc4 c5 ) ( 6. a3 b6 { Prepares ...Bb7, the long diagonal toward White's king, and keeps ...c5 for later. } ) ( 6. cxd5 exd5 7. Bd3 c6 { Guards d5 with a pawn. Next come ...Bd6, ...Re8 and ...Nbd7. } ) 6... dxc4 { Now is the time to take: White's bishop has just moved to d3 and has to move again to take back. } 7. Bxc4 c5 { The freeing break. Black challenges d4 at once and opens a diagonal for the queen. } 8. O-O ( 8. dxc5 Bxc5 9. O-O Qxd1 { Trading queens leaves a level position with no weaknesses for Black. } 10. Rxd1 ) ( 8. a3 b6 { Prepares ...Bb7, and the bishop on c4 has nothing to hit. } ) 8... cxd4 { Swaps the c-pawn for the d-pawn and leaves White with a pawn on d4 that no other pawn can defend: an isolated pawn. } 9. exd4 Nc6 { Develops with an attack on d4, so White must keep a piece guarding it. } 10. a3 ( 10. Re1 b6 11. a3 Bb7 ) 10... b6 { Prepares ...Bb7 on the long diagonal. The pawn on b6 also keeps the knight on c6 safe from Bxc6 tricks. } 11. Re1 Bb7 { Black is fully developed. Plan: a knight to d5 to block the isolated pawn, trade pieces, and attack d4 with ...Rc8 and ...Qd6. Fewer pieces make the d4 pawn weaker. } *
