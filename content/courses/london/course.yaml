@@ -36,12 +36,22 @@ lines:
   - id: vs-d5-c5-qb6-qc1
     alternative: true
   - vs-d5-bf5
+  - vs-d5-nc6
+  - vs-d5-nc6-bf5
+  - vs-d5-e6
+  - vs-e6
+  - vs-nf6-e6
+  - vs-nf6-d6
+  - vs-nf6-c5
   - vs-nf6-g6
+  - vs-g6
   - vs-englund-gambit
+  - englund-bc5
   - vs-c5
   - vs-f5
   - nh5-queen-takes-knight
   - poisoned-b2
+  - bg4-queen-takes-bishop
   - englund-bc3-pin
   - englund-qd2-fork
   - englund-nbd2-hangs-bishop
