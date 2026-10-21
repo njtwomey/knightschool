@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { buildAuthored } from './authoring';
-import { contributionYaml, issueUrl, MAX_ISSUE_URL, readContribution, type Contribution } from './contribution';
+import {
+  CONTRIBUTION_KINDS,
+  contributionYaml,
+  issueFields,
+  issueUrl,
+  MAX_ISSUE_URL,
+  readContribution,
+  type Contribution,
+} from './contribution';
 import { parsePgn } from './pgn';
 
 const headers = `[Event "Knight School"]
@@ -114,6 +122,26 @@ describe('the link to propose it', () => {
       title: 'Contribution: My Italian',
       contribution: 'knightschool: contribution\n',
     });
+  });
+
+  it('fills in what the form asks that the course already says', () => {
+    const fields = issueFields(contribution);
+    expect(fields.kind).toBe(CONTRIBUTION_KINDS.course);
+    expect(fields.what).toBe('My Italian, played as white.\n\nMine.\n\nx\n\nLines: Main line; Main line, 3...Nf6.');
+    expect(fields.existing).toMatch(/course of its own/);
+    expect(fields.why).toBe('z');
+    // Lines that grow from the app's own chapters say so, and the kind follows.
+    const grows = issueFields({
+      ...contribution,
+      manifest: { ...contribution.manifest, opening: 'italian-game' },
+      chapters: [{ id: 'my-italian-3-nf6', pgn: branch }],
+    });
+    expect(grows.kind).toBe(CONTRIBUTION_KINDS.lines);
+    expect(grows.existing).toBe(
+      'Adds to the opening italian-game.\nIt grows from these lines already in the app: my-italian-main, after 3.Bc4.',
+    );
+    const params = paramsOf(issueUrl('Contribution: My Italian', 'yaml', fields).url);
+    expect(params).toMatchObject({ ...fields, contribution: 'yaml' });
   });
 
   it('falls back to a short note when the YAML would make it too long', () => {

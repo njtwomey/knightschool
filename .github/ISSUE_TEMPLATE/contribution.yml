@@ -1,20 +1,76 @@
 name: Contribution
-description: Propose lines written in Knight School (Profile, Author, Publish) for the app.
+description: Propose a course or lines for Knight School, written in the app (Profile, Author, Publish).
 title: 'Contribution: '
 labels: [contribution]
 body:
   - type: markdown
     attributes:
       value: |
-        Knight School filled this in from your course. It is one YAML document: the course (as `course.yaml`) and the
-        lines it needs, each with its headers and its moves as PGN, so anyone can paste the moves into a board to check
-        them. A course of its own has the opening `my-white-courses` or `my-black-courses`; the reviewer gives it a place.
+        Thanks for writing lines for Knight School. When you use **Publish** in the app, most of this form is filled in
+        from your course: check what it says, then answer the rest. The YAML at the end is the course itself; it is what
+        a reviewer imports to try it.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of contribution is it?
+      options:
+        - A new course
+        - New lines for a course in the app
+        - A fix to lines already in the app
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What is it?
+      description: The opening and the side it is played for, the idea in a sentence or two, and the lines it holds.
+      placeholder: |
+        The Fried Liver Attack for White, against 3...Nf6 in the Two Knights. White gives a knight for a fast attack on
+        the black king. Lines: main line 6...Nxd5 7.Nxf7; 5...Na5 as a sideline.
+    validations:
+      required: true
+  - type: textarea
+    id: existing
+    attributes:
+      label: What is already there?
+      description: >-
+        Which courses or lines in the app this builds on, overlaps or would replace, and what is missing today (for a
+        fix: which line, which move, and what is wrong with it).
+      placeholder: The Italian course stops at 4.Ng5 and never answers 4...d5.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why add it, and who is it for?
+      description: Who meets this position and how often (the Lichess explorer is a good guide), and what it teaches.
+      placeholder: Beginners meet 3...Nf6 in about a third of their Italian games and lose quickly to Ng5 if unprepared.
+  - type: textarea
+    id: checked
+    attributes:
+      label: How did you check the lines?
+      description: An engine and its depth, books, courses or games you used. Say where the ideas in the notes come from.
+      placeholder: Every move checked with Stockfish at depth 20; the plans follow the notes in my club's opening sheet.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before you submit
+      options:
+        - label: I played the lines through in the app (Learn and Drill) and they work as intended.
+          required: true
+        - label: The notes are in my own words, not copied from a book, course or website.
+          required: true
+        - label: I am happy for this to be published under the project's MIT licence.
+          required: true
   - type: textarea
     id: contribution
     attributes:
       label: The contribution (YAML)
       description: >-
-        If it was too long for the link, paste it here (the app copied it), or attach the downloaded file below.
+        Filled in by the app. If it was too long for the link, paste it here (the app copied it), or attach the downloaded
+        file under "Anything else".
       render: yaml
     validations:
       required: true
@@ -22,4 +78,4 @@ body:
     id: notes
     attributes:
       label: Anything else
-      description: Where the lines come from, what you checked, or the attached file when the YAML did not fit above.
+      description: Questions for the reviewer, lines you were unsure of, or the attached file when the YAML did not fit above.

@@ -1,4 +1,4 @@
-import { contributionYaml, issueUrl, MAX_ISSUE_URL } from '@knightschool/core';
+import { contributionYaml, issueFields, issueUrl, MAX_ISSUE_URL } from '@knightschool/core';
 import { Copy, Download, ExternalLink, Upload } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -40,9 +40,14 @@ export function PublishPanel({ course }: { course: DraftCourse }) {
   const result = useMemo(() => {
     try {
       const contribution = useAuthor.getState().contribution(course.id);
-      return { yaml: contributionYaml(contribution), lines: contribution.chapters.length, error: null };
+      return {
+        yaml: contributionYaml(contribution),
+        fields: issueFields(contribution),
+        lines: contribution.chapters.length,
+        error: null,
+      };
     } catch (error) {
-      return { yaml: '', lines: 0, error: error instanceof Error ? error.message : String(error) };
+      return { yaml: '', fields: undefined, lines: 0, error: error instanceof Error ? error.message : String(error) };
     }
     // The contribution is rebuilt whenever the saved rows change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,7 +65,7 @@ export function PublishPanel({ course }: { course: DraftCourse }) {
       </Alert>
     );
   const title = `Contribution: ${course.manifest.name}`;
-  const link = issueUrl(title, result.yaml);
+  const link = issueUrl(title, result.yaml, result.fields);
   const file = `${course.id}-contribution.txt`;
   return (
     <div className="grid gap-4">
@@ -85,7 +90,10 @@ export function PublishPanel({ course }: { course: DraftCourse }) {
               setStatus(
                 `Too long for a link (${result.yaml.length} characters), so GitHub opens with a short note. The YAML is ${copied ? 'copied: paste it into the form' : 'downloaded'}, or attach ${file}.`,
               );
-            } else setStatus('GitHub opened with your contribution filled in. Check it and submit the issue there.');
+            } else
+              setStatus(
+                'GitHub opened with your contribution filled in. Check the answers, add how you checked the lines, and submit the issue there.',
+              );
             window.open(link.url, '_blank', 'noopener');
           }}
         >

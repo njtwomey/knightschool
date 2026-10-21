@@ -1,4 +1,5 @@
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import { isOwnOpening } from './authoring';
 import { parsePgn, writePgn } from './pgn';
 import { CourseManifest } from './schema/content';
 import { parseStart } from './theory-tree';
@@ -96,6 +97,56 @@ export function readContribution(text: string): Contribution {
   return { courseId, manifest: manifest.data, chapters };
 }
 
+/** The kinds offered by the form's first question; the text must match its options exactly. */
+export const CONTRIBUTION_KINDS = {
+  course: 'A new course',
+  lines: 'New lines for a course in the app',
+} as const;
+
+/** The form's other fields the app can answer from the course: field id to text. The contributor edits them. */
+export type IssueFields = { kind: string; what: string; existing: string; why: string };
+
+/**
+ * What the contribution form can be given ready-made: whether it is a course of its own or adds to the app's openings,
+ * what it is (the course's name, side, summary, idea and lines), what it builds on (the app's chapters its lines grow
+ * from) and who it suits.
+ */
+export function issueFields({ manifest, chapters }: Contribution): IssueFields {
+  const own = isOwnOpening(manifest.opening);
+  const ids = new Set(chapters.map((chapter) => chapter.id));
+  const titles: string[] = [];
+  const grows = new Set<string>();
+  for (const chapter of chapters) {
+    const headers = parsePgn(chapter.pgn).tags;
+    titles.push(headers.Variation || chapter.id);
+    const start = headers.Start?.trim();
+    const parent = start?.split(/\s+/)[0];
+    if (start && parent && !ids.has(parent)) grows.add(`${parent}, after ${start.slice(parent.length).trim()}`);
+  }
+  const what = [
+    `${manifest.name}, played as ${manifest.side}.`,
+    manifest.summary,
+    manifest.about.idea,
+    `Lines: ${titles.join('; ')}.`,
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+  const existing = [
+    own
+      ? 'A course of its own: it does not belong to any opening in the app yet.'
+      : `Adds to the opening ${manifest.opening}.`,
+    grows.size ? `It grows from these lines already in the app: ${[...grows].join('; ')}.` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+  return {
+    kind: own ? CONTRIBUTION_KINDS.course : CONTRIBUTION_KINDS.lines,
+    what,
+    existing,
+    why: manifest.about.suits,
+  };
+}
+
 /** Where contributions are proposed: a new issue on the repository, with the contribution form. */
 export const ISSUE_URL = 'https://github.com/njtwomey/knightschool/issues/new';
 /** Browsers and GitHub refuse links much longer than about 8 KB; past this, the YAML goes by clipboard or file. */
@@ -105,12 +156,17 @@ export const MAX_ISSUE_URL = 7500;
  * The link that opens the contribution form with the title and the YAML filled in (`full`), or, when that would be
  * longer than `MAX_ISSUE_URL`, with a short note asking for the YAML to be pasted or attached instead.
  */
-export function issueUrl(title: string, yaml: string): { url: string; full: boolean } {
+export function issueUrl(
+  title: string,
+  yaml: string,
+  fields: IssueFields | Record<string, never> = {},
+): { url: string; full: boolean } {
   const query = (params: Record<string, string>) =>
     Object.entries(params)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&');
-  const link = (contribution: string) => `${ISSUE_URL}?${query({ template: 'contribution.yml', title, contribution })}`;
+  const link = (contribution: string) =>
+    `${ISSUE_URL}?${query({ template: 'contribution.yml', title, ...fields, contribution })}`;
   const full = link(yaml);
   if (full.length <= MAX_ISSUE_URL) return { url: full, full: true };
   return {
