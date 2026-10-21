@@ -14,7 +14,7 @@ export type ProfileTab = 'overview' | 'stats' | 'settings';
 export type Route =
   | { page: 'home' }
   | { page: 'profile'; tab: ProfileTab }
-  | { page: 'openings' }
+  | { page: 'search' }
   | { page: 'courses' }
   | { page: 'course'; id: string; tab: CourseTab }
   /** Create: your courses (`/create`), one course's tab (`/create/<course>[/<tab>]`), a line (`/create/<course>/<line>`). */
@@ -53,7 +53,7 @@ export function parseRoute(pathname: string): Route {
     case 'browse':
     case 'search':
     case 'openings':
-      return { page: 'openings' };
+      return { page: 'search' };
     case 'courses':
       return { page: 'courses' };
     case 'profile':

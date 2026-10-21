@@ -39,7 +39,7 @@ import { GlossaryPage } from '@/features/glossary/glossary-page';
 import { CurriculumTreePage } from '@/features/tree/curriculum-tree-page';
 import { CoursesPage } from '@/features/courses/courses-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
-import { OpeningsPage } from '@/features/openings/openings-page';
+import { SearchPage } from '@/features/search/search-page';
 import { LinePage } from '@/features/line/line-page';
 import { GuessPage } from '@/features/guess/guess-page';
 import { SpeedPage } from '@/features/speed/speed-page';
@@ -84,7 +84,7 @@ export function App() {
     {
       href: to('/search'),
       label: 'Search',
-      active: route.page === 'openings' || route.page === 'play',
+      active: route.page === 'search' || route.page === 'play',
       icon: <Search aria-hidden />,
       group: 0,
     },
@@ -215,7 +215,7 @@ export function App() {
         <PageErrorBoundary resetKey={pathname}>
           {route.page === 'home' && <HomePage />}
           {route.page === 'profile' && <ProfilePage tab={route.tab} />}
-          {route.page === 'openings' && <OpeningsPage />}
+          {route.page === 'search' && <SearchPage />}
           {route.page === 'course' &&
             (route.tab === 'tree' ? (
               <CourseTreePage key={route.id} course={route.id} />

@@ -18,8 +18,9 @@ describe('parseRoute', () => {
   it.each([
     ['/', { page: 'home' }],
     ['', { page: 'home' }],
-    ['/browse', { page: 'openings' }],
-    ['/search', { page: 'openings' }],
+    ['/browse', { page: 'search' }],
+    ['/search', { page: 'search' }],
+    ['/openings', { page: 'search' }],
     ['/courses', { page: 'courses' }],
     ['/course/caro-kann-panov', { page: 'course', id: 'caro-kann-panov', tab: 'overview' }],
     ['/course/caro-kann-panov/tree', { page: 'course', id: 'caro-kann-panov', tab: 'tree' }],

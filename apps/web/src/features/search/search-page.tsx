@@ -68,7 +68,7 @@ type Item =
  * Search: courses in the order to study them, and every line in them. Courses and lines are the same kind of card, so one
  * search covers both. Filters say which side you play, whether you are playing an opening or against it, and the tier.
  */
-export function OpeningsPage() {
+export function SearchPage() {
   const { index, openings, indexStatus, indexError } = useCatalog();
   const learned = useProgress((state) => state.learned);
   const storage = useStorage((state) => state.storage);

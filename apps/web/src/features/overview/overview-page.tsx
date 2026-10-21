@@ -12,7 +12,7 @@ import { loadOpening } from '@/data/content';
 import { useStorage } from '@/data/storage';
 import { getCardOptions, getEnrolled, getIntroducedToday, getNewPerDay } from '@/data/training-settings';
 import { useCatalog } from '@/data/catalog-store';
-import { CourseCard } from '@/features/openings/course-card';
+import { CourseCard } from '@/features/search/course-card';
 import { percent, useProgress } from '@/features/courses/progress';
 import { to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
