@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { buildAuthored, exportReminder, slugify, uniqueId } from './authoring';
+import {
+  buildAuthored,
+  exportReminder,
+  isOwnOpening,
+  overridesFromYaml,
+  overridesToYaml,
+  ownOpeningGroups,
+  ownOpeningId,
+  slugify,
+  uniqueId,
+} from './authoring';
 import { parsePgn, writePgn } from './pgn';
 import type { Chapter } from './theory-tree';
 import { variantPath } from './tree-helpers';
@@ -158,5 +168,44 @@ describe('PGN with tags', () => {
     expect(game.tags.Description).toBe('Say "hi"');
     expect(game.moves.map((move) => move.tags)).toEqual([['tip'], ['blunder', 'other']]);
     expect(parsePgn(writePgn(game))).toEqual(game);
+  });
+});
+
+describe('units: as YAML', () => {
+  it('round-trips, leaves out empty parts, and explains what does not fit', () => {
+    const text = overridesToYaml({ order: ['main:2'], after: { 'side:1': ['main:2'] }, drop: {} });
+    expect(text).toBe('order:\n  - main:2\nafter:\n  side:1:\n    - main:2\n');
+    expect(overridesFromYaml(text)).toEqual({ order: ['main:2'], after: { 'side:1': ['main:2'] }, drop: {} });
+    expect(overridesToYaml({ order: [], after: {}, drop: {} })).toBe('');
+    expect(overridesFromYaml('  ')).toBeUndefined();
+    expect(() => overridesFromYaml('order: [main]')).toThrow(/order\.0: a unit id/);
+    expect(() => overridesFromYaml('first: [main:1]')).toThrow(/Unrecognized key/);
+    expect(() => overridesFromYaml('order: [')).toThrow(/^Not YAML/);
+  });
+});
+
+describe('courses of their own', () => {
+  it('get a "My courses" group per side, made by the app', () => {
+    expect(ownOpeningId('black')).toBe('my-black-courses');
+    expect(isOwnOpening('my-white-courses')).toBe(true);
+    expect(isOwnOpening('italian-game')).toBe(false);
+    const groups = ownOpeningGroups([
+      { id: 'a', side: 'white', opening: 'my-white-courses' },
+      { id: 'b', side: 'white', opening: 'italian-game' },
+      { id: 'c', side: 'black', opening: 'my-black-courses' },
+    ]);
+    expect(groups.map((group) => [group.id, group.name, group.side, group.courses])).toEqual([
+      ['my-white-courses', 'My courses', 'white', ['a']],
+      ['my-black-courses', 'My courses', 'black', ['c']],
+    ]);
+  });
+
+  it('build without any opening of the app', () => {
+    const built = buildAuthored([], {
+      chapters: [{ id: 'mine-main', pgn: chapterText('Main', '1. e4 e5', { Opponent: '1...e5' }) }],
+      courses: [{ id: 'mine', manifest: course(['mine-main'], { opening: ownOpeningId('white') }) }],
+    });
+    expect(built.problems).toEqual([]);
+    expect(built.courses[0]!.opening.opening).toBe('my-white-courses');
   });
 });

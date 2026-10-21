@@ -1,5 +1,7 @@
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { parsePgn } from './pgn';
-import { CourseManifest, type OpeningContent } from './schema/content';
+import { START_EPD } from './epd';
+import { CourseManifest, UnitOverrides, type OpeningContent, type OpeningGroup, type Side } from './schema/content';
 import { projectCourse, resolveTree, type Chapter, type TheoryTree } from './theory-tree';
 
 /**
@@ -126,4 +128,61 @@ export function exportReminder(
   if (editsSince === 0 || !since) return null;
   const days = Math.floor((now.getTime() - Date.parse(since)) / 86_400_000);
   return editsSince >= EXPORT_REMINDER.edits || days >= EXPORT_REMINDER.days ? { edits: editsSince, days } : null;
+}
+
+/** A course's `units:` block as YAML, for editing as text: empty when there are no overrides. */
+export function overridesToYaml(overrides: UnitOverrides | undefined): string {
+  if (!overrides) return '';
+  const trimmed = Object.fromEntries(
+    Object.entries(overrides).filter(([, value]) =>
+      Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0,
+    ),
+  );
+  return Object.keys(trimmed).length ? stringifyYaml(trimmed) : '';
+}
+
+/** Reads a `units:` block written as YAML; blank text means none. Throws with a plain message when it does not fit. */
+export function overridesFromYaml(text: string): UnitOverrides | undefined {
+  if (!text.trim()) return undefined;
+  let raw: unknown;
+  try {
+    raw = parseYaml(text);
+  } catch (error) {
+    throw new Error(`Not YAML: ${messageOf(error)}`);
+  }
+  const parsed = UnitOverrides.safeParse(raw ?? {});
+  if (!parsed.success)
+    throw new Error(
+      parsed.error.issues.map((issue) => `${issue.path.join('.') || 'units'}: ${issue.message}`).join('; '),
+    );
+  return parsed.data;
+}
+
+/**
+ * The opening an authored course belongs to when it is a course of its own rather than part of an opening the app
+ * has: "My courses", one per side (an opening's side decides "playing it" or "playing against it"). Its group is made
+ * by the app (`ownOpeningGroups`), so content/openings.yaml does not need it; a contribution that uses it is a new
+ * opening for whoever accepts it.
+ */
+export const ownOpeningId = (side: Side) => `my-${side}-courses`;
+export const isOwnOpening = (id: string) => id === ownOpeningId('white') || id === ownOpeningId('black');
+
+/** The "My courses" groups for the authored courses that are courses of their own. */
+export function ownOpeningGroups(courses: { id: string; side: Side; opening: string }[]): OpeningGroup[] {
+  return (['white', 'black'] as const).flatMap((side) => {
+    const own = courses.filter((course) => course.opening === ownOpeningId(side)).map((course) => course.id);
+    return own.length
+      ? [
+          {
+            id: ownOpeningId(side),
+            name: 'My courses',
+            side,
+            summary: `Courses you wrote, playing ${side}.`,
+            moves: '',
+            epd: START_EPD,
+            courses: own,
+          },
+        ]
+      : [];
+  });
 }

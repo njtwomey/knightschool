@@ -36,3 +36,4 @@ export * from './rich-text';
 export * from './move-tree';
 export * from './course-index';
 export * from './authoring';
+export * from './chapter-edit';
