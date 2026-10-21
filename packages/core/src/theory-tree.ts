@@ -203,6 +203,25 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
     pending = waiting;
   }
 
+  /** A chapter's own moves with each move's annotation as the tree holds it, so a move reads the same in every line. */
+  const withTreeNotes = (fromEpd: string, moves: PgnMoveNode[]): PgnMoveNode[] => {
+    let epd = fromEpd;
+    return moves.map((move) => {
+      const variations = move.variations.map((variation) => withTreeNotes(epd, variation));
+      const edge = edges.get(edgeKey(epd, playSan(epd, move.san).uci))!;
+      epd = edge.to;
+      const { note } = edge;
+      return {
+        ...move,
+        ...(note.comment ? { comment: note.comment } : {}),
+        nags: note.nags,
+        arrows: note.arrows,
+        circles: note.circles,
+        variations,
+      };
+    });
+  };
+
   const lines = new Map<string, TreeLine>();
   for (const chapter of chapters) {
     const path = startPaths.get(chapter.id)!;
@@ -225,7 +244,7 @@ export function resolveTree(chapters: Chapter[]): TheoryTree {
       startEpd: path.at(-1)?.to ?? START_EPD,
       startPly: path.length,
       parents,
-      game: { tags, moves: [...prefix, ...chapter.game.moves] },
+      game: { tags, moves: [...prefix, ...withTreeNotes(path.at(-1)?.to ?? START_EPD, chapter.game.moves)] },
     });
   }
   return { lines, edges };

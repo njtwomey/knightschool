@@ -116,6 +116,12 @@ describe('resolveTree', () => {
     expect(() => resolveTree([italian, other])).toThrow(/commented differently/);
   });
 
+  it('shows a move with the comment and marks the tree holds, in every chapter that writes it', () => {
+    const copy = chapter('copy', '1. e4 e5 2. Nf3 Nc6 3. Bb5'); // retypes 2.Nf3 without italian's comment
+    const line = resolveTree([italian, copy]).lines.get('copy')!;
+    expect(line.game.moves[2]).toMatchObject({ san: 'Nf3', comment: 'Develops and hits e5.' });
+  });
+
   it('reports moves written out in more than one chapter', () => {
     const copy = chapter('copy', '1. e4 e5 2. Nf3 Nc6 3. Bb5');
     const moves = rewrittenMoves(resolveTree([italian, copy]));

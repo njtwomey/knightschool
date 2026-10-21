@@ -1,9 +1,9 @@
 name: Vienna Game # quote it if it has a colon
 eco: C25 # optional
-side: white # the learner's side: it must match the white/ or black/ folder
+side: white # the learner's side
 opening: vienna-game # an id from content/openings.yaml (add the opening there if it is new)
 tier: 2 # 1 study first, 2 next, 3 alternatives and rare replies
-trigger: '1. e4 e5 2. Nc3' # every line passes through this position
+trigger: '1. e4 e5 2. Nc3' # every listed line passes through this position ('' is the initial position)
 summary: >-
   Two plain sentences: what the opening is (the position, and who gives what), and what the learner will practise.
 about: # required: the introduction shown at the top of the course page and on the play page
@@ -17,14 +17,12 @@ plans:
   - A plan a 1200 can act on when the opponent leaves the book.
 motifs: [fork] # ids from content/motifs.yaml
 tags: [e4, open]
-lines: # teaching order; the first is the main line
-  - file: main-line
-    opponent: '2...Nf6' # what the opponent does to arrive here
-    kind: main # main | sideline | rare | gambit
-    # section: If Black takes the pawn   # optional: the course page groups by this heading (give every line one, or none)
-    # alternative: true                   # optional: shown, never drilled (a second answer to a position)
-    # from: other-course-id               # optional: reuse that course's file (same side only; shown, never drilled)
-traps: # or []
-  - file: greedy-nxe4
-    opponent: '3...Nxe4'
-    kind: for-us # for-us: we spring it; against-us: we must not fall for it
+lines: # teaching order, any line of content/tree by id (its file name); the first is the main line
+  - vienna-main-line # a plain id: the chapter's [Kind] and [Opponent] apply
+  - id: vienna-quiet-d6
+    # section: If Black plays quietly   # optional: the course page groups by this heading (give every entry one, or none)
+    # kind: sideline                     # optional: override the chapter's [Kind] for this course
+    # opponent: '2...d6'                 # optional: override the chapter's [Opponent]
+  - id: vienna-greedy-nxe4 # a trap: its chapter's [Kind] says so (flipped if written for the other side)
+  - id: other-course-line
+    alternative: true # shown, never drilled: a second answer to a position, or a line another course drills

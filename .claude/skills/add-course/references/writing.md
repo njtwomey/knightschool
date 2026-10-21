@@ -8,8 +8,11 @@
 - Prefer the move that is easier to explain and harder to misplay. Never write a move you cannot give a reason for.
 - **Check with the engine**: lines drafted from memory are often wrong. Run `course:eval` and follow what the engine prefers.
 - Mark the opponent's bad moves `?`/`?!` and the learner's demonstrated mistakes `?`/`??`; keep demonstrations short.
-- Variation inside the file for a short sideline (about 4 moves); separate file when it needs its own name or tags.
+- Variation inside the chapter for a short sideline (about 4 moves); a separate chapter, branching off this one, when it
+  needs its own id, name, kind, tags or a place in another course.
 - Transpositions are fine: same position = same card. Say so in a comment when a variation transposes.
+- Before writing, see what the tree already has from the trigger (`tree-at`): list those lines instead of writing them
+  again, and start new chapters after the last move the tree writes.
 
 ## The introduction (`about` in course.yaml)
 
@@ -28,8 +31,10 @@ any jargon in the same sentence, no exclamation marks).
 
 ## Explaining moves (this is what makes a course good)
 
-A comment sits on a move: `3. Bc4 { Aims at f7, the square only Black's king protects. }`. In Play and Review the learner
-sees your comment plus at most one generated note; in Browse all of them. Generated notes (`explain/`) only name tactics
+A comment sits on a move: `3. Bc4 { Aims at f7, the square only Black's king protects. }`. A move has one comment in
+the whole tree, read by every course that passes there, for either side, so before writing on a move another chapter also
+writes, read what it says (`tree-at`): keep it, or improve that one comment. In Play and Review the learner sees the
+comment plus at most one generated note; in Browse all of them. Generated notes (`explain/`) only name tactics
 (mate threat, hanging piece, fork, pin or skewer of a piece, wins material) and are dropped below confidence 0.7 when you
 wrote a note. They **cannot** say plans, prevention, structure or why a quiet move was chosen: that is your job.
 
@@ -38,7 +43,9 @@ Rules:
 1. One or two sentences, under about 200 characters, plain words, name the pieces and squares.
 2. Say **why**: what the move prepares, which threat it stops, what goes wrong without it, what a bait costs. Not what.
 3. No jargon without a definition in the same sentence (tempo, outpost, initiative, prophylaxis, weak square, minority attack).
-4. Name the sides ("White", "Black", "the knight"), not "we/you". British spelling. No exclamation marks, no emoji.
+4. Name the sides ("White", "Black", "the knight"), never "we/you": a White and a Black course may both show the comment.
+   When both sides' courses explain a move, write it as the side making the move would. British spelling. No
+   exclamation marks, no emoji.
 5. Note roughly half the learner's moves: every non-obvious one, each plan start, each prevention move, each bait and
    punishing reply. Obvious development in an explained sequence can be silent.
 6. On a `?` move say what the mistake allows, concretely.

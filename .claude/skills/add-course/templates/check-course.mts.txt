@@ -1,72 +1,46 @@
-// Builds ONE course folder (anywhere: content/_staging/<id> or its real place) and prints what a learner will read.
+// Builds ONE course folder exactly as pnpm content:build does and prints what a learner will read.
 //   cp .claude/skills/add-course/templates/check-course.mts.txt "$SCRATCH/check-course.mts"
-//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/<white|black>/<group>/<course-id>
-// The directory name is the course id. Build errors are thrown with the file name. Exit 1 on error.
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
+//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<id>      # or content/_staging/<id>
+// The folder name is the course id. Its lines come from content/tree plus the folder's own tree/ (staging). Each move
+// shows whose it is, the notes a learner sees, and the chapters that write it out (from <chapter>). Exit 1 on error.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 const root = process.env.KS_ROOT;
 const dir = process.argv[2];
-if (!root || !dir) throw new Error('Usage: KS_ROOT=<repo> tsx check-course.mts <course-dir>');
+if (!root || !dir) throw new Error('Usage: KS_ROOT=<repo> tsx check-course.mts <course-folder>');
 const core = await import(join(root, 'packages/core/src/index.ts'));
-const { parse } = await import(join(root, 'node_modules/yaml/dist/index.js'));
-const { z } = await import(join(root, 'node_modules/zod/index.js'));
+const lib = await import(join(root, 'scripts/content-lib.ts'));
 
-const variants = (kind: 'lines' | 'traps') =>
-  existsSync(join(dir, kind))
-    ? readdirSync(join(dir, kind))
-        .filter((f) => f.endsWith('.pgn'))
-        .sort()
-        .map((f) => ({
-          id: f.slice(0, -4),
-          kind: kind === 'lines' ? 'line' : 'refutation', // a trap is called a refutation inside the code
-          game: core.parsePgn(readFileSync(join(dir, kind, f), 'utf8'), `${kind}/${f}`),
-          source: `${kind}/${f}`,
-        }))
-    : [];
-/** Lines taken from another course (`from:` in course.yaml): shown, never drilled, and only for the same side. */
-const home = (id: string): string | undefined => {
-  const walk = (folder: string): string | undefined => {
-    if (!existsSync(folder)) return undefined;
-    if (basename(folder) === id && existsSync(join(folder, 'course.yaml'))) return folder;
-    for (const child of readdirSync(folder, { withFileTypes: true })) {
-      if (child.isDirectory() && !child.name.startsWith('_')) {
-        const found = walk(join(folder, child.name));
-        if (found) return found;
-      }
-    }
-    return undefined;
-  };
-  return walk(join(root, 'content/white')) ?? walk(join(root, 'content/black'));
-};
-const reused = (manifest: any) =>
-  manifest.lines
-    .filter((line: any) => line.from)
-    .map((line: any) => {
-      const folder = home(line.from);
-      if (!folder) throw new Error(`"${line.file}" is from "${line.from}", which is not a course`);
-      const path = join(folder, 'lines', `${line.file}.pgn`);
-      return { id: line.file, kind: 'line', game: core.parsePgn(readFileSync(path, 'utf8'), path), source: path, reused: true };
-    });
 try {
-  const manifest = core.OpeningManifest.parse(parse(readFileSync(join(dir, 'course.yaml'), 'utf8')));
-  const quizPath = join(dir, 'quizzes.yaml');
-  const quizzes = existsSync(quizPath) ? z.array(core.QuizEntry).parse(parse(readFileSync(quizPath, 'utf8'))) : [];
-  const content = core.buildOpening(basename(dir), manifest, [...variants('lines'), ...variants('traps'), ...reused(manifest)], quizzes);
+  const content = lib.loadCourseAt(dir);
+  const own = join(dir, 'tree');
+  const tree = lib.loadTree(existsSync(own) ? own : undefined);
   for (const variant of content.opening.variants) {
-    console.log(`\n${variant.kind} ${variant.id}: ${variant.name}`);
+    const line = tree.lines.get(variant.id);
+    const flags = [variant.weight ?? variant.whose, variant.alternative ? 'alternative' : '', variant.section ?? '']
+      .filter(Boolean)
+      .join(', ');
+    console.log(`\n${variant.kind} ${variant.id} [${flags}] ${line?.source ?? ''}: ${variant.name}`);
     core.lineSteps(content, variant.id).forEach((step: any, ply: number) => {
       const n = `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}`;
       const notes = core.explainMove(step.fromEpd, step.edge.uci, { edge: step.edge });
-      console.log(`  ${n} ${step.edge.san} (${step.ours ? 'you' : 'them'})${notes.length ? '' : step.ours ? '  [no note]' : ''}`);
+      const writers = tree.edges.get(`${step.fromEpd} ${step.edge.uci}`)?.writtenIn ?? [];
+      const from = writers.length === 1 && writers[0] === variant.id ? '' : `  (from ${writers.join(', ')})`;
+      const missing = notes.length ? '' : step.ours ? '  [no note]' : '';
+      console.log(`  ${n} ${step.edge.san} (${step.ours ? 'you' : 'them'})${from}${missing}`);
       for (const note of notes) console.log(`      ${note.source}: ${note.text}`);
       const text = step.edge.annotation?.text ?? '';
       if (text.length > 220) console.log(`      WARN ${text.length} characters; aim for under about 200`);
     });
   }
   const cards = core.introductionOrder(content, 0);
-  console.log(`\nOK ${content.opening.id}: ${Object.keys(content.nodes).length} positions, ${cards.length} cards incl. ${content.quizzes.length} quizzes.`);
-  console.log('Not checked here: the opening against content/openings.yaml, the motifs against motifs.yaml, the curriculum, other courses. Run pnpm content:build for those.');
+  console.log(
+    `\nOK ${content.opening.id}: ${Object.keys(content.nodes).length} positions, ${cards.length} cards incl. ${content.quizzes.length} quizzes.`,
+  );
+  console.log(
+    'Not checked here: openings.yaml, motifs.yaml, curriculum.yaml and other courses. Run pnpm content:build for those.',
+  );
 } catch (error) {
   console.error(`FAILED: ${error instanceof Error ? error.message : error}`);
   process.exit(1);

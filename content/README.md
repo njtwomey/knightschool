@@ -63,7 +63,8 @@ rules below.
 5... Ba5 6. d4 { Takes the centre and attacks e5. } 6... exd4 7. O-O ( 7... Nge7 8. cxd4 d5 ) ...
 ```
 
-- **`[Start "<chapter> <move>"]`** says where the line branches: after that move of that chapter. The move must be one
+- **`[Start "<chapter> <move>"]`** says where the line branches: after that move of that chapter, written with its number
+  (`6.d4`, `6...exd4`). The move must be one
   the named chapter writes itself (on its main line or in a variation). If the chapter writes that move in more than one
   place, give the moves before it too, as many as it takes: `[Start "odd-first-moves 1.h4 d5"]`. No `[Start]`: the line
   begins at the initial position. Chapters may come in any order; a missing chapter, a move the parent does not write, an
@@ -75,8 +76,9 @@ rules below.
   avoid it) for a trap. A course of the other side that lists a trap sees it flipped: one side's `for-us` is the other's
   `against-us`. A course can override the kind of any line it lists.
 - **`[Opponent]`** is what the opponent does to reach the line ("3...Bc5"), shown in the lines list. A course can override it.
-- **A move has one comment**, wherever it is written: two chapters that comment differently on the same move fail the
-  build. The comment explains the move for both sides, so write "White", "Black", never "we". When both sides' courses
+- **A move has one comment and one set of marks**, wherever it is written: two chapters that comment differently on the
+  same move fail the build, and every line shows the move with what the tree holds (a comment or `?` written in one
+  chapter appears in all of them). Before commenting a move that already exists, read what the tree says. The comment explains the move for both sides, so write "White", "Black", never "we". When both sides' courses
   explain a move, the side making the move says it.
 - Every line rebuilt from the start passes through the trigger of each course that lists it.
 
@@ -104,14 +106,13 @@ motifs: [f7-weakness, fork-trick] # ids from motifs.yaml
 tags: [e4, open] # optional, searchable
 lines: # teaching order, any line of the tree by id; the first is the main line
   - giuoco-pianissimo
-  - two-knights-fried-liver
+  - fried-liver
   - blackburne-shilling # a trap: its chapter's [Kind] says so
-  - id: four-knights-alternative
-    alternative: true # shown and playable, never drilled: a second answer to a position another line answers
-  - id: kings-gambit-declined
+  - id: four-knights # a line written for Black, shown in this White course
+    alternative: true # shown and playable, never drilled
     kind: sideline # override the chapter's [Kind] for this course
-    opponent: '2.f4' # override the chapter's [Opponent]
-    section: "King's Gambit" # optional: group the course page by this heading instead of main / sideline / trap
+    opponent: '3...Nf6' # override the chapter's [Opponent]
+    section: Other third moves # optional: group the course page by this heading instead of main / sideline / trap
 ```
 
 **The introduction.** Nobody should land on a course without knowing what it is. `summary` says what the opening is,
@@ -124,6 +125,11 @@ too few games reach them. `rare` lines produce cards only when the learner turns
 `alternative` lines never do. `against-us` traps produce cards for the move that avoids the trap (it is the repertoire move
 of another line, and the trap shows the mistake, marked `?`). `for-us` traps produce no cards, because the opponent has to
 move first: give each one a quiz instead (a question about the position where we strike).
+
+**Listing another course's line.** Any course may list any line, but two things follow. A line written for the other
+side has that side's moves as its answers, so in this course it usually needs `alternative: true` (shown, not drilled).
+And cards are still kept per course (docs/TREE.md, step 3), so a line that two courses drill is asked in both; list it as
+`alternative` in the course where it is a visitor.
 
 ## Openings, order and motifs
 
@@ -169,11 +175,13 @@ to the Zod enum in the same commit.
 | `Tricks`    | yes      | Tricks either side can fall for, from the motif list below, or `none`           | `trap,fork`                             |
 | `Refutes`   | no       | SAN from the start position of the opponent idea this line punishes             | `1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5` |
 | `For`       | yes      | The side the line is written for: `white` or `black`                            | `white`                                 |
-| `Kind`      | yes      | `main`, `sideline`, `rare`, `gambit` (lines) or `for-us`, `against-us` (traps)  | `main`                                  |
-| `Opponent`  | yes      | What the opponent does to reach the line                                        | `3...Bc5`                               |
+| `Kind`      | yes¹     | `main`, `sideline`, `rare`, `gambit` (lines) or `for-us`, `against-us` (traps)  | `main`                                  |
+| `Opponent`  | yes¹     | What the opponent does to reach the line                                        | `3...Bc5`                               |
 | `Start`     | no       | The chapter and move this line branches after                                   | `evans-gambit 5.c3`                     |
 | `RefutedBy` | no       | SAN from the start of the line that punishes this one, if it is a known mistake | `1. e4 e5 2. Qh5 Nc6 3. Bc4 g6`         |
 | `Themes`    | no       | Plans and ideas, kebab-case, open vocabulary                                    | `d4-break,f7-pressure`                  |
+
+¹ The build accepts them missing when every course that lists the line gives `kind` / `opponent`; write them anyway.
 
 `Refutes` and `RefutedBy` are checked for legality at build time. Lists are comma-separated with no spaces.
 
@@ -196,15 +204,23 @@ looks like a position (it contains `/`) but is not legal fails the build with th
 
 ## Example: adding a branch
 
-To teach the Evans Gambit's 5...Bc5 in the White Evans course:
+To teach the Evans Gambit's 5...Bd6 (not in the tree yet) in the White Evans course:
 
 1. Find the chapter that writes the move before the branch. `grep -rl "5. c3" content/tree` finds
    `tree/e4/open-games/evans-gambit.pgn`: a chapter written for Black (the Open Games course meets the Evans). The tree
-   is shared, so White's Evans lines branch off it too.
-2. Write `tree/e4/evans-gambit/evans-bc5.pgn` with `[Start "evans-gambit 5.c3"]`, `[For "white"]`, `[Kind "sideline"]`,
-   `[Opponent "5...Bc5"]` and the moves from `5... Bc5` on.
-3. Add `evans-bc5` to `lines:` in `courses/evans-gambit/course.yaml`.
+   is shared, so White's Evans lines branch off it too (5...Ba5, 5...Be7 and 5...Bc5 already do).
+2. Write `tree/e4/evans-gambit/evans-bd6.pgn` with `[Start "evans-gambit 5.c3"]`, `[For "white"]`, `[Kind "sideline"]`,
+   `[Opponent "5...Bd6"]` and the moves from `5... Bd6` on.
+3. Add `evans-bd6` to `lines:` in `courses/evans-gambit/course.yaml`.
 4. `pnpm content:build`, then `make doctor`.
+
+## Staging a course
+
+While a course is being written alongside other work, keep it in `content/_staging/<course>/` with its `course.yaml`,
+`quizzes.yaml` and a `tree/` folder of its new chapters (they may branch off `content/tree`). `content:build` and
+`make doctor` ignore folders starting with `_`; `pnpm course:eval --dir content/_staging/<course>` loads it with its own
+chapters. Moving it in means moving the chapters into `content/tree/<first move>/<family>/` and the folder into
+`content/courses/`.
 
 ## Sources
 

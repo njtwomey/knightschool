@@ -1,0 +1,41 @@
+// What the theory tree already says along a move list: who writes each move, its comment and marks, and what the tree
+// plays next. Use it to find the chapter a new line branches from ([Start]) and to read a move's comment before you
+// write one (a move has one comment across the whole tree).
+//   cp .claude/skills/add-course/templates/tree-at.mts.txt "$SCRATCH/tree-at.mts"
+//   KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/tree-at.mts" "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4" [content/_staging/<id>/tree]
+// The optional second argument is a folder of new chapters to read along with content/tree (staging).
+import { join } from 'node:path';
+
+const root = process.env.KS_ROOT;
+const [moves = '', extra] = process.argv.slice(2);
+if (!root) throw new Error('Usage: KS_ROOT=<repo> tsx tree-at.mts "<moves>" [extra-tree-folder]');
+const core = await import(join(root, 'packages/core/src/index.ts'));
+const lib = await import(join(root, 'scripts/content-lib.ts'));
+
+const tree = lib.loadTree(extra);
+const label = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`;
+const NAGS: Record<number, string> = { 1: '!', 2: '?', 3: '!!', 4: '??', 5: '!?', 6: '?!' };
+const describe = (edge: any) => {
+  const marks = edge.note.nags.length ? `, marked ${edge.note.nags.map((n: number) => NAGS[n] ?? `$${n}`).join(' ')}` : '';
+  return `written in ${edge.writtenIn.join(', ')}${marks}${edge.note.comment ? `\n      "${edge.note.comment}"` : ''}`;
+};
+let epd = core.START_EPD;
+let ply = 0;
+let last: { san: string; writers: string[] } | undefined;
+for (const san of core.sanMoves(moves, 'moves')) {
+  const played = core.playSan(epd, san);
+  const edge = tree.edges.get(`${epd} ${played.uci}`);
+  console.log(`  ${label(ply, played.move.san)}  ${edge ? describe(edge) : 'NOT IN THE TREE'}`);
+  last = edge ? { san: label(ply, played.move.san).replace(/[+#]$/, ''), writers: edge.writtenIn } : undefined;
+  epd = played.epd;
+  ply += 1;
+}
+const next = [...tree.edges.values()].filter((edge: any) => edge.from === epd);
+console.log(next.length ? '\nThe tree continues with:' : '\nThe tree has no moves from here.');
+for (const edge of next) console.log(`  ${label(ply, edge.san)}  ${describe(edge)}`);
+if (last) {
+  console.log(`\nA new line from here: [Start "${last.writers[0]} ${last.san}"]`);
+  if (last.writers.length > 1) console.log(`  (or any of ${last.writers.join(', ')}; the build says if it is ambiguous)`);
+} else if (ply > 0) {
+  console.log('\nThe last move is not in the tree: start from the last move that is, and write the rest in the new chapter.');
+}
