@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { parsePgn } from '../chess/pgn';
-import { newCard } from './scheduler';
-import { UnitOverrides, type LineKind, type OpeningContent, type TrapKind } from '../schema/content';
-import type { Card, Review } from '../schema/user';
-import { manifestOf } from '../testing/manifest';
-import { cardDefinitions, cardId } from './cards';
-import { buildOpening } from '../content/course-build';
+import { parsePgn } from '../../chess/pgn';
+import { newCard } from '../scheduler';
+import { UnitOverrides, type LineKind, type OpeningContent, type TrapKind } from '../../schema/content';
+import type { Card, Review } from '../../schema/user';
+import { manifestOf } from '../../testing/manifest';
+import { cardDefinitions, cardId } from '../cards';
+import { buildOpening } from '../../content/course-build';
 import {
   checkUnitOverrides,
   courseUnits,
@@ -18,7 +18,7 @@ import {
   unitStretches,
   type CourseUnit,
   type UnitOptions,
-} from './units';
+} from './index';
 
 const NOW = new Date('2026-10-21T10:00:00.000Z');
 
