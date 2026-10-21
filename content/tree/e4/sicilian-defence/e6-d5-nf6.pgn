@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Exchange Line"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "isolated-pawn,blockade,bishop-trade"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "5...Nf6"]
+[Start "e6-main-line 4...exd5 5.Nf3"]
+
+5... Nf6 ( 5... c4 6. b3 { Hits the pawn on c4 at once. Left alone, it would cramp White's queenside and keep the bishop off d3. } 6... cxb3 7. axb3 ) ( 5... cxd4 6. cxd4 { Joins the line 3...cxd4 4.cxd4 d5 5.exd5 exd5 6.Nf3, with a lone pawn in the middle for each side. } ) 6. Bb5+ { Develops with check and offers to trade the light-squared bishops, which leaves Black fewer pieces to make the pawn on d5 useful. } 6... Bd7 ( 6... Nc6 7. O-O Be7 8. dxc5 Bxc5 9. Nbd2 ) ( 6... Nbd7 7. O-O Be7 8. dxc5 ) 7. Bxd7+ Nbxd7 8. O-O Be7 9. dxc5 { Trades the d-pawn for the c-pawn, so Black is left with the lone pawn on d5. } 9... Nxc5 10. Nd4 { The knight sits on the square in front of the d5 pawn, where no Black pawn can ever chase it. } 10... O-O 11. Be3 { Plan: Na3 and Nc2 or Nd2 and Nf3, a rook to e1 and the queen to the d-file. Keep pieces on d4 and attack d5 when Black's pieces run out of ways to guard it. } *

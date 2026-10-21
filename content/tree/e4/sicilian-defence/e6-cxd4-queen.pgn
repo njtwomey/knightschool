@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Exchange Line"]
+[ECO "B22"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "early-queen"]
+[Themes "isolated-pawn,tempo-gain,d5-break"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...cxd4 4.cxd4 d5 5.exd5 Qxd5"]
+[Start "e6-main-line 5.exd5"]
+
+5... Qxd5 6. Nf3 { Develops and guards d4. The queen on d5 will be hit again by Nc3. } 6... Nf6 ( 6... Nc6 { Joins the line 2...Nc6 3.d4 cxd4 4.cxd4 d5 5.exd5 Qxd5 6.Nf3 e6, where 7.Nc3 hits the queen. } ) 7. Nc3 { Hits the queen and develops. White's d4 pawn has no pawns beside it, so White wants active pieces to make up for it. } 7... Qd6 ( 7... Qd8 8. Bc4 ) ( 7... Qa5 8. Bc4 ) ( 7... Bb4 8. Bd3 ) 8. Bc4 { Puts the bishop on its most active diagonal, aimed at e6 and f7, and gets ready to castle. } 8... Be7 9. O-O O-O 10. Qe2 { Plan: rooks to d1 and e1, the bishop to g5, and then the break d4-d5 to open lines while Black is still sorting out the queenside. A pawn alone on d4 is a weakness only if White's pieces are passive. } *

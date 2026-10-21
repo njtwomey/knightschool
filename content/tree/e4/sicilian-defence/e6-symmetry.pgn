@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Exchange Line"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "symmetrical-centre,pin,piece-activity"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...cxd4 4.cxd4 d5 5.exd5 exd5"]
+[Start "e6-main-line 6.Nf3"]
+
+6... Nf6 ( 6... Nc6 7. Bb5 { Pins the knight on c6, the piece that attacks d4, and gets ready to castle. } 7... Bd6 8. O-O Nge7 9. Nc3 ) ( 6... Bb4+ 7. Bd2 Bxd2+ 8. Qxd2 ) ( 6... Bg4 7. Be2 ) ( 6... Bd6 7. Nc3 ) 7. Bb5+ { Develops with check. Black has to block, and every way of doing it costs something: ...Bd7 lets White trade off a bishop, ...Nc6 walks into a pin. } 7... Nc6 ( 7... Bd7 8. Bxd7+ Nbxd7 9. O-O ) 8. O-O Be7 9. Nc3 O-O 10. Bg5 { Plan: both sides have a lone pawn in the middle. White's pieces hit d5 from c3, g5 (which takes away its guard on f6) and later a rook on e1, while d4 is kept safe by the knight on f3 and the queen. } *
