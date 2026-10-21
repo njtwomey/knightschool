@@ -2,7 +2,6 @@ import { courseUnits, lineOrderOf, type CourseUnit } from '@knightschool/core';
 import { ArrowDown, ArrowUp, GripVertical, ListChecks, Route, Swords } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -220,7 +219,6 @@ export function PathOrder({ course }: { course: DraftCourse }) {
                       : `${row.extra === 'trap' ? 'Trap to spring' : 'Question'}${row.unit ? `, with ${unitLabel(row.unit)}` : ''}`}
                   </span>
                 </div>
-                {bonusRow && <Badge variant="outline">Bonus</Badge>}
                 <Button
                   size="icon"
                   variant="ghost"

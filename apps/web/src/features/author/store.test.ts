@@ -141,6 +141,7 @@ describe('writing a course in the editor', () => {
     // Study 2...Nf6 first: the lines are written in that order, and the path starts with it.
     expect(await author().setPath([nf6, 'my-italian-main'], [f4])).toBeNull();
     expect(ids()).toEqual([nf6, 'my-italian-main', f4]);
+    expect(author().undoLabel).toBe('reorder the path');
     expect(courseUnits(author().build!.courses[0]!)[0]!.line).toBe(nf6);
     expect(author().build!.problems).toEqual([]);
 
@@ -151,8 +152,10 @@ describe('writing a course in the editor', () => {
     // To the bonus and back: an alternative, then not.
     expect(await author().setPath(['my-italian-main'], [f4, nf6])).toBeNull();
     expect(lines()[2]).toMatchObject({ id: nf6, alternative: true });
+    expect(author().undoLabel).toBe('move Main line, 2...Nf6 to bonus');
     expect(await author().setPath(['my-italian-main', nf6], [f4])).toBeNull();
     expect(lines()[1]).toBe(nf6);
+    expect(author().undoLabel).toBe('move Main line, 2...Nf6 to the path');
 
     // 2.f4 on the path would give the position after 1...e5 two answers: the build's problem, nothing saved.
     const before = JSON.stringify(lines());
@@ -174,8 +177,10 @@ describe('writing a course in the editor', () => {
     expect(author().undoLabel).toBe(`make line Line ${before.length + 1}`);
     await author().renameLine(added, 'Quiet line');
     expect(readChapter((await chapterPgn(added))!.pgn).tags.Variation).toBe('Quiet line');
-    expect(author().undoLabel).toBe('change to line Quiet line');
+    expect(author().undoLabel).toBe(`rename line Line ${before.length + 1} to Quiet line`);
+    expect(author().undoLabel).not.toMatch(/^change to/);
     const copy = (await author().duplicateLine(added))!;
+    expect(author().undoLabel).toBe('copy line Quiet line');
     expect(ids()).toEqual([...before, added, copy]);
     expect(readChapter((await chapterPgn(copy))!.pgn).tags.Variation).toBe('Quiet line (copy)');
     await author().deleteLine(copy);
@@ -254,7 +259,7 @@ describe('writing a course in the editor', () => {
       );
     await author().setGroup('Openers', 'my-italian-main');
     expect(section('my-italian-main')).toMatchObject({ id: 'my-italian-main', section: 'Openers' });
-    expect(author().undoLabel).toBe('change to course My Italian');
+    expect(author().undoLabel).toBe('put Main line in group Openers');
     await author().undo();
     expect(section('my-italian-main')).toBe('my-italian-main');
   });

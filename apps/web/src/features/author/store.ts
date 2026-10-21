@@ -35,7 +35,7 @@ import {
 } from '@knightschool/core';
 import { create } from 'zustand';
 import { loadAuthoredBuild, loadAuthoredRows, loadShippedChapters, type AuthoredRows } from '@/data/authored';
-import { saveAuthored, undoAuthored, type AuthoredChangeInput } from '@/data/authoring';
+import { loadUndoLabels, saveAuthored, undoAuthored, type AuthoredChangeInput } from '@/data/authoring';
 import { reminderToExport } from '@/data/backup';
 import { loadShippedIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
@@ -182,9 +182,10 @@ let pendingHint: string | null = null;
 
 export const useAuthor = create<AuthorState>((set, get) => {
   /** Saves an action, reloads, and refreshes the rest of the app (courses, the open course). */
-  async function save(changes: AuthoredChangeInput[], message: string, undo = false) {
+  /** Saves an action under `label`, which Undo shows ("reorder the path"). */
+  async function save(changes: AuthoredChangeInput[], message: string, undo: boolean, label: string) {
     try {
-      await saveAuthored(changes);
+      await saveAuthored(changes, label);
       await get().load();
       set({ message: { text: message, undo } });
       const { useBrowse } = await import('@/features/browse/store');
@@ -218,6 +219,9 @@ export const useAuthor = create<AuthorState>((set, get) => {
     const written = setHeader(game, 'Opponent', opponentMove(sans, startPly, side));
     return { kind: 'chapter', itemId: id, body: chapterText(written, startPly) };
   }
+  /** A line's title, as its chapter says. */
+  const titleOf = (id: string) =>
+    fullLine(get().build, id)?.game.tags.Variation ?? draftChapter(get().rows, id)?.tags.Variation ?? id;
   const prefixOf = (line: TreeLine) => line.game.moves.slice(0, line.startPly).map((move) => move.san);
 
   return {
@@ -242,7 +246,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         const build = await loadAuthoredBuild(async () => shipped);
         const { storage } = await whenStorageReady();
         const reminder = await reminderToExport(storage);
-        const undoLabel = describeUndo(await storage.authoring.history(), rows);
+        const undoLabel = describeUndo(await storage.authoring.history(), rows, await loadUndoLabels(storage));
         set({ rows, build, shippedCourses: shipped, reminder, undoLabel, status: 'ready', error: null });
         // The pages choose the course and line from the address; keep the position inside the line.
         const line = fullLine(build, get().lineId);
@@ -323,6 +327,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
           { kind: 'course', itemId: id, body: JSON.stringify(manifest) },
         ],
         `Made the course ${manifest.name}. Play its main line on the board.`,
+        false,
+        `make course ${manifest.name}`,
       );
       set({ courseId: id, lineId, ply: startPly });
       return id;
@@ -346,6 +352,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
           courseChange({ ...course, manifest: { ...course.manifest, lines: [...course.manifest.lines, lineId] } }),
         ],
         `Made ${title}, from the start.`,
+        false,
+        `make line ${title}`,
       );
       set({ lineId, ply: 0 });
       return lineId;
@@ -359,6 +367,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
       await save(
         [{ kind: 'chapter', itemId: id, body: chapterText(setHeader(own, 'Variation', name), line.startPly) }],
         `Renamed the line ${name}.`,
+        false,
+        `rename line ${own.tags.Variation ?? id} to ${name}`,
       );
     },
 
@@ -382,6 +392,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
           }),
         ],
         `Made a copy of the line, ${title}.`,
+        false,
+        `copy line ${own.tags.Variation ?? id}`,
       );
       return copy;
     },
@@ -431,6 +443,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
       await save(
         [...chapters, { kind: 'course', itemId: copyId, body: JSON.stringify(manifest) }],
         `Made a copy of the course, ${manifest.name}.`,
+        false,
+        `copy course ${course.manifest.name}`,
       );
       return copyId;
     },
@@ -501,6 +515,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
           second
             ? `Made a new line, ${title}: a second answer to a position, so it is shown but not drilled. Carry on playing it.`
             : `Made a new line, ${title}. Carry on playing it.`,
+          false,
+          `branch ${title}`,
         );
         set({ lineId: id, ply: branching + 1, branching: null });
         return;
@@ -521,6 +537,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
       await save(
         [chapterChange(lineId, appendMove(own, from, san), line.startPly, prefixOf(line), side)],
         `Played ${moveText(ply, san)}.`,
+        false,
+        `play ${moveText(ply, san)} in ${titleOf(lineId)}`,
       );
       set({ ply: ply + 1 });
     },
@@ -536,6 +554,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         [chapterChange(lineId, truncateMoves(own, keep), line.startPly, prefixOf(line), course.manifest.side)],
         `Deleted the moves after this position.`,
         true,
+        `delete the moves of ${titleOf(lineId)} after ${ply > 0 ? moveText(ply - 1, line.game.moves[ply - 1]!.san) : 'the start'}`,
       );
     },
 
@@ -555,6 +574,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
           },
         ],
         'Saved the note.',
+        false,
+        `note ${moveText(ply - 1, line.game.moves[ply - 1]!.san)} in ${titleOf(lineId)}`,
       );
     },
 
@@ -566,7 +587,12 @@ export const useAuthor = create<AuthorState>((set, get) => {
       let game = setHeader(own, 'Variation', title || 'Line');
       game = setHeader(game, 'Description', description);
       game = setHeader(game, 'Kind', kind);
-      await save([{ kind: 'chapter', itemId: lineId, body: chapterText(game, line.startPly) }], 'Saved the line.');
+      await save(
+        [{ kind: 'chapter', itemId: lineId, body: chapterText(game, line.startPly) }],
+        'Saved the line.',
+        false,
+        `edit the details of ${titleOf(lineId)}`,
+      );
     },
 
     async setSnapshot(ply) {
@@ -578,6 +604,10 @@ export const useAuthor = create<AuthorState>((set, get) => {
       await save(
         [{ kind: 'chapter', itemId: lineId, body: chapterText(game, line.startPly) }],
         ply === undefined ? 'The line is pictured at its end again.' : 'This position now pictures the line.',
+        false,
+        ply === undefined || ply === 0
+          ? `picture ${titleOf(lineId)} at its end`
+          : `picture ${titleOf(lineId)} after ${moveText(ply - 1, line.game.moves[ply - 1]!.san)}`,
       );
     },
 
@@ -592,6 +622,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
       await save(
         [courseChange({ ...course, manifest: { ...course.manifest, lines } })],
         name ? `Put the line in ${name}.` : 'Took the line out of its group.',
+        false,
+        name ? `put ${titleOf(lineId)} in group ${name}` : `take ${titleOf(lineId)} out of its group`,
       );
     },
 
@@ -602,7 +634,12 @@ export const useAuthor = create<AuthorState>((set, get) => {
       const lines = course.manifest.lines.map((entry) =>
         entrySection(entry) === from ? withSection(entry, name) : entry,
       );
-      await save([courseChange({ ...course, manifest: { ...course.manifest, lines } })], `Renamed ${from} to ${name}.`);
+      await save(
+        [courseChange({ ...course, manifest: { ...course.manifest, lines } })],
+        `Renamed ${from} to ${name}.`,
+        false,
+        `rename group ${from} to ${name}`,
+      );
     },
 
     async deleteGroup(name) {
@@ -615,6 +652,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         [courseChange({ ...course, manifest: { ...course.manifest, lines } })],
         `Deleted the group ${name}; its lines are kept.`,
         true,
+        `delete group ${name}`,
       );
     },
 
@@ -644,6 +682,9 @@ export const useAuthor = create<AuthorState>((set, get) => {
         ],
         doomed.size > 1 ? `Deleted the line and ${doomed.size - 1} that grew from it.` : 'Deleted the line.',
         true,
+        doomed.size > 1
+          ? `delete line ${titleOf(lineId)} and ${doomed.size - 1} that grew from it`
+          : `delete line ${titleOf(lineId)}`,
       );
     },
 
@@ -666,6 +707,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         ],
         `Deleted the course ${course.manifest.name}.`,
         true,
+        `delete course ${course.manifest.name}`,
       );
     },
 
@@ -692,13 +734,29 @@ export const useAuthor = create<AuthorState>((set, get) => {
       await save(
         [...chapters, courseChange({ ...course, manifest: { ...course.manifest, side, opening } })],
         `You now play ${side} in this course.`,
+        false,
+        `play ${side} in the course`,
       );
     },
 
     async setCourseMeta(meta) {
       const course = courseOf(get().courseId);
       if (!course) return;
-      await save([courseChange({ ...course, manifest: { ...course.manifest, ...meta } })], 'Saved the course.');
+      // Name what changed: a rename alone says so.
+      const changed = Object.entries(meta).filter(
+        ([key, value]) =>
+          JSON.stringify(value) !== JSON.stringify(course.manifest[key as keyof typeof course.manifest]),
+      );
+      const label =
+        changed.length === 1 && changed[0]![0] === 'name'
+          ? `rename course ${course.manifest.name} to ${meta.name}`
+          : `edit the details of course ${course.manifest.name}`;
+      await save(
+        [courseChange({ ...course, manifest: { ...course.manifest, ...meta } })],
+        'Saved the course.',
+        false,
+        label,
+      );
     },
 
     async setPath(path, bonus) {
@@ -743,7 +801,19 @@ export const useAuthor = create<AuthorState>((set, get) => {
           return errorText(error);
         }
       }
-      await save([courseChange({ ...course, manifest })], 'Saved the order of the path.');
+      // Name the change: a line moved to or from the bonus, else a new order.
+      const wasBonus = (id: string) => {
+        const old = byId.get(id);
+        return springs(id) || (typeof old !== 'string' && Boolean(old?.alternative));
+      };
+      const toBonus = bonus.find((id) => !wasBonus(id));
+      const toPath = path.find((id) => wasBonus(id));
+      const label = toBonus
+        ? `move ${titleOf(toBonus)} to bonus`
+        : toPath
+          ? `move ${titleOf(toPath)} to the path`
+          : 'reorder the path';
+      await save([courseChange({ ...course, manifest })], 'Saved the order of the path.', false, label);
       return null;
     },
 
@@ -775,7 +845,17 @@ export const useAuthor = create<AuthorState>((set, get) => {
         !next.order.length && !Object.keys(next.after).length && !Object.keys(next.drop).length && !next.place;
       if (empty) delete manifest.units;
       else manifest.units = next;
-      await save([courseChange({ ...course, manifest })], 'Saved where it is shown.');
+      const quiz = content.quizzes.find((candidate) => candidate.id === item);
+      const name = quiz ? `the question ${item}` : titleOf(item);
+      const unit = courseUnits({ ...content, opening: { ...content.opening, units: next } }).find(
+        (candidate) => candidate.traps.includes(item) || candidate.quizzes.includes(item),
+      );
+      await save(
+        [courseChange({ ...course, manifest })],
+        'Saved where it is shown.',
+        false,
+        unit ? `show ${name} with ${titleOf(unit.line)} ${unit.n}` : `move ${name}`,
+      );
       return null;
     },
 
@@ -822,6 +902,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         ],
         `Imported ${read.manifest.name}, with ${read.chapters.length} ${read.chapters.length === 1 ? 'line' : 'lines'}.`,
         true,
+        `import ${read.manifest.name}`,
       );
       get().selectCourse(read.courseId);
       return null;
@@ -851,10 +932,17 @@ function descendants(build: AuthoredBuild | null, id: string): string[] {
  * What Undo would take back, in a few words ("delete line 2...Bc5", "change to course My Scotch"), from the newest
  * action not yet undone. Null when there is nothing to undo.
  */
-export function describeUndo(history: AuthoredChange[], rows: AuthoredRows): string | null {
+export function describeUndo(
+  history: AuthoredChange[],
+  rows: AuthoredRows,
+  labels: Record<string, string> = {},
+): string | null {
   const undone = new Set(history.flatMap((row) => (row.undoOf ? [row.undoOf] : [])));
   const latest = history.find((row) => row.undoOf === null && !undone.has(row.group));
   if (!latest) return null;
+  // The name the action was saved with; older actions are described from what they changed.
+  const named = labels[latest.group];
+  if (named) return named;
   const group = history.filter((row) => row.group === latest.group);
   const now = (row: AuthoredChange) =>
     (row.kind === 'chapter' ? rows.chapters : rows.courses).find((item) => item.id === row.itemId);

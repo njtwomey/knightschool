@@ -149,7 +149,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   `lichess` in index.json).
 - `author` (**Create**, the course editor, its own section of the menu). `/create` (`create-page.tsx`) is your courses
   in one sortable table (name, side, lines, last edited, status with its problems on hover; open, view as learner,
-  copy, delete) with New course, Import contribution, Undo (named: "Undo: delete line 2...Bc5", `describeUndo`) and
+  copy, delete) with New course, Import contribution, Undo (named after the action: "Undo: reorder the path"; each save stores its name under `authoringUndoLabels` in settings, and `describeUndo` falls back to what changed for older actions) and
   Export. `/create/<course>` (`course-editor.tsx`, tabs in `tabs.ts` at the end of the breadcrumbs, `crumbs.tsx`) has
   Details (`course-form.tsx`: name, side while no line has moves, tier, opening, summary, about, plans, motifs, groups),
   Lines (`lines-tab.tsx`: every line with kind, group, opponent, moves, what it grows from and problems; new from the
