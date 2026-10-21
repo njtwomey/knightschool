@@ -114,7 +114,8 @@ the build never calls the network. Put secrets in `.env` (git-ignored; `.env.exa
 ### Changing the app
 
 - Build screens from the shadcn components in `apps/web/src/components/ui`. ESLint rejects raw buttons and inputs.
-- Keep to the package boundaries (core knows nothing about React or the browser); ESLint enforces them.
+- Keep to the package boundaries (core knows nothing about React or the browser) and, inside the web app, to its
+  layers: `lib`, `router`, `data` and `components` never import a page from `features`. ESLint enforces both.
 - Core changes ship with tests in the same commit.
 - After changing the database schema in `packages/storage/src/schema.ts`, run `pnpm db:generate` and commit the
   migration it writes.

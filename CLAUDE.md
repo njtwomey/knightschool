@@ -61,7 +61,11 @@ Four workspace packages with a one-way dependency rule, enforced by `eslint-plug
 - `packages/engine`, `packages/storage`: may import core **types only** (`import type`), plus core's Zod schemas via
   `@knightschool/core/schema`; never each other or React. (A package-root value import is blocked by
   `no-restricted-imports`, a relative one by the boundaries policy.)
-- `apps/web`: the only place engine, storage, core and React meet.
+- `apps/web`: the only place engine, storage, core and React meet. Inside `apps/web/src` the folders are layered, lowest
+  first, and the same plugin enforces it: `lib` (plain helpers such as `days.ts`; imports nothing else from the app),
+  `router` (addresses), `data` (loading and shared stores), `components` (shared UI), then `features` (pages), `App.tsx`
+  and `main.tsx`. Only features (and App) import features; lib, router and data never import components.
+  `eslint-alias-resolver.js` teaches the rules the `@/` alias.
 
 Data is split into content (authored, shipped, read-only) and user state (written by the app, exportable). Both are Zod
 schemas in `packages/core`; Drizzle tables in `packages/storage` mirror the user-state schemas. Positions are keyed by
@@ -102,7 +106,7 @@ position.
 In the browser that is a Worker running sqlite-wasm on opfs-sahpool (no COOP/COEP headers needed; one tab at a time,
 enforced with a Web Lock that the newest tab _steals_: the older tab is told (`onLost`), terminates its worker and shows
 a banner with "use it in this tab"; opening is retried briefly while the old tab lets go of the files). In tests it is an in-memory sqlite-wasm in Node
-(`testing/memory.ts`), the same code path. Repositories (`Storage` interface) are Drizzle over the proxy driver; write
+(`testing/memory.ts`; row fixtures in `testing/fixtures.ts`), the same code path. Repositories (`Storage` interface) are Drizzle over the proxy driver; write
 multi-statement changes by building statements with `toSQL()` and calling `exec.transaction`, never `db.batch`.
 Import merges by `at` (logs keep existing rows) and writes nothing if any row fails validation.
 
@@ -123,34 +127,45 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/search` (aliases `/browse`, `/openings`; the page called Search: courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/path` its study path, `/course/:id/tree` its tree),
 `/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill; learn and drill
 take `/<n>` for unit n of that line on the path, or `/<n>/<first>-<last>` for some of its moves),
-`/quiz` (alias `/review`), `/name` (alias `/guess`), `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/create`
+`/quiz` (alias `/review`), `/name` (aliases `/name-it`, `/guess`), `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/create`
 (your courses; `/profile/author` redirects here), `/create/:course` and `/create/:course/{lines,path,publish}` (one course's
 Details, Lines, Path and Publish), `/create/:course/:line` (the line editor), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
 `setHashState` as the page changes and read once when it opens, so a refresh or shared link restores it exactly:
 course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=…&scope=…&bm=<moves>&bk=<kind>`; play
 `#m=<moves played>` (and `&p=<part>` in a unit with several branches); lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
-and `404.html` is copied from `index.html` at build; dev and preview already fall back). Features in `apps/web/src/features/*`:
+and `404.html` is copied from `index.html` at build; dev and preview already fall back).
+
+Where things live in `apps/web/src`: `router/route.ts` (`parseRoute`, route page names match the folders: `search`,
+`quiz`, `name-it`, ...), `router/hrefs.ts` (every page's tabs and the address builders `courseHref`, `lineHref`,
+`branchesHref`, `createHref`, `lineEditHref`, `profileHref`, plus `parseLineTab` / `parseUnitRef`: build every link with
+these, never by hand), `router/location.ts` and `router/hash.ts`. `data/` holds loading and the shared stores:
+`catalog-store.ts` (`useCatalog`: the course index, the open course and the board's place in it), `progress-store.ts`
+(`useProgress`), `authored-content.ts` and `authored-edits.ts`, `training-settings.ts`, `content.ts`, `storage.ts`.
+`components/` holds shared UI: `ui` (shadcn), `board` (with `shapes.ts`), `breadcrumbs` (`CrumbMenu`, `TabGroup`,
+`CourseBreadcrumbs`, `PlayBreadcrumbs`), `tags` (`TagBadge`, `TagLegend`, `tag-specs.ts`, and `hints.ts`, the hover
+wording for tags and filters), `icon-action.tsx`. Features in `apps/web/src/features/*`, one folder per page, named as
+the menu names it:
 
 The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | Create | Glossary (`App.tsx`).
 
 - `courses` (`/courses`): every course in one table, filtered by side (White / Black / Both), every column sortable, a
   row opens the course.
-- `openings` (the Search page, once called Browse): courses in study order and every line, as cards of one kind (lines
+- `search` (the Search page, once called Browse; `search-page.tsx`): courses in study order and every line, as cards of one kind (lines
   have a board thumbnail). Filters: play it / against it (from `content/openings.yaml`), side, tier; a scope switch (all /
   courses / lines); a forgiving search (words run together, small slips: `editDistance` in `catalog.ts`) ranked by
-  relevance with "why it matched"; and **board search** in a modal: `search.json` maps every position to the lines
+  relevance with "why it matched"; and **board search** in a modal (`board-search.tsx`, `board-query.ts`): `search.json` maps every position to the lines
   through it, so transpositions match.
-- `course`: one course's page, Overview, Path and Tree tabs at the end of the breadcrumbs (`features/course/tabs.ts`). The
+- `course`: one course's page, Overview, Path and Tree tabs at the end of the breadcrumbs (`COURSE_TABS` in `router/hrefs.ts`). The
   introduction (`CourseIntro`: summary, then idea, risks and who it suits in three columns), plans and motifs, line tags
-  explained on hover and in a key (`TagLegend`, wording in `features/openings/explanations.ts`), the board with the
-  engine strip, its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
+  explained on hover and in a key (`TagLegend`, wording in `components/tags/hints.ts`), the board with the
+  engine strip (`board-panel.tsx`, `position-details.tsx`), its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
   from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
   `lichess` in index.json).
-- `author` (**Create**, the course editor, its own section of the menu). `/create` (`create-page.tsx`) is your courses
+- `create` (**Create**, the course editor, its own section of the menu). `/create` (`create-page.tsx`) is your courses
   in one sortable table (name, side, lines, last edited, status with its problems on hover; open, view as learner,
   copy, delete) with New course, Import contribution, Undo (named after the action: "Undo: reorder the path"; each save stores its name under `authoringUndoLabels` in settings, and `describeUndo` falls back to what changed for older actions) and
-  Export. `/create/<course>` (`course-editor.tsx`, tabs in `tabs.ts` at the end of the breadcrumbs, `crumbs.tsx`) has
+  Export. `/create/<course>` (`course-editor.tsx`, tabs (`CREATE_TABS` in `router/hrefs.ts`) at the end of the breadcrumbs, `crumbs.tsx`) has
   Details (`course-form.tsx`: name, side while no line has moves, tier, opening, summary, about, plans, motifs, groups),
   Lines (`lines-tab.tsx`: every line with kind, group, opponent, moves, what it grows from and problems; new from the
   start or branching from a line, rename, copy, delete), Path (`path-order.tsx`, bonus items grouped under the unit they
@@ -159,7 +174,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   problems where they occur. The learner's course page and line About show **Edit** for an authored course
   (`authored` in index.json). `store.ts` (`useAuthor`; pages choose the course and line with `open`) turns each action into chapter PGN and
   course JSON with core's `chapter-edit.ts` (`newChapter`, `appendMove`, `truncateMoves`, `setMoveNote`, `setHeader`,
-  `startHeader`, `opponentMove`) and saves it as one undoable action (`data/authoring.ts`). A new course is a course of
+  `startHeader`, `opponentMove`) and saves it as one undoable action (`data/authored-edits.ts`). A new course is a course of
   its own by default (opening `my-<side>-courses`, grouped as "My courses" by `ownOpeningGroups`); it can instead add to
   one of the app's openings and start from the end of one of its lines (`[Start]` into the shipped chapter). Moves are
   played on the board at the end of a line; **Branch here** makes the next move the start of a new line (a second answer
@@ -180,11 +195,11 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   (`.github/ISSUE_TEMPLATE/contribution.yml`, field `contribution`); over 7,500 characters of URL the link carries a
   short note and the YAML is copied and downloaded instead. **Import** reads a contribution back into your courses.
 - **Authored courses** are ordinary courses: `data/content.ts` merges them into `loadIndex`, `loadOpening` and
-  `loadTreeGraph` through `data/authored.ts`, which reads the live authored rows and runs `buildAuthored` (core) over
+  `loadTreeGraph` through `data/authored-content.ts`, which reads the live authored rows and runs `buildAuthored` (core) over
   them and the shipped chapters as written (`public/content/chapters.json`, from the build, fetched only when something
   is authored). A chapter or course that does not fit (an id taken, a `[Start]` naming nothing, a comment clashing
-  with a shipped one: one comment per move holds here too) is left out with a problem, never a crash. The browse store's
-  `reload` refreshes the lists after an edit. Board search (`search.json`) does not include them.
+  with a shipped one: one comment per move holds here too) is left out with a problem, never a crash. The catalog store's
+  (`useCatalog`) `reload` refreshes the lists after an edit. Board search (`search.json`) does not include them.
 - `path` (a course's Path tab, `features/path`): the course cut into units (`courseUnits` in core, see Training) in
   study order, each with its state, its moves (yours in bold), what unlocks it if locked, its extras (traps and quizzes,
   never needed to pass) and Learn / Drill buttons for just that unit. `data/course-path.ts` loads it: units cut with the
@@ -196,7 +211,7 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   `rush:<course>`: `rushQueue` plays each passed unit from the start to its end, ignoring the depth). Answers are
   recorded the usual way: Learn and Drill through `play/record.ts`, Speed in `speed_attempts`.
 - `line`: one line's page, `/play/<course>/<line>/<tab>` with About, Learn, Drill, Quiz and Tree as a joined button group
-  at the end of the breadcrumbs (`features/line/tabs.ts`; old `/practice` links are Drill). About is the line in words:
+  at the end of the breadcrumbs (`LINE_TABS` in `router/hrefs.ts`; old `/practice` links are Drill). About is the line in words:
   a board on the position that names it (`namedPly`), the moves with their comments, where it branches from and what
   grows from it, other courses that teach it. Quiz is every question of that one line, shuffled and never saved
   (`lineQuestions`). The breadcrumbs' course and line are menus of every course and every line, the current one ticked.
@@ -210,22 +225,23 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   subtree.
 - `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each, searchable and A to Z.
 - `play`: Learn (you play both sides, every move shown), Drill (the computer plays the other side; once called
-  Practise) and Every branch.
+  Practise; `PlayMode` is `learn | drill | branches`) and Every branch.
   `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; how deep: to move 6, 10
   or 15 or the whole line, `cutToMove`; lines from the courses you
   are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
   instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hints (piece, then move) are
   counted. The last set-up is kept in localStorage. Runs go to the `speed_attempts` table (no effect on the review
   schedule), shown on the Stats tab.
-  `guess` ("Name That Opening", menu "Name it", `/name`): a position from the courses and you type what it is; `guessTargets` collects every
+  `name-it` ("Name That Opening", menu "Name it", `/name`; `useNameIt`): a position from the courses and you type what it is; `guessTargets` collects every
   opening and variation whose lines reach it (transpositions count) and `gradeGuess` gives full credit for a variation, half
   for just the opening; answers go to the `guess_attempts` table.
-  `review`: spaced-repetition cards. Quiz, Guess and Speed share a "from" choice (`SourceSelect`, `data/practice-source.ts`):
+  `quiz` (`useQuiz`): spaced-repetition cards. Quiz, Name it and Speed share a "from" choice (`SourceSelect`, `data/practice-source.ts`):
   the courses you are learning, everything, or one course. Quiz also has "Due today (your schedule)", the default; any
   other choice is free practice (`freePractice` in core) that is never saved, so it cannot touch the schedule. At the end
   of a quiz every wrong move is listed with what it cost by the engine against the course's move (`regret.ts` in core:
   under 30cp a memory slip, 30 to 99 an inaccuracy, 100 and more a mistake), from baked analysis or the browser engine at
-  depth 14 after the session. `today`: dashboard. `settings`, `lab` (render any PGN at a ply, or a FEN).
+  depth 14 after the session. `profile`: its tabs (`PROFILE_TABS`) are `overview` (the dashboard), `stats` and
+  `settings`, each a folder under `features/profile`. `lab` (render any PGN at a ply, or a FEN).
 
 Toggle groups mark the chosen item from `aria-checked` / `aria-pressed` (`components/ui/toggle.tsx`), because a hover
 hint (`Hint`, a tooltip trigger) round an item overwrites its `data-state`.
@@ -234,7 +250,7 @@ hint (`Hint`, a tooltip trigger) round an item overwrites its `data-state`.
 replies, the next card appears); a wrong move flashes a cross and snaps back; a miss reveals the move. The exception, asked
 for by the user: in Quiz and Guess a miss (or a partly right Guess, or a move needing a retry) stays up with a **Next** button,
 because there is an explanation to read. In Speed a five second modal, with a countdown and the next opening's name, sits
-between lines of a fixed run. Delays live in `DELAYS` / `REVIEW_DELAYS` / `GUESS_DELAYS` / `SPEED_DELAYS`.
+between lines of a fixed run. Delays live in `DELAYS` / `QUIZ_DELAYS` / `NAME_IT_DELAYS` / `SPEED_DELAYS`.
 
 All boards are `components/board/app-board.tsx` (colour theme, piece set, legal-move dots, hover and selection
 highlights, tick/cross badge, hint pulse). Its size is one rule, `--board-size` in `index.css`: never wider than its
@@ -298,7 +314,7 @@ default path if what is left fails.
 Stockfish 19 lite single-threaded (the registry no longer serves 18) is copied from `node_modules/stockfish` into
 `apps/web/public/engine` by `pnpm engine:copy` (run by `pnpm dev` and `pnpm build`; gitignored) and loaded as a Worker
 from our own origin. It is a separate GPL program: only UCI text goes over `postMessage`, never import its code.
-`packages/engine` is pure logic over a `UciTransport` (a Worker in the browser, `FakeStockfish` in tests): one search at
+`packages/engine` is pure logic over a `UciTransport` (a Worker in the browser, `FakeStockfish` from `src/testing` in tests): one search at
 a time, a different position stops the running one (resolved `partial`), scores are normalised to White's point of view
 before leaving the package. `evaluateCached` / `measureLineCached` read an `EvalStore` first, so a position is searched
 once; the web app backs the store with the `eval_cache` table (`toRows` / `fromRows`). Only finished searches are stored.
