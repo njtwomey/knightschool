@@ -67,7 +67,11 @@ export function GlossaryPage() {
           {shown.length === 0 && <p className="text-sm text-muted-foreground">Nothing in the glossary matches that.</p>}
           <dl className="grid content-start gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {shown.map((entry) => (
-              <div key={entry.id} id={entry.id} className="grid scroll-mt-20 content-start gap-1 rounded-xl border bg-card p-3">
+              <div
+                key={entry.id}
+                id={entry.id}
+                className="grid scroll-mt-20 content-start gap-1 rounded-xl border bg-card p-3"
+              >
                 <dt className="flex items-center gap-2 font-semibold">
                   {entry.name}
                   <Badge variant="secondary" className="px-1.5 py-0 text-[11px] font-normal">
