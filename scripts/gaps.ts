@@ -29,6 +29,10 @@ const sides = (['white', 'black'] as const).filter(
 const popularity = PopularityFile.parse(
   JSON.parse(readFileSync(join(root, 'content', 'popularity', 'popularity.json'), 'utf8')),
 ).positions;
+/** The explorer writes castling as the king taking its rook (e1h1); our lines write the king's move (e1g1). */
+const CASTLING: Record<string, string> = { e1h1: 'e1g1', e1a1: 'e1c1', e8h8: 'e8g8', e8a8: 'e8c8' };
+const castlingUci = (uci: string) => CASTLING[uci] ?? uci;
+
 const gamesAt = (epd: string) => {
   const entry = popularity[epd];
   return entry ? entry.white + entry.draws + entry.black : 0;
@@ -60,7 +64,7 @@ function gapsFor(side: Side, courses: OpeningContent[]): Gap[] {
     if (sideToMove(epd) !== side && here > 0) {
       for (const move of popularity[epd]!.moves) {
         const count = move.white + move.draws + move.black;
-        if (answered.has(move.uci) || count / here < minShare) continue;
+        if (answered.has(castlingUci(move.uci)) || count / here < minShare) continue;
         gaps.push({
           games: count,
           share: count / here,
