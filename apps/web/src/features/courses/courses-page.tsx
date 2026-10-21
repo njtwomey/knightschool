@@ -1,21 +1,27 @@
-import { courseProgress, inStudyOrder, type OpeningIndexEntry, type Side, type Tier } from '@knightschool/core';
-import { useEffect } from 'react';
+import { courseProgress, inStudyOrder, roleOf, type Side, type Tier } from '@knightschool/core';
+import { GitFork } from 'lucide-react';
+import { Fragment, useEffect } from 'react';
 import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useBrowse } from '@/features/browse/store';
+import { courseHref } from '@/features/course/tabs';
 import { useProgress } from '@/features/courses/progress';
-import { CourseCard } from '@/features/openings/course-card';
+import { to } from '@/router/location';
 
-const TIERS: { tier: Tier; title: string; note: string }[] = [
-  { tier: 1, title: 'Study first', note: 'The core of a repertoire.' },
-  { tier: 2, title: 'Next', note: 'The next openings to meet, and the main answers to them.' },
-  { tier: 3, title: 'Alternatives and rare replies', note: 'Extra weapons and the odd moves people try.' },
+const TIER: Record<Tier, string> = { 1: 'Study first', 2: 'Next', 3: 'Alternative' };
+const SIDES: { side: Side; title: string }[] = [
+  { side: 'white', title: 'You play White' },
+  { side: 'black', title: 'You play Black' },
 ];
 
 /**
- * Every course and nothing else (/courses): Browse stripped down to the courses, for an overview of what there is to
- * learn. Grouped by the side you play, then by tier, in study order, each with how far through it you are.
+ * Every course as one plain table (/courses), for seeing at a glance what there is and how it hangs together: grouped
+ * by the side you play, then by tier and study order, with the opening each belongs to, the moves it starts from, how
+ * many lines it has and how far through it you are. Browse is for searching; this is the list.
  */
 export function CoursesPage() {
   const index = useBrowse((state) => state.index);
@@ -26,22 +32,15 @@ export function CoursesPage() {
   useEffect(() => {
     void useProgress.getState().refresh();
   }, []);
-
   const total = courseProgress(index, learned);
-  const sides: { side: Side; title: string }[] = [
-    { side: 'white', title: 'You play White' },
-    { side: 'black', title: 'You play Black' },
-  ];
-  const of = (side: Side, tier: Tier): OpeningIndexEntry[] =>
-    inStudyOrder(index.filter((course) => course.side === side && course.tier === tier));
 
   return (
-    <Page className="gap-8">
+    <Page className="gap-6">
       <header className="grid gap-1">
         <h1 className="text-2xl font-semibold">Courses</h1>
         <p className="text-muted-foreground">
           {index.length > 0
-            ? `${index.length} courses, ${total.learned} of ${total.total} moves learned. Open one for its introduction, lines and tree.`
+            ? `${index.length} courses, ${total.learned} of ${total.total} moves learned.`
             : 'Every course, by the side you play.'}
         </p>
       </header>
@@ -51,40 +50,89 @@ export function CoursesPage() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
-      {status !== 'ready' && status !== 'error' && (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <Skeleton className="h-40" />
-          <Skeleton className="h-40" />
-          <Skeleton className="h-40" />
+      {status !== 'ready' && status !== 'error' && <Skeleton className="h-96" />}
+      {status === 'ready' && (
+        <div className="rounded-xl border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Course</TableHead>
+                <TableHead>Tier</TableHead>
+                <TableHead>Opening</TableHead>
+                <TableHead>Starts with</TableHead>
+                <TableHead className="text-right">Lines</TableHead>
+                <TableHead>Learned</TableHead>
+                <TableHead>
+                  <span className="sr-only">Tree</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {SIDES.map(({ side, title }) => {
+                const courses = inStudyOrder(index.filter((course) => course.side === side)).sort(
+                  (a, b) => a.tier - b.tier,
+                );
+                return (
+                  <Fragment key={side}>
+                    <TableRow className="bg-muted/50 hover:bg-muted/50">
+                      <TableCell colSpan={7} className="py-2 font-semibold">
+                        {title} <span className="font-normal text-muted-foreground">({courses.length})</span>
+                      </TableCell>
+                    </TableRow>
+                    {courses.map((course) => {
+                      const progress = courseProgress([course], learned);
+                      const share = progress.total ? progress.learned / progress.total : 0;
+                      const opening = openings.find((candidate) => candidate.id === course.opening);
+                      const role = roleOf(course, openings);
+                      return (
+                        <TableRow key={course.id}>
+                          <TableCell className="min-w-40 whitespace-normal font-medium">
+                            <a href={to(courseHref(course.id))} className="hover:underline">
+                              {course.name}
+                            </a>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant={course.tier === 1 ? 'default' : 'outline'} className="font-normal">
+                              {TIER[course.tier]}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="min-w-40 whitespace-normal text-sm">
+                            {opening?.name ?? course.opening}{' '}
+                            <span className="text-muted-foreground">
+                              ({role === 'play' ? 'you play it' : 'you meet it'})
+                            </span>
+                          </TableCell>
+                          <TableCell className="min-w-32 whitespace-normal font-mono text-xs">
+                            {course.trigger || 'the first move'}
+                          </TableCell>
+                          <TableCell className="text-right tabular-nums">{course.lines.length}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted" aria-hidden>
+                                <div className="h-full bg-primary" style={{ width: `${Math.round(share * 100)}%` }} />
+                              </div>
+                              <span className="text-xs tabular-nums text-muted-foreground">
+                                {progress.learned}/{progress.total}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Button asChild variant="ghost" size="sm" className="h-7">
+                              <a href={to(courseHref(course.id, 'tree'))} aria-label={`The tree of ${course.name}`}>
+                                <GitFork aria-hidden /> Tree
+                              </a>
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </Fragment>
+                );
+              })}
+            </TableBody>
+          </Table>
         </div>
       )}
-      {status === 'ready' &&
-        sides.map(({ side, title }) => (
-          <section key={side} aria-labelledby={`courses-${side}`} className="grid gap-5">
-            <h2 id={`courses-${side}`} className="border-b pb-2 text-xl font-semibold">
-              {title}
-            </h2>
-            {TIERS.map(({ tier, title: tierTitle, note }) => {
-              const courses = of(side, tier);
-              if (courses.length === 0) return null;
-              return (
-                <div key={tier} className="grid gap-3">
-                  <div>
-                    <h3 className="font-medium">{tierTitle}</h3>
-                    <p className="text-sm text-muted-foreground">{note}</p>
-                  </div>
-                  <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {courses.map((course) => (
-                      <li key={course.id} className="contents">
-                        <CourseCard course={course} openings={openings} learned={learned} />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </section>
-        ))}
     </Page>
   );
 }
