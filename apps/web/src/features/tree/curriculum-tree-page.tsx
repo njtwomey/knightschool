@@ -63,6 +63,7 @@ export function CurriculumTreePage() {
       lines={lines}
       header={header}
       search
+      zoom={0.3}
       aside={
         <Select onValueChange={(course) => navigate(courseHref(course, 'tree'))}>
           <SelectTrigger className="h-8 w-full" aria-label="Open one course's tree">

@@ -77,6 +77,7 @@ export function TreeExplorer({
   shortNames = false,
   search = false,
   aside,
+  zoom,
 }: {
   tree: MoveTree;
   /** In order: the first is the main line, the rest in the order their lanes are claimed. */
@@ -91,6 +92,8 @@ export function TreeExplorer({
   search?: boolean;
   /** Anything else for the top of the index, such as a course picker. */
   aside?: ReactNode;
+  /** The tree's starting zoom: the whole curriculum starts far out, to show its shape. */
+  zoom?: number;
 }) {
   const ids = useMemo(() => lines.map((line) => line.id), [lines]);
   const byId = useMemo(() => new Map(lines.map((line) => [line.id, line])), [lines]);
@@ -232,6 +235,7 @@ export function TreeExplorer({
             scrollTo={scrollTo}
             onFocus={setFocus}
             onPick={pickNode}
+            zoom={zoom}
             className="max-h-[70dvh] lg:max-h-[calc(100dvh-8rem)]"
           />
           <p className="text-xs text-muted-foreground">
