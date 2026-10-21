@@ -42,3 +42,47 @@
   examples:
     match: [nothing defends it, the d6 pawn blocks the queen, it is undefended]
     miss: [it is pinned, it is a bad square, no idea, to castle]
+- id: qxd4-bxc6-check
+  line: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 d5 5. exd5 Qxd5 6. Nf3 Bg4 7. Be2 Bxf3 8. Bxf3 Qxd4
+  prompt: 'Black grabbed the pawn on d4. How does White win the queen?'
+  accept:
+    - keywords: [[bxc6, c6]]
+      feedback: Yes. Bxc6+ removes the knight that guards the queen, with check. After Black answers the check, Qxd4 takes the queen.
+  reveal: Bxc6+ takes the only guard of the queen on d4 with check. Black must answer the check, and then Qxd4 wins the queen.
+  showMove: Bxc6+
+  examples:
+    match: [Bxc6+, take the knight on c6 with check, bishop takes c6]
+    miss: [Qxd4, castle, take the queen, no idea]
+- id: push-d5-chases-knights
+  line: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 Nf6
+  prompt: 'Black has not played ...d5. Which pawn move wins time against both black knights?'
+  accept:
+    - keywords: [[d5]]
+      feedback: Yes. 5.d5 hits the knight on c6, and when it moves, e5 will kick the knight on f6 as well.
+  reveal: 5.d5 attacks the knight on c6. Once it moves, e4-e5 chases the other knight, and Black loses a lot of time.
+  showMove: d5
+  examples:
+    match: [d5, push the d pawn to d5, d4-d5]
+    miss: [e5, Nc3, develop the knight, no idea]
+- id: trapped-knight-f4
+  line: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 g6 5. d5 Ne5
+  prompt: 'The knight went to e5. Which pawn move leaves it with no safe square?'
+  accept:
+    - keywords: [[f4]]
+      feedback: Yes. After 6.f4 every square the knight can reach is covered or blocked by Black's own pawns.
+  reveal: 6.f4 hits the knight. The squares it could go to are covered by White or blocked by Black's pawns on d7, f7 and g6.
+  showMove: f4
+  examples:
+    match: [f4, push the pawn to f4, f2-f4]
+    miss: [Nf3, f3, Qd4, no idea]
+- id: qa4-check-wins-knight
+  line: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 d6 5. d5 Nb4
+  prompt: 'The knight ran to b4. How does White win it?'
+  accept:
+    - keywords: [[qa4, a4]]
+      feedback: Yes. Qa4+ gives check and attacks the knight on b4 at the same time.
+  reveal: Qa4+ is a double attack on the king and the knight on b4. Black answers the check and the queen takes the knight.
+  showMove: Qa4+
+  examples:
+    match: [Qa4+, queen to a4 with check, Qa4 check]
+    miss: [a3, Nc3, Bb5+, no idea]

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation"]
+[ECO "B22"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "hanging-piece"]
+[Themes "space-advantage,tempo-gain,d4-pawn-centre"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...e6"]
+[Start "nc6-main-line 4.cxd4"]
+
+4... e6 ( 4... e5 5. d5 Nd4 ( 5... Nb4 6. Nc3 ) ( 5... Nce7 6. Nc3 ) 6. Nf3 { Challenges the knight on d4 at once. If it takes on f3, the queen takes back and White keeps the space the d5 pawn gives. } 6... Nxf3+ 7. Qxf3 ) ( 4... d6 5. d5 Ne5 ( 5... Nb8 6. Nc3 ) ( 5... Nb4 $2 6. Qa4+ { Check, and the queen takes the knight on b4 next. } ) 6. f4 { Gains more space with a hit on the knight, which has to go back again. } 6... Nd7 ( 6... Ng6 7. Nf3 ) 7. Nf3 ) ( 4... Nf6 5. d5 { Hits the knight on c6, and if it moves, e5 hits the knight on f6. Black's knights are chased round the board. } 5... Ne5 ( 5... Nb8 6. e5 Ng8 7. Nf3 ) ( 5... Nb4 6. a3 ) 6. f4 Ng6 ( 6... Neg4 7. h3 ) 7. e5 ) ( 4... g6 5. d5 Nb8 ( 5... Ne5 $4 6. f4 { The knight is trapped: c4, d3, f3 and g4 are covered, c6 is guarded by the d5 pawn, and d7, f7 and g6 hold Black's own pawns. } ) 6. Nc3 ) 5. d5 { Black did not play ...d5 at once, so White pushes the pawn past the knight on c6 and kicks it. Whichever way it goes, the pawn on d5 cramps Black. } 5... exd5 ( 5... Ne5 6. f4 Ng6 7. Nc3 ) ( 5... Bb4+ 6. Nc3 exd5 7. exd5 ) ( 5... Nb4 6. Nc3 ) 6. exd5 { Takes back with the pawn, which still attacks the knight on c6. } 6... Ne5 ( 6... Bb4+ 7. Nc3 Qe7+ 8. Be2 ) ( 6... Nb4 7. Nc3 ) ( 6... Nce7 7. Nc3 ) ( 6... Qe7+ 7. Be2 ) 7. Nf3 { Develops and offers to trade the knight on e5, Black's best-placed piece. If it takes on f3, the queen takes back. } 7... Bd6 ( 7... Nxf3+ 8. Qxf3 ) 8. Be2 Nf6 9. Nc3 O-O 10. O-O { Plan: the pawn on d5 cramps Black and holds back the pawn on d7. Keep it guarded with pieces, bring a knight to d4 or b5 and a rook to e1, and Black's pieces run short of good squares. } *

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation"]
+[ECO "B22"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "space-advantage,passed-pawn,tempo-gain"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...e6"]
+[Start "minor-second-moves 2...Nc6 3.d4"]
+
+3... e6 ( 3... d6 4. d5 { Kicks the knight before Black can play ...e5 or ...Nf6. The pawn on d5 takes away c6 and e6. } 4... Ne5 ( 4... Nb8 5. Nf3 ) 5. f4 Ng6 ( 5... Nd7 6. Nf3 ) 6. Nf3 ) 4. d5 { The same rule as after 3...cxd4 4.cxd4: when Black's knight is on c6 and Black has not played ...d5, push the d-pawn and kick it. } 4... exd5 ( 4... Ne5 5. f4 Ng6 6. Nf3 ) 5. exd5 { Takes back with the pawn, so it still attacks the knight on c6. } 5... Ne5 ( 5... Qe7+ 6. Be2 ) 6. Nf3 { Develops and offers to trade off the knight on e5. } 6... d6 7. Nxe5 dxe5 8. Bb5+ { Gains time with check and trades off a pair of bishops. The fewer pieces there are, the stronger White's pawn on d5 becomes. } 8... Bd7 9. Bxd7+ Qxd7 10. c4 { Plan: the pawn on d5 is now passed: no Black pawn stands in front of it on the c-, d- or e-file, and c4 guards it. Bring the knight round to c3 or e4, castle, and push the pawn when it is safe. } *

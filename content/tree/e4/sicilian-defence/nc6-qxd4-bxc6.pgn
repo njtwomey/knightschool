@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Barmen Defense, Central Exchange"]
+[ECO "B22"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pawn-grab,early-queen"]
+[Themes "pin,tempo-gain"]
+[Refutes "1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 d5 5. exd5 Qxd5 6. Nf3 Bg4 7. Be2 Bxf3 8. Bxf3 Qxd4"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "8...Qxd4"]
+[Start "nc6-main-line 8.Bxf3"]
+
+8... Qxd4 $4 { Takes the pawn, but the queen on d4 is guarded only by the knight on c6, and White's queen on d1 looks straight up the file at it. } 9. Bxc6+ $1 { Removes the guard with check. Black has to answer the check first, and then the queen on d4 is simply taken. } 9... bxc6 ( 9... Kd8 10. Qxd4 ) 10. Qxd4 { White has won the queen for a bishop. } *

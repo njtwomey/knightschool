@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation, Barmen Defense, Central Exchange"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin,early-queen"]
+[Themes "tempo-gain,d4-pawn-centre,bishop-pair"]
+[For "white"]
+[Kind "main"]
+[Opponent "2...Nc6 3.d4 cxd4"]
+[Start "minor-second-moves 2...Nc6 3.d4"]
+
+3... cxd4 4. cxd4 { This is what 2.c3 was for: White takes back with a pawn and has two pawns in the centre, and the c3 square is free again for the knight. } 4... d5 { Hits e4 at once, before White can guard it. Any slower move lets White push d4-d5 and chase the knight on c6. } 5. exd5 { Takes, so Black has to bring the queen out to win the pawn back. } 5... Qxd5 6. Nf3 { Develops and guards d4. Next comes Nc3, which hits the queen again now that the c-pawn has gone. } 6... Bg4 { Pins the knight on f3 to the queen, so it stops guarding d4, the pawn the queen and the knight on c6 both attack. } 7. Be2 { Breaks the pin. If Black takes on f3, the bishop recaptures and looks straight down the long diagonal at c6 and b7. After 7...e6 8.Nc3 the game joins the line 2...d5 3.exd5 Qxd5 4.d4 Nc6 5.Nf3 Bg4. } 7... Bxf3 $6 { Gives up the bishop for the knight. Now White's bishop on f3 eyes the knight on c6, so ...Qxd4 fails, and d4-d5 comes with gain of time. } ( 7... Nf6 8. Nc3 { Hits the queen. White will castle and keep d4 guarded, the same plan as when Black plays ...e6 first. } 8... Qa5 9. O-O e6 ) ( 7... O-O-O $6 8. Nc3 { Hits the queen, and the black king on c8 now stands on the open c-file, where a white rook will soon arrive. } ) 8. Bxf3 { Now the bishop aims down the long diagonal at the knight on c6, the piece that would guard Black's queen if it took on d4. } 8... Qd7 ( 8... Qd8 9. d5 Ne5 10. Be2 ) ( 8... Qd6 9. d5 Ne5 10. Be2 ) 9. d5 { With the queen gone from d5, the pawn can move up and chase the knight off c6. The bishop on f3 guards d5. } 9... Ne5 10. Be2 { Steps out of the knight's reach and keeps the two bishops. White has more space and Black has no centre pawns at all. } 10... e6 11. Nc3 { Plan: castle, bring the other bishop to f4 to hit the knight on e5, and use the pawn on d5 to cramp Black. If Black takes on d5, take back with a piece: Black's king is still in the centre, on the open d-file. } *

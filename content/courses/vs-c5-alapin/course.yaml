@@ -37,6 +37,11 @@ lines:
   - id: e6-advance
     alternative: true
   - minor-second-moves
+  - nc6-main-line
+  - nc6-queen-chased
+  - nc6-push-d5
+  - nc6-e6-push
+  - nc6-qxd4-bxc6
   - c4-hits-the-queen
   - bd3-leaves-g2
   - nb6-retreat
