@@ -2,6 +2,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { isOwnOpening } from './authoring';
 import { parsePgn, writePgn } from '../chess/pgn';
 import { CourseManifest } from '../schema/content';
+import { Slug } from '../schema/tags';
 import { parseStart } from '../content/theory-tree';
 import { z } from 'zod';
 
@@ -12,8 +13,6 @@ import { z } from 'zod';
  * reads it back with the same parsers (`readContribution`).
  */
 export const CONTRIBUTION_VERSION = 1;
-
-const Slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'kebab-case only');
 
 export const ContributionFile = z.object({
   knightschool: z.literal('contribution'),
