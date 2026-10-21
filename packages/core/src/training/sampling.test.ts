@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { pickWeighted, popularityWeight } from './sampling';
+import { pickWeighted, popularityWeight, shuffle } from './sampling';
 
 /** A repeatable stream of "random" numbers. */
 const seeded = (seed: number) => () => {
@@ -43,5 +43,22 @@ describe('popularityWeight', () => {
     expect(popularityWeight(undefined)).toBeGreaterThan(0);
     expect(popularityWeight(undefined)).toBeLessThan(0.05);
     expect(popularityWeight(0)).toBeGreaterThan(0);
+  });
+});
+
+describe('shuffle', () => {
+  it('keeps every item once and leaves the input alone', () => {
+    const items = [1, 2, 3, 4, 5, 6];
+    const shuffled = shuffle(items, seeded(5));
+    expect([...shuffled].sort()).toEqual(items);
+    expect(items).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(shuffle([], seeded(1))).toEqual([]);
+  });
+
+  it('puts each item first about equally often', () => {
+    const random = seeded(11);
+    const counts = [0, 0, 0, 0];
+    for (let i = 0; i < 4000; i++) counts[shuffle([0, 1, 2, 3], random)[0]!]! += 1;
+    for (const count of counts) expect(Math.abs(count - 1000)).toBeLessThan(150);
   });
 });
