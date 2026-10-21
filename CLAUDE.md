@@ -123,7 +123,7 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/search` (aliases `/browse`, `/openings`; the page called Search: courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/path` its study path, `/course/:id/tree` its tree),
 `/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill; learn and drill
 take `/<n>` for unit n of that line on the path, or `/<n>/<first>-<last>` for some of its moves),
-`/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
+`/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`, `/profile/author`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
 `setHashState` as the page changes and read once when it opens, so a refresh or shared link restores it exactly:
 course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=…&scope=…&bm=<moves>&bk=<kind>`; play
@@ -145,6 +145,18 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
   engine strip, its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
   from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
   `lichess` in index.json).
+- `author` (Profile, Author: the course editor). `store.ts` (`useAuthor`) turns each action into chapter PGN and
+  course JSON with core's `chapter-edit.ts` (`newChapter`, `appendMove`, `truncateMoves`, `setMoveNote`, `setHeader`,
+  `startHeader`, `opponentMove`) and saves it as one undoable action (`data/authoring.ts`). A new course is a course of
+  its own by default (opening `my-<side>-courses`, grouped as "My courses" by `ownOpeningGroups`); it can instead add to
+  one of the app's openings and start from the end of one of its lines (`[Start]` into the shipped chapter). Moves are
+  played on the board at the end of a line; **Branch here** makes the next move the start of a new line (a second answer
+  where you move is listed `alternative`, since a course has one answer per position). A move's note has free text and
+  tags (tip, trap, common blunder, any word); a comment another line already gives is read-only (one comment per move).
+  Lines have a title, a description, a kind, a group (course `section`) and a snapshot. The Path tab edits `units:` as
+  YAML, checked against the units before saving. Deletes ask first, take what grows from a line with it, and offer
+  Undo; the reminder to export shows above the editor. Learners see notes, tags (`components/move-tags.tsx`) and the
+  description in About, Learn and Drill.
 - **Authored courses** are ordinary courses: `data/content.ts` merges them into `loadIndex`, `loadOpening` and
   `loadTreeGraph` through `data/authored.ts`, which reads the live authored rows and runs `buildAuthored` (core) over
   them and the shipped chapters as written (`public/content/chapters.json`, from the build, fetched only when something

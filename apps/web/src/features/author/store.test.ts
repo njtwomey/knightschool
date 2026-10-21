@@ -1,0 +1,122 @@
+import { readChapter } from '@knightschool/core';
+import { openMemoryStorage } from '@knightschool/storage/testing';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
+const memory = await openMemoryStorage();
+vi.mock('@/data/storage', () => ({ whenStorageReady: () => Promise.resolve(memory) }));
+// No shipped content: the authored course stands alone.
+vi.stubGlobal('fetch', (url: string) => {
+  const file = url.split('/').at(-1)!;
+  const body = file === 'index.json' || file === 'chapters.json' ? [] : null;
+  return Promise.resolve({ ok: body !== null, status: 404, json: () => Promise.resolve(body) });
+});
+
+const { draftCourses, fullLine, useAuthor } = await import('./store');
+const author = () => useAuthor.getState();
+const chapterPgn = async (id: string) => (await memory.storage.authoring.chapters()).find((row) => row.id === id);
+const play = async (...ucis: string[]) => {
+  for (const uci of ucis) await author().playMove(uci);
+};
+const sansOf = (id: string | null) => fullLine(author().build, id)?.game.moves.map((move) => move.san);
+
+describe('writing a course in the editor', () => {
+  beforeAll(async () => {
+    await author().load();
+    await author().createCourse({ name: 'My Italian', side: 'white' });
+  });
+
+  it('makes a course with an empty main line, and plays moves onto it', async () => {
+    expect(author().courseId).toBe('my-italian');
+    expect(author().lineId).toBe('my-italian-main');
+    // A course of its own unless it says otherwise: no opening of the app is needed.
+    expect(draftCourses(author().rows)[0]!.manifest.opening).toBe('my-white-courses');
+    await play('e2e4', 'e7e5', 'g1f3', 'b8c6');
+    expect(sansOf('my-italian-main')).toEqual(['e4', 'e5', 'Nf3', 'Nc6']);
+    expect(author().ply).toBe(4);
+    expect(author().build!.problems).toEqual([]);
+    expect(readChapter((await chapterPgn('my-italian-main'))!.pgn).tags.Opponent).toBe('1...e5');
+  });
+
+  it('steps along the line, and asks for a branch to play a different move', async () => {
+    author().setPly(2);
+    await play('g1f3');
+    expect(author().ply).toBe(3);
+    author().setPly(2);
+    await play('f2f4');
+    expect(author().message?.text).toMatch(/choose Branch/);
+    expect(sansOf('my-italian-main')).toHaveLength(4);
+  });
+
+  it('branches from a position into a new line that grows from it', async () => {
+    author().setPly(2);
+    author().startBranch();
+    await play('f2f4', 'e5f4');
+    const branch = author().lineId!;
+    expect(branch).not.toBe('my-italian-main');
+    expect(sansOf(branch)).toEqual(['e4', 'e5', 'f4', 'exf4']);
+    expect(readChapter((await chapterPgn(branch))!.pgn).tags).toMatchObject({
+      Start: 'my-italian-main 1...e5',
+      Variation: 'Main line, 2.f4',
+      Opponent: '1...e5',
+    });
+    const course = draftCourses(author().rows)[0]!;
+    // 2.f4 is a second answer to the position after 1...e5, so it is shown but not drilled.
+    expect(course.manifest.lines).toEqual(['my-italian-main', { id: branch, alternative: true }]);
+    expect(author().build!.problems).toEqual([]);
+  });
+
+  it('notes and tags a move, pictures the line, and puts it in a group', async () => {
+    const branch = author().lineId!;
+    author().setPly(3);
+    await author().setNote('Offers a pawn for the centre.', ['tip', 'trap', 'King gambit']);
+    await author().setSnapshot(3);
+    await author().setGroup('Gambits');
+    const game = readChapter((await chapterPgn(branch))!.pgn);
+    expect(game.moves[0]).toMatchObject({
+      san: 'f4',
+      comment: 'Offers a pawn for the centre.',
+      tags: ['tip', 'trap', 'king-gambit'],
+    });
+    expect(game.tags.Snapshot).toBe('3');
+    expect(draftCourses(author().rows)[0]!.manifest.lines[1]).toEqual({
+      id: branch,
+      alternative: true,
+      section: 'Gambits',
+    });
+    const content = author().build!.courses[0]!;
+    expect(content.opening.variants.find((variant) => variant.id === branch)).toMatchObject({
+      snapshot: 3,
+      section: 'Gambits',
+    });
+  });
+
+  it('deletes a line with what grows from it, and undo brings both back', async () => {
+    const branch = author().lineId!;
+    author().selectLine('my-italian-main');
+    await author().deleteLine();
+    expect(author().message).toMatchObject({ undo: true, text: expect.stringMatching(/and 1 that grew from it/) });
+    expect((await chapterPgn('my-italian-main'))!.deletedAt).not.toBeNull();
+    expect((await chapterPgn(branch))!.deletedAt).not.toBeNull();
+    await author().undo();
+    expect((await chapterPgn('my-italian-main'))!.deletedAt).toBeNull();
+    expect((await chapterPgn(branch))!.deletedAt).toBeNull();
+    expect(draftCourses(author().rows)[0]!.manifest.lines).toHaveLength(2);
+    expect(author().build!.problems).toEqual([]);
+  });
+
+  it('checks path changes against the units before saving them', async () => {
+    expect(await author().setOverrides('order: [nope:1]')).toMatch(/"nope:1" is not a unit/);
+    expect(await author().setOverrides('order: [my-italian-main:1]')).toBeNull();
+    expect(draftCourses(author().rows)[0]!.manifest.units?.order).toEqual(['my-italian-main:1']);
+    expect(await author().setOverrides('')).toBeNull();
+    expect(draftCourses(author().rows)[0]!.manifest.units).toBeUndefined();
+  });
+
+  it('renames and deletes a group, keeping its lines', async () => {
+    await author().renameGroup('Gambits', 'Sharp');
+    expect(draftCourses(author().rows)[0]!.manifest.lines[1]).toMatchObject({ section: 'Sharp' });
+    await author().deleteGroup('Sharp');
+    expect(draftCourses(author().rows)[0]!.manifest.lines).toHaveLength(2);
+    expect(draftCourses(author().rows)[0]!.manifest.lines[1]).not.toHaveProperty('section');
+  });
+});

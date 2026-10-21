@@ -1,6 +1,6 @@
 # Study paths, spaced repetition and authoring: analysis and plan
 
-Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 to 5 are built (see §4 for what changed from this proposal). Decisions
+Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 to 6 are built (see §4 for what changed from this proposal). Decisions
 that change stored data are listed at the end.
 
 ## 1. What exists today
@@ -193,7 +193,18 @@ Each stage stands on its own and is small enough to review.
    (a ply; authored lines without one are pictured at their end). The export reminder comes after 20 authored edits or
    7 days since the last export.
 6. **The editor,** under Profile (a new tab beside Overview, Stats and Settings, e.g. `/profile/author`, and an entry in
-   the profile menu): board, lane tree, branch, comment, tags, metadata, groups, overrides, undo.
+   the profile menu): board, lane tree, branch, comment, tags, metadata, groups, overrides, undo. **Done**, at
+   `/profile/author` with a menu entry. As built: the line is a board with step buttons and a numbered move list (the
+   lane tree is not reused: a line is one path, and the tree page already draws authored chapters); moves are added at
+   the end of a line, and **Branch here** starts a new chapter at any position, whose `[Start]` names the chapter that
+   writes the move before; a branch that gives a second answer where you move is listed `alternative` (shown, not
+   drilled), because a course holds one answer per position. Groups are the course entries' `section`. Overrides are
+   the `units:` block edited as YAML and checked against the units before saving. Every action is one undoable history
+   group; deleting a line also deletes what branches from it, after a confirmation. At the user's request a new course
+   is **a course of its own** by default (no opening needed: it goes under an automatic "My courses" group per side);
+   adding to an opening of the app, and carrying on from the end of one of its lines, is the second choice. A comment
+   that the shipped tree already gives a move is shown read-only (the move can still be tagged), because a move has one
+   comment wherever it is played. Learners see descriptions, comments and tags in About, Learn and Drill.
 7. **Publishing:** YAML serialisation and reading, issue form template, link, clipboard and download fallback.
 
 ## 5. Decisions needed before building (hard to reverse)

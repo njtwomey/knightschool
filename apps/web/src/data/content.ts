@@ -1,4 +1,5 @@
 import {
+  ownOpeningGroups,
   CurriculumEntry,
   GlossaryEntry,
   OpeningContent,
@@ -60,7 +61,25 @@ export function loadSearchIndex(): Promise<SearchIndex> {
 
 /** The openings that courses are grouped under, with who plays each. */
 export async function loadOpenings(): Promise<OpeningGroup[]> {
-  return z.array(OpeningGroup).parse(await fetchJson('openings.json'));
+  const shipped = z.array(OpeningGroup).parse(await fetchJson('openings.json'));
+  const authored = await loadAuthoredBuild(shippedIds).catch(() => null);
+  if (!authored?.courses.length) return shipped;
+  // Authored courses join the opening they name, or the "My courses" group of their side.
+  const courses = authored.courses.map(({ opening }) => ({
+    id: opening.id,
+    side: opening.side,
+    opening: opening.opening,
+  }));
+  return [
+    ...shipped.map((group) => ({
+      ...group,
+      courses: [
+        ...group.courses,
+        ...courses.filter((course) => course.opening === group.id).map((course) => course.id),
+      ],
+    })),
+    ...ownOpeningGroups(courses),
+  ];
 }
 
 /** The study order and what each course depends on. */

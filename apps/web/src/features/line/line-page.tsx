@@ -1,6 +1,7 @@
 import { namedPly, variantPath, type LineEdge, type OpeningContent, type Variant } from '@knightschool/core';
 import { BookOpen, GitBranch, GitFork, ListChecks, Target } from 'lucide-react';
 import { EcoLink } from '@/components/eco-link';
+import { MoveTags } from '@/components/move-tags';
 import { useEffect, useMemo, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { StepButtons } from '@/components/board/step-buttons';
@@ -56,14 +57,14 @@ const moveLabel = (ply: number, san: string, numbered: boolean) =>
   ply % 2 === 0 ? `${ply / 2 + 1}. ${san}` : numbered ? `${Math.floor(ply / 2) + 1}... ${san}` : san;
 
 /** The line as paragraphs: a run of moves, then the comment on the last of them. */
-type Paragraph = { moves: { ply: number; san: string }[]; comment?: string };
+type Paragraph = { moves: { ply: number; san: string; tags?: string[] }[]; comment?: string };
 
 function paragraphsOf(path: LineEdge[], from: number): Paragraph[] {
   const paragraphs: Paragraph[] = [];
   let current: Paragraph = { moves: [] };
   for (let ply = from; ply < path.length; ply++) {
     const edge = path[ply]!;
-    current.moves.push({ ply, san: edge.san });
+    current.moves.push({ ply, san: edge.san, tags: edge.annotation?.tags });
     if (edge.annotation?.text) {
       paragraphs.push({ ...current, comment: edge.annotation.text });
       current = { moves: [] };
@@ -205,6 +206,7 @@ function About({
               </span>
             </div>
             <VariantTags variant={variant} side={side} visible={8} />
+            {variant.description && <p className="max-w-prose leading-relaxed">{variant.description}</p>}
           </header>
 
           <div className="flex flex-wrap gap-2">
@@ -364,7 +366,7 @@ function MoveRun({
   ply,
   onPick,
 }: {
-  moves: { ply: number; san: string }[];
+  moves: { ply: number; san: string; tags?: string[] }[];
   ply: number;
   onPick: (ply: number) => void;
 }) {
@@ -382,6 +384,7 @@ function MoveRun({
           >
             {moveLabel(move.ply, move.san, i === 0)}
           </Button>
+          <MoveTags tags={move.tags} className="ml-0.5" />
         </span>
       ))}
     </>

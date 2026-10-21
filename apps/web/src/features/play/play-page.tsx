@@ -9,6 +9,7 @@ import { StepButtons } from '@/components/board/step-buttons';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { MoveTags } from '@/components/move-tags';
 import { RichText } from '@/components/rich-text';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -389,7 +390,10 @@ export function PlayPage({ course, line, mode, unit }: Props) {
                 {exploring
                   ? 'This is off the line. Watch the engine to see what it costs or gains, or click what people play.'
                   : state.mode === 'learn'
-                    ? upcomingNotes.slice(0, 2).map((note) => <RichText key={note.text} text={`${note.text} `} />)
+                    ? [
+                        ...upcomingNotes.slice(0, 2).map((note) => <RichText key={note.text} text={`${note.text} `} />),
+                        <MoveTags key="tags" tags={view.upcoming?.edge.annotation?.tags} />,
+                      ]
                     : MODES[state.mode].blurb}
               </CardDescription>
             </CardHeader>
@@ -426,16 +430,20 @@ export function PlayPage({ course, line, mode, unit }: Props) {
             </CardContent>
           </Card>
 
-          {notes.length > 0 && !complete && state.mode !== 'learn' && (
-            <div className="grid gap-1.5 rounded-lg border bg-card p-4 text-sm">
-              <p className="font-medium">{label(lastStep!, index - 1)}</p>
-              {notes.slice(0, 2).map((note) => (
-                <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
-                  <RichText text={note.text} />
+          {(notes.length > 0 || Boolean(lastStep?.edge.annotation?.tags?.length)) &&
+            !complete &&
+            state.mode !== 'learn' && (
+              <div className="grid gap-1.5 rounded-lg border bg-card p-4 text-sm">
+                <p className="font-medium">
+                  {label(lastStep!, index - 1)} <MoveTags tags={lastStep!.edge.annotation?.tags} />
                 </p>
-              ))}
-            </div>
-          )}
+                {notes.slice(0, 2).map((note) => (
+                  <p key={note.text} className={note.source === 'author' ? '' : 'text-muted-foreground'}>
+                    <RichText text={note.text} />
+                  </p>
+                ))}
+              </div>
+            )}
 
           <CourseIntroCard
             key={`${course}:${state.mode}`}

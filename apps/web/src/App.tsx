@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Library,
   Menu,
+  PenLine,
   Search,
   Settings,
   Telescope,
@@ -173,6 +174,11 @@ export function App() {
               <DropdownMenuItem asChild>
                 <a href={to('/profile/stats')}>
                   <BarChart3 aria-hidden /> Stats
+                </a>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <a href={to('/profile/author')}>
+                  <PenLine aria-hidden /> Author
                 </a>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

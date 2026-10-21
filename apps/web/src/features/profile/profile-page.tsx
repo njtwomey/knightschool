@@ -2,10 +2,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { OverviewPage } from '@/features/overview/overview-page';
 import { SettingsPage } from '@/features/settings/settings-page';
 import { StatsPage } from '@/features/stats/stats-page';
+import { AuthorPage } from '@/features/author/author-page';
+import type { ProfileTab } from '@/route';
 import { navigate } from '@/router/location';
 
-/** You: what is due and how far through your courses you are, how you are doing, and your settings. One page, three tabs. */
-export function ProfilePage({ tab }: { tab: 'overview' | 'stats' | 'settings' }) {
+/**
+ * You: what is due and how far through your courses you are, how you are doing, your settings, and the courses you
+ * write (Author). One page, four tabs.
+ */
+export function ProfilePage({ tab }: { tab: ProfileTab }) {
   return (
     <Tabs
       value={tab}
@@ -17,6 +22,7 @@ export function ProfilePage({ tab }: { tab: 'overview' | 'stats' | 'settings' })
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="stats">Stats</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="author">Author</TabsTrigger>
         </TabsList>
       </div>
       <TabsContent value="overview">
@@ -27,6 +33,9 @@ export function ProfilePage({ tab }: { tab: 'overview' | 'stats' | 'settings' })
       </TabsContent>
       <TabsContent value="settings">
         <SettingsPage />
+      </TabsContent>
+      <TabsContent value="author">
+        <AuthorPage />
       </TabsContent>
     </Tabs>
   );

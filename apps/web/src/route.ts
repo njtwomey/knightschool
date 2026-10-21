@@ -1,9 +1,12 @@
 import type { CourseTab } from '@/features/course/tabs';
 import { parseLineTab, parseUnitRef, type LineTab, type UnitRef } from '@/features/line/tabs';
 
+/** Profile's tabs: Overview, Stats, Settings, and Author (the course editor). */
+export type ProfileTab = 'overview' | 'stats' | 'settings' | 'author';
+
 export type Route =
   | { page: 'home' }
-  | { page: 'profile'; tab: 'overview' | 'stats' | 'settings' }
+  | { page: 'profile'; tab: ProfileTab }
   | { page: 'openings' }
   | { page: 'courses' }
   | { page: 'course'; id: string; tab: CourseTab }
@@ -43,7 +46,7 @@ export function parseRoute(pathname: string): Route {
     case 'courses':
       return { page: 'courses' };
     case 'profile':
-      return { page: 'profile', tab: a === 'stats' ? 'stats' : a === 'settings' ? 'settings' : 'overview' };
+      return { page: 'profile', tab: a === 'stats' || a === 'settings' || a === 'author' ? a : 'overview' };
     case 'overview':
     case 'today':
       return { page: 'profile', tab: 'overview' };

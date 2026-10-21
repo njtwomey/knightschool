@@ -78,6 +78,7 @@ describe('parseRoute', () => {
     ['/profile', { page: 'profile', tab: 'overview' }],
     ['/profile/stats', { page: 'profile', tab: 'stats' }],
     ['/profile/settings', { page: 'profile', tab: 'settings' }],
+    ['/profile/author', { page: 'profile', tab: 'author' }],
     ['/today', { page: 'profile', tab: 'overview' }],
     ['/stats', { page: 'profile', tab: 'stats' }],
     ['/credits', { page: 'credits' }],
