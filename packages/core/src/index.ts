@@ -2,6 +2,7 @@ export * from './attempt';
 export * from './board-edit';
 export * from './branches';
 export * from './catalog';
+export * from './sampling';
 export * from './chess';
 export * from './constants';
 export * from './epd';

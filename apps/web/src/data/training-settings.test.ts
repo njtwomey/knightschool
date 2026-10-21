@@ -18,6 +18,13 @@ import {
 const now = new Date(2026, 9, 13, 23, 30); // local time, late evening
 
 describe('training settings', () => {
+  it('drops enrolled courses that no longer exist', async () => {
+    const { storage } = await openMemoryStorage();
+    await setEnrolled(storage, ['italian-game', 'vs-e5-italian', 'qgd'], now);
+    expect(await getEnrolled(storage, ['vs-e5-italian', 'qgd', 'london'])).toEqual(['vs-e5-italian', 'qgd']);
+    expect(await getEnrolled(storage)).toEqual(['italian-game', 'vs-e5-italian', 'qgd']);
+  });
+
   it('keeps the enrolled openings, ignoring a damaged value', async () => {
     const { storage } = await openMemoryStorage();
     expect(await getEnrolled(storage)).toEqual([]);

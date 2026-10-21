@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { WeightingSelect } from '@/components/weighting-select';
 import { useBrowse } from '@/features/browse/store';
 import { to } from '@/router/location';
 import { SPEED_DELAYS, useSpeed, type SpeedConfig } from './store';
@@ -203,6 +204,15 @@ function SetupDialog() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="speed-weighting">Pick lines</Label>
+            <WeightingSelect
+              value={config.weighting}
+              onChange={(weighting) => set({ weighting })}
+              label="How lines are picked"
+            />
           </div>
         </div>
 

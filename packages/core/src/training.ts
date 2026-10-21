@@ -1,5 +1,6 @@
 import { MIN_POPULARITY_FOR_CARD, SESSION_SIZE } from './constants';
 import { newId } from './ids';
+import { pickWeighted, popularityWeight, type Weighting } from './sampling';
 import type { Attempt } from './attempt';
 import { newCard, scheduleReview } from './scheduler';
 import type { LineNode, OpeningContent } from './schema/content';
@@ -118,8 +119,9 @@ export function planIntroductions(
 }
 
 /**
- * Free practice: a random handful of questions from the given courses, whether or not they are being learned. The
- * cards are made fresh and are never saved, so nothing here touches the review schedule. `random` is injectable for tests.
+ * Free practice: a handful of questions from the given courses, whether or not they are being learned. The cards are
+ * made fresh and are never saved, so nothing here touches the review schedule. Picked at random, or (`popular`)
+ * favouring the positions more games reach. `random` is injectable for tests.
  */
 export function freePractice(
   contents: OpeningContent[],
@@ -127,13 +129,17 @@ export function freePractice(
   options: CardOptions = {},
   random: () => number = Math.random,
   now = new Date(),
+  weighting: Weighting = 'random',
 ): Card[] {
-  const pool = contents.flatMap((content) => introductionOrder(content, { ...options, includeRare: true }));
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j]!, pool[i]!];
-  }
-  return pool.slice(0, size).map((definition) => newCard(definition, now));
+  const pool = contents.flatMap((content) =>
+    introductionOrder(content, { ...options, includeRare: true }).map((definition) => ({
+      definition,
+      popularity: content.nodes[definition.epd]?.popularity,
+    })),
+  );
+  const weight = (entry: { popularity: number | undefined }) =>
+    weighting === 'popular' ? popularityWeight(entry.popularity) : 1;
+  return pickWeighted(pool, weight, size, random).map(({ definition }) => newCard(definition, now));
 }
 
 /** The cards to study now: seen cards first (most overdue first), then new ones in the order introduced. */

@@ -7,6 +7,7 @@ import {
   type OpeningIndexEntry,
 } from '@knightschool/core';
 import { ArrowRight } from 'lucide-react';
+import { useState } from 'react';
 import { BoardThumb } from '@/components/board/board-thumb';
 import { Badge } from '@/components/ui/badge';
 import { Hint } from '@/components/hint';
@@ -18,6 +19,46 @@ import { ECO_HINT, PRACTICE_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from './expl
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
 
 const TIER = { 1: 'Study first', 2: 'Study next', 3: 'Alternative' } as const;
+
+const SHOWN_MATCHES = 3;
+
+/**
+ * The lines a board search passes through: how many, the first few by name, and "and N more" to open the rest in place.
+ * The card is a link, so opening the list must not follow it.
+ */
+function MatchedLines({ matches }: { matches: LineInfo[] }) {
+  const [open, setOpen] = useState(false);
+  const name = (line: LineInfo) => `${line.name}${line.kind === 'refutation' ? ' (trap)' : ''}`;
+  const hidden = matches.length - SHOWN_MATCHES;
+  const toggle = (event: { preventDefault: () => void; stopPropagation: () => void }) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setOpen(!open);
+  };
+  return (
+    <p className="text-xs text-muted-foreground">
+      <span className="font-medium text-foreground">
+        {matches.length} {matches.length === 1 ? 'line' : 'lines'} reach this position
+      </span>
+      : {(open ? matches : matches.slice(0, SHOWN_MATCHES)).map(name).join(', ')}
+      {hidden > 0 && (
+        <>
+          {', '}
+          <span
+            role="button"
+            tabIndex={0}
+            aria-expanded={open}
+            className="relative z-10 cursor-pointer text-foreground underline decoration-dotted underline-offset-2"
+            onClick={toggle}
+            onKeyDown={(event) => (event.key === 'Enter' || event.key === ' ') && toggle(event)}
+          >
+            {open ? 'show fewer' : `and ${hidden} more`}
+          </span>
+        </>
+      )}
+    </p>
+  );
+}
 
 /** A course: its board, name, who plays what, where it sits in the study order, and how far through it you are. */
 export function CourseCard({
@@ -78,7 +119,7 @@ export function CourseCard({
             </Badge>
           </Hint>
         </div>
-        {reason && reason.kind !== 'name' && (
+        {!(matches && matches.length > 0) && reason && reason.kind !== 'name' && (
           <p className="text-xs text-foreground">
             {reason.kind === 'lines' ? (
               <>
@@ -95,11 +136,7 @@ export function CourseCard({
             )}
           </p>
         )}
-        {matches && matches.length > 0 && (
-          <p className="text-xs text-muted-foreground">
-            Matches: {matches.map((line) => `${line.name}${line.kind === 'refutation' ? ' (trap)' : ''}`).join(', ')}
-          </p>
-        )}
+        {matches && matches.length > 0 && <MatchedLines matches={matches} />}
         <div className="mt-auto grid gap-1.5">
           {progress.total > 0 && (
             <Hint text={PRACTICE_HINT.progress}>

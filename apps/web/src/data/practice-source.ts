@@ -1,4 +1,4 @@
-import type { OpeningIndexEntry } from '@knightschool/core';
+import type { OpeningIndexEntry, Weighting } from '@knightschool/core';
 
 /** Where free practice draws from: the courses being learned, every course, or one course by id. */
 export type PracticeSource = 'learning' | 'all' | (string & {});
@@ -26,3 +26,7 @@ export function saveChoice(key: string, value: string) {
     // the choice just will not be remembered
   }
 }
+
+/** A saved "random or popular" choice; anything unrecognised means random. */
+export const savedWeighting = (key: string): Weighting =>
+  savedChoice(key, 'random') === 'popular' ? 'popular' : 'random';

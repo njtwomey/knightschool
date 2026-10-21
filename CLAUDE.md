@@ -35,6 +35,13 @@ Use `make` (run `make` alone to list targets). It uses a global pnpm if present,
 pnpm 12 blocks dependency install scripts by default. New packages that need one must be allowed in
 `pnpm-workspace.yaml` under `allowBuilds` (esbuild already is).
 
+## Docs, authoring and deploy
+
+- `README.md` is the human-facing overview and "how to add things"; keep it in step with this file when the workflow changes.
+  Adding a course goes through the `add-course` skill (`.claude/skills/add-course`): use it for any content change.
+- Deploy: `.github/workflows/deploy.yml` builds and publishes to GitHub Pages on every push to `main` (the build job can pass while
+  the Pages step is slow; re-running a deploy for the same commit can collide with the stuck one, so push a new commit instead).
+
 ## Python
 
 There is no Python in this repo, and project scripts are TypeScript run with `tsx` (`scripts/`). If Python is ever needed
@@ -60,8 +67,8 @@ EPD (FEN without move counters), so transpositions share one node. See `docs/PLA
 
 ### Content
 
-Content is organised by who is to move and what the opponent has done (`docs/CURRICULUM.md` is the proposal, `content/README.md`
-the format). A **course** is a folder under `content/white/` or `content/black/` (the folder decides the side) with
+Content is organised by who is to move and what the opponent has done (`content/README.md` is the format; `docs/CURRICULUM.md` is
+the original proposal, kept for its coverage list, not adopted as written). A **course** is a folder under `content/white/` or `content/black/` (the folder decides the side) with
 `course.yaml`, `lines/*.pgn`, `traps/*.pgn` and `quizzes.yaml`; its id is the folder name. `course.yaml` gives the trigger
 position every line passes through, a tier (1 study first, 2 next, 3 alternatives), the opening it belongs to (an id from
 `content/openings.yaml`, which also says who plays the opening: that makes a course "playing it" or "playing against it"), plans
@@ -98,7 +105,7 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 
 Real path URLs (History API, `apps/web/src/router`): `/` Home, `/browse` (aliases `/search`, `/openings`; courses in study order and every line, in one grid), `/course/:id` (one course),
 `/glossary`, `/play/:course/:line/:mode` (learn | practice; line `all` is the every-branch drill),
-`/quiz` (alias `/review`), `/guess`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
+`/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
 `setHashState` as the page changes and read once when it opens, so a refresh or shared link restores it exactly:
 course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=…&scope=…&bm=<moves>&bk=<kind>`; play

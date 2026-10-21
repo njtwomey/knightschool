@@ -334,11 +334,30 @@ describe('freePractice', () => {
     }
   });
 
-  it('is a different order for a different roll', () => {
+  it('is a different draw for a different roll, from the same cards', () => {
     const c = content();
-    const first = freePractice([c], 100, {}, () => 0, NOW).map((card) => card.id);
-    const second = freePractice([c], 100, {}, () => 0.99, NOW).map((card) => card.id);
+    let seed = 1;
+    const rolling = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const first = freePractice([c], 100, {}, rolling, NOW).map((card) => card.id);
+    const second = freePractice([c], 100, {}, rolling, NOW).map((card) => card.id);
     expect(new Set(first)).toEqual(new Set(second));
     expect(first).not.toEqual(second);
+  });
+
+  it('favours the more popular positions when weighted by popularity', () => {
+    const c = content();
+    const ids = introductionOrder(c, { includeRare: true }).map((card) => card.id);
+    const target = introductionOrder(c, { includeRare: true })[0]!;
+    const popular = { ...c, nodes: { ...c.nodes } };
+    popular.nodes[target.epd] = { ...popular.nodes[target.epd]!, popularity: 1 };
+    let seed = 5;
+    const rolling = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    let firstPicks = 0;
+    for (let i = 0; i < 300; i++) {
+      const [pick] = freePractice([popular], 1, {}, rolling, NOW, 'popular');
+      if (pick!.id === target.id) firstPicks++;
+    }
+    expect(ids.length).toBeGreaterThan(1);
+    expect(firstPicks).toBeGreaterThan(200);
   });
 });

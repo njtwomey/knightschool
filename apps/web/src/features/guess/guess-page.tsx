@@ -12,14 +12,15 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SourceSelect } from '@/components/source-select';
+import { WeightingSelect } from '@/components/weighting-select';
 import { useBrowse } from '@/features/browse/store';
-import { buildHash } from '@/router/hash';
+import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
 import { allSuggestions, SESSION_LENGTH, sessionPoints, useGuess, type Outcome } from './store';
 
 /** "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts. */
 export function GuessPage() {
-  const { phase, error, question, answer, graded, outcomes, source } = useGuess();
+  const { phase, error, question, answer, graded, outcomes, source, weighting } = useGuess();
   const index = useBrowse((state) => state.index);
 
   useEffect(() => {
@@ -66,6 +67,11 @@ export function GuessPage() {
           onChange={(next) => useGuess.getState().setSource(next)}
           index={index}
           label="Positions from"
+        />
+        <WeightingSelect
+          value={weighting}
+          onChange={(next) => useGuess.getState().setWeighting(next)}
+          label="How positions are picked"
         />
       </div>
       <div className="flex items-center gap-3">
@@ -175,7 +181,12 @@ export function GuessPage() {
                 {question.sources.slice(0, 8).map((source) => (
                   <li key={`${source.course}/${source.line}`}>
                     <Button asChild variant="outline" size="sm">
-                      <a href={to(`/course/${source.course}`) + buildHash({ v: source.line })}>
+                      <a
+                        href={
+                          to(`/play/${source.course}/${source.line}/learn`) +
+                          buildHash({ m: source.moves ? encodeMoves(source.moves) : undefined })
+                        }
+                      >
                         {source.name}
                         {source.trap && (
                           <Badge variant="secondary" className="px-1.5 py-0 text-[11px]">

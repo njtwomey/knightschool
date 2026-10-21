@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SourceSelect } from '@/components/source-select';
+import { WeightingSelect } from '@/components/weighting-select';
 import { useBrowse } from '@/features/browse/store';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
 import { currentQuestion, DUE, useReview, type QuizQuestion } from './store';
@@ -38,6 +39,7 @@ const arrow = (uci: string) => ({
 /** Chooses between the scheduled session and free practice from any course. Nothing in free practice is saved. */
 function SourceBar() {
   const source = useReview((state) => state.source);
+  const weighting = useReview((state) => state.weighting);
   const index = useBrowse((state) => state.index);
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
@@ -49,7 +51,16 @@ function SourceBar() {
         extra={[{ value: DUE, label: 'Due today (your schedule)' }]}
         label="Questions from"
       />
-      {source !== DUE && <span>Free practice: nothing here changes your schedule.</span>}
+      {source !== DUE && (
+        <>
+          <WeightingSelect
+            value={weighting}
+            onChange={(next) => useReview.getState().setWeighting(next)}
+            label="How questions are picked"
+          />
+          <span>Free practice: nothing here changes your schedule.</span>
+        </>
+      )}
     </div>
   );
 }

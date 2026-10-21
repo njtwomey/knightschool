@@ -4,21 +4,25 @@ import {
   guessSuggestions,
   guessTargets,
   guessWeight,
+  popularityWeight,
   lastResults,
+  lineSteps,
   newId,
   searchAt,
   type GuessResult,
   type GuessTargets,
   type OpeningIndexEntry,
   type SearchIndex,
+  type Weighting,
 } from '@knightschool/core';
 import { create } from 'zustand';
-import { loadIndex, loadSearchIndex } from '@/data/content';
+import { loadIndex, loadOpening, loadSearchIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
-import { coursesFor, saveChoice, savedChoice, type PracticeSource } from '@/data/practice-source';
+import { coursesFor, saveChoice, savedChoice, savedWeighting, type PracticeSource } from '@/data/practice-source';
 import { getEnrolled } from '@/data/training-settings';
 
 const SOURCE_KEY = 'knightschool.guess.source';
+const WEIGHTING_KEY = 'knightschool.guess.weighting';
 
 /** Positions in one sitting, as a review session has cards. */
 export const SESSION_LENGTH = 10;
@@ -27,7 +31,14 @@ export const SESSION_LENGTH = 10;
 export const GUESS_DELAYS = { full: 2600 } as const;
 
 /** A place a position comes from, to link to once it has been answered. */
-export type Source = { course: string; line: string; name: string; trap: boolean };
+export type Source = {
+  course: string;
+  line: string;
+  name: string;
+  trap: boolean;
+  /** The moves (UCI) from the start to the guessed position along this line, once worked out: the link opens there. */
+  moves?: string[];
+};
 
 export type Question = {
   epd: string;
@@ -51,9 +62,12 @@ type GuessState = {
   shownAt: number;
   /** Which courses the positions come from. Answers are always judged against every course. */
   source: PracticeSource;
+  /** Random, or favouring the positions more games reach. */
+  weighting: Weighting;
 
   start: () => Promise<void>;
   setSource: (source: PracticeSource) => void;
+  setWeighting: (weighting: Weighting) => void;
   stop: () => void;
   setAnswer: (answer: string) => void;
   submit: () => void;
@@ -66,6 +80,8 @@ type Deck = {
   /** The courses positions are asked from (all of them, unless the source narrows it). */
   pool: OpeningIndexEntry[];
   search: SearchIndex;
+  /** How many games reach each position (0 to 1), when the questions are weighted by popularity. */
+  reach: Map<string, number> | null;
   /** How each position went last time, so missed ones come back sooner. */
   history: Map<string, GuessResult>;
 };
@@ -81,7 +97,11 @@ function candidates(from: Deck) {
         if (seen.has(epd)) return;
         // Very early and very late positions are asked a little less: the middle is where openings differ.
         const depth = i >= 1 && i <= 8 ? 1 : 0.5;
-        seen.set(epd, { epd, side: course.side, weight: depth * guessWeight(from.history.get(epd)) });
+        seen.set(epd, {
+          epd,
+          side: course.side,
+          weight: depth * guessWeight(from.history.get(epd)) * (from.reach ? popularityWeight(from.reach.get(epd)) : 1),
+        });
       });
     }
   }
@@ -114,6 +134,25 @@ function pick(from: Deck, asked: Set<string>): Question | null {
 }
 
 export const useGuess = create<GuessState>((set, get) => {
+  /** Works out, for each source line, the moves that reach the guessed position, so its link can open right there. */
+  async function attachMoves(question: Question) {
+    const sources = await Promise.all(
+      question.sources.slice(0, 8).map(async (source) => {
+        try {
+          const content = await loadOpening(source.course);
+          const steps = lineSteps(content, source.line);
+          const at = steps.findIndex((step) => step.edge.to === question.epd);
+          return at < 0 ? source : { ...source, moves: steps.slice(0, at + 1).map((step) => step.edge.uci) };
+        } catch {
+          return source;
+        }
+      }),
+    );
+    const current = get().question;
+    if (current?.epd === question.epd)
+      set({ question: { ...current, sources: [...sources, ...question.sources.slice(8)] } });
+  }
+
   function show() {
     clearTimeout(timer);
     const { outcomes } = get();
@@ -148,6 +187,7 @@ export const useGuess = create<GuessState>((set, get) => {
         }),
       )
       .catch(() => undefined); // the game still works if the answer cannot be saved
+    void attachMoves(question);
     clearTimeout(timer);
     // A right answer moves on by itself; anything else waits, because there is something to read.
     if (grade.result === 'full') timer = setTimeout(show, GUESS_DELAYS.full);
@@ -162,6 +202,7 @@ export const useGuess = create<GuessState>((set, get) => {
     outcomes: [],
     shownAt: 0,
     source: savedChoice(SOURCE_KEY, 'all'),
+    weighting: savedWeighting(WEIGHTING_KEY),
 
     async start() {
       if (get().phase === 'loading') return;
@@ -178,7 +219,18 @@ export const useGuess = create<GuessState>((set, get) => {
                 .then(({ storage }) => getEnrolled(storage))
                 .catch(() => [] as string[])
             : [];
-        deck = { courses, pool: coursesFor(get().source, courses, enrolled), search, history };
+        const pool = coursesFor(get().source, courses, enrolled);
+        let reach: Map<string, number> | null = null;
+        if (get().weighting === 'popular') {
+          reach = new Map();
+          for (const content of await Promise.all(pool.map((course) => loadOpening(course.id)))) {
+            for (const node of Object.values(content.nodes)) {
+              if (node.popularity !== undefined)
+                reach.set(node.epd, Math.max(reach.get(node.epd) ?? 0, node.popularity));
+            }
+          }
+        }
+        deck = { courses, pool, reach, search, history };
         set({ outcomes: [] });
         show();
       } catch (error) {
@@ -187,6 +239,11 @@ export const useGuess = create<GuessState>((set, get) => {
     },
     stop() {
       clearTimeout(timer);
+    },
+    setWeighting(weighting) {
+      saveChoice(WEIGHTING_KEY, weighting);
+      set({ weighting });
+      void get().start();
     },
     setSource(source) {
       saveChoice(SOURCE_KEY, source);

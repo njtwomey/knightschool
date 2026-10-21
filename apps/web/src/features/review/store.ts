@@ -18,11 +18,12 @@ import {
   type LineEdge,
   type OpeningContent,
   type RatingName,
+  type Weighting,
 } from '@knightschool/core';
 import type { Storage } from '@knightschool/storage';
 import { create } from 'zustand';
 import { loadIndex, loadOpening } from '@/data/content';
-import { coursesFor, saveChoice, savedChoice } from '@/data/practice-source';
+import { coursesFor, saveChoice, savedChoice, savedWeighting } from '@/data/practice-source';
 import { useStorage, whenStorageReady } from '@/data/storage';
 import {
   addIntroducedToday,
@@ -34,6 +35,7 @@ import {
 
 const scheduler = createScheduler();
 const SOURCE_KEY = 'knightschool.quiz.source';
+const WEIGHTING_KEY = 'knightschool.quiz.weighting';
 
 /** "due" is the scheduled session; anything else is free practice from those courses. */
 export const DUE = 'due';
@@ -73,6 +75,9 @@ type ReviewState = {
 
   start: () => Promise<void>;
   setSource: (source: string) => void;
+  /** Free practice only: an even draw, or favouring the positions more games reach. */
+  weighting: Weighting;
+  setWeighting: (weighting: Weighting) => void;
   /** Returns true when the move was the expected one. Illegal moves are ignored. */
   submitMove: (uci: string) => boolean;
   /** A typed answer to a quiz card. */
@@ -129,6 +134,12 @@ export const useReview = create<ReviewState>((set, get) => {
     advancing: false,
     quizResult: null,
     source: savedChoice(SOURCE_KEY, DUE),
+    weighting: savedWeighting(WEIGHTING_KEY),
+    setWeighting(weighting) {
+      saveChoice(WEIGHTING_KEY, weighting);
+      set({ weighting });
+      if (get().source !== DUE) void get().start();
+    },
     viewing: null,
     holding: false,
     view: (viewing) => set({ viewing }),
@@ -155,12 +166,23 @@ export const useReview = create<ReviewState>((set, get) => {
       try {
         const storage = (await whenStorageReady()).storage;
         const now = new Date();
-        const enrolled = await getEnrolled(storage);
+        const index = await loadIndex();
+        const enrolled = await getEnrolled(
+          storage,
+          index.map((course) => course.id),
+        );
         if (get().source !== DUE) {
           // Free practice: random questions, saved nowhere, so the schedule is untouched.
-          const chosen = coursesFor(get().source, await loadIndex(), enrolled);
+          const chosen = coursesFor(get().source, index, enrolled);
           const free = await Promise.all(chosen.map((course) => loadOpening(course.id)));
-          const queue = freePractice(free, undefined, await getCardOptions(storage));
+          const queue = freePractice(
+            free,
+            undefined,
+            await getCardOptions(storage),
+            Math.random,
+            new Date(),
+            get().weighting,
+          );
           set({
             queue,
             index: 0,

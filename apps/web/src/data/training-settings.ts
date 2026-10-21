@@ -28,10 +28,15 @@ export function lastDays(count: number, now: Date): string[] {
   return days;
 }
 
-export async function getEnrolled(storage: Storage): Promise<string[]> {
+/**
+ * The courses being learned. Pass the ids of the courses that exist today (`known`) to drop any that have since been
+ * renamed or removed: a stale id would otherwise make the quiz try to load a course that is not there.
+ */
+export async function getEnrolled(storage: Storage, known?: readonly string[]): Promise<string[]> {
   try {
     const parsed: unknown = JSON.parse((await storage.settings.get(ENROLLED)) ?? '[]');
-    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+    const ids = Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+    return known ? ids.filter((id) => known.includes(id)) : ids;
   } catch {
     return [];
   }

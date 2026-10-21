@@ -1,4 +1,13 @@
-import { lineSteps, newId, withPromotion, type LineStep, type OpeningContent } from '@knightschool/core';
+import {
+  lineSteps,
+  newId,
+  pickWeighted,
+  popularityWeight,
+  withPromotion,
+  type LineStep,
+  type OpeningContent,
+  type Weighting,
+} from '@knightschool/core';
 import { create } from 'zustand';
 import { loadIndex, loadOpening } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
@@ -13,9 +22,17 @@ export type SpeedConfig = {
   seconds: 30 | 60 | 120;
   /** Where the lines come from: the courses you are learning, everything, or one course by id. */
   source: 'learning' | 'all' | (string & {});
+  /** How lines are picked: at random, or favouring the ones more games reach. */
+  weighting: Weighting;
 };
 
-export const DEFAULT_CONFIG: SpeedConfig = { mode: 'lines', lines: 5, seconds: 60, source: 'learning' };
+export const DEFAULT_CONFIG: SpeedConfig = {
+  mode: 'lines',
+  lines: 5,
+  seconds: 60,
+  source: 'learning',
+  weighting: 'random',
+};
 const CONFIG_KEY = 'knightschool.speed';
 
 function savedConfig(): SpeedConfig {
@@ -28,6 +45,7 @@ function savedConfig(): SpeedConfig {
       lines: parsed.lines === 3 || parsed.lines === 10 ? parsed.lines : 5,
       seconds: parsed.seconds === 30 || parsed.seconds === 120 ? parsed.seconds : 60,
       source: typeof parsed.source === 'string' && parsed.source ? parsed.source : 'learning',
+      weighting: parsed.weighting === 'popular' ? 'popular' : 'random',
     };
   } catch {
     return DEFAULT_CONFIG;
@@ -95,15 +113,6 @@ type SpeedState = {
 
 let timer: ReturnType<typeof setTimeout> | undefined;
 let deadlineTimer: ReturnType<typeof setTimeout> | undefined;
-
-function shuffle<T>(items: T[]): T[] {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j]!, copy[i]!];
-  }
-  return copy;
-}
 
 /** The index of the next step the learner has to play, skipping (instantly) the opponent's moves. */
 function nextOurs(steps: LineStep[], from: number): number {
@@ -267,9 +276,22 @@ export const useSpeed = create<SpeedState>((set, get) => {
         const candidates = pool.flatMap((course) =>
           course.lines.filter((line) => line.kind === 'line').map((line) => ({ course: course.id, line })),
         );
-        const picked = shuffle(candidates).slice(0, config.mode === 'timed' ? TIMED_QUEUE : config.lines);
-        if (picked.length === 0) throw new Error('There are no lines to play from that choice.');
         const contents = new Map<string, OpeningContent>();
+        const need = config.weighting === 'popular' ? candidates.map(({ course }) => course) : [];
+        for (const course of new Set(need)) contents.set(course, await loadOpening(course));
+        // A line is as popular as the position its first eight moves reach.
+        const reach = ({ course, line }: (typeof candidates)[number]) => {
+          const content = contents.get(course)!;
+          const steps = lineSteps(content, line.id);
+          const last = steps[Math.min(steps.length, 8) - 1];
+          return popularityWeight(last ? content.nodes[last.edge.to]?.popularity : undefined);
+        };
+        const picked = pickWeighted(
+          candidates,
+          config.weighting === 'popular' ? reach : () => 1,
+          config.mode === 'timed' ? TIMED_QUEUE : config.lines,
+        );
+        if (picked.length === 0) throw new Error('There are no lines to play from that choice.');
         for (const { course } of picked) if (!contents.has(course)) contents.set(course, await loadOpening(course));
         const queue = picked.map(({ course, line }) => {
           const content = contents.get(course)!;
