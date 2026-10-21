@@ -14,6 +14,7 @@ import {
   Timer,
 } from 'lucide-react';
 import { useEffect, type ReactNode } from 'react';
+import { PageErrorBoundary } from '@/components/error-boundary';
 import { SiteFooter } from '@/components/site-footer';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
@@ -48,12 +49,9 @@ import { ProfilePage } from '@/features/profile/profile-page';
 import { parseRoute, type Route } from '@/route';
 import { navigate, to, usePathname } from '@/router/location';
 
-function useRoute(): Route {
-  return parseRoute(usePathname());
-}
-
 export function App() {
-  const route = useRoute();
+  const pathname = usePathname();
+  const route: Route = parseRoute(pathname);
   const selectCourse = useBrowse((state) => state.selectCourse);
   const loadIndex = useBrowse((state) => state.loadIndex);
   const courseId = route.page === 'course' ? route.id : null;
@@ -69,7 +67,6 @@ export function App() {
   }, [courseId, selectCourse]);
 
   // Writing courses was once a Profile tab; its old address shows Create.
-  const pathname = usePathname();
   useEffect(() => {
     if (/^\/profile\/author\/?$/.test(pathname)) navigate('/create', { replace: true });
   }, [pathname]);
@@ -215,37 +212,39 @@ export function App() {
         </div>
       )}
       <main className="min-h-dvh flex-1">
-        {route.page === 'home' && <HomePage />}
-        {route.page === 'profile' && <ProfilePage tab={route.tab} />}
-        {route.page === 'openings' && <OpeningsPage />}
-        {route.page === 'course' &&
-          (route.tab === 'tree' ? (
-            <CourseTreePage key={route.id} course={route.id} />
-          ) : route.tab === 'path' ? (
-            <CoursePathPage key={route.id} course={route.id} />
-          ) : (
-            <CoursePage courseId={route.id} />
-          ))}
-        {route.page === 'create' && <CreatePage />}
-        {route.page === 'create-course' && <CourseEditorPage course={route.course} tab={route.tab} />}
-        {route.page === 'create-line' && <LineEditorPage course={route.course} line={route.line} />}
-        {route.page === 'glossary' && <GlossaryPage />}
-        {route.page === 'tree' && <CurriculumTreePage />}
-        {route.page === 'courses' && <CoursesPage />}
-        {route.page === 'play' && (
-          <LinePage
-            key={`${route.course}/${route.line}/${route.tab}/${JSON.stringify(route.unit ?? null)}`}
-            course={route.course}
-            line={route.line}
-            tab={route.tab}
-            unit={route.unit}
-          />
-        )}
-        {route.page === 'review' && <ReviewPage />}
-        {route.page === 'guess' && <GuessPage />}
-        {route.page === 'speed' && <SpeedPage />}
-        {route.page === 'credits' && <CreditsPage />}
-        {route.page === 'lab' && <LabPage />}
+        <PageErrorBoundary resetKey={pathname}>
+          {route.page === 'home' && <HomePage />}
+          {route.page === 'profile' && <ProfilePage tab={route.tab} />}
+          {route.page === 'openings' && <OpeningsPage />}
+          {route.page === 'course' &&
+            (route.tab === 'tree' ? (
+              <CourseTreePage key={route.id} course={route.id} />
+            ) : route.tab === 'path' ? (
+              <CoursePathPage key={route.id} course={route.id} />
+            ) : (
+              <CoursePage courseId={route.id} />
+            ))}
+          {route.page === 'create' && <CreatePage />}
+          {route.page === 'create-course' && <CourseEditorPage course={route.course} tab={route.tab} />}
+          {route.page === 'create-line' && <LineEditorPage course={route.course} line={route.line} />}
+          {route.page === 'glossary' && <GlossaryPage />}
+          {route.page === 'tree' && <CurriculumTreePage />}
+          {route.page === 'courses' && <CoursesPage />}
+          {route.page === 'play' && (
+            <LinePage
+              key={`${route.course}/${route.line}/${route.tab}/${JSON.stringify(route.unit ?? null)}`}
+              course={route.course}
+              line={route.line}
+              tab={route.tab}
+              unit={route.unit}
+            />
+          )}
+          {route.page === 'review' && <ReviewPage />}
+          {route.page === 'guess' && <GuessPage />}
+          {route.page === 'speed' && <SpeedPage />}
+          {route.page === 'credits' && <CreditsPage />}
+          {route.page === 'lab' && <LabPage />}
+        </PageErrorBoundary>
       </main>
       <SiteFooter />
     </div>
