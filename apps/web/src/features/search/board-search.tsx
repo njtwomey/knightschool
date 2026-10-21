@@ -6,10 +6,11 @@ import {
   searchAt,
   type SearchIndex,
 } from '@knightschool/core';
-import { FlipHorizontal2 } from 'lucide-react';
-import { StepButtons } from '@/components/board/step-buttons';
 import { useState } from 'react';
-import { AppBoard } from '@/components/board/app-board';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { uciArrow } from '@/components/board/shapes';
+import { StudyBoard } from '@/components/board/study-board';
+import { MoveList } from '@/components/move-list';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,7 +25,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
-import { movesText, queryEpd, type BoardQuery } from './board-query';
+import { queryEpd, type BoardQuery } from './board-query';
 import { courseHref, lineHref } from '@/router/hrefs';
 
 type Props = {
@@ -53,7 +54,6 @@ export function BoardSearchDialog({
   matches,
   failed,
 }: Props) {
-  const [side, setSide] = useState<'white' | 'black'>('white');
   const [notice, setNotice] = useState<string | null>(null);
   // Moves stepped back over, nearest first, so forward and last can play them again until a different move is played.
   const [ahead, setAhead] = useState<Props['query']['played']>([]);
@@ -62,6 +62,15 @@ export function BoardSearchDialog({
     setAhead(next);
     setNotice(null);
   };
+  // The moves played and the ones stepped back over, as one line to step along.
+  const all = [...query.played, ...ahead];
+  const stepper = useLineStepper({
+    length: all.length,
+    index: query.played.length,
+    setIndex: (index) => step(all.slice(0, index), all.slice(index)),
+    keys: open,
+    label: 'Step through the moves played',
+  });
   const epd = queryEpd(query);
   const here = index ? searchAt(index, epd, query.kind) : undefined;
   const name = index?.[epd]?.name;
@@ -102,43 +111,31 @@ export function BoardSearchDialog({
         </DialogHeader>
 
         <div className="grid min-h-0 gap-5 overflow-y-auto md:grid-cols-[minmax(0,22rem)_1fr] md:overflow-hidden">
-          <div className="grid content-start gap-3">
-            <AppBoard
-              id="board-search"
-              className="aspect-square w-full"
-              epd={epd}
-              orientation={side}
-              onMove={play}
-              lastMove={query.played.at(-1)?.uci}
-              arrows={(here?.moves ?? []).slice(0, 4).map((move) => ({
-                startSquare: move.uci.slice(0, 2),
-                endSquare: move.uci.slice(2, 4),
-                color: 'rgb(21 128 61 / 0.55)',
-              }))}
-            />
-            <div className="flex flex-wrap items-center gap-1.5">
-              <StepButtons
-                label="Step through the moves played"
-                onFirst={() => step([], [...query.played, ...ahead])}
-                onPrev={() => step(query.played.slice(0, -1), [query.played.at(-1)!, ...ahead])}
-                onNext={() => step([...query.played, ahead[0]!], ahead.slice(1))}
-                onLast={() => step([...query.played, ...ahead], [])}
-                atStart={query.played.length === 0}
-                atEnd={ahead.length === 0}
+          <StudyBoard
+            id="board-search"
+            size="aside"
+            epd={epd}
+            orientation="white"
+            onMove={play}
+            lastMove={query.played.at(-1)?.uci}
+            arrows={(here?.moves ?? []).slice(0, 4).map((move) => uciArrow(move.uci, 'candidate'))}
+            stepper={stepper}
+            controls={{ flip: true }}
+            caption={
+              <MoveList
+                layout="inline"
+                label="Moves played"
+                empty="No moves yet"
+                moves={all.map((move, ply) => ({
+                  ply,
+                  san: move.san,
+                  state: ply < query.played.length ? 'played' : 'future',
+                }))}
+                current={query.played.length - 1}
+                onSelect={(ply) => step(all.slice(0, ply + 1), all.slice(ply + 1))}
               />
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Flip the board"
-                onClick={() => setSide(side === 'white' ? 'black' : 'white')}
-              >
-                <FlipHorizontal2 aria-hidden />
-              </Button>
-              <p className="ml-1 min-h-5 flex-1 font-mono text-sm text-muted-foreground">
-                {movesText(query.played) || 'No moves yet'}
-              </p>
-            </div>
-          </div>
+            }
+          />
 
           <div className="grid min-h-0 content-start gap-4 md:overflow-y-auto md:pr-1">
             <ToggleGroup

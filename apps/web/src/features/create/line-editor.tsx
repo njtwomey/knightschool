@@ -1,8 +1,9 @@
-import { type LineKind, MOVE_TAGS, numberedMove, runMove, type TrapKind, uciLine } from '@knightschool/core';
+import { type LineKind, MOVE_TAGS, numberedMove, type TrapKind, uciLine } from '@knightschool/core';
 import { Camera, GitBranch, Scissors, Trash2, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { AppBoard } from '@/components/board/app-board';
-import { StepButtons } from '@/components/board/step-buttons';
+import { useMemo, useState } from 'react';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { StudyBoard } from '@/components/board/study-board';
+import { MoveList } from '@/components/move-list';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +16,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -49,19 +49,13 @@ export function LineEditor({ course }: { course: DraftCourse }) {
   const positions = useMemo(() => positionsOf(line), [line]);
   const ucis = useMemo(() => uciLine(line), [line]);
 
-  // Arrow keys step through the line, unless typing.
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
-      const { ply: at, setPly } = useAuthor.getState();
-      if (event.key === 'ArrowLeft') setPly(at - 1);
-      else if (event.key === 'ArrowRight') setPly(at + 1);
-      else return;
-      event.preventDefault();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  // The steps and the arrow keys walk the line; a move played at the end adds to it.
+  const stepper = useLineStepper({
+    length: line?.game.moves.length ?? 0,
+    index: ply,
+    setIndex: (index) => useAuthor.getState().setPly(index),
+    keys: Boolean(line),
+  });
 
   if (!lineId)
     return <p className="text-sm text-muted-foreground">This course has no lines yet. Add one on the left.</p>;
@@ -90,100 +84,105 @@ export function LineEditor({ course }: { course: DraftCourse }) {
   return (
     <div className="grid gap-4">
       <LineDetails course={course} />
-      <div className="grid grid-cols-[minmax(0,1fr)] gap-4 xl:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
-        <div className="grid content-start gap-2">
-          <AppBoard
-            id="author"
-            className="aspect-square w-full max-w-[26rem]"
-            epd={positions[at]!}
-            orientation={side}
-            interactive
-            onMove={(uci) => {
-              // A branch opens a new line: the address follows it.
-              void useAuthor
-                .getState()
-                .playMove(uci)
-                .then(() => {
-                  const opened = useAuthor.getState().lineId;
-                  if (opened && opened !== lineId) navigate(lineEditHref(course.id, opened));
-                });
-              return true;
-            }}
-            lastMove={at > 0 ? ucis[at - 1] : undefined}
-          />
-          <div className="flex flex-wrap items-center gap-2">
-            <StepButtons
-              onFirst={() => useAuthor.getState().setPly(0)}
-              onPrev={() => useAuthor.getState().setPly(ply - 1)}
-              onNext={() => useAuthor.getState().setPly(ply + 1)}
-              onLast={() => useAuthor.getState().setPly(length)}
-              atStart={ply === 0}
-              atEnd={ply >= length}
-            />
-            {branching === null ? (
-              <Button
-                variant="outline"
-                onClick={() => useAuthor.getState().startBranch()}
-                title="Start a new line from this position"
-              >
-                <GitBranch aria-hidden /> Branch here
-              </Button>
-            ) : (
-              <Button variant="outline" onClick={() => useAuthor.getState().cancelBranch()}>
-                <X aria-hidden /> Cancel the branch
-              </Button>
-            )}
-            {mine && ply >= line.startPly && (
-              <Button
-                variant="outline"
-                onClick={() => void useAuthor.getState().setSnapshot(ply === length ? undefined : ply)}
-                title="Use this position as the line's picture"
-              >
-                <Camera aria-hidden /> Picture the line here
-              </Button>
-            )}
-            {mine && ply < length && ply >= line.startPly && (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="outline">
-                    <Scissors aria-hidden /> Delete the moves after this
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete the last {length - ply} moves of this line?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Their notes go with them, and any line that branches from them will no longer fit. Undo brings
-                      them back.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Keep them</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => void useAuthor.getState().truncate()}>Delete</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
-          </div>
-          <p className="text-sm text-muted-foreground" aria-live="polite">
-            {branching !== null
-              ? `Play the first move of the new line, after ${branching === 0 ? 'the start' : numberedMove(branching - 1, moves[branching - 1]!.san)}.`
-              : ply === length
-                ? mine
-                  ? 'Play a move on the board to add it to the line.'
-                  : 'This line is not yours: branch from it to write your own.'
-                : 'Play the next move, or step with the arrows. Choose Branch here to play a different move.'}
-          </p>
-        </div>
+      <div className="board-columns grid gap-4">
+        <StudyBoard
+          id="author"
+          epd={positions[at]!}
+          orientation={side}
+          interactive
+          onMove={(uci) => {
+            // A branch opens a new line: the address follows it.
+            void useAuthor
+              .getState()
+              .playMove(uci)
+              .then(() => {
+                const opened = useAuthor.getState().lineId;
+                if (opened && opened !== lineId) navigate(lineEditHref(course.id, opened));
+              });
+            return true;
+          }}
+          lastMove={at > 0 ? ucis[at - 1] : undefined}
+          stepper={stepper}
+          controls={{ flip: true }}
+          actions={
+            <>
+              {branching === null ? (
+                <Button
+                  variant="outline"
+                  onClick={() => useAuthor.getState().startBranch()}
+                  title="Start a new line from this position"
+                >
+                  <GitBranch aria-hidden /> Branch here
+                </Button>
+              ) : (
+                <Button variant="outline" onClick={() => useAuthor.getState().cancelBranch()}>
+                  <X aria-hidden /> Cancel the branch
+                </Button>
+              )}
+              {mine && ply >= line.startPly && (
+                <Button
+                  variant="outline"
+                  onClick={() => void useAuthor.getState().setSnapshot(ply === length ? undefined : ply)}
+                  title="Use this position as the line's picture"
+                >
+                  <Camera aria-hidden /> Picture the line here
+                </Button>
+              )}
+              {mine && ply < length && ply >= line.startPly && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline">
+                      <Scissors aria-hidden /> Delete the moves after this
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete the last {length - ply} moves of this line?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Their notes go with them, and any line that branches from them will no longer fit. Undo brings
+                        them back.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Keep them</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => void useAuthor.getState().truncate()}>Delete</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </>
+          }
+          caption={
+            <p className="text-muted-foreground" aria-live="polite">
+              {branching !== null
+                ? `Play the first move of the new line, after ${branching === 0 ? 'the start' : numberedMove(branching - 1, moves[branching - 1]!.san)}.`
+                : ply === length
+                  ? mine
+                    ? 'Play a move on the board to add it to the line.'
+                    : 'This line is not yours: branch from it to write your own.'
+                  : 'Play the next move, or step with the arrows. Choose Branch here to play a different move.'}
+            </p>
+          }
+        />
 
         <div className="grid content-start gap-4">
-          <MoveList
-            sans={moves.map((move) => move.san)}
-            startPly={line.startPly}
-            ply={ply}
-            snapshot={snapshot ?? length}
-            tags={moves.map((move) => move.tags ?? [])}
-          />
+          <div className="text-sm">
+            <MoveList
+              layout="inline"
+              label="The line"
+              empty="No moves yet."
+              moves={moves.map((move, i) => ({
+                ply: i,
+                san: move.san,
+                // The moves before the line starts are its parent's.
+                state: i < line.startPly ? 'lead' : 'played',
+                tags: move.tags,
+                mark: i + 1 === (snapshot ?? length) ? 'The line is pictured here' : undefined,
+              }))}
+              current={ply - 1}
+              onSelect={(at) => useAuthor.getState().setPly(at + 1)}
+            />
+          </div>
           {ply > 0 && (
             <MoveNote
               key={`${lineId}:${ply}`}
@@ -198,45 +197,6 @@ export function LineEditor({ course }: { course: DraftCourse }) {
         </div>
       </div>
     </div>
-  );
-}
-
-/** The line's moves, numbered: the ones before its start dimmed, the picture marked; a move shows its position. */
-function MoveList({
-  sans,
-  startPly,
-  ply,
-  snapshot,
-  tags,
-}: {
-  sans: string[];
-  startPly: number;
-  ply: number;
-  snapshot: number;
-  tags: string[][];
-}) {
-  if (sans.length === 0) return <p className="text-sm text-muted-foreground">No moves yet.</p>;
-  return (
-    <ol className="flex flex-wrap gap-x-1 gap-y-1 font-mono text-sm" aria-label="The line">
-      {sans.map((san, i) => (
-        <li key={i}>
-          <Button
-            variant={i + 1 === ply ? 'secondary' : 'ghost'}
-            size="xs"
-            className={`h-auto px-1 font-mono ${i < startPly ? 'text-muted-foreground' : ''} ${i + 1 === snapshot ? 'underline decoration-dotted underline-offset-4' : ''}`}
-            onClick={() => useAuthor.getState().setPly(i + 1)}
-            title={i + 1 === snapshot ? 'The line is pictured here' : undefined}
-          >
-            {runMove(i, san, i === 0)}
-            {tags[i]!.map((tag) => (
-              <Badge key={tag} variant="outline" className="ml-1 px-1 py-0 font-sans text-[10px]">
-                {tag}
-              </Badge>
-            ))}
-          </Button>
-        </li>
-      ))}
-    </ol>
   );
 }
 

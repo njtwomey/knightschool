@@ -117,8 +117,8 @@
 /*
  * Board size: one rule for every board. A board is as wide as its column, never wider than its cap, and never taller
  * than the screen less --board-chrome: the header above and the controls below, so a move never needs a scroll. There
- * are two caps: 36rem for the board a page is about (Play, Quiz, Speed, Name it, Lab, a course), and 22rem for a board
- * beside other content (`.board-aside`: a line's About, the tree, the path, board search, Create). On a phone held
+ * are two caps: 36rem for the board a page is about (Play, Quiz, Speed, Name it, Lab, a course, Create), and 22rem for a
+ * board beside other content (`.board-aside`: a line's About, the tree, the path, board search). On a phone held
  * sideways the header scrolls away and the board sits beside its panel (the `short` variant), so it can use more of the
  * height. Every study board is a `StudyBoard` (components/board/study-board.tsx), which applies this.
  */

@@ -1,8 +1,8 @@
 import { laneLayout, matchesText, pathOf, numberedMove, type MoveTree, type Side } from '@knightschool/core';
 import { BookOpen, ChevronRight, Crosshair, Target, X } from 'lucide-react';
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { AppBoard } from '@/components/board/app-board';
-import { StepButtons } from '@/components/board/step-buttons';
+import { useMemo, useState, type ReactNode } from 'react';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { StudyBoard } from '@/components/board/study-board';
 import { RichText } from '@/components/rich-text';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -131,9 +131,10 @@ export function TreeExplorer({
   const through = shown.lines.filter((id) => byId.has(id));
   const comment = useMoveComment([...new Set(through.map((id) => byId.get(id)!.course))], parent?.epd, shown.uci);
   const pickedLine = picked ? byId.get(picked) : undefined;
-  // Where the cursor is on the picked line's whole path (from the starting position), for the step buttons.
+  // Where the board is on the picked line's whole path (from the starting position), for the steps: before any click, the
+  // first pill (the moves every line shares).
   const steps = picked ? pathOfLine(picked) : [];
-  const at = cursor ? steps.indexOf(cursor) : -1;
+  const at = steps.indexOf(shownId);
 
   /**
    * The pill that stands for a move: the move itself if it is drawn, else the nearest drawn move before it (the first
@@ -175,27 +176,14 @@ export function TreeExplorer({
   const matches = query.trim() ? lines.filter((line) => matchesText(query, `${line.name} ${line.course}`)) : null;
   const grouped = model.groups.length > 1;
 
-  // The arrow keys step along the picked line; Home and End go to its first and last move.
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
-      if (!steps.length) return;
-      const target =
-        event.key === 'ArrowLeft'
-          ? steps[Math.max(0, at - 1)]
-          : event.key === 'ArrowRight'
-            ? steps[Math.min(steps.length - 1, at + 1)]
-            : event.key === 'Home'
-              ? steps[0]
-              : event.key === 'End'
-                ? steps.at(-1)
-                : undefined;
-      if (!target) return;
-      event.preventDefault();
-      goTo(target);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+  // The steps and the arrow keys go along the picked line; Home and End go to its first and last move.
+  const stepper = useLineStepper({
+    length: steps.length - 1,
+    index: at,
+    setIndex: (index) => goTo(steps[index]),
+    atStart: !picked || at <= 0,
+    atEnd: !picked || at < 0 || at >= steps.length - 1,
+    disabledTitle: 'Pick a line to step through it',
   });
 
   const entryProps: EntryProps = {
@@ -349,29 +337,23 @@ export function TreeExplorer({
         </section>
 
         <aside className="order-1 grid content-start gap-2 lg:sticky lg:top-20 lg:order-none">
-          <AppBoard
+          <StudyBoard
             id="tree-board"
             previewable
-            className="aspect-square w-full max-w-72 justify-self-center lg:max-w-none"
+            size="aside"
+            className="justify-self-center lg:justify-self-stretch"
             epd={shown.epd}
             orientation={orientation ?? pickedLine?.side ?? 'white'}
             interactive={false}
             lastMove={shown.uci ?? undefined}
+            stepper={stepper}
+            controls={{ flip: true }}
+            caption={
+              <p className="font-medium">
+                {shown.san ? `After ${numberedMove(shown.ply - 1, shown.san)}` : 'The start'}
+              </p>
+            }
           />
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-sm font-medium">
-              {shown.san ? `After ${numberedMove(shown.ply - 1, shown.san)}` : 'The start'}
-            </p>
-            <StepButtons
-              onFirst={() => goTo(steps[0])}
-              onPrev={() => goTo(steps[at - 1])}
-              onNext={() => goTo(steps[at + 1])}
-              onLast={() => goTo(steps.at(-1))}
-              atStart={!picked || at <= 0}
-              atEnd={!picked || at < 0 || at >= steps.length - 1}
-              disabledTitle="Pick a line to step through it"
-            />
-          </div>
           {comment && (
             <p className="text-sm text-muted-foreground">
               <RichText text={comment} />
