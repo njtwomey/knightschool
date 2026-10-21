@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Queen Check on e6"]
+[ECO "B01"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "early-queen,pawn-grab,fork"]
+[Themes "tempo-on-queen,open-e-file"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Qe6+"]
+[Start "qa5-classical 3.Nc3"]
+
+3... Qe6+ { Checks so that White cannot castle at once, but the queen now stands in front of the e7 pawn and blocks the c8 bishop. } 4. Be2 { Blocks the check with a developing move. The queen on e6 sits on an open file, so a white rook on e1 will hit it later. } 4... Nf6 ( 4... Qg6 { Attacks the pawn on g2. } 5. Nf3 { Develops and leaves g2 to its fate: if the queen takes it, Rg1 chases her with gain of time. } 5... Qxg2 $2 { Grabs a pawn, but the queen is now far from home and every white move will hit her. } 6. Rg1 { Attacks the queen, which has to move again. } 6... Qh3 7. Rg3 { Chases the queen once more. The rook uses the open g-file, and White keeps gaining moves. } 7... Qh5 8. d4 { Takes the centre. White has given a pawn for four free moves, and Black has not developed a single piece. } ) ( 4... Nc6 5. d4 { Takes the centre. The pawn is safe: ...Nxd4 drops the knight to the queen on d1. } 5... Qd6 ( 5... Nxd4 $2 6. Qxd4 { Takes the knight. Black's queen on e6 cannot win it back. } ) 6. Nb5 { Hits the queen and eyes c7, where a knight check would fork the king and the rook on a8. } 6... Qd8 7. Bf4 { A second attacker on c7. Black has to give up a pawn or tie the pieces down to defend it. [%cal Gb5c7,Gf4c7] } ) ( 4... c6 5. Nf3 Nf6 6. d4 Qd6 { The same position as 4...Nf6 5.Nf3 Qd6 6.d4 c6, reached by a different order. } ) 5. Nf3 { Develops and gets ready to castle, after which Re1 will line up against the queen. } 5... Qd6 { Steps off the e-file before White's rook arrives. } 6. d4 { Takes the centre and opens the way for the c1 bishop. } 6... c6 ( 6... e6 7. O-O { Castle first; the queen on d6 can be hit later by Nb5 or Bf4. } ) 7. O-O { Castles. Black is behind in development because the queen has moved three times. } 7... Bg4 ( 7... g6 8. Re1 Bg7 9. h3 { Stops ...Bg4 before it can pin the knight to the queen. } 9... O-O 10. Bg5 { Develops the last minor piece and puts pressure on the knight on f6. } ) 8. h3 { Asks the bishop to decide: take on f3 and give White the bishop pair, or retreat. } 8... Bxf3 ( 8... Bh5 9. Ne5 { The knight jumps to a strong central square and offers to trade the bishops. } 9... Bxe2 10. Qxe2 ) 9. Bxf3 { Takes back with the bishop, which now has a long, open diagonal. } 9... e6 10. Re1 { The rook takes the open e-file. Plan: Ne2 or Ne4, then c4 and Bf4, using the bishop pair and the extra space. } *

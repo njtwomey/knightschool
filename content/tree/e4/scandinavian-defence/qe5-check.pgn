@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Queen Check on e5"]
+[ECO "B01"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "early-queen,pin"]
+[Themes "tempo-on-queen,open-e-file"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Qe5+"]
+[Start "qa5-classical 3.Nc3"]
+
+3... Qe5+ { Checks so that White cannot castle at once. The queen is exposed in the centre, where White's pieces can hit it. } 4. Be2 { Blocks the check with a developing move and gets ready to castle. Nf3 next comes with an attack on the queen. } 4... Nf6 ( 4... c6 5. Nf3 { Develops with an attack on the queen, so Black has to move it again. } 5... Qc7 ( 5... Qa5 6. d4 Nf6 { The same position as 4...Nf6 5.Nf3 Qa5 6.d4 c6. } ) 6. d4 Bf5 7. O-O { Castles. The queen on c7 is often hit later by a knight or bishop. } ) ( 4... Bg4 5. d4 { Takes the centre and attacks the queen. Black's bishop on g4 now has to trade or lose time. } 5... Bxe2 6. Ngxe2 { Takes back with the knight, which keeps the d4 pawn guarded by the queen. } 6... Qa5 7. O-O { Castles. White is well ahead in development and can aim the knights at f4 and e4. } ) 5. Nf3 { Develops with an attack on the queen. } 5... Qa5 ( 5... Qd6 { The same position as 3...Qe6+ 4.Be2 Nf6 5.Nf3 Qd6, where White plays d4. } ) 6. d4 { Takes the centre and opens the way for the c1 bishop. } 6... c6 ( 6... Bg4 7. h3 { Asks the bishop what it wants. Taking on f3 gives White the bishop pair. } 7... Bxf3 8. Bxf3 ) 7. O-O { Castles before opening the centre. } 7... Bf5 ( 7... Bg4 8. h3 Bxf3 9. Bxf3 { The bishop pair and a safe king: White can now push d5 or play Re1. } ) 8. Re1 { Puts the rook on the open e-file, ready to support d5 or hit anything that lands on e6 or e7. } 8... e6 9. Bf4 { Develops the last minor piece and points it at the queenside, where the black queen lives. } 9... Be7 ( 9... Nbd7 10. Nd2 { Heads for c4, where the knight attacks the queen on a5. } ) 10. Ne5 { A strong central knight. Plan: Bd3 to trade Black's good bishop, then Nc4 to chase the queen. } *

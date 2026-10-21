@@ -21,6 +21,8 @@ about:
     like to punish an early queen move by developing with tempo.
 plans:
   - After ...Qxd5 play Nc3 with tempo, then d4, Nf3 and Bd2 or Bc4, and castle.
+  - Against the checks ...Qe6+ and ...Qe5+ block with Be2, then Nf3, d4 and castle; a rook on e1 will hit a queen
+    left on the e-file.
   - If the black bishop goes to g4, play h3 to ask it a question; do not walk the f3 knight away.
   - When Black's queen stands on a5, keep the bishop behind the c3 knight; Nb5 hits the queen if c6 is missing.
   - After ...Nf6 take the centre with d4 and c4, then castle and play with the bishop pair.
@@ -30,8 +32,11 @@ lines:
   - qa5-classical
   - nf6-marshall
   - qa5-bg4
+  - qe6-check
+  - qe5-check
   - qd6
   - qd8
+  - qd8-e6
   - id: nf6-bb5
     alternative: true
   - c6-gambit

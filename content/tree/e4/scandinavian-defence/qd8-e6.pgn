@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Scandinavian Defense"]
+[Variation "Scandinavian Defense: Valencian Variation, 4...e6"]
+[ECO "B01"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "space,quick-development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Qd8 4.d4 e6"]
+[Start "qd8 4.d4"]
+
+4... e6 { Solid, but it shuts in Black's bishop on c8, so Black will have trouble finding a good square for it. } 5. Nf3 { Develops and guards d4. } 5... Nf6 6. Bd3 { The bishop's best square: it aims at h7 and Black's kingside, and no black pawn can chase it. } 6... Be7 ( 6... c5 7. dxc5 { Takes the pawn so the bishop has to spend a move taking it back. } 7... Bxc5 8. O-O ) 7. O-O O-O 8. Qe2 { Connects the rooks and gets ready for Rd1 behind the d4 pawn. Plan: Bg5 or Bf4, Rad1, and Ne5 or Ne4 when the pieces are ready. Black's bishop on c8 is still shut in. } *
