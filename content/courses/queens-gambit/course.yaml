@@ -54,6 +54,12 @@ lines:
     section: Declined (2...e6)
   - id: qgd-tarrasch
     section: Declined (2...e6)
+  - id: qga-third-move
+    section: Accepted (2...dxc4)
+  - id: qga-nf6-sidelines
+    section: Accepted (2...dxc4)
+  - id: qga-bb4-check
+    section: Accepted (2...dxc4)
   - id: slav-bf5
     section: Slav (2...c6)
   - id: slav-bg4

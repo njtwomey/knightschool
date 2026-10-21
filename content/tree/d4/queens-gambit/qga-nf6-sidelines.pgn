@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Queen's Gambit"]
+[Variation "Queen's Gambit Accepted: Normal Variation, fourth-move sidelines"]
+[ECO "D25"]
+[Character "positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pawn-grab"]
+[Themes "regain-the-pawn,attack-the-base"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...b5"]
+[Start "accepted 3...Nf6 4.e3"]
+
+4... b5 { Tries to keep the extra pawn on c4 with another pawn. } ( 4... Nc6 5. Bxc4 { Pawn regained. If Black plays ...e6, castle; the knight on c6 blocks Black's c-pawn. } ) ( 4... Be6 5. Nbd2 { The knight heads for c4 to take the pawn back. } ) ( 4... Bg4 { The same position as after 3...Bg4 4.e3 Nf6. } ) ( 4... Bf5 { The same position as after 3...Bf5 4.e3 Nf6. } ) 5. a4 { Hits the pawn on b5, which is the only thing holding c4. } 5... c6 6. axb5 cxb5 7. b3 { Attacks the base of Black's pawns. After bxc4 White has the pawn back and a strong centre. If 7...e6, it is the same position as in the Slav line. } *
