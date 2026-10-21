@@ -140,16 +140,15 @@ export function TreeExplorer({
   const [cursor, setCursor] = useState<string | null>(
     initialPicked ? (pathOfLine(initialPicked).at(-1) ?? null) : null,
   );
-  const [pointed, setPointed] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
   const [scrollTo, setScrollTo] = useState<string | null>(null);
 
   const indexOf = new Map(ids.map((id, i) => [id, i]));
   const colourOf = (id: string) => laneColour(indexOf.get(id) ?? 0);
   const name = (line: ExplorerLine) =>
     shortNames && line.name.includes(':') ? line.name.slice(line.name.indexOf(':') + 1).trim() || line.name : line.name;
-  const lit = new Set<string>([pointed ?? picked].filter((id): id is string => id !== null));
-  const shownId = preview ?? cursor ?? layout.top;
+  // Only a click changes anything: pointing at a line or a move does nothing, so the board stays where you put it.
+  const lit = new Set<string>(picked ? [picked] : []);
+  const shownId = cursor ?? layout.top;
   const shown = tree.nodes.get(shownId) ?? tree.nodes.get(layout.top)!;
   const parent = shown.parent ? tree.nodes.get(shown.parent) : undefined;
   const through = shown.lines.filter((id) => byId.has(id));
@@ -171,7 +170,6 @@ export function TreeExplorer({
   const goTo = (node: string | undefined) => {
     if (!node) return;
     setCursor(node);
-    setPreview(null);
     setScrollTo(drawn(node));
   };
   /** Picking a line picks it out and puts the board on the move where it becomes itself; the tree stays as it is. */
@@ -189,11 +187,6 @@ export function TreeExplorer({
     const line = picked && ours.includes(picked) ? picked : owner && ours.includes(owner) ? owner : ours[0];
     if (line) setPicked(line);
     setCursor(id);
-    setPreview(null);
-  };
-  const point = (id: string | null) => {
-    setPointed(id);
-    setPreview(id ? (pathOfLine(id).at(-1) ?? null) : null);
   };
   const zoomInto = (key: string) => setSubtree(key === subtree ? null : key);
   const toggleFold = (key: string) =>
@@ -236,7 +229,6 @@ export function TreeExplorer({
     folded,
     colourOf,
     name,
-    onPoint: point,
     onPick: pickLine,
     onZoom: zoomInto,
     onFold: toggleFold,
@@ -366,7 +358,6 @@ export function TreeExplorer({
             colourOf={colourOf}
             lit={lit}
             focus={drawn(shownId)}
-            onFocus={setPreview}
             scrollTo={scrollTo}
             onPick={pickNode}
             labelOf={(id) => name(byId.get(id)!)}
@@ -481,15 +472,13 @@ type EntryProps = {
   folded: ReadonlySet<string>;
   colourOf: (id: string) => string;
   name: (line: ExplorerLine) => string;
-  onPoint: (id: string | null) => void;
   onPick: (id: string) => void;
   onZoom: (id: string) => void;
   onFold: (id: string) => void;
 };
 
 function IndexEntry(props: EntryProps & { id: string; depth: number; flat?: boolean }) {
-  const { model, byId, id, depth, picked, subtree, folded, colourOf, name, onPoint, onPick, onZoom, onFold, flat } =
-    props;
+  const { model, byId, id, depth, picked, subtree, folded, colourOf, name, onPick, onZoom, onFold, flat } = props;
   const line = byId.get(id)!;
   const children = model.children.get(id) ?? [];
   const under = below(model, id).length;
@@ -499,8 +488,6 @@ function IndexEntry(props: EntryProps & { id: string; depth: number; flat?: bool
     <li>
       <div
         className={`group flex items-center gap-1 rounded-md pr-1 text-sm ${chosen ? 'bg-accent' : 'hover:bg-accent/60'}`}
-        onMouseEnter={() => onPoint(id)}
-        onMouseLeave={() => onPoint(null)}
       >
         {!flat && (
           <Button

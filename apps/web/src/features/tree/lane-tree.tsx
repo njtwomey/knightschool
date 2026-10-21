@@ -46,7 +46,6 @@ export function LaneTree({
   focus,
   folded,
   scrollTo,
-  onFocus,
   onPick,
   labelOf,
   className,
@@ -60,7 +59,6 @@ export function LaneTree({
   /** Lines whose branches are folded away, with how many: a "+N" after the line's last move. */
   folded?: ReadonlyMap<string, number>;
   scrollTo?: string | null;
-  onFocus: (id: string) => void;
   onPick: (id: string) => void;
   /** A line's name, written in its colour just left of where it starts. */
   labelOf?: (line: string) => string;
@@ -133,6 +131,8 @@ export function LaneTree({
   }, [scrollTo, layout]);
 
   const litNodes = new Set([...lit].flatMap((line) => layout.pathOf.get(line) ?? []));
+  /** The column of the move on the board: a band runs down it and its move number stands out. */
+  const currentRow = focus ? (layout.places.get(focus)?.row ?? null) : null;
   const dimming = lit.size > 0;
   const placeOf = (id: string) => layout.places.get(id)!;
 
@@ -187,12 +187,28 @@ export function LaneTree({
               x={cx(row)}
               y={HEAD - 6}
               textAnchor="middle"
-              className="fill-muted-foreground font-mono text-[10px]"
+              className={
+                row === currentRow
+                  ? 'fill-primary font-mono text-[11px] font-bold'
+                  : 'fill-muted-foreground font-mono text-[10px]'
+              }
             >
               {moveNumber(layout.firstPly + row)}
             </text>
           ))}
 
+          {currentRow !== null && (
+            <rect
+              x={cx(currentRow) - (currentRow === 0 ? trunkWidth : COL) / 2}
+              y={HEAD - 2}
+              width={currentRow === 0 ? trunkWidth : COL}
+              height={height - HEAD}
+              rx={6}
+              fill="var(--primary)"
+              opacity={0.12}
+              aria-hidden
+            />
+          )}
           {layout.edges.map(({ from, to }) => {
             const a = placeOf(from);
             const b = placeOf(to);
@@ -267,8 +283,6 @@ export function LaneTree({
                 aria-pressed={focused}
                 opacity={on ? 1 : 0.28}
                 className="cursor-pointer outline-none"
-                onMouseEnter={() => onFocus(place.id)}
-                onFocus={() => onFocus(place.id)}
                 onClick={() => onPick(place.id)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
@@ -277,6 +291,18 @@ export function LaneTree({
                   }
                 }}
               >
+                {focused && (
+                  <rect
+                    x={left - 5}
+                    y={cy(place.lane) - PILL_H / 2 - 5}
+                    width={w + 10}
+                    height={PILL_H + 10}
+                    rx={(PILL_H + 10) / 2}
+                    fill="none"
+                    stroke="var(--primary)"
+                    strokeWidth={2.5}
+                  />
+                )}
                 <rect
                   x={left}
                   y={cy(place.lane) - PILL_H / 2}
