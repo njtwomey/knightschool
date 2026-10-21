@@ -12,7 +12,7 @@ import { BoardThumb } from '@/components/board/board-thumb';
 import { Badge } from '@/components/ui/badge';
 import { Hint } from '@/components/hint';
 import { Progress } from '@/components/ui/progress';
-import { percent } from '@/features/courses/progress';
+import { percent } from '@/data/progress-store';
 import { to } from '@/router/location';
 import { ECO_HINT, PROGRESS_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
 import { courseHref } from '@/router/hrefs';

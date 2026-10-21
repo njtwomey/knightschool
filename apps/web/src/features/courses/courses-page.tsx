@@ -17,7 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useCatalog } from '@/data/catalog-store';
-import { useProgress } from '@/features/courses/progress';
+import { useProgress } from '@/data/progress-store';
 import { navigate, to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
 

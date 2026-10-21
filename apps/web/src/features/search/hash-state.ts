@@ -1,5 +1,5 @@
 import { playUci, START_EPD, type CatalogFilter, type ResultKind, type SearchScope } from '@knightschool/core';
-import type { BoardQuery, Played } from '@/features/courses/board-query';
+import type { BoardQuery, Played } from './board-query';
 import { decodeMoves, encodeMoves, type HashParams } from '@/router/hash';
 
 const ROLES: CatalogFilter['role'][] = ['all', 'play', 'against'];

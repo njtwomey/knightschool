@@ -16,7 +16,7 @@ import { BoardPanel } from '@/features/course/board-panel';
 import { PositionDetails } from '@/features/course/position-details';
 import { currentEpd, useCatalog } from '@/data/catalog-store';
 import { EnrolButton } from '@/features/courses/enrol-button';
-import { percent, useProgress } from '@/features/courses/progress';
+import { percent, useProgress } from '@/data/progress-store';
 import { EngineStrip } from '@/features/engine/engine-strip';
 import { useEnginePrefs } from '@/features/engine/prefs';
 import { useEngine } from '@/features/engine/store';

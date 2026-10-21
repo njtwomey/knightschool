@@ -13,7 +13,7 @@ import { useStorage } from '@/data/storage';
 import { getCardOptions, getEnrolled, getIntroducedToday, getNewPerDay } from '@/data/training-settings';
 import { useCatalog } from '@/data/catalog-store';
 import { CourseCard } from '@/features/search/course-card';
-import { percent, useProgress } from '@/features/courses/progress';
+import { percent, useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
 import { courseHref } from '@/router/hrefs';
 

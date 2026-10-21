@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { Button } from '@/components/ui/button';
 import { useStorage } from '@/data/storage';
-import { useProgress } from '@/features/courses/progress';
+import { useProgress } from '@/data/progress-store';
 import { to } from '@/router/location';
 import { lineHref } from '@/router/hrefs';
 
