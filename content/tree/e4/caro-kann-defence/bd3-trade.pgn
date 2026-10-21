@@ -13,4 +13,4 @@
 [Opponent "4...Bf5"]
 [Start "short-system 3...Bf5"]
 
-4. Bd3 $6 { Looks natural, but ...Bxd3 trades off Black's problem piece for White's good one. The right move is 4.Nf3. } 4... Bxd3 5. Qxd3 e6 { Black has swapped away the bishop that e5 was cramping, and can now break with ...c5 and ...Nc6 in comfort. } *
+4. Bd3 $6 { Looks natural, but ...Bxd3 trades off Black's problem piece for White's good one. The right move is 4.Nf3. } 4... Bxd3 { Takes at once. White's good bishop disappears, and Black's own bishop, the piece ...e6 could have shut in, has done its job. } 5. Qxd3 e6 { Black has swapped away the bishop that e5 was cramping, and can now break with ...c5 and ...Nc6 in comfort. } *
