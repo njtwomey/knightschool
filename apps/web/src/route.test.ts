@@ -23,6 +23,7 @@ describe('parseRoute', () => {
       { page: 'play', course: 'italian-game', line: 'two-knights', tab: 'drill' },
     ],
     ['/play/italian-game/two-knights/quiz', { page: 'play', course: 'italian-game', line: 'two-knights', tab: 'quiz' }],
+    ['/play/italian-game/two-knights/tree', { page: 'play', course: 'italian-game', line: 'two-knights', tab: 'tree' }],
     [
       '/play/italian-game/two-knights/about',
       { page: 'play', course: 'italian-game', line: 'two-knights', tab: 'about' },
@@ -35,6 +36,7 @@ describe('parseRoute', () => {
     ['/review', { page: 'review' }],
     ['/guess', { page: 'guess' }],
     ['/glossary', { page: 'glossary' }],
+    ['/tree', { page: 'tree' }],
     ['/speed', { page: 'speed' }],
     ['/overview', { page: 'profile', tab: 'overview' }],
     ['/profile', { page: 'profile', tab: 'overview' }],

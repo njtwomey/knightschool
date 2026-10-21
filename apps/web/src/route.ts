@@ -11,6 +11,7 @@ export type Route =
   | { page: 'guess' }
   | { page: 'speed' }
   | { page: 'glossary' }
+  | { page: 'tree' }
   | { page: 'credits' }
   | { page: 'lab' }
   | { page: 'settings' };
@@ -62,6 +63,8 @@ export function parseRoute(pathname: string): Route {
       return { page: 'profile', tab: 'stats' };
     case 'glossary':
       return { page: 'glossary' };
+    case 'tree':
+      return { page: 'tree' };
     case 'credits':
       return { page: 'credits' };
     case 'lab':

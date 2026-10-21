@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  chapterTitle,
   parseStart,
   projectCourse,
   resolveTree,
@@ -11,7 +12,7 @@ import {
 import { positionId } from './position-id';
 import { epdAfterPgn } from './chess';
 import { parsePgn, writePgn } from './pgn';
-import type { CourseManifest } from './schema/content';
+import { TreeGraph, type CourseManifest } from './schema/content';
 import { manifestOf } from './test-manifest';
 import { buildOpening } from './tree';
 
@@ -145,11 +146,32 @@ describe('treeGraph', () => {
       ['two-knights', 'italian', '3.Bc4'],
     ]);
     expect(graph.chapters[1]!.from).toBe(positionId(epdAfterPgn('1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5')));
+    expect(graph.chapters.map(({ id, ply, moves }) => [id, ply, moves.join(' ')])).toEqual([
+      ['italian', 0, 'e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3 g8f6 d2d4'],
+      ['evans', 6, 'e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 b2b4 c5b4 c2c3 b4a5 d2d4'],
+      ['two-knights', 5, 'e2e4 e7e5 g1f3 b8c6 f1c4 g8f6 f3g5 d7d5 e4d5'],
+    ]);
+    expect(graph.chapters[0]).toMatchObject({ name: 'Italian Game', opening: 'Italian Game', courses: [] });
+    expect(TreeGraph.parse(graph)).toEqual(graph);
+    const listed = treeGraph(resolveTree([italian]), (line) => (line === 'italian' ? ['a', 'b'] : []));
+    expect(listed.chapters[0]!.courses).toEqual(['a', 'b']);
     const fromRoot = graph.moves.filter((move) => move.from === graph.root);
     expect(fromRoot).toEqual([
       { from: graph.root, to: positionId(epdAfterPgn('1. e4')), san: 'e4', chapters: ['italian'] },
     ]);
     expect(graph.moves).toHaveLength(9 + 5 + 4);
+  });
+});
+
+describe('chapterTitle', () => {
+  it.each([
+    ['Short Variation', 'Caro-Kann Defence: Advance Variation', 'Caro-Kann Defence: Short Variation'],
+    ['Scandinavian Defense: Main Line', 'Scandinavian Defense', 'Scandinavian Defense: Main Line'],
+    ['Hillbilly Attack', 'Caro-Kann Defence', 'Caro-Kann Defence: Hillbilly Attack'],
+    ['Caro-Kann Defence, Two Knights', 'Caro-Kann Defence', 'Caro-Kann Defence, Two Knights'],
+    ['Mieses Opening', '', 'Mieses Opening'],
+  ])('%s in %s reads %s', (name, opening, title) => {
+    expect(chapterTitle({ name, opening })).toBe(title);
   });
 });
 

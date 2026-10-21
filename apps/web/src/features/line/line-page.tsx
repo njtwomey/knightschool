@@ -1,5 +1,5 @@
 import { namedPly, variantPath, type LineEdge, type OpeningContent, type Variant } from '@knightschool/core';
-import { BookOpen, GitBranch, ListChecks, Target } from 'lucide-react';
+import { BookOpen, GitBranch, GitFork, ListChecks, Target } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
 import { Page } from '@/components/page';
@@ -15,6 +15,7 @@ import { VariantTags } from '@/features/browse/tag-badge';
 import { CourseIntro } from '@/features/course/course-intro';
 import { PlayPage } from '@/features/play/play-page';
 import { ReviewPage } from '@/features/review/review-page';
+import { TreeView } from '@/features/tree/tree-view';
 import { to } from '@/router/location';
 import { lineHref, type LineTab } from './tabs';
 
@@ -25,6 +26,13 @@ export function LinePage({ course, line, tab }: { course: string; line: string; 
   if (tab === 'drill') return <PlayPage course={course} line={line} mode="practice" />;
   if (tab === 'quiz')
     return <ReviewPage scope={{ course, line }} header={<PlayBreadcrumbs course={course} line={line} tab="quiz" />} />;
+  if (tab === 'tree')
+    return (
+      <Page className="gap-4">
+        <PlayBreadcrumbs course={course} line={line} tab="tree" />
+        <TreeView courses={[course]} line={line} preferCourse={course} depth={99} beside />
+      </Page>
+    );
   return <LineAbout course={course} line={line} />;
 }
 
@@ -185,6 +193,11 @@ function About({
             <Button asChild variant="outline">
               <a href={to(lineHref(course, variant.id, 'quiz'))}>
                 <ListChecks aria-hidden /> Quiz yourself
+              </a>
+            </Button>
+            <Button asChild variant="outline">
+              <a href={to(lineHref(course, variant.id, 'tree'))}>
+                <GitFork aria-hidden /> See it in the tree
               </a>
             </Button>
           </div>

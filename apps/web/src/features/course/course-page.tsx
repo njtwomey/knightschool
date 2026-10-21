@@ -25,6 +25,7 @@ import { useGlossary } from '@/features/glossary/use-glossary';
 import { ECO_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/features/openings/explanations';
 import { CourseIntro } from './course-intro';
 import { LinesTable } from './lines-table';
+import { CourseTree } from '@/features/tree/course-tree';
 
 function isTyping(target: EventTarget | null) {
   return (
@@ -218,6 +219,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
               )}
             </div>
           </div>
+          <CourseTree courseId={courseId} defaultOpen />
         </>
       )}
     </Page>

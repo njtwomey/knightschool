@@ -1,3 +1,4 @@
+import { fold } from './catalog';
 import { playSan } from './chess';
 import { START_EPD } from './epd';
 import { parsePgn, type PgnGame, type PgnMoveNode } from './pgn';
@@ -10,6 +11,7 @@ import {
   type OpeningContent,
   type OpeningManifest,
   type QuizEntry,
+  type TreeGraph,
 } from './schema/content';
 import { buildOpening, RESERVED_LINE_ID, type VariantSource } from './tree';
 
@@ -255,26 +257,32 @@ export function rewrittenMoves(tree: TheoryTree): TreeEdge[] {
   return [...tree.edges.values()].filter((edge) => edge.writtenIn.length > 1);
 }
 
-/** The tree as data to draw: chapters as branches (which grows out of which, after which move) and every move. */
-export type TreeGraph = {
-  /** Position id (`positionId`) of the initial position. */
-  root: string;
-  chapters: {
-    id: string;
-    name: string;
-    side: Side;
-    /** The chapter it branches from, and the move of that chapter it follows ("6.d4"); null from the start. */
-    parent: string | null;
-    after: string | null;
-    /** Position id where its own moves begin. */
-    from: string;
-    source: string;
-  }[];
-  /** Every move once, between position ids, with the chapters that write it. */
-  moves: { from: string; to: string; san: string; chapters: string[] }[];
+/**
+ * A chapter's name with its opening in front when the name leaves it out: "Short Variation" in the Caro-Kann reads
+ * "Caro-Kann Defence: Short Variation". A name that already says its opening ("Scandinavian Defense: Main Line") is
+ * kept as it is.
+ */
+export function chapterTitle(chapter: { name: string; opening: string }): string {
+  const opening = chapter.opening.split(':')[0]!.trim();
+  if (!opening || chapter.name.includes(':') || fold(chapter.name).includes(fold(opening))) return chapter.name;
+  return `${opening}: ${chapter.name}`;
+}
+
+/** A line's main line as UCI moves from the initial position. */
+const uciLine = (line: TreeLine) => {
+  let epd = START_EPD;
+  return line.game.moves.map((move) => {
+    const played = playSan(epd, move.san);
+    epd = played.epd;
+    return played.uci;
+  });
 };
 
-export function treeGraph(tree: TheoryTree): TreeGraph {
+/**
+ * The tree as data to draw (`TreeGraph` in the content schema): chapters as branches, each with its whole main line and
+ * the courses that list it (`coursesOf`), and every move once.
+ */
+export function treeGraph(tree: TheoryTree, coursesOf: (line: string) => string[] = () => []): TreeGraph {
   return {
     root: positionId(START_EPD),
     chapters: [...tree.lines.values()].map((line) => {
@@ -282,10 +290,14 @@ export function treeGraph(tree: TheoryTree): TreeGraph {
       return {
         id: line.id,
         name: line.game.tags.Variation ?? line.id,
+        opening: line.game.tags.Opening ?? '',
         side: line.side,
         parent: line.parents.at(-1) ?? null,
         after: branch ? moveText(line.startPly - 1, branch.san) : null,
         from: positionId(line.startEpd),
+        ply: line.startPly,
+        moves: uciLine(line),
+        courses: coursesOf(line.id),
         source: line.source,
       };
     }),

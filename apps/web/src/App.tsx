@@ -1,6 +1,7 @@
 import {
   BarChart3,
   BookText,
+  GitFork,
   CircleUser,
   LayoutDashboard,
   Library,
@@ -28,6 +29,7 @@ import { CreditsPage } from '@/features/credits/credits-page';
 import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
 import { GlossaryPage } from '@/features/glossary/glossary-page';
+import { TreePage } from '@/features/tree/tree-page';
 import { OpeningsPage } from '@/features/openings/openings-page';
 import { LinePage } from '@/features/line/line-page';
 import { GuessPage } from '@/features/guess/guess-page';
@@ -68,6 +70,7 @@ export function App() {
     { href: to('/quiz'), label: 'Quiz', active: route.page === 'review', icon: <Library aria-hidden /> },
     { href: to('/guess'), label: 'Guess', active: route.page === 'guess', icon: <Telescope aria-hidden /> },
     { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden /> },
+    { href: to('/tree'), label: 'Tree', active: route.page === 'tree', icon: <GitFork aria-hidden /> },
     { href: to('/glossary'), label: 'Glossary', active: route.page === 'glossary', icon: <BookText aria-hidden /> },
   ];
 
@@ -165,6 +168,7 @@ export function App() {
         {route.page === 'openings' && <OpeningsPage />}
         {route.page === 'course' && <CoursePage courseId={route.id} />}
         {route.page === 'glossary' && <GlossaryPage />}
+        {route.page === 'tree' && <TreePage />}
         {route.page === 'play' && (
           <LinePage
             key={`${route.course}/${route.line}/${route.tab}`}
