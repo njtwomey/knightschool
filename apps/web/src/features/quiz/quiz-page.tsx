@@ -165,11 +165,12 @@ function MoveView({ question }: { question: MoveQuestion }) {
         </CardHeader>
         <CardContent className="grid gap-4 text-sm">
           <div className="grid gap-1">
-            <p className="text-muted-foreground">
-              {lastEdge
-                ? `${side === 'white' ? 'Black' : 'White'} just played ${lastEdge.san}.`
-                : 'The game is about to begin.'}
-            </p>
+            {/* At the first move the empty list already says the game is about to begin. */}
+            {lastEdge && (
+              <p className="text-muted-foreground">
+                {side === 'white' ? 'Black' : 'White'} just played {lastEdge.san}.
+              </p>
+            )}
             <MoveList
               layout="table"
               label="Moves so far"
