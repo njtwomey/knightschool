@@ -268,4 +268,40 @@ describe('writing a course in the editor', () => {
     await author().undo();
     expect(section('my-italian-main')).toBe('my-italian-main');
   });
+
+  it('deleting a course keeps the lines another course of yours grows from', async () => {
+    const id = (await author().createCourse({ name: 'Carry on', side: 'white', from: 'my-italian-main' }))!;
+    await play('f1c4');
+    const own = () => author().build!.courses.map((content) => content.opening.id);
+    expect(own()).toContain(id);
+    await author().deleteCourse('my-italian');
+    expect(author().build!.problems).toEqual([]);
+    expect(own()).toContain(id);
+    expect(own()).not.toContain('my-italian');
+    expect((await chapterPgn('my-italian-main'))!.deletedAt).toBeNull();
+    await author().undo();
+    expect(own()).toContain('my-italian');
+  });
+
+  it('stops when a change is not saved, leaving the position and the open course as they were', async () => {
+    const apply = vi.spyOn(memory.storage.authoring, 'apply');
+    const before = { courseId: author().courseId, lineId: author().lineId, ply: author().ply };
+    apply.mockRejectedValueOnce(new Error('The disk is full.'));
+    expect(await author().createCourse({ name: 'Never made', side: 'black' })).toBeNull();
+    expect(author().message).toMatchObject({ text: 'The disk is full.', error: true });
+    expect({ courseId: author().courseId, lineId: author().lineId, ply: author().ply }).toEqual(before);
+
+    author().setPly(fullLine(author().build, author().lineId)!.game.moves.length);
+    const ply = author().ply;
+    const calls = apply.mock.calls.length;
+    apply.mockRejectedValueOnce(new Error('The disk is full.'));
+    await play(ply % 2 ? 'g8f6' : 'd2d4');
+    expect(apply.mock.calls.length).toBe(calls + 1); // the move was legal: a save was tried
+    expect(author().ply).toBe(ply);
+    apply.mockRejectedValueOnce(new Error('The disk is full.'));
+    expect(await author().importContribution(contributionYaml(author().contribution(author().courseId!)))).toBe(
+      'The disk is full.',
+    );
+    apply.mockRestore();
+  });
 });

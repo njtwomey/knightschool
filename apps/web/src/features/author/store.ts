@@ -181,11 +181,18 @@ const errorText = (error: unknown) => (error instanceof Error ? error.message : 
 let pendingHint: string | null = null;
 
 export const useAuthor = create<AuthorState>((set, get) => {
-  /** Saves an action, reloads, and refreshes the rest of the app (courses, the open course). */
-  /** Saves an action under `label`, which Undo shows ("reorder the path"). */
+  /**
+   * Saves an action under `label`, which Undo shows ("reorder the path"), reloads, and refreshes the rest of the app
+   * (courses, the open course). False when nothing was saved (the message says why): the caller then stops.
+   */
   async function save(changes: AuthoredChangeInput[], message: string, undo: boolean, label: string) {
     try {
       await saveAuthored(changes, label);
+    } catch (error) {
+      set({ message: { text: errorText(error), undo: false, error: true } });
+      return false;
+    }
+    try {
       await get().load();
       set({ message: { text: message, undo } });
       const { useBrowse } = await import('@/features/browse/store');
@@ -193,6 +200,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
     } catch (error) {
       set({ message: { text: errorText(error), undo: false, error: true } });
     }
+    return true;
   }
   const courseOf = (id: string | null) => draftCourses(get().rows).find((course) => course.id === id);
   const courseChange = (course: DraftCourse): AuthoredChangeInput => ({
@@ -321,7 +329,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         }
       }
       const chapter = newChapter({ title, opening: name, eco: eco ?? '', side, kind: 'main', start });
-      await save(
+      const saved = await save(
         [
           { kind: 'chapter', itemId: lineId, body: chapterText(setHeader(chapter, 'Opponent', 'any move'), startPly) },
           { kind: 'course', itemId: id, body: JSON.stringify(manifest) },
@@ -330,6 +338,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         false,
         `make course ${manifest.name}`,
       );
+      if (!saved) return null;
       set({ courseId: id, lineId, ply: startPly });
       return id;
     },
@@ -346,7 +355,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         side: course.manifest.side,
         kind: 'sideline',
       });
-      await save(
+      const saved = await save(
         [
           { kind: 'chapter', itemId: lineId, body: chapterText(setHeader(chapter, 'Opponent', 'any move'), 0) },
           courseChange({ ...course, manifest: { ...course.manifest, lines: [...course.manifest.lines, lineId] } }),
@@ -355,6 +364,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         false,
         `make line ${title}`,
       );
+      if (!saved) return null;
       set({ lineId, ply: 0 });
       return lineId;
     },
@@ -383,7 +393,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
       const at = lines.findIndex((entry) => entryId(entry) === id);
       const original = lines[at]!;
       const entry: CourseEntry = typeof original === 'string' ? copy : { ...original, id: copy };
-      await save(
+      const saved = await save(
         [
           { kind: 'chapter', itemId: copy, body: chapterText(setHeader(own, 'Variation', title), line.startPly) },
           courseChange({
@@ -395,7 +405,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         false,
         `copy line ${own.tags.Variation ?? id}`,
       );
-      return copy;
+      return saved ? copy : null;
     },
 
     async duplicateCourse(id) {
@@ -440,13 +450,13 @@ export const useAuthor = create<AuthorState>((set, get) => {
           drop: map(manifest.units.drop),
         };
       }
-      await save(
+      const saved = await save(
         [...chapters, { kind: 'course', itemId: copyId, body: JSON.stringify(manifest) }],
         `Made a copy of the course, ${manifest.name}.`,
         false,
         `copy course ${course.manifest.name}`,
       );
-      return copyId;
+      return saved ? copyId : null;
     },
 
     async playMove(uci) {
@@ -504,7 +514,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         const entry: CourseEntry = second
           ? { ...(typeof listed === 'string' ? { id: listed } : listed), alternative: true }
           : listed;
-        await save(
+        const saved = await save(
           [
             chapterChange(id, chapter, branching, prefix, side),
             courseChange({
@@ -518,7 +528,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
           false,
           `branch ${title}`,
         );
-        set({ lineId: id, ply: branching + 1, branching: null });
+        if (saved) set({ lineId: id, ply: branching + 1, branching: null });
         return;
       }
 
@@ -534,13 +544,13 @@ export const useAuthor = create<AuthorState>((set, get) => {
         set({ message: { text: 'This line is not yours to change.', undo: false, error: true } });
         return;
       }
-      await save(
+      const saved = await save(
         [chapterChange(lineId, appendMove(own, from, san), line.startPly, prefixOf(line), side)],
         `Played ${moveText(ply, san)}.`,
         false,
         `play ${moveText(ply, san)} in ${titleOf(lineId)}`,
       );
-      set({ ply: ply + 1 });
+      if (saved) set({ ply: ply + 1 });
     },
 
     async truncate() {
@@ -691,15 +701,16 @@ export const useAuthor = create<AuthorState>((set, get) => {
     async deleteCourse(id) {
       const course = courseOf(id ?? get().courseId);
       if (!course) return;
-      // Its chapters go too, unless another course of yours lists them.
-      const listedElsewhere = new Set(
+      // Its chapters go too, unless another course of yours lists them or a line it lists grows from them.
+      const neededElsewhere = new Set(
         draftCourses(get().rows)
           .filter((other) => other.id !== course.id)
-          .flatMap((other) => other.manifest.lines.map(entryId)),
+          .flatMap((other) => other.manifest.lines.map(entryId))
+          .flatMap((line) => [line, ...(fullLine(get().build, line)?.parents ?? [])]),
       );
       const chapters = course.manifest.lines
         .map(entryId)
-        .filter((id) => !listedElsewhere.has(id) && draftChapter(get().rows, id));
+        .filter((id) => !neededElsewhere.has(id) && draftChapter(get().rows, id));
       await save(
         [
           { kind: 'course', itemId: course.id, body: null },
@@ -813,8 +824,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
         : toPath
           ? `move ${titleOf(toPath)} to the path`
           : 'reorder the path';
-      await save([courseChange({ ...course, manifest })], 'Saved the order of the path.', false, label);
-      return null;
+      const saved = await save([courseChange({ ...course, manifest })], 'Saved the order of the path.', false, label);
+      return saved ? null : (get().message?.text ?? 'The order was not saved.');
     },
 
     async placeExtra(item, unitId) {
@@ -850,13 +861,13 @@ export const useAuthor = create<AuthorState>((set, get) => {
       const unit = courseUnits({ ...content, opening: { ...content.opening, units: next } }).find(
         (candidate) => candidate.traps.includes(item) || candidate.quizzes.includes(item),
       );
-      await save(
+      const saved = await save(
         [courseChange({ ...course, manifest })],
         'Saved where it is shown.',
         false,
         unit ? `show ${name} with ${titleOf(unit.line)} ${unit.n}` : `move ${name}`,
       );
-      return null;
+      return saved ? null : (get().message?.text ?? 'It was not saved.');
     },
 
     contribution(courseId) {
@@ -891,7 +902,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
       }
       if (get().shippedCourses.includes(read.courseId))
         return `The course id "${read.courseId}" is already a course of the app.`;
-      await save(
+      const saved = await save(
         [
           ...read.chapters.map((chapter): AuthoredChangeInput => ({
             kind: 'chapter',
@@ -904,6 +915,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
         true,
         `import ${read.manifest.name}`,
       );
+      if (!saved) return get().message?.text ?? 'The contribution was not saved.';
       get().selectCourse(read.courseId);
       return null;
     },
