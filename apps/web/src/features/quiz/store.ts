@@ -43,7 +43,7 @@ import {
 } from '@/data/training-settings';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { errorText } from '@/lib/errors';
-import { sessionLoader } from '@/lib/session';
+import { sessionLoader, type SessionPhase } from '@/lib/session';
 
 const scheduler = createScheduler();
 const SOURCE_KEY = 'knightschool.quiz.source';
@@ -57,7 +57,7 @@ const savedMoves = (): MovesPerQuestion => {
 /** "due" is the scheduled session; anything else is free practice from those courses. */
 export const DUE = 'due';
 
-type Phase = 'idle' | 'loading' | 'asking' | 'summary' | 'error';
+type Phase = SessionPhase<'asking' | 'summary'>;
 
 type QuizState = {
   phase: Phase;

@@ -28,7 +28,7 @@ import { introduceStep, recordStep } from './record';
 import type { UnitRef } from '@/router/hrefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { errorText } from '@/lib/errors';
-import { sessionLoader } from '@/lib/session';
+import { sessionLoader, type SessionPhase } from '@/lib/session';
 
 export type PlayMode = 'learn' | 'drill' | 'branches';
 
@@ -41,7 +41,7 @@ export const setRandom = (rng: Rng) => {
   random = rng;
 };
 
-type Phase = 'idle' | 'loading' | 'playing' | 'complete' | 'error';
+type Phase = SessionPhase<'playing' | 'complete'>;
 
 /**
  * Learn or Drill scoped to a unit of the study path: its stretches (one, or one per short branch of a side unit), played

@@ -22,7 +22,7 @@ import { whenStorageReady } from '@/data/storage';
 import { coursesFor, saveChoice, savedChoice, savedWeighting, type PracticeSource } from '@/data/practice-source';
 import { getEnrolled } from '@/data/training-settings';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
-import { sessionLoader } from '@/lib/session';
+import { sessionLoader, type SessionPhase } from '@/lib/session';
 
 const SOURCE_KEY = 'knightschool.guess.source';
 const WEIGHTING_KEY = 'knightschool.guess.weighting';
@@ -49,7 +49,7 @@ export type Question = {
   sources: Source[];
 };
 
-type Phase = 'idle' | 'loading' | 'asking' | 'answered' | 'summary' | 'error';
+type Phase = SessionPhase<'asking' | 'answered' | 'summary'>;
 
 export type Outcome = { question: Question; result: GuessResult; answer: string };
 

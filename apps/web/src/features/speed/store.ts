@@ -19,7 +19,7 @@ import { whenStorageReady } from '@/data/storage';
 import { getEnrolled } from '@/data/training-settings';
 import { oneOf, type PrefSchema, readPrefs, writePrefs } from '@/lib/local-prefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
-import { sessionLoader } from '@/lib/session';
+import { sessionLoader, type SessionPhase } from '@/lib/session';
 
 /** How a run is set up: a fixed number of lines, or as many moves as you can make before the time is up. */
 export type SpeedConfig = {
@@ -81,7 +81,7 @@ type LineResult = {
 
 type Queued = { content: OpeningContent; lineId: string; lineName: string; steps: LineStep[] };
 
-type Phase = 'idle' | 'setup' | 'loading' | 'ready' | 'playing' | 'between' | 'summary' | 'error';
+type Phase = SessionPhase<'setup' | 'ready' | 'playing' | 'between' | 'summary'>;
 
 type SpeedState = {
   phase: Phase;
