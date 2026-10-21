@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { epdAfterPgn, legalMovesFrom, playSan, playUci, pvToSan, sideToMove, withPromotion } from './chess';
+import { epdAfterPgn, legalMovesFrom, playSan, playUci, pvToSan, replayUcis, sideToMove, withPromotion } from './chess';
 import { START_EPD } from './epd';
 
 describe('chess wrappers', () => {
@@ -45,6 +45,19 @@ describe('chess wrappers', () => {
 
   it('rejects an illegal move', () => {
     expect(() => playSan(START_EPD, 'Ke2')).toThrow();
+  });
+});
+
+describe('replayUcis', () => {
+  it('replays moves with their SAN and the position after each', () => {
+    const played = replayUcis(START_EPD, ['e2e4', 'e7e5']);
+    expect(played.map((move) => move.san)).toEqual(['e4', 'e5']);
+    expect(played[1]).toEqual({ uci: 'e7e5', san: 'e5', epd: epdAfterPgn('1. e4 e5') });
+  });
+
+  it('stops at the first move that is not legal', () => {
+    expect(replayUcis(START_EPD, ['e2e4', 'e2e4', 'e7e5']).map((move) => move.uci)).toEqual(['e2e4']);
+    expect(replayUcis(START_EPD, [])).toEqual([]);
   });
 });
 
