@@ -23,7 +23,7 @@ import { COURSE_TABS, courseHref, type CourseTab } from '@/features/course/tabs'
 import { LINE_TABS, lineHref, type LineTab } from '@/features/line/tabs';
 import { navigate, to } from '@/router/location';
 
-type MenuItem = { id: string; label: string; href: string; group: string };
+export type MenuItem = { id: string; label: string; href: string; group: string };
 
 /**
  * A breadcrumb that is also a menu of its siblings (every course, or every line of a course), to move sideways without
@@ -31,7 +31,7 @@ type MenuItem = { id: string; label: string; href: string; group: string };
  * (`href`), its name stays a link and a chevron beside it opens the menu; when it is the page you are on, the whole
  * crumb opens the menu.
  */
-function CrumbMenu({
+export function CrumbMenu({
   label,
   href,
   current,
@@ -114,7 +114,7 @@ function useCourseItems(): MenuItem[] {
 }
 
 /** One choice of several, so a joined group: a shared border, flat inside, round at the two ends. */
-function TabGroup<T extends string>({
+export function TabGroup<T extends string>({
   tabs,
   value,
   onPick,

@@ -194,7 +194,10 @@ Each stage stands on its own and is small enough to review.
    7 days since the last export.
 6. **The editor,** under Profile (a new tab beside Overview, Stats and Settings, e.g. `/profile/author`, and an entry in
    the profile menu): board, lane tree, branch, comment, tags, metadata, groups, overrides, undo. **Done**, at
-   `/profile/author` with a menu entry. As built: the line is a board with step buttons and a numbered move list (the
+   `/profile/author` with a menu entry, and later moved, at the user's request, to its own section **Create** (`/create`,
+   a menu item between the study modes and Glossary): your courses in a table, a page per course with Details, Lines,
+   Path and Publish tabs, a page per line, Undo naming what it takes back, and Edit on the learner pages of an authored
+   course; `/profile/author` redirects there. As built: the line is a board with step buttons and a numbered move list (the
    lane tree is not reused: a line is one path, and the tree page already draws authored chapters); moves are added at
    the end of a line, and **Branch here** starts a new chapter at any position, whose `[Start]` names the chapter that
    writes the move before; a branch that gives a second answer where you move is listed `alternative` (shown, not

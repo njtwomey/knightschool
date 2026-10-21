@@ -1,5 +1,8 @@
 import { courseProgress, relatedCourses, roleOf, type RelatedCourse } from '@knightschool/core';
+import { PenLine } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { createHref } from '@/features/author/tabs';
 import { EcoLink } from '@/components/eco-link';
 import { Page } from '@/components/page';
 import { RichText } from '@/components/rich-text';
@@ -135,7 +138,14 @@ export function CoursePage({ courseId }: { courseId: string }) {
               <Hint text={TIER_HINT[course.tier]}>
                 <Badge variant="outline">{TIER_NAME[course.tier]}</Badge>
               </Hint>
-              <span className="ml-auto">
+              <span className="ml-auto flex flex-wrap gap-2">
+                {course.authored && (
+                  <Button asChild size="sm" variant="outline">
+                    <a href={to(createHref(courseId))}>
+                      <PenLine aria-hidden /> Edit
+                    </a>
+                  </Button>
+                )}
                 <EnrolButton openingId={courseId} />
               </span>
             </div>

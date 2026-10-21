@@ -1,6 +1,16 @@
 import { courseUnits, lineOrderOf } from '@knightschool/core';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, GripVertical, ListChecks, Swords } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import {
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  GitBranch,
+  GripVertical,
+  ListChecks,
+  Swords,
+  type LucideIcon,
+} from 'lucide-react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { entryId, unitSummary } from './helpers';
@@ -43,6 +53,17 @@ export function PathOrder({ course }: { course: DraftCourse }) {
     ids.filter((id) => !isBonus(id)),
   );
   const bonus = ids.filter(isBonus);
+  // Traps to spring and quizzes belong with the unit they leave from (`attachSupplementary`); alternatives stand apart.
+  const springs = bonus.filter((id) => kindOf(id) === 'for-us');
+  const alternatives = bonus.filter((id) => kindOf(id) !== 'for-us');
+  const attached = units
+    .map((unit) => ({
+      unit,
+      traps: unit.traps.filter((trap) => springs.includes(trap)),
+      quizzes: (content?.quizzes ?? []).filter((quiz) => unit.quizzes.includes(quiz.id)),
+    }))
+    .filter((group) => group.traps.length > 0 || group.quizzes.length > 0);
+  const loose = springs.filter((id) => !units.some((unit) => unit.traps.includes(id)));
   const custom = course.manifest.units;
   const hasCustom = Boolean(custom && (Object.keys(custom.after).length || Object.keys(custom.drop).length));
 
@@ -161,43 +182,82 @@ export function PathOrder({ course }: { course: DraftCourse }) {
           </h3>
           <p className="text-sm text-muted-foreground">Shown while studying, never needed to pass.</p>
         </div>
-        {bonus.length === 0 && (content?.quizzes.length ?? 0) === 0 && (
+        {alternatives.length === 0 && attached.length === 0 && loose.length === 0 && (
           <p className="text-sm text-muted-foreground">Nothing yet.</p>
         )}
-        <ul className="grid gap-1.5">
-          {bonus.map((id) => (
-            <li key={id} className="flex items-center gap-2 rounded-lg border bg-muted/40 p-2 text-sm">
-              <Swords className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              <div className="grid min-w-0 flex-1">
-                <span className="truncate font-medium">{title(id)}</span>
-                <span className="text-xs text-muted-foreground">
-                  {kindOf(id) === 'for-us' ? 'Trap to spring' : `Alternative (${KIND[kindOf(id)] ?? kindOf(id)})`}
-                </span>
-              </div>
-              {kindOf(id) !== 'for-us' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() =>
-                    apply(
-                      [...path, id],
-                      bonus.filter((line) => line !== id),
-                    )
-                  }
-                >
-                  <ArrowLeft aria-hidden /> To path
-                </Button>
-              )}
-            </li>
-          ))}
-          {content?.quizzes.map((quiz) => (
-            <li key={quiz.id} className="flex items-center gap-2 rounded-lg border bg-muted/40 p-2 text-sm">
-              <ListChecks className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-              <span>Question: {quiz.prompt}</span>
-            </li>
-          ))}
-        </ul>
+        {attached.map(({ unit, traps, quizzes }) => (
+          <div key={unit.id} className="grid gap-1">
+            <h4 className="text-xs font-medium text-muted-foreground">
+              With {title(unit.line)} {unit.n}
+            </h4>
+            <ul className="grid gap-1">
+              {traps.map((id) => (
+                <BonusItem key={id} icon={Swords} label={title(id)} note="Trap to spring" />
+              ))}
+              {quizzes.map((quiz) => (
+                <BonusItem key={quiz.id} icon={ListChecks} label={quiz.prompt} note="Question" />
+              ))}
+            </ul>
+          </div>
+        ))}
+        {loose.length > 0 && (
+          <div className="grid gap-1">
+            <h4 className="text-xs font-medium text-muted-foreground">Not with any unit yet</h4>
+            <ul className="grid gap-1">
+              {loose.map((id) => (
+                <BonusItem key={id} icon={Swords} label={title(id)} note="Trap to spring" />
+              ))}
+            </ul>
+          </div>
+        )}
+        {alternatives.length > 0 && (
+          <div className="grid gap-1">
+            <h4 className="text-xs font-medium text-muted-foreground">Alternatives: shown, not drilled</h4>
+            <ul className="grid gap-1">
+              {alternatives.map((id) => (
+                <BonusItem key={id} icon={GitBranch} label={title(id)} note={KIND[kindOf(id)] ?? kindOf(id)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      apply(
+                        [...path, id],
+                        bonus.filter((line) => line !== id),
+                      )
+                    }
+                  >
+                    <ArrowLeft aria-hidden /> To path
+                  </Button>
+                </BonusItem>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
     </div>
+  );
+}
+
+/** One bonus item: what it is, and what kind. */
+function BonusItem({
+  icon: Icon,
+  label,
+  note,
+  children,
+}: {
+  icon: LucideIcon;
+  label: string;
+  note: string;
+  children?: ReactNode;
+}) {
+  return (
+    <li className="flex items-center gap-2 rounded-lg border bg-muted/40 p-2 text-sm">
+      <Icon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+      <div className="grid min-w-0 flex-1">
+        <span className="font-medium">{label}</span>
+        <span className="text-xs text-muted-foreground">{note}</span>
+      </div>
+      {children}
+    </li>
   );
 }

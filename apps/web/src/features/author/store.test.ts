@@ -164,4 +164,47 @@ describe('writing a course in the editor', () => {
     await author().undo();
     expect(ids()).toEqual(['my-italian-main', nf6, f4]);
   });
+
+  it('adds, renames, copies and deletes a line, naming each change Undo would take back', async () => {
+    const ids = () =>
+      draftCourses(author().rows)[0]!.manifest.lines.map((entry) => (typeof entry === 'string' ? entry : entry.id));
+    const before = ids();
+    const added = (await author().createLine())!;
+    expect(ids()).toEqual([...before, added]);
+    expect(author().undoLabel).toBe(`make line Line ${before.length + 1}`);
+    await author().renameLine(added, 'Quiet line');
+    expect(readChapter((await chapterPgn(added))!.pgn).tags.Variation).toBe('Quiet line');
+    expect(author().undoLabel).toBe('change to line Quiet line');
+    const copy = (await author().duplicateLine(added))!;
+    expect(ids()).toEqual([...before, added, copy]);
+    expect(readChapter((await chapterPgn(copy))!.pgn).tags.Variation).toBe('Quiet line (copy)');
+    await author().deleteLine(copy);
+    expect(ids()).toEqual([...before, added]);
+    expect(author().undoLabel).toBe('delete line Quiet line (copy)');
+    await author().undo();
+    expect(ids()).toEqual([...before, added, copy]);
+  });
+
+  it('copies a course with its lines, and deletes a course that undo brings back', async () => {
+    const copyId = (await author().duplicateCourse('my-italian'))!;
+    const copy = draftCourses(author().rows).find((course) => course.id === copyId)!;
+    expect(copy.manifest.name).toBe('My Italian (copy)');
+    const original = draftCourses(author().rows).find((course) => course.id === 'my-italian')!;
+    expect(copy.manifest.lines).toHaveLength(original.manifest.lines.length);
+    // A copied branch grows from the copy of its parent, so the copy builds on its own.
+    expect(author().build!.problems).toEqual([]);
+    const copiedLines = copy.manifest.lines.map((entry) => (typeof entry === 'string' ? entry : entry.id));
+    const originalLines = original.manifest.lines.map((entry) => (typeof entry === 'string' ? entry : entry.id));
+    expect(copiedLines.some((id) => originalLines.includes(id))).toBe(false);
+    await author().deleteCourse(copyId);
+    expect(draftCourses(author().rows).map((course) => course.id)).toEqual(['my-italian']);
+    expect(author().undoLabel).toBe('delete course My Italian (copy)');
+    await author().undo();
+    expect(
+      draftCourses(author().rows)
+        .map((course) => course.id)
+        .sort(),
+    ).toEqual(['my-italian', copyId].sort());
+    expect(author().build!.problems).toEqual([]);
+  });
 });

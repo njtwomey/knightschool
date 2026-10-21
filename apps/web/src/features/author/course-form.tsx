@@ -28,8 +28,12 @@ import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, Sele
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useBrowse } from '@/features/browse/store';
-import { useDraft } from './helpers';
-import { useAuthor, type DraftCourse } from './store';
+import { GroupActions } from './group-actions';
+import { entryId, entrySection, useDraft } from './helpers';
+import { createHref } from './tabs';
+import { useGlossary } from '@/features/glossary/use-glossary';
+import { navigate } from '@/router/location';
+import { fullLine, useAuthor, type DraftCourse } from './store';
 
 const FROM_START = '__start';
 
@@ -166,13 +170,16 @@ export function NewCourseDialog({ compact = false }: { compact?: boolean }) {
             onClick={() => {
               setOpen(false);
               const own = opening === null || isOwnOpening(opening);
-              void useAuthor.getState().createCourse({
-                name,
-                side,
-                opening: own ? undefined : opening,
-                eco: chosen?.eco,
-                from: !own && from !== FROM_START ? from : undefined,
-              });
+              void useAuthor
+                .getState()
+                .createCourse({
+                  name,
+                  side,
+                  opening: own ? undefined : opening,
+                  eco: chosen?.eco,
+                  from: !own && from !== FROM_START ? from : undefined,
+                })
+                .then((id) => id && navigate(createHref(id)));
               setName('');
               setOpening(null);
               setFrom(FROM_START);
@@ -186,15 +193,29 @@ export function NewCourseDialog({ compact = false }: { compact?: boolean }) {
   );
 }
 
-/** The course's details: name, opening, summary and introduction. Saved together; deleting asks first. */
+/**
+ * The Details tab: the course's name, side (while no line has moves), tier, opening, summary and introduction, plans,
+ * motifs, and its groups of lines. Saved together; deleting asks first.
+ */
 export function CourseForm({ course }: { course: DraftCourse }) {
   const { manifest } = course;
+  const build = useAuthor((state) => state.build);
+  const glossary = useGlossary();
   const [name, setName] = useDraft(manifest.name);
   const [opening, setOpening] = useDraft(manifest.opening);
+  const [tier, setTier] = useDraft(String(manifest.tier));
   const [summary, setSummary] = useDraft(manifest.summary);
   const [idea, setIdea] = useDraft(manifest.about.idea);
   const [risks, setRisks] = useDraft(manifest.about.risks);
   const [suits, setSuits] = useDraft(manifest.about.suits);
+  const [plans, setPlans] = useDraft((manifest.plans ?? []).join('\n'));
+  const [motifs, setMotifs] = useDraft(manifest.motifs ?? []);
+  const groups = [...new Set(manifest.lines.map(entrySection).filter((group): group is string => Boolean(group)))];
+  // The side can change only while no line has a move: every move is written for one side.
+  const played = manifest.lines.some((entry) => {
+    const line = fullLine(build, entryId(entry));
+    return line && line.game.moves.length > line.startPly;
+  });
   const field = (id: string, label: string, value: string, set: (value: string) => void, long = false) => (
     <div className="grid gap-1.5">
       <Label htmlFor={id}>{label}</Label>
@@ -206,25 +227,76 @@ export function CourseForm({ course }: { course: DraftCourse }) {
     </div>
   );
   return (
-    <div className="grid max-w-2xl gap-4">
-      <p className="text-sm text-muted-foreground">
-        You play {manifest.side}. The course is {course.id} on this device.
-      </p>
+    <div className="grid max-w-3xl gap-4">
       {field('course-name', 'Name', name, setName)}
-      <div className="grid gap-1.5">
-        <Label htmlFor="course-opening">It belongs to</Label>
-        <OpeningSelect id="course-opening" value={opening} onChange={setOpening} side={manifest.side} />
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-1.5">
+          <Label>You play</Label>
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            value={manifest.side}
+            disabled={played}
+            onValueChange={(value) => value && void useAuthor.getState().setSide(value as Side)}
+            className="justify-self-start"
+            title={
+              played ? 'Every move is written for one side, so the side is fixed once a line has moves.' : undefined
+            }
+          >
+            <ToggleGroupItem value="white">White</ToggleGroupItem>
+            <ToggleGroupItem value="black">Black</ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+        <div className="grid gap-1.5">
+          <Label htmlFor="course-tier">Tier</Label>
+          <Select value={tier} onValueChange={setTier}>
+            <SelectTrigger id="course-tier" className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">Study first</SelectItem>
+              <SelectItem value="2">Study next</SelectItem>
+              <SelectItem value="3">Alternative or rare</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-1.5">
+          <Label htmlFor="course-opening">It belongs to</Label>
+          <OpeningSelect id="course-opening" value={opening} onChange={setOpening} side={manifest.side} />
+        </div>
       </div>
       {field('course-summary', 'Summary: what the opening is and what the course covers', summary, setSummary, true)}
       {field('course-idea', 'The idea: why you play it', idea, setIdea, true)}
       {field('course-risks', 'The risks: what can go wrong', risks, setRisks, true)}
       {field('course-suits', 'Who it suits', suits, setSuits, true)}
+      {field('course-plans', 'Plans to remember, one on each line', plans, setPlans, true)}
+      {glossary && glossary.length > 0 && (
+        <div className="grid gap-1.5">
+          <Label>Ideas in the course</Label>
+          <ToggleGroup
+            type="multiple"
+            variant="outline"
+            size="sm"
+            value={motifs}
+            onValueChange={setMotifs}
+            className="flex flex-wrap justify-start"
+            aria-label="Motifs"
+          >
+            {glossary.map((entry) => (
+              <ToggleGroupItem key={entry.id} value={entry.id} title={entry.summary}>
+                {entry.name}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+      )}
       <div className="flex flex-wrap gap-2">
         <Button
           onClick={() =>
             void useAuthor.getState().setCourseMeta({
               name: name.trim() || manifest.name,
               opening,
+              tier: Number(tier) as 1 | 2 | 3,
               summary: summary.trim() || manifest.summary,
               about: {
                 ...manifest.about,
@@ -232,10 +304,15 @@ export function CourseForm({ course }: { course: DraftCourse }) {
                 risks: risks.trim() || 'Not written yet.',
                 suits: suits.trim() || 'Not written yet.',
               },
+              plans: plans
+                .split('\n')
+                .map((plan) => plan.trim())
+                .filter(Boolean),
+              motifs,
             })
           }
         >
-          Save the course
+          Save the details
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -252,11 +329,44 @@ export function CourseForm({ course }: { course: DraftCourse }) {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Keep it</AlertDialogCancel>
-              <AlertDialogAction onClick={() => void useAuthor.getState().deleteCourse()}>Delete</AlertDialogAction>
+              <AlertDialogAction
+                onClick={() =>
+                  void useAuthor
+                    .getState()
+                    .deleteCourse(course.id)
+                    .then(() => navigate('/create'))
+                }
+              >
+                Delete
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
+      <section className="grid gap-2" aria-labelledby="groups-heading">
+        <h3 id="groups-heading" className="font-semibold">
+          Groups
+        </h3>
+        {groups.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No groups yet. Put a line in a group from its page; the course page then shows its lines under the groups.
+          </p>
+        ) : (
+          <ul className="grid gap-1">
+            {groups.map((group) => (
+              <li key={group} className="flex items-center justify-between gap-2 rounded-lg border px-3 py-1.5 text-sm">
+                <span>
+                  {group}{' '}
+                  <span className="text-muted-foreground">
+                    ({manifest.lines.filter((entry) => entrySection(entry) === group).length} lines)
+                  </span>
+                </span>
+                <GroupActions name={group} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }

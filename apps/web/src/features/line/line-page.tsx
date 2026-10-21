@@ -1,5 +1,6 @@
 import { namedPly, variantPath, type LineEdge, type OpeningContent, type Variant } from '@knightschool/core';
-import { BookOpen, GitBranch, GitFork, ListChecks, Target } from 'lucide-react';
+import { BookOpen, GitBranch, GitFork, ListChecks, PenLine, Target } from 'lucide-react';
+import { lineEditHref } from '@/features/author/tabs';
 import { EcoLink } from '@/components/eco-link';
 import { MoveTags } from '@/components/move-tags';
 import { useEffect, useMemo, useState } from 'react';
@@ -170,6 +171,7 @@ function About({
   const entry = index
     .find((candidate) => candidate.id === course)
     ?.lines.find((candidate) => candidate.id === variant.id);
+  const authored = index.find((candidate) => candidate.id === course)?.authored === true;
   const homeOf = (lineId: string) =>
     index.find((candidate) => candidate.id === course && candidate.lines.some((l) => l.id === lineId)) ??
     index.find((candidate) => candidate.lines.some((l) => l.id === lineId));
@@ -230,6 +232,13 @@ function About({
                 <GitFork aria-hidden /> See it in the tree
               </a>
             </Button>
+            {authored && (
+              <Button asChild variant="outline">
+                <a href={to(lineEditHref(course, variant.id))}>
+                  <PenLine aria-hidden /> Edit
+                </a>
+              </Button>
+            )}
           </div>
         </div>
 

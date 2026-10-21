@@ -31,6 +31,9 @@ import { CreditsPage } from '@/features/credits/credits-page';
 import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
 import { CoursePathPage } from '@/features/path/path-page';
+import { CourseEditorPage } from '@/features/author/course-editor';
+import { CreatePage } from '@/features/author/create-page';
+import { LineEditorPage } from '@/features/author/line-page';
 import { GlossaryPage } from '@/features/glossary/glossary-page';
 import { CurriculumTreePage } from '@/features/tree/curriculum-tree-page';
 import { CoursesPage } from '@/features/courses/courses-page';
@@ -43,7 +46,7 @@ import { ReviewPage } from '@/features/review/review-page';
 import { HomePage } from '@/features/home/home-page';
 import { ProfilePage } from '@/features/profile/profile-page';
 import { parseRoute, type Route } from '@/route';
-import { to, usePathname } from '@/router/location';
+import { navigate, to, usePathname } from '@/router/location';
 
 function useRoute(): Route {
   return parseRoute(usePathname());
@@ -65,8 +68,14 @@ export function App() {
     void selectCourse(courseId);
   }, [courseId, selectCourse]);
 
-  // In the order you use them: find and look (Courses, Browse, Tree), practise (Quiz, Speed, Guess), look things up
-  // (Glossary).
+  // Writing courses was once a Profile tab; its old address shows Create.
+  const pathname = usePathname();
+  useEffect(() => {
+    if (/^\/profile\/author\/?$/.test(pathname)) navigate('/create', { replace: true });
+  }, [pathname]);
+
+  // In the order you use them: find and look (Courses, Browse, Tree), practise (Quiz, Speed, Guess), write your own
+  // (Create), look things up (Glossary).
   const links: { href: string; label: string; active: boolean; icon: ReactNode; group: number }[] = [
     {
       href: to('/courses'),
@@ -87,11 +96,18 @@ export function App() {
     { href: to('/speed'), label: 'Speed', active: route.page === 'speed', icon: <Timer aria-hidden />, group: 1 },
     { href: to('/guess'), label: 'Guess', active: route.page === 'guess', icon: <Telescope aria-hidden />, group: 1 },
     {
+      href: to('/create'),
+      label: 'Create',
+      active: route.page === 'create' || route.page === 'create-course' || route.page === 'create-line',
+      icon: <PenLine aria-hidden />,
+      group: 2,
+    },
+    {
       href: to('/glossary'),
       label: 'Glossary',
       active: route.page === 'glossary',
       icon: <BookText aria-hidden />,
-      group: 2,
+      group: 3,
     },
   ];
   const startsGroup = (i: number) => i > 0 && links[i]!.group !== links[i - 1]!.group;
@@ -176,11 +192,6 @@ export function App() {
                   <BarChart3 aria-hidden /> Stats
                 </a>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a href={to('/profile/author')}>
-                  <PenLine aria-hidden /> Author
-                </a>
-              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <a href={to('/profile/settings')}>
@@ -215,6 +226,9 @@ export function App() {
           ) : (
             <CoursePage courseId={route.id} />
           ))}
+        {route.page === 'create' && <CreatePage />}
+        {route.page === 'create-course' && <CourseEditorPage course={route.course} tab={route.tab} />}
+        {route.page === 'create-line' && <LineEditorPage course={route.course} line={route.line} />}
         {route.page === 'glossary' && <GlossaryPage />}
         {route.page === 'tree' && <CurriculumTreePage />}
         {route.page === 'courses' && <CoursesPage />}

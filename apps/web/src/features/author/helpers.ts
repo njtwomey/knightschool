@@ -1,5 +1,16 @@
-import { playSan, START_EPD, type CourseEntry, type CourseUnit, type TreeLine } from '@knightschool/core';
-import { useState } from 'react';
+import {
+  playSan,
+  START_EPD,
+  type AuthoredBuild,
+  type AuthoredProblem,
+  type CourseEntry,
+  type CourseUnit,
+  type TreeLine,
+} from '@knightschool/core';
+import { useEffect, useState } from 'react';
+import type { AuthoredRows } from '@/data/authored';
+import { useStorage } from '@/data/storage';
+import { useAuthor, type DraftCourse } from './store';
 
 export const entryId = (entry: CourseEntry) => (typeof entry === 'string' ? entry : entry.id);
 export const entrySection = (entry: CourseEntry) => (typeof entry === 'string' ? undefined : entry.section);
@@ -35,3 +46,34 @@ export function useDraft<T>(source: T): [T, (value: T) => void] {
   if (draft.source !== source) setDraft({ source, value: source }); // React's pattern for state that follows a prop
   return [draft.source === source ? draft.value : source, (value: T) => setDraft({ source, value })];
 }
+
+/** Loads your authored work once the database is open, and says where it is. */
+export function useAuthorLoaded() {
+  const storageStatus = useStorage((state) => state.status);
+  const status = useAuthor((state) => state.status);
+  const error = useAuthor((state) => state.error);
+  useEffect(() => {
+    if (storageStatus === 'ready') void useAuthor.getState().load();
+  }, [storageStatus]);
+  return { storageStatus, status, error };
+}
+
+/** The build's problems about these courses and lines. */
+export const problemsFor = (build: AuthoredBuild | null, ids: string[]): AuthoredProblem[] =>
+  (build?.problems ?? []).filter((problem) => ids.includes(problem.id));
+
+/** When a course or any of its lines last changed. */
+export function lastEdited(rows: AuthoredRows, course: DraftCourse): string {
+  const lines = new Set(course.manifest.lines.map(entryId));
+  const times = [
+    ...rows.courses.filter((row) => row.id === course.id).map((row) => row.at),
+    ...rows.chapters.filter((row) => lines.has(row.id)).map((row) => row.at),
+  ];
+  return times.sort().at(-1) ?? '';
+}
+
+/** "21 Oct, 18:06": a time in the learner's own words. */
+export const shortTime = (iso: string) =>
+  iso
+    ? new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+    : '';

@@ -22,7 +22,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { navigate } from '@/router/location';
 import { entryId, entrySection, numbered, ucisOf, useDraft } from './helpers';
+import { createHref, lineEditHref } from './tabs';
 import { draftChapter, fullLine, positionsOf, useAuthor, type DraftCourse } from './store';
 
 const KINDS: { value: LineKind | TrapKind; label: string }[] = [
@@ -98,7 +100,14 @@ export function LineEditor({ course }: { course: DraftCourse }) {
             orientation={side}
             interactive
             onMove={(uci) => {
-              void useAuthor.getState().playMove(uci);
+              // A branch opens a new line: the address follows it.
+              void useAuthor
+                .getState()
+                .playMove(uci)
+                .then(() => {
+                  const opened = useAuthor.getState().lineId;
+                  if (opened && opened !== lineId) navigate(lineEditHref(course.id, opened));
+                });
               return true;
             }}
             lastMove={at > 0 ? ucis[at - 1] : undefined}
@@ -429,7 +438,16 @@ function LineDetails({ course }: { course: DraftCourse }) {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Keep it</AlertDialogCancel>
-              <AlertDialogAction onClick={() => void useAuthor.getState().deleteLine()}>Delete</AlertDialogAction>
+              <AlertDialogAction
+                onClick={() =>
+                  void useAuthor
+                    .getState()
+                    .deleteLine()
+                    .then(() => navigate(createHref(course.id, 'lines')))
+                }
+              >
+                Delete
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

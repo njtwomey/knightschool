@@ -16,7 +16,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { download } from '@/data/backup';
+import { navigate } from '@/router/location';
 import { useAuthor, type DraftCourse } from './store';
+import { createHref } from './tabs';
 
 /** Copies text to the clipboard; false when the browser will not. */
 async function copy(text: string): Promise<boolean> {
@@ -147,7 +149,7 @@ export function ImportContributionDialog() {
     >
       <DialogTrigger asChild>
         <Button size="sm" variant="outline">
-          <Upload aria-hidden /> Import
+          <Upload aria-hidden /> Import contribution
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">
@@ -196,6 +198,8 @@ export function ImportContributionDialog() {
               if (!problem) {
                 setOpen(false);
                 setText('');
+                const imported = useAuthor.getState().courseId;
+                if (imported) navigate(createHref(imported));
               }
             }}
           >

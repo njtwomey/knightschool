@@ -90,13 +90,14 @@ export function authoredIndexEntries(build: AuthoredBuild, shipped: OpeningIndex
     ),
   );
   const after = Math.max(0, ...shipped.map((entry) => entry.order)) + 1;
-  return build.courses.map((content, i) =>
-    courseIndexEntry(content, {
+  return build.courses.map((content, i) => ({
+    ...courseIndexEntry(content, {
       order: after + i,
       alsoIn: (line) => listedBy.get(line) ?? [],
       branch: (line) => branches.get(line),
     }),
-  );
+    authored: true,
+  }));
 }
 
 /** The whole tree to draw, authored chapters included. */

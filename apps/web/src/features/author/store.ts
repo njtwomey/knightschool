@@ -11,6 +11,7 @@ import {
   CourseManifest,
   type Contribution,
   ownOpeningId,
+  isOwnOpening,
   playSan,
   readChapter,
   setHeader,
@@ -21,6 +22,7 @@ import {
   truncateMoves,
   uniqueId,
   type AuthoredBuild,
+  type AuthoredChange,
   type CourseEntry,
   type LineKind,
   type PgnGame,
@@ -54,10 +56,16 @@ export type AuthorState = {
   /** What just happened, with an undo offer after a change that removed something. */
   message: { text: string; undo: boolean; error?: boolean } | null;
   reminder: { edits: number; days: number } | null;
+  /** What Undo would take back ("delete line 2...Bc5"), or null when there is nothing to undo. */
+  undoLabel: string | null;
 
   load: () => Promise<void>;
   selectCourse: (id: string | null) => void;
   selectLine: (id: string | null) => void;
+  /** Opens a course and a line from the address, keeping the position when it is the line already open. */
+  open: (courseId: string, lineId?: string | null) => void;
+  /** A message to show when the next page opens (`open`), such as how to branch. */
+  hintNext: (text: string) => void;
   setPly: (ply: number) => void;
   startBranch: () => void;
   cancelBranch: () => void;
@@ -65,8 +73,20 @@ export type AuthorState = {
    * A new course: of its own ("My courses") unless `opening` names an opening of the app it adds to. `from` is a line of
    * the app to carry on from: the course's first line then starts where that line ends.
    */
-  createCourse: (input: { name: string; side: Side; opening?: string; eco?: string; from?: string }) => Promise<void>;
-  createLine: () => Promise<void>;
+  createCourse: (input: {
+    name: string;
+    side: Side;
+    opening?: string;
+    eco?: string;
+    from?: string;
+  }) => Promise<string | null>;
+  /** A new line from the start, in the open course. Returns its id. */
+  createLine: () => Promise<string | null>;
+  renameLine: (id: string, title: string) => Promise<void>;
+  /** A copy of a line, listed after it. Returns the copy's id. */
+  duplicateLine: (id: string) => Promise<string | null>;
+  /** A copy of a course with copies of its lines. Returns the copy's id. */
+  duplicateCourse: (id: string) => Promise<string | null>;
   /** A move on the board: the next move of the line, a new move at its end, or the first move of a branch. */
   playMove: (uci: string) => Promise<void>;
   truncate: () => Promise<void>;
@@ -76,12 +96,15 @@ export type AuthorState = {
   setGroup: (group: string | undefined) => Promise<void>;
   renameGroup: (from: string, to: string) => Promise<void>;
   deleteGroup: (name: string) => Promise<void>;
-  deleteLine: () => Promise<void>;
-  deleteCourse: () => Promise<void>;
+  /** Changes the side the course is for, while none of its lines has a move yet. */
+  setSide: (side: Side) => Promise<void>;
+  /** Deletes a line (the open one by default) with the lines that grow from it. */
+  deleteLine: (id?: string) => Promise<void>;
+  /** Deletes a course (the open one by default) with its lines that no other course of yours lists. */
+  deleteCourse: (id?: string) => Promise<void>;
   setCourseMeta: (
-    meta: Partial<Pick<CourseManifest, 'name' | 'summary' | 'opening' | 'about' | 'plans'>>,
+    meta: Partial<Pick<CourseManifest, 'name' | 'summary' | 'opening' | 'about' | 'plans' | 'tier' | 'motifs'>>,
   ) => Promise<void>;
-  /** Returns an error message, or null when the overrides were saved. */
   /**
    * Sets the study order: `path` lists the drilled lines in the order to study them, `bonus` the lines shown but not
    * needed (an alternative, or a trap to spring). Writes `lines:` in that order and a `units.order` that follows it as
@@ -146,6 +169,8 @@ export function positionsOf(line: TreeLine | undefined): string[] {
 
 const errorText = (error: unknown) => (error instanceof Error ? error.message : String(error));
 
+let pendingHint: string | null = null;
+
 export const useAuthor = create<AuthorState>((set, get) => {
   /** Saves an action, reloads, and refreshes the rest of the app (courses, the open course). */
   async function save(changes: AuthoredChangeInput[], message: string, undo = false) {
@@ -198,6 +223,7 @@ export const useAuthor = create<AuthorState>((set, get) => {
     branching: null,
     message: null,
     reminder: null,
+    undoLabel: null,
 
     async load() {
       if (get().status === 'idle') set({ status: 'loading' });
@@ -207,18 +233,11 @@ export const useAuthor = create<AuthorState>((set, get) => {
         const build = await loadAuthoredBuild(async () => shipped);
         const { storage } = await whenStorageReady();
         const reminder = await reminderToExport(storage);
-        set({ rows, build, shippedCourses: shipped, reminder, status: 'ready', error: null });
-        // Keep the selection valid after an undo or a delete.
-        const courses = draftCourses(rows);
-        const course = courses.find((candidate) => candidate.id === get().courseId) ?? courses[0];
-        const lines = course?.manifest.lines.map(entryId) ?? [];
-        const lineId = lines.includes(get().lineId ?? '') ? get().lineId : (lines[0] ?? null);
-        const line = fullLine(build, lineId);
-        set({
-          courseId: course?.id ?? null,
-          lineId,
-          ply: Math.min(get().ply, line?.game.moves.length ?? 0),
-        });
+        const undoLabel = describeUndo(await storage.authoring.history(), rows);
+        set({ rows, build, shippedCourses: shipped, reminder, undoLabel, status: 'ready', error: null });
+        // The pages choose the course and line from the address; keep the position inside the line.
+        const line = fullLine(build, get().lineId);
+        set({ ply: Math.min(get().ply, line?.game.moves.length ?? 0) });
       } catch (error) {
         set({ status: 'error', error: errorText(error) });
       }
@@ -231,6 +250,20 @@ export const useAuthor = create<AuthorState>((set, get) => {
     },
     selectLine(id) {
       set({ lineId: id, ply: fullLine(get().build, id)?.game.moves.length ?? 0, branching: null });
+    },
+    open(courseId, lineId = null) {
+      if (get().courseId === courseId && get().lineId === lineId) return;
+      set({
+        courseId,
+        lineId,
+        ply: fullLine(get().build, lineId)?.game.moves.length ?? 0,
+        branching: null,
+        message: pendingHint ? { text: pendingHint, undo: false } : null,
+      });
+      pendingHint = null;
+    },
+    hintNext(text) {
+      pendingHint = text;
     },
     setPly(ply) {
       const length = fullLine(get().build, get().lineId)?.game.moves.length ?? 0;
@@ -283,11 +316,12 @@ export const useAuthor = create<AuthorState>((set, get) => {
         `Made the course ${manifest.name}. Play its main line on the board.`,
       );
       set({ courseId: id, lineId, ply: startPly });
+      return id;
     },
 
     async createLine() {
       const course = courseOf(get().courseId);
-      if (!course) return;
+      if (!course) return null;
       const lineId = uniqueId(`${course.id}-line`, takenIds());
       const title = `Line ${course.manifest.lines.length + 1}`;
       const chapter = newChapter({
@@ -305,6 +339,91 @@ export const useAuthor = create<AuthorState>((set, get) => {
         `Made ${title}, from the start.`,
       );
       set({ lineId, ply: 0 });
+      return lineId;
+    },
+
+    async renameLine(id, title) {
+      const line = fullLine(get().build, id);
+      const own = draftChapter(get().rows, id);
+      const name = title.trim();
+      if (!line || !own || !name) return;
+      await save(
+        [{ kind: 'chapter', itemId: id, body: chapterText(setHeader(own, 'Variation', name), line.startPly) }],
+        `Renamed the line ${name}.`,
+      );
+    },
+
+    async duplicateLine(id) {
+      const course = courseOf(get().courseId);
+      const line = fullLine(get().build, id);
+      const own = draftChapter(get().rows, id);
+      if (!course || !line || !own) return null;
+      const copy = uniqueId(`${id}-copy`, takenIds());
+      const title = `${own.tags.Variation ?? id} (copy)`;
+      const lines = course.manifest.lines;
+      const at = lines.findIndex((entry) => entryId(entry) === id);
+      const original = lines[at]!;
+      const entry: CourseEntry = typeof original === 'string' ? copy : { ...original, id: copy };
+      await save(
+        [
+          { kind: 'chapter', itemId: copy, body: chapterText(setHeader(own, 'Variation', title), line.startPly) },
+          courseChange({
+            ...course,
+            manifest: { ...course.manifest, lines: [...lines.slice(0, at + 1), entry, ...lines.slice(at + 1)] },
+          }),
+        ],
+        `Made a copy of the line, ${title}.`,
+      );
+      return copy;
+    },
+
+    async duplicateCourse(id) {
+      const course = courseOf(id);
+      if (!course) return null;
+      const taken = takenIds();
+      const copyId = uniqueId(`${id}-copy`, taken);
+      taken.add(copyId);
+      // Each line of yours gets a copy, and a copied branch grows from the copy of its parent.
+      const renamed = new Map<string, string>();
+      for (const line of course.manifest.lines.map(entryId))
+        if (draftChapter(get().rows, line)) {
+          const next = uniqueId(`${line}-copy`, taken);
+          taken.add(next);
+          renamed.set(line, next);
+        }
+      const chapters = [...renamed].map(([from, to]): AuthoredChangeInput => {
+        const line = fullLine(get().build, from);
+        let game = draftChapter(get().rows, from)!;
+        const start = game.tags.Start;
+        const parent = start?.split(' ')[0];
+        if (start && parent && renamed.has(parent))
+          game = setHeader(game, 'Start', `${renamed.get(parent)}${start.slice(parent.length)}`);
+        return { kind: 'chapter', itemId: to, body: chapterText(game, line?.startPly ?? 0) };
+      });
+      const lines = course.manifest.lines.map((entry): CourseEntry => {
+        const to = renamed.get(entryId(entry));
+        if (!to) return entry;
+        return typeof entry === 'string' ? to : { ...entry, id: to };
+      });
+      const manifest = { ...course.manifest, name: `${course.manifest.name} (copy)`, lines };
+      if (manifest.units) {
+        const unit = (unitId: string) => {
+          const [line, n] = [unitId.slice(0, unitId.lastIndexOf(':')), unitId.slice(unitId.lastIndexOf(':'))];
+          return `${renamed.get(line) ?? line}${n}`;
+        };
+        const map = (record: Record<string, string[]>) =>
+          Object.fromEntries(Object.entries(record).map(([key, ids]) => [unit(key), ids.map(unit)]));
+        manifest.units = {
+          order: manifest.units.order.map(unit),
+          after: map(manifest.units.after),
+          drop: map(manifest.units.drop),
+        };
+      }
+      await save(
+        [...chapters, { kind: 'course', itemId: copyId, body: JSON.stringify(manifest) }],
+        `Made a copy of the course, ${manifest.name}.`,
+      );
+      return copyId;
     },
 
     async playMove(uci) {
@@ -490,12 +609,15 @@ export const useAuthor = create<AuthorState>((set, get) => {
       );
     },
 
-    async deleteLine() {
+    async deleteLine(id) {
       const course = courseOf(get().courseId);
-      const { lineId, build } = get();
+      const { build } = get();
+      const lineId = id ?? get().lineId;
       if (!course || !lineId) return;
       // The lines that grow from it go too, or they would have nothing to grow from.
-      const doomed = new Set([lineId, ...descendants(build, lineId)].filter((id) => draftChapter(get().rows, id)));
+      const doomed = new Set(
+        [lineId, ...descendants(build, lineId)].filter((candidate) => draftChapter(get().rows, candidate)),
+      );
       const lines = course.manifest.lines.filter((entry) => !doomed.has(entryId(entry)));
       const others = draftCourses(get().rows)
         .filter((other) => other.id !== course.id && other.manifest.lines.some((entry) => doomed.has(entryId(entry))))
@@ -516,8 +638,8 @@ export const useAuthor = create<AuthorState>((set, get) => {
       );
     },
 
-    async deleteCourse() {
-      const course = courseOf(get().courseId);
+    async deleteCourse(id) {
+      const course = courseOf(id ?? get().courseId);
       if (!course) return;
       // Its chapters go too, unless another course of yours lists them.
       const listedElsewhere = new Set(
@@ -535,6 +657,32 @@ export const useAuthor = create<AuthorState>((set, get) => {
         ],
         `Deleted the course ${course.manifest.name}.`,
         true,
+      );
+    },
+
+    async setSide(side) {
+      const course = courseOf(get().courseId);
+      if (!course || course.manifest.side === side) return;
+      const ids = course.manifest.lines.map(entryId);
+      const played = ids.some((id) => {
+        const line = fullLine(get().build, id);
+        return line && line.game.moves.length > line.startPly;
+      });
+      if (played) {
+        set({ message: { text: 'The side is fixed once a line has moves.', undo: false, error: true } });
+        return;
+      }
+      const opening = isOwnOpening(course.manifest.opening) ? ownOpeningId(side) : course.manifest.opening;
+      const chapters = ids.flatMap((id): AuthoredChangeInput[] => {
+        const own = draftChapter(get().rows, id);
+        const line = fullLine(get().build, id);
+        return own
+          ? [{ kind: 'chapter', itemId: id, body: chapterText(setHeader(own, 'For', side), line?.startPly ?? 0) }]
+          : [];
+      });
+      await save(
+        [...chapters, courseChange({ ...course, manifest: { ...course.manifest, side, opening } })],
+        `You now play ${side} in this course.`,
       );
     },
 
@@ -654,4 +802,38 @@ export const useAuthor = create<AuthorState>((set, get) => {
 function descendants(build: AuthoredBuild | null, id: string): string[] {
   if (!build) return [];
   return [...build.tree.lines.values()].filter((line) => line.parents.includes(id)).map((line) => line.id);
+}
+
+/**
+ * What Undo would take back, in a few words ("delete line 2...Bc5", "change to course My Scotch"), from the newest
+ * action not yet undone. Null when there is nothing to undo.
+ */
+export function describeUndo(history: AuthoredChange[], rows: AuthoredRows): string | null {
+  const undone = new Set(history.flatMap((row) => (row.undoOf ? [row.undoOf] : [])));
+  const latest = history.find((row) => row.undoOf === null && !undone.has(row.group));
+  if (!latest) return null;
+  const group = history.filter((row) => row.group === latest.group);
+  const now = (row: AuthoredChange) =>
+    (row.kind === 'chapter' ? rows.chapters : rows.courses).find((item) => item.id === row.itemId);
+  const what = (row: AuthoredChange) => (row.kind === 'chapter' ? 'line' : 'course');
+  const name = (row: AuthoredChange) => {
+    const item = now(row);
+    if (!item) return row.itemId;
+    if ('pgn' in item)
+      return /\[Variation "((?:[^"\\]|\\.)*)"\]/.exec(item.pgn)?.[1]?.replace(/\\"/g, '"') ?? row.itemId;
+    try {
+      return (JSON.parse(item.manifest) as { name?: string }).name ?? row.itemId;
+    } catch {
+      return row.itemId;
+    }
+  };
+  const isDeleted = (row: AuthoredChange) => Boolean(now(row)?.deletedAt && !row.beforeDeletedAt);
+  // A deleted course names the action, not the lines that went with it.
+  const deleted = group.find((row) => isDeleted(row) && row.kind === 'course') ?? group.find(isDeleted);
+  if (deleted) return `delete ${what(deleted)} ${name(deleted)}`;
+  const created =
+    group.find((row) => row.before === null && row.kind === 'course') ?? group.find((row) => row.before === null);
+  if (created) return `make ${what(created)} ${name(created)}`;
+  const changed = group.find((row) => row.kind === 'chapter') ?? group[0]!;
+  return `change to ${what(changed)} ${name(changed)}`;
 }

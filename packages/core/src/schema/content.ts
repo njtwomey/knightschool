@@ -213,6 +213,8 @@ export const OpeningIndexEntry = Opening.pick({
   variants: z.number().int(),
   /** How many cards the course produces, for progress bars. */
   cards: z.number().int(),
+  /** True for a course written in the app (Create): the learner pages offer to edit it. */
+  authored: z.boolean().optional(),
   /** The course's opening page on Lichess (`lichessUrlForCourse`). */
   lichess: z.string().optional(),
   /** A mid-line position (EPD) to draw as the course thumbnail. */

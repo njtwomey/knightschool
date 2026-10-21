@@ -123,14 +123,16 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 Real path URLs (History API, `apps/web/src/router`): `/` Home, `/courses` (every course in one sortable table, filtered by side), `/search` (aliases `/browse`, `/openings`; the page called Search: courses in study order and every line, in one grid), `/course/:id` (one course; `/course/:id/path` its study path, `/course/:id/tree` its tree),
 `/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill; learn and drill
 take `/<n>` for unit n of that line on the path, or `/<n>/<first>-<last>` for some of its moves),
-`/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`, `/profile/author`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
+`/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/create`
+(your courses; `/profile/author` redirects here), `/create/:course` and `/create/:course/{lines,path,publish}` (one course's
+Details, Lines, Path and Publish), `/create/:course/:line` (the line editor), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
 `setHashState` as the page changes and read once when it opens, so a refresh or shared link restores it exactly:
 course page `#v=<line>&m=<uci.uci…>`; browse `#q=…&role=…&side=…&tier=…&scope=…&bm=<moves>&bk=<kind>`; play
 `#m=<moves played>` (and `&p=<part>` in a unit with several branches); lab `#pgn=…&fen=…&ply=…&side=…`. Hosts must serve `index.html` for unknown paths (`public/_redirects`,
 and `404.html` is copied from `index.html` at build; dev and preview already fall back). Features in `apps/web/src/features/*`:
 
-The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Glossary (`App.tsx`).
+The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Create | Glossary (`App.tsx`).
 
 - `courses` (`/courses`): every course in one table, filtered by side (White / Black / Both), every column sortable, a
   row opens the course.
@@ -145,7 +147,17 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
   engine strip, its lines grouped by kind (a row opens the line's About; icons show / learn / drill), and the same ground
   from the other side (`relatedCourses`). ECO codes are links to the opening's Lichess page (`EcoLink`, address from
   `lichess` in index.json).
-- `author` (Profile, Author: the course editor). `store.ts` (`useAuthor`) turns each action into chapter PGN and
+- `author` (**Create**, the course editor, its own section of the menu). `/create` (`create-page.tsx`) is your courses
+  in one sortable table (name, side, lines, last edited, status with its problems on hover; open, view as learner,
+  copy, delete) with New course, Import contribution, Undo (named: "Undo: delete line 2...Bc5", `describeUndo`) and
+  Export. `/create/<course>` (`course-editor.tsx`, tabs in `tabs.ts` at the end of the breadcrumbs, `crumbs.tsx`) has
+  Details (`course-form.tsx`: name, side while no line has moves, tier, opening, summary, about, plans, motifs, groups),
+  Lines (`lines-tab.tsx`: every line with kind, group, opponent, moves, what it grows from and problems; new from the
+  start or branching from a line, rename, copy, delete), Path (`path-order.tsx`, bonus items grouped under the unit they
+  attach to) and Publish; View as learner and Undo sit in its header. `/create/<course>/<line>` (`line-page.tsx`) is the
+  line editor with course and line menus and previous/next. `shell.tsx` gates on the database and shows notices and
+  problems where they occur. The learner's course page and line About show **Edit** for an authored course
+  (`authored` in index.json). `store.ts` (`useAuthor`; pages choose the course and line with `open`) turns each action into chapter PGN and
   course JSON with core's `chapter-edit.ts` (`newChapter`, `appendMove`, `truncateMoves`, `setMoveNote`, `setHeader`,
   `startHeader`, `opponentMove`) and saves it as one undoable action (`data/authoring.ts`). A new course is a course of
   its own by default (opening `my-<side>-courses`, grouped as "My courses" by `ownOpeningGroups`); it can instead add to

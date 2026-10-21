@@ -1,8 +1,9 @@
+import { isCreateTab, type CreateTab } from '@/features/author/tabs';
 import type { CourseTab } from '@/features/course/tabs';
 import { parseLineTab, parseUnitRef, type LineTab, type UnitRef } from '@/features/line/tabs';
 
-/** Profile's tabs: Overview, Stats, Settings, and Author (the course editor). */
-export type ProfileTab = 'overview' | 'stats' | 'settings' | 'author';
+/** Profile's tabs: Overview, Stats and Settings. */
+export type ProfileTab = 'overview' | 'stats' | 'settings';
 
 export type Route =
   | { page: 'home' }
@@ -10,6 +11,10 @@ export type Route =
   | { page: 'openings' }
   | { page: 'courses' }
   | { page: 'course'; id: string; tab: CourseTab }
+  /** Create: your courses (`/create`), one course's tab (`/create/<course>[/<tab>]`), a line (`/create/<course>/<line>`). */
+  | { page: 'create' }
+  | { page: 'create-course'; course: string; tab: CreateTab }
+  | { page: 'create-line'; course: string; line: string }
   /**
    * A line's page and tab; line `all` is the every-branch drill of the whole course. `unit` scopes Learn or Drill to one
    * unit of the study path (`/play/<course>/<line>/learn/<n>`), or some of its moves (`.../<n>/<first>-<last>`).
@@ -46,7 +51,16 @@ export function parseRoute(pathname: string): Route {
     case 'courses':
       return { page: 'courses' };
     case 'profile':
-      return { page: 'profile', tab: a === 'stats' || a === 'settings' || a === 'author' ? a : 'overview' };
+      // Authoring was once a Profile tab: /profile/author is now Create.
+      if (a === 'author') return { page: 'create' };
+      return { page: 'profile', tab: a === 'stats' || a === 'settings' ? a : 'overview' };
+    case 'create':
+      if (!a || !slug.test(a)) return { page: 'create' };
+      if (!b) return { page: 'create-course', course: a, tab: 'details' };
+      if (isCreateTab(b)) return { page: 'create-course', course: a, tab: b };
+      return slug.test(b)
+        ? { page: 'create-line', course: a, line: b }
+        : { page: 'create-course', course: a, tab: 'details' };
     case 'overview':
     case 'today':
       return { page: 'profile', tab: 'overview' };
