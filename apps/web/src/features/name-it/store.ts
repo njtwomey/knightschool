@@ -21,6 +21,7 @@ import { loadIndex, loadOpening, loadSearchIndex } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
 import { coursesFor, saveChoice, savedChoice, savedWeighting, type PracticeSource } from '@/data/practice-source';
 import { getEnrolled } from '@/data/training-settings';
+import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 
 const SOURCE_KEY = 'knightschool.guess.source';
 const WEIGHTING_KEY = 'knightschool.guess.weighting';
@@ -29,7 +30,6 @@ const WEIGHTING_KEY = 'knightschool.guess.weighting';
 export const SESSION_LENGTH = 10;
 
 /** A right answer is shown for a moment, then the next position comes up. Other answers wait for Next. */
-const NAME_IT_DELAYS = { full: 2600 } as const;
 
 /** A place a position comes from, to link to once it has been answered. */
 export type Source = {
@@ -87,7 +87,7 @@ type Deck = {
   history: Map<string, GuessResult>;
 };
 let deck: Deck | null = null;
-let timer: ReturnType<typeof setTimeout> | undefined;
+const timers = createTimers();
 
 /** One candidate per distinct position: transpositions share it, and the first line to reach it names the side. */
 function candidates(from: Deck) {
@@ -154,7 +154,7 @@ export const useNameIt = create<NameItState>((set, get) => {
   }
 
   function show() {
-    clearTimeout(timer);
+    timers.clear();
     const { outcomes } = get();
     if (outcomes.length >= SESSION_LENGTH) return set({ phase: 'summary', question: null });
     const question = deck ? pick(deck, new Set(outcomes.map((outcome) => outcome.question.epd))) : null;
@@ -188,9 +188,9 @@ export const useNameIt = create<NameItState>((set, get) => {
       )
       .catch(() => undefined); // the game still works if the answer cannot be saved
     void attachMoves(question);
-    clearTimeout(timer);
+    timers.clear();
     // A right answer moves on by itself; anything else waits, because there is something to read.
-    if (grade.result === 'full') timer = setTimeout(show, NAME_IT_DELAYS.full);
+    if (grade.result === 'full') timers.later(FEEDBACK_DELAYS.guessFull, show);
   }
 
   return {
@@ -238,7 +238,7 @@ export const useNameIt = create<NameItState>((set, get) => {
       }
     },
     stop() {
-      clearTimeout(timer);
+      timers.clear();
     },
     setWeighting(weighting) {
       saveChoice(WEIGHTING_KEY, weighting);

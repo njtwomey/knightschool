@@ -46,6 +46,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { EngineLines } from '@/features/engine/engine-lines';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState } from '@/router/location';
+import { FEEDBACK_DELAYS } from '@/lib/feedback';
 
 const PIECES: PieceLetter[] = ['K', 'Q', 'R', 'B', 'N', 'P'];
 
@@ -136,7 +137,7 @@ export function LabPage() {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(what);
-      setTimeout(() => setCopied(null), 1800);
+      setTimeout(() => setCopied(null), FEEDBACK_DELAYS.copied);
     } catch {
       setProblem('Your browser would not let me copy. Select the text and copy it by hand.');
     }

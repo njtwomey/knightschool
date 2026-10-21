@@ -26,6 +26,7 @@ import { whenStorageReady } from '@/data/storage';
 import { getCardOptions } from '@/data/training-settings';
 import { introduceStep, recordStep } from './record';
 import type { UnitRef } from '@/router/hrefs';
+import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 
 export type PlayMode = 'learn' | 'drill' | 'branches';
 
@@ -37,12 +38,6 @@ let random: Rng = Math.random;
 export const setRandom = (rng: Rng) => {
   random = rng;
 };
-
-/**
- * How long things stay on screen. Nothing waits for a click: a tick shows while play carries on, and the computer
- * answers by itself.
- */
-export const DELAYS = { afterCorrect: 350, opponent: 500, wrongBadge: 900 } as const;
 
 type Phase = 'idle' | 'loading' | 'playing' | 'complete' | 'error';
 
@@ -107,14 +102,11 @@ type PlayState = {
   stop: () => void;
 };
 
-let timers: ReturnType<typeof setTimeout>[] = [];
+const timers = createTimers();
+const later = timers.later;
+const clearTimers = timers.clear;
 /** How many times `start` has been called: each call's number, so a slower earlier one can tell it was overtaken. */
 let runs = 0;
-const later = (ms: number, run: () => void) => timers.push(setTimeout(run, ms));
-const clearTimers = () => {
-  for (const timer of timers) clearTimeout(timer);
-  timers = [];
-};
 
 /** Is the learner asked for this step, or does the computer play it? */
 const asked = (mode: PlayMode, step: LineStep) => mode === 'learn' || step.ours;
@@ -148,7 +140,7 @@ export const usePlay = create<PlayState>((set, get) => {
     if (index >= steps.length && scope && content && scope.part + 1 < scope.parts.length) {
       // A side unit: on to its next short branch, after a pause to see the end of this one.
       set({ opponentThinking: true });
-      later(DELAYS.opponent * 2, () => {
+      later(FEEDBACK_DELAYS.opponent * 2, () => {
         const part = scope.part + 1;
         const stretch = scope.parts[part]!;
         set({
@@ -171,7 +163,7 @@ export const usePlay = create<PlayState>((set, get) => {
       return;
     }
     set({ opponentThinking: true });
-    later(DELAYS.opponent, () => {
+    later(FEEDBACK_DELAYS.opponent, () => {
       set((state) => ({ index: state.index + 1, badge: null }));
       proceed();
     });
@@ -304,11 +296,11 @@ export const usePlay = create<PlayState>((set, get) => {
           badge: { square: played.slice(2, 4), kind: 'correct' },
           results: [...state.results, { index, rating: next.rating! }],
         }));
-        later(DELAYS.afterCorrect, proceed);
+        later(FEEDBACK_DELAYS.afterCorrect, proceed);
         return true;
       }
       set({ attempt: next, badge: { square: played.slice(2, 4), kind: 'wrong' } });
-      later(DELAYS.wrongBadge, () => set({ badge: null }));
+      later(FEEDBACK_DELAYS.wrongBadge, () => set({ badge: null }));
       return false;
     },
 

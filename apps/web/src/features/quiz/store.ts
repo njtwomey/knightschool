@@ -41,6 +41,7 @@ import {
   getIntroducedToday,
   getNewPerDay,
 } from '@/data/training-settings';
+import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 
 const scheduler = createScheduler();
 const SOURCE_KEY = 'knightschool.quiz.source';
@@ -53,13 +54,6 @@ const savedMoves = (): MovesPerQuestion => {
 
 /** "due" is the scheduled session; anything else is free practice from those courses. */
 export const DUE = 'due';
-
-/** Nothing waits for a click: a right answer shows a tick and the next card follows by itself. */
-const QUIZ_DELAYS = {
-  afterCorrect: 700,
-  wrongBadge: 900,
-  quizRight: 2200,
-} as const;
 
 type Phase = 'idle' | 'loading' | 'asking' | 'summary' | 'error';
 
@@ -116,12 +110,9 @@ type QuizState = {
   stop: () => void;
 };
 
-let timers: ReturnType<typeof setTimeout>[] = [];
-const later = (ms: number, run: () => void) => timers.push(setTimeout(run, ms));
-const clearTimers = () => {
-  for (const timer of timers) clearTimeout(timer);
-  timers = [];
-};
+const timers = createTimers();
+const later = timers.later;
+const clearTimers = timers.clear;
 
 const storageOrThrow = (): Storage => {
   const { storage } = useStorage.getState();
@@ -386,7 +377,7 @@ export const useQuiz = create<QuizState>((set, get) => {
       const square = played.slice(2, 4);
       if (next.status !== 'done') {
         set({ attempt: next, badge: { square, kind: 'wrong' } });
-        later(QUIZ_DELAYS.wrongBadge, () => set({ badge: null }));
+        later(FEEDBACK_DELAYS.wrongBadge, () => set({ badge: null }));
         return false;
       }
       set((state) => ({
@@ -409,7 +400,7 @@ export const useQuiz = create<QuizState>((set, get) => {
       }
       // A right first time carries on by itself; a miss or a slip waits for Next so the explanation can be read.
       if (next.shown || next.wrongTries > 0) set({ holding: true });
-      else later(QUIZ_DELAYS.afterCorrect, advance);
+      else later(FEEDBACK_DELAYS.nextCard, advance);
       return true;
     },
 
@@ -442,7 +433,7 @@ export const useQuiz = create<QuizState>((set, get) => {
           .catch((error: unknown) =>
             set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
           );
-      if (result.matched) later(QUIZ_DELAYS.quizRight, advance);
+      if (result.matched) later(FEEDBACK_DELAYS.quizRight, advance);
       else set({ holding: true });
     },
 

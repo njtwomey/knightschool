@@ -18,6 +18,7 @@ import { isPassed, loadCoursePath } from '@/data/course-path';
 import { whenStorageReady } from '@/data/storage';
 import { getEnrolled } from '@/data/training-settings';
 import { oneOf, type PrefSchema, readPrefs, writePrefs } from '@/lib/local-prefs';
+import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 
 /** How a run is set up: a fixed number of lines, or as many moves as you can make before the time is up. */
 export type SpeedConfig = {
@@ -64,9 +65,6 @@ const CONFIG_SCHEMA: PrefSchema<SpeedConfig> = {
 
 /** A timed run keeps lines coming; this many is far more than anyone gets through in two minutes. */
 const TIMED_QUEUE = 40;
-
-/** How long the next line's name is held up before it begins (fixed runs), and how long a wrong-move cross shows. */
-export const SPEED_DELAYS = { betweenLines: 5000, wrongBadge: 600 } as const;
 
 type LineResult = {
   courseId: string;
@@ -121,8 +119,15 @@ type SpeedState = {
   stop: () => void;
 };
 
-let timer: ReturnType<typeof setTimeout> | undefined;
-let deadlineTimer: ReturnType<typeof setTimeout> | undefined;
+/** The countdown before a line, a timed run's clock, and the tick or cross on a move: each cleared on its own. */
+const countdown = createTimers();
+const clock = createTimers();
+const badges = createTimers();
+const clearAll = () => {
+  countdown.clear();
+  clock.clear();
+  badges.clear();
+};
 
 /** The index of the next step the learner has to play, skipping (instantly) the opponent's moves. */
 function nextOurs(steps: LineStep[], from: number): number {
@@ -186,8 +191,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
   }
 
   function endRun() {
-    clearTimeout(timer);
-    clearTimeout(deadlineTimer);
+    clearAll();
     set({ phase: 'summary' });
   }
 
@@ -197,8 +201,8 @@ export const useSpeed = create<SpeedState>((set, get) => {
     if (config.mode === 'timed') {
       const deadline = performance.now() + config.seconds * 1000;
       set({ deadline });
-      clearTimeout(deadlineTimer);
-      deadlineTimer = setTimeout(timeUp, config.seconds * 1000);
+      clock.clear();
+      clock.later(config.seconds * 1000, timeUp);
     }
     startLine(0);
   }
@@ -212,9 +216,9 @@ export const useSpeed = create<SpeedState>((set, get) => {
     }
     if (lineIndex + 1 >= queue.length) return endRun();
     if (config.mode === 'timed') return startLine(lineIndex + 1); // no pause: the clock is running
-    set({ phase: 'between', betweenEndsAt: performance.now() + SPEED_DELAYS.betweenLines });
-    clearTimeout(timer);
-    timer = setTimeout(() => startLine(lineIndex + 1), SPEED_DELAYS.betweenLines);
+    set({ phase: 'between', betweenEndsAt: performance.now() + FEEDBACK_DELAYS.betweenLines });
+    countdown.clear();
+    countdown.later(FEEDBACK_DELAYS.betweenLines, () => startLine(lineIndex + 1));
   }
 
   /** Time is up in a timed run: the line in progress counts for the moves already made in it. */
@@ -247,8 +251,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
     results: [],
 
     openSetup() {
-      clearTimeout(timer);
-      clearTimeout(deadlineTimer);
+      clearAll();
       set({ phase: 'setup', error: null, results: [], queue: [] });
     },
 
@@ -259,8 +262,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
 
     async prepare() {
       if (get().phase === 'loading') return;
-      clearTimeout(timer);
-      clearTimeout(deadlineTimer);
+      clearAll();
       const { config } = get();
       set({ phase: 'loading', error: null, results: [], queue: [] });
       try {
@@ -323,7 +325,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
     /** Skips the rest of the countdown before a line. */
     startNow() {
       if (get().phase !== 'between') return;
-      clearTimeout(timer);
+      countdown.clear();
       const next = get().lineIndex + 1;
       if (next === 0) launch();
       else startLine(next);
@@ -333,9 +335,9 @@ export const useSpeed = create<SpeedState>((set, get) => {
     begin() {
       if (get().phase !== 'ready') return;
       // lineIndex -1 means "before the first line", so the countdown shows queue[0] as the one up next.
-      set({ phase: 'between', lineIndex: -1, betweenEndsAt: performance.now() + SPEED_DELAYS.betweenLines });
-      clearTimeout(timer);
-      timer = setTimeout(launch, SPEED_DELAYS.betweenLines);
+      set({ phase: 'between', lineIndex: -1, betweenEndsAt: performance.now() + FEEDBACK_DELAYS.betweenLines });
+      countdown.clear();
+      countdown.later(FEEDBACK_DELAYS.betweenLines, launch);
     },
 
     submitMove(uci) {
@@ -347,7 +349,8 @@ export const useSpeed = create<SpeedState>((set, get) => {
       if (!played) return false;
       if (played !== step.edge.uci) {
         set({ errors: errors + 1, badge: { square: played.slice(2, 4), kind: 'wrong' } });
-        setTimeout(() => set({ badge: null }), SPEED_DELAYS.wrongBadge);
+        badges.clear();
+        badges.later(FEEDBACK_DELAYS.wrongBadge, () => set({ badge: null }));
         return false;
       }
       const ms = performance.now() - turnStartedAt;
@@ -360,7 +363,8 @@ export const useSpeed = create<SpeedState>((set, get) => {
         badge: { square: played.slice(2, 4), kind: 'correct' },
         turnStartedAt: performance.now(),
       });
-      setTimeout(() => set({ badge: null }), 250);
+      badges.clear();
+      badges.later(FEEDBACK_DELAYS.correctBadge, () => set({ badge: null }));
       if (next >= queued.steps.length) finishLine();
       return true;
     },
@@ -372,8 +376,7 @@ export const useSpeed = create<SpeedState>((set, get) => {
     },
 
     stop() {
-      clearTimeout(timer);
-      clearTimeout(deadlineTimer);
+      clearAll();
     },
   };
 });

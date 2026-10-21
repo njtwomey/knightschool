@@ -1,7 +1,8 @@
 import { testManifest } from '@/test-manifest';
 import { buildOpening, parsePgn } from '@knightschool/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { DELAYS, setRandom, usePlay } from './store';
+import { FEEDBACK_DELAYS as DELAYS } from '@/lib/feedback';
+import { setRandom, usePlay } from './store';
 
 const game = parsePgn(`[Event "x"]
 [Opening "T"]

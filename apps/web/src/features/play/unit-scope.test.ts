@@ -39,7 +39,8 @@ vi.mock('@/router/location', () => ({ readHashState: () => hash }));
 // No database: the unit is cut with the default settings and nothing is saved.
 vi.mock('@/data/storage', () => ({ whenStorageReady: () => Promise.reject(new Error('no database in tests')) }));
 
-const { DELAYS, resumeStretch, usePlay } = await import('./store');
+const { resumeStretch, usePlay } = await import('./store');
+const { FEEDBACK_DELAYS: DELAYS } = await import('@/lib/feedback');
 const { startFromAddress } = await import('./resume');
 
 const units = courseUnits(content);

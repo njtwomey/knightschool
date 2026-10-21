@@ -24,7 +24,8 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { WeightingSelect } from '@/components/weighting-select';
 import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
-import { rushCourse, rushSource, SPEED_DELAYS, useSpeed, type SpeedConfig } from './store';
+import { rushCourse, rushSource, useSpeed, type SpeedConfig } from './store';
+import { FEEDBACK_DELAYS } from '@/lib/feedback';
 import { profileHref } from '@/router/hrefs';
 
 /** A stopwatch redrawn ten times a second, only while a line is being played. */
@@ -80,7 +81,7 @@ function BetweenDialog() {
   const next = queue[lineIndex + 1];
   const nextTitles = next ? titles(next.content, next.lineName) : undefined;
   const left = Math.max(0, betweenEndsAt - now);
-  const total = SPEED_DELAYS.betweenLines;
+  const total = FEEDBACK_DELAYS.betweenLines;
   return (
     <Dialog open={open && !!next} modal={false}>
       {open && <div className="fixed inset-x-0 top-[3.25rem] bottom-0 z-40 bg-black/55 backdrop-blur-sm" />}
