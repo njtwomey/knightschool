@@ -24,7 +24,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { WeightingSelect } from '@/components/weighting-select';
 import { useBrowse } from '@/features/browse/store';
 import { to } from '@/router/location';
-import { SPEED_DELAYS, useSpeed, type SpeedConfig } from './store';
+import { rushCourse, rushSource, SPEED_DELAYS, useSpeed, type SpeedConfig } from './store';
 
 /** A stopwatch redrawn ten times a second, only while a line is being played. */
 function useNow(running: boolean): number {
@@ -110,6 +110,9 @@ function SetupDialog() {
   const config = useSpeed((state) => state.config);
   const index = useBrowse((state) => state.index);
   const set = (change: Partial<SpeedConfig>) => useSpeed.getState().setConfig({ ...config, ...change });
+  // An opening rush is started from a course's Path tab; it stays a choice here while it is the one set.
+  const rush = rushCourse(config.source);
+  const rushName = index.find((course) => course.id === rush)?.name ?? rush;
 
   return (
     // Not modal, with the dimming drawn below the header, so the navigation stays usable while the window is open.
@@ -188,23 +191,29 @@ function SetupDialog() {
             </div>
           )}
 
-          <div className="grid gap-2">
-            <Label>How deep</Label>
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              value={String(config.depth)}
-              onValueChange={(value) => value && set({ depth: Number(value) as SpeedDepth })}
-              className="justify-self-start"
-              aria-label="How deep each line goes"
-            >
-              {SPEED_DEPTHS.map((depth) => (
-                <ToggleGroupItem key={depth} value={String(depth)}>
-                  {depth === 0 ? 'Whole line' : `To move ${depth}`}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          </div>
+          {rush ? (
+            <p className="text-sm text-muted-foreground">
+              An opening rush plays each passed unit from the first move to its end.
+            </p>
+          ) : (
+            <div className="grid gap-2">
+              <Label>How deep</Label>
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                value={String(config.depth)}
+                onValueChange={(value) => value && set({ depth: Number(value) as SpeedDepth })}
+                className="justify-self-start"
+                aria-label="How deep each line goes"
+              >
+                {SPEED_DEPTHS.map((depth) => (
+                  <ToggleGroupItem key={depth} value={String(depth)}>
+                    {depth === 0 ? 'Whole line' : `To move ${depth}`}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+          )}
 
           <div className="grid gap-2">
             <Label htmlFor="speed-source">Lines from</Label>
@@ -213,6 +222,11 @@ function SetupDialog() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                {rush && (
+                  <SelectItem value={rushSource(rush)}>
+                    Opening rush: the units of {rushName} you have passed
+                  </SelectItem>
+                )}
                 <SelectItem value="learning">The courses I am learning</SelectItem>
                 <SelectItem value="all">Everything</SelectItem>
                 {index.map((course) => (

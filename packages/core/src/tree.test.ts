@@ -9,6 +9,7 @@ import {
   lineName,
   lineSteps,
   mainLine,
+  pathSteps,
   ourMoveNodes,
   pathTo,
   preferredMove,
@@ -134,6 +135,14 @@ describe('buildOpening', () => {
     expect(steps.map((step) => step.ours)).toEqual([true, false, true, false, true, false]);
     expect(steps[0]!.fromEpd).toBe(content.opening.rootEpd);
     expect(steps[1]!.fromEpd).toBe(steps[0]!.edge.to);
+  });
+
+  it('turns any run of moves into steps, as far as the course knows them', () => {
+    const steps = pathSteps(content, ['e2e4', 'e7e5', 'g1f3', 'g8f6', 'a2a3']);
+    expect(steps.map((step) => step.edge.san)).toEqual(['e4', 'e5', 'Nf3', 'Nf6']);
+    expect(steps.map((step) => step.ours)).toEqual([true, false, true, false]);
+    expect(steps[3]!.fromEpd).toBe(steps[2]!.edge.to);
+    expect(pathSteps(content, [])).toEqual([]);
   });
 
   it('carries a path on to the end of its line', () => {

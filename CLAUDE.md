@@ -141,7 +141,11 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
   never needed to pass) and Learn / Drill buttons for just that unit. `data/course-path.ts` loads it: units cut with the
   learner's card settings, state from `cards.byOpening` and `reviews.byOpening`. A unit address plays only that unit:
   the play store's `scope` holds its stretches, each started part-way along (`firstIndex`), one after another for a side
-  unit.
+  unit. Above the list, **sessions** from `features/path/sessions` (a registry, one file per type: `pick` reads the path
+  and returns an address): Next unit (learn the first ready unit, or drill the one being learned), Next 3 moves (the
+  current unit from its first move not yet passed, `/<n>/<first>-<last>`) and Opening rush (Speed with the source
+  `rush:<course>`: `rushQueue` plays each passed unit from the start to its end, ignoring the depth). Answers are
+  recorded the usual way: Learn and Drill through `play/record.ts`, Speed in `speed_attempts`.
 - `line`: one line's page, `/play/<course>/<line>/<tab>` with About, Learn, Drill, Quiz and Tree as a joined button group
   at the end of the breadcrumbs (`features/line/tabs.ts`; old `/practice` links are Drill). About is the line in words:
   a board on the position that names it (`namedPly`), the moves with their comments, where it branches from and what

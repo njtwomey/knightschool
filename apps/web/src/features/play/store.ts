@@ -1,5 +1,6 @@
 import {
   courseUnits,
+  pathSteps,
   lineSteps,
   unitStretches,
   type CourseUnit,
@@ -369,15 +370,6 @@ export function resumeFrom(
   let index = 0;
   while (index < moves.length && index < steps.length && steps[index]!.edge.uci === moves[index]) index++;
   return { steps, index };
-}
-
-/** A run of moves (UCI) from the start position as steps, as far as the course knows them. */
-export function pathSteps(content: OpeningContent, moves: string[]): LineStep[] {
-  const edges = pathFromUcis(content, moves);
-  return edges.map((edge, i) => {
-    const fromEpd = i === 0 ? content.opening.rootEpd : edges[i - 1]!.to;
-    return { fromEpd, edge, ours: nodeAt(content, fromEpd).isOurTurn };
-  });
 }
 
 /** A stretch resumed after the moves of it already played (from a saved URL); never before its own start. */

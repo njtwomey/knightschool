@@ -1,6 +1,6 @@
 # Study paths, spaced repetition and authoring: analysis and plan
 
-Status: D1 to D3 approved as recommended (2026-10-21). Stage 1 is built (see §4 for what changed from this proposal). Decisions
+Status: D1 to D3 approved as recommended (2026-10-21). Stages 1 and 2 are built (see §4 for what changed from this proposal). Decisions
 that change stored data are listed at the end.
 
 ## 1. What exists today
@@ -159,7 +159,11 @@ Each stage stands on its own and is small enough to review.
    - `/play/<course>/<line>/<learn|drill>/<n>[/<first>-<last>]` plays one unit (or some of its moves); one new read
      query, `reviews.byOpening`, and no schema change.
 2. **Sessions from the path.** "Next unit", "next three moves", "opening rush" on top of Learn, Drill and Speed, through a
-   small session registry. No data change.
+   small session registry. No data change. **Done**, on the Path tab (`features/path/sessions`, one file per type).
+   Next unit learns the first ready unit, or drills the one being learned (Learn ends with "Now drill it"). Next three
+   moves takes the current unit from its first move not yet passed: drilled, or learned when none of those moves is in
+   the quiz yet. Opening rush is Speed with a new source, `rush:<course>`: each passed unit from the first move to its
+   end (the depth choice does not apply), repeated to fill the run when few are passed. "Standard" is stage 3.
 3. **Path-ordered introductions.** New cards come from unlocked units in path order; the daily queue stays as it is.
    Supplementary items stop being cards if D3 says so (a data change: see below).
 4. **Unit order overrides for shipped courses** in `course.yaml`, checked by the build.

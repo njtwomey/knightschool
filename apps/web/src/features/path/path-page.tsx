@@ -29,6 +29,7 @@ import { CourseBreadcrumbs } from '@/features/browse/breadcrumbs';
 import { useBrowse } from '@/features/browse/store';
 import { lineHref } from '@/features/line/tabs';
 import { to } from '@/router/location';
+import { SessionStarters } from './session-starters';
 
 const KIND: Record<CourseUnit['kind'], string> = {
   main: 'Main line',
@@ -220,6 +221,7 @@ export function CoursePathPage({ course }: { course: string }) {
 
       {units.length > 0 && (
         <>
+          <SessionStarters content={ready} path={path} />
           <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:items-start">
             <ol className="grid gap-2" aria-label="Units in study order">
               {units.map((unit) => (

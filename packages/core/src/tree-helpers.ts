@@ -97,6 +97,15 @@ export type LineStep = {
   ours: boolean;
 };
 
+/** A run of moves (UCI) from the start position as steps, as far as the course knows them. */
+export function pathSteps(content: OpeningContent, ucis: string[]): LineStep[] {
+  const edges = pathFromUcis(content, ucis);
+  return edges.map((edge, i) => {
+    const fromEpd = i === 0 ? content.opening.rootEpd : edges[i - 1]!.to;
+    return { fromEpd, edge, ours: nodeAt(content, fromEpd).isOurTurn };
+  });
+}
+
 /** A variant's main line as steps from the start position. */
 export function lineSteps(content: OpeningContent, variantId: string): LineStep[] {
   return variantPath(content, variantId).map((edge, index, path) => {

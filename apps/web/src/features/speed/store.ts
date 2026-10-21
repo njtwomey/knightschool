@@ -1,6 +1,7 @@
 import {
   lineSteps,
   cutToMove,
+  pathSteps,
   SPEED_DEPTHS,
   type SpeedDepth,
   newId,
@@ -13,6 +14,7 @@ import {
 } from '@knightschool/core';
 import { create } from 'zustand';
 import { loadIndex, loadOpening } from '@/data/content';
+import { isPassed, loadCoursePath } from '@/data/course-path';
 import { whenStorageReady } from '@/data/storage';
 import { getEnrolled } from '@/data/training-settings';
 
@@ -23,7 +25,10 @@ export type SpeedConfig = {
   lines: 3 | 5 | 10;
   /** Seconds in a timed run. */
   seconds: 30 | 60 | 120;
-  /** Where the lines come from: the courses you are learning, everything, or one course by id. */
+  /**
+   * Where the lines come from: the courses you are learning, everything, one course by id, or an opening rush: the
+   * passed units of one course (`rush:<id>`, see `rushSource`).
+   */
   source: 'learning' | 'all' | (string & {});
   /** How lines are picked: at random, or favouring the ones more games reach. */
   weighting: Weighting;
@@ -40,6 +45,12 @@ export const DEFAULT_CONFIG: SpeedConfig = {
   depth: 10,
 };
 const CONFIG_KEY = 'knightschool.speed';
+
+const RUSH = 'rush:';
+/** The source for an opening rush on one course: lines made of the units of its path already passed. */
+export const rushSource = (course: string) => `${RUSH}${course}`;
+/** The course of an opening rush source, or undefined for any other source. */
+export const rushCourse = (source: string) => (source.startsWith(RUSH) ? source.slice(RUSH.length) : undefined);
 
 function savedConfig(): SpeedConfig {
   try {
@@ -265,6 +276,12 @@ export const useSpeed = create<SpeedState>((set, get) => {
       const { config } = get();
       set({ phase: 'loading', error: null, results: [], queue: [] });
       try {
+        const rush = rushCourse(config.source);
+        if (rush) {
+          const queue = await rushQueue(rush, config.mode === 'timed' ? TIMED_QUEUE : config.lines, config.weighting);
+          set({ queue, lineIndex: 0, phase: 'ready' });
+          return;
+        }
         const index = await loadIndex();
         const enrolled =
           config.source === 'learning'
@@ -372,3 +389,32 @@ export const useSpeed = create<SpeedState>((set, get) => {
     },
   };
 });
+
+/**
+ * An opening rush: lines made of the passed units of one course, each from the start to the end of the unit (the moves
+ * before it belong to the units it grew from, passed before it). The whole stretch is played, whatever the depth. With
+ * fewer passed units than lines wanted, they come round again.
+ */
+export async function rushQueue(course: string, wanted: number, weighting: Weighting): Promise<Queued[]> {
+  const content = await loadOpening(course);
+  const path = await loadCoursePath(content);
+  const candidates = path.units
+    .filter((unit) => isPassed(path.progress.get(unit.id)))
+    .flatMap((unit) => unit.stretches.map((stretch) => ({ unit, stretch })));
+  if (candidates.length === 0)
+    throw new Error(`No unit of ${content.opening.name} is passed yet. Pass one on the course's path first.`);
+  const end = ({ stretch }: (typeof candidates)[number]) => {
+    const steps = pathSteps(content, stretch.moves);
+    return popularityWeight(content.nodes[steps.at(-1)?.edge.to ?? '']?.popularity);
+  };
+  const picked: typeof candidates = [];
+  while (picked.length < wanted)
+    picked.push(...pickWeighted(candidates, weighting === 'popular' ? end : () => 1, wanted - picked.length));
+  const names = new Map(content.opening.variants.map((variant) => [variant.id, variant.name]));
+  return picked.map(({ unit, stretch }) => ({
+    content,
+    lineId: unit.line,
+    lineName: `${names.get(unit.line) ?? unit.line}, unit ${unit.index + 1}`,
+    steps: pathSteps(content, stretch.moves),
+  }));
+}
