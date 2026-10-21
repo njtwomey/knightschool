@@ -24,6 +24,7 @@
     "analyse": "tsx scripts/analyse.ts",
     "fen": "tsx scripts/fen.ts",
     "content:doctor": "tsx scripts/doctor.ts",
+    "content:gaps": "tsx scripts/gaps.ts",
     "popularity": "tsx --env-file-if-exists=.env scripts/popularity.ts"
   },
   "devDependencies": {

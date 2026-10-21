@@ -18,7 +18,8 @@ real alternative piece sets (licence check first).
 Use `make` (run `make` alone to list targets). It uses a global pnpm if present, else `npx pnpm@<packageManager>`.
 
 - `make dev`: Vite dev server (http://localhost:5173)
-- `make check`: format check, lint, typecheck, tests. `make pre-push` adds the build; this is what CI runs. `make doctor`:
+- `make check`: format check, lint, typecheck, tests. `make pre-push` adds the build; this is what CI runs. `make gaps`:
+  popular replies no course answers, per side, ranked by explorer games (`scripts/gaps.ts`). `make doctor`:
   overlaps in `content/` worth tidying (a report, never a gate).
 - `make fix`: ESLint autofix plus Prettier. `make hooks` installs a git pre-push hook that runs `make pre-push`.
 - Single test file: `pnpm exec vitest run packages/core/src/epd.test.ts`; by name: `pnpm exec vitest run -t "epdToFen"`.

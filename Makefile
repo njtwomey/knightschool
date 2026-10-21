@@ -5,7 +5,7 @@ PNPM_VERSION := $(shell node -p "require('./package.json').packageManager.split(
 PNPM ?= $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo npx -y pnpm@$(PNPM_VERSION))
 
 .DEFAULT_GOAL := help
-.PHONY: help install dev doctor popularity build preview test test-watch lint fix format format-check typecheck check pre-push hooks clean
+.PHONY: help install dev doctor gaps popularity build preview test test-watch lint fix format format-check typecheck check pre-push hooks clean
 
 help: ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  make %-13s %s\n", $$1, $$2}'
@@ -24,6 +24,9 @@ build: node_modules ## Typecheck and build the site into apps/web/dist
 
 doctor: node_modules ## Report overlaps in content/ (moves written twice, unlisted chapters, shared lines); never fails
 	$(PNPM) content:doctor
+
+gaps: node_modules ## Where the courses have no answer to replies club players often play, ranked by how often (popularity data)
+	$(PNPM) content:gaps
 
 popularity: node_modules ## Fetch how often players reach each position from Lichess into content/popularity (needs LICHESS_TOKEN in .env)
 	$(PNPM) popularity

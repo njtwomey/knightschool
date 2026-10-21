@@ -66,20 +66,23 @@ chapter there. `check-course` builds one course as the real build does.
 
 ## Procedure
 
-1. **Decide** side, trigger (as deep as the course's own idea), opening, tier (1 study first, 2 next, 3 alternatives), and
+1. **Find what is missing**: `make gaps` (or `pnpm content:gaps white|black --top 40`) lists, per side, the replies club
+   players often play that no course answers, ranked by how many explorer games go there, with the courses whose lines
+   reach the position. Start from the biggest gaps in the core repertoire (tier 1 and 2 courses) before side weapons.
+2. **Decide** side, trigger (as deep as the course's own idea), opening, tier (1 study first, 2 next, 3 alternatives), and
    for each opponent reply which line (`main`, `sideline`, `rare`, `gambit`). Check what already exists:
    `ls content/courses`, `content/openings.yaml`, `grep -ril "<opening name>" content/tree`, and `tree-at` along the
    trigger to see the lines the tree already has from there. If another course for either side answers the same
    positions, agree with it (`pnpm content:build` warns otherwise).
-2. **Register** the opening if new: an entry in `content/openings.yaml` (`id`, `name`, `side` = who plays it, `eco`, `summary`,
+3. **Register** the opening if new: an entry in `content/openings.yaml` (`id`, `name`, `side` = who plays it, `eco`, `summary`,
    `moves` = SAN to the defining position), and the course in `content/curriculum.yaml` (study order and `prerequisites`, which
    must appear earlier in the list). Motif ids come from `content/motifs.yaml`; add a motif there only if it is genuinely new.
-3. **Scaffold** the course: copy `templates/course.yaml` (and `quizzes.yaml`) into the course folder and replace everything.
+4. **Scaffold** the course: copy `templates/course.yaml` (and `quizzes.yaml`) into the course folder and replace everything.
    Write the introduction (`summary` plus `about: {idea, risks, suits, origin?}`, writing.md) so a beginner knows what the
    opening is for.
-4. **List what exists** first: every tree line the course should teach goes into `lines:` by id, with `kind`, `opponent`,
+5. **List what exists** first: every tree line the course should teach goes into `lines:` by id, with `kind`, `opponent`,
    `section` or `alternative` overrides where this course sees it differently.
-5. **Write the missing lines**, one chapter each:
+6. **Write the missing lines**, one chapter each:
    - Find the parent: run `tree-at` on the moves up to the branch point (or `grep -rl "5. c3" content/tree`); it prints the
      `[Start]`. Add earlier moves when the parent writes that move in more than one place (`[Start "x 4...Bxb4 5.c3"]`);
      the build says when.
@@ -93,30 +96,30 @@ chapter there. `check-course` builds one course as the real build does.
      has branches); exactly one unmarked learner move per position; mistakes marked `?`/`?!`. Take the engine's preferred
      moves. Gambits may end a little worse (say so in `Risk` and the note), but never teach a line the engine calls lost.
    - List the new id in `lines:`.
-6. **Tags** on every new chapter (`Opening`, `Variation`, `ECO`, `Character`, `Risk`, `EarlyMate`, `Tricks`, `Themes`,
+7. **Tags** on every new chapter (`Opening`, `Variation`, `ECO`, `Character`, `Risk`, `EarlyMate`, `Tricks`, `Themes`,
    `For`, `Kind`, `Opponent`, `Start`). Honest values, from the `[For]` side's point of view: formats.md.
-7. **Notes**: say _why_ on every non-obvious learner move, bait and punishing reply (writing.md). Before commenting a move
+8. **Notes**: say _why_ on every non-obvious learner move, bait and punishing reply (writing.md). Before commenting a move
    other chapters also write, read its comment with `tree-at`: keep it, or improve it for every course that passes there.
    Where a position is hard to picture, add a **position link**: `[f7](<EPD or FEN>)`; `pnpm fen "1. e4 e5 2. f4"` prints
    the EPD. The build checks that the target is legal (not that it is the position you meant: regenerate with `pnpm fen`).
-8. **Quizzes**: two to four on the best teaching moments, each with 3+ `examples.match` and 3+ `examples.miss`. Every
+9. **Quizzes**: two to four on the best teaching moments, each with 3+ `examples.match` and 3+ `examples.miss`. Every
    `for-us` trap the course lists (including flipped ones) needs one.
-9. **Check the course** with `check-course` until it prints `OK`. Read every note as a beginner would; it flags
-   `[no note]` on learner moves and shows `(from <chapter>)` on moves another chapter writes.
-10. **Engine**: `pnpm course:eval --dir <course folder> --no-cache --depth 16 --lose 75 --threads 1` (a few minutes; run it
+10. **Check the course** with `check-course` until it prints `OK`. Read every note as a beginner would; it flags
+    `[no note]` on learner moves and shows `(from <chapter>)` on moves another chapter writes.
+11. **Engine**: `pnpm course:eval --dir <course folder> --no-cache --depth 16 --lose 75 --threads 1` (a few minutes; run it
     in the background and read the output; do not poll with sleep). Fix findings by switching to the engine's move or
     shortening the line. Rerun a flagged gambit or trap at `--depth 18` before believing it.
-11. **Whole repo**: `pnpm content:build` (ids, `[Start]`s, comments, curriculum, cross-course
+12. **Whole repo**: `pnpm content:build` (ids, `[Start]`s, comments, curriculum, cross-course
     warnings), then `make doctor` and read what names your chapters (moves written twice: start the later chapter after
     them; a chapter no course lists: list it or remove it), then `make check` (`scripts/content.test.ts` builds the real
     content).
-12. **Look at it in the app** (`pnpm dev`, or headless Chrome with puppeteer-core): `/course/<id>/tree` shows the course as
+13. **Look at it in the app** (`pnpm dev`, or headless Chrome with puppeteer-core): `/course/<id>/tree` shows the course as
     a tree, one column per move and one lane per line. Lines should branch where you meant them to; a lane that adds
     nothing, or a line that hangs off an unexpected parent, means a `[Start]` or a duplicate to fix. Open a line's About
     tab to read it as a learner will.
-13. **Afterwards, offer** (heavy, so ask): `pnpm analyse <id>` (native Stockfish at depth 24, committed) and, for the card
+14. **Afterwards, offer** (heavy, so ask): `pnpm analyse <id>` (native Stockfish at depth 24, committed) and, for the card
     threshold, `make popularity` (needs `LICHESS_TOKEN`; fills only the new positions).
-14. **Report**: files, `opening:` id, tier and trigger, the lines and traps (new chapters and listed existing ones) with
+15. **Report**: files, `opening:` id, tier and trigger, the lines and traps (new chapters and listed existing ones) with
     the final eval of each, any comment you changed on a shared move, every departure from the plan because the engine
     disagreed, and anything unresolved.
 
