@@ -217,6 +217,38 @@ export const OpeningIndexEntry = Opening.pick({
 });
 export type OpeningIndexEntry = z.infer<typeof OpeningIndexEntry>;
 
+/**
+ * public/content/tree.json, written by `treeGraph`: the theory tree as data to draw. Chapters are the branches (which
+ * grows out of which, after which move) and moves join positions, named by `positionId(epd)`.
+ */
+export const TreeGraph = z.object({
+  /** Position id of the initial position. */
+  root: z.string(),
+  chapters: z.array(
+    z.object({
+      id: Slug,
+      /** Its [Variation], which may leave out the opening ("Short Variation"), and its [Opening]. */
+      name: z.string(),
+      opening: z.string(),
+      side: Side,
+      /** The chapter it branches from, and the move of that chapter it follows ("6.d4"); null from the start. */
+      parent: Slug.nullable(),
+      after: z.string().nullable(),
+      /** Position id where its own moves begin, and how many plies lead there. */
+      from: z.string(),
+      ply: z.number().int().nonnegative(),
+      /** The whole line in UCI from the initial position: the moves that lead to `from`, then its own main line. */
+      moves: z.array(z.string()),
+      /** The courses that list it, in the order they were built (none is possible). */
+      courses: z.array(Slug),
+      source: z.string(),
+    }),
+  ),
+  /** Every move once, between position ids, with the chapters that write it. */
+  moves: z.array(z.object({ from: z.string(), to: z.string(), san: z.string(), chapters: z.array(Slug) })),
+});
+export type TreeGraph = z.infer<typeof TreeGraph>;
+
 export const Annotation = z.object({
   text: z.string().optional(), // 'Develops with tempo on the knight'
   nag: z.array(z.number().int()).default([]), // 1 = !, 2 = ?, 4 = ??, ...

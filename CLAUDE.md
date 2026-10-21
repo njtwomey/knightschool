@@ -111,7 +111,7 @@ puppeteer-core against `pnpm dev` (the dev server may take 5174 or higher if 517
 ### Web app
 
 Real path URLs (History API, `apps/web/src/router`): `/` Home, `/browse` (aliases `/search`, `/openings`; courses in study order and every line, in one grid), `/course/:id` (one course),
-`/glossary`, `/play/:course/:line/:mode` (learn | practice; line `all` is the every-branch drill),
+`/glossary`, `/tree` (every line as one tree), `/play/:course/:line/:tab` (about | learn | drill | quiz | tree; line `all` is the every-branch drill),
 `/quiz` (alias `/review`), `/guess`, `/speed`, `/profile` (tabs Overview, `/profile/stats`, `/profile/settings`; `/stats` and `/settings` are aliases), `/credits`, `/lab`. Plain `<a href={to('/path')}>` links navigate without a reload
 (`startRouter` intercepts them); old `#/route` links are upgraded. The **hash carries view state**, written with
 `setHashState` as the page changes and read once when it opens, so a refresh or shared link restores it exactly:

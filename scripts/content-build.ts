@@ -87,16 +87,16 @@ async function main() {
   const courses = loadCourses();
   const curriculum = loadCurriculum(courses);
   const order = new Map(curriculum.map((entry, i) => [entry.id, i]));
-  const graph = treeGraph(loadTree());
+  const listedBy = new Map<string, string[]>();
+  for (const content of courses)
+    for (const variant of content.opening.variants)
+      listedBy.set(variant.id, [...(listedBy.get(variant.id) ?? []), content.opening.id]);
+  const graph = treeGraph(loadTree(), (line) => listedBy.get(line) ?? []);
   const branches = new Map(
     graph.chapters.flatMap((chapter) =>
       chapter.parent && chapter.after ? [[chapter.id, { parent: chapter.parent, after: chapter.after }] as const] : [],
     ),
   );
-  const listedBy = new Map<string, string[]>();
-  for (const content of courses)
-    for (const variant of content.opening.variants)
-      listedBy.set(variant.id, [...(listedBy.get(variant.id) ?? []), content.opening.id]);
   for (let content of courses) {
     if (names) content = applyNames(content, names);
     if (popularity) content = applyPopularity(content, (epd) => popularity.positions[epd]);

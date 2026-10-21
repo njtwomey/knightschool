@@ -24,6 +24,17 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  /* Lines in a course's tree, one hue each (features/tree). Mid lightness so a tint and the full colour both read. */
+  --line-0: oklch(0.55 0.15 255);
+  --line-1: oklch(0.6 0.16 45);
+  --line-2: oklch(0.55 0.14 150);
+  --line-3: oklch(0.55 0.18 330);
+  --line-4: oklch(0.6 0.13 200);
+  --line-5: oklch(0.62 0.15 85);
+  --line-6: oklch(0.5 0.17 290);
+  --line-7: oklch(0.58 0.17 15);
+  --line-8: oklch(0.55 0.12 120);
+  --line-9: oklch(0.5 0.12 230);
 }
 
 .dark {
@@ -45,6 +56,16 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
+  --line-0: oklch(0.72 0.13 255);
+  --line-1: oklch(0.75 0.14 45);
+  --line-2: oklch(0.74 0.14 150);
+  --line-3: oklch(0.72 0.15 330);
+  --line-4: oklch(0.76 0.11 200);
+  --line-5: oklch(0.8 0.13 85);
+  --line-6: oklch(0.7 0.14 290);
+  --line-7: oklch(0.72 0.15 15);
+  --line-8: oklch(0.76 0.12 120);
+  --line-9: oklch(0.7 0.1 230);
 }
 
 @theme inline {

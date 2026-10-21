@@ -43,8 +43,12 @@ course, courses for one side that disagree.
 
 ## Still to do
 
-1. **Draw the tree.** A view of `tree.json`: chapters as branches, named, with the courses that use each line, so the
-   whole of what is taught can be seen at once. Reconcile it with the course page's lists and the board.
+1. **Draw the tree.** Done in a first form: `tree.json` carries each chapter's whole main line (UCI) and the courses
+   that list it; core `move-tree.ts` builds a prefix tree keyed by the moves (not the position, so it stays a tree),
+   with `scopeTree`, `pathOf`, `compress` and `everyMove`, and `tree-layout.ts` lays it out. One component
+   (`features/tree/tree-view.tsx`) draws it top-down on `/tree` (the curriculum, only branch points), on the course page
+   and on a line's Tree tab (every move a node, coloured by line). Still to do: put a clicked position on the course
+   page's board.
 2. **"Also in" on the course and play pages.** `index.json` already carries each line's `alsoIn` (other courses listing
    it); it needs showing.
 3. **Cards keyed by position and answer** (`<side>:<epd>:<uci>` instead of `<course>:<epd>`), so a line shared by two

@@ -5,6 +5,7 @@ import {
   OpeningGroup,
   OpeningIndexEntry,
   SearchIndex,
+  TreeGraph,
 } from '@knightschool/core';
 import { z } from 'zod';
 
@@ -44,6 +45,11 @@ export async function loadOpenings(): Promise<OpeningGroup[]> {
 /** The study order and what each course depends on. */
 export async function loadCurriculum(): Promise<CurriculumEntry[]> {
   return z.array(CurriculumEntry).parse(await fetchJson('curriculum.json'));
+}
+
+/** The whole theory tree (`tree.json`): every chapter with its moves and the courses that list it. */
+export async function loadTreeGraph(): Promise<TreeGraph> {
+  return TreeGraph.parse(await fetchJson('tree.json'));
 }
 
 /** The motif vocabulary, each with the courses that use it. */
