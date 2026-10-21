@@ -26,7 +26,7 @@ export type Route =
    * unit of the study path (`/play/<course>/<line>/learn/<n>`), or some of its moves (`.../<n>/<first>-<last>`).
    */
   | { page: 'play'; course: string; line: string; tab: LineTab | 'branches'; unit?: UnitRef }
-  | { page: 'review' }
+  | { page: 'quiz' }
   | { page: 'guess' }
   | { page: 'speed' }
   | { page: 'glossary' }
@@ -83,7 +83,7 @@ export function parseRoute(pathname: string): Route {
       }
     case 'quiz':
     case 'review':
-      return { page: 'review' };
+      return { page: 'quiz' };
     case 'name':
     case 'guess':
       return { page: 'guess' };

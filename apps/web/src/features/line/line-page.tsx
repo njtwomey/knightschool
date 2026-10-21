@@ -17,7 +17,7 @@ import { useCatalog } from '@/data/catalog-store';
 import { VariantTags } from '@/components/tags/tag-badge';
 import { CourseIntro } from '@/features/course/course-intro';
 import { PlayPage } from '@/features/play/play-page';
-import { ReviewPage } from '@/features/review/review-page';
+import { QuizPage } from '@/features/quiz/quiz-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { to } from '@/router/location';
 import { courseHref, lineHref, lineEditHref, type LineTab, type UnitRef } from '@/router/hrefs';
@@ -39,7 +39,7 @@ export function LinePage({
   if (tab === 'learn') return <PlayPage course={course} line={line} mode="learn" unit={unit} />;
   if (tab === 'drill') return <PlayPage course={course} line={line} mode="practice" unit={unit} />;
   if (tab === 'quiz')
-    return <ReviewPage scope={{ course, line }} header={<PlayBreadcrumbs course={course} line={line} tab="quiz" />} />;
+    return <QuizPage scope={{ course, line }} header={<PlayBreadcrumbs course={course} line={line} tab="quiz" />} />;
   if (tab === 'tree') return <CourseTreePage course={course} line={line} />;
   return <LineAbout course={course} line={line} />;
 }

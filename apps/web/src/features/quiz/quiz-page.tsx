@@ -29,7 +29,7 @@ import { WeightingSelect } from '@/components/weighting-select';
 import { useCatalog } from '@/data/catalog-store';
 import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
 import { MissList } from './miss-list';
-import { currentQuestion, DUE, useReview, type LineScope, type QuizQuestion } from './store';
+import { currentQuestion, DUE, useQuiz, type LineScope, type QuizQuestion } from './store';
 import { to } from '@/router/location';
 import { lineHref } from '@/router/hrefs';
 
@@ -65,13 +65,13 @@ function SourceBar() {
 
 /** How many of your moves a question runs for: the line carries on after the answer, up to this many. */
 function MovesChoice() {
-  const moves = useReview((state) => state.movesPerQuestion);
+  const moves = useQuiz((state) => state.movesPerQuestion);
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
       <span>Each question runs for</span>
       <Select
         value={String(moves)}
-        onValueChange={(value) => useReview.getState().setMovesPerQuestion(Number(value) as MovesPerQuestion)}
+        onValueChange={(value) => useQuiz.getState().setMovesPerQuestion(Number(value) as MovesPerQuestion)}
       >
         <SelectTrigger className="h-8 w-auto" aria-label="Moves per question">
           <SelectValue />
@@ -89,15 +89,15 @@ function MovesChoice() {
 }
 
 function SourceChoice() {
-  const source = useReview((state) => state.source);
-  const weighting = useReview((state) => state.weighting);
+  const source = useQuiz((state) => state.source);
+  const weighting = useQuiz((state) => state.weighting);
   const index = useCatalog((state) => state.index);
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
       Questions from
       <SourceSelect
         value={source}
-        onChange={(next) => useReview.getState().setSource(next)}
+        onChange={(next) => useQuiz.getState().setSource(next)}
         index={index}
         extra={[{ value: DUE, label: 'Due today (your schedule)' }]}
         label="Questions from"
@@ -106,7 +106,7 @@ function SourceChoice() {
         <>
           <WeightingSelect
             value={weighting}
-            onChange={(next) => useReview.getState().setWeighting(next)}
+            onChange={(next) => useQuiz.getState().setWeighting(next)}
             label="How questions are picked"
           />
           <span>Free practice: nothing here changes your schedule.</span>
@@ -120,29 +120,29 @@ function SourceChoice() {
  * The quiz. On its own (/quiz) it asks the schedule's due cards or free practice from the courses chosen; given a
  * `scope` it asks every question of one line, shuffled and never saved, with `header` (the line's tabs) on top.
  */
-export function ReviewPage({ scope, header }: { scope?: LineScope; header?: ReactNode } = {}) {
+export function QuizPage({ scope, header }: { scope?: LineScope; header?: ReactNode } = {}) {
   return (
     <HeaderSlot.Provider value={header ?? null}>
-      <Review scope={scope} />
+      <QuizSession scope={scope} />
     </HeaderSlot.Provider>
   );
 }
 
-function Review({ scope }: { scope?: LineScope }) {
-  const state = useReview();
+function QuizSession({ scope }: { scope?: LineScope }) {
+  const state = useQuiz();
   const { phase, error, attempt, queue, index, results, badge, advancing, viewing, holding } = state;
   const course = scope?.course;
   const line = scope?.line;
 
   useEffect(() => {
-    useReview.setState({ scope: course && line ? { course, line } : null });
-    void useReview.getState().start();
-    return () => useReview.getState().stop();
+    useQuiz.setState({ scope: course && line ? { course, line } : null });
+    void useQuiz.getState().start();
+    return () => useQuiz.getState().stop();
   }, [course, line]);
 
   // Start again if the store was reset while the page stayed open, rather than waiting on a refresh.
   useEffect(() => {
-    if (useReview.getState().phase === 'idle') void useReview.getState().start();
+    if (useQuiz.getState().phase === 'idle') void useQuiz.getState().start();
   }, [phase]);
 
   if (phase === 'idle' || phase === 'loading') return <Skeleton className="mx-auto mt-6 h-[28rem] max-w-5xl" />;
@@ -187,7 +187,7 @@ function Review({ scope }: { scope?: LineScope }) {
             epd={epd}
             orientation={side}
             interactive={!advancing && !looking}
-            onMove={(uci) => useReview.getState().submitMove(uci)}
+            onMove={(uci) => useQuiz.getState().submitMove(uci)}
             lastMove={lastMove}
             lastMoveTone={done && !looking ? 'yellow' : 'red'}
             arrows={
@@ -202,12 +202,12 @@ function Review({ scope }: { scope?: LineScope }) {
             <PathSteps length={path.length} />
             <Button
               variant="outline"
-              onClick={() => useReview.getState().hint()}
+              onClick={() => useQuiz.getState().hint()}
               disabled={attempt.hintUsed || attempt.shown || done}
             >
               <Lightbulb aria-hidden /> Hint
             </Button>
-            <Button variant="outline" onClick={() => useReview.getState().show()} disabled={attempt.shown || done}>
+            <Button variant="outline" onClick={() => useQuiz.getState().show()} disabled={attempt.shown || done}>
               <Eye aria-hidden /> Show me
             </Button>
           </div>
@@ -237,13 +237,13 @@ function Review({ scope }: { scope?: LineScope }) {
               <MoveTable
                 sans={[...path.map((edge) => edge.san), ...(done ? [expected.san] : [])]}
                 selected={viewing}
-                onSelect={(i) => useReview.getState().view(i < path.length - 1 ? i : null)}
+                onSelect={(i) => useQuiz.getState().view(i < path.length - 1 ? i : null)}
               />
             </div>
             {!done && attempt.wrongTries > 0 && !attempt.shown && <p>Not that one. Try again, or use a hint.</p>}
             {!done && attempt.shown && <p>The move is marked on the board. Play it to carry on.</p>}
             {holding && (
-              <Button autoFocus className="w-fit" onClick={() => useReview.getState().skip()}>
+              <Button autoFocus className="w-fit" onClick={() => useQuiz.getState().skip()}>
                 Next
               </Button>
             )}
@@ -262,7 +262,7 @@ function Review({ scope }: { scope?: LineScope }) {
 
 function Summary({ results }: { results: readonly string[] }) {
   const count = (...ratings: string[]) => results.filter((rating) => ratings.includes(rating)).length;
-  const scope = useReview((state) => state.scope);
+  const scope = useQuiz((state) => state.scope);
   if (scope) {
     return (
       <Page className="max-w-xl gap-4 py-8">
@@ -277,7 +277,7 @@ function Summary({ results }: { results: readonly string[] }) {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap gap-2">
-            {results.length > 0 && <Button onClick={() => void useReview.getState().start()}>Quiz again</Button>}
+            {results.length > 0 && <Button onClick={() => void useQuiz.getState().start()}>Quiz again</Button>}
             <Button asChild variant="outline">
               <a href={to(lineHref(scope.course, scope.line, 'drill'))}>Drill it</a>
             </Button>
@@ -300,10 +300,10 @@ function Summary({ results }: { results: readonly string[] }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
-          {useReview.getState().source !== DUE && (
-            <Button onClick={() => void useReview.getState().start()}>Another ten</Button>
+          {useQuiz.getState().source !== DUE && (
+            <Button onClick={() => void useQuiz.getState().start()}>Another ten</Button>
           )}
-          <Button asChild variant={useReview.getState().source !== DUE ? 'outline' : 'default'}>
+          <Button asChild variant={useQuiz.getState().source !== DUE ? 'outline' : 'default'}>
             <a href={to('/profile')}>Back to your overview</a>
           </Button>
           <Button asChild variant="outline">
@@ -321,8 +321,8 @@ function Summary({ results }: { results: readonly string[] }) {
  * same as clicking the moves in the table.
  */
 function PathSteps({ length }: { length: number }) {
-  const viewing = useReview((state) => state.viewing);
-  const view = useReview((state) => state.view);
+  const viewing = useQuiz((state) => state.viewing);
+  const view = useQuiz((state) => state.view);
   if (length < 2) return null;
   const at = viewing ?? length - 1;
   const goTo = (i: number) => view(i >= length - 1 ? null : Math.max(0, i));
@@ -341,7 +341,7 @@ function PathSteps({ length }: { length: number }) {
 
 /** A question answered in words: type, get feedback or the reveal, and it moves on by itself. */
 function QuizView({ question }: { question: QuizQuestion }) {
-  const { queue, index, quizResult, advancing, viewing, holding } = useReview();
+  const { queue, index, quizResult, advancing, viewing, holding } = useQuiz();
   const [answer, setAnswer] = useState('');
   const { card, content, quiz } = question;
 
@@ -400,7 +400,7 @@ function QuizView({ question }: { question: QuizQuestion }) {
                 className="flex gap-2"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  useReview.getState().submitAnswer(answer);
+                  useQuiz.getState().submitAnswer(answer);
                 }}
               >
                 <Input
@@ -430,15 +430,15 @@ function QuizView({ question }: { question: QuizQuestion }) {
             <MoveTable
               sans={path.map((edge) => edge.san)}
               selected={viewing}
-              onSelect={(i) => useReview.getState().view(i < path.length - 1 ? i : null)}
+              onSelect={(i) => useQuiz.getState().view(i < path.length - 1 ? i : null)}
             />
             {advancing &&
               (holding ? (
-                <Button autoFocus className="w-fit" onClick={() => useReview.getState().skip()}>
+                <Button autoFocus className="w-fit" onClick={() => useQuiz.getState().skip()}>
                   Next
                 </Button>
               ) : (
-                <Button variant="ghost" size="sm" className="w-fit" onClick={() => useReview.getState().skip()}>
+                <Button variant="ghost" size="sm" className="w-fit" onClick={() => useQuiz.getState().skip()}>
                   Skip ahead
                 </Button>
               ))}

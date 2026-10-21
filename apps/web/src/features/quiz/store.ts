@@ -54,7 +54,7 @@ const savedMoves = (): MovesPerQuestion => {
 export const DUE = 'due';
 
 /** Nothing waits for a click: a right answer shows a tick and the next card follows by itself. */
-export const REVIEW_DELAYS = {
+export const QUIZ_DELAYS = {
   afterCorrect: 700,
   wrongBadge: 900,
   quizRight: 2200,
@@ -62,7 +62,7 @@ export const REVIEW_DELAYS = {
 
 type Phase = 'idle' | 'loading' | 'asking' | 'summary' | 'error';
 
-type ReviewState = {
+type QuizState = {
   phase: Phase;
   error: string | null;
   queue: Card[];
@@ -130,7 +130,7 @@ const storageOrThrow = (): Storage => {
 
 export type LineScope = { course: string; line: string };
 
-export const useReview = create<ReviewState>((set, get) => {
+export const useQuiz = create<QuizState>((set, get) => {
   /** Only the schedule's own session is saved; free practice and a line's quiz never touch it. */
   const saving = () => get().source === DUE && !get().scope;
   /** Whether this card's answer goes to the schedule. */
@@ -389,7 +389,7 @@ export const useReview = create<ReviewState>((set, get) => {
       const square = played.slice(2, 4);
       if (next.status !== 'done') {
         set({ attempt: next, badge: { square, kind: 'wrong' } });
-        later(REVIEW_DELAYS.wrongBadge, () => set({ badge: null }));
+        later(QUIZ_DELAYS.wrongBadge, () => set({ badge: null }));
         return false;
       }
       set((state) => ({
@@ -412,7 +412,7 @@ export const useReview = create<ReviewState>((set, get) => {
       }
       // A right first time carries on by itself; a miss or a slip waits for Next so the explanation can be read.
       if (next.shown || next.wrongTries > 0) set({ holding: true });
-      else later(REVIEW_DELAYS.afterCorrect, advance);
+      else later(QUIZ_DELAYS.afterCorrect, advance);
       return true;
     },
 
@@ -445,7 +445,7 @@ export const useReview = create<ReviewState>((set, get) => {
           .catch((error: unknown) =>
             set({ phase: 'error', error: error instanceof Error ? error.message : String(error) }),
           );
-      if (result.matched) later(REVIEW_DELAYS.quizRight, advance);
+      if (result.matched) later(QUIZ_DELAYS.quizRight, advance);
       else set({ holding: true });
     },
 
@@ -477,10 +477,10 @@ export type MoveQuestion = {
 
 export type QuizQuestion = { kind: 'quiz'; card: Card; content: OpeningContent; quiz: Quiz };
 
-export type ReviewQuestion = MoveQuestion | QuizQuestion;
+export type SessionQuestion = MoveQuestion | QuizQuestion;
 
 /** What the board and panel need for the card being asked. */
-export function currentQuestion(state: Pick<ReviewState, 'queue' | 'index' | 'contents'>): ReviewQuestion | null {
+export function currentQuestion(state: Pick<QuizState, 'queue' | 'index' | 'contents'>): SessionQuestion | null {
   const card = state.queue[state.index];
   const content = card ? state.contents[card.openingId] : undefined;
   if (!card || !content || !cardFits(content, card)) return null;

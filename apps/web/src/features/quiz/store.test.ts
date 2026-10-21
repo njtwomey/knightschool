@@ -27,8 +27,8 @@ vi.mock('@/data/content', () => ({
   loadOpening: () => Promise.resolve(content),
 }));
 
-const { currentQuestion, useReview, DUE } = await import('./store');
-const review = () => useReview.getState();
+const { currentQuestion, useQuiz, DUE } = await import('./store');
+const review = () => useQuiz.getState();
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 async function startSession({ newPerDay = 10, moves = 2 as const } = {}) {
@@ -36,7 +36,7 @@ async function startSession({ newPerDay = 10, moves = 2 as const } = {}) {
   const now = new Date();
   await setEnrolled(memory.storage, ['t'], now);
   await setNewPerDay(memory.storage, newPerDay, now);
-  useReview.setState({ phase: 'idle', source: DUE, scope: null });
+  useQuiz.setState({ phase: 'idle', source: DUE, scope: null });
   review().setMovesPerQuestion(moves);
   await review().start();
 }
@@ -96,7 +96,7 @@ describe('the quiz session', () => {
     await memory.storage.cards.insertMissing(stale);
     await setEnrolled(memory.storage, ['t'], past);
     await setNewPerDay(memory.storage, 0, past);
-    useReview.setState({ phase: 'idle', source: DUE, scope: null });
+    useQuiz.setState({ phase: 'idle', source: DUE, scope: null });
     await review().start();
     expect(review().phase).toBe('summary');
     expect(review().queue).toEqual([]);

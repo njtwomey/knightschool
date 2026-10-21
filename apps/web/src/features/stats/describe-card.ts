@@ -1,5 +1,5 @@
 import { isQuizCard, pathTo, playUci, type Card, type OpeningContent } from '@knightschool/core';
-import { quizFor } from '@/features/review/store';
+import { quizFor } from '@/features/quiz/store';
 
 const numbered = (moves: string[], from = 0) =>
   moves.map((san, i) => ((from + i) % 2 === 0 ? `${Math.floor((from + i) / 2) + 1}. ${san}` : san)).join(' ');

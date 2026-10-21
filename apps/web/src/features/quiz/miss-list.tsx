@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEnginePrefs } from '@/features/engine/prefs';
 import { checkMisses, useMissChecks, type Miss, type MissCheck } from './regret';
-import { useReview } from './store';
+import { useQuiz } from './store';
 
 // Board arrows take a colour string, not a class: the same green the quiz uses for the course's move.
 const COURSE_ARROW = 'rgb(21 128 61 / 0.85)';
@@ -24,7 +24,7 @@ const badgeVariant = (regret: Regret) =>
  * once the session is over, from the baked analysis where it covers the moves and the browser engine otherwise.
  */
 export function MissList() {
-  const misses = useReview((state) => state.misses);
+  const misses = useQuiz((state) => state.misses);
   const checks = useMissChecks((state) => state.checks);
   const auto = useEnginePrefs((state) => state.auto);
   // The browser engine runs only when it is on in Settings, or when asked for here.
