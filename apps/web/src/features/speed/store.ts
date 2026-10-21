@@ -13,6 +13,7 @@ import {
   type Weighting,
 } from '@knightschool/core';
 import { create } from 'zustand';
+import type { BoardBadge } from '@/components/board/shapes';
 import { loadIndex, loadOpening } from '@/data/content';
 import { isPassed, loadCoursePath } from '@/data/course-path';
 import { whenStorageReady } from '@/data/storage';
@@ -105,7 +106,7 @@ type SpeedState = {
   hintLevel: 0 | 1 | 2;
   /** The last move you made and how long it took, shown big. */
   lastMs: number | null;
-  badge: { square: string; kind: 'correct' | 'wrong' } | null;
+  badge: BoardBadge | null;
   results: LineResult[];
 
   /** Opens the set-up. */
@@ -116,7 +117,10 @@ type SpeedState = {
   begin: () => void;
   startNow: () => void;
   submitMove: (uci: string) => boolean;
+  /** Marks the piece to move (the first step of a hint). */
   hint: () => void;
+  /** Draws the move (the second step); straight from nothing it counts as both steps. */
+  show: () => void;
   stop: () => void;
 };
 
@@ -374,8 +378,15 @@ export const useSpeed = create<SpeedState>((set, get) => {
 
     hint() {
       const { phase, hintLevel, hints } = get();
+      if (phase !== 'playing' || hintLevel > 0) return;
+      set({ hintLevel: 1, hints: hints + 1 });
+    },
+
+    show() {
+      const { phase, hintLevel, hints } = get();
       if (phase !== 'playing' || hintLevel === 2) return;
-      set({ hintLevel: hintLevel === 0 ? 1 : 2, hints: hints + 1 });
+      // Each step of the hint is counted, as when the piece was asked for first.
+      set({ hintLevel: 2, hints: hints + 2 - hintLevel });
     },
 
     stop() {

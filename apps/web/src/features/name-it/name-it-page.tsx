@@ -2,9 +2,8 @@ import { Page } from '@/components/page';
 import { suggest } from '@knightschool/core';
 import { Check, CircleHelp, Minus, X } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
-import { AppBoard } from '@/components/board/app-board';
 import { BoardThumb } from '@/components/board/board-thumb';
-import { BoardSettingsButton } from '@/components/board/board-settings';
+import { StudyBoard } from '@/components/board/study-board';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -81,19 +80,8 @@ export function NameItPage() {
           {Math.min(outcomes.length + (answered ? 0 : 1), SESSION_LENGTH)} of {SESSION_LENGTH}
         </span>
       </div>
-      <div className="board-columns grid gap-6 [--board-cap:36rem]">
-        <div className="grid content-start gap-3">
-          <AppBoard
-            id="guess"
-            className="aspect-square w-full"
-            epd={question.epd}
-            orientation={question.side}
-            interactive={false}
-          />
-          <div className="flex items-center gap-2">
-            <BoardSettingsButton />
-          </div>
-        </div>
+      <div className="board-columns grid gap-6">
+        <StudyBoard id="guess" epd={question.epd} orientation={question.side} interactive={false} />
 
         <div className="grid content-start gap-4">
           <div className="grid gap-1">

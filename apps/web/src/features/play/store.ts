@@ -21,6 +21,7 @@ import {
   withPromotion,
 } from '@knightschool/core';
 import { create } from 'zustand';
+import type { BoardBadge } from '@/components/board/shapes';
 import { loadOpening } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
 import { getCardOptions } from '@/data/training-settings';
@@ -62,7 +63,7 @@ type PlayState = {
   index: number;
   attempt: Attempt;
   /** A tick or cross, shown briefly on a square. */
-  badge: { square: string; kind: 'correct' | 'wrong' } | null;
+  badge: BoardBadge | null;
   /** True while the computer is about to play the other side's move. */
   opponentThinking: boolean;
   results: { index: number; rating: RatingName }[];

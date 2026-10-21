@@ -18,22 +18,11 @@ import {
   type Played,
   type Setup,
 } from '@knightschool/core';
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Copy,
-  Eraser,
-  FlipHorizontal2,
-  Pencil,
-  RotateCcw,
-  Trash2,
-  Undo2,
-} from 'lucide-react';
+import { Copy, Eraser, Pencil, RotateCcw, Trash2, Undo2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { AppBoard } from '@/components/board/app-board';
-import { BoardSettingsButton } from '@/components/board/board-settings';
+import { useLineStepper } from '@/components/board/line-stepper';
+import { StudyBoard } from '@/components/board/study-board';
+import { MoveList } from '@/components/move-list';
 import { useBoardPrefs } from '@/components/board/prefs';
 import { piecesFor } from '@/components/board/pieces';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -43,7 +32,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { EngineLines } from '@/components/engine/engine-lines';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState } from '@/router/location';
 import { FEEDBACK_DELAYS } from '@/lib/feedback';
@@ -77,6 +65,8 @@ export function LabPage() {
   const prefs = useBoardPrefs();
 
   const startEpd = fenToEpd(startFen);
+  // Plies before the first move, from the FEN's move number and side to move, so the moves are numbered as in the game.
+  const firstPly = (Number(startFen.split(' ')[5] ?? 1) - 1) * 2 + (startFen.split(' ')[1] === 'b' ? 1 : 0);
   const epd = cursor > 0 ? moves[cursor - 1]!.epd : startEpd;
   const pgn = pgnFor(
     startFen,
@@ -146,92 +136,34 @@ export function LabPage() {
 
   const palette = piecesFor(prefs.pieces);
   const editing = setup !== null;
+  const stepper = useLineStepper({ length: moves.length, index: cursor, setIndex: setCursor, keys: !editing });
   const shownEpd = editing ? fenToEpd(setupFen!) : epd;
 
   return (
-    <Page className="board-columns gap-4 [--board-cap:34rem]">
-      <div className="grid content-start gap-3">
-        <AppBoard
-          id="lab"
-          className="aspect-square w-full"
-          epd={shownEpd}
-          orientation={side}
-          interactive={!editing}
-          onMove={play}
-          lastMove={editing || cursor === 0 ? undefined : moves[cursor - 1]!.uci}
-          onSquareSelect={
-            editing
-              ? (square) =>
-                  setSetup((current) =>
-                    current
-                      ? { ...current, placement: placePiece(current.placement, square, tool === 'erase' ? null : tool) }
-                      : current,
-                  )
-              : undefined
-          }
-        />
-        <div className="flex flex-wrap items-center gap-2">
-          <BoardSettingsButton />
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label="Flip the board"
-            onClick={() => setSide(side === 'white' ? 'black' : 'white')}
-          >
-            <FlipHorizontal2 aria-hidden />
-          </Button>
-          {!editing && (
-            <div className="ml-auto flex gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Start"
-                disabled={cursor === 0}
-                onClick={() => setCursor(0)}
-              >
-                <ChevronsLeft aria-hidden />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Back one move"
-                disabled={cursor === 0}
-                onClick={() => setCursor(cursor - 1)}
-              >
-                <ChevronLeft aria-hidden />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="Forward one move"
-                disabled={cursor === moves.length}
-                onClick={() => setCursor(cursor + 1)}
-              >
-                <ChevronRight aria-hidden />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                aria-label="End"
-                disabled={cursor === moves.length}
-                onClick={() => setCursor(moves.length)}
-              >
-                <ChevronsRight aria-hidden />
-              </Button>
-            </div>
-          )}
-        </div>
-        {!editing && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Engine</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <EngineLines epd={epd} />
-            </CardContent>
-          </Card>
-        )}
-      </div>
+    <Page className="board-columns gap-4">
+      <StudyBoard
+        id="lab"
+        epd={shownEpd}
+        orientation={side}
+        interactive={!editing}
+        onMove={play}
+        lastMove={editing || cursor === 0 ? undefined : moves[cursor - 1]!.uci}
+        onSquareSelect={
+          editing
+            ? (square) =>
+                setSetup((current) =>
+                  current
+                    ? { ...current, placement: placePiece(current.placement, square, tool === 'erase' ? null : tool) }
+                    : current,
+                )
+            : undefined
+        }
+        controls={{ flip: true }}
+        onFlip={() => setSide(side === 'white' ? 'black' : 'white')}
+        // Steps and the engine are for the game on the board, not while a position is being set up.
+        stepper={editing ? null : stepper}
+        engine={!editing && { view: 'lines' }}
+      />
 
       <div className="grid content-start gap-4">
         {problem && (
@@ -340,34 +272,16 @@ export function LabPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
-                <ol className="flex flex-wrap gap-x-1 gap-y-1 font-mono text-sm" aria-label="Moves">
-                  {moves.length === 0 && (
-                    <li className="text-muted-foreground">No moves yet. Play one on the board.</li>
-                  )}
-                  {moves.map((move, i) => {
-                    const first = fenToEpd(startFen).split(' ')[1] === 'w' ? i % 2 === 0 : i % 2 === 1;
-                    return (
-                      <li key={i} className="flex items-center gap-1">
-                        {first && (
-                          <span className="text-muted-foreground">
-                            {Math.floor((i + (startFen.split(' ')[1] === 'b' ? 1 : 0)) / 2) +
-                              Number(startFen.split(' ')[5] ?? 1)}
-                            .
-                          </span>
-                        )}
-                        <Button
-                          type="button"
-                          variant={i === cursor - 1 ? 'secondary' : 'ghost'}
-                          size="xs"
-                          className="px-1.5 font-mono"
-                          onClick={() => setCursor(i + 1)}
-                        >
-                          {move.san}
-                        </Button>
-                      </li>
-                    );
-                  })}
-                </ol>
+                <div className="text-sm">
+                  <MoveList
+                    layout="inline"
+                    label="Moves"
+                    empty="No moves yet. Play one on the board."
+                    moves={moves.map((move, i) => ({ ply: firstPly + i, san: move.san }))}
+                    current={firstPly + cursor - 1}
+                    onSelect={(ply) => setCursor(ply - firstPly + 1)}
+                  />
+                </div>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     variant="outline"

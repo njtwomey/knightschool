@@ -1,8 +1,8 @@
 import { formatMs, speedSummary, SPEED_DEPTHS, type SpeedDepth } from '@knightschool/core';
-import { Lightbulb, Play, RotateCcw, Settings2, Timer } from 'lucide-react';
+import { Play, RotateCcw, Settings2, Timer } from 'lucide-react';
 import { useEffect } from 'react';
-import { AppBoard } from '@/components/board/app-board';
-import { BoardSettingsButton } from '@/components/board/board-settings';
+import { uciArrow } from '@/components/board/shapes';
+import { StudyBoard } from '@/components/board/study-board';
 import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -315,35 +315,27 @@ export function SpeedPage() {
   ]);
 
   return (
-    <Page className="board-columns gap-4 [--board-cap:36rem]">
+    <Page className="board-columns gap-4">
       <BetweenDialog />
-      <div className="grid content-start gap-3">
-        <AppBoard
-          id="speed"
-          className="aspect-square w-full"
-          epd={epd}
-          orientation={side}
-          interactive={running}
-          onMove={(uci) => useSpeed.getState().submitMove(uci)}
-          lastMove={previous?.edge.uci}
-          lastMoveTone="red"
-          badge={badge}
-          hintSquare={running && expected && hintLevel >= 1 ? expected.slice(0, 2) : null}
-          arrows={
-            running && expected && hintLevel === 2
-              ? [{ startSquare: expected.slice(0, 2), endSquare: expected.slice(2, 4), color: 'rgb(21 128 61 / 0.85)' }]
-              : []
-          }
-        />
-        <div className="flex items-center gap-2">
-          <BoardSettingsButton />
-          {running && (
-            <Button variant="outline" onClick={() => useSpeed.getState().hint()} disabled={hintLevel === 2 || finished}>
-              <Lightbulb aria-hidden /> {hintLevel === 0 ? 'Hint' : 'Show the move'}
-            </Button>
-          )}
-        </div>
-      </div>
+      <StudyBoard
+        id="speed"
+        epd={epd}
+        orientation={side}
+        interactive={running}
+        onMove={(uci) => useSpeed.getState().submitMove(uci)}
+        lastMove={previous?.edge.uci}
+        lastMoveTone="red"
+        badge={badge}
+        hintSquare={running && expected && hintLevel >= 1 ? expected.slice(0, 2) : null}
+        arrows={running && expected && hintLevel === 2 ? [uciArrow(expected)] : []}
+        controls={{
+          // Two steps, as in Play and the quiz: the piece first, then the move. Both are counted.
+          hint: running ? { onHint: () => useSpeed.getState().hint(), disabled: hintLevel > 0 || finished } : undefined,
+          show: running
+            ? { onShow: () => useSpeed.getState().show(), disabled: hintLevel === 2 || finished }
+            : undefined,
+        }}
+      />
 
       <div className="grid content-start gap-4">
         <div className="flex items-center gap-3">
@@ -424,8 +416,8 @@ export function SpeedPage() {
                   <>This move: {formatMs(clock)}. Hints are counted, and the clock keeps running.</>
                 ) : (
                   <>
-                    The other side answers at once. Use Hint if you are stuck: it is counted, and the clock keeps
-                    running.
+                    The other side answers at once. Stuck? Hint marks the piece and Show me the move: each is counted,
+                    and the clock keeps running.
                   </>
                 )}
               </CardContent>

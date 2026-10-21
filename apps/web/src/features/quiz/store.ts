@@ -30,6 +30,7 @@ import {
 } from '@knightschool/core';
 import type { Storage } from '@knightschool/storage';
 import { create } from 'zustand';
+import type { BoardBadge } from '@/components/board/shapes';
 import { loadIndex, loadOpening } from '@/data/content';
 import { coursesFor, saveChoice, savedChoice, savedWeighting } from '@/data/practice-source';
 import { useStorage, whenStorageReady } from '@/data/storage';
@@ -72,7 +73,7 @@ type QuizState = {
   misses: Miss[];
   /** performance.now() when the current card was shown. */
   shownAt: number;
-  badge: { square: string; kind: 'correct' | 'wrong' } | null;
+  badge: BoardBadge | null;
   /** True between a finished answer and the next card, so the board does not take another move. */
   advancing: boolean;
   /** The result of the typed answer to the quiz being asked, shown until the next card. */
