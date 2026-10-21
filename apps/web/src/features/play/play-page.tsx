@@ -311,13 +311,11 @@ export function PlayPage({ course, line, mode, unit }: Props) {
                           state: 'explored',
                         })),
                       ]
-                    : steps
-                        .slice(0, stepping ? steps.length : index)
-                        .map((step, ply): MoveListMove => ({
-                          ply,
-                          san: step.edge.san,
-                          state: ply < index ? 'played' : 'future',
-                        }))
+                    : steps.slice(0, stepping ? steps.length : index).map((step, ply): MoveListMove => ({
+                        ply,
+                        san: step.edge.san,
+                        state: ply < index ? 'played' : 'future',
+                      }))
                 }
                 current={exploring ? index + explore!.length - 1 : index - 1}
                 onSelect={stepping ? (ply) => usePlay.getState().goTo(ply + 1) : undefined}
