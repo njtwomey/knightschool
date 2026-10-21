@@ -25,8 +25,8 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { navigate } from '@/router/location';
 import { GroupSelect } from './group-select';
 import { numbered, ucisOf, useDraft } from './helpers';
-import { createHref, lineEditHref } from './tabs';
 import { draftChapter, fullLine, positionsOf, useAuthor, type DraftCourse } from './store';
+import { createHref, lineEditHref } from '@/router/hrefs';
 
 const KINDS: { value: LineKind | TrapKind; label: string }[] = [
   { value: 'main', label: 'Main line' },

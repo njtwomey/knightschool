@@ -23,8 +23,8 @@ import { create } from 'zustand';
 import { loadOpening } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
 import { getCardOptions } from '@/data/training-settings';
-import type { UnitRef } from '@/features/line/tabs';
 import { introduceStep, recordStep } from './record';
+import type { UnitRef } from '@/router/hrefs';
 
 export type PlayMode = 'learn' | 'practice' | 'branches';
 

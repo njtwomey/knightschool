@@ -1,7 +1,7 @@
-import type { UnitRef } from '@/features/line/tabs';
 import { decodeMoves } from '@/router/hash';
 import { readHashState } from '@/router/location';
 import { usePlay, type PlayMode } from './store';
+import type { UnitRef } from '@/router/hrefs';
 
 /**
  * Starts the play page where its address says: the moves played (`#m=`) and the part of a side unit (`#p=`), so a

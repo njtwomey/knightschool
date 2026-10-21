@@ -17,9 +17,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useCatalog } from '@/data/catalog-store';
-import { courseHref } from '@/features/course/tabs';
 import { useProgress } from '@/features/courses/progress';
 import { navigate, to } from '@/router/location';
+import { courseHref } from '@/router/hrefs';
 
 const TIER: Record<Tier, string> = { 1: 'Study first', 2: 'Next', 3: 'Alternative' };
 

@@ -33,7 +33,7 @@ import { navigate, to } from '@/router/location';
 import { GroupSelect } from './group-select';
 import { entryId, problemsFor } from './helpers';
 import { draftChapter, fullLine, useAuthor, type DraftCourse } from './store';
-import { lineEditHref } from './tabs';
+import { lineEditHref } from '@/router/hrefs';
 
 const KIND: Record<string, string> = {
   main: 'Main line',

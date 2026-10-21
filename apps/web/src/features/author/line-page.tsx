@@ -3,14 +3,13 @@ import { useEffect } from 'react';
 import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { lineHref } from '@/features/line/tabs';
 import { to } from '@/router/location';
 import { LineBreadcrumbs } from './crumbs';
 import { entryId } from './helpers';
 import { LineEditor } from './line-editor';
 import { AuthorGate, CreateNotices, UndoButton } from './shell';
 import { draftCourses, useAuthor } from './store';
-import { createHref } from './tabs';
+import { lineHref, createHref } from '@/router/hrefs';
 
 /** One line in Create (`/create/<course>/<line>`): the board to play, branch, note and tag it. */
 export function LineEditorPage({ course, line }: { course: string; line: string }) {

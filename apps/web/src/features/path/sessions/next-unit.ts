@@ -1,6 +1,6 @@
 import { BookOpen } from 'lucide-react';
-import { lineHref } from '@/features/line/tabs';
 import { currentUnit, nothingLeft, unitLabel, type SessionType } from './types';
+import { lineHref } from '@/router/hrefs';
 
 /** Next unit: learn the first unit ready to start, or drill the one being learned. Learn ends with "Now drill it". */
 export const nextUnit: SessionType = {

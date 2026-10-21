@@ -30,10 +30,10 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useCatalog } from '@/data/catalog-store';
 import { GroupActions } from './group-actions';
 import { entryId, entrySection, useDraft } from './helpers';
-import { createHref } from './tabs';
 import { useGlossary } from '@/features/glossary/use-glossary';
 import { navigate } from '@/router/location';
 import { fullLine, useAuthor, type DraftCourse } from './store';
+import { createHref } from '@/router/hrefs';
 
 const FROM_START = '__start';
 

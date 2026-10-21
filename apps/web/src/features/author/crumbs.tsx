@@ -13,7 +13,7 @@ import { TabGroup } from '@/components/breadcrumbs/tab-group';
 import { navigate, to } from '@/router/location';
 import { entryId } from './helpers';
 import { draftCourses, fullLine, useAuthor } from './store';
-import { CREATE_TABS, createHref, lineEditHref, type CreateTab } from './tabs';
+import { createHref, lineEditHref, CREATE_TABS, type CreateTab } from '@/router/hrefs';
 
 /** Your courses as menu items, each opening the same tab. */
 function useCourseItems(tab: CreateTab): MenuItem[] {

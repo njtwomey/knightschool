@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { glossary } from './use-glossary';
 import { useCatalog } from '@/data/catalog-store';
 import { to } from '@/router/location';
+import { courseHref } from '@/router/hrefs';
 
 /** The tactical and structural ideas the courses use, in plain words, with the courses where each turns up. */
 export function GlossaryPage() {
@@ -82,7 +83,7 @@ export function GlossaryPage() {
                 {entry.courses.length > 0 && (
                   <dd className="flex flex-wrap gap-1 pt-1">
                     {entry.courses.map((course) => (
-                      <a key={course} href={to(`/course/${course}`)}>
+                      <a key={course} href={to(courseHref(course))}>
                         <Badge variant="outline" className="font-normal hover:bg-accent">
                           {names.get(course) ?? course}
                         </Badge>

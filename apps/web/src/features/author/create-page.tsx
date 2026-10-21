@@ -16,14 +16,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { courseHref } from '@/features/course/tabs';
 import { navigate, to } from '@/router/location';
 import { NewCourseDialog } from './course-form';
 import { entryId, lastEdited, problemsFor, shortTime } from './helpers';
 import { ImportContributionDialog } from './publish';
 import { AuthorGate, CreateNotices, ExportButton, UndoButton } from './shell';
 import { draftCourses, useAuthor, type DraftCourse } from './store';
-import { createHref } from './tabs';
+import { courseHref, createHref } from '@/router/hrefs';
 
 type Row = { course: DraftCourse; lines: number; edited: string; problems: string[] };
 type SortKey = 'name' | 'side' | 'lines' | 'edited' | 'status';

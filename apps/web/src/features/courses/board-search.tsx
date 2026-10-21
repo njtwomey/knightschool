@@ -17,8 +17,8 @@ import {
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
-import { lineHref } from '@/features/line/tabs';
 import { movesText, queryEpd, type BoardQuery } from './board-query';
+import { courseHref, lineHref } from '@/router/hrefs';
 
 type Props = {
   open: boolean;
@@ -217,7 +217,7 @@ export function BoardSearchDialog({
                 </ul>
                 <a
                   href={
-                    to(`/course/${lines[0]!.course.id}`) +
+                    to(courseHref(lines[0]!.course.id)) +
                     buildHash({ m: encodeMoves(query.played.map((move) => move.uci)) })
                   }
                   className="justify-self-start px-0 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"

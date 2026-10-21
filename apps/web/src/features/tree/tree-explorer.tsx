@@ -15,11 +15,11 @@ import { RichText } from '@/components/rich-text';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { loadOpening } from '@/data/content';
-import { lineHref } from '@/features/line/tabs';
 import { to } from '@/router/location';
 import { laneColour } from './colours';
 import { below, indexModel, type IndexModel } from './index-model';
 import { LaneTree } from './lane-tree';
+import { lineHref } from '@/router/hrefs';
 
 /** A line as the explorer lists it: its id, what to call it, the course to open it in, and its side. */
 export type ExplorerLine = { id: string; name: string; course: string; side: Side };

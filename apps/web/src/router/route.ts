@@ -1,6 +1,12 @@
-import { isCreateTab, type CreateTab } from '@/features/author/tabs';
-import type { CourseTab } from '@/features/course/tabs';
-import { parseLineTab, parseUnitRef, type LineTab, type UnitRef } from '@/features/line/tabs';
+import {
+  isCreateTab,
+  parseLineTab,
+  parseUnitRef,
+  type CourseTab,
+  type CreateTab,
+  type LineTab,
+  type UnitRef,
+} from './hrefs';
 
 /** Profile's tabs: Overview, Stats and Settings. */
 export type ProfileTab = 'overview' | 'stats' | 'settings';

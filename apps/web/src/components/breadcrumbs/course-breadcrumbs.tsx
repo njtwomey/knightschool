@@ -10,9 +10,8 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { useCatalog } from '@/data/catalog-store';
-import { COURSE_TABS, courseHref, type CourseTab } from '@/features/course/tabs';
-import { LINE_TABS, lineHref, type LineTab } from '@/features/line/tabs';
 import { navigate, to } from '@/router/location';
+import { courseHref, lineHref, LINE_TABS, COURSE_TABS, type LineTab, type CourseTab } from '@/router/hrefs';
 
 /** Every course as menu items, in study order, grouped by the side you play. */
 function useCourseItems(): MenuItem[] {
@@ -23,7 +22,7 @@ function useCourseItems(): MenuItem[] {
   ].map((course) => ({
     id: course.id,
     label: course.name,
-    href: `/course/${course.id}`,
+    href: courseHref(course.id),
     group: course.side === 'white' ? 'You play White' : 'You play Black',
   }));
 }
@@ -101,7 +100,7 @@ export function PlayBreadcrumbs({
         <BreadcrumbItem>
           <CrumbMenu
             label={entry?.name ?? course}
-            href={`/course/${course}`}
+            href={courseHref(course)}
             current={course}
             items={courses}
             menuLabel="Other courses"

@@ -2,7 +2,6 @@ import { courseProgress, relatedCourses, roleOf, type RelatedCourse } from '@kni
 import { PenLine } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { createHref } from '@/features/author/tabs';
 import { EcoLink } from '@/components/eco-link';
 import { Page } from '@/components/page';
 import { RichText } from '@/components/rich-text';
@@ -29,6 +28,7 @@ import { useGlossary } from '@/features/glossary/use-glossary';
 import { ECO_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
 import { CourseIntro } from './course-intro';
 import { LinesTable } from './lines-table';
+import { courseHref, createHref } from '@/router/hrefs';
 
 function isTyping(target: EventTarget | null) {
   return (
@@ -200,7 +200,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
                   <ul className="grid gap-1.5">
                     {siblings.map((other) => (
                       <li key={other.id}>
-                        <a href={to(`/course/${other.id}`)} className="font-medium underline-offset-4 hover:underline">
+                        <a href={to(courseHref(other.id))} className="font-medium underline-offset-4 hover:underline">
                           {other.name}
                         </a>{' '}
                         <span className="text-muted-foreground">
@@ -213,10 +213,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
                       .slice(0, 4)
                       .map(({ course: other, shared }) => (
                         <li key={other.id}>
-                          <a
-                            href={to(`/course/${other.id}`)}
-                            className="font-medium underline-offset-4 hover:underline"
-                          >
+                          <a href={to(courseHref(other.id))} className="font-medium underline-offset-4 hover:underline">
                             {other.name}
                           </a>{' '}
                           <span className="text-muted-foreground">

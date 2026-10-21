@@ -18,7 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { download } from '@/data/backup';
 import { navigate } from '@/router/location';
 import { useAuthor, type DraftCourse } from './store';
-import { createHref } from './tabs';
+import { createHref } from '@/router/hrefs';
 
 /** Copies text to the clipboard; false when the browser will not. */
 async function copy(text: string): Promise<boolean> {

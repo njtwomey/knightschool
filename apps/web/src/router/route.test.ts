@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { lineHref } from '@/features/line/tabs';
 import { parseRoute } from './route';
+import { lineHref } from '@/router/hrefs';
 
 describe('lineHref', () => {
   it.each([

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useStorage } from '@/data/storage';
 import { useProgress } from '@/features/courses/progress';
 import { to } from '@/router/location';
+import { lineHref } from '@/router/hrefs';
 
 // The Giuoco Piano: a line worth watching, played over and over on the front page, with the idea of each move.
 const SHOWCASE: { uci: string; why: string }[] = [
@@ -72,7 +73,7 @@ function HeroBoard() {
       </p>
       <div className="flex items-center justify-end text-sm">
         <a
-          href={to('/play/vs-e5-italian/giuoco-piano/about')}
+          href={to(lineHref('vs-e5-italian', 'giuoco-piano'))}
           className="flex items-center gap-1 font-medium hover:underline"
         >
           Learn this line <ArrowRight className="size-3.5" aria-hidden />

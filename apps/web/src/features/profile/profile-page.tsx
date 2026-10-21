@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { OverviewPage } from '@/features/overview/overview-page';
 import { SettingsPage } from '@/features/settings/settings-page';
 import { StatsPage } from '@/features/stats/stats-page';
-import type { ProfileTab } from '@/route';
+import type { ProfileTab } from '@/router/route';
 import { navigate } from '@/router/location';
 
 /** You: what is due and how far through your courses you are, how you are doing, and your settings. One page, three tabs. */

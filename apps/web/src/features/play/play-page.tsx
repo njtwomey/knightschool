@@ -22,11 +22,10 @@ import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
 import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
 import { encodeMoves } from '@/router/hash';
-import { lineHref, type UnitRef } from '@/features/line/tabs';
-import { courseHref } from '@/features/course/tabs';
 import { startFromAddress } from './resume';
 import { ALL_BRANCHES, playView, usePlay, type PlayMode } from './store';
 import { navigate, setHashState, to } from '@/router/location';
+import { courseHref, lineHref, branchesHref, type UnitRef } from '@/router/hrefs';
 
 const MODES: Record<PlayMode, { name: string; blurb: string; icon: typeof BookOpen }> = {
   learn: { name: 'Learn', blurb: 'You play both sides. Every move is shown first.', icon: BookOpen },
@@ -219,7 +218,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
    * for the every-branch drill).
    */
   function chooseMode(next: PlayMode) {
-    if (next === 'branches') navigate(`/play/${course}/${ALL_BRANCHES}/branches`);
+    if (next === 'branches') navigate(branchesHref(course));
     else navigate(lineHref(course, drill ? firstLine.id : line, next === 'practice' ? 'drill' : 'learn', unit));
   }
   const side = content.opening.side;
@@ -491,7 +490,7 @@ export function PlayPage({ course, line, mode, unit }: Props) {
                   </Button>
                 )}
                 <Button asChild variant="ghost">
-                  <a href={scope ? pathHref : to(`/course/${course}`)}>Back to the {scope ? 'path' : 'course'}</a>
+                  <a href={scope ? pathHref : to(courseHref(course))}>Back to the {scope ? 'path' : 'course'}</a>
                 </Button>
               </CardContent>
             </Card>

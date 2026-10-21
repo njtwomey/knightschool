@@ -1,6 +1,5 @@
 import { namedPly, variantPath, type LineEdge, type OpeningContent, type Variant } from '@knightschool/core';
 import { BookOpen, GitBranch, GitFork, ListChecks, PenLine, Target } from 'lucide-react';
-import { lineEditHref } from '@/features/author/tabs';
 import { EcoLink } from '@/components/eco-link';
 import { MoveTags } from '@/components/move-tags';
 import { useEffect, useMemo, useState } from 'react';
@@ -21,7 +20,7 @@ import { PlayPage } from '@/features/play/play-page';
 import { ReviewPage } from '@/features/review/review-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { to } from '@/router/location';
-import { lineHref, type LineTab, type UnitRef } from './tabs';
+import { courseHref, lineHref, lineEditHref, type LineTab, type UnitRef } from '@/router/hrefs';
 
 /** One line's page: the tab decides what it shows. Learn, Drill and the every-branch drill are the play page. */
 export function LinePage({
@@ -114,7 +113,7 @@ function LineAbout({ course, line }: { course: string; line: string }) {
           <AlertTitle>No such line</AlertTitle>
           <AlertDescription>
             {content.opening.name} has no line called {line}.{' '}
-            <a className="underline" href={to(`/course/${course}`)}>
+            <a className="underline" href={to(courseHref(course))}>
               See its lines
             </a>
           </AlertDescription>
@@ -357,7 +356,7 @@ function About({
           <section className="grid gap-3" aria-labelledby="line-course">
             <h2 id="line-course" className="text-lg font-semibold">
               The course:{' '}
-              <a href={to(`/course/${course}`)} className="underline">
+              <a href={to(courseHref(course))} className="underline">
                 {opening.name}
               </a>
             </h2>

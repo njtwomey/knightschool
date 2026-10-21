@@ -1,6 +1,6 @@
 import { ListOrdered } from 'lucide-react';
-import { lineHref } from '@/features/line/tabs';
 import { currentUnit, nothingLeft, unitLabel, type SessionType } from './types';
+import { lineHref } from '@/router/hrefs';
 
 /** How many moves "next three moves" asks for. */
 export const NEXT_MOVES = 3;

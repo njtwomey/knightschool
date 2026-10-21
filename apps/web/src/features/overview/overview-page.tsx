@@ -15,6 +15,7 @@ import { useCatalog } from '@/data/catalog-store';
 import { CourseCard } from '@/features/openings/course-card';
 import { percent, useProgress } from '@/features/courses/progress';
 import { to } from '@/router/location';
+import { courseHref } from '@/router/hrefs';
 
 type Row = { course: OpeningIndexEntry; due: number; fresh: number };
 
@@ -171,7 +172,7 @@ export function OverviewPage() {
               {rows.map(({ course, due: courseDue, fresh: courseFresh }) => (
                 <li key={course.id}>
                   <a
-                    href={to(`/course/${course.id}`)}
+                    href={to(courseHref(course.id))}
                     className="group flex gap-3 rounded-xl border bg-card p-3 outline-none transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   >
                     <div className="w-20 shrink-0">

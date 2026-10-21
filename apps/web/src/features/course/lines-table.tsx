@@ -7,6 +7,7 @@ import { useCatalog } from '@/data/catalog-store';
 import { VariantTags } from '@/components/tags/tag-badge';
 import { TagLegend } from '@/components/tags/tag-legend';
 import { to } from '@/router/location';
+import { lineHref } from '@/router/hrefs';
 
 type Group = { title: string; note?: string; variants: Variant[] };
 
@@ -72,7 +73,7 @@ function Section({ group, courseId, side }: { group: Group; courseId: string; si
             <TableRow key={variant.id} className="relative">
               <TableCell className="whitespace-normal py-1.5">
                 <a
-                  href={to(`/play/${courseId}/${variant.id}/about`)}
+                  href={to(lineHref(courseId, variant.id, 'about'))}
                   className='font-medium outline-none after:absolute after:inset-0 after:content-[""] focus-visible:after:ring-[3px] focus-visible:after:ring-ring/50'
                 >
                   {variant.name}
@@ -101,11 +102,11 @@ function Section({ group, courseId, side }: { group: Group; courseId: string; si
                 <IconAction label="Show on board" onClick={() => showLine(variant.id)}>
                   <Eye aria-hidden />
                 </IconAction>
-                <IconAction label="Learn it first" href={to(`/play/${courseId}/${variant.id}/learn`)}>
+                <IconAction label="Learn it first" href={to(lineHref(courseId, variant.id, 'learn'))}>
                   <BookOpen aria-hidden />
                 </IconAction>
                 {!variant.alternative && (
-                  <IconAction label="Drill it" href={to(`/play/${courseId}/${variant.id}/drill`)}>
+                  <IconAction label="Drill it" href={to(lineHref(courseId, variant.id, 'drill'))}>
                     <Target aria-hidden />
                   </IconAction>
                 )}

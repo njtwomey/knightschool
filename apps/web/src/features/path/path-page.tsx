@@ -27,9 +27,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { loadCoursePath, isPassed, type CoursePath } from '@/data/course-path';
 import { CourseBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
 import { useCatalog } from '@/data/catalog-store';
-import { lineHref } from '@/features/line/tabs';
 import { to } from '@/router/location';
 import { SessionStarters } from './session-starters';
+import { lineHref } from '@/router/hrefs';
 
 const KIND: Record<CourseUnit['kind'], string> = {
   main: 'Main line',

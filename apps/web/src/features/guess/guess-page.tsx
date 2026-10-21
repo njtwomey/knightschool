@@ -17,6 +17,7 @@ import { useCatalog } from '@/data/catalog-store';
 import { buildHash, encodeMoves } from '@/router/hash';
 import { to } from '@/router/location';
 import { allSuggestions, SESSION_LENGTH, sessionPoints, useGuess, type Outcome } from './store';
+import { lineHref } from '@/router/hrefs';
 
 /** "Name That Opening": a position comes up, and you type what it is. Any opening or variation that reaches it counts. */
 export function GuessPage() {
@@ -183,7 +184,7 @@ export function GuessPage() {
                     <Button asChild variant="outline" size="sm">
                       <a
                         href={
-                          to(`/play/${source.course}/${source.line}/learn`) +
+                          to(lineHref(source.course, source.line, 'learn')) +
                           buildHash({ m: source.moves ? encodeMoves(source.moves) : undefined })
                         }
                       >

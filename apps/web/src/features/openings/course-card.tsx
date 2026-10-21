@@ -15,6 +15,7 @@ import { Progress } from '@/components/ui/progress';
 import { percent } from '@/features/courses/progress';
 import { to } from '@/router/location';
 import { ECO_HINT, PROGRESS_HINT, ROLE_HINT, SIDE_HINT, TIER_HINT } from '@/components/tags/hints';
+import { courseHref } from '@/router/hrefs';
 
 type LineInfo = { id: string; name: string; kind: 'line' | 'refutation' };
 
@@ -86,7 +87,7 @@ export function CourseCard({
 
   return (
     <a
-      href={to(`/course/${course.id}`)}
+      href={to(courseHref(course.id))}
       className="group flex gap-3 rounded-xl border bg-card p-3 text-card-foreground outline-none transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50"
     >
       <div className="w-24 shrink-0 sm:w-28">

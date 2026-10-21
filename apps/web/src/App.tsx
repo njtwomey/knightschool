@@ -46,7 +46,7 @@ import { SpeedPage } from '@/features/speed/speed-page';
 import { ReviewPage } from '@/features/review/review-page';
 import { HomePage } from '@/features/home/home-page';
 import { ProfilePage } from '@/features/profile/profile-page';
-import { parseRoute, type Route } from '@/route';
+import { parseRoute, type Route } from '@/router/route';
 import { navigate, to, usePathname } from '@/router/location';
 
 export function App() {

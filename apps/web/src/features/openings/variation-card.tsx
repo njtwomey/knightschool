@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { IconAction } from '@/components/icon-action';
 import { to } from '@/router/location';
 import { ROLE_HINT, SIDE_HINT, TRAP_HINT, WEIGHT_HINT } from '@/components/tags/hints';
-import { lineHref } from '@/features/line/tabs';
+import { lineHref } from '@/router/hrefs';
 
 /** A variation found by search, drawn like an opening: its board, name and where it lives. Click to see it on the board. */
 export function VariationCard({ hit, openings }: { hit: LineHit; openings: OpeningGroup[] }) {
@@ -64,10 +64,10 @@ export function VariationCard({ hit, openings }: { hit: LineHit; openings: Openi
         </div>
       </div>
       <div className="relative z-10 flex shrink-0 flex-col justify-center gap-1">
-        <IconAction label="Learn it first" href={to(`/play/${course.id}/${line.id}/learn`)}>
+        <IconAction label="Learn it first" href={to(lineHref(course.id, line.id, 'learn'))}>
           <BookOpen aria-hidden />
         </IconAction>
-        <IconAction label="Drill it" href={to(`/play/${course.id}/${line.id}/drill`)}>
+        <IconAction label="Drill it" href={to(lineHref(course.id, line.id, 'drill'))}>
           <Target aria-hidden />
         </IconAction>
       </div>

@@ -4,10 +4,10 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCatalog } from '@/data/catalog-store';
-import { courseHref } from '@/features/course/tabs';
 import { navigate } from '@/router/location';
 import { TreeExplorer, type ExplorerLine } from './tree-explorer';
 import { useMoveTree } from './use-move-tree';
+import { courseHref } from '@/router/hrefs';
 
 /**
  * Every line of every course as one tree (/tree): intentionally big. Lines come in study order, each course's lines in

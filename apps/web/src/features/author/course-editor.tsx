@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { courseHref } from '@/features/course/tabs';
 import { to } from '@/router/location';
 import { CourseForm } from './course-form';
 import { CreateBreadcrumbs } from './crumbs';
@@ -13,7 +12,7 @@ import { PathOrder } from './path-order';
 import { PublishPanel } from './publish';
 import { AuthorGate, CreateNotices, UndoButton } from './shell';
 import { draftCourses, useAuthor } from './store';
-import type { CreateTab } from './tabs';
+import { courseHref, type CreateTab } from '@/router/hrefs';
 
 /** One course in Create (`/create/<course>/<tab>`): its details, lines, path or publishing. */
 export function CourseEditorPage({ course, tab }: { course: string; tab: CreateTab }) {
