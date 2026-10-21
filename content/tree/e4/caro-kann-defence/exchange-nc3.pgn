@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Exchange Variation, 4.Nc3"]
+[ECO "B13"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin,hanging-piece"]
+[Themes "bishop-pin,attack-d4,transposition"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.Nc3 Nf6 5.Nf3"]
+[Start "caro-kann-exchange 4.Nc3 Nf6"]
+
+5. Nf3 ( 5. Bg5 Nc6 { Develops and hits d4. If White plays Nf3, ...Bg4 pins it as in the main line. } 6. Nf3 Bg4 ) ( 5. Bb5+ Nc6 { Blocks with a developing move that also hits d4. } ) ( 5. Bd3 Nc6 ) 5... Bg4 { Pins the knight that guards d4, the same idea as in the other Exchange lines. } 6. h3 ( 6. Be2 e6 ) ( 6. Bb5+ Nc6 { Blocks with a developing move. The knight adds pressure on d4. } ) ( 6. Ne5 $4 { The knight was pinned: moving it leaves the queen on d1 to Black's bishop. } 6... Bxd1 { Wins the queen for a bishop. } ) 6... Bxf3 { Takes the knight rather than retreat: d4 loses one of its two guards. } 7. Qxf3 Nc6 { Develops and hits d4 at once. The queen on f3 does not guard d4, so White must spend a move on it. } 8. Be3 ( 8. Bb5 e6 { Guards d5 and opens the bishop. The pin on c6 costs Black nothing. } ) ( 8. Bd3 $6 Nxd4 { The bishop blocks the d-file, so nothing guards d4 and Black wins a pawn. } ) ( 8. Bf4 $6 Nxd4 { Wins the pawn on d4, which nothing guarded. } ) ( 8. Nxd5 $4 { Counts wrong: d5 is guarded twice, by the knight on f6 and the queen. } 8... Qxd5 { Takes with the queen, which the knight on f6 guards. If White swaps queens, ...Nxd5 leaves Black a knight up. } ) 8... e6 { Supports d5 and frees the f8 bishop. This is the same position as 2.Nf3 d5 3.exd5 cxd5 4.d4 Nc6 5.Nc3 Bg4 6.h3 Bxf3 7.Qxf3 e6 8.Be3 Nf6: Black plays ...Bd6 and castles, then uses the c-file. } *

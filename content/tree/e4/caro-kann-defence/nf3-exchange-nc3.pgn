@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "Exchange Variation, 4.Nf3 Nc6 5.Nc3"]
+[ECO "B13"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin,hanging-piece"]
+[Themes "bishop-pin,attack-d4,solid-centre"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "5.Nc3"]
+[Start "nf3-exchange 4.d4 Nc6"]
+
+5. Nc3 Bg4 { Pins the knight on f3, which is one of d4's two guards. } 6. h3 { Asks the bishop to take or retreat. } ( 6. Be2 e6 ) ( 6. Bb5 e6 { Black does not mind the pin on c6: ...Bxf3 can remove d4's guard whenever Black likes. } ) ( 6. Be3 e6 ) ( 6. Bf4 e6 ) ( 6. Ne5 $4 { Moves the pinned knight, so White's queen on d1 is left unguarded. } 6... Bxd1 { Wins the queen for a bishop. } ) 6... Bxf3 { Gives up the bishop for the knight, d4's best guard, rather than let g4 chase it. } 7. Qxf3 e6 { Guards d5, which the queen and the knight on c3 both attack, and frees the f8 bishop. Now ...Nxd4 is a threat, because nothing guards d4. } 8. Be3 { Guards d4. } ( 8. Bb5 Nf6 { Develops and guards d5 again. The pin on c6 is harmless: Black castles and plays ...Rc8. } 9. O-O Bd6 ) ( 8. Bd3 $6 Nxd4 { Takes the pawn on d4, which has had no guard since the queen went to f3. Watch for Qg3 next, which hits g7. } ) ( 8. Bf4 $6 Nxd4 { The same idea: d4 was not guarded, so Black wins a pawn. } ) 8... Nf6 { Develops and guards d5 a second time. } 9. Bd3 Bd6 { Develops and aims at h2, so Black can castle next. } 10. O-O O-O { The position is equal and solid. Plan: a rook to c8 on the open file, ...Nb4 to trade off White's bishop on d3, and ...a6 with ...b5 to gain room on the queenside. } *

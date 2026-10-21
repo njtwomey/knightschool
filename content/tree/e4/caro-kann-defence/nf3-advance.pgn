@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Caro-Kann Defence"]
+[Variation "2.Nf3, Advance Variation"]
+[ECO "B12"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "hanging-piece"]
+[Themes "transposition,good-bishop,c5-break"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "2.Nf3 d5 3.e5"]
+[Start "nf3-exchange 2...d5"]
+
+3. e5 { Gains space and takes f6 from Black's knight, as in the Advance Variation. } 3... Bf5 { Brings the bishop out before ...e6 shuts it in, just as against 2.d4 d5 3.e5. } 4. d4 { The usual move. The game is now the Advance Variation, Short line (2.d4 d5 3.e5 Bf5 4.Nf3): Black plays ...e6 and ...c5. } ( 4. Be2 e6 5. O-O ( 5. d4 { The Short line again, by another move order. } ) 5... c5 { Takes space on the queenside and gets ready to meet d4 with pressure on that pawn. } 6. d4 { The Short line once more, with both sides castled or about to castle. } ) ( 4. Bd3 Bxd3 { Trades White's best minor piece. } 5. cxd3 e6 6. d4 c5 { Hits d4 straight away. White's doubled d-pawns on d3 and d4 make this easier. } ) ( 4. Nh4 Bd7 { Steps back out of the knight's reach. The knight on h4 is badly placed and will have to go back. Not 4...e6?, when Nxf5 exf5 doubles Black's pawns, and never 4...Bg4??, which loses the bishop to Qxg4. } ) ( 4. Nc3 e6 5. d4 { The same position as 4.Nf3 e6 5.Nc3 in the Short line. Black plays ...c5. } ) ( 4. c3 e6 5. d4 { The same position as 4.Nf3 e6 5.c3 in the Short line. Black plays ...c5. } ) ( 4. d3 e6 { Supports d5 calmly. With White's pawn on d3 instead of d4, ...c5 and ...Nc6 give Black a comfortable game. } ) ( 4. c4 e6 { Supports d5. If White takes on d5, Black recaptures with the e-pawn or the c-pawn and keeps a solid centre. } ) *
