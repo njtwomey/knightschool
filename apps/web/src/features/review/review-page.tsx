@@ -18,6 +18,7 @@ import { SourceSelect } from '@/components/source-select';
 import { WeightingSelect } from '@/components/weighting-select';
 import { useBrowse } from '@/features/browse/store';
 import { arrowsOf, squareStylesOf } from '@/features/browse/shapes';
+import { MissList } from './miss-list';
 import { currentQuestion, DUE, useReview, type LineScope, type QuizQuestion } from './store';
 import { to } from '@/router/location';
 
@@ -240,6 +241,7 @@ function Summary({ results }: { results: readonly string[] }) {
             </Button>
           </CardContent>
         </Card>
+        <MissList />
       </Page>
     );
   }
@@ -267,6 +269,7 @@ function Summary({ results }: { results: readonly string[] }) {
           </Button>
         </CardContent>
       </Card>
+      <MissList />
     </Page>
   );
 }

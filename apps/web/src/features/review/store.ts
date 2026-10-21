@@ -9,6 +9,7 @@ import {
   type Quiz,
   nodeAt,
   pathTo,
+  playUci,
   planIntroductions,
   planSession,
   reduceAttempt,
@@ -27,6 +28,7 @@ import { create } from 'zustand';
 import { loadIndex, loadOpening } from '@/data/content';
 import { coursesFor, saveChoice, savedChoice, savedWeighting } from '@/data/practice-source';
 import { useStorage, whenStorageReady } from '@/data/storage';
+import { missKey, type Miss } from './regret';
 import {
   addIntroducedToday,
   getEnrolled,
@@ -60,6 +62,8 @@ type ReviewState = {
   attempt: Attempt;
   sessionId: string;
   results: RatingName[];
+  /** Every wrong move of the session, in the order played, for the summary. Never saved. */
+  misses: Miss[];
   /** performance.now() when the current card was shown. */
   shownAt: number;
   badge: { square: string; kind: 'correct' | 'wrong' } | null;
@@ -111,6 +115,23 @@ export type LineScope = { course: string; line: string };
 export const useReview = create<ReviewState>((set, get) => {
   /** Only the schedule's own session is saved; free practice and a line's quiz never touch it. */
   const saving = () => get().source === DUE && !get().scope;
+  function recordMiss(card: Card, content: OpeningContent, playedUci: string) {
+    const key = missKey(card.epd, playedUci, card.expectedUci);
+    if (get().misses.some((miss) => miss.key === key)) return;
+    const miss: Miss = {
+      key,
+      cardId: card.id,
+      openingId: card.openingId,
+      courseName: content.opening.name,
+      side: content.opening.side,
+      epd: card.epd,
+      playedUci,
+      playedSan: playUci(card.epd, playedUci).san,
+      expectedUci: card.expectedUci,
+      expectedSan: playUci(card.epd, card.expectedUci).san,
+    };
+    set((state) => ({ misses: [...state.misses, miss] }));
+  }
   function advance() {
     const { index, queue } = get();
     if (index + 1 >= queue.length)
@@ -137,6 +158,7 @@ export const useReview = create<ReviewState>((set, get) => {
     attempt: startAttempt(),
     sessionId: '',
     results: [],
+    misses: [],
     shownAt: 0,
     badge: null,
     advancing: false,
@@ -195,6 +217,7 @@ export const useReview = create<ReviewState>((set, get) => {
             index: 0,
             contents: { [content.opening.id]: content },
             results: [],
+            misses: [],
             sessionId: crypto.randomUUID(),
             attempt: startAttempt(),
             shownAt: performance.now(),
@@ -219,6 +242,7 @@ export const useReview = create<ReviewState>((set, get) => {
             index: 0,
             contents: Object.fromEntries(free.map((content) => [content.opening.id, content])),
             results: [],
+            misses: [],
             sessionId: crypto.randomUUID(),
             attempt: startAttempt(),
             shownAt: performance.now(),
@@ -247,6 +271,7 @@ export const useReview = create<ReviewState>((set, get) => {
           index: 0,
           contents,
           results: [],
+          misses: [],
           sessionId: crypto.randomUUID(),
           attempt: startAttempt(),
           shownAt: performance.now(),
@@ -263,6 +288,8 @@ export const useReview = create<ReviewState>((set, get) => {
       if (phase !== 'asking' || advancing || !card || !contents[card.openingId]) return false;
       const played = withPromotion(card.epd, uci);
       if (!played) return false;
+      // A guess, kept for the summary even if the right move follows; not one played after the answer was shown.
+      if (played !== card.expectedUci && !attempt.shown) recordMiss(card, contents[card.openingId]!, played);
 
       const next = reduceAttempt(
         attempt,

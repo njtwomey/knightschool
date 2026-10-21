@@ -124,6 +124,22 @@ export const useEngine = create<EngineState>((set, get) => ({
   cancelMeasure: () => measuring?.abort(),
 }));
 
+/**
+ * One search in the browser engine (starting it if it is off), read from the database cache first and never from the
+ * baked analysis, so two positions searched this way are compared at the same depth. Undefined if the engine cannot
+ * start or the search was cut short.
+ */
+export async function evaluateLive(
+  epd: string,
+  depth: number,
+  signal?: AbortSignal,
+): Promise<CachedEvaluation | undefined> {
+  await useEngine.getState().turnOn();
+  if (!engine || signal?.aborted) return undefined;
+  const result = await evaluateCached(engine, evalStore(), epd, { depth, multipv: 1 }, signal);
+  return result.partial ? undefined : result;
+}
+
 /** The positions of a line, from the start through each move, for measuring it. */
 export function lineEpds(content: OpeningContent, line: LineEdge[]): string[] {
   return [content.opening.rootEpd, ...line.map((move) => move.to)];

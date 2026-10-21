@@ -20,6 +20,7 @@ export * from './related';
 export * from './scheduler';
 export * from './search';
 export * from './speed';
+export * from './regret';
 export * from './schema';
 export * from './stats';
 export * from './tags';
