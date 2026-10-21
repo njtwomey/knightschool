@@ -30,7 +30,7 @@ function useSeen<T extends Element>(margin = '300px') {
 export function BoardThumb({ id, epd, side }: { id: string; epd: string; side: 'white' | 'black' }) {
   const [ref, seen] = useSeen<HTMLDivElement>();
   return (
-    <div ref={ref} className="pointer-events-none aspect-square w-full overflow-hidden rounded-md bg-muted" aria-hidden>
+    <div ref={ref} className="pointer-events-none aspect-square w-full overflow-hidden bg-muted" aria-hidden>
       {seen && <AppBoard id={`thumb-${id}`} epd={epd} orientation={side} interactive={false} coordinates={false} />}
     </div>
   );
