@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { epdAfterPgn } from '../chess';
+import { epdAfterPgn } from '../chess/chess';
 import type { LineEdge } from '../schema/content';
 import {
   authorExplainer,

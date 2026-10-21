@@ -1,5 +1,5 @@
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
-import { positionFromEpd } from '../chess';
+import { positionFromEpd } from '../chess/chess';
 import type { Motif } from '../schema/content';
 import type { Explanation } from './types';
 

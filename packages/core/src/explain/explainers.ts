@@ -1,4 +1,4 @@
-import { playUci } from '../chess';
+import { playUci } from '../chess/chess';
 import { explainMotifs } from './motif';
 import type { EvalLike, Explainer, Explanation, ExplainContext } from './types';
 

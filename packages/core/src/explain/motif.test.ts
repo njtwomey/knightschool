@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { epdAfterPgn } from '../chess';
-import { fenToEpd } from '../epd';
+import { epdAfterPgn } from '../chess/chess';
+import { fenToEpd } from '../chess/epd';
 import { explainMotifs } from './motif';
 
 const after = (pgn: string) => epdAfterPgn(pgn);
