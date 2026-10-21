@@ -7,7 +7,7 @@ describe('parseRoute', () => {
     ['', { page: 'home' }],
     ['/browse', { page: 'openings' }],
     ['/search', { page: 'openings' }],
-    ['/courses', { page: 'openings' }],
+    ['/courses', { page: 'courses' }],
     ['/course/caro-kann-panov', { page: 'course', id: 'caro-kann-panov', tab: 'overview' }],
     ['/course/caro-kann-panov/tree', { page: 'course', id: 'caro-kann-panov', tab: 'tree' }],
     [

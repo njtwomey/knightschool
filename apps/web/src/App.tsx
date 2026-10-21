@@ -2,6 +2,7 @@ import {
   BarChart3,
   BookText,
   GitFork,
+  GraduationCap,
   CircleUser,
   LayoutDashboard,
   Library,
@@ -30,6 +31,7 @@ import { LabPage } from '@/features/lab/lab-page';
 import { CoursePage } from '@/features/course/course-page';
 import { GlossaryPage } from '@/features/glossary/glossary-page';
 import { CurriculumTreePage } from '@/features/tree/curriculum-tree-page';
+import { CoursesPage } from '@/features/courses/courses-page';
 import { CourseTreePage } from '@/features/tree/course-tree-page';
 import { OpeningsPage } from '@/features/openings/openings-page';
 import { LinePage } from '@/features/line/line-page';
@@ -61,12 +63,20 @@ export function App() {
     void selectCourse(courseId);
   }, [courseId, selectCourse]);
 
-  // In the order you use them: find and look (Browse, Tree), practise (Quiz, Speed, Guess), look things up (Glossary).
+  // In the order you use them: find and look (Courses, Browse, Tree), practise (Quiz, Speed, Guess), look things up
+  // (Glossary).
   const links: { href: string; label: string; active: boolean; icon: ReactNode; group: number }[] = [
+    {
+      href: to('/courses'),
+      label: 'Courses',
+      active: route.page === 'courses' || route.page === 'course',
+      icon: <GraduationCap aria-hidden />,
+      group: 0,
+    },
     {
       href: to('/browse'),
       label: 'Browse',
-      active: route.page === 'openings' || route.page === 'course' || route.page === 'play',
+      active: route.page === 'openings' || route.page === 'play',
       icon: <Search aria-hidden />,
       group: 0,
     },
@@ -198,6 +208,7 @@ export function App() {
           ))}
         {route.page === 'glossary' && <GlossaryPage />}
         {route.page === 'tree' && <CurriculumTreePage />}
+        {route.page === 'courses' && <CoursesPage />}
         {route.page === 'play' && (
           <LinePage
             key={`${route.course}/${route.line}/${route.tab}`}
