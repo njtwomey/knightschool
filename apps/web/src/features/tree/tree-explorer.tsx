@@ -133,7 +133,8 @@ export function TreeExplorer({
    * The line being worked through and where on it: the board's buttons (and the arrow keys) step along it. Picking a
    * line in the index or a move in the tree sets both; pointing at a move only previews it.
    */
-  const [picked, setPicked] = useState<string | null>(initialPicked ?? null);
+  // The main line is picked to begin with, so the tree opens calm: one line bright, the rest muted.
+  const [picked, setPicked] = useState<string | null>(initialPicked ?? lines[0]?.id ?? null);
   /** A line's whole path from the starting position, through every line it grows out of: what the steps walk. */
   const pathOfLine = (line: string) => pathOf(tree, line);
   const [cursor, setCursor] = useState<string | null>(
