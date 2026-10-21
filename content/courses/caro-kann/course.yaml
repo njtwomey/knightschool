@@ -6,7 +6,8 @@ tier: 3
 trigger: '1. e4 c6'
 summary: >-
   A solid reply to 1.e4: the c6 pawn backs up ...d5, and Black's light-squared bishop gets out before ...e6 can shut
-  it in. Learn one set-up against each way White can meet it, from the Advance and Exchange to the odd second moves.
+  it in. Learn one set-up against each way White can meet it: 2.d4 (Advance, Exchange, Panov, Classical), the popular
+  2.Nf3 and 2.Nc3, and the odd second moves.
 about:
   idea: >-
     The pawn on c6 supports ...d5, so Black challenges White's e4 pawn without blocking the light-squared bishop,
@@ -25,15 +26,25 @@ plans:
   - Play ...d5 on the next move, and take the bishop out to f5 or g4 before you play ...e6.
   - Against the Advance (e5), hit the base of the chain with ...c5 and develop quietly.
   - Against the Exchange, put the queen on c7 and trade the light bishops; Black has no weaknesses.
+  - Against 2.Nf3, still play ...d5. After exd5 cxd5, develop with ...Nc6, ...e6, ...Bd6 or ...Bg4; after e5, play ...Bf5
+    as in the Advance.
+  - After ...Bg4, ...Bxf3 and Qxf3, look at d4. The queen has left d1, so the pawn is often unguarded and ...Nxd4 wins it.
   - Check every White move that attacks something for a free piece before you reply.
 motifs: [good-bishop-out, attack-the-base, smothered-mate, isolated-queens-pawn, counting, hanging-piece]
 tags: [e4, semi-open, solid]
 lines:
   - advance-short
+  - advance-bd3
+  - advance-short-castles
   - advance-h4
   - advance-nc3
+  - advance-f4
   - advance-g4
   - caro-kann-exchange
+  - exchange-nc3
+  - nf3-exchange
+  - nf3-exchange-nc3
+  - nf3-advance
   - classical
   - panov-attack
   - two-knights

@@ -9,8 +9,8 @@
 [Themes "centre-control,bishop-trade"]
 [Refutes "1. e4 c6 2. Bc4"]
 [For "black"]
-[Kind "rare"]
+[Kind "sideline"]
 [Opponent "2.Bc4"]
 [Start "short-system 1...c6"]
 
-2. Bc4 $6 { The bishop eyes f7, but it goes to a square that ...d5 will attack at once. } 2... d5 $1 { Hits the bishop and e4 together, so White has to give up the centre or retreat. } 3. exd5 ( 3. Bb3 dxe4 { Wins a pawn: the bishop has no good follow-up, and Black can develop calmly. } 4. Nc3 Nf6 5. f3 exf3 6. Nxf3 Bf5 ) 3... cxd5 { Recaptures with the pawn, keeping a pawn in the centre. } 4. Bb5+ Bd7 { Blocks with the bishop so White cannot gain time with a knight check. } 5. Bxd7+ Nxd7 { Trades off White's best piece and develops. } 6. d4 e6 { Supports d5. Black has the better pawn centre and can develop easily. } 7. Nf3 Ngf6 { Develops with no weaknesses. } 8. O-O Bd6 { The bishop eyes the kingside and Black is ready to castle. Black's plan: castle, then play ...Qc7 and ...Rc8 on the open c-file. If White varies, castle and take the c-file. } *
+2. Bc4 $6 { The bishop eyes f7, but it goes to a square that ...d5 will attack at once. } 2... d5 $1 { Hits the bishop and e4 together, so White has to give up the centre or retreat. } 3. exd5 ( 3. Bb3 dxe4 { Wins a pawn: the bishop has no good follow-up, and Black can develop calmly. } 4. Nc3 Nf6 5. f3 exf3 6. Nxf3 Bf5 ) 3... cxd5 { Recaptures with the pawn, keeping a pawn in the centre. } 4. Bb5+ ( 4. Bb3 Nc6 { Develops and hits d4 and e5. White's bishop on b3 bites on the d5 pawn, which is well guarded. } ) ( 4. Be2 Nc6 ) ( 4. Bd3 Nc6 ) 4... Bd7 { Blocks with the bishop so White cannot gain time with a knight check. } 5. Bxd7+ Nxd7 { Trades off White's best piece and develops. } 6. d4 e6 { Supports d5. Black has the better pawn centre and can develop easily. } 7. Nf3 Ngf6 { Develops with no weaknesses. } 8. O-O Bd6 { The bishop eyes the kingside and Black is ready to castle. Black's plan: castle, then play ...Qc7 and ...Rc8 on the open c-file. If White varies, castle and take the c-file. } *

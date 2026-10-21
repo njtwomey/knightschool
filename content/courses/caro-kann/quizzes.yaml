@@ -50,3 +50,34 @@
   examples:
     match: [Nd6 mate, knight to d6 is checkmate, smothered mate on d6]
     miss: [Qxe7, it attacks the queen, nothing is wrong]
+- id: d4-unguarded
+  line: 1. e4 c6 2. Nf3 d5 3. exd5 cxd5 4. d4 Nc6 5. Nc3 Bg4 6. h3 Bxf3 7. Qxf3 e6 8. Bd3
+  prompt: White just played 8.Bd3. What can Black win, and why?
+  accept:
+    - keywords: [[nxd4]]
+      feedback: Yes. Nothing guards d4 any more, so 8...Nxd4 wins a pawn.
+    - keywords: [[d4], [take, lose, unguarded]]
+      all: true
+      feedback: Yes. The queen left d1 for f3 and the bishop on d3 blocks the d-file, so the pawn on d4 is free.
+  reveal: 8...Nxd4 wins a pawn. The queen on f3 does not guard d4, and the bishop on d3 shuts the d-file.
+  showMove: Nxd4
+  examples:
+    match: [Nxd4, take the pawn on d4, the d4 pawn is unguarded so win it]
+    miss: [castle, Nf6, attack the queen with the knight]
+- id: qb5-check
+  line: 1. e4 c6 2. d4 d5 3. e5 Bf5 4. Bd3 Bxd3 5. Qxd3 e6 6. Nf3 c5 7. dxc5 Bxc5 8. Qb5+
+  prompt: White checks on b5. How should Black block the check, and why?
+  accept:
+    - keywords: [[nd7]]
+      feedback: Yes. The knight on d7 blocks the check and guards the bishop on c5.
+    - keywords: [[knight], [d7]]
+      all: true
+      feedback: Yes. From d7 the knight also guards the bishop on c5.
+    - keywords: [[nc6, qd7]]
+      partial: true
+      feedback: That blocks the check, but the bishop on c5 is left unguarded and the queen takes it.
+  reveal: 8...Nd7 is the only good block. The queen on b5 attacks the bishop on c5 as well as the king, and only the knight on d7 also guards c5.
+  showMove: Nd7
+  examples:
+    match: [Nd7, block with the knight on d7, knight to d7 so c5 stays guarded]
+    miss: [Nc6, Qd7, move the king to f8]
