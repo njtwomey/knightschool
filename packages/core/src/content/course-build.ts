@@ -6,6 +6,7 @@ import { epdAfterPgn } from '../chess/chess';
 import { numberedMove } from '../chess/notation';
 import { matchAnswer } from '../training/quiz';
 import { parseVariantHeader } from './tags';
+import { walkMoves } from '../navigation/content-walk';
 import {
   Opening,
   OpeningContent,
@@ -198,12 +199,7 @@ export function buildOpening(
     };
     walk(START_EPD, 0, variant.game.moves, true);
     // Every line of a course passes through its trigger position: that is what makes it one course.
-    let walked = START_EPD;
-    const path = [walked];
-    for (const uci of mainUcis) {
-      walked = nodes.get(walked)!.moves.find((edge) => edge.uci === uci)!.to;
-      path.push(walked);
-    }
+    const path = [START_EPD, ...walkMoves(START_EPD, mainUcis, (epd) => nodes.get(epd)?.moves).map((edge) => edge.to)];
     if (!path.includes(triggerEpd)) {
       throw new Error(`${variant.source}: the main line does not pass through the trigger "${manifest.trigger}"`);
     }

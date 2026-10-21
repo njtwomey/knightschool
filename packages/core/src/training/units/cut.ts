@@ -1,3 +1,4 @@
+import { pathFromUcis, pathSteps } from '../../navigation/content-walk';
 import type { LineEdge, OpeningContent, Variant } from '../../schema/content';
 import { cardDefinitions, type CardDefinition } from '../cards';
 import { attachExtras } from './extras';
@@ -85,10 +86,8 @@ function learnerTree(content: OpeningContent, definitions: Map<string, CardDefin
   for (const variant of opening.variants) {
     const next = new Map<string, string>();
     let epd = opening.rootEpd;
-    for (const uci of variant.mainLine) {
-      next.set(epd, uci);
-      const edge = nodes[epd]?.moves.find((candidate) => candidate.uci === uci);
-      if (!edge) break;
+    for (const edge of pathFromUcis(content, variant.mainLine)) {
+      next.set(epd, edge.uci);
       epd = edge.to;
     }
     mainNext.set(variant.id, next);
@@ -190,16 +189,9 @@ function findBranches(tree: LearnerTree, main: Variant): Branch[] {
 
 /** The main line's moves from the start, up to a learner move that is not the repertoire's. */
 function mainLineEdges(tree: LearnerTree, main: Variant): LineEdge[] {
-  const edges: LineEdge[] = [];
-  let epd = tree.rootEpd;
-  for (const uci of main.mainLine) {
-    const node = tree.content.nodes[epd];
-    const edge = node?.moves.find((candidate) => candidate.uci === uci);
-    if (!node || !edge || (node.isOurTurn && !edge.isRepertoire)) break;
-    edges.push(edge);
-    epd = edge.to;
-  }
-  return edges;
+  const steps = pathSteps(tree.content, main.mainLine);
+  const stop = steps.findIndex((step) => step.ours && !step.edge.isRepertoire);
+  return steps.slice(0, stop < 0 ? steps.length : stop).map((step) => step.edge);
 }
 
 /**

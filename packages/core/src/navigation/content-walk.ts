@@ -78,15 +78,7 @@ export function orderedMoves(node: LineNode): LineEdge[] {
 export function variantPath(content: OpeningContent, variantId: string): LineEdge[] {
   const variant = content.opening.variants.find((candidate) => candidate.id === variantId);
   if (!variant) throw new Error(`No variant ${variantId} in ${content.opening.id}`);
-  const path: LineEdge[] = [];
-  let node = nodeAt(content, content.opening.rootEpd);
-  for (const uci of variant.mainLine) {
-    const edge = node.moves.find((candidate) => candidate.uci === uci);
-    if (!edge) throw new Error(`Variant ${variantId}: no move ${uci} at ${node.epd}`);
-    path.push(edge);
-    node = nodeAt(content, edge.to);
-  }
-  return path;
+  return pathFromUcis(content, variant.mainLine, { strict: true, label: `Variant ${variantId}` });
 }
 
 /** One move of a line, with whose it is. */
@@ -97,22 +89,21 @@ export type LineStep = {
   ours: boolean;
 };
 
-/** A run of moves (UCI) from the start position as steps, as far as the course knows them. */
-export function pathSteps(content: OpeningContent, ucis: string[]): LineStep[] {
-  const edges = pathFromUcis(content, ucis);
+/** A path from the start position as steps. */
+function toSteps(content: OpeningContent, edges: LineEdge[]): LineStep[] {
   return edges.map((edge, i) => {
     const fromEpd = i === 0 ? content.opening.rootEpd : edges[i - 1]!.to;
     return { fromEpd, edge, ours: nodeAt(content, fromEpd).isOurTurn };
   });
 }
 
+/** A run of moves (UCI) from the start position as steps, as far as the course knows them. */
+export const pathSteps = (content: OpeningContent, ucis: readonly string[]): LineStep[] =>
+  toSteps(content, pathFromUcis(content, ucis));
+
 /** A variant's main line as steps from the start position. */
-export function lineSteps(content: OpeningContent, variantId: string): LineStep[] {
-  return variantPath(content, variantId).map((edge, index, path) => {
-    const fromEpd = index === 0 ? content.opening.rootEpd : path[index - 1]!.to;
-    return { fromEpd, edge, ours: nodeAt(content, fromEpd).isOurTurn };
-  });
-}
+export const lineSteps = (content: OpeningContent, variantId: string): LineStep[] =>
+  toSteps(content, variantPath(content, variantId));
 
 /** A path carried on to the end of its line, preferring the main line at each branch. */
 export function continueLine(content: OpeningContent, path: LineEdge[]): LineEdge[] {
@@ -141,20 +132,57 @@ export function lineName(content: OpeningContent, edges: LineEdge[]): string | u
 }
 
 /**
- * Walks a list of UCI moves through the tree from the start, as far as the course knows them: a saved view or a shared
- * link carries moves like this. Stops at the first move the course does not have, so a stale link degrades to a prefix.
+ * Walks UCI moves from `start` through any tree of moves, where `movesAt` gives the moves out of a position. Stops at
+ * the first move the tree does not have; `onMissing` may throw there instead.
  */
-export function pathFromUcis(content: OpeningContent, ucis: string[]): LineEdge[] {
-  const path: LineEdge[] = [];
-  let node = nodeAt(content, content.opening.rootEpd);
+export function walkMoves<E extends { uci: string; to: string }>(
+  start: string,
+  ucis: readonly string[],
+  movesAt: (epd: string) => readonly E[] | undefined,
+  onMissing?: (uci: string, epd: string) => void,
+): E[] {
+  const path: E[] = [];
+  let epd = start;
   for (const uci of ucis) {
-    const edge = node.moves.find((candidate) => candidate.uci === uci);
-    if (!edge) break;
+    const edge = movesAt(epd)?.find((candidate) => candidate.uci === uci);
+    if (!edge) {
+      onMissing?.(uci, epd);
+      break;
+    }
     path.push(edge);
-    node = nodeAt(content, edge.to);
+    epd = edge.to;
   }
   return path;
 }
+
+/**
+ * Walks a list of UCI moves through the course from the start, as far as the course knows them: a saved view or a
+ * shared link carries moves like this. Stops at the first move the course does not have, so a stale link degrades to a
+ * prefix. `strict` throws there instead, naming what was walked (`label`).
+ */
+export function pathFromUcis(
+  content: OpeningContent,
+  ucis: readonly string[],
+  options: { strict?: boolean; label?: string } = {},
+): LineEdge[] {
+  const { strict = false, label = 'Moves' } = options;
+  return walkMoves(
+    content.opening.rootEpd,
+    ucis,
+    (epd) => nodeAt(content, epd).moves,
+    strict
+      ? (uci, epd) => {
+          throw new Error(`${label}: no move ${uci} at ${epd}`);
+        }
+      : undefined,
+  );
+}
+
+/** The positions a path passes through from the start: where it starts, then after each move. */
+export const positionsAlong = (content: OpeningContent, edges: readonly LineEdge[]): string[] => [
+  content.opening.rootEpd,
+  ...edges.map((edge) => edge.to),
+];
 
 /**
  * The ply where a line becomes itself: its [Snapshot] when the author chose one, else the deepest position along it

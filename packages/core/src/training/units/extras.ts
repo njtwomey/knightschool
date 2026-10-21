@@ -1,15 +1,10 @@
+import { pathFromUcis, positionsAlong } from '../../navigation/content-walk';
 import type { OpeningContent } from '../../schema/content';
 import type { CourseUnit, UnitStretch } from './types';
 
 /** The positions a stretch passes through: where it starts, and after each of its moves. */
 export function stretchPositions(content: OpeningContent, stretch: Pick<UnitStretch, 'moves' | 'from'>): string[] {
-  const positions = [content.opening.rootEpd];
-  for (const uci of stretch.moves) {
-    const edge = content.nodes[positions.at(-1)!]?.moves.find((candidate) => candidate.uci === uci);
-    if (!edge) break;
-    positions.push(edge.to);
-  }
-  return positions.slice(stretch.from);
+  return positionsAlong(content, pathFromUcis(content, stretch.moves)).slice(stretch.from);
 }
 
 /**

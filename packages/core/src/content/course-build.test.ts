@@ -12,9 +12,11 @@ import {
   pathSteps,
   ourMoveNodes,
   pathTo,
+  positionsAlong,
   preferredMove,
   transpositions,
   variantPath,
+  walkMoves,
 } from '../navigation/content-walk';
 import { START_EPD } from '../chess/epd';
 
@@ -143,6 +145,16 @@ describe('buildOpening', () => {
     expect(steps.map((step) => step.ours)).toEqual([true, false, true, false]);
     expect(steps[3]!.fromEpd).toBe(steps[2]!.edge.to);
     expect(pathSteps(content, [])).toEqual([]);
+  });
+
+  it('walks moves leniently, or strictly naming what was walked', () => {
+    const moves = ['e2e4', 'e7e5', 'a2a3'];
+    const path = pathFromUcis(content, moves);
+    expect(path.map((edge) => edge.san)).toEqual(['e4', 'e5']);
+    expect(positionsAlong(content, path)).toEqual([content.opening.rootEpd, path[0]!.to, path[1]!.to]);
+    expect(() => pathFromUcis(content, moves, { strict: true, label: 'Here' })).toThrow(/^Here: no move a2a3 at /);
+    const movesAt = (epd: string) => content.nodes[epd]?.moves;
+    expect(walkMoves(content.opening.rootEpd, moves, movesAt)).toEqual(path);
   });
 
   it('carries a path on to the end of its line', () => {
