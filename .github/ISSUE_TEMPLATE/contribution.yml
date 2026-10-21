@@ -1,0 +1,25 @@
+name: Contribution
+description: Propose lines written in Knight School (Profile, Author, Publish) for the app.
+title: 'Contribution: '
+labels: [contribution]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Knight School filled this in from your course. It is one YAML document: the course (as `course.yaml`) and the
+        lines it needs, each with its headers and its moves as PGN, so anyone can paste the moves into a board to check
+        them. A course of its own has the opening `my-white-courses` or `my-black-courses`; the reviewer gives it a place.
+  - type: textarea
+    id: contribution
+    attributes:
+      label: The contribution (YAML)
+      description: >-
+        If it was too long for the link, paste it here (the app copied it), or attach the downloaded file below.
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Where the lines come from, what you checked, or the attached file when the YAML did not fit above.
