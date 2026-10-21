@@ -13,6 +13,7 @@ import {
   introductionOrder,
   isQuizCard,
   lineQuestions,
+  followOn,
   planSession,
   quizCardId,
   quizDefinitions,
@@ -427,5 +428,25 @@ describe('namedPly', () => {
     c.nodes[path[2]!.to]!.name = "King's Knight Opening";
     c.nodes[path[4]!.to]!.name = 'Italian Game';
     expect(namedPly(c, 'main')).toBe(5);
+  });
+});
+
+describe('followOn', () => {
+  it('carries on along the line to your next move, past the reply, and stops at its end', () => {
+    const c = content();
+    const start = c.opening.rootEpd;
+    const first = followOn(c, start, 'e2e4', 'main')!;
+    expect(first.definition.expectedUci).toBe('g1f3');
+    expect(first.line).toBe('main');
+    const second = followOn(c, first.definition.epd, 'g1f3', 'main')!;
+    expect(second.definition.expectedUci).toBe('f1c4');
+    expect(followOn(c, second.definition.epd, 'f1c4', 'main')).toBeNull(); // 3...Bc5 ends the line
+  });
+
+  it('stays on the line it was given, and does not ask a move marked as a mistake', () => {
+    const c = content();
+    const afterNf3 = followOn(c, c.opening.rootEpd, 'e2e4', 'side')!;
+    expect(afterNf3.definition.expectedUci).toBe('g1f3');
+    expect(followOn(c, afterNf3.definition.epd, 'g1f3', 'side')!.definition.expectedUci).toBe('f3e5');
   });
 });

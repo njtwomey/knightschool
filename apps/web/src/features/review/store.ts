@@ -2,7 +2,10 @@ import {
   createScheduler,
   freePractice,
   isQuizCard,
+  followOn,
   lineQuestions,
+  MOVES_PER_QUESTION,
+  type MovesPerQuestion,
   matchAnswer,
   newCard,
   recordQuizAnswer,
@@ -40,6 +43,11 @@ import {
 const scheduler = createScheduler();
 const SOURCE_KEY = 'knightschool.quiz.source';
 const WEIGHTING_KEY = 'knightschool.quiz.weighting';
+const MOVES_KEY = 'knightschool.quiz.moves';
+const savedMoves = (): MovesPerQuestion => {
+  const value = Number(savedChoice(MOVES_KEY, '1'));
+  return (MOVES_PER_QUESTION as readonly number[]).includes(value) ? (value as MovesPerQuestion) : 1;
+};
 
 /** "due" is the scheduled session; anything else is free practice from those courses. */
 export const DUE = 'due';
@@ -86,6 +94,13 @@ type ReviewState = {
   /** Free practice only: an even draw, or favouring the positions more games reach. */
   weighting: Weighting;
   setWeighting: (weighting: Weighting) => void;
+  /** How many of your moves a question runs for: after the answer the line carries on, up to this many (0: to its end). */
+  movesPerQuestion: MovesPerQuestion;
+  setMovesPerQuestion: (moves: MovesPerQuestion) => void;
+  /** The run of follow-on moves under way: how many more may follow, and the line they keep to. */
+  chain: { left: number; line: string } | null;
+  /** Follow-on questions whose card was never introduced: asked, but not written to the schedule. */
+  unsaved: string[];
   /** Returns true when the move was the expected one. Illegal moves are ignored. */
   submitMove: (uci: string) => boolean;
   /** A typed answer to a quiz card. */
@@ -115,6 +130,8 @@ export type LineScope = { course: string; line: string };
 export const useReview = create<ReviewState>((set, get) => {
   /** Only the schedule's own session is saved; free practice and a line's quiz never touch it. */
   const saving = () => get().source === DUE && !get().scope;
+  /** Whether this card's answer goes to the schedule. */
+  const saves = (card: Card) => saving() && !get().unsaved.includes(card.id);
   function recordMiss(card: Card, content: OpeningContent, playedUci: string) {
     const key = missKey(card.epd, playedUci, card.expectedUci);
     if (get().misses.some((miss) => miss.key === key)) return;
@@ -132,7 +149,42 @@ export const useReview = create<ReviewState>((set, get) => {
     };
     set((state) => ({ misses: [...state.misses, miss] }));
   }
+  /**
+   * After a move question: carry on along its line for up to `movesPerQuestion` of your moves (the opponent's reply in
+   * between is shown as the last move), then go on to the next question in the queue.
+   */
   function advance() {
+    const { index, queue, contents, chain, movesPerQuestion } = get();
+    const card = queue[index];
+    const content = card ? contents[card.openingId] : undefined;
+    const left = chain ? chain.left : movesPerQuestion === 0 ? Number.POSITIVE_INFINITY : movesPerQuestion - 1;
+    if (card && content && !isQuizCard(card) && left > 0) {
+      const next = followOn(content, card.epd, card.expectedUci, chain?.line);
+      if (next) {
+        void askNext(next.definition, next.line, left - 1);
+        return;
+      }
+    }
+    set({ chain: null });
+    nextInQueue();
+  }
+  /** Puts a follow-on question next: the stored card when there is one, so its schedule carries on. */
+  async function askNext(definition: Parameters<typeof newCard>[0], line: string, left: number) {
+    let card = newCard(definition, new Date());
+    let unsaved = false;
+    if (saving()) {
+      const stored = await storageOrThrow().cards.get(definition.id);
+      if (stored && stored.expectedUci === definition.expectedUci) card = stored;
+      else unsaved = true; // never introduce a card outside the path, nor overwrite another answer's schedule
+    }
+    set((state) => ({
+      queue: [...state.queue.slice(0, state.index + 1), card, ...state.queue.slice(state.index + 1)],
+      chain: { left, line },
+      unsaved: unsaved ? [...state.unsaved, card.id] : state.unsaved,
+    }));
+    nextInQueue();
+  }
+  function nextInQueue() {
     const { index, queue } = get();
     if (index + 1 >= queue.length)
       set({ phase: 'summary', badge: null, advancing: false, quizResult: null, holding: false });
@@ -166,6 +218,13 @@ export const useReview = create<ReviewState>((set, get) => {
     source: savedChoice(SOURCE_KEY, DUE),
     scope: null,
     weighting: savedWeighting(WEIGHTING_KEY),
+    movesPerQuestion: savedMoves(),
+    setMovesPerQuestion(moves) {
+      saveChoice(MOVES_KEY, String(moves));
+      set({ movesPerQuestion: moves, chain: null });
+    },
+    chain: null,
+    unsaved: [],
     setWeighting(weighting) {
       saveChoice(WEIGHTING_KEY, weighting);
       set({ weighting });
@@ -187,6 +246,8 @@ export const useReview = create<ReviewState>((set, get) => {
       clearTimers();
       set({
         phase: 'loading',
+        chain: null,
+        unsaved: [],
         error: null,
         advancing: false,
         badge: null,
@@ -310,7 +371,7 @@ export const useReview = create<ReviewState>((set, get) => {
         advancing: true,
         results: [...state.results, next.rating!],
       }));
-      if (saving()) {
+      if (saves(card)) {
         const answer = recordAnswer(scheduler, card, next, get().sessionId, new Date());
         void storageOrThrow()
           .reviews.record(answer.card, answer.review)

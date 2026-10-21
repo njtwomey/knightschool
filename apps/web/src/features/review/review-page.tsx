@@ -1,5 +1,13 @@
 import { Page } from '@/components/page';
-import { explainMove, pathTo, playUci, type LineEdge, type OpeningContent } from '@knightschool/core';
+import {
+  MOVES_PER_QUESTION,
+  type MovesPerQuestion,
+  explainMove,
+  pathTo,
+  playUci,
+  type LineEdge,
+  type OpeningContent,
+} from '@knightschool/core';
 import { EcoLink } from '@/components/eco-link';
 import { Eye, Lightbulb } from 'lucide-react';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
@@ -14,6 +22,7 @@ import { RichText } from '@/components/rich-text';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SourceSelect } from '@/components/source-select';
 import { WeightingSelect } from '@/components/weighting-select';
@@ -45,7 +54,37 @@ const HeaderSlot = createContext<ReactNode>(null);
 /** Chooses between the scheduled session and free practice from any course. Nothing in free practice is saved. */
 function SourceBar() {
   const header = useContext(HeaderSlot);
-  return header ?? <SourceChoice />;
+  return (
+    <div className="grid gap-2">
+      {header ?? <SourceChoice />}
+      <MovesChoice />
+    </div>
+  );
+}
+
+/** How many of your moves a question runs for: the line carries on after the answer, up to this many. */
+function MovesChoice() {
+  const moves = useReview((state) => state.movesPerQuestion);
+  return (
+    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+      <span>Each question runs for</span>
+      <Select
+        value={String(moves)}
+        onValueChange={(value) => useReview.getState().setMovesPerQuestion(Number(value) as MovesPerQuestion)}
+      >
+        <SelectTrigger className="h-8 w-auto" aria-label="Moves per question">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {MOVES_PER_QUESTION.map((n) => (
+            <SelectItem key={n} value={String(n)}>
+              {n === 0 ? 'the rest of the line' : n === 1 ? '1 move' : `up to ${n} moves`}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
 }
 
 function SourceChoice() {

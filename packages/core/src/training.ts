@@ -4,7 +4,7 @@ import { pickWeighted, popularityWeight, type Weighting } from './sampling';
 import type { Attempt } from './attempt';
 import { newCard, scheduleReview } from './scheduler';
 import type { LineNode, OpeningContent } from './schema/content';
-import { variantPath } from './tree-helpers';
+import { lineSteps, variantPath } from './tree-helpers';
 
 /** What decides which positions earn cards: the popularity cut-off, and whether rare lines are included. */
 export type CardOptions = { minPopularity?: number; includeRare?: boolean };
@@ -191,4 +191,44 @@ export function lineQuestions(content: OpeningContent, lineId: string): CardDefi
   }
   questions.push(...quizzes.filter((quiz) => quiz.epd === positions[path.length]));
   return questions;
+}
+
+/** How many of your moves one quiz question runs for: 1 to 5, or the rest of the line (0). */
+export type MovesPerQuestion = 0 | 1 | 2 | 3 | 4 | 5;
+export const MOVES_PER_QUESTION: readonly MovesPerQuestion[] = [1, 2, 3, 4, 5, 0];
+
+/**
+ * The next question after answering one: carry on along a line through the position, past the opponent's reply, to
+ * your next move there. `line` keeps a run of questions on one line; without it, one of the lines whose move this is
+ * is picked (`random`), preferring lines that are drilled. Stops (null) at the end of the line or at a move marked as a
+ * mistake, which is shown, never asked.
+ */
+export function followOn(
+  content: OpeningContent,
+  epd: string,
+  expectedUci: string,
+  line?: string,
+  random: () => number = Math.random,
+): { definition: CardDefinition; line: string } | null {
+  const edge = content.nodes[epd]?.moves.find((move) => move.uci === expectedUci);
+  if (!edge) return null;
+  const variants = content.opening.variants.filter((variant) => edge.variants.includes(variant.id));
+  const drilled = variants.filter((variant) => !variant.alternative && variant.kind === 'line');
+  const pool = drilled.length ? drilled : variants;
+  const chosen = (line && pool.find((variant) => variant.id === line)) || pool[Math.floor(random() * pool.length)];
+  if (!chosen) return null;
+  const steps = lineSteps(content, chosen.id);
+  const at = steps.findIndex((step) => step.fromEpd === epd && step.edge.uci === expectedUci);
+  if (at < 0) return null;
+  const next = steps.slice(at + 1).find((step) => step.ours);
+  if (!next || next.edge.annotation?.nag.some((nag) => MISTAKE_NAGS.has(nag))) return null;
+  return {
+    line: chosen.id,
+    definition: {
+      id: cardId(content.opening.id, next.fromEpd),
+      openingId: content.opening.id,
+      epd: next.fromEpd,
+      expectedUci: next.edge.uci,
+    },
+  };
 }
