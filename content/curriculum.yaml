@@ -37,3 +37,5 @@
   prerequisites: [vs-e5-italian]
 - id: rousseau-gambit
   prerequisites: [e5-open-games]
+- id: two-knights
+  prerequisites: [e5-open-games]

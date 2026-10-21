@@ -1,0 +1,63 @@
+- id: na5-not-nxd5
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5
+  prompt: White has taken on d5. Why does Black play 5...Na5 instead of taking back with the knight?
+  accept:
+    - keywords: [[fried, liver, nxf7, f7, sacrifice]]
+      feedback: Yes. 5...Nxd5 allows 6.Nxf7, the Fried Liver Attack. 5...Na5 chases the bishop off the diagonal to f7 first.
+    - keywords: [[bishop, c4], [attack, chase, away, off]]
+      all: true
+      feedback: Yes. 5...Na5 hits the bishop on c4, the piece that aims at f7, so White has no time for Nxf7.
+  reveal: 5...Nxd5 runs into 6.Nxf7, the Fried Liver Attack. 5...Na5 attacks the bishop on c4 first, so the attack on f7 never gets going.
+  showMove: Na5
+  examples:
+    match:
+      - taking with the knight allows the Fried Liver
+      - Nxd5 loses to Nxf7
+      - Na5 attacks the bishop on c4
+      - it chases the bishop away from the f7 diagonal
+    miss:
+      - it develops a piece
+      - to castle quickly
+      - it protects the e5 pawn
+- id: ba4-queen-d4
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Ba4 h6 9. Nf3 e4 10. Ne5
+  prompt: White's knight has jumped to e5. Which queen move wins material, and why?
+  accept:
+    - keywords: [[qd4, d4], [e5, f2, fork, both, two, knight]]
+      all: true
+      feedback: Yes. 10...Qd4 hits the knight on e5 and the pawn on f2, and White cannot cover both.
+    - keywords: [[qd4, d4]]
+      partial: true
+      feedback: Close. Say what the queen attacks on d4.
+  reveal: 10...Qd4 attacks the knight on e5 and the f2 pawn together. The bishop on a4 is too far away to help, and Black wins material.
+  showMove: Qd4
+  examples:
+    match:
+      - Qd4 attacks the knight on e5 and f2
+      - queen to d4 forks e5 and f2
+      - Qd4 hits both the knight and the f2 pawn
+    miss:
+      - Qd5 attacking e5
+      - castle kingside
+      - Bd6 develops
+- id: fork-trick-d5
+  line: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Nc3 Nxe4 5. Nxe4
+  prompt: Black took on e4 and White took the knight back. Which pawn move wins the piece back, and why?
+  accept:
+    - keywords: [[d5], [fork, attack, both, two, bishop, knight]]
+      all: true
+      feedback: Yes. ...d5 attacks the bishop on c4 and the knight on e4 at once, so White cannot save both.
+    - keywords: [[d5]]
+      partial: true
+      feedback: Close. Say what the pawn on d5 attacks.
+  reveal: 5...d5 forks the bishop on c4 and the knight on e4, so Black wins one of them back and the material is level.
+  showMove: d5
+  examples:
+    match:
+      - d5 forks the bishop and knight
+      - pawn to d5 attacks two pieces
+      - d5 hits both the bishop and the knight
+    miss:
+      - castle kingside
+      - it controls the centre
+      - Qh4

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Pianissimo, Fifth-Move Alternatives"]
+[ECO "C50"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork"]
+[Themes "castle-early,solid-centre"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.d3 Nf6 5.Ng5, 5.Bg5, 5.c3, 5.Nc3, 5.h3 or 5.Be3"]
+[Start "italian-quiet-fourths 4.d3 Nf6"]
+
+5. Ng5 { Attacks f7 a second time, but with d3 played, White has no follow-up. } ( 5. Bg5 h6 6. Bh4 ( 6. Bxf6 Qxf6 7. Nc3 Ne7 { The knight heads for g6 and frees the c-pawn. If Nd5, Black trades it with ...Nxd5. } ) 6... d6 7. c3 a6 { The bishop gets the a7 square before d4 can hit it. If the pin on f6 gets annoying, ...g5 breaks it. } ) ( 5. c3 d6 ) ( 5. Nc3 d6 ) ( 5. h3 d6 ) ( 5. Be3 Bxe3 { Trades the bishops so White's e-pawns are doubled. } 6. fxe3 d6 ) 5... O-O 6. O-O ( 6. Nc3 h6 7. Nf3 d6 ) ( 6. f4 $2 { Opens lines toward White's own king before castling. } 6... d5 { Strikes in the centre and opens the c8 bishop toward g4. White's king is stuck in the middle. } ) ( 6. Nxf7 $6 Rxf7 7. Bxf7+ Kxf7 { Two minor pieces for a rook and a pawn: the knights and bishops are stronger than the rook this early. } ) 6... h6 { The knight on g5 must go back, so White has spent two moves on it for nothing. } 7. Nf3 d6 { Black has a solid centre and a lead in development. Plan: ...a6 and ...Ba7, ...Be6 to trade White's bishop, and ...Ne7-g6 toward the kingside. } *

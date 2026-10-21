@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Two Knights Defence"]
+[Variation "Italian Game: Two Knights Defense, Modern Bishop's Opening"]
+[ECO "C55"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "transposition,castle-early,solid-centre"]
+[For "black"]
+[Kind "main"]
+[Opponent "4.d3"]
+[Start "two-knights-quiet-d3 4.d3"]
+
+4... Bc5 { The bishop aims at f2, and Black uses the same quiet set-up as after 3...Bc5: ...d6, ...O-O, ...a6 and ...h6. Almost every White fifth move leads to a position from the Open Games course. } 5. c3 ( 5. O-O d6 6. c3 O-O ) ( 5. Nc3 d6 { The Italian Four Knights with d3, a quiet and level position. } ) ( 5. Ng5 O-O { Castling defends f7 with the rook, and Nxf7 would cost White the knight and bishop for a rook. } ) ( 5. h3 d6 ) ( 5. Bg5 h6 { Asks the bishop to decide at once: take on f6 or step back. } ) 5... d6 6. O-O O-O *

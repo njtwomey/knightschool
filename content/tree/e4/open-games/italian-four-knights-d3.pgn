@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Piano, Four Knights with d3"]
+[ECO "C50"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "castle-early,solid-centre"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.Nc3 Nf6 5.d3 d6"]
+[Start "italian-quiet-fourths 4.Nc3 Nf6 5.d3 d6"]
+
+6. h3 { Stops ...Bg4, which would pin the knight on f3 to the queen. } ( 6. O-O a6 ) ( 6. Be3 Bxe3 { Trades the bishops, so White's pawns on e3 and f2 are doubled after fxe3. } 7. fxe3 O-O ) ( 6. Ng5 O-O { Nxf7 would cost White the knight and bishop for a rook, so Black castles and ignores the knight. } 7. O-O Bg4 { Develops with a hit on the queen. White must move it before trying anything on f7, and Black then plays ...h6. } 8. Qe1 h6 ) ( 6. Na4 Bb6 { Keeps the bishop. If the knight takes on b6, the a-pawn recaptures and the rook on a8 gets the open a-file. } 7. Nxb6 axb6 ) 6... a6 { The usual plan: the bishop gets a retreat on a7, then Black castles. } 7. O-O { The same position as after 5.O-O d6 6.d3 a6 7.h3. } ( 7. a3 O-O ) ( 7. Be3 Bxe3 8. fxe3 O-O ) 7... O-O *

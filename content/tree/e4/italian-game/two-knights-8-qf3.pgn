@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Two Knights Defence"]
+[Variation "Italian Game: Two Knights Defense, Polerio Defense, Bogoljubov Variation"]
+[ECO "C59"]
+[Character "sharp"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "development-lead,open-lines"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "8.Qf3 or 8.Bd3"]
+[Start "two-knights-ng5 7...bxc6"]
+
+8. Qf3 { Pins the c6 pawn: if it takes the bishop, Qxa8 wins the rook in the corner. } ( 8. Bd3 Nd5 { The knight takes the centre square and blocks the d-file. } 9. Nf3 Bd6 { Guards e5 and gets ready to castle. Black has the centre for the pawn. } ) 8... Rb8 { Takes the rook off the long diagonal, so the bishop on b5 really is attacked now. } 9. Bd3 ( 9. Be2 Be7 ) ( 9. Bxc6+ Nxc6 10. Qxc6+ Nd7 { The knight blocks the check. White is two pawns up but has only the queen out, and Black gains time on it with ...Rb6 or ...Be7 and ...O-O. The engine prefers Black. } ) ( 9. Ba4 Be7 ) 9... Be7 10. Nc3 O-O { Black has the open b-file and quicker development for the pawn. Plan: ...h6 to send the knight back, ...Rb4 or ...e4, and ...Nb7-c5 to bring the knight back into play. } *

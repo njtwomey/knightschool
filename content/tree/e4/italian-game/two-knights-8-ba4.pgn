@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Two Knights Defence"]
+[Variation "Italian Game: Two Knights Defense, Polerio Defense, 8.Ba4"]
+[ECO "C58"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "fork,hanging-piece"]
+[Themes "development-lead,tempo-gain"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "8.Ba4"]
+[Start "two-knights-ng5 7...bxc6"]
+
+8. Ba4 { Keeps the bishop, but on a4 it is far from White's king and the knight on g5 is left without help. } 8... h6 { Kicks the knight first, before it can settle on e4 or jump to f7. } 9. Nf3 ( 9. Nh3 Bg4 { Develops with a hit on the queen, so White has no time to untangle. } 10. f3 Bxh3 11. gxh3 Bc5 { White's kingside pawns are broken and the king cannot castle safely. } ) 9... e4 { Hits the knight again: it has to move once more while Black's pieces come out. } 10. Ne5 ( 10. Qe2 Bd6 { Develops and gets ready to castle. The pawn on e4 cramps White's pieces. } ) 10... Qd4 { Attacks the knight on e5 and the pawn on f2 together. The bishop on a4 is too far away to help. } 11. f4 ( 11. Nxf7 Kxf7 { The knight cannot get out, and Black is a piece for two pawns up. } ) ( 11. Bxc6+ Nxc6 12. Nxc6 Qc5 { Hits the knight on c6, and it has no safe square. } ) 11... Bc5 { Threatens ...Qf2 checkmate. White must defend, and then Black takes the bishop on a4 or the knight on e5. Black is winning. } *

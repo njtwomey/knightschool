@@ -1,0 +1,59 @@
+name: Two Knights Defence
+eco: C55
+side: black
+opening: two-knights-defence
+tier: 3
+trigger: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6'
+summary: >-
+  Against the Italian Game Black plays 3...Nf6 instead of 3...Bc5, attacking the pawn on e4 at once. The course
+  covers White's sharp 4.Ng5, the quiet 4.d3, and the 4.Nc3, 4.d4 and 4.O-O tries.
+about:
+  idea: >-
+    The knight on f6 hits e4 straight away, so White has to defend it or offer it, and Black gets active play from
+    the first moves. Against the popular quiet 4.d3, Black simply plays ...Bc5 and ...d6 and reaches the same calm
+    Italian positions as the Open Games course.
+  risks: >-
+    4.Ng5 attacks f7 twice. Black must answer 4...d5 and, after 5.exd5, 5...Na5: the natural 5...Nxd5 allows the
+    Fried Liver Attack. After 5...Na5 Black is a pawn down for good development, which the engine rates as fair, but
+    the moves have to be known.
+  suits: >-
+    Players who like active pieces and are happy to learn a few exact moves against 4.Ng5. If you would rather avoid
+    that, 3...Bc5 in the Open Games course is the calmer choice.
+plans:
+  - Against 4.Ng5, play 4...d5 and 5...Na5, never 5...Nxd5. Chase the bishop and the knight with ...c6, ...h6 and
+    ...e4, and develop fast for the pawn.
+  - Against 4.d3, play ...Bc5, ...d6, ...O-O, ...a6 and ...h6, the same set-up as against the quiet Italian.
+  - Against 4.Nc3, take on e4 with the knight, because ...d5 then forks the bishop and the knight and wins the piece back.
+  - Against 4.d4, take on d4 and use the e4 pawn as a target with ...Nxe4 or ...d5.
+motifs: [f7-weakness, fork-trick, counter-in-the-centre, develop-first, castle-early, knight-on-the-rim]
+tags: [e4, open, italian, black]
+lines:
+  - id: two-knights-ng5
+    kind: main
+    section: 'The sharp reply: 4.Ng5'
+  - id: two-knights-d3
+    kind: main
+    section: 'The quiet reply: 4.d3'
+  - id: two-knights-8-ba4
+    section: 'The sharp reply: 4.Ng5'
+  - id: two-knights-8-qf3
+    section: 'The sharp reply: 4.Ng5'
+  - id: two-knights-6-d3
+    section: 'The sharp reply: 4.Ng5'
+  - id: fried-liver
+    alternative: true
+    section: 'The sharp reply: 4.Ng5'
+  - id: fork-trick-nc3
+    kind: sideline
+    opponent: '4.Nc3'
+    section: 'The fork trick: 4.Nc3'
+  - id: two-knights-fork-trick
+    section: 'The fork trick: 4.Nc3'
+  - id: two-knights-fork-trick-bxd5
+    section: 'The fork trick: 4.Nc3'
+  - id: two-knights-fork-trick-fifth
+    section: 'The fork trick: 4.Nc3'
+  - id: two-knights-d4
+    section: 'Other fourth moves'
+  - id: two-knights-castles
+    section: 'Other fourth moves'

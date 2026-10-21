@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Two Knights Defence"]
+[Variation "Italian Game: Two Knights Defense, Modern Bishop's Opening, 4.d4"]
+[ECO "C55"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "fork,pin"]
+[Themes "centre-counter,give-back-material"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.d4"]
+[Start "two-knights-na5 3...Nf6"]
+
+4. d4 { Opens the centre at once while Black's king is still on e8. } 4... exd4 { Takes the pawn. If Black leaves it, dxe5 hits the knight on f6. } 5. O-O ( 5. e5 d5 { Hits the bishop and builds a centre, so the knight on f6 can go to e4. } 6. Bb5 Ne4 7. Nxd4 Bd7 { Breaks the pin on c6, so the knight is defended twice. } 8. Bxc6 bxc6 9. O-O Bc5 ) ( 5. Ng5 d5 { Blocks the bishop's path to f7. } 6. exd5 Qe7+ { A check that stops White from castling and wins time for ...Ne5. } 7. Kf1 Ne5 8. Qxd4 Nxc4 9. Qxc4 h6 ) ( 5. Nxd4 Nxe4 { The e4 pawn has lost its defender, so Black takes it. } 6. Nxc6 bxc6 7. O-O d5 ) 5... Nxe4 { Takes a second pawn. The knight will be attacked, but ...d5 is ready to defend it. } 6. Re1 d5 { Guards the knight with a pawn and attacks the bishop on c4. } 7. Bxd5 ( 7. Nc3 dxc4 { Takes the bishop. After Rxe4+ Be7 White wins the d4 pawn back, and Black stays a pawn up. } 8. Rxe4+ Be7 ) ( 7. Bd3 Be7 { Develops and gets ready to castle. Black is two pawns up. } ) 7... Qxd5 8. Nc3 Qd7 { Steps away from the knight's attack to a quiet square. White takes back on e4, and Black castles next. } 9. Nxe4 Be7 { Black gets the king to safety next. White has more active pieces, Black has an extra pawn on d4 for now. Plan: ...O-O, ...Qf5 or ...Bd7, and give the d4 pawn back if that finishes development. } *

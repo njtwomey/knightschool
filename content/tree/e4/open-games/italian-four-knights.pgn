@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Piano, Four Knights"]
+[ECO "C50"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "castle-early,solid-centre"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.Nc3 Nf6 5.O-O, 5.Ng5 or 5.h3"]
+[Start "italian-quiet-fourths 4.Nc3 Nf6"]
+
+5. O-O { White castles first and keeps the choice between d3 and an early d4. } ( 5. Ng5 O-O { Castles at once, so the rook guards f7 as well as the king. If Nxf7, Rxf7 and Bxf7+ Kxf7, Black has two pieces for a rook and a pawn. } 6. d3 ( 6. O-O h6 7. Nf3 d6 ) 6... h6 { The knight on g5 has nothing to do, so Black asks it to go home. } 7. Nf3 d6 ) ( 5. h3 d6 6. d3 a6 ) 5... d6 { Gives e5 a pawn defender and opens the c8 bishop: the same plan as against every quiet Italian. } 6. d3 a6 { Gives the bishop a safe retreat on a7, so Na4 or a later d4 does not trade it off or win time against it. } 7. h3 ( 7. Bg5 h6 { Asks the bishop to decide. If it takes on f6, the queen recaptures and Black keeps the bishop pair. } 8. Bxf6 Qxf6 9. Nd5 Qd8 { The queen steps back; the knight on d5 is strong but can be traded with ...Ne7 later. } 10. c3 O-O ) ( 7. a3 O-O ) ( 7. Nd5 Nxd5 { Swaps off the strong knight on d5. } 8. Bxd5 O-O ) ( 7. Be3 Bxe3 8. fxe3 O-O { White's doubled e-pawns give the f-file to White's rook, but they also leave d3 and e3 stiff. Plan: ...Be6, ...Ne7 and ...c6. } ) 7... O-O { Both kings are safe and the position is level. Plan: ...h6 to keep pieces off g5, ...Be6 to trade White's bishop on c4, and ...Ba7 when the bishop is attacked. } *

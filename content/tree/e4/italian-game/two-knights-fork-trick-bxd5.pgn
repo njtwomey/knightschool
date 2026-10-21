@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Two Knights Defence"]
+[Variation "Italian Game: Two Knights Defense, Fork Trick, 6.Bxd5 and 6.Bb5"]
+[ECO "C55"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork"]
+[Themes "bishop-pair,centre-pawns"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.Nc3 Nxe4 5.Nxe4 d5 6.Bxd5 or 6.Bb5"]
+[Start "fork-trick-nc3 5...d5"]
+
+6. Bxd5 ( 6. Bb5 { Pins the knight on c6 instead of saving the bishop on c4 from the fork. } 6... dxe4 7. Nxe5 Qg5 { Hits the knight on e5 and the pawn on g2 at once. } 8. d4 ( 8. Nxc6 Qxb5 { Takes the bishop. The knight on c6 is attacked too, so Black wins a piece. } ) 8... Qxg2 9. Rf1 Bd6 ) 6... Qxd5 7. Nc3 ( 7. d3 Bg4 { Pins the knight on f3, so White's pieces are tied up while Black develops. } ) 7... Qd6 8. O-O Bg4 9. h3 Bh5 { Keeps the pin on the knight. Black has two bishops against bishop and knight and a pawn in the centre. Plan: ...O-O-O, then ...f5 or ...g5 against White's king. } *

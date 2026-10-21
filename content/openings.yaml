@@ -78,3 +78,9 @@
   eco: C50
   summary: Black answers the Italian 3.Bc4 with the wild 3...f5. White has a calm reply, but the gambit sets real traps.
   moves: 1. e4 e5 2. Nf3 Nc6 3. Bc4 f5
+- id: two-knights-defence
+  name: Two Knights Defence
+  side: black
+  eco: C55-C59
+  summary: Black answers the Italian 3.Bc4 with 3...Nf6, hitting e4 at once. Sharper than 3...Bc5, and White's 4.Ng5 must be met accurately.
+  moves: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6

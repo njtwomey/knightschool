@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Two Knights Defence"]
+[Variation "Italian Game: Two Knights Defense, Fork Trick"]
+[ECO "C55"]
+[Character "solid"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "fork"]
+[Themes "bishop-pair,centre-pawns"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.Nc3 Nxe4 5.Nxe4 d5 6.Bd3"]
+[Start "fork-trick-nc3 7.Bxe4"]
+
+7... Bd6 8. O-O ( 8. d3 O-O ) ( 8. d4 exd4 { Swaps off White's centre pawn, so the e-file opens while White's king is still in the middle. } 9. O-O O-O ) ( 8. Bxc6+ bxc6 { White gives up the bishop, and Black has the two bishops for the rest of the game. } ) 8... O-O 9. d3 ( 9. Re1 Bg4 ) ( 9. Qe2 Bg4 ) 9... Bg4 { Pins the knight on f3 to the queen, so White's knight cannot attack e5. Plan: ...f5 to chase the bishop on e4, then ...Qf6 or ...Kh8 and play on the f-file. } *

@@ -50,6 +50,10 @@ lines:
   - italian-pianissimo
   - italian-d4-break
   - italian-quiet-fourths
+  - italian-d3-fifths
+  - italian-four-knights
+  - italian-four-knights-d3
+  - italian-castles
   - evans-gambit
   - ruy-lopez-setup
   - scotch-game
@@ -61,6 +65,7 @@ lines:
   - id: two-knights-ng5
     alternative: true
   - bishops-opening
+  - bishops-opening-qf3
   - vienna-bishop
   - vienna-gambit
   - kings-gambit-declined
