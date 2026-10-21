@@ -108,6 +108,25 @@ export const CourseAbout = z.object({
 });
 export type CourseAbout = z.infer<typeof CourseAbout>;
 
+/** A unit of a course's study path: `<line>:<n>`, the n-th unit of that line. */
+export const UnitId = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*:[1-9]\d*$/, 'a unit id, <line>:<n>');
+
+/**
+ * course.yaml `units:`: changes to the study path the build cuts (docs/STUDY-PLAN.md), by unit id. Ids are those of the
+ * default card settings; the build checks them.
+ */
+export const UnitOverrides = z
+  .object({
+    /** These units come as early as their prerequisites allow, in this order, before the others. */
+    order: z.array(UnitId).default([]),
+    /** More prerequisites: the unit waits for these too. */
+    after: z.record(UnitId, z.array(UnitId)).default({}),
+    /** Prerequisites to remove from a unit (it no longer waits for these). */
+    drop: z.record(UnitId, z.array(UnitId)).default({}),
+  })
+  .strict();
+export type UnitOverrides = z.infer<typeof UnitOverrides>;
+
 /** The contents of course.yaml, before the variants are read. */
 export const OpeningManifest = z.object({
   name: z.string().min(1),
@@ -132,6 +151,8 @@ export const OpeningManifest = z.object({
   tags: z.array(Slug).default([]),
   lines: z.array(CourseLine).min(1), // teaching order; the first is the main line
   traps: z.array(CourseTrap).default([]),
+  /** Optional changes to the order of the study path and to what each unit waits for. */
+  units: UnitOverrides.optional(),
 });
 export type OpeningManifest = z.infer<typeof OpeningManifest>;
 

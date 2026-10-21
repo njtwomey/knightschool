@@ -118,6 +118,8 @@ function headline(content: OpeningContent, unit: CourseUnit, units: CourseUnit[]
   const { own } = stretchMoves(content, first);
   const opener = own[0];
   if (unit.index === 0) return 'From the start';
+  if (unit.prerequisites.length === 0)
+    return opener ? `When ${numbered(opener, true)} is played, open from the start` : 'Open from the start';
   if (unit.side) return `Other replies after unit ${unitNumber(units, unit.prerequisites[0])}`;
   if (unit.branch && opener) return `When ${numbered(opener, true)} is played`;
   return `Carries on from unit ${unitNumber(units, unit.prerequisites[0])}`;
@@ -299,6 +301,7 @@ function UnitRow({
         <span
           className="grid size-8 shrink-0 place-items-center rounded-full bg-secondary text-sm font-semibold tabular-nums"
           aria-hidden
+          title={`Unit id ${unit.id}, for course.yaml units:`}
         >
           {unit.index + 1}
         </span>

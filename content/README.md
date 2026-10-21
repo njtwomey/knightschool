@@ -127,6 +127,25 @@ too few games reach them. `rare` lines produce cards only when the learner turns
 of another line, and the trap shows the mistake, marked `?`). `for-us` traps produce no cards, because the opponent has to
 move first: give each one a quiz instead (a question about the position where we strike).
 
+**The study path (`units:`, optional).** The app cuts every course into units of about four of the learner's moves, in
+an order and with prerequisites of its own (docs/STUDY-PLAN.md; the course's Path tab shows them, and hovering a unit's
+number shows its id). A unit's id is `<line>:<n>`, the n-th unit of that line. When the default is wrong, change it:
+
+```yaml
+units:
+  order: [stafford-gambit:1] # these first, in this order, as early as what they wait for allows
+  after: # extra prerequisites: elephant-gambit:1 waits for two-knights-na5:1 too
+    elephant-gambit:1: [two-knights-na5:1]
+  drop: # prerequisites to remove: stafford-gambit:1 no longer waits for petrov-classical:1
+    stafford-gambit:1: [petrov-classical:1]
+```
+
+The other units keep their default order, and every unit still comes after what it waits for. The build checks the ids
+against the units cut with the default settings and fails, naming the file, on an id that is not a unit, a dropped
+prerequisite the unit does not have, a cycle, or an `order` the prerequisites make impossible. Changing a line can
+renumber its units, so check `units:` after editing a course's lines. The learner's settings (rare lines, the popularity
+cut-off) can cut different units; the app then ignores the entries that name units it does not have.
+
 **Listing another course's line.** Any course may list any line, but two things follow. A line written for the other
 side has that side's moves as its answers, so in this course it usually needs `alternative: true` (shown, not drilled).
 And cards are still kept per course (docs/TREE.md, step 3), so a line that two courses drill is asked in both; list it as

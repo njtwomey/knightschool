@@ -256,6 +256,7 @@ export function buildOpening(
     plans: manifest.plans,
     motifs: manifest.motifs,
     tags: manifest.tags,
+    ...(manifest.units ? { units: manifest.units } : {}),
     rootEpd: START_EPD,
     variants: metas,
   });

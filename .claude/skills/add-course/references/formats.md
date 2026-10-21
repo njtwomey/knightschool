@@ -92,6 +92,12 @@ lines:
   chapter's `[For]` is not the course's `side` (`for-us` <-> `against-us`); lines keep their kind.
 - Every listed line, rebuilt from move 1, must pass through the trigger position.
 
+**`units:` (optional)** changes the course's study path, by unit id `<line>:<n>` (hover a unit's number on the Path tab):
+`order: [ids]` puts units first, as early as their prerequisites allow; `after: {unit: [ids]}` adds prerequisites;
+`drop: {unit: [ids]}` removes default ones. The build fails, naming the file, on an unknown id, a cycle or an impossible
+order (ids are checked with the default card settings). Editing a course's lines can renumber units: re-check `units:`.
+See `content/README.md`.
+
 Which lines earn cards (`training.ts`): `main` and `gambit` always; `sideline` unless the explorer says too few games reach it;
 `rare` only when the learner turns on "include rare lines"; `alternative` never. `against-us` traps give cards for the move that
 avoids the trap (the repertoire move of another listed line; the trap shows the mistake marked `?`). `for-us` traps give no

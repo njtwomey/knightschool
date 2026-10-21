@@ -238,7 +238,11 @@ stretch each. Ids are `<line>:<n>`. A branch's first unit depends on the unit ho
 leaves, a later unit on the one before. Quizzes and traps are attached as extras. State is derived, never stored
 (`unitProgress`): passed when every move's last two answers were good or easy (or the move is graduated), graduated when
 every card is in FSRS review at 7 days or more, learning once a card exists, otherwise unlocked or locked by its
-prerequisites. A unit with progress shows it even if its prerequisites are not passed.
+prerequisites. A unit with progress shows it even if its prerequisites are not passed. A course can change its path in
+course.yaml `units:` (`order`, `after`, `drop`; `UnitOverrides`, `content/README.md`): applied at the end of
+`courseUnits` as a topological sort that keeps the default order where it can. The build checks it strictly
+(`checkUnitOverrides`, default card settings); the app ignores entries for units its settings do not cut, and keeps the
+default path if what is left fails.
 
 ### Engine
 

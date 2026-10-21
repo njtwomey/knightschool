@@ -12,6 +12,7 @@ import {
   projectCourse,
   resolveTree,
   buildOpeningGroups,
+  checkUnitOverrides,
   parsePgn,
   sideToMove,
   type GlossaryEntry,
@@ -75,7 +76,14 @@ export function loadCourseAt(dir: string): OpeningContent {
   const manifest = readYaml(join(dir, 'course.yaml'), CourseManifest);
   const quizPath = join(dir, 'quizzes.yaml');
   const quizzes: QuizEntry[] = existsSync(quizPath) ? readYaml(quizPath, z.array(QuizEntry)) : [];
-  return projectCourse(id, manifest, loadTree(), quizzes);
+  const content = projectCourse(id, manifest, loadTree(), quizzes);
+  // `units:` names units of the study path, cut with the default card settings: every id must be one of them.
+  try {
+    checkUnitOverrides(content);
+  } catch (error) {
+    throw new Error(`${rel(join(dir, 'course.yaml'))}: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  return content;
 }
 
 /** Reads and validates every course under content/courses. A course's id is its folder name. Throws on the first problem, naming the file. */

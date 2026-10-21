@@ -1,18 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { parsePgn } from './pgn';
 import { newCard } from './scheduler';
-import type { LineKind, OpeningContent, TrapKind } from './schema/content';
+import { UnitOverrides, type LineKind, type OpeningContent, type TrapKind } from './schema/content';
 import type { Card, Review } from './schema/user';
 import { manifestOf } from './test-manifest';
 import { cardDefinitions, cardId } from './training';
 import { buildOpening } from './tree';
 import {
+  checkUnitOverrides,
   courseUnits,
   cutIntoUnits,
   pathIntroductionOrder,
   unitProgress,
   unitStretches,
   type CourseUnit,
+  type UnitOptions,
 } from './units';
 
 const NOW = new Date('2026-10-21T10:00:00.000Z');
@@ -377,5 +379,99 @@ describe('pathIntroductionOrder', () => {
 
   it('never offers a quiz', () => {
     expect(order([], []).every((card) => card.expectedUci !== '' && card.id === cardId('t', card.epd))).toBe(true);
+  });
+});
+
+describe('course.yaml units: overrides', () => {
+  const overridden = (units: unknown) => ({
+    ...content,
+    opening: { ...content.opening, units: UnitOverrides.parse(units) },
+  });
+  const ids = (c: OpeningContent, options: UnitOptions = {}) => courseUnits(c, options).map((unit) => unit.id);
+  const strict = (units: unknown) => () => checkUnitOverrides(overridden(units));
+
+  it('changes nothing without them', () => {
+    expect(ids(overridden({}))).toEqual(ids(content));
+  });
+
+  it.each([
+    [
+      'order brings a unit forward, as early as what it waits for allows',
+      { order: ['side:1'] },
+      ['main:1', 'side:1', 'main:2', 'gambit:1', 'main:3', 'avoid:1'],
+    ],
+    [
+      'order brings what a unit waits for forward with it',
+      { order: ['main:2', 'avoid:1'] },
+      ['main:1', 'main:2', 'avoid:1', 'gambit:1', 'main:3', 'side:1'],
+    ],
+    [
+      'after adds a prerequisite, which moves the unit behind it',
+      { after: { 'gambit:1': ['side:1'] } },
+      ['main:1', 'main:2', 'main:3', 'side:1', 'gambit:1', 'avoid:1'],
+    ],
+    [
+      'drop removes a prerequisite, so the unit can come first',
+      { drop: { 'gambit:1': ['main:1'] }, order: ['gambit:1'] },
+      ['gambit:1', 'main:1', 'main:2', 'main:3', 'side:1', 'avoid:1'],
+    ],
+  ])('%s', (_name, units, expected) => {
+    const result = courseUnits(overridden(units), { strict: true });
+    expect(result.map((unit) => unit.id)).toEqual(expected);
+    expect(result.map((unit) => unit.index)).toEqual(expected.map((_, i) => i));
+    // Every prerequisite points backwards in the final order.
+    for (const unit of result)
+      for (const need of unit.prerequisites)
+        expect(result.findIndex((other) => other.id === need)).toBeLessThan(unit.index);
+  });
+
+  it('applies added and dropped prerequisites to the unit states', () => {
+    const units = courseUnits(overridden({ after: { 'gambit:1': ['side:1'] }, drop: { 'avoid:1': ['main:1'] } }));
+    const states = unitProgress(units, [], []);
+    expect(units.find((unit) => unit.id === 'gambit:1')!.prerequisites).toEqual(['main:1', 'side:1']);
+    expect(states.get('avoid:1')!.state).toBe('unlocked');
+  });
+
+  it.each([
+    ['a unit that does not exist', { order: ['main:9'] }, /"main:9" is not a unit of this course .*main:1 to 3/],
+    ['a prerequisite that does not exist', { after: { 'main:2': ['nope:1'] } }, /"nope:1" is not a unit/],
+    [
+      'a prerequisite the unit does not have',
+      { drop: { 'main:2': ['gambit:1'] } },
+      /"main:2" does not wait for "gambit:1"/,
+    ],
+    ['a cycle', { after: { 'main:1': ['main:2'] } }, /a cycle: "main:1" waits for "main:2", which waits for "main:1"/],
+    ['waiting for itself', { after: { 'main:1': ['main:1'] } }, /cannot wait for itself/],
+    [
+      'an order the prerequisites forbid',
+      { order: ['main:2', 'main:1'] },
+      /"main:2" is listed before "main:1", but it waits/,
+    ],
+    ['a unit listed twice', { order: ['side:1', 'side:1'] }, /listed twice/],
+  ])('fails clearly on %s', (_name, units, message) => {
+    expect(strict(units)).toThrow(message);
+  });
+
+  it('rejects ids that are not unit ids before anything is cut', () => {
+    expect(() => UnitOverrides.parse({ order: ['main'] })).toThrow();
+    expect(() => UnitOverrides.parse({ first: ['main:1'] })).toThrow();
+  });
+
+  it('ignores, in the app, entries for units the learner settings do not cut, and keeps the rest', () => {
+    // rare:1 exists only with rare lines on; the build checks against the default settings.
+    const units = { order: ['rare:1', 'side:1'], after: { 'rare:1': ['gambit:1'] } };
+    expect(strict(units)).toThrow(/"rare:1" is not a unit/);
+    expect(ids(overridden(units))).toEqual(['main:1', 'side:1', 'main:2', 'gambit:1', 'main:3', 'avoid:1']);
+    expect(ids(overridden(units), { includeRare: true })).toEqual([
+      'main:1',
+      'gambit:1',
+      'rare:1',
+      'side:1',
+      'main:2',
+      'main:3',
+      'avoid:1',
+    ]);
+    // What still fails after that keeps the default path rather than breaking the app.
+    expect(ids(overridden({ after: { 'main:1': ['main:2'] } }))).toEqual(ids(content));
   });
 });
