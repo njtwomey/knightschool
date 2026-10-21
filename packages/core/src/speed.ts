@@ -34,3 +34,15 @@ export function formatMs(ms: number | null): string {
   if (ms === null) return '–';
   return ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(1)} s`;
 }
+
+/** How deep a Speed line goes: up to this move number, or the whole line (0). */
+export type SpeedDepth = 0 | 6 | 10 | 15;
+export const SPEED_DEPTHS: readonly SpeedDepth[] = [6, 10, 15, 0];
+
+/**
+ * A line cut off after a move number, counted from the start of the game: up to move 10 keeps 1.e4 to 10...(Black's
+ * tenth), so both sides' tenth moves are played. 0 keeps the whole line.
+ */
+export function cutToMove<T>(steps: readonly T[], move: SpeedDepth): T[] {
+  return move === 0 ? [...steps] : steps.slice(0, move * 2);
+}

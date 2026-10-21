@@ -1,5 +1,8 @@
 import {
   lineSteps,
+  cutToMove,
+  SPEED_DEPTHS,
+  type SpeedDepth,
   newId,
   pickWeighted,
   popularityWeight,
@@ -24,6 +27,8 @@ export type SpeedConfig = {
   source: 'learning' | 'all' | (string & {});
   /** How lines are picked: at random, or favouring the ones more games reach. */
   weighting: Weighting;
+  /** How deep each line goes: up to this move number, or the whole line (0). */
+  depth: SpeedDepth;
 };
 
 export const DEFAULT_CONFIG: SpeedConfig = {
@@ -32,6 +37,7 @@ export const DEFAULT_CONFIG: SpeedConfig = {
   seconds: 60,
   source: 'learning',
   weighting: 'random',
+  depth: 10,
 };
 const CONFIG_KEY = 'knightschool.speed';
 
@@ -46,6 +52,7 @@ function savedConfig(): SpeedConfig {
       seconds: parsed.seconds === 30 || parsed.seconds === 120 ? parsed.seconds : 60,
       source: typeof parsed.source === 'string' && parsed.source ? parsed.source : 'learning',
       weighting: parsed.weighting === 'popular' ? 'popular' : 'random',
+      depth: SPEED_DEPTHS.includes(parsed.depth as SpeedDepth) ? (parsed.depth as SpeedDepth) : 10,
     };
   } catch {
     return DEFAULT_CONFIG;
@@ -295,7 +302,12 @@ export const useSpeed = create<SpeedState>((set, get) => {
         for (const { course } of picked) if (!contents.has(course)) contents.set(course, await loadOpening(course));
         const queue = picked.map(({ course, line }) => {
           const content = contents.get(course)!;
-          return { content, lineId: line.id, lineName: line.name, steps: lineSteps(content, line.id) };
+          return {
+            content,
+            lineId: line.id,
+            lineName: line.name,
+            steps: cutToMove(lineSteps(content, line.id), config.depth),
+          };
         });
         set({ queue, lineIndex: 0, phase: 'ready' });
       } catch (error) {

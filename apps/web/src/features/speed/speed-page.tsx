@@ -1,4 +1,4 @@
-import { formatMs, speedSummary } from '@knightschool/core';
+import { formatMs, speedSummary, SPEED_DEPTHS, type SpeedDepth } from '@knightschool/core';
 import { Lightbulb, Play, RotateCcw, Settings2, Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AppBoard } from '@/components/board/app-board';
@@ -187,6 +187,24 @@ function SetupDialog() {
               </ToggleGroup>
             </div>
           )}
+
+          <div className="grid gap-2">
+            <Label>How deep</Label>
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={String(config.depth)}
+              onValueChange={(value) => value && set({ depth: Number(value) as SpeedDepth })}
+              className="justify-self-start"
+              aria-label="How deep each line goes"
+            >
+              {SPEED_DEPTHS.map((depth) => (
+                <ToggleGroupItem key={depth} value={String(depth)}>
+                  {depth === 0 ? 'Whole line' : `To move ${depth}`}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
 
           <div className="grid gap-2">
             <Label htmlFor="speed-source">Lines from</Label>

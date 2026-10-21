@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatMs, speedSummary } from './speed';
+import { cutToMove, formatMs, speedSummary } from './speed';
 
 describe('speedSummary', () => {
   it('is empty before anything is played', () => {
@@ -36,5 +36,15 @@ describe('formatMs', () => {
     expect(formatMs(850)).toBe('850 ms');
     expect(formatMs(1400)).toBe('1.4 s');
     expect(formatMs(null)).toBe('–');
+  });
+});
+
+describe('cutToMove', () => {
+  const plies = Array.from({ length: 31 }, (_, i) => i); // 1.e4 to 16.(White)
+  it('keeps both sides up to the move number, or the whole line for 0', () => {
+    expect(cutToMove(plies, 6)).toHaveLength(12);
+    expect(cutToMove(plies, 10).at(-1)).toBe(19);
+    expect(cutToMove(plies, 0)).toHaveLength(31);
+    expect(cutToMove(plies.slice(0, 8), 15)).toHaveLength(8);
   });
 });

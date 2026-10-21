@@ -150,7 +150,8 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Guess | Gl
 - `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each, searchable and A to Z.
 - `play`: Learn (you play both sides, every move shown), Drill (the computer plays the other side; once called
   Practise) and Every branch.
-  `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; lines from the courses you
+  `speed` (`/speed`): a set-up window (a set of 3, 5 or 10 lines, or a timed run of 30 s, 1 min or 2 min; how deep: to move 6, 10
+  or 15 or the whole line, `cutToMove`; lines from the courses you
   are learning, everything, or one course) and then lines played from memory against the clock with the other side answering
   instantly. A set of lines scores the mean time per move, a timed run how many moves you make. Hints (piece, then move) are
   counted. The last set-up is kept in localStorage. Runs go to the `speed_attempts` table (no effect on the review
