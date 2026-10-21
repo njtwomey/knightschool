@@ -9,7 +9,7 @@
 [Themes "bishop-pair,development-lead"]
 [For "black"]
 [Kind "sideline"]
-[Opponent "6.d3"]
+[Opponent "6.d3, 6.Qe2 or 6.Bb3"]
 [Start "two-knights-ng5 5...Na5"]
 
-6. d3 { Guards the bishop with a pawn instead of moving it, so White keeps the extra pawn on d5. } 6... h6 { Kicks the knight first. Black takes on c4 later, when it gains the most time. } 7. Nf3 ( 7. Ne4 $2 Nxe4 8. dxe4 Nxc4 { The pawn on d3 left, so the bishop on c4 lost its defender. Black is a piece up. } ) 7... e4 { Hits the knight again and opens the diagonal of the c8 bishop. } 8. Qe2 ( 8. dxe4 Nxc4 { The pawn on d3 has gone, so the bishop on c4 has no defender. Black wins a piece. } ) ( 8. Nd4 Bc5 { Develops with a hit on the knight. } ) 8... Nxc4 9. dxc4 Bc5 { Black has the two bishops and quicker development for the pawn. Plan: castle, ...Re8, and ...Bg4 to pin the knight against the queen. } *
+6. d3 { Guards the bishop with a pawn instead of moving it, so White keeps the extra pawn on d5. } ( 6. Qe2 Nxc4 { Takes the bishop first, so the queen has to recapture. } 7. Qxc4 Qxd5 { Wins the pawn back and offers a queen trade. Black has the two bishops and an easy game. } ) ( 6. Bb3 Nxb3 7. axb3 h6 { Kicks the knight before it can do anything. Black has the two bishops and will win the d5 pawn back. } 8. Nf3 e4 ) 6... h6 { Kicks the knight first. Black takes on c4 later, when it gains the most time. } 7. Nf3 ( 7. Ne4 $2 Nxe4 8. dxe4 Nxc4 { The pawn on d3 left, so the bishop on c4 lost its defender. Black is a piece up. } ) 7... e4 { Hits the knight again and opens the diagonal of the c8 bishop. } 8. Qe2 ( 8. dxe4 Nxc4 { The pawn on d3 has gone, so the bishop on c4 has no defender. Black wins a piece. } ) ( 8. Nd4 Bc5 { Develops with a hit on the knight. } ) 8... Nxc4 9. dxc4 Bc5 { Black has the two bishops and quicker development for the pawn. Plan: castle, ...Re8, and ...Bg4 to pin the knight against the queen. } *

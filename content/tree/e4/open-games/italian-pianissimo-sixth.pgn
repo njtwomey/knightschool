@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Pianissimo, Sixth-Move Alternatives"]
+[ECO "C54"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "castle-early,solid-centre"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "4.c3 Nf6 5.d3 d6 6.h3, 6.b4, 6.Bg5, 6.a4 or 6.Nbd2"]
+[Start "giuoco-piano 5...d6"]
+
+6. h3 { Stops ...Bg4 before White castles. } ( 6. b4 Bb6 { Keeps the bishop on the diagonal to f2. Never take on b4: the pawn on c3 guards it. } 7. a4 a5 { Stops a4-a5, which would trap the bishop. } 8. b5 Ne7 ) ( 6. Bg5 h6 { Asks the bishop to take on f6 or retreat. After Bxf6 Qxf6 Black has the two bishops. } ) ( 6. a4 a5 { Stops a4-a5, which would push the bishop away from its diagonal. } ) ( 6. Nbd2 a6 ) 6... a6 { Gives the bishop the a7 square, so b4 or d4 never wins time against it. } 7. O-O Ba7 { Steps back before White's pawns can hit it. On a7 it still aims at f2. Plan: ...O-O, ...h6 and ...Be6 to trade White's bishop on c4. } *

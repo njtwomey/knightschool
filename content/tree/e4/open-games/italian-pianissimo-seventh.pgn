@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Open Games (1...e5)"]
+[Variation "Italian Game: Giuoco Pianissimo, Seventh-Move Alternatives"]
+[ECO "C54"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "castle-early,solid-centre"]
+[For "black"]
+[Kind "sideline"]
+[Opponent "6.O-O O-O 7.h3, 7.Bg5, 7.Bb3 or 7.Nbd2"]
+[Start "giuoco-piano 6...O-O"]
+
+7. h3 { Stops ...Bg4 and ...Ng4. } ( 7. Bg5 h6 { Asks the bishop to decide. If it retreats to h4, Black can break the pin later with ...g5. } ) ( 7. Bb3 a6 ) ( 7. Nbd2 a6 ) 7... a6 { The same plan as in the main line: ...a6, ...Ba7 and ...h6, then ...Be6 to trade White's bishop. } *
