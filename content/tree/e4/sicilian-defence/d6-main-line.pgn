@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Variation "Alapin Variation"]
+[ECO "B22"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "d4-pawn-centre,space-advantage,d4-push"]
+[For "white"]
+[Kind "main"]
+[Opponent "2...d6 3.d4 cxd4"]
+[Start "minor-second-moves 2...d6 3.d4"]
+
+3... cxd4 4. cxd4 { White has the two centre pawns the Alapin is played for, and c3 is free for the knight. } 4... Nf6 ( 4... g6 5. Nc3 Bg7 6. Nf3 { Black's knight usually comes to f6 next, which joins the main line. } ) ( 4... Nc6 { Joins the line 2...Nc6 3.d4 cxd4 4.cxd4 d6, where 5.d5 kicks the knight. } ) ( 4... e6 5. Nc3 Nf6 ) ( 4... e5 5. Nf3 { Develops with a hit on e5. If Black takes on d4, the knight takes back and White has a lead in development. } 5... exd4 6. Nxd4 ) 5. Nc3 { Guards e4 against the knight and develops. White does not need to hurry: the centre is already there. } 5... g6 ( 5... Nc6 6. d5 { The same idea as in the 2...Nc6 lines: kick the knight off c6 and keep a grip on the centre. } 6... Nb8 7. Nf3 ) ( 5... e6 6. Nf3 Be7 7. Bd3 ) ( 5... a6 6. Nf3 ) ( 5... Bg4 6. Be2 { Offers to trade bishops. If Black takes on e2, the knight takes back and d4 is not weakened. } ) ( 5... e5 6. Nf3 exd4 7. Nxd4 ) 6. Nf3 Bg7 7. Be2 { A quiet, safe square. The king castles next, and the bishop does not block the queen's view of d4. } 7... O-O 8. O-O Nc6 ( 8... Bg4 9. Be3 { Guards d4, which the bishop on g7 and a knight on c6 would aim at. } 9... Nc6 10. d5 ) 9. d5 { Kicks the knight from c6, and the pawn on d5 takes away c6 and e6 from Black's pieces. } 9... Ne5 10. Nd4 { The knight takes the square the pawn has just left, in the middle of the board. Plan: f4 to chase the knight on e5, Be3, Qd2 and a rook to c1, with more space everywhere. } *
