@@ -1,7 +1,6 @@
-import { type LineKind, MOVE_TAGS, numberedMove, type TrapKind, uciLine } from '@knightschool/core';
-import { KIND_OPTIONS } from '@/components/tags/hints';
-import { Camera, GitBranch, Scissors, Trash2, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { numberedMove, uciLine } from '@knightschool/core';
+import { Camera, GitBranch, Scissors, X } from 'lucide-react';
+import { useMemo } from 'react';
 import { useLineStepper } from '@/components/board/line-stepper';
 import { StudyBoard } from '@/components/board/study-board';
 import { MoveList } from '@/components/move-list';
@@ -18,17 +17,12 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { navigate } from '@/router/location';
 import { draftChapter, fullLine, positionsOf, type DraftCourse } from './draft';
-import { GroupSelect } from './group-select';
-import { useDraft } from './helpers';
+import { LineDetails } from './line-details';
+import { MoveNote } from './move-note';
 import { useAuthor } from './store';
-import { createHref, lineEditHref } from '@/router/hrefs';
+import { lineEditHref } from '@/router/hrefs';
 
 /**
  * One line: its details, the board to play it on, its moves (yours to change are the ones after where it starts), and
@@ -188,176 +182,6 @@ export function LineEditor({ course }: { course: DraftCourse }) {
             />
           )}
         </div>
-      </div>
-    </div>
-  );
-}
-
-/** The note on a move: free text and supplementary tags (tip, trap, blunder or your own), shown to learners. */
-function MoveNote({
-  label,
-  comment,
-  tags,
-  editable,
-  owner,
-  fixed,
-}: {
-  label: string;
-  comment: string;
-  tags: string[];
-  editable: boolean;
-  owner: string | undefined;
-  /** The comment comes from another line that plays this move too: a move has one comment, so it is not changed here. */
-  fixed: boolean;
-}) {
-  const [text, setText] = useState(comment);
-  const [chosen, setChosen] = useState(tags.filter((tag) => (MOVE_TAGS as readonly string[]).includes(tag)));
-  const [others, setOthers] = useState(
-    tags.filter((tag) => !(MOVE_TAGS as readonly string[]).includes(tag)).join(', '),
-  );
-  if (!editable)
-    return (
-      <div className="grid gap-1 rounded-lg border p-3 text-sm">
-        <p className="font-medium">{label}</p>
-        {comment ? <p>{comment}</p> : <p className="text-muted-foreground">No note.</p>}
-        <p className="text-xs text-muted-foreground">
-          This move belongs to {owner ? `the line ${owner}` : 'another line'}: its note is written there.
-        </p>
-      </div>
-    );
-  return (
-    <div className="grid gap-2 rounded-lg border p-3">
-      <Label htmlFor="move-note">Note on {label}</Label>
-      {fixed ? (
-        <div className="grid gap-1 text-sm">
-          <p>{comment}</p>
-          <p className="text-xs text-muted-foreground">
-            Another line already explains this move, and a move has one comment wherever it is played. You can still tag
-            it.
-          </p>
-        </div>
-      ) : (
-        <Textarea
-          id="move-note"
-          rows={3}
-          value={text}
-          placeholder="Why this move, or what to look out for. Learners see it while studying."
-          onChange={(event) => setText(event.target.value)}
-        />
-      )}
-      <ToggleGroup
-        type="multiple"
-        variant="outline"
-        size="sm"
-        value={chosen}
-        onValueChange={setChosen}
-        className="justify-self-start"
-        aria-label="Tags"
-      >
-        {MOVE_TAGS.map((tag) => (
-          <ToggleGroupItem key={tag} value={tag}>
-            {tag === 'blunder' ? 'common blunder' : tag}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
-      <Input
-        value={others}
-        onChange={(event) => setOthers(event.target.value)}
-        placeholder="Other tags, separated by commas"
-        aria-label="Other tags"
-      />
-      <Button
-        size="sm"
-        className="justify-self-start"
-        onClick={() => void useAuthor.getState().setNote(fixed ? '' : text, [...chosen, ...others.split(',')])}
-      >
-        Save the note
-      </Button>
-    </div>
-  );
-}
-
-/** The line's title, description, kind and group. Deleting it asks first. */
-function LineDetails({ course }: { course: DraftCourse }) {
-  const { build, rows, lineId } = useAuthor();
-  const line = fullLine(build, lineId);
-  const own = lineId ? draftChapter(rows, lineId) : undefined;
-  const [title, setTitle] = useDraft(own?.tags.Variation ?? '');
-  const [description, setDescription] = useDraft(own?.tags.Description ?? '');
-  const [kind, setKind] = useDraft((own?.tags.Kind ?? 'sideline') as LineKind | TrapKind);
-  if (!own || !line) return null;
-  const children = [...(build?.tree.lines.values() ?? [])].filter((other) => other.parents.includes(line.id)).length;
-  return (
-    <div className="grid gap-3 rounded-xl border bg-card p-3">
-      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_12rem]">
-        <div className="grid gap-1.5">
-          <Label htmlFor="line-title">Title</Label>
-          <Input id="line-title" value={title} onChange={(event) => setTitle(event.target.value)} />
-        </div>
-        <div className="grid gap-1.5">
-          <Label htmlFor="line-kind">Kind</Label>
-          <Select value={kind} onValueChange={(value) => setKind(value as LineKind | TrapKind)}>
-            <SelectTrigger id="line-kind" className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {KIND_OPTIONS.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="grid gap-1.5">
-          <Label htmlFor="line-group">Group</Label>
-          <GroupSelect id="line-group" course={course} lineId={line.id} />
-        </div>
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="line-description">What it is and why it matters</Label>
-        <Textarea
-          id="line-description"
-          rows={2}
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-        />
-      </div>
-      <div className="flex flex-wrap gap-2">
-        <Button size="sm" onClick={() => void useAuthor.getState().setLineMeta({ title, description, kind })}>
-          Save the line
-        </Button>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button size="sm" variant="outline">
-              <Trash2 aria-hidden /> Delete the line
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete {own.tags.Variation}?</AlertDialogTitle>
-              <AlertDialogDescription>
-                {children > 0
-                  ? `${children} ${children === 1 ? 'line branches' : 'lines branch'} from it and will be deleted too. `
-                  : ''}
-                Undo brings everything back.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Keep it</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() =>
-                  void useAuthor
-                    .getState()
-                    .deleteLine()
-                    .then(() => navigate(createHref(course.id, 'lines')))
-                }
-              >
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
     </div>
   );
