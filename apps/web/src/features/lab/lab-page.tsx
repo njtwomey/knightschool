@@ -1,43 +1,35 @@
-import { Page } from '@/components/page';
 import {
   checkFen,
-  EMPTY_SETUP,
   epdToFen,
   fenFromSetup,
   fenToEpd,
   loadGame,
   pgnFor,
-  placePiece,
   playSan,
   playUci,
   replayUcis,
   setupFromFen,
   START_FEN,
   withPromotion,
-  type PieceLetter,
   type Played,
   type Setup,
 } from '@knightschool/core';
-import { Copy, Eraser, Pencil, RotateCcw, Trash2, Undo2 } from 'lucide-react';
+import { Pencil, RotateCcw, Undo2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useLineStepper } from '@/components/board/line-stepper';
 import { StudyBoard } from '@/components/board/study-board';
 import { MoveList } from '@/components/move-list';
-import { useBoardPrefs } from '@/components/board/prefs';
-import { piecesFor } from '@/components/board/pieces';
+import { Page } from '@/components/page';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { errorText } from '@/lib/errors';
 import { decodeMoves, encodeMoves } from '@/router/hash';
 import { readHashState, setHashState } from '@/router/location';
-import { FEEDBACK_DELAYS } from '@/lib/feedback';
-import { errorText } from '@/lib/errors';
-
-const PIECES: PieceLetter[] = ['K', 'Q', 'R', 'B', 'N', 'P'];
+import { CopyCard } from './copy-card';
+import { LoadCard } from './load-card';
+import { SetupCard } from './setup-card';
+import { applyTool, type SetupTool } from './setup-tool';
 
 /**
  * The analysis board. It starts from the usual position; play moves on it, flip it, step back and forward, or set up
@@ -58,11 +50,8 @@ export function LabPage() {
   const [cursor, setCursor] = useState(initial.cursor);
   const [side, setSide] = useState<'white' | 'black'>(initial.side);
   const [setup, setSetup] = useState<Setup | null>(null);
-  const [tool, setTool] = useState<PieceLetter | 'erase'>('K');
-  const [paste, setPaste] = useState('');
+  const [tool, setTool] = useState<SetupTool>('K');
   const [problem, setProblem] = useState<string | null>(null);
-  const [copied, setCopied] = useState<string | null>(null);
-  const prefs = useBoardPrefs();
 
   const startEpd = fenToEpd(startFen);
   // Plies before the first move, from the FEN's move number and side to move, so the moves are numbered as in the game.
@@ -73,7 +62,6 @@ export function LabPage() {
     moves.map((move) => move.san),
   );
   const setupFen = setup ? fenFromSetup(setup) : null;
-  const setupProblem = setupFen ? checkFen(setupFen) : null;
 
   useEffect(() => {
     setHashState({
@@ -114,27 +102,17 @@ export function LabPage() {
     setProblem(null);
   }
 
-  function load() {
+  function load(text: string): boolean {
     try {
-      const game = loadGame(paste);
+      const game = loadGame(text);
       begin(game.startFen, game.sans);
-      setPaste('');
+      return true;
     } catch (error) {
       setProblem(errorText(error));
+      return false;
     }
   }
 
-  async function copy(what: string, text: string) {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(what);
-      setTimeout(() => setCopied(null), FEEDBACK_DELAYS.copied);
-    } catch {
-      setProblem('Your browser would not let me copy. Select the text and copy it by hand.');
-    }
-  }
-
-  const palette = piecesFor(prefs.pieces);
   const editing = setup !== null;
   const stepper = useLineStepper({ length: moves.length, index: cursor, setIndex: setCursor, keys: !editing });
   const shownEpd = editing ? fenToEpd(setupFen!) : epd;
@@ -150,12 +128,7 @@ export function LabPage() {
         lastMove={editing || cursor === 0 ? undefined : moves[cursor - 1]!.uci}
         onSquareSelect={
           editing
-            ? (square) =>
-                setSetup((current) =>
-                  current
-                    ? { ...current, placement: placePiece(current.placement, square, tool === 'erase' ? null : tool) }
-                    : current,
-                )
+            ? (square) => setSetup((current) => (current ? applyTool(current, square, tool) : current))
             : undefined
         }
         controls={{ flip: true }}
@@ -173,94 +146,14 @@ export function LabPage() {
         )}
 
         {editing ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>Set up a position</CardTitle>
-              <CardDescription>
-                Pick a piece, then click squares to put it there. Click a square again with the eraser to clear it.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              {(['w', 'b'] as const).map((color) => (
-                <div key={color} className="flex flex-wrap gap-1">
-                  {PIECES.map((piece) => {
-                    const letter = (color === 'w' ? piece : piece.toLowerCase()) as PieceLetter;
-                    const Piece = palette[`${color}${piece}`];
-                    return (
-                      <Button
-                        key={letter}
-                        type="button"
-                        variant={tool === letter ? 'secondary' : 'outline'}
-                        className="size-12 p-1"
-                        aria-label={`${color === 'w' ? 'White' : 'Black'} ${piece}`}
-                        aria-pressed={tool === letter}
-                        onClick={() => setTool(letter)}
-                      >
-                        {Piece ? <Piece /> : letter}
-                      </Button>
-                    );
-                  })}
-                </div>
-              ))}
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  type="button"
-                  variant={tool === 'erase' ? 'secondary' : 'outline'}
-                  onClick={() => setTool('erase')}
-                  aria-pressed={tool === 'erase'}
-                >
-                  <Eraser aria-hidden /> Eraser
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setSetup({ ...setup, placement: EMPTY_SETUP.placement })}
-                >
-                  <Trash2 aria-hidden /> Clear the board
-                </Button>
-                <Button type="button" variant="outline" onClick={() => setSetup(setupFromFen(START_FEN))}>
-                  <RotateCcw aria-hidden /> Standard position
-                </Button>
-              </div>
-              <div className="grid gap-2">
-                <Label>Side to move</Label>
-                <ToggleGroup
-                  type="single"
-                  variant="outline"
-                  value={setup.turn}
-                  onValueChange={(value) => value && setSetup({ ...setup, turn: value as 'w' | 'b' })}
-                  className="justify-self-start"
-                >
-                  <ToggleGroupItem value="w">White</ToggleGroupItem>
-                  <ToggleGroupItem value="b">Black</ToggleGroupItem>
-                </ToggleGroup>
-              </div>
-              <div className="grid gap-2">
-                <Label>Castling still allowed</Label>
-                <ToggleGroup
-                  type="multiple"
-                  variant="outline"
-                  value={setup.castling.split('')}
-                  onValueChange={(value) => setSetup({ ...setup, castling: value.join('') })}
-                  className="justify-self-start"
-                >
-                  <ToggleGroupItem value="K">White short</ToggleGroupItem>
-                  <ToggleGroupItem value="Q">White long</ToggleGroupItem>
-                  <ToggleGroupItem value="k">Black short</ToggleGroupItem>
-                  <ToggleGroupItem value="q">Black long</ToggleGroupItem>
-                </ToggleGroup>
-              </div>
-              {setupProblem && <p className="text-sm text-destructive">{setupProblem}</p>}
-              <div className="flex flex-wrap gap-2">
-                <Button type="button" disabled={setupProblem !== null} onClick={() => begin(setupFen!)}>
-                  Use this position
-                </Button>
-                <Button type="button" variant="ghost" onClick={() => setSetup(null)}>
-                  Cancel
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <SetupCard
+            setup={setup}
+            setSetup={setSetup}
+            tool={tool}
+            setTool={setTool}
+            onUse={(fen) => begin(fen)}
+            onCancel={() => setSetup(null)}
+          />
         ) : (
           <>
             <Card>
@@ -303,68 +196,8 @@ export function LabPage() {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Copy</CardTitle>
-                <CardDescription>
-                  The PGN has the start position in its header when it is not the usual one, so it reproduces exactly
-                  what is on the board.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-3">
-                <Textarea
-                  readOnly
-                  rows={4}
-                  value={pgn}
-                  className="font-mono text-sm"
-                  aria-label="PGN"
-                  onFocus={(event) => event.target.select()}
-                />
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button onClick={() => void copy('pgn', pgn)}>
-                    <Copy aria-hidden /> {copied === 'pgn' ? 'Copied the PGN' : 'Copy PGN'}
-                  </Button>
-                  <Button variant="outline" onClick={() => void copy('fen', epdToFen(epd, 0, 1))}>
-                    <Copy aria-hidden /> {copied === 'fen' ? 'Copied the FEN' : 'Copy this position (FEN)'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Load</CardTitle>
-                <CardDescription>Paste a PGN or a FEN to put it on the board.</CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-3">
-                <Label htmlFor="lab-paste" className="sr-only">
-                  PGN or FEN
-                </Label>
-                <Textarea
-                  id="lab-paste"
-                  rows={3}
-                  value={paste}
-                  onChange={(event) => setPaste(event.target.value)}
-                  placeholder="1. e4 e5 2. Nf3 Nc6 …  or  rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-                  className="font-mono text-sm"
-                />
-                <div>
-                  <Button variant="outline" disabled={!paste.trim()} onClick={load}>
-                    Load
-                  </Button>
-                </div>
-                <div className="grid gap-1">
-                  <Label htmlFor="lab-fen">Position now (FEN)</Label>
-                  <Input
-                    id="lab-fen"
-                    readOnly
-                    value={epdToFen(epd)}
-                    className="font-mono text-xs"
-                    onFocus={(event) => event.target.select()}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+            <CopyCard pgn={pgn} epd={epd} onProblem={setProblem} />
+            <LoadCard epd={epd} onLoad={load} />
           </>
         )}
       </div>
