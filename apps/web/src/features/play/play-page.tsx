@@ -1,38 +1,26 @@
-import { Page } from '@/components/page';
 import { explainMove, type LineStep, numberedMove } from '@knightschool/core';
-import { EcoLink } from '@/components/eco-link';
-import { BookOpen, GitBranch, RotateCcw, Target, Undo2 } from 'lucide-react';
-import { useEffect } from 'react';
+import { BookOpen, GitBranch, RotateCcw, Undo2 } from 'lucide-react';
+import { PlayBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
 import { useLineStepper } from '@/components/board/line-stepper';
+import { arrowsOf, squareStylesOf, uciArrow } from '@/components/board/shapes';
 import { StudyBoard } from '@/components/board/study-board';
-import { MoveList, type MoveListMove } from '@/components/move-list';
+import { EcoLink } from '@/components/eco-link';
+import { MoveTags } from '@/components/move-tags';
+import { Page } from '@/components/page';
+import { RichText } from '@/components/rich-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MoveTags } from '@/components/move-tags';
-import { RichText } from '@/components/rich-text';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
-import { PlayBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
 import { CourseIntroCard } from '@/features/course/course-intro';
 import { ExplorerPanel } from '@/features/explorer/explorer-panel';
-import { arrowsOf, squareStylesOf, uciArrow } from '@/components/board/shapes';
-import { encodeMoves } from '@/router/hash';
-import { startFromAddress } from './resume';
+import { branchesHref, courseHref, lineHref, type UnitRef } from '@/router/hrefs';
+import { navigate, to } from '@/router/location';
+import { CompleteCard } from './complete-card';
+import { MODES } from './modes';
+import { PlayPanel } from './play-panel';
 import { ALL_BRANCHES, playView, usePlay, type PlayMode } from './store';
-import { navigate, setHashState, to } from '@/router/location';
-import { courseHref, lineHref, branchesHref, type UnitRef } from '@/router/hrefs';
-
-const MODES: Record<PlayMode, { name: string; blurb: string; icon: typeof BookOpen }> = {
-  learn: { name: 'Learn', blurb: 'You play both sides. Every move is shown first.', icon: BookOpen },
-  drill: { name: 'Drill', blurb: 'The computer plays the other side. Recall your moves.', icon: Target },
-  branches: {
-    name: 'Every branch',
-    blurb: 'The computer varies its replies each time. Know the answer to every one.',
-    icon: GitBranch,
-  },
-};
+import { usePlayAddress } from './use-play-address';
 
 const label = (step: LineStep, index: number) => numberedMove(index, step.edge.san);
 
@@ -41,30 +29,8 @@ type Props = { course: string; line: string; mode: PlayMode; unit?: UnitRef };
 export function PlayPage({ course, line, mode, unit }: Props) {
   const state = usePlay();
   const { phase, content, steps, index, attempt, badge, opponentThinking, results, explore, scope, firstIndex } = state;
-  // The address names the unit; the effects below must not restart for a new object with the same contents.
-  const unitKey = unit ? `${unit.n}/${unit.first ?? ''}-${unit.last ?? ''}` : '';
 
-  useEffect(() => {
-    // The moves played so far are in the URL hash, so a refresh carries on from the same move (and the same part).
-    void startFromAddress(course, line, mode, unit);
-    return () => usePlay.getState().stop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [course, line, mode, unitKey]);
-
-  // If the store was reset while this page stayed open (a hot reload while developing does that), start again instead of
-  // sitting on a loading skeleton until the page is refreshed.
-  useEffect(() => {
-    if (usePlay.getState().phase === 'idle') void startFromAddress(course, line, mode, unit);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, course, line, mode, unitKey]);
-
-  useEffect(() => {
-    if (phase !== 'playing' && phase !== 'complete') return;
-    setHashState({
-      m: index > 0 ? encodeMoves(steps.slice(0, index).map((step) => step.edge.uci)) : undefined,
-      p: scope && scope.part > 0 ? String(scope.part) : undefined,
-    });
-  }, [phase, index, steps, scope]);
+  usePlayAddress(course, line, mode, unit);
 
   // Learn: the steps (and the arrow keys) go forward by playing the move shown, and back through the line or the moves
   // explored off it. They are not there when you are recalling the line yourself.
@@ -140,9 +106,6 @@ export function PlayPage({ course, line, mode, unit }: Props) {
     state.mode === 'learn' && view.upcoming && !complete && !explore
       ? explainMove(view.upcoming.fromEpd, view.upcoming.edge.uci, { edge: view.upcoming.edge })
       : [];
-  const clean = results.filter((result) => result.rating === 'easy' || result.rating === 'good').length;
-  const helped = results.filter((result) => result.rating === 'hard').length;
-  const missed = results.filter((result) => result.rating === 'again').length;
 
   let instruction: string;
   if (complete) instruction = scope ? 'Unit complete.' : 'Line complete.';
@@ -255,78 +218,20 @@ export function PlayPage({ course, line, mode, unit }: Props) {
         />
 
         <div className="grid content-start gap-4">
-          <Card>
-            <CardHeader className="gap-3">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <CardTitle className="text-xl" aria-live="polite">
-                  {exploring ? `Exploring: ${explore!.map((move) => move.san).join(' ')}` : instruction}
-                </CardTitle>
-                {state.mode === 'learn' && !everyBranch && (
-                  <Button size="sm" onClick={() => chooseMode('drill')}>
-                    <Target aria-hidden /> Drill this {scope ? 'unit' : 'line'}
-                  </Button>
-                )}
-              </div>
-              <CardDescription>
-                {exploring
-                  ? 'This is off the line. Watch the engine to see what it costs or gains, or click what people play.'
-                  : state.mode === 'learn'
-                    ? [
-                        ...upcomingNotes.slice(0, 2).map((note) => <RichText key={note.text} text={`${note.text} `} />),
-                        <MoveTags key="tags" tags={view.upcoming?.edge.annotation?.tags} />,
-                      ]
-                    : MODES[state.mode].blurb}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-              {everyBranch ? (
-                <p className="text-xs text-muted-foreground">
-                  {index} moves so far. Each run takes a different branch.
-                </p>
-              ) : (
-                <div className="grid gap-1">
-                  <Progress
-                    value={
-                      ((Math.min(index, steps.length) - firstIndex) / Math.max(1, steps.length - firstIndex)) * 100
-                    }
-                    aria-label={scope ? 'Progress through the unit' : 'Progress through the line'}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    {Math.min(index, steps.length) - firstIndex} of {steps.length - firstIndex} moves
-                    {firstIndex > 0 && ', after the moves that lead here'}
-                  </p>
-                </div>
-              )}
-              <MoveList
-                layout="table"
-                label="The line"
-                empty="No moves yet."
-                moves={
-                  exploring
-                    ? [
-                        ...steps.slice(0, index).map((step, ply): MoveListMove => ({ ply, san: step.edge.san })),
-                        ...explore!.map((move, i): MoveListMove => ({
-                          ply: index + i,
-                          san: move.san,
-                          state: 'explored',
-                        })),
-                      ]
-                    : steps.slice(0, stepping ? steps.length : index).map((step, ply): MoveListMove => ({
-                        ply,
-                        san: step.edge.san,
-                        state: ply < index ? 'played' : 'future',
-                      }))
-                }
-                current={exploring ? index + explore!.length - 1 : index - 1}
-                onSelect={stepping ? (ply) => usePlay.getState().goTo(ply + 1) : undefined}
-              />
-              {state.mode === 'learn' && !everyBranch && (
-                <p className="text-xs text-muted-foreground">
-                  Right arrow plays the next move, left arrow goes back. Click a move to jump to it.
-                </p>
-              )}
-            </CardContent>
-          </Card>
+          <PlayPanel
+            mode={state.mode}
+            everyBranch={everyBranch}
+            unit={scope !== null}
+            instruction={instruction}
+            explore={explore}
+            upcomingNotes={upcomingNotes}
+            upcomingTags={view.upcoming?.edge.annotation?.tags}
+            steps={steps}
+            index={index}
+            firstIndex={firstIndex}
+            stepping={stepping}
+            onDrill={() => chooseMode('drill')}
+          />
 
           {(notes.length > 0 || Boolean(lastStep?.edge.annotation?.tags?.length)) &&
             !complete &&
@@ -358,42 +263,20 @@ export function PlayPage({ course, line, mode, unit }: Props) {
           )}
 
           {complete && (
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  {results.length === 0
-                    ? `You have played through the ${scope ? 'unit' : 'line'}.`
-                    : `${clean} of ${results.length} moves right first time`}
-                </CardTitle>
-                <CardDescription>
-                  {results.length > 0 && state.mode !== 'learn' && `${helped} with help, ${missed} to see again. `}
-                  {state.mode === 'learn'
-                    ? 'The moves are now in your quiz.'
-                    : 'Your answers are saved and scheduled for the quiz.'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-wrap gap-2">
-                {state.mode === 'learn' ? (
-                  <Button onClick={() => chooseMode('drill')}>
-                    <Target aria-hidden /> Now drill it
-                  </Button>
-                ) : (
-                  <Button onClick={() => usePlay.getState().restart()}>
-                    <RotateCcw aria-hidden /> {everyBranch ? 'Another branch' : 'Drill again'}
-                  </Button>
-                )}
-                {next && (
-                  <Button asChild variant="outline">
-                    <a href={to(lineHref(course, next.id, state.mode === 'drill' ? 'drill' : 'learn'))}>
-                      Next: {next.name}
-                    </a>
-                  </Button>
-                )}
-                <Button asChild variant="ghost">
-                  <a href={scope ? pathHref : to(courseHref(course))}>Back to the {scope ? 'path' : 'course'}</a>
-                </Button>
-              </CardContent>
-            </Card>
+            <CompleteCard
+              mode={state.mode}
+              results={results}
+              unit={scope !== null}
+              everyBranch={everyBranch}
+              next={
+                next && {
+                  name: next.name,
+                  href: to(lineHref(course, next.id, state.mode === 'drill' ? 'drill' : 'learn')),
+                }
+              }
+              backHref={scope ? pathHref : to(courseHref(course))}
+              onDrill={() => chooseMode('drill')}
+            />
           )}
         </div>
       </div>

@@ -1,13 +1,9 @@
 import {
   type Attempt,
-  type CourseUnit,
-  courseUnits,
   type LineStep,
-  lineSteps,
   nextBranchMove,
   nodeAt,
   type OpeningContent,
-  pathFromUcis,
   pathSteps,
   type Played,
   playUci,
@@ -16,22 +12,22 @@ import {
   RESERVED_LINE_ID,
   type Rng,
   startAttempt,
-  type UnitStretch,
-  unitStretches,
   withPromotion,
 } from '@knightschool/core';
 import { create } from 'zustand';
 import type { BoardBadge } from '@/components/board/shapes';
 import { loadOpening } from '@/data/content';
 import { whenStorageReady } from '@/data/storage';
-import { getCardOptions } from '@/data/training-settings';
 import { introduceStep, recordStep } from './record';
+import { resumeFrom, resumeStretch, scopeFor, type PlayScope } from './scope';
 import type { UnitRef } from '@/router/hrefs';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { errorText } from '@/lib/errors';
 import { sessionLoader, type SessionPhase } from '@/lib/session';
 
 export type PlayMode = 'learn' | 'drill' | 'branches';
+
+export { resumeFrom, resumeStretch } from './scope';
 
 /** The line id that means "every branch" in routes and in `variantId`. */
 export const ALL_BRANCHES = RESERVED_LINE_ID;
@@ -43,14 +39,6 @@ export const setRandom = (rng: Rng) => {
 };
 
 type Phase = SessionPhase<'playing' | 'complete'>;
-
-/**
- * Learn or Drill scoped to a unit of the study path: its stretches (one, or one per short branch of a side unit), played
- * one after another. Each starts part-way along: the moves before `from` are already on the board.
- */
-type PlayScope = { unit: CourseUnit; ref: UnitRef; parts: UnitStretch[]; part: number };
-
-/** A step off the line, played while exploring in Learn. */
 
 type PlayState = {
   phase: Phase;
@@ -346,53 +334,4 @@ export function playView(state: Pick<PlayState, 'content' | 'steps' | 'index' | 
     showExpected: expected !== undefined && (mode === 'learn' || attempt.shown),
     hintSquare: expected && attempt.hintUsed ? expected.uci.slice(0, 2) : null,
   };
-}
-
-/**
- * Where a run starts when it is resumed from the moves in a URL. A fixed line resumes after however many of its own
- * moves match; every branch rebuilds the branch that was being played, as far as the course knows it. Nothing matching
- * starts from the beginning.
- */
-export function resumeFrom(
-  content: OpeningContent,
-  variantId: string,
-  mode: PlayMode,
-  moves: string[],
-): { steps: LineStep[]; index: number } {
-  if (mode === 'branches') {
-    const edges = pathFromUcis(content, moves);
-    const steps = edges.map((edge, i) => {
-      const fromEpd = i === 0 ? content.opening.rootEpd : edges[i - 1]!.to;
-      return { fromEpd, edge, ours: nodeAt(content, fromEpd).isOurTurn };
-    });
-    return { steps, index: steps.length };
-  }
-  const steps = lineSteps(content, variantId);
-  let index = 0;
-  while (index < moves.length && index < steps.length && steps[index]!.edge.uci === moves[index]) index++;
-  return { steps, index };
-}
-
-/** A stretch resumed after the moves of it already played (from a saved URL); never before its own start. */
-export function resumeStretch(
-  content: OpeningContent,
-  stretch: UnitStretch,
-  moves: string[],
-): { steps: LineStep[]; index: number } {
-  const steps = pathSteps(content, stretch.moves);
-  let index = 0;
-  while (index < moves.length && index < steps.length && steps[index]!.edge.uci === moves[index]) index++;
-  return { steps, index: Math.max(stretch.from, index) };
-}
-
-/** The unit a Learn or Drill address names, cut with the learner's card settings as the Path tab cuts it. */
-async function scopeFor(content: OpeningContent, line: string, ref: UnitRef, part: number): Promise<PlayScope> {
-  const options = await whenStorageReady()
-    .then(({ storage }) => getCardOptions(storage))
-    .catch(() => ({}));
-  const unit = courseUnits(content, options).find((candidate) => candidate.line === line && candidate.n === ref.n);
-  if (!unit)
-    throw new Error(`${content.opening.name} has no unit ${ref.n} of this line now. Pick one from the course's path.`);
-  const parts = unitStretches(unit, ref.first, ref.last);
-  return { unit, ref, parts, part: Math.min(Math.max(0, part), parts.length - 1) };
 }
