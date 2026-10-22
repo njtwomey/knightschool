@@ -1,47 +1,31 @@
 import {
   type Attempt,
   type Card,
-  cardFits,
   createScheduler,
   followOn,
-  freePractice,
   isQuizCard,
-  type LineEdge,
-  lineQuestions,
   matchAnswer,
   newCard,
-  nodeAt,
   type OpeningContent,
-  pathTo,
-  planIntroductions,
-  planSession,
   playUci,
-  type Quiz,
   type RatingName,
   recordAnswer,
   recordQuizAnswer,
   reduceAttempt,
-  shuffle,
   startAttempt,
   withPromotion,
 } from '@knightschool/core';
 import type { Storage } from '@knightschool/storage';
 import { create } from 'zustand';
 import type { BoardBadge } from '@/components/board/shapes';
-import { loadIndex, loadOpening } from '@/data/content';
-import { DUE, type QuizConfig, resolvePool, savedConfig } from '@/data/practice-config';
-import { useStorage, whenStorageReady } from '@/data/storage';
-import { missKey, type Miss } from './regret';
-import {
-  addIntroducedToday,
-  getEnrolled,
-  getCardOptions,
-  getIntroducedToday,
-  getNewPerDay,
-} from '@/data/training-settings';
+import { DUE, type QuizConfig, savedConfig } from '@/data/practice-config';
+import { useStorage } from '@/data/storage';
 import { createTimers, FEEDBACK_DELAYS } from '@/lib/feedback';
 import { errorText } from '@/lib/errors';
 import { sessionLoader, type SessionPhase } from '@/lib/session';
+import { quizFor } from './questions';
+import { missKey, type Miss } from './regret';
+import { sessionQueue, type LineScope } from './session';
 
 const scheduler = createScheduler();
 
@@ -111,7 +95,7 @@ const storageOrThrow = (): Storage => {
   return storage.storage;
 };
 
-export type LineScope = { course: string; line: string };
+export type { LineScope } from './session';
 
 export const useQuiz = create<QuizState>((set, get) => {
   /** Only the schedule's own session is saved; free practice and a line's quiz never touch it. */
@@ -251,78 +235,7 @@ export const useQuiz = create<QuizState>((set, get) => {
       };
       await load(reset, async () => {
         clearTimers();
-        const storage = (await whenStorageReady()).storage;
-        const now = new Date();
-        const index = await loadIndex();
-        const scope = get().scope;
-        if (scope) {
-          const content = await loadOpening(scope.course);
-          // Shuffled, so the quiz is not the line played again in order.
-          const questions = shuffle(lineQuestions(content, scope.line));
-          const queue = questions.map((definition) => newCard(definition, now));
-          set({
-            queue,
-            index: 0,
-            contents: { [content.opening.id]: content },
-            results: [],
-            misses: [],
-            sessionId: crypto.randomUUID(),
-            attempt: startAttempt(),
-            shownAt: performance.now(),
-            phase: queue.length ? 'asking' : 'summary',
-          });
-          return;
-        }
-        if (config.source !== DUE) {
-          // Free practice: random questions, saved nowhere, so the schedule is untouched.
-          const chosen = await resolvePool(config.source, index);
-          const free = await Promise.all(chosen.map((course) => loadOpening(course.id)));
-          const queue = freePractice(
-            free,
-            undefined,
-            await getCardOptions(storage),
-            Math.random,
-            new Date(),
-            config.weighting,
-          );
-          set({
-            queue,
-            index: 0,
-            contents: Object.fromEntries(free.map((content) => [content.opening.id, content])),
-            results: [],
-            misses: [],
-            sessionId: crypto.randomUUID(),
-            attempt: startAttempt(),
-            shownAt: performance.now(),
-            phase: queue.length ? 'asking' : 'summary',
-          });
-          return;
-        }
-        const enrolled = await getEnrolled(
-          storage,
-          index.map((course) => course.id),
-        );
-        const loaded = await Promise.all(enrolled.map((id) => loadOpening(id)));
-        const contents = Object.fromEntries(loaded.map((content) => [content.opening.id, content]));
-
-        // New cards come from each course's path: its open units in order, never ahead of what is passed.
-        const quota = Math.max(0, (await getNewPerDay(storage)) - (await getIntroducedToday(storage, now)));
-        const courses = await Promise.all(
-          loaded.map(async (content) => ({
-            content,
-            cards: await storage.cards.byOpening(content.opening.id),
-            reviews: await storage.reviews.byOpening(content.opening.id),
-          })),
-        );
-        const fresh = planIntroductions(courses, quota, now, await getCardOptions(storage));
-        await storage.cards.insertMissing(fresh);
-        if (fresh.length) await addIntroducedToday(storage, fresh.length, now);
-
-        // A card whose position or move its course no longer has (a line cut short or rewritten) cannot be asked.
-        const due = (await storage.cards.due(now.toISOString())).filter(
-          (card) => enrolled.includes(card.openingId) && cardFits(contents[card.openingId], card),
-        );
-        const queue = planSession(due);
+        const { queue, contents } = await sessionQueue(config, get().scope);
         set({
           queue,
           index: 0,
@@ -421,35 +334,3 @@ export const useQuiz = create<QuizState>((set, get) => {
     stop: clearTimers,
   };
 });
-
-export const quizFor = (content: OpeningContent | undefined, card: Card): Quiz | undefined =>
-  content?.quizzes.find((quiz) => card.id === `quiz:${content.opening.id}:${quiz.id}`);
-
-export type MoveQuestion = {
-  kind: 'move';
-  card: Card;
-  content: OpeningContent;
-  /** The move that was just played to reach this position (the opponent's), if any. */
-  lastEdge: LineEdge | undefined;
-  /** How the position was reached, as moves from the start. */
-  path: LineEdge[];
-  expected: LineEdge;
-};
-
-export type QuizQuestion = { kind: 'quiz'; card: Card; content: OpeningContent; quiz: Quiz };
-
-type SessionQuestion = MoveQuestion | QuizQuestion;
-
-/** What the board and panel need for the card being asked. */
-export function currentQuestion(state: Pick<QuizState, 'queue' | 'index' | 'contents'>): SessionQuestion | null {
-  const card = state.queue[state.index];
-  const content = card ? state.contents[card.openingId] : undefined;
-  if (!card || !content || !cardFits(content, card)) return null;
-  if (isQuizCard(card)) {
-    const quiz = quizFor(content, card);
-    return quiz ? { kind: 'quiz', card, content, quiz } : null;
-  }
-  const expected = nodeAt(content, card.epd).moves.find((move) => move.uci === card.expectedUci)!;
-  const path = card.epd === content.opening.rootEpd ? [] : pathTo(content, card.epd);
-  return { kind: 'move', card, content, lastEdge: path.at(-1), path, expected };
-}

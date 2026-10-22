@@ -27,7 +27,8 @@ vi.mock('@/data/content', () => ({
   loadOpening: () => Promise.resolve(content),
 }));
 
-const { currentQuestion, useQuiz, DUE } = await import('./store');
+const { useQuiz, DUE } = await import('./store');
+const { currentQuestion } = await import('./questions');
 const { saveConfig, savedConfig } = await import('@/data/practice-config');
 const review = () => useQuiz.getState();
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
