@@ -7,7 +7,7 @@ import {
   type Card,
   type OpeningContent,
 } from '@knightschool/core';
-import { quizFor } from '@/features/quiz/store';
+import { quizFor } from '@/features/quiz/questions';
 
 /** A card in words a learner recognises: "after 1. e4 e5 2. Nf3, play 2...Nc6", or the quiz question. */
 export function describeCard(content: OpeningContent, card: Card): string {

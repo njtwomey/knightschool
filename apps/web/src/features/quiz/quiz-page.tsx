@@ -19,7 +19,7 @@ import { Summary } from './summary';
  * the courses chosen (`#start=due` starts the schedule at once). Given a `scope` it asks every question of one line,
  * shuffled and never saved, at once, with `header` (the line's tabs) on top.
  */
-export function QuizPage({ scope, header }: { scope?: LineScope; header?: ReactNode } = {}) {
+export function QuizPage({ scope, header }: { scope?: LineScope; header?: ReactNode }) {
   const state = useQuiz();
   const { phase, error, results, config, queue, index } = state;
   const course = scope?.course;
