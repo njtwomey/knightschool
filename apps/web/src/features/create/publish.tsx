@@ -17,7 +17,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { download } from '@/data/backup';
 import { navigate } from '@/router/location';
-import { useAuthor, type DraftCourse } from './store';
+import { type DraftCourse } from './draft';
+import { useAuthor } from './store';
 import { createHref } from '@/router/hrefs';
 import { errorText } from '@/lib/errors';
 

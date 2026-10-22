@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { entryId, unitSummary } from './helpers';
-import { fullLine, useAuthor, type DraftCourse } from './store';
+import { entryId, fullLine, type DraftCourse } from './draft';
+import { unitSummary } from './helpers';
+import { useAuthor } from './store';
 
 /** One row of the path: a line (on the path or a bonus), or a trap to spring or a quiz shown with a unit. */
 type Row =

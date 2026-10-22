@@ -4,11 +4,11 @@ import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { to } from '@/router/location';
+import { entryId, draftCourses } from './draft';
 import { LineBreadcrumbs } from './crumbs';
-import { entryId } from './helpers';
 import { LineEditor } from './line-editor';
 import { AuthorGate, CreateNotices, UndoButton } from './shell';
-import { draftCourses, useAuthor } from './store';
+import { useAuthor } from './store';
 import { lineHref, createHref } from '@/router/hrefs';
 
 /** One line in Create (`/create/<course>/<line>`): the board to play, branch, note and tag it. */

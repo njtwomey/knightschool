@@ -30,11 +30,12 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { SIDE_OPTIONS } from '@/components/filter-options';
 import { FilterToggle } from '@/components/filter-toggle';
 import { useCatalog } from '@/data/catalog-store';
+import { entryId, entrySection, fullLine, type DraftCourse } from './draft';
 import { GroupActions } from './group-actions';
-import { entryId, entrySection, useDraft } from './helpers';
+import { useDraft } from './helpers';
 import { useGlossary } from '@/features/glossary/use-glossary';
 import { navigate } from '@/router/location';
-import { fullLine, useAuthor, type DraftCourse } from './store';
+import { useAuthor } from './store';
 import { createHref } from '@/router/hrefs';
 
 const FROM_START = '__start';

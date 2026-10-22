@@ -1,11 +1,9 @@
-import { type AuthoredBuild, type AuthoredProblem, type CourseEntry, type CourseUnit } from '@knightschool/core';
+import { type AuthoredBuild, type AuthoredProblem, type CourseUnit } from '@knightschool/core';
 import { useEffect, useState } from 'react';
 import type { AuthoredRows } from '@/data/authored-content';
 import { useStorage } from '@/data/storage';
-import { useAuthor, type DraftCourse } from './store';
-
-export const entryId = (entry: CourseEntry) => (typeof entry === 'string' ? entry : entry.id);
-export const entrySection = (entry: CourseEntry) => (typeof entry === 'string' ? undefined : entry.section);
+import { entryId, type DraftCourse } from './draft';
+import { useAuthor } from './store';
 
 /** "12 units: Main line (1–4), Two Knights (1–2), …": the path, unit by unit, run together by line. */
 export function unitSummary(units: CourseUnit[], title: (line: string) => string): string {

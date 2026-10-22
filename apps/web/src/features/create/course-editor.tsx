@@ -4,14 +4,14 @@ import { Page } from '@/components/page';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { to } from '@/router/location';
+import { entryId, draftCourses } from './draft';
 import { CourseForm } from './course-form';
 import { CreateBreadcrumbs } from './crumbs';
-import { entryId } from './helpers';
 import { LinesTab } from './lines-tab';
 import { PathOrder } from './path-order';
 import { PublishPanel } from './publish';
 import { AuthorGate, CreateNotices, UndoButton } from './shell';
-import { draftCourses, useAuthor } from './store';
+import { useAuthor } from './store';
 import { courseHref, type CreateTab } from '@/router/hrefs';
 
 /** One course in Create (`/create/<course>/<tab>`): its details, lines, path or publishing. */

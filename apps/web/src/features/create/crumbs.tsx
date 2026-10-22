@@ -3,8 +3,8 @@ import { TrailCrumbs } from '@/components/breadcrumbs/trail-crumbs';
 import { useCourseItems } from '@/components/breadcrumbs/use-course-items';
 import { Button } from '@/components/ui/button';
 import { navigate } from '@/router/location';
-import { entryId } from './helpers';
-import { draftCourses, fullLine, useAuthor } from './store';
+import { entryId, draftCourses, fullLine } from './draft';
+import { useAuthor } from './store';
 import { createHref, lineEditHref, CREATE_TABS, type CreateTab } from '@/router/hrefs';
 
 const ROOT = { label: 'Create', href: '/create' };

@@ -18,11 +18,12 @@ import { useSort } from '@/hooks/use-sort';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { to } from '@/router/location';
+import { entryId, draftCourses, type DraftCourse } from './draft';
 import { NewCourseDialog } from './course-form';
-import { entryId, lastEdited, problemsFor, shortTime } from './helpers';
+import { lastEdited, problemsFor, shortTime } from './helpers';
 import { ImportContributionDialog } from './publish';
 import { AuthorGate, CreateNotices, ExportButton, UndoButton } from './shell';
-import { draftCourses, useAuthor, type DraftCourse } from './store';
+import { useAuthor } from './store';
 import { courseHref, createHref } from '@/router/hrefs';
 
 type Row = { course: DraftCourse; lines: number; edited: string; problems: string[] };

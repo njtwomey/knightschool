@@ -33,9 +33,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { navigate, to } from '@/router/location';
+import { entryId, draftChapter, fullLine, type DraftCourse } from './draft';
 import { GroupSelect } from './group-select';
-import { entryId, problemsFor } from './helpers';
-import { draftChapter, fullLine, useAuthor, type DraftCourse } from './store';
+import { problemsFor } from './helpers';
+import { useAuthor } from './store';
 import { lineEditHref } from '@/router/hrefs';
 
 /** One line of the table, worked out once so that any column can sort it. */

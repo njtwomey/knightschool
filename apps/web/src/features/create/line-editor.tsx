@@ -24,9 +24,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { navigate } from '@/router/location';
+import { draftChapter, fullLine, positionsOf, type DraftCourse } from './draft';
 import { GroupSelect } from './group-select';
 import { useDraft } from './helpers';
-import { draftChapter, fullLine, positionsOf, useAuthor, type DraftCourse } from './store';
+import { useAuthor } from './store';
 import { createHref, lineEditHref } from '@/router/hrefs';
 
 /**

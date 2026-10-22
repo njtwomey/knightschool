@@ -10,8 +10,8 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { entrySection } from './helpers';
-import { useAuthor, type DraftCourse } from './store';
+import { entrySection, type DraftCourse } from './draft';
+import { useAuthor } from './store';
 
 const NO_GROUP = '__none';
 const NEW_GROUP = '__new';

@@ -16,7 +16,8 @@ vi.stubGlobal('fetch', (url: string) => {
   });
 });
 
-const { draftCourses, fullLine, useAuthor } = await import('./store');
+const { draftCourses, fullLine } = await import('../draft');
+const { useAuthor } = await import('./index');
 const author = () => useAuthor.getState();
 const chapterPgn = async (id: string) => (await memory.storage.authoring.chapters()).find((row) => row.id === id);
 const play = async (...ucis: string[]) => {
