@@ -18,7 +18,8 @@ real alternative piece sets (licence check first).
 Use `make` (run `make` alone to list targets). It uses a global pnpm if present, else `npx pnpm@<packageManager>`.
 
 - `make dev`: Vite dev server (http://localhost:5173)
-- `make check`: format check, lint, typecheck, tests. `make pre-push` adds the build; this is what CI runs. `make gaps`:
+- `make check`: format check, lint, typecheck, tests. `make pre-push` adds the build; this is what CI runs, and it must
+  pass before every push (`make hooks` installs it as the git pre-push hook; this checkout has it). `make gaps`:
   popular replies no course answers, per side, ranked by explorer games (`scripts/gaps.ts`). `make doctor`:
   overlaps in `content/` worth tidying (a report, never a gate).
 - `make fix`: ESLint autofix plus Prettier. `make hooks` installs a git pre-push hook that runs `make pre-push`.
@@ -32,7 +33,11 @@ Use `make` (run `make` alone to list targets). It uses a global pnpm if present,
   explorer band is blitz and rapid, 1000 to 1600) for the card threshold now and for weighting the computer's replies later.
   Secrets go in `.env` (git-ignored, mode 600; `.env.example` is the template). Only `pnpm popularity` loads it, through
   node's `--env-file-if-exists=.env` in `package.json`; never read, print or commit `.env`.
-  `scripts/content.test.ts` builds the real content in `make test`.
+  `scripts/content.test.ts` builds the real content in `make test`, and writes every content file again into a temporary
+  folder (`scripts/content-emit.ts`, the writer `content:build` uses) and parses each with the schema the app reads it
+  with. **Shipped content is validated at build and trusted at runtime**: production casts the JSON it fetches
+  (`data/content.ts`, `authored-build.ts`, `analysis.ts`), development still parses it. A new content file needs its
+  schema in that test.
 - `pnpm db:generate`: after changing `packages/storage/src/schema.ts`, writes a numbered SQL migration with drizzle-kit and
   bundles it into `src/migrations.generated.ts` (check both in). A test fails if the schema and migrations disagree.
 
@@ -83,7 +88,8 @@ Four workspace packages with a one-way dependency rule, enforced by `eslint-plug
 - `apps/web`: the only place engine, storage, core and React meet. Inside `apps/web/src` the folders are layered, lowest
   first, and the same plugin enforces it: `lib` (plain helpers; imports nothing else from the app), `hooks` (React hooks
   over lib; never data or router), `router` (addresses), `data` (loading and shared stores), `components` (shared UI),
-  then `features` (pages), `App.tsx` and `main.tsx`. Only features (and App) import features; lib, hooks, router and data
+  then `features` (pages), `app/` (`header.tsx`: the site header and the paused-tab banner; `routes.tsx`: the page for
+  each route), `App.tsx` and `main.tsx`. Only features (and app/, App) import features; lib, hooks, router and data
   never import components.
   `eslint-alias-resolver.js` teaches the rules the `@/` alias.
 
@@ -164,7 +170,10 @@ Where things live in `apps/web/src`: `router/route.ts` (`parseRoute`, route page
 these, never by hand), `router/menu.ts` (`headerItemOf`: which header item a page belongs to; course, line, play, path and tree pages are Courses,
 Create's are Create, Profile's are Profile), `router/location.ts` and `router/hash.ts`. `data/` holds loading and the shared stores:
 `catalog-store.ts` (`useCatalog`: the course index, the open course and the board's place in it), `progress-store.ts`
-(`useProgress`), `authored-content.ts` and `authored-edits.ts`, `training-settings.ts`, `storage.ts`, `content.ts` (every
+(`useProgress`), `authored-content.ts` (the authored rows and their build; the code that builds, `authored-build.ts`
+(`buildAuthored`, the PGN reader), is imported only when something is authored) and `authored-edits.ts`,
+`training-settings.ts`, `storage.ts` (`useStorage.open()` imports `@knightschool/storage` itself, so the database code is
+a chunk of its own), `content.ts` (every
 `load*`; `loadOpening` keeps each course once, cleared when the authored build changes) and `fetch-content.ts`
 (`contentUrl`, `fetchContent`, and `onceRetryable(load)`: one shared load that tries again after a failure; use it for
 anything loaded once). `lib/` holds plain helpers: `local-prefs.ts` (every localStorage read and write: `readPref` /
@@ -172,10 +181,11 @@ anything loaded once). `lib/` holds plain helpers: `local-prefs.ts` (every local
 a Zustand store of them; board and engine preferences are two such stores; keys and stored formats are kept, so an old
 value still reads), `feedback.ts` (`FEEDBACK_DELAYS`, `createTimers`), `errors.ts` (`errorText(error)`), `session.ts`
 (`SessionPhase` and `sessionLoader`, the loading phase, the guard against a second start and the error phase that the
-session stores share), `sort.ts` (`nextSort`, `sortRows`), `days.ts`. `hooks/` holds `use-sort.ts` (`useSort(compare,
+session stores share), `sort.ts` (`nextSort`, `sortRows`), `days.ts`, `lazy.ts` (`lazyNamed(() => import(...), 'XPage')`). `hooks/` holds `use-sort.ts` (`useSort(compare,
 { initial, fallback })`: a heading sorts up, then down, then back to the table's own order), `use-async.ts` (`useAsync(load, deps)` gives `{ data, error, loading }`:
 use it for any effect that loads something, never a hand-written cancelled flag) and `use-now.ts` (a ticking clock).
-`components/` holds shared UI: `ui` (shadcn), `board` (with `shapes.ts`), `breadcrumbs` (`TrailCrumbs`, the one shape of
+`components/` holds shared UI: `ui` (shadcn), `page-fallback.tsx` (`PageFallback`, the page skeleton, and
+`PageSuspense`, a Suspense with it), `board` (with `shapes.ts`), `breadcrumbs` (`TrailCrumbs`, the one shape of
 every breadcrumb trail: a root, crumbs that are menus of their siblings (`CrumbMenu`), the page's tabs (`TabGroup`) and
 anything trailing; `useCourseItems` for the course menus; `CourseBreadcrumbs` and `PlayBreadcrumbs` are built on it, as
 are Create's and Profile's), `tags` (`TagBadge`, `TagLegend`, `tag-specs.ts`, and `hints.ts`, the hover wording for tags
@@ -186,7 +196,16 @@ every one-of-several choice and filter, with hints and an optional `allValue`; o
 them `SIDE_FILTER_OPTIONS`: Both, White, Black, value `'all'` for both), `icon-action.tsx`. Features in `apps/web/src/features/*`, one folder per page, named as
 the menu names it:
 
-The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | Create | Glossary (`App.tsx`).
+**Code splitting.** Home, Courses, Search, a course, its Path and a line's About come with the app; Create, Tree, Lab,
+Profile, Quiz, Speed, Name it, Glossary and Credits are `lazyNamed` in `app/routes.tsx` and render in `PageSuspense`
+(the skeleton while their chunk loads), and so are a line's Learn, Drill, Quiz and Tree tabs (`line-page.tsx`).
+`manualChunks` in `vite.config.ts` puts react, radix and the board (react-chessboard, chess.js) in chunks of their own;
+the service worker precaches every chunk, so after one visit it all works offline. Keep Zod and the PGN parser out of the
+main chunk: a module is bundled whole, so a core module the app needs at once must not also export what only authoring
+or the build needs (hence `authoring/build.ts`, `schema/search.ts`, `schema/explorer.ts`), and a schema used only in
+development is written `import.meta.env.DEV ? Schema.parse(json) : (json as T)` or imported inside the DEV branch.
+
+The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | Create | Glossary (`app/header.tsx`).
 
 - `courses` (`/courses`): every course in one table, filtered by side (Both / White / Black), every column sortable
   (up, down, back to study order), a row opens the course.
@@ -211,7 +230,9 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   attach to) and Publish; View as learner and Undo sit in its header. `/create/<course>/<line>` (`line-page.tsx`) is the
   line editor with course and line menus and previous/next. `shell.tsx` gates on the database and shows notices and
   problems where they occur. The learner's course page and line About show **Edit** for an authored course
-  (`authored` in index.json). `store.ts` (`useAuthor`; pages choose the course and line with `open`) turns each action into chapter PGN and
+  (`authored` in index.json). `store/` (`useAuthor`; pages choose the course and line with `open`; slices for the session,
+  course, line, move, group, path and contribution share `context.ts`'s `save` and lookups; the pure helpers are
+  `draft.ts`, Undo's label `undo-label.ts`) turns each action into chapter PGN and
   course JSON with core's `authoring/chapter-edit.ts` (`newChapter`, `appendMove`, `truncateMoves`, `setMoveNote`, `setHeader`,
   `startHeader`, `opponentMove`) and saves it as one undoable action (`data/authored-edits.ts`). A new course is a course of
   its own by default (opening `my-<side>-courses`, grouped as "My courses" by `ownOpeningGroups`); it can instead add to
@@ -234,14 +255,15 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   (`.github/ISSUE_TEMPLATE/contribution.yml`, field `contribution`); over 7,500 characters of URL the link carries a
   short note and the YAML is copied and downloaded instead. **Import** reads a contribution back into your courses.
 - **Authored courses** are ordinary courses: `data/content.ts` merges them into `loadIndex`, `loadOpening` and
-  `loadTreeGraph` through `data/authored-content.ts`, which reads the live authored rows and runs `buildAuthored` (core) over
+  `loadTreeGraph` through `data/authored-content.ts`, which reads the live authored rows and runs `buildAuthored` (core `authoring/build.ts`) over
   them and the shipped chapters as written (`public/content/chapters.json`, from the build, fetched only when something
   is authored). A chapter or course that does not fit (an id taken, a `[Start]` naming nothing, a comment clashing
   with a shipped one: one comment per move holds here too) is left out with a problem, never a crash. The catalog store's
   (`useCatalog`) `reload` refreshes the lists after an edit. Board search (`search.json`) does not include them.
 - `path` (a course's Path tab, `features/path`): the course cut into units (`courseUnits` in core, see Training) in
   study order, each with its state, its moves (yours in bold), what unlocks it if locked, its extras (traps and quizzes,
-  never needed to pass) and Learn / Drill buttons for just that unit. `data/course-path.ts` loads it: units cut with the
+  never needed to pass) and Learn / Drill buttons for just that unit (`unit-row.tsx`, with `stretch-moves.tsx`,
+  `unit-board.tsx`, `unit-state.ts`, `unit-text.ts`). `data/course-path.ts` loads it: units cut with the
   learner's card settings, state from `cards.byOpening` and `reviews.byOpening`. A unit address plays only that unit:
   the play store's `scope` holds its stretches, each started part-way along (`firstIndex`), one after another for a side
   unit. Above the list, **sessions** from `features/path/sessions` (a registry, one file per type: `pick` reads the path
@@ -250,21 +272,24 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   `rush:<course>`: `rushQueue` plays each passed unit from the start to its end, ignoring the depth). Answers are
   recorded the usual way: Learn and Drill through `play/record.ts`, Speed in `speed_attempts`.
 - `line`: one line's page, `/play/<course>/<line>/<tab>` with About, Learn, Drill, Quiz and Tree as a joined button group
-  at the end of the breadcrumbs (`LINE_TABS` in `router/hrefs.ts`; old `/practice` links are Drill). About is the line in words:
+  at the end of the breadcrumbs (`LINE_TABS` in `router/hrefs.ts`; old `/practice` links are Drill). About (`about-tab.tsx`) is the line in words:
   a board on the position that names it (`namedPly`), the moves with their comments, where it branches from and what
   grows from it, other courses that teach it. Quiz is every question of that one line, shuffled and never saved
-  (`lineQuestions`). The breadcrumbs' course and line are menus of every course and every line, the current one ticked.
+  (`lineQuestions`). `line-page.tsx` only picks the tab. The breadcrumbs' course and line are menus of every course and every line, the current one ticked.
 - `tree` (`/tree`, a course's Tree tab, a line's Tree tab): `TreeExplorer`, full width in three columns. Left an index
+  (`tree-index.tsx`)
   shaped like the tree (`index-model.ts`: the curriculum grouped by first two moves, a line under the line it grows out
   of within its group; folding only tidies the list). Middle the tree, one column per move and one lane per line, the
   main line across the top, branches below with the latest nearest so no lines cross (`laneLayout` in core
   `navigation/lane-layout.ts`, nodes keyed by move prefix in `navigation/move-tree.ts`); pills filled in the line's colour, the line's name left of where it starts; zoom
   buttons and pinch. Right a board with step buttons (and the arrow keys) along the picked line's whole path from the
-  start. Only a click changes anything: a line or a move picks a line; the crosshair (or a group's name) draws only that
+  start (`tree-board.tsx`, the move's comment from `use-move-comment.ts`). Only a click changes anything: a line or a move picks a line; the crosshair (or a group's name) draws only that
   subtree.
 - `glossary`: the motif vocabulary from `content/motifs.yaml` with the courses that use each, searchable and A to Z.
 - `play`: Learn (you play both sides, every move shown), Drill (the computer plays the other side; once called
-  Practise; `PlayMode` is `learn | drill | branches`) and Every branch.
+  Practise; `PlayMode` is `learn | drill | branches`, named in `modes.ts`) and Every branch. The page is `play-page.tsx`
+  (the board) with `play-panel.tsx` and `complete-card.tsx`; `use-play-address.ts` starts it from the address and keeps
+  the hash; the store's unit scope and resume helpers are `scope.ts`.
   **One practice set-up for Quiz, Name it and Speed.** Each mode keeps one saved choice (`data/practice-config.ts`:
   `practiceConfig[mode]`, a `createPrefStore` under `knightschool.practice.<mode>`; the old keys `knightschool.quiz.*`,
   `knightschool.guess.*` and `knightschool.speed` are carried over once by `migratePracticePrefs` and removed). Every
@@ -290,14 +315,15 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   `name-it` ("Name That Opening", menu "Name it", `/name`; `useNameIt`): a position from the courses and you type what it is; `guessTargets` collects every
   opening and variation whose lines reach it (transpositions count) and `gradeGuess` gives full credit for a variation, half
   for just the opening; answers go to the `guess_attempts` table.
-  `quiz` (`useQuiz`): spaced-repetition cards. "Due today" is the schedule's session (`/quiz#start=due`, `dueQuizHref`,
+  `quiz` (`useQuiz` in `store.ts`, answering; `session.ts` builds the queue, `questions.ts` says what is asked; the page
+  is `quiz-page.tsx` with `move-view.tsx`, `quiz-view.tsx` and `summary.tsx`): spaced-repetition cards. "Due today" is the schedule's session (`/quiz#start=due`, `dueQuizHref`,
   starts it at once: the links from Home and Overview use it); any other source is free practice (`freePractice` in core),
   never saved, so it cannot touch the schedule. A line's Quiz tab starts at once, is never saved, and its card has only
   the moves per question. At the end
   of a quiz every wrong move is listed with what it cost by the engine against the course's move (`training/regret.ts` in core:
   under 30cp a memory slip, 30 to 99 an inaccuracy, 100 and more a mistake), from baked analysis or the browser engine at
   depth 14 after the session. `profile`: its tabs (`PROFILE_TABS` in `router/hrefs.ts`, at the end of its breadcrumbs as on a course) are
-  `overview` (the dashboard), `stats` and `settings`, each a folder under `features/profile`. `lab` (render any PGN at a ply, or a FEN).
+  `overview` (the dashboard), `stats` and `settings`, each a folder under `features/profile`. `lab` (render any PGN at a ply, or a FEN; its set-up, copy and load cards each a file).
 
 Toggle groups mark the chosen item from `aria-checked` / `aria-pressed` (`components/ui/toggle.tsx`), because a hover
 hint (`Hint`, a tooltip trigger) round an item overwrites its `data-state`.
