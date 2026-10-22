@@ -1,5 +1,23 @@
-import { describe, expect, it } from 'vitest';
-import { cardDefinitions, courseUnits, type CardOptions, type OpeningContent } from '../packages/core/src/index.ts';
+import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterAll, describe, expect, it } from 'vitest';
+import { z } from 'zod';
+import {
+  AnalysisFile,
+  cardDefinitions,
+  courseUnits,
+  CurriculumEntry,
+  GlossaryEntry,
+  OpeningContent,
+  OpeningGroup,
+  OpeningIndexEntry,
+  SearchIndex,
+  ShippedChapters,
+  TreeGraph,
+  type CardOptions,
+} from '../packages/core/src/index.ts';
+import { emitContent, loadPopularity, openingNames } from './content-emit.ts';
 import { loadCourses, loadCurriculum, loadGlossary, loadOpeningGroups } from './content-lib.ts';
 
 /** How many positions ask the learner for a move: their turn, with a repertoire move. */
@@ -58,5 +76,43 @@ describe('content', () => {
     const ids = courseUnits(content, options).flatMap((unit) => unit.cards.map((card) => card.id));
     expect(ids.length).toBe(new Set(ids).size);
     expect(new Set(ids)).toEqual(new Set(cardDefinitions(content, options).map((card) => card.id)));
+  });
+});
+
+/**
+ * The app trusts the shipped content at runtime (production casts the JSON it fetches), so the guarantee is here: every
+ * file `pnpm content:build` writes to apps/web/public/content is written again into a temporary folder by the same code
+ * and parsed with the schema the app reads it with (`apps/web/src/data/content.ts`, `authored-build.ts`,
+ * `analysis.ts`). A file the app could not read fails `make test`, and so `make pre-push`.
+ */
+describe('the content files the app reads', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'knightschool-content-'));
+  afterAll(() => rmSync(dir, { recursive: true, force: true }));
+  emitContent(dir, await openingNames({ offline: true }), loadPopularity(), { quiet: true });
+  const read = (file: string): unknown => JSON.parse(readFileSync(join(dir, file), 'utf8'));
+  const index = z.array(OpeningIndexEntry).parse(read('index.json'));
+  const courseFiles = new Set(index.map((entry) => `${entry.id}.json`));
+  const schemas: Record<string, z.ZodType> = {
+    'index.json': z.array(OpeningIndexEntry),
+    'search.json': SearchIndex,
+    'openings.json': z.array(OpeningGroup),
+    'curriculum.json': z.array(CurriculumEntry),
+    'tree.json': TreeGraph,
+    'glossary.json': z.array(GlossaryEntry),
+    'chapters.json': ShippedChapters,
+    'analysis.json': AnalysisFile,
+  };
+  const files = readdirSync(dir).sort();
+
+  it('writes a file for every course in the index', () => {
+    for (const file of courseFiles) expect(files).toContain(file);
+  });
+
+  it.each(files)('%s parses with the schema the app reads it with', (file) => {
+    const schema = schemas[file] ?? (courseFiles.has(file) ? OpeningContent : undefined);
+    // A new kind of file needs its schema here, as well as a loader in the app.
+    expect(schema, `no schema for ${file}`).toBeDefined();
+    const parsed = schema!.safeParse(read(file));
+    expect(parsed.success, parsed.success ? '' : `${file}: ${parsed.error.message.slice(0, 2000)}`).toBe(true);
   });
 });
