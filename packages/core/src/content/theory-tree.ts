@@ -14,7 +14,8 @@ import {
   type QuizEntry,
   type TreeGraph,
 } from '../schema/content';
-import { buildOpening, RESERVED_LINE_ID, type VariantSource } from './course-build';
+import { RESERVED_LINE_ID } from '../constants';
+import { buildOpening, type VariantSource } from './course-build';
 
 /**
  * The theory tree is all of content/tree: one tree of positions and moves for both sides, split into chapters. A

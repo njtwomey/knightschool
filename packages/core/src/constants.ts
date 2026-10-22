@@ -12,3 +12,6 @@ export const DEFAULT_NEW_CARDS_PER_DAY = 10;
 
 /** Cards in one training session. */
 export const SESSION_SIZE = 20;
+
+/** `/play/<course>/all/...` practises every branch, so no line may use this id. */
+export const RESERVED_LINE_ID = 'all';

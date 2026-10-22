@@ -1,7 +1,7 @@
-import { z } from 'zod';
 import { EXPLORER_BAND } from '../constants';
 import type { ExplorerCache, ExplorerMove } from '../schema/user';
 import type { OpeningContent } from '../schema/content';
+import type { ExplorerResponse } from '../schema/explorer';
 
 /** What the Lichess explorer says about one position (a subset of its response). */
 export type ExplorerPosition = { white: number; draws: number; black: number; moves: ExplorerMove[] };
@@ -43,24 +43,6 @@ export function applyPopularity(
   );
   return { ...content, nodes };
 }
-
-/** The part of a Lichess explorer reply we use. Anything else in the reply is ignored. */
-export const ExplorerResponse = z.object({
-  white: z.number().int(),
-  draws: z.number().int(),
-  black: z.number().int(),
-  moves: z.array(
-    z.object({
-      uci: z.string(),
-      san: z.string(),
-      white: z.number().int(),
-      draws: z.number().int(),
-      black: z.number().int(),
-    }),
-  ),
-  opening: z.object({ eco: z.string(), name: z.string() }).nullish(),
-});
-export type ExplorerResponse = z.infer<typeof ExplorerResponse>;
 
 /** One position asked at one rating band and speed: the cache key, so each is asked at most once a month. */
 export const explorerKey = (epd: string, db: 'lichess' | 'masters' = 'lichess') =>

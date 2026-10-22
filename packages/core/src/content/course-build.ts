@@ -1,4 +1,5 @@
 import { checkRichText } from './rich-text';
+import { RESERVED_LINE_ID } from '../constants';
 import { START_EPD } from '../chess/epd';
 import { playSan, sideToMove } from '../chess/chess';
 import { hasNote, type PgnGame, type PgnMoveNode } from '../chess/pgn';
@@ -29,9 +30,6 @@ export type VariantSource = {
   /** Read from another course's folder (`from:` in course.yaml), so its [Kind] header is that course's view. */
   reused?: boolean;
 };
-
-/** `#/play/<course>/all/...` practises every branch, so no line may use this id. */
-export const RESERVED_LINE_ID = 'all';
 
 const BAD_NAGS = new Set([2, 4, 6]); // ?, ??, ?!
 

@@ -1,5 +1,5 @@
 import type { OpeningIndexEntry } from '../schema/content';
-import type { SearchIndex } from '../search/position-search';
+import type { SearchIndex } from '../schema/search';
 
 export type RelatedCourse = { course: OpeningIndexEntry; shared: number };
 

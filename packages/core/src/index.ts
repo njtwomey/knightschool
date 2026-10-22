@@ -53,6 +53,7 @@ export * from './search/position-search';
 
 // authoring: the course editor and contributions
 export * from './authoring/authoring';
+export * from './authoring/build';
 export * from './authoring/chapter-edit';
 export * from './authoring/contribution';
 

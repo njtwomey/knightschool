@@ -93,3 +93,7 @@ export const CurriculumEntry = z.object({
   prerequisites: z.array(Slug).default([]),
 });
 export type CurriculumEntry = z.infer<typeof CurriculumEntry>;
+
+/** public/content/chapters.json: the tree's chapters as written, so the app can merge authored chapters with them. */
+export const ShippedChapters = z.array(z.object({ id: z.string(), source: z.string(), pgn: z.string() }));
+export type ShippedChapters = z.infer<typeof ShippedChapters>;

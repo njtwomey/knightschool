@@ -1,5 +1,5 @@
 import type { OpeningIndexEntry } from '../schema/content';
-import type { SearchIndex } from '../search/position-search';
+import type { SearchIndex } from '../schema/search';
 import { searchAt } from '../search/position-search';
 
 /** How close an answer was: the variation (full), just the opening (partial), or neither. */

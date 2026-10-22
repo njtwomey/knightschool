@@ -2,7 +2,8 @@ import { manifestOf } from '../testing/manifest';
 import { describe, expect, it } from 'vitest';
 import { chooseReply, expectedMove, nextBranchMove } from './branches';
 import { parsePgn } from '../chess/pgn';
-import { buildOpening, RESERVED_LINE_ID } from '../content/course-build';
+import { RESERVED_LINE_ID } from '../constants';
+import { buildOpening } from '../content/course-build';
 
 const game = (variation: string, moves: string) =>
   parsePgn(`[Event "x"]

@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import {
-  buildAuthored,
-  exportReminder,
-  isOwnOpening,
-  ownOpeningGroups,
-  ownOpeningId,
-  slugify,
-  uniqueId,
-} from './authoring';
+import { buildAuthored } from './build';
+import { exportReminder, isOwnOpening, ownOpeningGroups, ownOpeningId, slugify, uniqueId } from './authoring';
 import { reduceAttempt, startAttempt } from '../training/attempt';
 import { nextBranchMove } from '../training/branches';
 import { parsePgn, writePgn } from '../chess/pgn';

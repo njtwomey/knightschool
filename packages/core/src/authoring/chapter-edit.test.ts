@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildAuthored } from './authoring';
+import { buildAuthored } from './build';
 import {
   appendMove,
   chapterText,
