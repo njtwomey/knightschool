@@ -1,29 +1,14 @@
-import {
-  buildAuthored,
-  courseIndexEntry,
-  parsePgn,
-  treeGraph,
-  type AuthoredBuild,
-  type AuthoredChapter,
-  type AuthoredCourse,
-  type Chapter,
-  type OpeningIndexEntry,
-  type TreeGraph,
-} from '@knightschool/core';
-import { z } from 'zod';
-import { fetchContent, onceRetryable } from './fetch-content';
+import type { AuthoredBuild, AuthoredChapter, AuthoredCourse, Chapter } from '@knightschool/core';
 import { whenStorageReady } from './storage';
 
 /** How long the lists wait for the database before showing only the shipped courses. */
 const STORAGE_WAIT_MS = 3000;
 
-const ChapterText = z.array(z.object({ id: z.string(), source: z.string(), pgn: z.string() }));
+/** The code that builds authored content (`authored-build.ts`), loaded the first time something authored needs it. */
+const builder = () => import('./authored-build');
+
 /** The shipped chapters as written (public/content/chapters.json), parsed once, when authored content first needs them. */
-export const loadShippedChapters: () => Promise<Chapter[]> = onceRetryable(() =>
-  fetchContent('chapters.json').then((json) =>
-    ChapterText.parse(json).map(({ id, source, pgn }) => ({ id, source, game: parsePgn(pgn, source) })),
-  ),
-);
+export const loadShippedChapters = async (): Promise<Chapter[]> => (await builder()).loadShippedChapters();
 
 export type AuthoredRows = { chapters: AuthoredChapter[]; courses: AuthoredCourse[] };
 
@@ -43,7 +28,7 @@ let built: { key: string; build: Promise<AuthoredBuild | null> } | undefined;
 
 /**
  * The authored chapters and courses merged with the shipped tree (`buildAuthored`), or null when nothing is authored,
- * so the shipped app pays nothing. Rebuilt when the rows change.
+ * so the shipped app pays nothing: not even the code that builds it is loaded. Rebuilt when the rows change.
  */
 export async function loadAuthoredBuild(shippedCourses: () => Promise<string[]>): Promise<AuthoredBuild | null> {
   const rows = await loadAuthoredRows();
@@ -56,49 +41,11 @@ export async function loadAuthoredBuild(shippedCourses: () => Promise<string[]>)
     const build =
       live.chapters.length === 0 && live.courses.length === 0
         ? Promise.resolve(null)
-        : Promise.all([loadShippedChapters(), shippedCourses()]).then(([chapters, ids]) =>
-            buildAuthored(chapters, live, new Set(ids)),
-          );
+        : Promise.all([builder(), shippedCourses()]).then(([{ buildFromRows }, ids]) => buildFromRows(live, ids));
     built = { key, build };
     build.catch(() => {
       if (built?.build === build) built = undefined;
     });
   }
   return built.build;
-}
-
-/** Index rows for the authored courses, after the shipped ones in study order. */
-export function authoredIndexEntries(build: AuthoredBuild, shipped: OpeningIndexEntry[]): OpeningIndexEntry[] {
-  const listedBy = linesListedBy(build, shipped);
-  const graph = treeGraph(build.tree);
-  const branches = new Map(
-    graph.chapters.flatMap((chapter) =>
-      chapter.parent && chapter.after ? [[chapter.id, { parent: chapter.parent, after: chapter.after }] as const] : [],
-    ),
-  );
-  const after = Math.max(0, ...shipped.map((entry) => entry.order)) + 1;
-  return build.courses.map((content, i) => ({
-    ...courseIndexEntry(content, {
-      order: after + i,
-      alsoIn: (line) => listedBy.get(line) ?? [],
-      branch: (line) => branches.get(line),
-    }),
-    authored: true,
-  }));
-}
-
-/** The whole tree to draw, authored chapters included. */
-export function authoredTreeGraph(build: AuthoredBuild, shipped: OpeningIndexEntry[]): TreeGraph {
-  const listedBy = linesListedBy(build, shipped);
-  return treeGraph(build.tree, (line) => listedBy.get(line) ?? []);
-}
-
-/** Which courses list each line, shipped and authored. */
-function linesListedBy(build: AuthoredBuild, shipped: OpeningIndexEntry[]): Map<string, string[]> {
-  const listedBy = new Map<string, string[]>();
-  const add = (line: string, course: string) => listedBy.set(line, [...(listedBy.get(line) ?? []), course]);
-  for (const entry of shipped) for (const line of entry.lines) add(line.id, entry.id);
-  for (const content of build.courses)
-    for (const variant of content.opening.variants) add(variant.id, content.opening.id);
-  return listedBy;
 }

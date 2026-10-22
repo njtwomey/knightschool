@@ -1,4 +1,4 @@
-import { openBrowserStorage, StorageUnavailableError, type BrowserStorage } from '@knightschool/storage';
+import type { BrowserStorage } from '@knightschool/storage';
 import { create } from 'zustand';
 import { errorText } from '@/lib/errors';
 
@@ -18,7 +18,11 @@ export const useStorage = create<StorageState>((set, get) => ({
   async open() {
     if (get().status === 'opening' || get().status === 'ready') return;
     set({ status: 'opening', error: null });
+    // The database code (Drizzle, the SQLite worker's client) is a chunk of its own, loaded here rather than with the app.
+    let unavailable: (error: unknown) => boolean = () => false;
     try {
+      const { openBrowserStorage, StorageUnavailableError } = await import('@knightschool/storage');
+      unavailable = (error) => error instanceof StorageUnavailableError;
       const storage = await openBrowserStorage(() =>
         set({
           status: 'paused',
@@ -30,7 +34,7 @@ export const useStorage = create<StorageState>((set, get) => ({
     } catch (error) {
       const message = errorText(error);
       set({
-        status: error instanceof StorageUnavailableError ? 'unavailable' : 'error',
+        status: unavailable(error) ? 'unavailable' : 'error',
         error: message,
         storage: null,
       });

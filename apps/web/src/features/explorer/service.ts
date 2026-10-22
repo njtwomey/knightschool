@@ -1,7 +1,6 @@
 import {
   EXPLORER_BAND,
   EXPLORER_TTL_MS,
-  ExplorerResponse,
   epdToFen,
   explorerKey,
   toExplorerCache,
@@ -51,6 +50,8 @@ export function createExplorer({ storage, token, fetch: fetchImpl = fetch, now =
     }
     if (response.status === 401) throw new Error('Lichess did not accept that token. Check it in Settings.');
     if (!response.ok) throw new Error(`The Lichess explorer answered ${response.status}.`);
+    // The schema (and Zod) load only when Lichess is actually asked, which needs the network anyway.
+    const { ExplorerResponse } = await import('./response');
     const row = toExplorerCache(epd, ExplorerResponse.parse(await response.json()), now());
     await storage.explorer.put(row);
     return row;

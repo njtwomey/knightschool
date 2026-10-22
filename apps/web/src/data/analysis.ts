@@ -1,4 +1,4 @@
-import { AnalysisFile } from '@knightschool/core';
+import type { AnalysisFile } from '@knightschool/core';
 import type { Evaluation, EvalStore } from '@knightschool/engine';
 import { contentUrl } from './fetch-content';
 
@@ -44,8 +44,14 @@ export function loadAnalysis(): Promise<AnalysisFile | undefined> {
     try {
       const response = await fetch(contentUrl('analysis.json'));
       if (!response.ok) return undefined;
-      const parsed = AnalysisFile.safeParse(await response.json());
-      return parsed.success ? parsed.data : undefined;
+      const json: unknown = await response.json();
+      // Checked when it is built (scripts/content.test.ts), so production trusts it. Development still parses it, with
+      // the schema loaded only there: imported at the top, it kept Zod in the production bundle.
+      if (import.meta.env.DEV) {
+        const parsed = (await import('@knightschool/core/schema')).AnalysisFile.safeParse(json);
+        return parsed.success ? parsed.data : undefined;
+      }
+      return json as AnalysisFile;
     } catch {
       return undefined;
     }
