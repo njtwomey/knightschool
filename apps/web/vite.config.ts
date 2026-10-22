@@ -51,6 +51,22 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // The libraries every page uses, each in a chunk of its own: they change less often than the app, so a new
+        // version of the app leaves them cached.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined;
+          if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) return 'react';
+          if (/[\\/]node_modules[\\/](@radix-ui|@floating-ui|react-remove-scroll[^\\/]*|aria-hidden)[\\/]/.test(id))
+            return 'radix';
+          if (/[\\/]node_modules[\\/](react-chessboard|chess\.js)[\\/]/.test(id)) return 'board';
+          return undefined;
+        },
+      },
+    },
+  },
   // sqlite-wasm loads its .wasm and worker relative to its own files, so it must not be pre-bundled.
   optimizeDeps: { exclude: ['@sqlite.org/sqlite-wasm'] },
   worker: { format: 'es' },
