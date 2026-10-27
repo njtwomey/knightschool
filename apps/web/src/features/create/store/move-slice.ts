@@ -5,6 +5,7 @@ import {
   newChapter,
   numberedMove,
   playSan,
+  setMoveMarks,
   setMoveNote,
   slugify,
   startHeader,
@@ -15,7 +16,7 @@ import { draftChapter, entryId, entrySection, fullLine, positionsOf, withSection
 import type { SliceContext } from './context';
 import type { AuthorState } from './types';
 
-type MoveSlice = Pick<AuthorState, 'playMove' | 'truncate' | 'setNote'>;
+type MoveSlice = Pick<AuthorState, 'playMove' | 'truncate' | 'setNote' | 'setMarks'>;
 
 /** Moves on the board: playing on, branching, cutting a line short and a move's note. */
 export function moveSlice({
@@ -157,6 +158,21 @@ export function moveSlice({
         'Saved the note.',
         false,
         `note ${numberedMove(ply - 1, line.game.moves[ply - 1]!.san)} in ${titleOf(lineId)}`,
+      );
+    },
+
+    async setMarks(marks) {
+      const { build, lineId, ply } = get();
+      const line = fullLine(build, lineId);
+      const own = lineId ? draftChapter(get().rows, lineId) : undefined;
+      if (!line || !own || !lineId || ply === 0) return;
+      const index = ply - 1 - line.startPly;
+      if (index < 0) return;
+      await save(
+        [{ kind: 'chapter', itemId: lineId, body: chapterText(setMoveMarks(own, index, marks), line.startPly) }],
+        'Saved the marks.',
+        false,
+        `draw on ${numberedMove(ply - 1, line.game.moves[ply - 1]!.san)} in ${titleOf(lineId)}`,
       );
     },
   };

@@ -1,3 +1,4 @@
+import type { Marks } from '@knightschool/core';
 import { cn } from 'cn';
 import { Eye, FlipHorizontal2, Lightbulb } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
@@ -9,6 +10,8 @@ import { EvalBar } from '@/components/engine/eval-bar';
 import { AppBoard, type AppBoardProps } from './app-board';
 import { BoardSettingsButton } from './board-settings';
 import type { LineStepper } from './line-stepper';
+import { MarkKey } from './mark-key';
+import { marksOnBoard } from './shapes';
 import { StepButtons } from './step-buttons';
 
 /** The controls a study board can show, always in this order: settings, flip, steps, hint, show, then the page's own. */
@@ -40,6 +43,11 @@ export type StudyBoardProps = Omit<AppBoardProps, 'className'> & {
   caption?: ReactNode;
   /** The page's own buttons, at the end of the control row. */
   actions?: ReactNode;
+  /**
+   * The marks written for the move shown (`[%cal]` arrows and `[%csl]` rings), drawn with a key to their colours under
+   * the board. Only for studying: boards that test the learner leave them out until the answer is in.
+   */
+  marks?: Partial<Marks>;
   /** Anything else that belongs with the board, last. */
   below?: ReactNode;
   /** `main` for the board a page is about, `aside` for a smaller board beside other content (see index.css). */
@@ -59,12 +67,14 @@ export function StudyBoard({
   engine = false,
   caption,
   actions,
+  marks,
   below,
   size = 'main',
   className,
   orientation,
   ...board
 }: StudyBoardProps) {
+  const marked = marksOnBoard(marks);
   const { settings = true, flip = false, evalBar = false, hint, show } = controls;
   const [flipped, setFlipped] = useState(false);
   const shown = flipped !== (orientation === 'black') ? 'black' : 'white';
@@ -80,7 +90,13 @@ export function StudyBoard({
     >
       <div className="flex gap-2">
         {evalBar && <EvalBar orientation={shown} />}
-        <AppBoard {...board} orientation={shown} className="aspect-square min-w-0 flex-1" />
+        <AppBoard
+          {...board}
+          arrows={[...(board.arrows ?? []), ...marked.arrows]}
+          squareStyles={{ ...marked.squareStyles, ...board.squareStyles }}
+          orientation={shown}
+          className="aspect-square min-w-0 flex-1"
+        />
       </div>
       {row && (
         <div className="flex flex-wrap items-center gap-2">
@@ -111,6 +127,7 @@ export function StudyBoard({
         </div>
       )}
       {caption && <div className="text-sm">{caption}</div>}
+      <MarkKey marks={marks} />
       {engine && engine.view === 'strip' && (
         <EngineStrip epd={board.epd} before={engine.before} lastMove={engine.lastMove} />
       )}

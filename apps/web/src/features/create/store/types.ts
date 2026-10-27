@@ -1,4 +1,4 @@
-import type { AuthoredBuild, Contribution, CourseManifest, LineKind, Side, TrapKind } from '@knightschool/core';
+import type { AuthoredBuild, Contribution, CourseManifest, LineKind, Marks, Side, TrapKind } from '@knightschool/core';
 import type { AuthoredRows } from '@/data/authored-content';
 
 export type AuthorState = {
@@ -52,6 +52,8 @@ export type AuthorState = {
   playMove: (uci: string) => Promise<void>;
   truncate: () => Promise<void>;
   setNote: (comment: string, tags: string[]) => Promise<void>;
+  /** The arrows and rings drawn for the move looked at. */
+  setMarks: (marks: Marks) => Promise<void>;
   setLineMeta: (meta: { title: string; description: string; kind: LineKind | TrapKind }) => Promise<void>;
   setSnapshot: (ply: number | undefined) => Promise<void>;
   /** Puts a line (the open one by default) in a group, or none. */

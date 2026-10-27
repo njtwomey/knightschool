@@ -21,6 +21,7 @@ export function UnitBoard({ content, unit }: { content: OpeningContent; unit: Co
       orientation={content.opening.side}
       interactive={false}
       lastMove={last?.uci}
+      marks={last?.annotation}
       stepper={stepper}
       controls={{ flip: true }}
       caption={

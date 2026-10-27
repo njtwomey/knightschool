@@ -1,6 +1,5 @@
 import type { OpeningContent } from '@knightschool/core';
 import { useLineStepper } from '@/components/board/line-stepper';
-import { arrowsOf, squareStylesOf } from '@/components/board/shapes';
 import { StudyBoard } from '@/components/board/study-board';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { currentEpd, useCatalog } from '@/data/catalog-store';
@@ -27,8 +26,7 @@ export function BoardPanel({ content }: { content: OpeningContent }) {
       epd={epd}
       orientation={content.opening.side}
       lastMove={last?.uci}
-      arrows={arrowsOf(last?.annotation)}
-      squareStyles={squareStylesOf(undefined, last?.annotation)}
+      marks={last?.annotation}
       onMove={tryMove}
       stepper={stepper}
       controls={{ flip: true, evalBar: true }}

@@ -1,25 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { arrowsOf, squareStylesOf, uciArrow } from './shapes';
-
-const annotation = (arrows: string[], circles: string[]) => ({ nag: [], motifs: [], arrows, circles });
+import { MARK_RGB, marksOnBoard, uciArrow } from './shapes';
 
 describe('shapes', () => {
-  it('reads coloured and uncoloured arrows and skips malformed ones', () => {
-    const arrows = arrowsOf(annotation(['Re2e4', 'd1h5', 'nonsense', 'Xa1a2'], []));
-    expect(arrows.map((arrow) => `${arrow.startSquare}${arrow.endSquare}`)).toEqual(['e2e4', 'd1h5']);
-    expect(arrows[0]!.color).not.toBe(arrows[1]!.color);
+  it('draws arrows in the colour of their meaning and skips malformed ones', () => {
+    const { arrows } = marksOnBoard({ arrows: ['Re2e4', 'Bd1h5', 'd1h5', 'nonsense', 'Xa1a2'] });
+    expect(arrows).toEqual([
+      { startSquare: 'e2', endSquare: 'e4', color: MARK_RGB.R },
+      { startSquare: 'd1', endSquare: 'h5', color: MARK_RGB.B },
+    ]);
   });
 
-  it('highlights the last move and rings circled squares', () => {
-    const styles = squareStylesOf('g1f3', annotation([], ['Rf3', 'e4']));
-    expect(Object.keys(styles).sort()).toEqual(['e4', 'f3', 'g1']);
-    expect(styles.f3).toMatchObject({ backgroundColor: 'var(--board-highlight)' });
-    expect(styles.f3!.boxShadow).toContain('inset');
+  it('rings marked squares', () => {
+    const { squareStyles } = marksOnBoard({ circles: ['Yf3', 'e4'] });
+    expect(Object.keys(squareStyles)).toEqual(['f3']);
+    expect(squareStyles.f3!.boxShadow).toContain(MARK_RGB.Y);
   });
 
-  it('is empty without a move or annotation', () => {
-    expect(arrowsOf(undefined)).toEqual([]);
-    expect(squareStylesOf(undefined, undefined)).toEqual({});
+  it('is empty without marks', () => {
+    expect(marksOnBoard(undefined)).toEqual({ arrows: [], squareStyles: {} });
   });
 
   it('draws an arrow along a move, coloured by what it means', () => {

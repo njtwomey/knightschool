@@ -79,6 +79,19 @@ rules below.
   counted from the start, of the position that pictures the line (otherwise the deepest named position).
 - **Supplementary tags on a move**: `[%tag tip]`, `[%tag trap,blunder]` or any other word, inside the move's comment
   like `[%cal]`. They are shown while studying and never asked.
+- **Marks on the board**: arrows `[%cal Gc4f7,Rd8h4]` and rings `[%csl Yd5]` inside a move's comment, the notation
+  Lichess and ChessBase write: a colour letter, then the squares. Each colour means one thing everywhere (`MARK_MEANINGS`
+  in core `content/marks.ts`), and a key under the board names the ones shown:
+  - `G` **Idea**: the plan or a good move, where a piece is going and what it aims at.
+  - `R` **Threat**: danger, what the other side threatens, a trap, a pin against the side to move.
+  - `Y` **Target**: a weak square or pawn, something to aim at or to watch.
+  - `B` **Support**: pieces working together, a defender, a battery, a piece covering a square.
+
+  Marks belong to the move they are written on and are shown with it while studying (the course page, About, Learn, the
+  tree, the path, Create), never while the learner is tested (Drill, Every branch, Speed, Name it; Quiz shows them with
+  the answer). One to three per move, only where they say something the comment does. Any other colour letter fails the
+  build. In Create they are drawn on the board (right-drag, right-click, or tapping).
+
 - **A move has one comment and one set of marks**, wherever it is written: two chapters that comment differently on the
   same move fail the build, and every line shows the move with what the tree holds (a comment or `?` written in one
   chapter appears in all of them). Before commenting a move that already exists, read what the tree says. The comment explains the move for both sides, so write "White", "Black", never "we". When both sides' courses

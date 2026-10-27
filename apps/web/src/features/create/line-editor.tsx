@@ -1,6 +1,6 @@
-import { numberedMove, uciLine } from '@knightschool/core';
+import { numberedMove, toggleArrow, toggleCircle, uciLine, type MarkColour } from '@knightschool/core';
 import { Camera, GitBranch, Scissors, X } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLineStepper } from '@/components/board/line-stepper';
 import { StudyBoard } from '@/components/board/study-board';
 import { MoveList } from '@/components/move-list';
@@ -20,6 +20,8 @@ import { Button } from '@/components/ui/button';
 import { navigate } from '@/router/location';
 import { draftChapter, fullLine, positionsOf, type DraftCourse } from './draft';
 import { LineDetails } from './line-details';
+import { markColourFor } from './mark-colour';
+import { MoveMarks } from './move-marks';
 import { MoveNote } from './move-note';
 import { useAuthor } from './store';
 import { lineEditHref } from '@/router/hrefs';
@@ -35,6 +37,10 @@ export function LineEditor({ course }: { course: DraftCourse }) {
   const own = lineId ? draftChapter(rows, lineId) : undefined;
   const positions = useMemo(() => positionsOf(line), [line]);
   const ucis = useMemo(() => uciLine(line), [line]);
+  // Drawing marks: the colour picked, tapping squares instead of the right button, and where a tapped arrow starts.
+  const [colour, setColour] = useState<MarkColour>('G');
+  const [tapping, setTapping] = useState(false);
+  const [tapFrom, setTapFrom] = useState<{ ply: number; square: string } | null>(null);
 
   // The steps and the arrow keys walk the line; a move played at the end adds to it.
   const stepper = useLineStepper({
@@ -67,6 +73,14 @@ export function LineEditor({ course }: { course: DraftCourse }) {
     edge?.note.comment && edge.writtenIn.some((chapter) => chapter !== lineId) && !ownMove?.comment,
   );
   const side = course.manifest.side;
+  // Marks belong to the move looked at, and only to a move this line writes.
+  const canMark = mine && branching === null && ply > 0 && ply - 1 >= line.startPly;
+  const ownMarks = { arrows: ownMove?.arrows ?? [], circles: ownMove?.circles ?? [] };
+  const draw = (from: string, to: string | undefined, drawn: MarkColour) =>
+    void useAuthor
+      .getState()
+      .setMarks(to ? toggleArrow(ownMarks, drawn, from, to) : toggleCircle(ownMarks, drawn, from));
+  const tapStart = tapFrom?.ply === ply ? tapFrom.square : null;
 
   return (
     <div className="grid gap-4">
@@ -76,7 +90,20 @@ export function LineEditor({ course }: { course: DraftCourse }) {
           id="author"
           epd={positions[at]!}
           orientation={side}
-          interactive
+          interactive={!(tapping && canMark)}
+          // The marks of every line that plays this move; this line's own are the ones drawing changes.
+          marks={branching === null && edge ? edge.note : undefined}
+          onDrawMark={canMark ? (from, to, keys) => draw(from, to, markColourFor(colour, keys)) : undefined}
+          onSquareSelect={
+            tapping && canMark
+              ? (square) => {
+                  if (tapStart === null) return setTapFrom({ ply, square });
+                  setTapFrom(null);
+                  draw(tapStart, tapStart === square ? undefined : square, colour);
+                }
+              : undefined
+          }
+          squareStyles={tapStart ? { [tapStart]: { backgroundColor: 'var(--board-highlight)' } } : undefined}
           onMove={(uci) => {
             // A branch opens a new line: the address follows it.
             void useAuthor
@@ -179,6 +206,20 @@ export function LineEditor({ course }: { course: DraftCourse }) {
               editable={mine && ply - 1 >= line.startPly}
               owner={line.parents.at(-1)}
               fixed={explainedElsewhere}
+            />
+          )}
+          {canMark && (
+            <MoveMarks
+              label={numberedMove(ply - 1, moves[ply - 1]!.san)}
+              marks={ownMarks}
+              colour={colour}
+              onColour={setColour}
+              tapping={tapping}
+              onTapping={(on) => {
+                setTapping(on);
+                setTapFrom(null);
+              }}
+              onClear={() => void useAuthor.getState().setMarks({ arrows: [], circles: [] })}
             />
           )}
         </div>

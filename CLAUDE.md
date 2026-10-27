@@ -240,6 +240,9 @@ The menu is in the order of use: Courses, Search, Tree | Quiz, Speed, Name it | 
   played on the board at the end of a line; **Branch here** makes the next move the start of a new line (a second answer
   where you move is listed `alternative`, since a course has one answer per position). A move's note has free text and
   tags (tip, trap, common blunder, any word); a comment another line already gives is read-only (one comment per move).
+  **Marks** (`move-marks.tsx`, `setMarks`, core `setMoveMarks`): arrows and rings on the board for the move looked at,
+  drawn with a right-drag or right-click (Shift red, Alt blue, both yellow, as on Lichess; `mark-colour.ts`) or by
+  tapping, in the colour picked; written as `[%cal]` / `[%csl]` in the move's comment (see content/README.md).
   Lines have a title, a description, a kind, a group (course `section`) and a snapshot. The Path tab (`path-order.tsx`)
   is one list in study order: lines, and each trap to spring and quiz under the unit it is shown with (drag by the
   handle, or the arrows; a trap or quiz moves by unit, never before the first unit that reaches it, written to
@@ -342,7 +345,11 @@ selection highlights, tick/cross badge, hint pulse). **Every board you study fro
 the settings gear (on by default), flip (`controls.flip`, where the exercise does not fix the side; `onFlip` when the page
 keeps the side, as Lab does in its hash), the step buttons (`stepper`), Hint and Show me (`controls.hint` / `show`: the
 piece, then the move; Speed counts each step), then the page's own `actions`; `controls.evalBar`, `engine` (`strip` with
-the move's cost, or `lines` in a card), `caption` and `below`. Steps come from `useLineStepper`
+the move's cost, or `lines` in a card), `caption`, `marks` and `below`. **`marks`** are a move's `[%cal]` / `[%csl]`
+arrows and rings (core `content/marks.ts`: four colours, each one meaning, `MARK_MEANINGS`; drawn by `marksOnBoard` in
+`shapes.ts`) with a key under the board (`mark-key.tsx`). Pass them only where the learner studies (course page, About,
+Learn, tree, path, Create; Quiz once answered), never on a board that tests (Drill, Every branch, Speed, Name it).
+`onDrawMark` (AppBoard) is the right-button drawing. Steps come from `useLineStepper`
 (`components/board/line-stepper.ts`): positions and an index (with overrides for a line that is more than that, such
 as Learn playing the next move), and the one binding of Left, Right, Home and End, never while typing, with a modifier, or
 for a key something else handled; one stepper per page has `keys`. Arrows from a move are `uciArrow(uci, tone)` and the

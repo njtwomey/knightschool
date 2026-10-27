@@ -41,8 +41,15 @@ export type PgnGame = {
 
 type ParserMove = ReturnType<typeof parseGame>['moves'][number];
 
-function toNode(move: ParserMove): PgnMoveNode {
+function toNode(move: ParserMove, source: string): PgnMoveNode {
   const diag = move.commentDiag;
+  // The parser keeps marks it cannot read (a colour other than G, R, Y or B) as plain text: refuse them.
+  const unread = diag as { cal?: unknown; csl?: unknown } | undefined;
+  if (unread?.cal !== undefined || unread?.csl !== undefined)
+    throw new Error(
+      `${source}: ${move.notation.notation}: cannot read the mark "${String(unread.cal ?? unread.csl)}". ` +
+        'Write a colour (G, R, Y or B) then the squares: [%cal Gc3d5] for an arrow, [%csl Yd5] for a ring.',
+    );
   const comment = (diag?.comment ?? move.commentAfter ?? '').replace(/\s+/g, ' ').trim();
   const tags = String((diag as { tag?: unknown } | undefined)?.tag ?? '')
     .split(',')
@@ -55,7 +62,7 @@ function toNode(move: ParserMove): PgnMoveNode {
     arrows: [...(diag?.colorArrows ?? [])],
     circles: [...(diag?.colorFields ?? [])],
     ...(tags.length ? { tags } : {}),
-    variations: (move.variations ?? []).map((variation) => variation.map(toNode)),
+    variations: (move.variations ?? []).map((variation) => variation.map((node) => toNode(node, source))),
   };
 }
 
@@ -72,7 +79,7 @@ export function parsePgn(text: string, source = 'pgn'): PgnGame {
     if (key === 'messages' || key === 'Result') continue; // parser additions, not part of the file
     tags[key] = String(value);
   }
-  return { tags, moves: game.moves.map(toNode) };
+  return { tags, moves: game.moves.map((move) => toNode(move, source)) };
 }
 
 function formatComment(node: PgnMoveNode): string {

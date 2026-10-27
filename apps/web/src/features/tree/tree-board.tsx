@@ -36,7 +36,7 @@ export function TreeBoard({
   orientation: Side;
   stepper: LineStepper;
 }) {
-  const comment = useMoveComment([...new Set(through.map((id) => byId.get(id)!.course))], parentEpd, shown.uci);
+  const note = useMoveComment([...new Set(through.map((id) => byId.get(id)!.course))], parentEpd, shown.uci);
   return (
     <aside className="order-1 grid content-start gap-2 lg:sticky lg:top-20 lg:order-none">
       <StudyBoard
@@ -48,15 +48,16 @@ export function TreeBoard({
         orientation={orientation}
         interactive={false}
         lastMove={shown.uci ?? undefined}
+        marks={note ?? undefined}
         stepper={stepper}
         controls={{ flip: true }}
         caption={
           <p className="font-medium">{shown.san ? `After ${numberedMove(shown.ply - 1, shown.san)}` : 'The start'}</p>
         }
       />
-      {comment && (
+      {note?.text && (
         <p className="text-sm text-muted-foreground">
-          <RichText text={comment} />
+          <RichText text={note.text} />
         </p>
       )}
       {through.length > 0 && through.length < total && (

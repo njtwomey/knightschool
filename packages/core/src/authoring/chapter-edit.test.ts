@@ -7,6 +7,7 @@ import {
   opponentMove,
   readChapter,
   setHeader,
+  setMoveMarks,
   setMoveNote,
   startHeader,
   truncateMoves,
@@ -56,6 +57,20 @@ describe('editing a chapter', () => {
     expect(setMoveNote(game, 2, { comment: '', tags: [] }).moves[2]).not.toHaveProperty('comment');
     expect(truncateMoves(game, 1).moves.map((move) => move.san)).toEqual(['e4']);
     expect(setHeader(game, 'Description', ' ').tags).not.toHaveProperty('Description');
+  });
+
+  it('draws marks on a move, keeps them beside its note, and reads them back from its PGN text', () => {
+    let game = play(base, START_EPD, ['e4', 'e5', 'Nf3']);
+    game = setMoveNote(game, 2, { comment: 'Attacks e5.', tags: ['tip'] });
+    game = setMoveMarks(game, 2, { arrows: ['Gf3e5', 'Gf3e5', 'Xa1a2'], circles: ['Ye5'] });
+    expect(game.moves[2]).toMatchObject({ comment: 'Attacks e5.', tags: ['tip'], arrows: ['Gf3e5'], circles: ['Ye5'] });
+    const text = chapterText(game, 0);
+    expect(text).toContain('{ Attacks e5. [%cal Gf3e5] [%csl Ye5] [%tag tip] }');
+    expect(readChapter(text)).toEqual(game);
+    // A note saved later keeps the marks.
+    expect(setMoveNote(game, 2, { comment: 'Hits e5.', tags: [] }).moves[2]).toMatchObject({ arrows: ['Gf3e5'] });
+    // Marks alone are still written, with no comment.
+    expect(chapterText(setMoveNote(game, 2, { comment: '', tags: [] }), 0)).toContain('{ [%cal Gf3e5] [%csl Ye5] }');
   });
 
   it('names a branch point by its move, or by every move when that one is written twice', () => {

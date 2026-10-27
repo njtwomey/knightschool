@@ -96,6 +96,25 @@ describe('writing a course in the editor', () => {
     });
   });
 
+  it('draws marks on a move, which learners see with its note', async () => {
+    const branch = author().lineId!;
+    author().setPly(3);
+    await author().setNote('Offers a pawn for the centre.', []);
+    await author().setMarks({ arrows: ['Rf4e5'], circles: ['Ye5'] });
+    expect(readChapter((await chapterPgn(branch))!.pgn).moves[0]).toMatchObject({
+      comment: 'Offers a pawn for the centre.',
+      arrows: ['Rf4e5'],
+      circles: ['Ye5'],
+    });
+    const content = author().build!.courses[0]!;
+    const f4 = Object.values(content.nodes)
+      .flatMap((node) => node.moves)
+      .find((move) => move.san === 'f4');
+    expect(f4?.annotation).toMatchObject({ arrows: ['Rf4e5'], circles: ['Ye5'] });
+    await author().setMarks({ arrows: [], circles: [] });
+    expect(readChapter((await chapterPgn(branch))!.pgn).moves[0]).toMatchObject({ arrows: [], circles: [] });
+  });
+
   it('deletes a line with what grows from it, and undo brings both back', async () => {
     const branch = author().lineId!;
     author().selectLine('my-italian-main');

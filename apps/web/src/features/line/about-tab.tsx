@@ -164,6 +164,7 @@ function About({
             orientation={side}
             interactive={false}
             lastMove={ply > 0 ? path[ply - 1]?.uci : undefined}
+            marks={ply > 0 ? path[ply - 1]?.annotation : undefined}
             stepper={stepper}
             controls={{ flip: true }}
             caption={

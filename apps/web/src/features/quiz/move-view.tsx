@@ -1,6 +1,6 @@
 import { explainMove } from '@knightschool/core';
 import { StudyBoard } from '@/components/board/study-board';
-import { arrowsOf, squareStylesOf, uciArrow } from '@/components/board/shapes';
+import { uciArrow } from '@/components/board/shapes';
 import { EcoLink } from '@/components/eco-link';
 import { MoveList } from '@/components/move-list';
 import { RichText } from '@/components/rich-text';
@@ -33,10 +33,9 @@ export function MoveView({ question }: { question: MoveQuestion }) {
         onMove={(uci) => useQuiz.getState().submitMove(uci)}
         lastMove={lastMove}
         lastMoveTone={done && !looking ? 'yellow' : 'red'}
-        arrows={
-          looking ? [] : attempt.shown && !done ? [uciArrow(expected.uci)] : done ? arrowsOf(expected.annotation) : []
-        }
-        squareStyles={done && !looking ? squareStylesOf(undefined, expected.annotation) : undefined}
+        arrows={!looking && attempt.shown && !done ? [uciArrow(expected.uci)] : []}
+        // The marks explain the answer, so they come with it, never before.
+        marks={done && !looking ? expected.annotation : undefined}
         badge={badge}
         hintSquare={attempt.hintUsed && !done ? card.expectedUci.slice(0, 2) : null}
         stepper={stepper}

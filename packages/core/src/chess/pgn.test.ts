@@ -37,6 +37,13 @@ describe('PGN round trip', () => {
       /content\/openings\/x\/lines\/y\.pgn/,
     );
   });
+
+  it.each([
+    ['an unknown colour', '[%cal Xe2e4]'],
+    ['a small letter', '[%csl ge4]'],
+  ])('refuses a mark with %s, naming the file and the move', (_, mark) => {
+    expect(() => parsePgn(`1. e4 { Centre. ${mark} } *`, 'x.pgn')).toThrow(/x\.pgn: e4: cannot read the mark/);
+  });
 });
 
 describe('move notes', () => {

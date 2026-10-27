@@ -1,6 +1,7 @@
 import { playSan } from '../chess/chess';
 import { numberedMove } from '../chess/notation';
 import { parsePgn, writePgn, type PgnGame, type PgnMoveNode } from '../chess/pgn';
+import { cleanMarks, type Marks } from '../content/marks';
 import type { LineKind, Side, TrapKind } from '../schema/content';
 
 /**
@@ -82,6 +83,15 @@ export function setMoveNote(game: PgnGame, index: number, note: { comment: strin
       delete rest.tags;
       return { ...rest, ...(comment ? { comment } : {}), ...(tags.length ? { tags } : {}) };
     }),
+  };
+}
+
+/** Sets the arrows and rings drawn for the chapter's `index`-th own move (`[%cal]` / `[%csl]`). Malformed ones are dropped. */
+export function setMoveMarks(game: PgnGame, index: number, marks: Marks): PgnGame {
+  const { arrows, circles } = cleanMarks(marks);
+  return {
+    ...game,
+    moves: game.moves.map((move, i) => (i === index ? { ...move, arrows, circles } : move)),
   };
 }
 

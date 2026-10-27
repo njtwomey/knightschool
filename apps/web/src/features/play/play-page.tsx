@@ -2,7 +2,7 @@ import { explainMove, type LineStep, numberedMove } from '@knightschool/core';
 import { BookOpen, GitBranch, RotateCcw, Undo2 } from 'lucide-react';
 import { PlayBreadcrumbs } from '@/components/breadcrumbs/course-breadcrumbs';
 import { useLineStepper } from '@/components/board/line-stepper';
-import { arrowsOf, squareStylesOf, uciArrow } from '@/components/board/shapes';
+import { uciArrow } from '@/components/board/shapes';
 import { StudyBoard } from '@/components/board/study-board';
 import { EcoLink } from '@/components/eco-link';
 import { MoveTags } from '@/components/move-tags';
@@ -151,15 +151,9 @@ export function PlayPage({ course, line, mode, unit }: Props) {
           onMove={(uci) => usePlay.getState().submitMove(uci)}
           lastMove={exploring ? explore!.at(-1)!.uci : view.lastEdge?.uci}
           lastMoveTone={exploring ? 'yellow' : 'red'}
-          arrows={
-            exploring
-              ? []
-              : [
-                  ...(view.showExpected && view.expected ? [uciArrow(view.expected.uci)] : []),
-                  ...arrowsOf(view.lastEdge?.annotation),
-                ]
-          }
-          squareStyles={exploring ? undefined : squareStylesOf(undefined, view.lastEdge?.annotation)}
+          arrows={!exploring && view.showExpected && view.expected ? [uciArrow(view.expected.uci)] : []}
+          // The marks teach: shown in Learn, never in Drill or Every branch, where they could give the answer away.
+          marks={learning && !exploring ? view.lastEdge?.annotation : undefined}
           badge={badge}
           hintSquare={view.hintSquare}
           stepper={stepping ? stepper : null}

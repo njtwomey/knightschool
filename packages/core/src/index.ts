@@ -17,6 +17,7 @@ export * from './content/course-build';
 export * from './content/course-index';
 export * from './content/explorer';
 export * from './content/lichess';
+export * from './content/marks';
 export * from './content/opening-groups';
 export * from './content/openings-list';
 export * from './content/related';

@@ -1,4 +1,4 @@
-import type { Annotation } from '@knightschool/core';
+import { parseArrow, parseCircle, type MarkColour, type Marks } from '@knightschool/core';
 import type { CSSProperties } from 'react';
 
 /** An arrow on the board, as react-chessboard draws it. */
@@ -25,37 +25,27 @@ export function uciArrow(uci: string, tone: ArrowTone = 'answer'): BoardArrow {
   return { startSquare: uci.slice(0, 2), endSquare: uci.slice(2, 4), color: TONES[tone] };
 }
 
-// PGN [%cal] / [%csl] colour letters.
-const COLOURS: Record<string, string> = {
-  G: 'rgba(21, 128, 61, 0.85)',
-  R: 'rgba(185, 28, 28, 0.85)',
-  Y: 'rgba(202, 138, 4, 0.85)',
-  B: 'rgba(29, 78, 216, 0.85)',
+/** The colour of each kind of mark (`MARK_MEANINGS` in core says what each means). Shared with the key under a board. */
+export const MARK_RGB: Record<MarkColour, string> = {
+  G: 'rgb(21 128 61 / 0.85)',
+  R: 'rgb(185 28 28 / 0.85)',
+  Y: 'rgb(202 138 4 / 0.9)',
+  B: 'rgb(29 78 216 / 0.85)',
 };
-const DEFAULT_COLOUR = COLOURS.G!;
 
-/** 'Ge2e4' to an arrow from e2 to e4. Malformed entries are skipped. */
-export function arrowsOf(annotation: Annotation | undefined): BoardArrow[] {
-  return (annotation?.arrows ?? []).flatMap((shape) => {
-    const match = /^([GRYB])?([a-h][1-8])([a-h][1-8])$/.exec(shape);
-    if (!match) return [];
-    return [{ startSquare: match[2]!, endSquare: match[3]!, color: COLOURS[match[1] ?? 'G'] ?? DEFAULT_COLOUR }];
+/** A move's marks as the board draws them: arrows, and rings round squares. Malformed marks are skipped. */
+export function marksOnBoard(marks: Partial<Marks> | undefined): {
+  arrows: BoardArrow[];
+  squareStyles: Record<string, CSSProperties>;
+} {
+  const arrows = (marks?.arrows ?? []).flatMap((mark) => {
+    const arrow = parseArrow(mark);
+    return arrow ? [{ startSquare: arrow.from, endSquare: arrow.to, color: MARK_RGB[arrow.colour] }] : [];
   });
-}
-
-/** Square styles for the last move and for annotation circles ('Ge4' rings e4 in green). */
-export function squareStylesOf(lastUci: string | undefined, annotation: Annotation | undefined) {
-  const styles: Record<string, CSSProperties> = {};
-  if (lastUci) {
-    for (const square of [lastUci.slice(0, 2), lastUci.slice(2, 4)]) {
-      styles[square] = { backgroundColor: 'var(--board-highlight)' };
-    }
+  const squareStyles: Record<string, CSSProperties> = {};
+  for (const mark of marks?.circles ?? []) {
+    const circle = parseCircle(mark);
+    if (circle) squareStyles[circle.square] = { boxShadow: `inset 0 0 0 4px ${MARK_RGB[circle.colour]}` };
   }
-  for (const shape of annotation?.circles ?? []) {
-    const match = /^([GRYB])?([a-h][1-8])$/.exec(shape);
-    if (!match) continue;
-    const colour = COLOURS[match[1] ?? 'G'] ?? DEFAULT_COLOUR;
-    styles[match[2]!] = { ...styles[match[2]!], boxShadow: `inset 0 0 0 4px ${colour}` };
-  }
-  return styles;
+  return { arrows, squareStyles };
 }

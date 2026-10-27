@@ -35,7 +35,15 @@ export type AppBoardProps = {
   className?: string;
   /** Show the position the learner is pointing at in the text, in place of this one (see `RichText`). */
   previewable?: boolean;
+  /**
+   * Drawing marks, as on Lichess: drag with the right button for an arrow (`to` is where it ends), right-click a square
+   * for a ring (`to` is undefined). `keys` are the modifier keys held, which pick the colour.
+   */
+  onDrawMark?: (from: string, to: string | undefined, keys: MarkKeys) => void;
 };
+
+/** The modifier keys held while a mark is drawn. */
+export type MarkKeys = { shift: boolean; alt: boolean; ctrl: boolean; meta: boolean };
 
 const YELLOW = 'rgb(245 230 60 / 0.5)';
 const RED = 'rgb(239 68 68 / 0.55)';
@@ -94,11 +102,14 @@ function AppBoardView({
   coordinates,
   onSquareSelect,
   className,
+  onDrawMark,
 }: AppBoardProps) {
   const prefs = useBoardPrefs();
   const theme = themeById(prefs.theme);
   const [selected, setSelected] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  // Where a right-button drag began, while one is being drawn.
+  const [markFrom, setMarkFrom] = useState<string | null>(null);
   const turn = sideToMove(epd);
 
   const targets = useMemo(() => {
@@ -156,6 +167,13 @@ function AppBoardView({
             targetSquare ? attempt(sourceSquare, targetSquare) : (setSelected(null), false),
           onMouseOverSquare: ({ square }) => setHovered(square),
           onMouseOutSquare: () => setHovered(null),
+          onSquareMouseDown: ({ square }, event) => setMarkFrom(onDrawMark && event.button === 2 ? square : null),
+          onSquareMouseUp: ({ square }, event) => {
+            if (!onDrawMark || event.button !== 2 || markFrom === null) return;
+            setMarkFrom(null);
+            const keys = { shift: event.shiftKey, alt: event.altKey, ctrl: event.ctrlKey, meta: event.metaKey };
+            onDrawMark(markFrom, markFrom === square ? undefined : square, keys);
+          },
           // Tap a piece, then tap where it goes: drag and drop is awkward on a phone.
           onSquareClick: ({ piece, square }) => {
             onSquareSelect?.(square);
