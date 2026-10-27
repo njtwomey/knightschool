@@ -1,8 +1,9 @@
 # Thin wrapper over the pnpm scripts in package.json. `make` alone lists the targets.
-# Uses a global pnpm if there is one, otherwise runs the pinned version through npx.
+# Uses a global pnpm if one runs, otherwise the pinned version through npx. (A version manager's shim can be on the PATH
+# with no version chosen, so the test is that `pnpm --version` works, not that the command exists.)
 
 PNPM_VERSION := $(shell node -p "require('./package.json').packageManager.split('@')[1]")
-PNPM ?= $(shell command -v pnpm >/dev/null 2>&1 && echo pnpm || echo npx -y pnpm@$(PNPM_VERSION))
+PNPM ?= $(shell pnpm --version >/dev/null 2>&1 && echo pnpm || echo npx -y pnpm@$(PNPM_VERSION))
 
 .DEFAULT_GOAL := help
 .PHONY: help install dev doctor gaps popularity build preview test test-watch lint fix format format-check typecheck check pre-push hooks clean
