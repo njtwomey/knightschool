@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Bird Variation, bishop to c5"]
+[ECO "C61"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,fork"]
+[Themes "f7-weakness"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 exd4 5. O-O a6 6. Bc4 Bc5"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "5...a6 6.Bc4 Bc5"]
+[Start "ruy-lopez-bird 5...a6 6.Bc4"]
+
+6... Bc5 $2 { A natural square, but the bishop on c5 is loose. } 7. Bxf7+ { Gives the bishop for the pawn on f7 to drag the king out. [%cal Gc4f7] } 7... Kxf7 ( 7... Kf8 8. Bb3 { The bishop is safe, White is a pawn up and Black can no longer castle. } ) 8. Qh5+ { A double attack: check, and the queen hits the bishop on c5. [%cal Gh5f7,Gh5c5] } 8... g6 9. Qxc5 { The piece is back and White is a pawn up, with Black's king out in the open. } *

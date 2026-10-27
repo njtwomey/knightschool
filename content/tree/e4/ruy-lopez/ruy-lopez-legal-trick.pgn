@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Modern Steinitz Defense, a Légal-style trick"]
+[ECO "C72"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "white"]
+[Tricks "trap,fork,pin"]
+[Themes "legal-mate,f7-weakness"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 d6 5. O-O b5 6. Bb3 Bg4 7. h3 Bh5"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "6...Bg4 7.h3 Bh5"]
+[Start "ruy-lopez-steinitz-deferred 7.h3"]
+
+7... Bh5 $2 { Keeps the pin, but the knight is not really pinned: the bishop on b3 aims at f7. } 8. Nxe5 $1 { Leaves the queen to be taken. If Black takes it, Bxf7+ and a knight check follow. [%cal Gb3f7,Ge5f7] } 8... Bxd1 ( 8... dxe5 9. Qxh5 { Wins the bishop back. White is a pawn up and f7 is weak. } ) ( 8... Nxe5 9. Qxh5 { The pin is gone and White has won a pawn. } ) 9. Bxf7+ { Check. The king must go to e7: d7 is covered by the knight on e5. } 9... Ke7 10. Nxc6+ { A fork: the knight checks the king and attacks the queen on d8. [%cal Gc6d8,Gc6e7] } 10... Kxf7 11. Nxd8+ { Takes the queen with check. } 11... Rxd8 12. Rxd1 { The queens are gone and White is two pawns up, an endgame that should be won. } *

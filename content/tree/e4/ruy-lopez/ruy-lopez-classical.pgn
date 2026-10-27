@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Classical Variation"]
+[ECO "C64"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "d4-break,centre-pawns"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Bc5"]
+[Start "ruy-lopez-setup 3.Bb5"]
+
+3... Bc5 { The Classical: the bishop aims at f2, as in the Italian. } 4. c3 { Prepares d4, which will hit the bishop on c5. } 4... Nf6 ( 4... f5 5. d4 { Hits the bishop and opens the centre before Black's attack starts. } 5... fxe4 6. dxc5 exf3 7. Qxf3 { Material is level. White has two bishops and the open f-file points at Black's king. } ) ( 4... Nge7 5. O-O ) 5. O-O { Castles, leaving e4 to be taken: if it is, d4 wins it back. } 5... O-O ( 5... Nxe4 6. d4 { Attacks the bishop and opens the centre. White wins the pawn back. } 6... Be7 7. Qe2 Nd6 8. Bxc6 bxc6 9. dxe5 { The pawn is back and the knight on d6 is driven away. Black's queenside pawns are split. } ) 6. d4 { Takes the centre with a gain of time on the bishop. } 6... Bb6 7. Re1 { Guards e4. } 7... d6 8. h3 { Stops ...Bg4. Plan: Bd3 or Bf1, Nbd2 and Bc2: a strong pawn centre and a slow build-up. } *

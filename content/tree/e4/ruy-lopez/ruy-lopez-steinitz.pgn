@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Steinitz Defense"]
+[ECO "C62"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "centre-pawns,development-lead"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...d6"]
+[Start "ruy-lopez-setup 3.Bb5"]
+
+3... d6 { Holds e5 with a pawn, but it shuts in the bishop on f8, and with the d7 square empty the knight on c6 is pinned to the king. } 4. d4 { Strikes at e5 at once. The pinned knight cannot take on d4. [%cal Gb5e8] } 4... exd4 { Gives up the centre. } ( 4... Bd7 5. Nc3 { Develops and adds to the pressure on e5. If Black takes on d4 now, 6.Nxd4 is the main line. } 5... Nf6 6. O-O Be7 7. Bxc6 Bxc6 8. Re1 { Guards e4, so the pawn on d4 can stay where it is. } ) 5. Nxd4 { Takes back with a knight in the centre, and it now hits the pinned knight on c6 a second time. [%cal Gd4c6,Gb5c6] } 5... Bd7 { Unpins the knight. } ( 5... a6 6. Bxc6+ bxc6 7. Nxc6 { Wins a pawn: the knight on c6 had no defender left. } ) 6. Nc3 { Develops and guards e4. } 6... Nf6 ( 6... Nxd4 7. Qxd4 Bxb5 8. Nxb5 c6 { The only good move: it drives the knight away. } 9. Nc3 { Back to a safe square. White has more space and quicker development. } ) 7. O-O { Castles. Black's position is solid but cramped. } 7... Be7 8. Nxc6 { Swaps knights so the bishop can take on c6 too. } 8... Bxc6 9. Bxc6+ bxc6 10. f4 { Black's pawns are split and White has more space. Plan: Qf3, then e5 to open lines while Black's pieces are passive. } *

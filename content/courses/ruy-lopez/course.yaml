@@ -1,0 +1,91 @@
+name: Ruy Lopez
+eco: C60
+side: white
+opening: ruy-lopez
+tier: 3
+trigger: '1. e4 e5 2. Nf3 Nc6 3. Bb5'
+summary: >-
+  The Ruy Lopez, also called the Spanish Opening: White's bishop goes to b5 and hits the knight that guards e5. This
+  course skips the long main lines and plays an open, direct version, with the traps club players fall into against
+  every common third move.
+about:
+  idea: >-
+    The bishop on b5 puts slow pressure on e5 through the knight on c6. After 3...a6 4.Ba4 Nf6 White plays 5.d4 at
+    once and castles before taking the pawn back, so the e-file opens while Black's king is still in the middle. When
+    Black chases the bishop with ...b5, it returns to b3 and aims at f7, and two threats appear together: e5 to kick
+    the knight and Ng5 to hit f7.
+  risks: >-
+    Against the best defence (6...Be7 and quick castling) the game is only level: 5.d4 gives up the slow pressure of the
+    main lines for quick play. The tricks need exact moves: Nxe5 against ...Bh5 works only with the bishop on b3, and
+    taking on d4 with the queen when the bishop is on b3 walks into the Noah's Ark trap.
+  origin: >-
+    Named after Ruy López de Segura, a Spanish priest who wrote about it in 1561.
+  suits: >-
+    Players who know the Italian and want a second answer to 2...Nc6 with the same ideas: quick development, the
+    pressure on f7, and tactics against a king left in the centre.
+plans:
+  - After 3...a6 4.Ba4 Nf6, play 5.d4 and castle before taking the pawn back on d4.
+  - When ...b5 drives the bishop to b3, look for e5 (kick the knight) and Ng5 (hit f7) together.
+  - Against ...Bg4 pins, ask at once with h3; if the bishop stays on h5 with yours on b3, Nxe5 wins.
+  - Take back on d4 with a knight, not the queen, when the bishop is on b3 and Black can play ...c5 and ...c4.
+  - Against quiet replies (the Berlin, ...d6 lines), castle, play c3 and d4, and build with Re1, h3 and Nbd2.
+  - A knight that grabs e4 or e5 often ends up stuck on the e-file; put a rook on e1 and attack it.
+motifs:
+  [
+    f7-weakness,
+    legal-mate,
+    noahs-ark,
+    pin-absolute,
+    pin-relative,
+    fork,
+    open-file,
+    centre-pawns,
+    castle-early,
+    scholar-mate,
+    long-diagonal,
+  ]
+tags: [e4, open, ruy-lopez]
+sources:
+  - title: The Spanish Opening for White (YouTube video)
+    url: https://www.youtube.com/watch?v=xD0iTgHMQVQ
+    note: >-
+      The plan with 5.d4 and the traps after ...Bg4, ...Nxe4, ...b5 and ...Nxe5 come from this video. Every line was
+      checked with Stockfish and the notes are written afresh.
+lines:
+  - id: ruy-lopez-centre-attack
+    section: Against 3...a6 4.Ba4 Nf6
+  - id: ruy-lopez-b5-bb3
+    section: Against 3...a6 4.Ba4 Nf6
+  - id: ruy-lopez-nxe5-trap
+    section: Against 3...a6 4.Ba4 Nf6
+  - id: ruy-lopez-ne4-trap
+    section: Against 3...a6 4.Ba4 Nf6
+  - id: ruy-lopez-steinitz-deferred
+    section: Against 3...a6 4.Ba4 d6
+  - id: ruy-lopez-legal-trick
+    section: Against 3...a6 4.Ba4 d6
+  - id: ruy-lopez-bd5-trap
+    section: Against 3...a6 4.Ba4 d6
+  - id: ruy-lopez-ng5-attack
+    section: Against 3...a6 4.Ba4 d6
+    alternative: true
+  - id: ruy-lopez-fourth-moves
+    section: Black's other fourth moves
+  - id: ruy-lopez-steinitz
+    section: Black's other third moves
+  - id: ruy-lopez-steinitz-e5
+    section: Black's other third moves
+  - id: ruy-lopez-bird
+    section: Black's other third moves
+  - id: ruy-lopez-bird-bc5
+    section: Black's other third moves
+  - id: ruy-lopez-bird-b5
+    section: Black's other third moves
+  - id: ruy-lopez-berlin
+    section: Black's other third moves
+  - id: ruy-lopez-classical
+    section: Black's other third moves
+  - id: ruy-lopez-schliemann
+    section: Black's other third moves
+  - id: ruy-lopez-fianchetto
+    section: Black's other third moves

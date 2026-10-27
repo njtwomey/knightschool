@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Morphy Defense, Modern Steinitz Defense"]
+[ECO "C72"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "pin"]
+[Themes "slow-build,d4-break"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "4...d6"]
+[Start "noahs-ark 4...d6"]
+
+5. O-O { Castles first. Against ...d6 there is no hurry: e5 is well guarded, and 5.d4 b5 6.Bb3 Nxd4 is the start of the Noah's Ark trap if White later takes back with the queen. } 5... b5 { Chases the bishop, the most common move at club level. } ( 5... Bg4 6. h3 { Asks the bishop at once. } 6... Bh5 7. c3 { Prepares d4. The pin on the knight is a nuisance, not a danger. } ) ( 5... Bd7 6. c3 Nf6 7. Re1 { Guards e4, so d4 can come next. } ) ( 5... Nf6 6. c3 Be7 ( 6... Nxe4 7. d4 { Opens the centre against the loose knight on e4, with the king already castled. } ) 7. Re1 ) 6. Bb3 { Back to the diagonal that aims at f7. } 6... Nf6 ( 6... Bg4 7. h3 { Asks the bishop: take the knight, or keep the pin and walk into a trick. } 7... Bxf3 8. Qxf3 { The queen and bishop now both aim at f7: Qxf7 would be mate. [%cal Gf3f7,Gb3f7] } 8... Nf6 9. c3 { Gives the bishop c2 to retreat to if ...Na5 comes. Plan: d3 or d4, then Nd2-f1-e3. } ) ( 6... Na5 7. d4 { Takes the centre while Black's knight is on the edge. } 7... exd4 8. Nxd4 { Takes back with the knight. Taking with the queen allows ...c5 and ...c4, the Noah's Ark trap that shuts in the bishop on b3. } ) 7. c3 { Prepares d4 and gives the bishop c2, out of reach of ...Na5. [%cal Gd2d4] } 7... Be7 { Calm development. } 8. d4 { Takes the centre now that the king is safe and c3 backs up d4. } 8... O-O ( 8... Bg4 9. Re1 { Guards e4, so the pin does not cost a pawn. } ) 9. h3 { Stops ...Bg4. Plan: Re1, Nbd2-f1-g3 and Bc2, the classic Ruy Lopez set-up. If Black leaves the book, keep the pawns on d4 and e4 and bring the knight round. } *

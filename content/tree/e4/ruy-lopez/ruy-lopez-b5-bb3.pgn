@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Mackenzie Variation, 6...b5"]
+[ECO "C77"]
+[Character "sharp,tactical"]
+[Risk "medium"]
+[EarlyMate "none"]
+[Tricks "trap,mate-threat"]
+[Themes "open-lines,e5-wedge"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "6...b5"]
+[Start "ruy-lopez-centre-attack 5...exd4 6.O-O"]
+
+6... b5 { Chases the bishop before Black's king is safe. It is the most common move here, and it costs Black time. } 7. Bb3 { Back to the diagonal that aims at f7. Now White has two ideas at once: e5, kicking the knight, and Ng5, hitting f7 twice. [%cal Ge4e5,Gf3g5,Gb3f7] } 7... Bc5 { Gets ready to castle, so Ng5 loses its point. It does nothing about e5. } ( 7... d6 8. Ng5 { Hits f7 with the knight and the bishop; only the king guards it. [%cal Gg5f7,Gb3f7] } 8... Ne5 9. f4 { Kicks the knight away from f7's defence, and the f-pawn joins the attack. } ) ( 7... Be7 8. e5 { The knight has no good square: on e4 it is hit by Bd5, and on g4 it is out of play. } 8... Ng4 9. Re1 ) ( 7... Na5 8. Nxd4 { Takes the pawn back. If the knight takes on b3, axb3 opens the a-file for the rook. } 8... Nxb3 9. axb3 ) ( 7... Nxe4 8. Re1 { Pins the knight to the king. } 8... d5 9. Nc3 { Piles up on the pinned knight. } ) 8. e5 { Kicks the knight, which has few good squares. } 8... Ng4 { The best square: with the bishop on c5 it eyes f2. [%cal Rg4f2,Rc5f2] } 9. c3 { Opens lines. If Black takes on c3, the queen comes to d5 with two threats. } 9... d3 { Keeps the c-file closed and leaves White a pawn to win back. } ( 9... dxc3 10. Qd5 { Two threats: Qxf7 is mate, and the bishop on c5 hangs. [%cal Gd5f7,Gd5c5] } 10... Qe7 { Guards both. } 11. Nxc3 { Takes back. Black is a pawn up, but the knight on g4 and the rook on a8 are loose and Black's king is still in the middle; the engine gives White a large advantage. } ) 10. Bd5 { The bishop takes the long diagonal towards the rook on a8, and h3 next will ask the knight on g4 where it is going. [%cal Gd5a8] } 10... Bb7 11. Qxd3 { Wins the pawn back. Plan: h3 to chase the knight, then Bf4 and Re1 while Black's king is still in the middle. } *

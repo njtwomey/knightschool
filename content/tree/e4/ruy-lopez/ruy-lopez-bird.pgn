@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Bird Variation"]
+[ECO "C61"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "castle-early,quick-development"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...Nd4"]
+[Start "ruy-lopez-setup 3.Bb5"]
+
+3... Nd4 { Bird's Defence: it attacks the knight on f3 and blocks the bishop's pressure on c6. } 4. Nxd4 { Trades it off. } 4... exd4 5. O-O { Castles. With the kingside pieces out, there is no reason to wait. } 5... c6 { Asks the bishop to move at once. } ( 5... Bc5 6. d3 c6 7. Ba4 { Keeps the bishop on the diagonal towards e8. } ) ( 5... Nf6 6. e5 { Kicks the knight before it settles. } 6... Nd5 7. d3 ) ( 5... a6 6. Bc4 { Back to the Italian diagonal, aiming at f7. Black has to watch for Bxf7+ tricks. } 6... Nf6 7. d3 ) 6. Bc4 { The bishop goes to the diagonal that aims at f7, as in the Italian. } 6... Nf6 7. d3 { Guards e4 and opens the bishop on c1. Later a knight on f3 can attack the pawn on d4, which is cut off from Black's other pawns. } 7... d5 ( 7... d6 8. Nd2 ) 8. exd5 { Takes, so that the e-file opens towards Black's king. } 8... Nxd5 9. Re1+ { Check on the open e-file, so Black has to block. } 9... Be7 10. Bg5 { Swaps off Black's only developed piece. } 10... O-O 11. Bxe7 Nxe7 12. Nd2 { White is ahead in development. Plan: Nf3 to hit the pawn on d4, Qh5 or Qf3, and keep the rook on the open e-file. } *

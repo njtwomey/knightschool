@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Mackenzie Variation, trapped knight"]
+[ECO "C77"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap"]
+[Themes "trapped-knight"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. d4 exd4 6. O-O b5 7. Bb3 Bc5 8. e5 Ne4"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "6...b5 7.Bb3 Bc5 8.e5 Ne4"]
+[Start "ruy-lopez-b5-bb3 7...Bc5 8.e5"]
+
+8... Ne4 $2 { Looks active, but the knight has no way back: the pawn on e5 covers d6 and f6, and the knight on f3 covers g5. [%csl Yd6,Yf6,Yg5] } 9. Qe2 { Attacks the knight, which has no safe square. [%cal Ge2e4] } 9... d5 { Guards it with a pawn. } 10. exd6 { Takes en passant: the pawn that guarded the knight is gone, and the e-file opens towards Black's king. } 10... f5 11. Bg5 { Hits the queen with gain of time before taking the knight. Nbd2 comes next to win it, and Black's king is stuck in the middle with the e-file open. [%cal Gg5d8] } *

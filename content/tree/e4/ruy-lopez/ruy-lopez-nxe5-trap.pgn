@@ -1,0 +1,16 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Mackenzie Variation, pawn grab on e5"]
+[ECO "C77"]
+[Character "tactical"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "trap,pin"]
+[Themes "open-e-file"]
+[Refutes "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. d4 exd4 6. O-O Be7 7. e5 Ne4 8. Nxd4 Nxe5"]
+[For "white"]
+[Kind "for-us"]
+[Opponent "8...Nxe5"]
+[Start "ruy-lopez-centre-attack 7...Ne4 8.Nxd4"]
+
+8... Nxe5 $2 { Grabs a pawn, but now both black knights stand on the e-file in front of the king. } 9. Re1 { Hits the knight on e4, with the knight on e5 next in line. Black cannot defend it with ...d5, because the bishop on a4 pins the d-pawn, nor with ...f5, which the knight on d4 covers. [%cal Ge1e4,Ga4e8] [%csl Yf5] } 9... O-O { Castles, but one knight is lost. } ( 9... Nc5 10. Rxe5 { Takes the other knight. } 10... Nxa4 11. Nf5 { The rook on e5 pins the bishop on e7 to the king, and the knight attacks it. [%cal Ge5e8,Gf5e7] } 11... O-O 12. Nxe7+ Kh8 13. Qh5 { A piece up, with the queen, rook and knight all aiming at Black's king. } ) 10. Rxe4 { White has won a piece for a pawn. } 10... Bf6 11. Nf3 { Swaps off the active knight. A piece up, White wants a calm position. } 11... Nxf3+ 12. Qxf3 *

@@ -1,0 +1,15 @@
+[Event "Knight School"]
+[Opening "Ruy Lopez"]
+[Variation "Ruy Lopez: Schliemann Defense"]
+[ECO "C63"]
+[Character "solid,positional"]
+[Risk "low"]
+[EarlyMate "none"]
+[Tricks "none"]
+[Themes "quiet-development,castle-early"]
+[For "white"]
+[Kind "sideline"]
+[Opponent "3...f5"]
+[Start "ruy-lopez-setup 3.Bb5"]
+
+3... f5 { The Schliemann: a gambit-like strike at e4 that opens Black's kingside. } 4. d3 { Guards e4 calmly. White has no need to enter the sharp lines after 4.Nc3. } 4... fxe4 ( 4... Nf6 5. O-O { Castles. If Black takes on e4, dxe4 opens the d-file for White's queen. } ) 5. dxe4 Nf6 6. O-O { Castles. The f-file Black opened is no danger once the king is safe. } 6... Bc5 ( 6... d6 7. Bc4 { The bishop aims at g8, where Black's king will want to go. } ) 7. Bxc6 { Gives up the bishop to win the pawn on e5. } 7... bxc6 8. Nxe5 { White is a pawn up. } 8... O-O 9. Nc3 { Guards e4 and develops. } 9... d6 10. Nd3 { The knight steps back and hits the bishop on c5. } 10... Bb6 11. h3 { Stops ...Bg4 and ...Ng4. White is a pawn up and Black's queenside pawns are split. Plan: Kh1, Bg5 and f3 to hold e4. } *

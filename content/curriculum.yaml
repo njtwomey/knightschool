@@ -39,3 +39,5 @@
   prerequisites: [e5-open-games]
 - id: two-knights
   prerequisites: [e5-open-games]
+- id: ruy-lopez
+  prerequisites: [vs-e5-italian]

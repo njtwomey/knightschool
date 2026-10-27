@@ -12,6 +12,12 @@
   eco: C50-C54
   summary: White develops the bishop to c4 and aims at f7. Natural moves, clear plans and several famous traps.
   moves: 1. e4 e5 2. Nf3 Nc6 3. Bc4
+- id: ruy-lopez
+  name: Ruy Lopez
+  side: white
+  eco: C60-C99
+  summary: White's bishop hits the knight that guards e5. Also called the Spanish Opening, it is one of the oldest and most played answers to 1...e5.
+  moves: 1. e4 e5 2. Nf3 Nc6 3. Bb5
 - id: open-games
   name: Open Games
   side: black
