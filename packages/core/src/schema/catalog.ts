@@ -18,6 +18,7 @@ export const OpeningIndexEntry = Opening.pick({
   plans: true,
   motifs: true,
   tags: true,
+  sources: true,
 }).extend({
   /** Position in content/curriculum.yaml: the order to study in. */
   order: z.number().int(),

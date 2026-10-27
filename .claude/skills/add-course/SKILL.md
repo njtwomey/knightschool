@@ -64,6 +64,28 @@ KS_ROOT="$PWD" pnpm exec tsx "$SCRATCH/check-course.mts" content/courses/<id>
 `tree-at` prints who writes each move, its marks and comment, what the tree plays next, and the `[Start]` for a new
 chapter there. `check-course` builds one course as the real build does.
 
+## Working from a video, book or article
+
+The user often collects analysis from a video, a book or an article (a transcript, notes, a chapter) and asks for it to
+become content. Treat it as a source of ideas, never of text:
+
+1. **Distil, in your own words.** Pick out the lines, the traps and the reasons. Write every comment fresh, in the tree's
+   neutral voice; never paste or closely paraphrase the source. A transcript's move names are often garbled ("night
+   takes c6", "R Lopez"): rebuild the moves on a board and give openings their proper names.
+2. **Verify everything with the engine** before writing it down (`course:eval`, or a quick multi-PV search on the
+   position). Sources are often loose: a "winning" trick may only win a pawn, a "forced" reply may have a better
+   alternative, a move order may not work. Teach what is true and say so neutrally in the comment ("8...dxe5 is the
+   better try, and still loses a pawn"); drop what the engine refutes.
+3. **Credit it** in course.yaml `sources:` (title, url, optional author and note: what the course took from it). The
+   course page lists it under the introduction.
+4. **One comment per move still holds.** Where a move the source talks about already has a comment in the tree (`tree-at`
+   shows it), do not add a second one: merge into the one comment, keeping what is right, adding the new point and fixing
+   what is wrong, and check every course that passes there (`make doctor`). If the source and the tree disagree on the
+   move itself, the engine decides; the comment can mention the other move ("5.O-O is the usual move; 5.d4 is more
+   direct"), and a second answer for the learner is a line listed with `alternative: true`.
+5. **Board marks** (`[%cal]`, `[%csl]` in a comment) show a source's arrows and highlighted squares; each colour has one
+   meaning (content/README.md). Use one to three where they say something.
+
 ## Procedure
 
 1. **Find what is missing**: `make gaps` (or `pnpm content:gaps white|black --top 40`) lists, per side, the replies club

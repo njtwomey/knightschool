@@ -268,6 +268,7 @@ export function buildOpening(
     motifs: manifest.motifs,
     tags: manifest.tags,
     ...(manifest.units ? { units: manifest.units } : {}),
+    ...(manifest.sources?.length ? { sources: manifest.sources } : {}),
     rootEpd: START_EPD,
     variants: metas,
   });

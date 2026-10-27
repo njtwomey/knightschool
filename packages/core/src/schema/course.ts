@@ -48,6 +48,22 @@ export const CourseAbout = z.object({
 });
 export type CourseAbout = z.infer<typeof CourseAbout>;
 
+/**
+ * Where a course's ideas come from: a video, book or article it was distilled from, credited on the course page. The
+ * notes are always written fresh; this says whose analysis inspired them.
+ */
+export const CourseSource = z
+  .object({
+    title: z.string().min(1),
+    url: z.string().url(),
+    /** Who made it: a channel, an author. */
+    author: z.string().min(1).optional(),
+    /** What the course took from it, in a few words. */
+    note: z.string().min(1).optional(),
+  })
+  .strict();
+export type CourseSource = z.infer<typeof CourseSource>;
+
 /** A unit of a course's study path: `<line>:<n>`, the n-th unit of that line. */
 export const UnitId = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*:[1-9]\d*$/, 'a unit id, <line>:<n>');
 
@@ -98,6 +114,8 @@ export const OpeningManifest = z.object({
   traps: z.array(CourseTrap).default([]),
   /** Optional changes to the order of the study path and to what each unit waits for. */
   units: UnitOverrides.optional(),
+  /** Videos, books or articles the course was distilled from, credited on the course page. */
+  sources: z.array(CourseSource).optional(),
 });
 export type OpeningManifest = z.infer<typeof OpeningManifest>;
 

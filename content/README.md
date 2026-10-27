@@ -133,6 +133,19 @@ lines: # teaching order, any line of the tree by id; the first is the main line
     section: Other third moves # optional: group the course page by this heading instead of main / sideline / trap
 ```
 
+Optional, for a course distilled from someone else's analysis (a video, a book, an article):
+
+```yaml
+sources:
+  - title: The Spanish Opening for White (YouTube video) # required
+    url: https://www.youtube.com/watch?v=xD0iTgHMQVQ # required, a full link
+    author: A channel or writer # optional
+    note: What the course took from it, in a sentence. # optional
+```
+
+They are listed under the introduction on the course page as **Sources**, each a link. The notes are still written fresh,
+in the tree's own neutral voice, and every line is checked with the engine; `sources` says whose ideas inspired them.
+
 **The introduction.** Nobody should land on a course without knowing what it is. `summary` says what the opening is,
 `about.idea` why our side plays it, `about.risks` what can go wrong for our side (including the opponent's best try and,
 for a gambit, what the engine thinks of it), `about.suits` who it suits and when to choose it, and the optional `about.origin` where it comes from. Write for a beginner, a
@@ -264,7 +277,8 @@ The app can load the YAML too (Author, Import), to see the course as a learner w
 
 ## Sources
 
-See docs/PLAN.md "Opening content" for licences. Lichess chess-openings and the puzzle database are CC0; Wikibooks text
+A course built from a video, book or article credits it in course.yaml `sources:` (see course.yaml above). See
+docs/PLAN.md "Opening content" for licences. Lichess chess-openings and the puzzle database are CC0; Wikibooks text
 is CC BY-SA 4.0 and must not be pasted into comments without attribution and the same licence.
 
 ## Quizzes

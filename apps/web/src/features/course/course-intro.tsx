@@ -1,4 +1,4 @@
-import type { CourseAbout, Side, Variant } from '@knightschool/core';
+import type { CourseAbout, CourseSource, Side, Variant } from '@knightschool/core';
 import { ChevronDown, Lightbulb, TriangleAlert, UserRound } from 'lucide-react';
 import { useState, type ComponentType } from 'react';
 import { RichText } from '@/components/rich-text';
@@ -41,12 +41,32 @@ function Origin({ text }: { text: string }) {
   );
 }
 
+/** The videos, books or articles a course was distilled from, each a link. */
+function Sources({ sources }: { sources: CourseSource[] }) {
+  return (
+    <div className="grid gap-1 text-xs text-muted-foreground">
+      <span className="font-medium text-foreground">Sources</span>
+      <ul className="grid gap-0.5">
+        {sources.map((source) => (
+          <li key={source.url}>
+            <a href={source.url} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+              {source.title}
+            </a>
+            {source.author && <span>, {source.author}</span>}
+            {source.note && <span>: {source.note}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 /**
  * The introduction at the top of a course page: what the opening is (the summary), why it is played, what can go wrong
  * and who it suits, so nobody lands on a course without knowing what it is for. It spans the page: three columns on a
  * wide screen, stacked on a phone.
  */
-export function CourseIntro({ summary, about }: Intro) {
+export function CourseIntro({ summary, about, sources = [] }: Intro & { sources?: CourseSource[] }) {
   return (
     <section aria-label="Introduction" className="grid gap-3">
       <p className="leading-relaxed">
@@ -59,6 +79,11 @@ export function CourseIntro({ summary, about }: Intro) {
         {about.origin && (
           <div className="sm:col-span-2 lg:col-span-3">
             <Origin text={about.origin} />
+          </div>
+        )}
+        {sources.length > 0 && (
+          <div className="sm:col-span-2 lg:col-span-3">
+            <Sources sources={sources} />
           </div>
         )}
       </div>

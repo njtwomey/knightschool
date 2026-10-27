@@ -119,7 +119,7 @@ export function CoursePage({ courseId }: { courseId: string }) {
                 <EnrolButton openingId={courseId} />
               </span>
             </div>
-            <CourseIntro summary={course.summary} about={course.about} />
+            <CourseIntro summary={course.summary} about={course.about} sources={course.sources} />
             {course.plans.length > 0 && (
               <section aria-label="Plans" className="grid gap-1">
                 <h3 className="text-sm font-semibold">Plans to remember</h3>
