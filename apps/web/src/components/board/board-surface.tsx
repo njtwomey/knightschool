@@ -11,7 +11,7 @@ import {
   type Marks,
 } from '@knightschool/core';
 import { Check, X } from 'lucide-react';
-import { useEffect, useMemo, useState, type CSSProperties, type MouseEvent } from 'react';
+import { useMemo, useState, type CSSProperties, type MouseEvent } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { siteConfig } from '@/data/site-config';
 import { cn } from '@/lib/utils';
@@ -126,8 +126,10 @@ export function BoardSurface({
   const theme = BOARD_THEMES.find((candidate) => candidate.id === settings.theme) ?? BOARD_THEMES[0];
   // Moving a piece, two ways: click it then a target square, or drag it. The selected piece gets corner brackets and
   // its legal moves small dots (a ring on a capture).
-  const [selected, setSelected] = useState<string | null>(null);
-  useEffect(() => setSelected(null), [epd]);
+  // The selection belongs to the position it was made in, so a new position clears it without an effect.
+  const [selection, setSelection] = useState<{ epd: string; square: string } | null>(null);
+  const selected = selection?.epd === epd ? selection.square : null;
+  const setSelected = (square: string | null) => setSelection(square ? { epd, square } : null);
   const canMove = interactive && Boolean(onMove);
   const targets = useMemo(() => (canMove && selected ? legalTargets(epd, selected) : []), [canMove, selected, epd]);
   const move = (from: string, to: string) => {
