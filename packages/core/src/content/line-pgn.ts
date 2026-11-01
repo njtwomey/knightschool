@@ -21,7 +21,7 @@ export function readLine(id: string, text: string): LineSource {
   try {
     game = parse(text, { startRule: 'game' }) as unknown as typeof game;
   } catch (error) {
-    throw new Error(`${id}: the PGN does not read: ${(error as Error).message.split('\n')[0]}`);
+    throw new Error(`${id}: the PGN does not read: ${(error as Error).message.split('\n')[0]}`, { cause: error });
   }
   const tag = (name: string) => {
     const value = game.tags?.[name];
