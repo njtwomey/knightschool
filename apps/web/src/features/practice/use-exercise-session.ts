@@ -255,9 +255,10 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
     const ms = Date.now() - started.current;
     const expected = expectedMove(exercise, epd, ply);
     const verdict = move.uci === expected ? null : judge(epd, move.uci, expected);
-    if (verdict === 'needs' && exercise.grader.kind === 'tolerant') {
-      // A tolerant grade is the judgement itself: the move stays on the board until the engine has looked at it. A
-      // move it cannot judge (the engine failed to start) counts as passed.
+    if (verdict === 'needs') {
+      // Not in the shipped facts: the move stays on the board until the engine has judged it, so a sound move that is
+      // not the line's is never counted wrong. A move the engine cannot judge (it failed to start) passes a tolerant
+      // grader and is wrong for an exact one.
       setPending({ uci: move.uci, epd: move.epd });
       void evaluateLive([epd, move.epd].filter((position) => !evalOf(position)))
         .catch(() => undefined)
@@ -282,14 +283,19 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
     verdict: Verdict | 'needs' | 'unjudged' | null,
   ): boolean => {
     const settled = verdict && verdict !== 'needs' && verdict !== 'unjudged' ? verdict : null;
-    const outcome = verdict === 'unjudged' ? 'right' : gradeMove(exercise, epd, ply, move.uci, settled);
+    const outcome =
+      verdict === 'unjudged'
+        ? exercise.grader.kind === 'tolerant'
+          ? 'right'
+          : 'wrong'
+        : gradeMove(exercise, epd, ply, move.uci, settled);
     const next = reduceAttempt(attempt, { type: 'try', uci: move.uci, ms, outcome }, triesBeforeShown);
     setExerciseAttempt((a) => ({ ...a, tries: [...a.tries, ...next.tries.slice(-1)] }));
     const rowIndex = tries.length;
     setTries((rows) => [
       ...rows,
       {
-        ply: ply,
+        ply: (exercise.startPly ?? 0) + ply,
         asked: expected ? (playMove(epd, expected)?.san ?? '?') : '(your choice)',
         played: move.san,
         grade:
@@ -303,7 +309,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
         hint: attempt.hint,
       },
     ]);
-    const where = { ply, san: move.san, from, to };
+    const where = { ply: (exercise.startPly ?? 0) + ply, san: move.san, from, to };
     if (verdict === 'needs') {
       // Not in the shipped facts: the browser engine fills the grade in when it has it.
       const lineAfter = expected ? playMove(epd, expected)?.epd : undefined;
@@ -342,7 +348,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
         ...where,
         grade: settled!.grade,
         lineMove: playMove(epd, expected!)?.san ?? '',
-        linePly: ply,
+        linePly: (exercise.startPly ?? 0) + ply,
       });
       setBadge(undefined);
     } else {

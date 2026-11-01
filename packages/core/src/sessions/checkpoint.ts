@@ -1,3 +1,4 @@
+import { positionPlies } from '../content/plies';
 import type { BuiltOpening } from '../content/build-opening';
 import type { Exercise } from '../exercise/exercise';
 import { drillScope, scopePositions } from './drill';
@@ -27,8 +28,15 @@ export function checkpointExercises(
   tries: number,
 ): Exercise[] {
   const positions = scopePositions(drillScope(opening, variation));
+  const plies = positionPlies(opening);
   return shuffled(positions, random).map((card) =>
-    moveExercise(card, { mode: 'checkpoint', before: moveInto(opening, card.epd), tries, help: false }),
+    moveExercise(card, {
+      mode: 'checkpoint',
+      before: moveInto(opening, card.epd),
+      tries,
+      help: false,
+      startPly: plies.get(card.epd),
+    }),
   );
 }
 

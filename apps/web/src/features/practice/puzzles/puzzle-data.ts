@@ -17,6 +17,7 @@ import { learnerStore } from '@/data/learner';
 import { siteConfig } from '@/data/site-config';
 import { writeBoardHash } from '@/pages/board/board-hash';
 import { to } from '@/router/location';
+import { firstPlyOf } from '@knightschool/core';
 
 export const puzzlesHref = (opening?: string, variation?: string) =>
   to(`/practice/puzzles${opening ? `/${opening}` : ''}${variation ? `/${variation}` : ''}`);
@@ -137,6 +138,7 @@ export const puzzleExercise = (puzzle: Pick<ShippedPuzzle, 'id' | 'fen' | 'moves
   id: puzzleCardId(puzzle.id),
   mode: 'puzzle',
   start: fenToEpd(puzzle.fen),
+  startPly: firstPlyOf(puzzle.fen),
   side: puzzleSolver(puzzle),
   grader: { kind: 'exact', anyMate: true },
   responder: { kind: 'scripted', script: [...puzzle.moves] },

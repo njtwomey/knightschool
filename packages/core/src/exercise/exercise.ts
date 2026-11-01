@@ -18,6 +18,8 @@ export type Exercise = {
   responder: Responder;
   /** How many of the learner's moves end it; with a script, the script's end does. */
   learnerMoves?: number;
+  /** The ply of `start` in the game, so moves are numbered as the game numbers them (0 when it starts the game). */
+  startPly?: number;
   /** Wrong tries before the move is shown; config `teach.triesBeforeShown` when left out (a checkpoint gives fewer). */
   tries?: number;
   /** Whether Hint and Show me are offered (false in a checkpoint). */

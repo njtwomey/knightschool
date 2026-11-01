@@ -36,7 +36,7 @@ export function moveInto(opening: BuiltOpening, epd: string): string | undefined
  */
 export function moveExercise(
   card: { epd: string; uci: string },
-  options: { mode: 'review' | 'checkpoint'; before?: string; tries?: number; help?: boolean },
+  options: { mode: 'review' | 'checkpoint'; before?: string; tries?: number; help?: boolean; startPly?: number },
 ): Exercise {
   return {
     id: moveCardId(card.epd, card.uci),
@@ -49,6 +49,7 @@ export function moveExercise(
     ...(options.before ? { before: options.before } : {}),
     ...(options.tries !== undefined ? { tries: options.tries } : {}),
     ...(options.help !== undefined ? { help: options.help } : {}),
+    ...(options.startPly !== undefined ? { startPly: options.startPly } : {}),
   };
 }
 

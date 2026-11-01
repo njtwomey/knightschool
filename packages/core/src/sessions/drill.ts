@@ -53,6 +53,7 @@ export function drillExercises(opening: BuiltOpening, scope: DrillScope, runs: n
     id: `drill:${opening.id}:${name}:${run + 1}`,
     mode: 'drill' as const,
     start: opening.startEpd,
+    startPly: opening.startPly,
     side: opening.side,
     grader: { kind: 'exact' as const, book: scope.book },
     responder: { kind: 'popular' as const, replies: scope.replies },

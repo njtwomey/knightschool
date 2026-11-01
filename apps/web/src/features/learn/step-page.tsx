@@ -190,6 +190,7 @@ function TryStage({
         id: step.id,
         mode: 'try',
         start: moves[0]!.before,
+        startPly: moves[0]!.ply,
         side: opening.side,
         grader: { kind: 'exact' },
         responder: { kind: 'scripted', script: moves.map((move) => move.uci) },

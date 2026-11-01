@@ -16,6 +16,7 @@ import { mergeFacts, mergeOpenings } from '../merge';
 import { practiceOpenings, puzzlesOf, startedOpenings, type LearnerProgress, type OpeningProgress } from '../progress';
 import { puzzleExercise } from '../puzzles/puzzle-data';
 import { scopeOf } from '../sources';
+import { positionPlies } from '@knightschool/core/content';
 
 /** One review session, worked out once when it starts: the move cards, then any puzzle cards. */
 export type ReviewPlan = {
@@ -45,7 +46,12 @@ function contextOf(openings: readonly OpeningProgress[]): Record<string, string>
 
 function exerciseOf(card: { epd: string; uci: string }, openings: readonly OpeningProgress[]): Exercise {
   const before = openings.map((one) => moveInto(one.opening, card.epd)).find(Boolean);
-  return moveExercise(card, { mode: 'review', ...(before ? { before } : {}) });
+  const startPly = openings.map((one) => positionPlies(one.opening).get(card.epd)).find((ply) => ply !== undefined);
+  return moveExercise(card, {
+    mode: 'review',
+    ...(before ? { before } : {}),
+    ...(startPly !== undefined ? { startPly } : {}),
+  });
 }
 
 function merged(openings: readonly OpeningProgress[]) {
