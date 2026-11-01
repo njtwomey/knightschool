@@ -1,0 +1,4 @@
+# Suggested orders of openings. Onboarding suggests from these.
+- id: first-e4
+  name: A first repertoire with 1.e4
+  openings: [italian-white]

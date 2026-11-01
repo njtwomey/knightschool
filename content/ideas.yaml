@@ -1,0 +1,24 @@
+# Every idea the openings name (docs/v2/schemas/content.md). One plain sentence each.
+- id: f7-weakness
+  name: The weak f7 square
+  kind: structure
+  summary: At the start only the king guards f7 (f2 for White), so it is the first target of an early attack.
+  themes: [kingsideAttack]
+- id: centre-pawns
+  name: Pawns in the centre
+  kind: principle
+  summary: Pawns on e4 and d4 take space and give the pieces good squares; prepare the second one before pushing it.
+- id: castle-early
+  name: Castle early
+  kind: principle
+  summary: Get the king out of the centre before the position opens.
+- id: pin
+  name: Pin
+  kind: tactic
+  summary: A piece cannot move without exposing a more valuable piece behind it.
+  themes: [pin]
+- id: legal-mate
+  name: Legal Mate
+  kind: tactic
+  summary: A queen sacrifice against an early pin, ending with mate by the minor pieces.
+  themes: [mate, sacrifice]

@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "trap"]
+[Start "giuoco-main 3.Bc4"]
+[Name "Legal Mate"]
+
+3... d6 4. Nc3 { Develops a piece. It is safe here because Black has not played ...Nf6, so ...Nxe4 is not possible. }
+4... Bg4 5. h3
+5... Bh5 $2 { Keeps the pin on the knight at f3. It looks natural, but it leaves the e5 pawn defended only by a pawn that cannot move away. [%icon pin@f3] }
+6. Nxe5 $1 { Offers the queen. If Black takes it, White has a forced mate. [%cal Gc4f7,Ge5f7] [%idea legal-mate] }
+6... Bxd1 $4 { Takes the queen and walks into mate. }
+7. Bxf7+ Ke7 8. Nd5# { Mate: the knights and the bishop cover every square round the king. } *

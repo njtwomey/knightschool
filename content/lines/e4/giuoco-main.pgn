@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "main"]
+[Name "Giuoco Piano: the quiet main line"]
+
+1. e4 { Takes the centre and opens lines for the queen and the bishop on f1. } 1... e5
+2. Nf3 { Develops a piece and attacks the e5 pawn, so Black must defend it. }
+2... Nc6 { Defends e5 with a piece and develops. Black never plays 2...Nf6 3.Nxe5 (the Stafford Gambit) or 3...Nd4 (the Blackburne Shilling): traps for beginners that lose against anyone who knows the answer. }
+3. Bc4 { Points the bishop at f7, the weakest square in Black's camp: at the start only the king defends it. [%cal Gc4f7] [%idea f7-weakness] }
+3... Bc5 { Copies White: the bishop eyes f2 and Black can castle soon. It also avoids 3...Nf6 4.Ng5, which asks a beginner for several exact moves. }
+4. c3 { Prepares d4. With a pawn on c3, White can take the centre and hit the bishop on c5 in one move. [%cal Gc3d4] [%idea centre-pawns] }
+( 4. Ng5? { Attacks f7 too early: Black guards it with ...Nh6, and the knight has spent two moves for nothing. } 4... Nh6 )
+4... Nf6 { Develops with an attack on e4, so White has to defend the pawn. [%cal Rf6e4] }
+5. d3 { Guards the pawn on e4 and keeps the centre closed. White builds slowly first; the d4 break can wait until the pieces are ready. }
+5... d6 { Gives e5 a pawn to defend it and frees the c8 bishop. }
+6. O-O { Gets the king safe before the centre opens. [%idea castle-early] }
+6... O-O { Castle now: the king is safe behind its pawns and the rook is ready for the centre. }
+7. Re1 { Defends the pawn on e4 a second time, so the knight on f3 is free to move, and puts the rook on the file where the game will open. }
+7... a6 { Makes room on a7, so the bishop can step back there if White plays d4. It also stops Bb5 or Nb5 ideas. }
+8. Bb3 { Steps back out of reach of ...b5 and keeps the bishop on the diagonal that points at f7. }
+8... Ba7 { Keeps the bishop on the long diagonal, out of reach of a pawn on d4, where it still presses on f2. } *

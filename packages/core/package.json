@@ -4,13 +4,15 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./content": "./src/content/index.ts"
   },
   "scripts": {
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "chess.js": "1.4.0",
-    "zod": "4.6.7"
+    "zod": "4.6.7",
+    "@mliebelt/pgn-parser": "1.4.19"
   }
 }

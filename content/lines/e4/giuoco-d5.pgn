@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 5.d3"]
+[Name "Giuoco Piano: Black strikes with ...d5"]
+
+5... d5 { Strikes in the centre, but opens the position before Black has castled. }
+6. exd5 Nxd5
+7. O-O { Castles. Black's e5 pawn will need defending, and Re1 hits it next. [%csl Ye5] } *

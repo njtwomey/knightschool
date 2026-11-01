@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 6.O-O"]
+[Name "Giuoco Piano: the pin with ...Bg4"]
+
+6... Bg4 { Pins the knight on f3 to the queen. [%icon pin@f3] [%idea pin] }
+7. h3 { Asks the pinning bishop to decide: take on f3 or retreat. Either way the pin on the f3 knight goes. }
+7... Bh5 8. Nbd2 { Brings out the last minor piece and defends the knight on f3 a second time. } *

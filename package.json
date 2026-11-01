@@ -7,14 +7,20 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm --filter @knightschool/web dev",
-    "build": "pnpm --filter @knightschool/web build",
+    "dev": "pnpm content:build && pnpm --filter @knightschool/web dev",
+    "build": "pnpm content:build && pnpm --filter @knightschool/web build",
     "preview": "pnpm --filter @knightschool/web preview",
     "lint": "eslint .",
-    "typecheck": "pnpm -r typecheck",
+    "typecheck": "pnpm -r typecheck && tsc -p scripts/puzzles && tsc -p scripts/content",
+    "puzzles:index": "node --import tsx scripts/puzzles/index.ts",
+    "puzzles:names": "node --import tsx scripts/puzzles/names.ts",
+    "puzzles:expand": "node --env-file-if-exists=.env --import tsx scripts/puzzles/expand.ts",
+    "puzzles:select": "node --import tsx scripts/puzzles/select.ts",
+    "puzzles:lookup": "node --import tsx scripts/puzzles/lookup.ts",
     "test": "vitest run",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "content:build": "node --import tsx scripts/content/build.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -24,6 +30,8 @@
     "eslint-plugin-react-refresh": "0.5.7",
     "globals": "17.13.0",
     "prettier": "3.9.10",
+    "stockfish": "19.0.1",
+    "tsx": "4.23.15",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.2",
     "vitest": "5.0.5",

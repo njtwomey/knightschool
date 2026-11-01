@@ -1,0 +1,27 @@
+name: Italian Game
+side: white
+start: 1. e4 e5 2. Nf3 Nc6 3. Bc4
+level: first
+style: [classical, trap-heavy]
+summary: The bishop aims at f7 while White builds a centre with c3 and d4, slowly and safely.
+about:
+  idea: Develop quickly, aim the bishop at f7, then prepare the d4 break with c3 while the king castles.
+  risks: Slow if White drifts; Black equalises with accurate play, so the plan matters more than the moves.
+  suits: Beginners who want natural moves, a safe king and chances to spring traps.
+  origin: One of the oldest openings, analysed by Italian players in the 1500s; Giuoco Piano means "the quiet game".
+ideas: [f7-weakness, centre-pawns, castle-early, pin, legal-mate]
+variations:
+  - id: giuoco-piano
+    name: Giuoco Piano
+    intro: Black copies White with 3...Bc5; White builds the centre with c3 and d3 and castles.
+    lines: [giuoco-main, giuoco-d5, giuoco-bg4]
+    plans:
+      - Play c3 and d3, castle, then Re1, Bb3 and h3 before the d4 break.
+  - id: traps
+    name: Traps to know
+    intro: What to do when Black pins the knight too early.
+    lines: [legal-mate]
+steps:
+  giuoco-main:1:
+    title: The quiet bishop
+    text: White's bishop looks at f7 and the c-pawn prepares d4. Copy the plan, not just the moves.
