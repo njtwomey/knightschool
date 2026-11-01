@@ -10,15 +10,18 @@ below says where the existing piece lives.
 
 ## The documents
 
-| File                               | What it settles                                                                               |
-| ---------------------------------- | --------------------------------------------------------------------------------------------- |
-| [experience.md](experience.md)     | Who comes, how they arrive, learn, test and see progress; the menu and the pages              |
-| [model.md](model.md)               | The things the site is made of (course, chapter, lesson, line, idea, ...) and how they relate |
-| [board.md](board.md)               | The one board, its parts, and how they connect                                                |
-| [capabilities.md](capabilities.md) | The shared engines underneath: judgement, exercises, progress, Lichess, puzzles, authoring    |
-| [courses.md](courses.md)           | How a v2 course is made: scope, the bar it must meet, the pipeline                            |
-| [roadmap.md](roadmap.md)           | The order to build it in, and what moves where                                                |
-| [survey.md](survey.md)             | What similar sites do, and what to borrow                                                     |
+| File                               | What it settles                                                                                 |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------- |
+| [experience.md](experience.md)     | Who comes, how they arrive, learn, test and see progress; the menu and the pages                |
+| [model.md](model.md)               | The things the site is made of (course, chapter, lesson, line, idea, ...) and how they relate   |
+| [board.md](board.md)               | The one board, its parts, and how they connect                                                  |
+| [capabilities.md](capabilities.md) | The shared engines underneath: judgement, exercises, progress, Lichess, puzzles, authoring      |
+| [courses.md](courses.md)           | How a v2 course is made: scope, the bar it must meet, the pipeline                              |
+| [roadmap.md](roadmap.md)           | The order to build it in, and what moves where                                                  |
+| [features.md](features.md)         | The survey mapped to what we build: adopt, adapt, later, skip                                   |
+| [puzzles.md](puzzles.md)           | All Lichess puzzles matched to positions: levels, uses, the jobs                                |
+| [inventory.md](inventory.md)       | v2 walked through, the reusable components, and every part of v1: keep, repurpose, park, delete |
+| [survey.md](survey.md)             | What similar sites do, and what to borrow                                                       |
 
 ## Principles
 
