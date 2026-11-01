@@ -37,8 +37,9 @@ named variations; Name it results on [stats](stats.md).
 - Full credit for the variation, half for the opening alone; every opening and variation whose lines reach the position
   counts, transpositions included. A miss or a half answer waits with **Next** so the name can be read.
 - Answers are saved as guess attempts; no effect on the review schedule.
-- The learner guesses names here, not moves, so the session's table lists each guess with its credit instead of a
-  centipawn cost.
+- The learner guesses names here, not moves, so there is no [tries-table](../components/tries-table.md) (it is for
+  moves): the [session-summary](../components/session-summary.md) keeps its own list of names guessed, each with the
+  right name and its credit.
 
 ## Leads to
 
@@ -49,8 +50,3 @@ An answer's name → [opening](opening.md) or [variation](variation.md); the mov
 
 `features/name-it` (`name-it-page.tsx`, `store.ts`; `guessTargets` and `gradeGuess` in core's `modes/guess.ts`).
 Verdict: **keep**, moved onto the exercise session later.
-
-## Open questions
-
-- Whether the [tries-table](../components/tries-table.md) gains a "names" form for this page, or the summary keeps its
-  own list.

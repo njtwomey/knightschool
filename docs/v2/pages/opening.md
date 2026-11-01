@@ -24,7 +24,7 @@ steps in order, a board to study from, and every line, openable freely. The page
 1. Heading: [opening-name](../components/opening-name.md) with ECO and Lichess link, side, style tags,
    [progress-ring](../components/progress-ring.md), and **Add to repertoire** or "In your repertoire".
 2. [mode-counts](../components/mode-counts.md): Learn 12/40, Review 6 due, Drill, Puzzles 3/15, each a link.
-   Beside it [next-step-button](../components/next-step-button.md) for this opening only, and its own coverage by move
+   Beside it [next-action](../components/next-action.md) for this opening only, and its own coverage by move
    10 with its biggest gap ([gap-link](../components/gap-link.md)).
 3. Two columns from lg (`.board-columns`, [../patterns/layout.md](../patterns/layout.md)):
    - Left: [opening-intro](../components/opening-intro.md) (summary, then idea, risks, who it suits in three columns,

@@ -12,45 +12,46 @@ measures holes for the whole catalogue._ **Rename: v1's "courses I am learning" 
 
 **Opening.** One opening for one side, such as "Italian Game, as White": an introduction (idea, risks, who it suits,
 origin), its variations in order, its ideas, its puzzles, a final test. _v1: a course,
-`content/courses/<id>/course.yaml`; `projectCourse` and `buildOpening` build its tree._ **Rename: a v1 course becomes
-an opening.** In v1 "opening" also named the family level in `content/openings.yaml` (which says who plays a course:
+`content/courses/<id>/course.yaml`; `projectCourse` and `buildOpening` build its tree._ **Rename: a v1 course becomes an
+opening.** In v1 "opening" also named the family level in `content/openings.yaml` (which says who plays a course:
 "playing it" or "playing against it"). That file is parked in v2 (inventory.md), so the word is free for this meaning.
 
-**Variation.** A named branch of an opening, using Lichess's names: the Giuoco Piano, the Two Knights Defence. Within
-an opening it is a group of steps round one decision ("When Black plays 3...Nf6"), and it ends with a **checkpoint**:
-a mixed test of its steps. _v1: a course line's `section`, shown as groups on the course page and in Create; Lichess
-opening names come from `content/lichess.ts`._ **Rename: a v1 `section` becomes a variation.**
+**Variation.** A named branch of an opening, using Lichess's names as written (patterns/wording.md): the Giuoco Piano,
+the Two Knights Defense. A variation's or line's display name is the author's `name` when one is written, else Lichess's
+name for the position where it starts. Within an opening it is a group of steps round one decision ("When Black plays
+3...Nf6"), and it ends with a **checkpoint**: a mixed test of its steps. _v1: a course line's `section`, shown as groups
+on the course page and in Create; Lichess opening names come from `content/lichess.ts`._ **Rename: a v1 `section`
+becomes a variation.**
 
 **Line.** One exact sequence of moves, written for one side, from where it branches off another line: a main line, a
 sideline, a rare line, a gambit, a trap. All lines together are the **theory tree**. _v1: the PGN files in
-`content/tree/`, which v1 calls chapters; `resolveTree` in `content/theory-tree.ts`._ **Rename: v1's PGN "chapter"
-files become lines everywhere.**
+`content/tree/`, which v1 calls chapters; `resolveTree` in `content/theory-tree.ts`._ **Rename: v1's PGN "chapter" files
+become lines everywhere.**
 
 **Step.** About four of the learner's moves: the chunk learned and tested at once, five to ten minutes. A step has a
-title, two to four sentences of text, the stretch of a line it teaches, the ideas it shows, and a check. It runs
-through five **stages**: Read, Watch, Try, Their mistakes, Done (experience.md). _v1: units (`training/units/`,
-`courseUnits`), cut automatically, with `units:` overrides in course.yaml._ v2 keeps the automatic cut as the default
-and lets an author name a step and write its text. **Rename: a v1 unit becomes a step.**
+title, two to four sentences of text, the stretch of a line it teaches, the ideas it shows, and a check. It runs through
+five **stages**: Read, Watch, Try, Their mistakes, Done (experience.md). _v1: units (`training/units/`, `courseUnits`),
+cut automatically, with `units:` overrides in course.yaml._ v2 keeps the automatic cut as the default and lets an author
+name a step and write its text. **Rename: a v1 unit becomes a step.**
 
 ## Beside the hierarchy
 
 **Idea.** A reusable piece of understanding that has a name: a tactic (fork, pin), a plan (minority attack, kingside
-pawn storm), a structure (Carlsbad, isolated queen's pawn), a principle (develop before attacking), a trap pattern
-(the Fried Liver). An idea has a page with a short explanation and every step, move and puzzle that shows it. _v1:
-motifs in `content/motifs.yaml` and the Glossary page (`features/glossary`); course `plans` as plain sentences;
-`explain/motif.ts` spots some motifs on the board._ v2 widens motifs into ideas of several kinds.
+pawn storm), a structure (Carlsbad, isolated queen's pawn), a principle (develop before attacking), a trap pattern (the
+Fried Liver). An idea has a page with a short explanation and every step, move and puzzle that shows it. _v1: motifs in
+`content/motifs.yaml` and the Glossary page (`features/glossary`); course `plans` as plain sentences; `explain/motif.ts`
+spots some motifs on the board._ v2 widens motifs into ideas of several kinds.
 
 **Position.** A board state, keyed by EPD so transpositions are one position. _v1: everywhere; `chess/epd.ts`,
 `positionId`._
 
 **Move.** A move out of a position, with its annotation: comment, marks (`[%cal]` / `[%csl]`), symbol (`?`, `!`, as PGN
-NAGs) and tags. One comment per move across the whole site. _v1: `LineEdge` and `Annotation` in `schema/built.ts`;
-marks in `content/marks.ts`._
+NAGs) and tags. One comment per move across the whole site. _v1: `LineEdge` and `Annotation` in `schema/built.ts`; marks
+in `content/marks.ts`._
 
-**Refutation.** A wrong move with the reason it is wrong: a PGN variation starting with a move marked `?` or `??`.
-Shown when someone plays that move; never a line, never drilled. _New; the PGN reader already keeps variations and
-NAGs (`chess/pgn.ts`)._ (A PGN variation is the file format's word for moves in brackets, not a variation of an
-opening.)
+**Refutation.** A wrong move with the reason it is wrong: a PGN variation starting with a move marked `?` or `??`. Shown
+when someone plays that move; never a line, never drilled. _New; the PGN reader already keeps variations and NAGs
+(`chess/pgn.ts`)._ (A PGN variation is the file format's word for moves in brackets, not a variation of an opening.)
 
 **Exercise.** Anything the learner answers: play a move, replay a stretch, answer a question in words, solve a puzzle,
 play on from a position. Every exercise is graded and recorded the same way. _v1: review cards (`training/cards.ts`),
@@ -94,21 +95,26 @@ graph TD
 Two rules keep this simple:
 
 - **Lines are shared, steps are not.** The theory tree belongs to the site; a line can be in many openings. A step
-  belongs to one opening, because the same moves are taught differently in different openings. _v1 already separates
-  the tree from courses this way._
+  belongs to one opening, because the same moves are taught differently in different openings. _v1 already separates the
+  tree from courses this way._
 - **Material keyed by position attaches itself.** A puzzle, a refutation, an explorer count or an evaluation is stored
   against a position, and appears in every opening that reaches it. Nothing is copied into an opening by hand.
 
 ## Progress, per piece
 
-| Piece      | States                                                                        | v1                                           |
-| ---------- | ----------------------------------------------------------------------------- | -------------------------------------------- |
-| Repertoire | coverage by move 5, 10, 15 at the learner's band                              | new                                          |
-| Opening    | percent of moves known and mastered; final test passed                        | partly, on Overview                          |
-| Variation  | locked, open, checkpoint passed                                               | new                                          |
-| Step       | locked, open, learning, passed, mastered (from its moves)                     | unit states (`features/path/unit-state.ts`)  |
-| Move       | new, learning, known (last two answers good), mastered (FSRS 7 days and more) | cards, `unitProgress` in `units/progress.ts` |
-| Idea       | seen, practised (puzzles and moves showing it answered well)                  | new                                          |
+One set of states serves moves, steps and variations: **locked**, **open**, **learning**, **known**, **mastered**. The
+rules behind known and mastered are config (`judge.knownRule`, `judge.masteredDays`; [config.md](config.md)).
+
+| Piece      | Progress                                                                                                                 | v1                                           |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| Repertoire | coverage by move 5, 10, 15 at the learner's band                                                                         | new                                          |
+| Opening    | a progress ring (share of its moves known and mastered) and whether its final test is cleared                            | partly, on Overview                          |
+| Variation  | locked, open, learning, known (its checkpoint is cleared), mastered (every step mastered)                                | new                                          |
+| Step       | locked, open, learning, known (every move known), mastered (every move mastered)                                         | unit states (`features/path/unit-state.ts`)  |
+| Move       | locked (in a locked step), open (not yet seen), learning, known (last two answers good), mastered (FSRS 7 days and more) | cards, `unitProgress` in `units/progress.ts` |
+| Idea       | open, learning (seen), known (practised: puzzles and moves showing it answered well)                                     | new                                          |
+
+v1 calls known "passed" and mastered "graduated"; v2 uses only the five words above.
 
 A line has no progress of its own: it is shared, so what a learner knows of it is the progress of its moves.
 
@@ -116,7 +122,14 @@ State stays derived from the answer log, never stored, as v1 does for units.
 
 ## What stays fixed
 
-Learner history is keyed by v1 course id and position (`card id = <course>:<epd>`) and line ids appear in it.
-Renaming a course or line id loses history, so v2 keeps every existing id: an opening's id is its v1 course id, and a
-line's id is its v1 PGN file name. The renames (course to opening, `section` to variation, unit to step, PGN "chapter"
-to line) are in words and new code, not in ids or files.
+v1 keys learner history by course id and position (`card id = <course>:<epd>`), so renaming a course or teaching the
+same position in two courses splits or orphans it. v2 keys what a learner knows by **position and move**
+(`move:<epd>:<uci>`, a recommended stored-format change, [schemas/upgrades.md](schemas/upgrades.md)): the same knowledge
+wherever that position appears. Steps, variations and lines hold no progress of their own; their states are worked out
+from the move cards, so they can be recut, reordered or split without losing anything. A one-off migration turns v1's
+cards into the new ids.
+
+Ids that still reach learner data are permanent: an opening's id (the repertoire) is its v1 course id, a line's id
+(attempts, links) is its v1 PGN file name, and idea and puzzle ids never change. A rename is written as `renamed:` in
+the content and applied on load. The renames of words (course to opening, `section` to variation, unit to step, PGN
+"chapter" to line) are in words and new code, not in ids or files.

@@ -1,8 +1,8 @@
 # Checkpoint
 
-The test at the end of a variation: a mixed set of exercises from its steps, which opens the next variation when
-passed. The same page holds an opening's final test. For a learner who has finished a variation, or who wants to test
-out of one they already know.
+The test at the end of a variation: a mixed set of exercises from its steps, which makes the variation known and opens
+the next one when cleared. The same page holds an opening's final test. For a learner who has finished a variation, or
+who wants to test out of one they already know.
 
 ## Address
 
@@ -16,40 +16,42 @@ No hash: a checkpoint is taken in one go; leaving it abandons the attempt
 ## Reached from
 
 The checkpoint row of [variation](variation.md) and [opening](opening.md)'s variation list (**Take the checkpoint**,
-**Test out**); Done's **Next** after a variation's last [step](step.md); Today's main button when a checkpoint is
-ready; the final test row on [opening](opening.md).
+**Test out**); Done's **Next** after a variation's last [step](step.md); Today's main button when a checkpoint is ready;
+the final test row on [opening](opening.md).
 
 ## Layout
 
 [breadcrumbs](../components/breadcrumbs.md): Learn › opening › variation › Checkpoint.
 
 1. A start card: what it asks ("10 exercises from the Two Knights: 6 positions, 2 of Black's mistakes, a question, a
-   puzzle"), the pass mark, **Start**. For testing out: "Pass this and the variation's steps count as passed."
+   puzzle"), the mark needed to clear it, **Start**. For testing out: "Clear this and the variation's steps count as
+   known."
 2. Running, two columns from lg:
    - [board](../components/board.md) with [board-surface](../components/board-surface.md) and
      [board-controls](../components/board-controls.md) (no Hint, no Show me).
    - [exercise-panel](../components/exercise-panel.md): "4 of 10", the prompt, tries left;
      [answer-input](../components/answer-input.md) for the question; [board-feedback](../components/board-feedback.md);
      the [tries-table](../components/tries-table.md).
-3. The result: passed or not, by exercise, [session-summary](../components/session-summary.md) with the tries table,
+3. The result: cleared or not, by exercise, [session-summary](../components/session-summary.md) with the tries table,
    and for each miss the [step-row](../components/step-row.md) to go back to.
 
 ## Behaviour
 
 - Exercises are drawn from the variation's steps: a position from each step's Try, the opponent's common mistakes to
-  punish, a typed question, one puzzle matched through the branch point. The final test is every branch of the
-  opening (as [drill](drill.md)), three puzzles and one [play-on](play-on.md).
-- Board `test`, then `answered` after each exercise. One try per move by default (the Exam rule), set by the gates
-  setting ([../hooks/use-setting.md](../hooks/use-setting.md)); feedback still says why after each answer.
-- Passing (by default nine of ten, no blunders) marks the checkpoint passed and opens the next variation; when
-  testing out, the variation's steps are passed too and their moves join reviews as known.
-- Not passed: nothing is lost; the result names the steps to revisit and **Try again** is open at once.
-- Locked (steps not yet passed): the page shows the start card with "Steps 5 to 8 are not passed yet" and **Test out**
-  in place of **Start**. With gates off, there is no lock, only advice.
+  punish, a typed question, one puzzle matched through the branch point. The final test is every branch of the opening
+  (as [drill](drill.md)), three puzzles and one [play-on](play-on.md).
+- Board `test`, then `answered` after each exercise. One try per move (config `teach.checkpointTries`,
+  [../config.md](../config.md)); feedback still says why after each answer.
+- Clearing it (config `teach.checkpointMark`: nine of ten, no blunders) makes the variation known and opens the next
+  variation; when testing out, the variation's steps become known too and their moves join reviews as known.
+- Not cleared: nothing is lost; the result names the steps to revisit and **Try again** is open at once.
+- Locked (steps not yet known): the page shows the start card with "Steps 5 to 8 are not known yet" and **Test out** in
+  place of **Start**. With gates off (`teach.gates`) or relaxed (`learning.gatesRelaxed`), there is no lock, only
+  advice.
 
 ## Leads to
 
-Passed → the next [variation](variation.md)'s first [step](step.md), or after the final test, the [opening](opening.md)
+Cleared → the next [variation](variation.md)'s first [step](step.md), or after the final test, the [opening](opening.md)
 marked complete; missed → the [step](step.md) to revisit; summary → [Today](today.md).
 
 ## From v1

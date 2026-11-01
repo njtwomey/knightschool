@@ -1,6 +1,8 @@
 # Tries table
 
-Every guess of a session in one table, filling in as the learner plays, each row able to take the board back to it.
+Every move guessed in a session in one table, filling in as the learner plays, each row able to take the board back to
+it. It is for moves only: [Name it](../pages/name-it.md) guesses names, and its summary keeps its own list of names
+guessed with their credit.
 
 ## Shows
 
@@ -15,7 +17,8 @@ One row per move asked, newest at the bottom:
 | Time       | seconds to the first try                                                                |
 | Help       | hint or shown, as small icons                                                           |
 
-Above it, one summary line: "12 moves, 9 first time, 2 slips, 1 mistake, average cost 18".
+Above it, one summary line: "12 moves, 9 first time, 2 as good but not your repertoire move, 1 mistake, average cost
+18".
 
 ## Configuration
 

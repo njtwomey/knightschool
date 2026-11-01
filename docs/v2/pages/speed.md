@@ -6,12 +6,12 @@ and wants them automatic.
 ## Address
 
 `/practice/speed` (the set-up card); `/practice/speed/<opening>[/<variation>]` starts at once;
-`/practice/speed/<opening>/rush` is the opening rush (each passed step from the start to its end). No hash: a timed
+`/practice/speed/<opening>/rush` is the opening rush (each known step from the start to its end). No hash: a timed
 run is not resumed ([../navigation/url-state.md](../navigation/url-state.md)). v1's `/speed` lands here.
 
 ## Reached from
 
-The Speed tile on [practice](practice.md); the opening rush on [opening](opening.md) (once a few steps are passed);
+The Speed tile on [practice](practice.md); the opening rush on [opening](opening.md) (once a few steps are known);
 Speed records on [stats](stats.md) (**Beat it**).
 
 ## Layout
@@ -39,7 +39,7 @@ Speed records on [stats](stats.md) (**Beat it**).
 - Runs are saved to Speed's own records, with no effect on the review schedule.
 - Feedback timing is the one place the delays are shortest
   ([../patterns/feedback-timing.md](../patterns/feedback-timing.md)).
-- A source with no passed steps for a rush: [empty-state](../components/empty-state.md) "Pass a step of this opening
+- A source with no known steps for a rush: [empty-state](../components/empty-state.md) "Learn a step of this opening
   first", with its next step.
 
 ## Leads to

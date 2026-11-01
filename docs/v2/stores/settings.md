@@ -4,12 +4,13 @@ Every setting's value, per layer and per store (device, learner, secret), behind
 
 ## Holds
 
-- the values set at each layer that is stored: **you**, **this opening** (per opening id) and the chosen **preset**;
-  the session layer lives in the [session](session.md) and the material layer comes from the [catalog](catalog.md);
+- the values set at each layer that is stored: **you**, **this opening** (per opening id) and the chosen **preset**; the
+  session layer lives in the [session](session.md) and the material layer comes from the [catalog](catalog.md);
 - per value, when it was set (`at`), for Undo and for import merging;
 - whether the database is open yet, so learner values can say they are not ready.
 
-The registry itself (keys, schemas, defaults, presets, wording) is code in core, not state (settings.md).
+The registry itself (keys, schemas, defaults, presets, wording) is code in core, not state; every key with its store is
+listed once in settings.md, "Keys".
 
 ## Written by
 
@@ -21,10 +22,10 @@ The registry itself (keys, schemas, defaults, presets, wording) is code in core,
 
 ## Read by
 
-[use-setting](../hooks/use-setting.md) everywhere; the [session](session.md) (tries, delays, hints, responder),
-[progress](progress.md) (new moves a day, card options, gates), [explorer](explorer.md) (band, token),
-[engine](engine.md) (on or off, depth), [puzzles](puzzles.md) (rating range, match levels), [games](games.md)
-(username).
+[use-setting](../hooks/use-setting.md) everywhere; the [session](session.md) (feedback speed, hints offered, responder;
+tries and base delays are config), [progress](progress.md) (new moves a day, card options, gates),
+[explorer](explorer.md) (band, token), [engine](engine.md) (on or off, depth), [puzzles](puzzles.md) (rating range,
+match levels), [games](games.md) (the Lichess and Chess.com usernames).
 
 ## Persists
 
@@ -42,8 +43,8 @@ Every read is checked field by field, so a bad stored value falls back to the ne
    `review.newPerDay`), and `opening:<id>:<key>` rows for the opening layer, and `preset`. No new table and no
    migration, but new key names that exports will carry.
 2. **v1 keys**: keep `newCardsPerDay`, `includeRareLines`, `minPopularityPercent` under their v1 names (the registry
-   maps them), or rename them once on first start with a carry-over like `migratePracticePrefs`. The proposal is to
-   keep them, so a v1 export imports unchanged.
+   maps them), or rename them once on first start with a carry-over like `migratePracticePrefs`. The proposal is to keep
+   them, so a v1 export imports unchanged.
 3. Whether device settings join the export (an optional "include this device's look" switch).
 
 ## From v1

@@ -8,7 +8,7 @@ A row of small coloured pills, one per mode, in a fixed order, each with an icon
 
 | Mode    | Count                                       | Example      |
 | ------- | ------------------------------------------- | ------------ |
-| Learn   | steps passed out of steps in the opening    | Learn 12/40  |
+| Learn   | steps known out of steps in the opening     | Learn 12/40  |
 | Review  | moves and questions due now                 | Review 6 due |
 | Drill   | lines drilled clean out of lines with cards | Drill 4/18   |
 | Puzzles | puzzles solved out of puzzles matched       | Puzzles 3/15 |
@@ -31,7 +31,7 @@ due" in a quiet tone when nothing is due, since that is good news.
 
 - Each pill is a link straight into that mode for the scope: Learn opens the next step, Review starts the due session
   for this opening, Puzzles starts puzzles from it, and so on.
-- Hover or long-press: a [hint](hint.md) with what the count means ("12 of 40 steps passed; 2 new moves left today").
+- Hover or long-press: a [hint](hint.md) with what the count means ("12 of 40 steps known; 2 new moves left today").
 - Counts update after each answer; no number jumps while a session is running on the same page.
 - Loading: grey pills of the right width with no numbers.
 

@@ -1,12 +1,12 @@
 # Roadmap
 
-Built on the `v2` branch in this repo, in stages that each leave the site working. `main` keeps deploying v1 until v2
-is ready to replace it (or to move to a repo of its own). Each stage names what it reuses.
+Built on the `v2` branch in this repo, in stages that each leave the site working. `main` keeps deploying v1 until v2 is
+ready to replace it (or to move to a repo of its own). Each stage names what it reuses.
 
 ## Stage 0: the plan (this folder)
 
 Agree the vocabulary (model.md), the experience (experience.md) and the shape of the board and capabilities. Settle the
-decisions listed at the end.
+decisions in [decisions.md](decisions.md).
 
 ## Stage 1a: the settings registry
 
@@ -14,7 +14,8 @@ The registry, the layers (session, opening, you, material, preset, default), pre
 page (settings.md). First, because every later stage reads its numbers from it: the fixed numbers in `constants.ts`,
 `FEEDBACK_DELAYS` and the training rules become registry entries as each stage touches them.
 
-_Reuses:_ `lib/local-prefs.ts`, the `settings` table, `data/practice-config.ts`, board and engine prefs, the Settings page.
+_Reuses:_ `lib/local-prefs.ts`, the `settings` table, `data/practice-config.ts`, board and engine prefs, the Settings
+page.
 
 ## Stage 1b: the board model
 
@@ -57,7 +58,7 @@ _Reuses:_ Home, Overview, Stats, the tree explorer and lane layout, `scripts/gap
 ## Stage 6: Play on, and your own games
 
 Play on from line ends, popular replies then the engine, graded by judgement; checkable plans. Reading a learner's
-public Lichess games by username: where they leave their repertoire, what they face most.
+public Lichess and Chess.com games by username: where they leave their repertoire, what they face most.
 
 _Reuses:_ the browser engine, popularity data and the explorer cache, Every branch's weighted replies.
 
@@ -89,12 +90,7 @@ into an opening's order, hiding the limits that stop overload.
 
 ## Decisions needed
 
-1. **The menu and names** in experience.md (Today, Learn, Practice, Explore, Ideas, Create).
-2. **Drilling the opponent's common mistakes** in each step's Their mistakes stage and as cards, rather than quizzes
-   only (changes which cards exist).
-3. **Gates**: checkpoints that lock the next variation, with testing out; or advice only, nothing locked.
-4. **Stored format**: puzzle cards in the cards table, one shared attempts log for new modes.
-5. **The puzzle database download** (about 250 MB, maintainer machine only).
-6. **Reading a learner's Lichess games** in the browser (public data, by username, no token needed).
-7. **The first catalogue**: which White and Black openings form the first repertoires.
-8. **Where v2 lives** when it is ready: replace `main` here, or a new repo.
+Every open decision, from this file and the rest of the plan, is collected with a recommendation in
+[decisions.md](decisions.md): the menu and names, drilling the opponent's mistakes as cards, the default for gates, the
+stored format, the puzzle database download, the first catalogue, and where v2 lives. Reading a learner's games from
+Lichess and Chess.com in the browser is decided (public APIs, by username, no token).

@@ -10,7 +10,7 @@ repertoire.
 - In the middle, the share known, as a whole percentage ("62%"). At `size="xs"` there is no number.
 - Beside it, optionally, a label: "26 of 42 moves known, 9 mastered".
 - A small tick in place of the number once everything is mastered, and a flag once the final test (or checkpoint) is
-  passed.
+  cleared.
 
 ## Configuration
 
@@ -18,8 +18,9 @@ repertoire.
   [use-progress](../hooks/use-progress.md).
 - `size`: `xs` (inline in rows), `sm` (cards), `md` (the opening page header).
 - `label`: none, short ("62%"), or long (the sentence above).
-- Reads `level.includeRare` (rare-line moves count only when they are being learned) and `review.knownRule` /
-  `review.masteredRule` (what counts as known and mastered: two right in a row, seven days and more by default).
+- Reads the setting `level.includeRare` (rare-line moves count only when they are being learned) and the config keys
+  `judge.knownRule` and `judge.masteredDays` (what counts as known and mastered: two right in a row, seven days and more
+  by default).
 
 ## Behaviour
 
@@ -45,8 +46,3 @@ repertoire.
 New, over existing counts. v1 shows a course's progress as a straight bar (`Progress` in
 `apps/web/src/features/search/course-card.tsx`, from `courseProgress` in `packages/core/src/search/progress.ts` and
 `percent` in `apps/web/src/data/progress-store.ts`), with learned moves only. The ring adds the mastered split.
-
-## Open questions
-
-- `review.knownRule` and `review.masteredRule` are proposed names; settings.md lists "what counts as known and
-  mastered" without keys.

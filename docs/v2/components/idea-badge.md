@@ -7,8 +7,8 @@ An idea's name as a small chip: hover for what it is, click to go to its page.
 - the idea's name ("Fork", "Minority attack", "Carlsbad structure", "Develop before attacking", "Fried Liver");
 - a small icon for its kind: tactic, plan, structure, principle, trap pattern (one icon each, the same in the
   [ideas](../pages/ideas.md) list);
-- optionally the learner's progress with it as a dot: not seen, seen, practised ([state-badge](state-badge.md)
-  colours).
+- optionally the learner's progress with it as a dot: open, learning (seen), known (practised)
+  ([state-badge](state-badge.md) colours).
 
 ## Configuration
 

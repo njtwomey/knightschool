@@ -5,19 +5,19 @@ says what it offers next.
 
 ## The rule
 
-| State             | Looks like                                                                                                                                               | Offers                                      |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| **Loading**       | A skeleton in the shape of what is coming, after about 300 ms (never a flash). A board shows its position at once; only its panel waits.                 | nothing; it resolves by itself              |
-| **Arriving late** | A part that fills in later (a verdict, an engine score, explorer numbers) shows a muted placeholder ("judging...") in its final place, so nothing jumps. | play carries on; it never waits for it      |
-| **Empty**         | An [empty-state](../components/empty-state.md): one sentence why, in the learner's terms.                                                                | one action that fixes it                    |
-| **Locked**        | Muted, with the lock icon ([state-badge](../components/state-badge.md)); still visible and readable.                                                     | what unlocks it, a link there, and Test out |
-| **Error, a part** | The part says what failed in one line; the rest of the page works ("The engine could not start. The baked evaluation is shown.").                        | Try again                                   |
-| **Error, a page** | The page area is replaced by "This page could not be shown"; header and menu stay.                                                                       | Reload, and the details in a fold           |
-| **Offline**       | A site [notice](../components/notice.md); everything shipped works. Parts that need Lichess say "Needs a connection" and show baked data where any.      | nothing to do; it clears when back online   |
-| **Another tab**   | The paused notice; the page stays readable, anything that saves is disabled with the reason on hover.                                                    | Use it in this tab                          |
-| **No database**   | A private window or a browser without OPFS: a notice, "Progress cannot be saved in this window"; learning still works for the visit.                     | how to fix it, and Export before leaving    |
+| State             | Looks like                                                                                                                                               | Offers                                    |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **Loading**       | A skeleton in the shape of what is coming, after about 300 ms (never a flash). A board shows its position at once; only its panel waits.                 | nothing; it resolves by itself            |
+| **Arriving late** | A part that fills in later (a verdict, an engine score, explorer numbers) shows a muted placeholder ("judging...") in its final place, so nothing jumps. | play carries on; it never waits for it    |
+| **Empty**         | An [empty-state](../components/empty-state.md): one sentence why, in the learner's terms.                                                                | one action that fixes it                  |
+| **Locked**        | Muted, with the lock icon ([state-badge](../components/state-badge.md)); still visible and readable.                                                     | what opens it, a link there, and Test out |
+| **Error, a part** | The part says what failed in one line; the rest of the page works ("The engine could not start. The baked evaluation is shown.").                        | Try again                                 |
+| **Error, a page** | The page area is replaced by "This page could not be shown"; header and menu stay.                                                                       | Reload, and the details in a fold         |
+| **Offline**       | A site [notice](../components/notice.md); everything shipped works. Parts that need Lichess say "Needs a connection" and show baked data where any.      | nothing to do; it clears when back online |
+| **Another tab**   | The paused notice; the page stays readable, anything that saves is disabled with the reason on hover.                                                    | Use it in this tab                        |
+| **No database**   | A private window or a browser without OPFS: a notice, "Progress cannot be saved in this window"; learning still works for the visit.                     | how to fix it, and Export before leaving  |
 
-- **Locked is never a dead end.** Clicking a locked step or variation opens it with "Pass Step 2 first" and two
+- **Locked is never a dead end.** Clicking a locked step or variation opens it with "Opens when Step 2 is known" and two
   buttons: go to Step 2, or Test out. Starting a later step once asks "Start here anyway?" (experience.md).
 - **A failed load retries once by itself** after a moment, then shows Try again; content loaded once is never fetched
   twice.

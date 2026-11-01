@@ -5,8 +5,10 @@ engine's best few lines.
 
 ## Shows
 
-- **Bar**: a thin vertical bar beside the board, White's share in the light part, the score at the end nearer the side
-  that is better, turned with the board.
+- **Bar**: a thin vertical bar beside the board, White's **winning chance** in the light part (not a clamp of the
+  centipawns), the score at the end nearer the side that is better, turned with the board. Because the grades are
+  winning-chance drops too (config `judge.grades`), the bar and the verdicts always agree: a Blunder visibly moves the
+  bar.
 - **Strip** (one line): the score, the best continuation as a [move-run](move-run.md), and, when the last move cost
   something, its [verdict-badge](verdict-badge.md) and [eval-words](eval-words.md) ("Black is a little better now,
   -0.6; the engine prefers 5.d4").
@@ -40,7 +42,7 @@ engine's best few lines.
 ## Used by
 
 [board](board.md) on [opening](../pages/opening.md), [line](../pages/line.md), [map](../pages/map.md),
-[analysis](../pages/analysis.md) (lines), and after answering on [review](../pages/review.md),
+[board](../pages/board.md) (lines), and after answering on [review](../pages/review.md),
 [puzzles](../pages/puzzles.md), [play-on](../pages/play-on.md).
 
 ## From v1
@@ -48,4 +50,5 @@ engine's best few lines.
 Keep `apps/web/src/components/engine/eval-bar.tsx`, `engine-strip.tsx` (score, best line, the engine explainer's
 sentence for the last move) and `engine-lines.tsx` (several lines, baked or live), over `data/engine/store.ts` and
 `data/analysis.ts`. What changes: they read the board model instead of props, hide by reveal level instead of by page,
-and their moves become chips.
+and their moves become chips. A visible change from v1: v1's bar is drawn from the centipawns; v2's shows winning
+chance.

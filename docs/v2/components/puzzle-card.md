@@ -11,7 +11,7 @@ from in the learner's openings.
 - Its rating, as a number and a word ("1240, about your level").
 - Its themes as [idea-badge](idea-badge.md)s where they map to our ideas (fork, pin, back rank), plain tags otherwise.
 - **Where it comes from**, by match level ([puzzles](../puzzles.md)): "From a game that passed through step 4 of your
-  Italian Game", "After the Fried Liver line", "From the Two Knights Defence", "Same pawns as the end of the Giuoco
+  Italian Game", "After the Fried Liver line", "From the Two Knights Defense", "Same pawns as the end of the Giuoco
   Piano", "Practises the fork".
 - Once tried: solved, solved with a hint, or missed, and its next review when it is a card.
 - A small credit: "Lichess puzzle" with its id.
@@ -48,8 +48,3 @@ from this opening"), [puzzle-picker](puzzle-picker.md) (Create).
 ## From v1
 
 New. v1 has no puzzles. The thumb and card shape follow `apps/web/src/features/search/variation-card.tsx`.
-
-## Open questions
-
-- `puzzles.showThemes` is a proposed key: whether themes show before solving. Lichess shows them; they can spoil a
-  puzzle for a beginner.

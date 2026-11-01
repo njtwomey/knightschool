@@ -5,7 +5,7 @@ What the map's colours and marks mean, listing only what the map is drawing now,
 ## Shows
 
 - One section per overlay that is on, each with a switch to turn it off and a sample of what it draws:
-  - **Progress**: four filled pill samples, Not seen, Learning, Known, Mastered, with a count of the learner's moves in
+  - **Progress**: four filled pill samples, Open, Learning, Known, Mastered, with a count of the learner's moves in
     each for the lines in view ("Known 31");
   - **Gaps**: a dashed stub, "A reply players at your level make that you do not answer yet; thicker means more games",
     with the band and the target ("At 1000 to 1600, replies in at least 1 game in 20");

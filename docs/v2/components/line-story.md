@@ -4,7 +4,7 @@ A line told in words: its moves with their comments, where it branches off, and 
 
 ## Shows
 
-- **Where it starts**: "Branches off the Two Knights Defence after 4.Ng5", the parent line as a link, and the shared
+- **Where it starts**: "Branches off the Two Knights Defense after 4.Ng5", the parent line as a link, and the shared
   moves before it as a greyed [move-run](move-run.md).
 - **The line move by move**, in paragraphs: a run of moves, then the comment on the last of them, then the next run.
   Every move is a [move-chip](move-chip.md); a commented move carries its [idea-badge](idea-badge.md)s and tags after

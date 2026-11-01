@@ -22,7 +22,7 @@ The days the learner practised over the past months, as a grid of small squares,
 ## Behaviour
 
 - Hover or long-press a square: a [hint](hint.md) with the date and what was done: "Tuesday 14 October: 32 answers,
-  27 right; 2 steps passed".
+  27 right; 2 steps known".
 - Click a square: [stats](../pages/stats.md) filtered to that day (the moves answered, the misses).
 - Keyboard: the grid is one focus stop; arrow keys move a day or a week, and the hint follows the focus.
 - Before any practice: the empty grid with one line, "Your practice will show here, one square a day."

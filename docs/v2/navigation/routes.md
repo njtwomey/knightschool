@@ -1,6 +1,7 @@
 # Routes
 
-Every address in v2, the page it opens, and where each v1 address now leads.
+Every address in v2, the page it opens, and where each v1 address now leads. This file is the authority: a page's
+"Address" section repeats its own rows from here.
 
 ## The plan
 
@@ -11,98 +12,109 @@ id is a new slug of its name, unique within its opening. Step numbers count alon
 
 ### Arriving and Learn
 
-| Address                                      | Page                                                                                                  | Menu                                 |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `/`                                          | [today](../pages/today.md), or [first-visit](../pages/first-visit.md) when there is no repertoire yet | Today                                |
-| `/today`                                     | the same as `/` (kept because v1 already parses it)                                                   | Today                                |
-| `/start`                                     | [onboarding](../pages/onboarding.md): three questions to a first repertoire                           | Today                                |
-| `/repertoire`                                | [repertoire](../pages/repertoire.md): slots, coverage, biggest gaps                                   | Learn                                |
-| `/openings`                                  | [openings](../pages/openings.md): every opening, filtered                                             | Learn                                |
-| `/openings/<opening>`                        | [opening](../pages/opening.md): introduction, path, lines, board                                      | Learn                                |
-| `/openings/<opening>/<variation>`            | [variation](../pages/variation.md): its steps, lines, ideas, checkpoint                               | Learn                                |
-| `/openings/<opening>/<variation>/checkpoint` | [checkpoint](../pages/checkpoint.md): the variation's mixed test                                      | Learn                                |
-| `/openings/<opening>/step/<n>`               | [step](../pages/step.md): Read, Watch, Try, Their mistakes, Done                                      | Learn                                |
-| `/openings/<opening>/lines/<line>`           | [step](../pages/step.md) run over one whole line (Watch and Try), outside the path                    | Learn                                |
-| `/openings/<opening>/test`                   | [checkpoint](../pages/checkpoint.md) as the opening's final test                                      | Learn                                |
-| `/lines/<line>`                              | [line](../pages/line.md): the line in words; shared, so no opening in the path                        | Learn or Explore (url-state.md, `o`) |
+| Address                                      | Page                                                                                                  | Menu    |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------- |
+| `/`                                          | [today](../pages/today.md), or [first-visit](../pages/first-visit.md) when there is no repertoire yet | Today   |
+| `/today`                                     | [today](../pages/today.md) always (kept because v1 already parses it)                                 | Today   |
+| `/welcome`                                   | [first-visit](../pages/first-visit.md) always (for a link in the README or a shared post)             | Today   |
+| `/start`                                     | [onboarding](../pages/onboarding.md): three questions to a first repertoire                           | Today   |
+| `/learn`                                     | redirects to `/repertoire` when there is a repertoire, else to `/openings`                            | Learn   |
+| `/repertoire`                                | [repertoire](../pages/repertoire.md): slots, coverage, biggest gaps                                   | Learn   |
+| `/openings`                                  | [openings](../pages/openings.md): every opening, filtered                                             | Learn   |
+| `/openings/<opening>`                        | [opening](../pages/opening.md), Overview tab: introduction, path, board                               | Learn   |
+| `/openings/<opening>/lines`                  | [opening](../pages/opening.md), Lines tab: every line, openable freely                                | Learn   |
+| `/openings/<opening>/map`                    | [map](../pages/map.md) drawing only that opening's lines (the opening's Map tab)                      | Learn   |
+| `/openings/<opening>/lines/<line>`           | [line](../pages/line.md) inside the opening: its side, its trail, the steps that teach it             | Learn   |
+| `/openings/<opening>/<variation>`            | [variation](../pages/variation.md): its steps, lines, ideas, checkpoint                               | Learn   |
+| `/openings/<opening>/<variation>/checkpoint` | [checkpoint](../pages/checkpoint.md): the variation's mixed test                                      | Learn   |
+| `/openings/<opening>/step/<n>`               | [step](../pages/step.md): Read, Watch, Try, Their mistakes, Done                                      | Learn   |
+| `/openings/<opening>/step/<n>/<a>-<b>`       | [step](../pages/step.md), only moves a to b of it (v1's "Next 3 moves")                               | Learn   |
+| `/openings/<opening>/test`                   | [checkpoint](../pages/checkpoint.md) as the opening's final test                                      | Learn   |
+| `/lines/<line>`                              | [line](../pages/line.md) on its own (lines are shared), from the map and search                       | Explore |
 
-`step`, `lines` and `test` are reserved and can never be a variation's id, as `details`, `lines`, `path` and `publish`
-are reserved among line ids in v1's Create (`isCreateTab` in `router/hrefs.ts`).
+`step`, `lines`, `map` and `test` are reserved and can never be a variation's id, as `details`, `lines`, `path` and
+`publish` are reserved among line ids in v1's Create (`isCreateTab` in `router/hrefs.ts`). There is no separate "learn
+this line" page: **Learn it** on a line page leads to the step that teaches its first unknown move.
 
 ### Practice
 
-Every mode takes the same optional **scope** after it, which picks the source of the set-up card for this session
-(practice-setup.md) without changing the saved choice: nothing (the saved source), `<opening>`,
+Every mode takes the same optional **scope** after it, which starts a session at once with that source, without
+changing the saved choice (practice-setup.md): nothing (the set-up card, with the saved source), `<opening>`,
 `<opening>/<variation>`, or `<opening>/lines/<line>`.
 
-| Address                        | Page                                                                           |
-| ------------------------------ | ------------------------------------------------------------------------------ |
-| `/practice`                    | [practice](../pages/practice.md): every mode, what is due                      |
-| `/practice/review[/<scope>]`   | [review](../pages/review.md); without a scope it is the schedule ("due")       |
-| `/practice/drill[/<scope>]`    | [drill](../pages/drill.md): every branch, replies as players at your band play |
-| `/practice/puzzles[/<scope>]`  | [puzzles](../pages/puzzles.md)                                                 |
-| `/practice/puzzles/p/<puzzle>` | one puzzle by its Lichess id, for links from an idea or a step                 |
-| `/practice/play-on[/<scope>]`  | [play-on](../pages/play-on.md)                                                 |
-| `/practice/speed[/<scope>]`    | [speed](../pages/speed.md)                                                     |
-| `/practice/name-it[/<scope>]`  | [name-it](../pages/name-it.md)                                                 |
-| `/practice/games`              | [your-games](../pages/your-games.md)                                           |
+| Address                           | Page                                                                                      |
+| --------------------------------- | ----------------------------------------------------------------------------------------- |
+| `/practice`                       | [practice](../pages/practice.md): every mode, what is due                                 |
+| `/practice/review[/<scope>]`      | [review](../pages/review.md); without a scope it is the schedule ("due"), started at once |
+| `/practice/drill[/<scope>]`       | [drill](../pages/drill.md): every branch, replies as players at your band play            |
+| `/practice/puzzles[/<scope>]`     | [puzzles](../pages/puzzles.md)                                                            |
+| `/practice/puzzles/ideas/<idea>`  | [puzzles](../pages/puzzles.md) showing one idea, started at once                          |
+| `/practice/puzzle/<puzzle>`       | one puzzle by its Lichess id, for links from Today, an idea or a step                     |
+| `/practice/play-on[/<scope>]`     | [play-on](../pages/play-on.md)                                                            |
+| `/practice/speed[/<scope>]`       | [speed](../pages/speed.md)                                                                |
+| `/practice/speed/<opening>/rush`  | [speed](../pages/speed.md): the opening rush, each known step from the start to its end   |
+| `/practice/name-it[/<scope>]`     | [name-it](../pages/name-it.md)                                                            |
+| `/practice/games`                 | [your-games](../pages/your-games.md): the list                                            |
+| `/practice/games/<source>/<game>` | [your-games](../pages/your-games.md): one game; `<source>` is `lichess` or `chessdotcom`  |
 
-A scoped review is free practice and never touches the schedule, as v1's line Quiz tab and every non-due source are.
+`ideas` is reserved after `/practice/puzzles/` and `rush` after `/practice/speed/<opening>/`, so neither can be an
+opening's or a variation's id. A scoped review is free practice and never touches the schedule, as v1's line Quiz tab
+and every non-due source are.
 
 ### Explore, Ideas, You, Create, other
 
-| Address                                    | Page                                                                                   |
-| ------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `/explore`                                 | redirects to `/explore/map`                                                            |
-| `/explore/map`                             | [map](../pages/map.md): every line as one tree                                         |
-| `/explore/map/<opening>`                   | [map](../pages/map.md) drawing only that opening's lines                               |
-| `/explore/search`                          | [search](../pages/search.md), with board search                                        |
-| `/explore/analysis`                        | [analysis](../pages/analysis.md): a free board, engine and explorer                    |
-| `/ideas`                                   | [ideas](../pages/ideas.md)                                                             |
-| `/ideas/<idea>`                            | [idea](../pages/idea.md)                                                               |
-| `/you`                                     | redirects to `/you/stats`                                                              |
-| `/you/stats`, `/you/settings`, `/you/data` | [stats](../pages/stats.md), [settings](../pages/settings.md), [data](../pages/data.md) |
-| `/create`                                  | [create](../pages/create.md): your openings                                            |
-| `/create/<opening>`                        | [create-opening](../pages/create-opening.md), Details tab                              |
-| `/create/<opening>/<tab>`                  | the same, tab `variations`, `lines`, `steps`, `puzzles` or `publish`                   |
-| `/create/<opening>/<line>`                 | [line-editor](../pages/line-editor.md)                                                 |
-| `/credits`                                 | [credits](../pages/credits.md)                                                         |
-| anything else                              | [not-found](../pages/not-found.md) (v1 shows Home instead)                             |
+| Address                                    | Page                                                                                    |
+| ------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `/explore`                                 | redirects to `/explore/map`                                                             |
+| `/explore/map`                             | [map](../pages/map.md): every line as one tree                                          |
+| `/explore/search`                          | [search](../pages/search.md), with board search                                         |
+| `/board`                                   | [board](../pages/board.md): a free board with the engine (menu: Explore › Board)        |
+| `/ideas`                                   | [ideas](../pages/ideas.md)                                                              |
+| `/ideas/<idea>`                            | [idea](../pages/idea.md)                                                                |
+| `/you`                                     | redirects to `/you/stats`                                                               |
+| `/you/stats`, `/you/settings`, `/you/data` | [stats](../pages/stats.md), [settings](../pages/settings.md), [data](../pages/data.md)  |
+| `/you/settings/<group>`                    | [settings](../pages/settings.md), one group (`level`, `review`, ... ; settings.md)      |
+| `/create`                                  | [create](../pages/create.md): your openings                                             |
+| `/create/<opening>`                        | [create-opening](../pages/create-opening.md), Details tab                               |
+| `/create/<opening>/<tab>`                  | the same, tab `lines`, `steps`, `puzzles` or `publish` (variations are edited in Steps) |
+| `/create/<opening>/<line>`                 | [line-editor](../pages/line-editor.md)                                                  |
+| `/credits`                                 | [credits](../pages/credits.md)                                                          |
+| anything else                              | [not-found](../pages/not-found.md) (v1 shows Home instead)                              |
 
 ## Where v1 addresses lead
 
 A redirect replaces the history entry (`navigate(target, { replace: true })`), keeps the hash unless the row says
 otherwise, and happens before the page loads. v1's `#/route` upgrade and `RENAMED_LINES` stay.
 
-| v1 address                                                         | v2 address                                                                  |
-| ------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| `/`, `/overview`, `/today`, `/profile`                             | `/` (Profile's Overview folds into Today)                                   |
-| `/courses`                                                         | `/openings`                                                                 |
-| `/search`, `/browse`                                               | `/explore/search` (hash kept; `role` and `tier` dropped)                    |
-| `/openings` (a v1 alias of Search)                                 | `/openings`, the catalogue; a v1 hash on it is ignored                      |
-| `/course/<c>` (hash `v`, `m`)                                      | `/openings/<c>`, hash `v` read as `l`                                       |
-| `/course/<c>/path`                                                 | `/openings/<c>` (the path is on the opening page)                           |
-| `/course/<c>/tree`                                                 | `/explore/map/<c>`                                                          |
-| `/play/<c>/<line>` and `/play/<c>/<line>/about`                    | `/lines/<line>#o=<c>`                                                       |
-| `/play/<c>/<line>/learn`                                           | `/openings/<c>/lines/<line>` (hash `m` kept)                                |
-| `/play/<c>/<line>/learn/<n>[/<a>-<b>]`                             | `/openings/<c>/step/<k>`, where `<k>` is the step holding unit `<line>:<n>` |
-| `/play/<c>/<line>/drill` and `/practice`                           | `/practice/drill/<c>/lines/<line>`                                          |
-| `/play/<c>/<line>/drill/<n>[/<a>-<b>]`                             | `/openings/<c>/step/<k>#s=try`                                              |
-| `/play/<c>/<line>/quiz`                                            | `/practice/review/<c>/lines/<line>`                                         |
-| `/play/<c>/<line>/tree`                                            | `/explore/map/<c>#l=<line>`                                                 |
-| `/play/<c>/all/branches`                                           | `/practice/drill/<c>`                                                       |
-| `/quiz`, `/review` (and `#start=due`)                              | `/practice/review` (hash kept)                                              |
-| `/name`, `/name-it`, `/guess`                                      | `/practice/name-it`                                                         |
-| `/speed`                                                           | `/practice/speed`                                                           |
-| `/profile/stats`, `/stats`                                         | `/you/stats`                                                                |
-| `/profile/settings`, `/settings`                                   | `/you/settings`                                                             |
-| `/profile/author`                                                  | `/create`                                                                   |
-| `/create/<c>/path`                                                 | `/create/<c>/steps`                                                         |
-| `/create/<c>`, `/create/<c>/{lines,publish}`, `/create/<c>/<line>` | unchanged                                                                   |
-| `/glossary`                                                        | `/ideas`                                                                    |
-| `/tree`                                                            | `/explore/map`                                                              |
-| `/lab` (hash `fen`, `m`, `c`, `side`)                              | `/explore/analysis`, hash unchanged                                         |
-| `/credits`                                                         | unchanged                                                                   |
+| v1 address                                                         | v2 address                                                                            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `/`, `/overview`, `/today`, `/profile`                             | `/` (Profile's Overview folds into Today)                                             |
+| `/courses`                                                         | `/openings`                                                                           |
+| `/search`, `/browse`                                               | `/explore/search` (hash kept; only `tier` dropped)                                    |
+| `/openings` (a v1 alias of Search)                                 | `/openings`, the catalogue; its side filter carried over                              |
+| `/course/<c>` (hash `v`, `m`)                                      | `/openings/<c>`, `m` kept (`v`, a line in v1, is dropped: v2's `v` is a variation)    |
+| `/course/<c>/path`                                                 | `/openings/<c>` (the path is on the opening page)                                     |
+| `/course/<c>/tree`                                                 | `/openings/<c>/map`                                                                   |
+| `/play/<c>/<line>` and `/play/<c>/<line>/about`                    | `/openings/<c>/lines/<line>`                                                          |
+| `/play/<c>/<line>/learn`                                           | `/openings/<c>/lines/<line>`                                                          |
+| `/play/<c>/<line>/learn/<n>[/<a>-<b>]`                             | `/openings/<c>/step/<k>[/<a>-<b>]`, where `<k>` is the step holding unit `<line>:<n>` |
+| `/play/<c>/<line>/drill` and `/play/<c>/<line>/practice`           | `/practice/drill/<c>/lines/<line>`                                                    |
+| `/play/<c>/<line>/drill/<n>[/<a>-<b>]`                             | `/openings/<c>/step/<k>#stage=try`                                                    |
+| `/play/<c>/<line>/quiz`                                            | `/practice/review/<c>/lines/<line>`                                                   |
+| `/play/<c>/<line>/tree`                                            | `/openings/<c>/map#line=<line>`                                                       |
+| `/play/<c>/all/branches`                                           | `/practice/drill/<c>`                                                                 |
+| `/quiz`, `/review` (and `#start=due`)                              | `/practice/review` (the due session; `start` is no longer needed)                     |
+| `/name`, `/name-it`, `/guess`                                      | `/practice/name-it`                                                                   |
+| `/speed`                                                           | `/practice/speed`                                                                     |
+| `/profile/stats`, `/stats`                                         | `/you/stats`                                                                          |
+| `/profile/settings`, `/settings`                                   | `/you/settings`                                                                       |
+| `/profile/author`                                                  | `/create`                                                                             |
+| `/create/<c>/path`                                                 | `/create/<c>/steps`                                                                   |
+| `/create/<c>`, `/create/<c>/{lines,publish}`, `/create/<c>/<line>` | unchanged                                                                             |
+| `/glossary`                                                        | `/ideas`                                                                              |
+| `/tree`                                                            | `/explore/map`                                                                        |
+| `/lab` (hash `fen`, `m`, `c`, `side`)                              | `/board` (`fen`, `m`, `side` kept; `c` read as `ply`)                                 |
+| `/credits`                                                         | unchanged                                                                             |
 
 The two redirects from v1 units need the opening's path, so they resolve after the opening loads; until then the
 step page shows its skeleton. A v1 unit the v2 path no longer cuts leads to the opening page.
@@ -126,6 +138,3 @@ v1's courses are parked (inventory.md), so an opening id from a v1 link may no l
 
 1. Step numbers shift when an author inserts a step. Address steps by number (short, readable) or by a stable id
    such as v1's `<line>:<n>` (survives edits)? The proposal is numbers, with the redirect table catching old ones.
-2. Should `/lines/<line>` live under Explore or Learn? The proposal: the page belongs to whichever its `o` hash says.
-3. Is `/openings/<opening>/lines/<line>` (learning a line outside the path) wanted, or does "learn this line" always
-   lead to the first step that teaches it?

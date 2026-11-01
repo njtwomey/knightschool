@@ -25,7 +25,7 @@ through it.
 ## Behaviour
 
 - The whole card is a link ([sortable-table](sortable-table.md)'s row link): a click anywhere opens the position on
-  the [analysis](../pages/analysis.md) page, or on the [line](../pages/line.md) page when the card is for one line.
+  the [board](../pages/board.md) page, or on the [line](../pages/line.md) page when the card is for one line.
   The line links inside keep their own clicks.
 - Hover the thumb: nothing extra (it is already a picture). Hover a line link: the
   [position-preview](position-preview.md) of where that line goes.

@@ -4,8 +4,8 @@ Verdicts and evaluations known so far, from the author, baked analysis and the b
 
 ## Holds
 
-- the **baked analysis** file, loaded once: evaluations for the openings' positions, and (new) for the positions after
-  the moves players at the band commonly play there;
+- the **baked analysis** (read from `knowledge.sqlite`, not a JSON file): evaluations for the openings' positions, and
+  (new) for the positions after the moves players at the band commonly play there;
 - **verdicts by position and move**: grade, symbol, cost, winning-chance drop, refutation, the layer it came from and
   the depth;
 - **pending** searches, so several components asking about the same move share one;
@@ -25,18 +25,20 @@ the [engine](engine.md) store, whose result is turned into a verdict and kept.
 [verdict-badge](../components/verdict-badge.md), [verdict-note](../components/verdict-note.md),
 [tries-table](../components/tries-table.md), [eval-words](../components/eval-words.md),
 [board-eval](../components/board-eval.md) (baked first, as the strip does now),
-[move-explanation](../components/move-explanation.md); the [session](session.md) (wrong moves, opponent mistakes),
-the [map](../pages/map.md) (the opponent's mistakes marked).
+[move-explanation](../components/move-explanation.md); the [session](session.md) (wrong moves, opponent mistakes), the
+[map](../pages/map.md) (the opponent's mistakes marked).
 
 ## Persists
 
 - Verdicts: **never** stored; they are worked out again from evaluations, which are cheap once cached.
-- Live evaluations: the existing `eval_cache` table, through the [engine](engine.md) store (only finished searches).
-  v1 exports it with everything else; it is a cache, so it could be left out of exports to keep them small.
-- Baked analysis: shipped JSON (`public/content/analysis.json`), service-worker cached, never exported.
+- Live evaluations: the existing `eval_cache` table, through the [engine](engine.md) store (only finished searches). v1
+  exports it with everything else; it is a cache, so it could be left out of exports to keep them small.
+- Baked analysis: the `evals` table of the shipped, read-only `knowledge.sqlite`
+  ([../schemas/built.md](../schemas/built.md)), built from `content/analysis/`, service-worker cached, never exported.
+  (v1 ships `public/content/analysis.json`.)
 
-No new table. Shipping replies in the baked file is a content change (`pnpm analyse --replies`), not a
-stored-format one.
+No new table. Shipping replies in the baked file is a content change (`pnpm analyse --replies`), not a stored-format
+one.
 
 ## From v1
 

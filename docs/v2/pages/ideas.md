@@ -35,7 +35,7 @@ idea results in [search](search.md).
   repertoire.
 - An entry's whole area opens the idea (a row link, [../patterns/interactions.md](../patterns/interactions.md));
   hovering the badge shows its summary card.
-- Progress per idea is derived: seen once a step showing it is passed, practised when its puzzles and moves are
+- Progress per idea is derived: seen once a step showing it is known, practised when its puzzles and moves are
   answered well ([../hooks/use-progress.md](../hooks/use-progress.md)).
 - No match: [empty-state](../components/empty-state.md) "No idea called 'zugzwangg'. Did you mean zugzwang?".
 

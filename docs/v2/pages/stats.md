@@ -29,7 +29,7 @@ The header's right side: **You** › Stats ([../navigation/menu.md](../navigatio
    [move-chip](../components/move-chip.md) with its opening and step, misses or mean time, and the average centipawn
    cost of the wrong tries (from the tries log). A row opens the position.
 7. **By opening**: each repertoire opening's [opening-card](../components/opening-card.md) with
-   [mode-counts](../components/mode-counts.md) and its checkpoints passed.
+   [mode-counts](../components/mode-counts.md) and its checkpoints cleared.
 8. **Speed records** per set-up, **Puzzles** solved by rating band and theme, **Name it** credit.
 
 ## Behaviour
@@ -44,14 +44,13 @@ The header's right side: **You** › Stats ([../navigation/menu.md](../navigatio
 
 ## Leads to
 
-A move row → [step](step.md) that teaches it, or [review](review.md) of the most missed
-(`/practice/review/<opening>` with the hardest-moves source); an opening card → [opening](opening.md); Speed records →
-[speed](speed.md).
+A move row → [step](step.md) that teaches it, or [review](review.md) of the most missed (`/practice/review/<opening>`
+with the hardest-moves source); an opening card → [opening](opening.md); Speed records → [speed](speed.md).
 
 ## From v1
 
-`features/profile/stats/stats-page.tsx` (with `describe-card.ts`). Verdict: **keep**, gaining learning status over
-time (features.md P5), the cost column and puzzles; Overview's dashboard parts go to [Today](today.md).
+`features/profile/stats/stats-page.tsx` (with `describe-card.ts`). Verdict: **keep**, gaining learning status over time
+(features.md P5), the cost column and puzzles; Overview's dashboard parts go to [Today](today.md).
 
 ## Open questions
 

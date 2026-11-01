@@ -9,7 +9,7 @@ thing in a table, a sentence, an engine line, the explorer or a search result.
   writes it ([move-run](move-run.md));
 - the SAN, in letters or figurines;
 - the symbol when the move has one (`!`, `!?`, `?!`, `?`, `??`), in its verdict colour;
-- its state as weight and colour: played, still to come, explored, leading in, the point of the step, passed, current
+- its state as weight and colour: played, still to come, explored, leading in, the point of the step, known, current
   (a filled background);
 - optionally a [verdict-badge](verdict-badge.md) after it, in the tries table and the explorer.
 
@@ -20,7 +20,7 @@ thing in a table, a sentence, an engine line, the explorer or a search result.
 - `state`, `symbol`, `verdict` as above.
 - `board`: which board it talks to. By default the nearest enclosing [board](board.md), else the page's primary board,
   else none.
-- `href`: where a click goes when there is no board (the [line](../pages/line.md) or [analysis](../pages/analysis.md)
+- `href`: where a click goes when there is no board (the [line](../pages/line.md) or [board](../pages/board.md)
   page at that position).
 - Settings read: `board.notation`, `display.previews` (whether hover may open a position preview).
 

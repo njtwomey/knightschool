@@ -10,27 +10,29 @@ below says where the existing piece lives.
 
 ## The documents
 
-| File                                | What it settles                                                                                            |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| [experience.md](experience.md)      | Who comes, how they arrive, learn, test and see progress; the menu and the pages                           |
-| [model.md](model.md)                | The things the site is made of (repertoire, opening, variation, line, step, idea, ...) and how they relate |
-| [board.md](board.md)                | The one board, its parts, and how they connect                                                             |
-| [capabilities.md](capabilities.md)  | The shared engines underneath: judgement, exercises, progress, Lichess, puzzles, authoring                 |
-| [courses.md](courses.md)            | How a v2 opening is made: scope, the bar it must meet, the pipeline                                        |
-| [roadmap.md](roadmap.md)            | The order to build it in, and what moves where                                                             |
-| [features.md](features.md)          | The survey mapped to what we build: adopt, adapt, later, skip                                              |
-| [puzzles.md](puzzles.md)            | All Lichess puzzles matched to positions: levels, uses, the jobs                                           |
-| [inventory.md](inventory.md)        | v2 walked through, the reusable components, and every part of v1: keep, repurpose, park, delete            |
-| [config.md](config.md)              | Config (how the site behaves, for everyone) as distinct from settings (a learner's choices)                |
-| [settings.md](settings.md)          | One settings registry: layers, presets, stores, the page, and everything configurable                      |
-| [schemas/](schemas/README.md)       | The data: content files, annotations, built data and the knowledge file, the learner database              |
-| [components/](components/README.md) | Every reusable piece of the interface, one file each                                                       |
-| [pages/](pages/README.md)           | Every page, one file each                                                                                  |
-| [navigation/](navigation/README.md) | Menu, addresses, address state, breadcrumbs, shortcuts, cross-links                                        |
-| [hooks/](hooks/README.md)           | Shared behaviour: board model, move interaction, previews, settings, sessions, judgement                   |
-| [stores/](stores/README.md)         | The app's state: what each store holds and where it persists                                               |
-| [patterns/](patterns/README.md)     | Rules everything follows: interactions, colours, states, timing, reveal, wording, layout, accessibility    |
-| [survey.md](survey.md)              | What similar sites do, and what to borrow                                                                  |
+| File                                | What it settles                                                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| [experience.md](experience.md)      | Who comes, how they arrive, learn, test and see progress; the menu and the pages                                    |
+| [model.md](model.md)                | The things the site is made of (repertoire, opening, variation, line, step, idea, ...) and how they relate          |
+| [board.md](board.md)                | The one board, its parts, and how they connect                                                                      |
+| [capabilities.md](capabilities.md)  | The shared engines underneath: judgement, exercises, progress, Lichess, puzzles, authoring                          |
+| [courses.md](courses.md)            | How a v2 opening is made: scope, the bar it must meet, the pipeline                                                 |
+| [roadmap.md](roadmap.md)            | The order to build it in, and what moves where                                                                      |
+| [decisions.md](decisions.md)        | Every open decision for the user, grouped, each with a recommendation                                               |
+| [features.md](features.md)          | The survey mapped to what we build: adopt, adapt, later, skip                                                       |
+| [puzzles.md](puzzles.md)            | All Lichess puzzles matched to positions: levels, uses, the jobs                                                    |
+| [inventory.md](inventory.md)        | v2 walked through, the reusable components, and every part of v1: keep, repurpose, park, delete                     |
+| [config.md](config.md)              | Config (how the site behaves, for everyone) as distinct from settings (a learner's choices)                         |
+| [settings.md](settings.md)          | One settings registry: layers, presets, stores, the page, and everything configurable                               |
+| [schemas/](schemas/README.md)       | The data: content files, annotations, built data and the knowledge file, the learner database                       |
+| [library/](library/README.md)       | The code under the pages: chess, tree, eval, judge, features, training, exercise, puzzles, engine, storage, Lichess |
+| [components/](components/README.md) | Every reusable piece of the interface, one file each                                                                |
+| [pages/](pages/README.md)           | Every page, one file each                                                                                           |
+| [navigation/](navigation/README.md) | Menu, addresses, address state, breadcrumbs, shortcuts, cross-links                                                 |
+| [hooks/](hooks/README.md)           | Shared behaviour: board model, move interaction, previews, settings, sessions, judgement                            |
+| [stores/](stores/README.md)         | The app's state: what each store holds and where it persists                                                        |
+| [patterns/](patterns/README.md)     | Rules everything follows: interactions, colours, states, timing, reveal, wording, layout, accessibility             |
+| [survey.md](survey.md)              | What similar sites do, and what to borrow                                                                           |
 
 ## Principles
 

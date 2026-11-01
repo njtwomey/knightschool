@@ -23,8 +23,11 @@ A sketch: `const { verdict, why, refutation, status } = useJudgement({ epd, uci,
 - Answers synchronously when the author or baked layer knows, so the verdict appears with the cross, not after it.
 - Otherwise asks the [judgement store](../stores/judgement.md), which queues a search on the
   [engine store](../stores/engine.md) at the strip's depth; the verdict fills in when it lands. Nothing waits for it.
-- Grades by winning chance, as Lichess and Chess.com do; v1's regret thresholds (under 30, 30 to 99, 100 and more) are
-  kept as the fallback when only centipawns are known.
+- A live verdict is final for the session: if a deeper search later disagrees, the row in the tries table keeps its
+  grade.
+- Grades by winning chance, as Lichess and Chess.com do, always computed from the centipawns (or mate) the layer gives;
+  there is no centipawn-band fallback. v1's regret thresholds (under 30, 30 to 99, 100 and more) go. The cut-offs are
+  config `judge.grades`.
 - Reveal: the hook does not hide anything itself; components show the verdict only once the exercise is answered.
 - Several hooks for the same move share one search.
 
@@ -42,8 +45,3 @@ per move), [position-preview](../components/position-preview.md); and
 - `apps/web/src/data/engine/store.ts` (`evaluateLive`, depth 14, three lines): the live layer.
 - core `training/regret.ts` (cost bands after a quiz) and `explain/` (`Explainer`; the engine explainer's sentences
   are written and never shown in v1).
-
-## Open questions
-
-1. Should a live verdict be replaced if a deeper search later disagrees, or is the first answer final for the session?
-   The proposal: final for the session, so a row in the tries table never changes grade under the learner.

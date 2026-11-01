@@ -21,7 +21,7 @@ link on [puzzles](puzzles.md); an opening's [sources-list](../components/sources
    source and licence, and the version in use.
 3. **Lichess**: the opening explorer (what players at your band play), the opening names, and the puzzle database
    (public domain, CC0): "6.2 million puzzles, of which the ones matching your openings ship with the site". The games
-   API, for your games. Links to each.
+   API, for your games. Links to each. **Chess.com**: its public API, for your games.
 4. **Sources by opening**: each opening's [opening-name](../components/opening-name.md) with its
    [sources-list](../components/sources-list.md) (videos, books, articles), shipped and authored.
 5. **Libraries**: the board, the chess rules, the database, the scheduler (FSRS), the interface components; each with

@@ -16,14 +16,14 @@ glance and a light streak. Comes first in the menu; most visits start and end he
 
 ## Layout
 
-1. [next-step-button](../components/next-step-button.md), large, with one line under it saying why: "Review 14 moves
+1. [next-action](../components/next-action.md), large, with one line under it saying why: "Review 14 moves
    due", "Continue step 4 of the Italian Game (Try)", "Start step 5: When Black plays 3...Nf6", "The Giuoco Piano
    checkpoint is ready". A [board-thumb](../components/board-thumb.md) of where it starts.
 2. Side by side on a wide screen, stacked on a phone:
    - [due-card](../components/due-card.md): moves, questions and game cards due, and "3 of 10 new moves today", so the
      daily limit is visible.
    - [puzzle-card](../components/puzzle-card.md): one puzzle from the learner's openings, matched "through the
-     position" to a step they have passed ([../puzzles.md](../puzzles.md)).
+     position" to a step they know ([../puzzles.md](../puzzles.md)).
 3. **Your repertoire**: one [opening-card](../components/opening-card.md) per slot, each with its
    [mode-counts](../components/mode-counts.md) ("Learn 12/40, Review 6 due, Puzzles 3/15") and
    [progress-ring](../components/progress-ring.md). An empty slot shows **Choose an opening**.
@@ -36,7 +36,7 @@ glance and a light streak. Comes first in the menu; most visits start and end he
 ## Behaviour
 
 - The main button's choice, in order: reviews when more than a session's worth are due (reviews come before new
-  steps); a step in progress; a checkpoint whose steps are all passed; the next open step in path order across the
+  steps); a step in progress; a checkpoint whose steps are all known; the next open step in path order across the
   repertoire's openings, taking turns between them; reviews, if any are due at all; otherwise "All done for today"
   with **Practise anyway** ([../hooks/use-progress.md](../hooks/use-progress.md)).
 - Everything is worked out from the answer log on arrival; nothing on the page is stored.

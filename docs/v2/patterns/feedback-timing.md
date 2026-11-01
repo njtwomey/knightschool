@@ -14,10 +14,10 @@ waits for a click when you are right; a miss with an explanation stays up until 
    panel while the computer replies and you think, so the reason is never gone in half a second.
 5. **Late judgement never holds play up.** A verdict or a cost that arrives after the move fills in its row in the
    [tries-table](../components/tries-table.md) where it is; play does not wait for it.
-6. **One table, one multiplier.** Every delay lives in one table; the setting `feedback.speed` (slow 1.5×, normal,
-   fast 0.6×) scales all of them except "Copied" and Speed's countdown.
-7. **Timers belong to the session.** A session schedules its delays through one set of timers and clears the lot when
-   it stops, restarts or the page is left, so nothing fires on the wrong exercise.
+6. **One table, one multiplier.** Every delay lives in one table (config `timing.delays`); the setting `feedback.speed`
+   (slow 1.5×, normal, fast 0.6×) scales all of them except "Copied" and Speed's countdown.
+7. **Timers belong to the session.** A session schedules its delays through one set of timers and clears the lot when it
+   stops, restarts or the page is left, so nothing fires on the wrong exercise.
 
 | Delay (v1 name) | v1 value | When                                                         | v2                                                |
 | --------------- | -------- | ------------------------------------------------------------ | ------------------------------------------------- |
@@ -35,16 +35,17 @@ waits for a click when you are right; a miss with an explanation stays up until 
 The hover and long-press delays are in [interactions](interactions.md), in the same table in code.
 
 **Hints fade and return** by answers, not by time: the arrow for the move to play is not shown once that move has been
-played right twice running, and comes back after two mistakes on it (experience.md, Watch).
+played right twice running, and comes back after two mistakes on it (experience.md, Watch; config
+`teach.hintFadeAfterRight` and `teach.hintReturnAfterWrong`).
 
 **Their mistakes**: the opponent's mistaken move is played after `opponent`, its note ("Played in a quarter of games at
 your level, and it loses a piece") appears with it, and the board waits for the learner's punishment with no timer.
 
 ## Where it applies
 
-Every exercise through [use-exercise-session](../hooks/use-exercise-session.md): a step's Watch, Try and Their
-mistakes, Review, Drill, Puzzles, Play on, Checkpoint, Speed, Name it. Shown by
-[board-feedback](../components/board-feedback.md) and [exercise-panel](../components/exercise-panel.md).
+Every exercise through [use-exercise-session](../hooks/use-exercise-session.md): a step's Watch, Try and Their mistakes,
+Review, Drill, Puzzles, Play on, Checkpoint, Speed, Name it. Shown by [board-feedback](../components/board-feedback.md)
+and [exercise-panel](../components/exercise-panel.md).
 
 ## From v1
 

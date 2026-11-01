@@ -30,7 +30,7 @@ their repertoire, by move 5, 10 and 15.
 - The [gap-link](gap-link.md) usually sits right under it.
 - No data for a position (the popularity file has none): those games count as unknown, and the hint says "Some
   replies have no data yet". A band with no baked data and no token says so and offers Settings.
-- Rises after each step passed; it is the one number that should always go up as the learner works.
+- Rises after each step known; it is the one number that should always go up as the learner works.
 
 ## Composed of
 

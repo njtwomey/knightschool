@@ -14,7 +14,7 @@ Preferences (on or off, depth, number of lines) are [settings](settings.md) on t
 ## Written by
 
 [board-eval](../components/board-eval.md) when its board's position changes and the engine is on; the
-[judgement](judgement.md) store for live verdicts; the [analysis](../pages/analysis.md) page; the engine toggle in
+[judgement](judgement.md) store for live verdicts; the [board](../pages/board.md) page; the engine toggle in
 [board-settings-menu](../components/board-settings-menu.md) and the `e` key ([shortcuts](../navigation/shortcuts.md)).
 
 ## Read by

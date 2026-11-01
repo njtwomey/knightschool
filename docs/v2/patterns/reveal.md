@@ -36,7 +36,7 @@ level from the board model. No page turns individual parts on or off.
 | `learn`    | learn               | a step's Watch                                                             |
 | `test`     | test, then answered | a step's Try and Their mistakes, Review, Drill, Checkpoint, Speed, Name it |
 | `puzzle`   | test, then answered | puzzles                                                                    |
-| `analysis` | study               | the analysis board, after a puzzle, Play on's review                       |
+| `analysis` | study               | the Board page (`/board`), after a puzzle, Play on's review                |
 | `author`   | study               | Create                                                                     |
 | `thumb`    | marks only          | cards, search results, the Today hero                                      |
 

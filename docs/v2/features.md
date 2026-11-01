@@ -58,12 +58,12 @@ other documents.
 
 ## Puzzles and your games
 
-| #   | Seen on                           | Feature                                    | Decision | Our version                                                                            | Where         |
-| --- | --------------------------------- | ------------------------------------------ | -------- | -------------------------------------------------------------------------------------- | ------------- |
-| Z1  | Chessreps, Lichess (by opening)   | Puzzles from the openings you study        | adopt    | All 6.2 million Lichess puzzles, matched to positions at several levels                | puzzles.md    |
-| Z2  | Chessbook, Chesstempo, ChessAtlas | Your games checked against your repertoire | adopt    | A Lichess username; the first move outside your repertoire in each game becomes a card | experience.md |
-| Z3  | OpeningTree                       | A tree of your own games with results      | later    | The map can show your games' moves beside the opening's                                | roadmap       |
-| Z4  | Aimchess, ChessFlare              | Puzzles from your own mistakes             | later    | From Z2: positions where you went wrong, as exercises                                  | roadmap       |
+| #   | Seen on                           | Feature                                    | Decision | Our version                                                                                                                                            | Where         |
+| --- | --------------------------------- | ------------------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| Z1  | Chessreps, Lichess (by opening)   | Puzzles from the openings you study        | adopt    | All 6.2 million Lichess puzzles, matched to positions at several levels                                                                                | puzzles.md    |
+| Z2  | Chessbook, Chesstempo, ChessAtlas | Your games checked against your repertoire | adopt    | A Lichess or Chess.com username (both public APIs work from the browser, no token); the first move outside your repertoire in each game becomes a card | experience.md |
+| Z3  | OpeningTree                       | A tree of your own games with results      | later    | The map can show your games' moves beside the opening's                                                                                                | roadmap       |
+| Z4  | Aimchess, ChessFlare              | Puzzles from your own mistakes             | later    | From Z2: positions where you went wrong, as exercises                                                                                                  | roadmap       |
 
 ## Arriving and finding
 

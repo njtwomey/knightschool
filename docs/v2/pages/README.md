@@ -49,17 +49,17 @@ One sentence: what the page is for, and who comes to it.
 | [checkpoint.md](checkpoint.md) | The test at the end of a variation                                                |
 | [speed.md](speed.md)           | Lines against the clock                                                           |
 | [name-it.md](name-it.md)       | Name the opening of a position                                                    |
-| [your-games.md](your-games.md) | Your Lichess games against your repertoire: where each left it                    |
+| [your-games.md](your-games.md) | Your Lichess and Chess.com games against your repertoire: where each left it      |
 
 ## Explore
 
-| File                       | What it is                                                                  |
-| -------------------------- | --------------------------------------------------------------------------- |
-| [map.md](map.md)           | Every line as one tree, coloured by what you know, with gaps                |
-| [search.md](search.md)     | Openings, variations, lines and ideas in one search, and board search       |
-| [analysis.md](analysis.md) | A free board: play, set up, paste a PGN or FEN, the engine and the explorer |
-| [ideas.md](ideas.md)       | Every idea, A to Z and by kind                                              |
-| [idea.md](idea.md)         | One idea: what it is, the steps, moves and puzzles that show it             |
+| File                   | What it is                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| [map.md](map.md)       | Every line as one tree, coloured by what you know, with gaps                                     |
+| [search.md](search.md) | Openings, variations, lines and ideas in one search, and board search                            |
+| [board.md](board.md)   | The raw board: set it up or play, the engine's evaluation and best lines, FEN and PGN in and out |
+| [ideas.md](ideas.md)   | Every idea, A to Z and by kind                                                                   |
+| [idea.md](idea.md)     | One idea: what it is, the steps, moves and puzzles that show it                                  |
 
 ## You
 

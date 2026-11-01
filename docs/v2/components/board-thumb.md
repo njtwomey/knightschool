@@ -14,7 +14,7 @@ no controls, no eval. An optional caption under it ("after 5.d4").
 - `marks`: off by default; on in idea pages and step rows that show the step's key position.
 - `highlight`: squares to tint (a position feature, a square named in text).
 - `size`: from 6rem in a list to 14rem in a [position-preview](position-preview.md).
-- Settings read: `board.theme`, `board.pieces`, `accessibility.highContrast`, so a thumb always matches the main board.
+- Settings read: `board.theme`, `board.pieces`, `access.highContrast`, so a thumb always matches the main board.
 
 ## Behaviour
 

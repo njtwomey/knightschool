@@ -37,7 +37,7 @@ The reviews due now, how long they will take, and one button into them.
 ## Used by
 
 [today](../pages/today.md), [practice](../pages/practice.md), [opening](../pages/opening.md) (scope one opening),
-[next-step-button](next-step-button.md) (uses its count to decide whether review comes first).
+[next-action](next-action.md) (uses its count to decide whether review comes first).
 
 ## From v1
 

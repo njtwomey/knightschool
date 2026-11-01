@@ -6,7 +6,8 @@ what the value means and where it came from. Most people never come here; those 
 ## Address
 
 `/you/settings` (Basic, the first group), `/you/settings/<group>` for one group (`level`, `review`, `learning`,
-`feedback`, `computer`, `puzzles`, `board`, `engine`, `lichess`, `accessibility`). Hash: `#q=<text>` for the search,
+`feedback`, `computer`, `puzzles`, `board`, `display`, `engine`, `accounts`, `progress`, `accessibility`; every key and
+its group is in [../settings.md](../settings.md), "Keys"). Hash: `#q=<text>` for the search,
 `#key=<setting key>` to scroll to and highlight one row, `&advanced=1` to show advanced rows
 ([../navigation/url-state.md](../navigation/url-state.md)). v1's `/settings` and `/profile/settings` land here.
 
@@ -28,8 +29,8 @@ what the value means and where it came from. Most people never come here; those 
    [settings-group](../components/settings-group.md) of [settings-row](../components/settings-row.md)s. Each row: label,
    control, one line of hint, what the value means in practice ("about 70 new moves a week"), where it comes from
    ("from the Club player preset", "set for the Italian Game"), and **Reset** when it differs.
-4. The **Lichess** group holds the token (this browser only, never exported, shown masked) and the username for your
-   games, with **Test connection**.
+4. The **Accounts** group holds the Lichess token (this browser only, never exported, shown masked; it only raises
+   Lichess's rate limits) and the Lichess and Chess.com usernames for your games, each with **Test connection**.
 5. [undo-button](../components/undo-button.md) at the top right, named after the last change ("Undo: new moves a day").
 
 ## Behaviour

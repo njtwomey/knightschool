@@ -36,7 +36,7 @@ It shows what it found before anything is saved, then turns it into lines, comme
 ## Composed of
 
 [problems-list](problems-list.md), [move-run](move-run.md), [undo-button](undo-button.md), [notice](notice.md),
-shadcn `Tabs`, `Textarea`, `Input`, `Dialog`, `Checkbox` (not yet in `components/ui`).
+shadcn `Tabs`, `Textarea`, `Input`, `Dialog`, `Checkbox` (to add from shadcn, [inventory](../inventory.md)).
 
 ## Used by
 

@@ -40,7 +40,7 @@ Under the rows: how many games reach the position, and whether the numbers are b
 
 ## Used by
 
-[board](board.md) on [analysis](../pages/analysis.md), [map](../pages/map.md), [opening](../pages/opening.md),
+[board](board.md) on [board](../pages/board.md), [map](../pages/map.md), [opening](../pages/opening.md),
 [line](../pages/line.md), and after answering in [review](../pages/review.md) and [puzzles](../pages/puzzles.md).
 
 ## From v1

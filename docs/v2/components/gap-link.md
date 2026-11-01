@@ -8,7 +8,7 @@ biggest gap".
 - One line: "Your biggest gap: **1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6**, about 1 game in 6 at your level." The moves are a
   [move-run](move-run.md), the final reply (the gap) emphasised.
 - A [board-thumb](board-thumb.md) of the position after the reply, on wider screens.
-- What fills it: "Your Italian Game answers this in step 9 (Two Knights Defence)" for a reply the learner's opening
+- What fills it: "Your Italian Game answers this in step 9 (Two Knights Defense)" for a reply the learner's opening
   covers but they have not learned; "The Caro-Kann answers 1...c6: add it to your repertoire" for a reply none of their
   openings covers; "No opening here answers this yet" when the catalogue has nothing.
 - The action: **Learn it** (the step that answers it), or **Add an opening** (opens the slot picker), or **See it on

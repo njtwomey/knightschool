@@ -25,7 +25,7 @@ Three columns, full width from xl; on a phone the tree first, the board in a she
 1. Left: [map-index](../components/map-index.md), shaped like the tree: openings grouped by first two moves, a line
    under the line it grows out of; a [search-box](../components/search-box.md) at its top.
 2. Middle: [map-tree](../components/map-tree.md): one column per move, one lane per line, main line across the top;
-   move pills coloured by state (not seen, learning, known, mastered, [state-badge](../components/state-badge.md)
+   move pills coloured by state (open, learning, known, mastered, [state-badge](../components/state-badge.md)
    colours); gaps as short dashed stubs with their share of games; the opponent's common mistakes marked where they
    happen. Zoom buttons and pinch. [map-legend](../components/map-legend.md) under it, with a
    [filter-toggle](../components/filter-toggle.md) per overlay.

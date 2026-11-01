@@ -1,13 +1,13 @@
 # Settings
 
-Almost everything in v2 has a sensible default and should be changeable: how many new moves a day, how strict the
-gates are, what the computer plays, how much the feedback says, which puzzles come up. That needs one settings system,
+Almost everything in v2 has a sensible default and should be changeable: how many new moves a day, how strict the gates
+are, what the computer plays, how much the feedback says, which puzzles come up. That needs one settings system,
 designed once, rather than a switch added wherever it is wanted.
 
 **Settings are the learner's; config is the site's.** How the site teaches and judges (how many right answers before a
 hint fades, when a move counts as known, the grade thresholds, the base delays) is config, written by us and the same
 for everyone: see [config.md](config.md). Config also declares which settings exist, with their defaults, ranges and the
-presets. Where the catalogue below still lists a rule of that kind, config.md wins.
+presets. Every learner setting key is listed once under "Keys" below; anything that is a rule lives in config.md.
 
 ## What v1 has
 
@@ -26,8 +26,8 @@ And many fixed numbers that ought to be settings: `DEFAULT_NEW_CARDS_PER_DAY`, `
 `FEEDBACK_DELAYS` (`lib/feedback.ts`), the regret thresholds (`training/regret.ts`), the two-tries rule
 (`training/attempt.ts`), the "passed" and "graduated" rules (`training/units/progress.ts`).
 
-The good parts to keep: `lib/local-prefs.ts` reads every value field by field, so a bad stored value falls back to
-its default and never breaks the app; old keys are carried over once (`migratePracticePrefs`); the practice set-up card
+The good parts to keep: `lib/local-prefs.ts` reads every value field by field, so a bad stored value falls back to its
+default and never breaks the app; old keys are carried over once (`migratePracticePrefs`); the practice set-up card
 edits a copy and changes nothing until Start.
 
 ## The design
@@ -42,7 +42,7 @@ defineSetting({
   group: 'review',
   label: 'New moves a day',
   hint: 'How many moves you have not seen before are added to your reviews each day.',
-  schema: z.number().int().min(0).max(100),
+  schema: z.number().int().min(0).max(50), // the range comes from config: schedule.newPerDay
   default: 10,
   level: 'basic', // or 'advanced'
   scopes: ['learner', 'opening'], // where it may be set (below)
@@ -52,9 +52,9 @@ defineSetting({
 });
 ```
 
-The settings page, the gear on a board, the practice card and an opening's page all draw from the registry, so a
-setting looks, behaves and is worded the same wherever it appears. Adding a setting is one declaration; nothing else
-has to remember it.
+The settings page, the gear on a board, the practice card and an opening's page all draw from the registry, so a setting
+looks, behaves and is worded the same wherever it appears. Adding a setting is one declaration; nothing else has to
+remember it.
 
 ### Layers: where a value comes from
 
@@ -67,8 +67,13 @@ A value is looked up from the most particular layer to the most general, and the
 5. **the preset** the learner picked (below);
 6. **the default** in the registry.
 
-The page always says where a value came from ("set for this opening", "from the Club player preset") and offers to
-reset it to the next layer down.
+The page always says where a value came from ("set for this opening", "from the Club player preset") and offers to reset
+it to the next layer down.
+
+**The learner wins, on purpose.** An opening's suggested setting values (the material layer) sit below the learner's own
+choice, so an author can suggest "include rare lines here" but never override what the learner chose. This is different
+from an opening's **config overrides** (the short listed set of keys an `opening.yaml` may change, such as how its gates
+or rare lines count, config.md): those are config, the same for everyone, and are not a settings layer.
 
 ### Presets
 
@@ -77,10 +82,10 @@ shows as "custom":
 
 | Preset              | For                       | For example                                                                      |
 | ------------------- | ------------------------- | -------------------------------------------------------------------------------- |
-| **Getting started** | new players               | 5 new moves a day, hints that fade slowly, full explanations, gates advise only  |
-| **Club player**     | 1000 to 1600              | 10 new moves a day, gates on, the computer plays what players at your level play |
-| **Exam**            | testing yourself honestly | no hints, no second try, the computer may leave the book, gates strict           |
-| **Relaxed**         | browsing and studying     | no limits, no gates, everything shown                                            |
+| **Getting started** | new players               | 5 new moves a day, full explanations, words after each answer, gates relaxed     |
+| **Club player**     | 1000 to 1600              | 10 new moves a day, gates as written, the computer plays what your level plays   |
+| **Exam**            | testing yourself honestly | no Hint or Show me, the tries table only at the end, the computer may leave book |
+| **Relaxed**         | browsing and studying     | no daily limit, gates relaxed, everything shown                                  |
 
 ### Where it is stored
 
@@ -90,8 +95,8 @@ shows as "custom":
 | **learner** | how you learn: review, gates, feedback, puzzles, repertoire | SQLite `settings` table         | yes      |
 | **secret**  | the Lichess token                                           | localStorage, this browser only | never    |
 
-Maintainer settings (the explorer band baked into the build, thresholds the build checks) move out of `constants.ts`
-into one committed file the scripts read, so they are visible and changed in one place.
+Maintainer values (the explorer band baked into the build, thresholds the build checks) move out of `constants.ts` into
+config (`content/config.yaml`, [config.md](config.md)), visible and changed in one place.
 
 ### The page
 
@@ -105,77 +110,124 @@ into one committed file the scripts read, so they are visible and changed in one
   entry.
 - Export and import carry learner settings with everything else (v1 already exports the settings table).
 
+## Keys
+
+Every learner setting, once. **Group** is where it sits on the settings page (`/you/settings/<group>`); **store** is
+where it is kept (device: localStorage on this screen; learner: the SQLite `settings` table, exported; secret: this
+browser only, never exported); **level** is Basic or Advanced on the page. A default written as a config key comes from
+[config.md](config.md), which also sets the allowed range. Rules (hint fading, tries before the move is shown, the known
+and mastered rules, gates, stages, checkpoint marks, grade cut-offs, base delays) are config keys, not settings, and are
+not listed here.
+
+| Key                         | Group         | Store   | Default                                                                  | Level    |
+| --------------------------- | ------------- | ------- | ------------------------------------------------------------------------ | -------- |
+| `preset`                    | (top of page) | learner | Club player (onboarding may pick Getting started)                        | basic    |
+| `repertoire`                | level         | learner | none; set on onboarding and the repertoire page (v1 `enrolled`)          | basic    |
+| `level.band`                | level         | learner | 1000–1600 (`coverage.band`), set by onboarding                           | basic    |
+| `level.coverageTarget`      | level         | learner | 1 game in 20 (`coverage.minShare`; v1 `minPopularityPercent`)            | advanced |
+| `level.includeRare`         | level         | learner | off (v1 `includeRareLines`)                                              | basic    |
+| `level.includeAlternatives` | level         | learner | off                                                                      | advanced |
+| `level.trapsAsDrills`       | level         | learner | off (traps to spring stay extras)                                        | advanced |
+| `review.newPerDay`          | review        | learner | 10 (`schedule.newPerDay`; v1 `newCardsPerDay`)                           | basic    |
+| `review.sessionSize`        | review        | learner | 20 (`schedule.sessionSize`)                                              | advanced |
+| `review.order`              | review        | learner | due first (or by opening, mixed)                                         | advanced |
+| `review.retention`          | review        | learner | 90% (`schedule.retention`)                                               | advanced |
+| `review.movesPerQuestion`   | review        | learner | 1 (1 to 5, or the rest of the line)                                      | basic    |
+| `review.grading`            | review        | learner | automatic (by hand, Anki-style, later)                                   | advanced |
+| `learning.gatesRelaxed`     | learning      | learner | off; on, locked steps read "suggested later" and open unasked            | advanced |
+| `learning.startFrom`        | learning      | learner | where the step branches off (or move 1)                                  | advanced |
+| `feedback.explain`          | feedback      | learner | a sentence (or the symbol only, or the refutation on the board)          | basic    |
+| `feedback.evalAfter`        | feedback      | learner | words (or off, or words and numbers)                                     | basic    |
+| `feedback.speed`            | feedback      | learner | normal (slow 1.5×, fast 0.6× over `timing.delays`)                       | basic    |
+| `feedback.hints`            | feedback      | learner | on (Hint and Show me offered)                                            | basic    |
+| `feedback.triesTable`       | feedback      | learner | live (or only at the end, or off)                                        | advanced |
+| `feedback.triesColumns`     | feedback      | learner | grade, cost, time, help                                                  | advanced |
+| `feedback.triesRightMoves`  | feedback      | learner | on (list right moves too)                                                | advanced |
+| `feedback.sounds`           | feedback      | device  | on                                                                       | basic    |
+| `computer.plays`            | computer      | learner | what players at your level play (or the lines as written, or the engine) | basic    |
+| `puzzles.rating`            | puzzles       | learner | around your puzzle results, within 600–1800                              | basic    |
+| `puzzles.solver`            | puzzles       | learner | you (or the opponent, or both)                                           | advanced |
+| `puzzles.showThemes`        | puzzles       | learner | off before solving, shown after                                          | advanced |
+| `puzzles.themes`            | puzzles       | learner | all                                                                      | advanced |
+| `board.theme`               | board         | device  | green (v1's default profile)                                             | basic    |
+| `board.pieces`              | board         | device  | v1's default set                                                         | basic    |
+| `board.coordinates`         | board         | device  | on                                                                       | basic    |
+| `board.legalMoves`          | board         | device  | on                                                                       | basic    |
+| `board.lastMove`            | board         | device  | on                                                                       | advanced |
+| `board.hoverSquare`         | board         | device  | off (as in v1)                                                           | advanced |
+| `board.animation`           | board         | device  | on                                                                       | advanced |
+| `board.notation`            | board         | device  | letters (or figurines)                                                   | basic    |
+| `board.marksWhileStudying`  | board         | device  | on                                                                       | advanced |
+| `board.sizeCap`             | board         | device  | 36rem                                                                    | advanced |
+| `display.previews`          | display       | device  | small board (or off, or on with name and counts)                         | advanced |
+| `display.previewDelay`      | display       | device  | 350 ms to open, 150 ms to close                                          | advanced |
+| `display.positionFeatures`  | display       | device  | on request (or off, or always while studying)                            | advanced |
+| `engine.on`                 | engine        | device  | on                                                                       | basic    |
+| `engine.depth`              | engine        | device  | v1's default                                                             | advanced |
+| `engine.lines`              | engine        | device  | 1 (1 to 5; 3 on the Board page)                                          | advanced |
+| `engine.bakedOnly`          | engine        | device  | off                                                                      | advanced |
+| `explorer.minShare`         | engine        | device  | 1% (rows below it folded under More)                                     | advanced |
+| `lichess.token`             | accounts      | secret  | none (raises Lichess's rate limits; never exported)                      | advanced |
+| `lichess.username`          | accounts      | learner | none                                                                     | basic    |
+| `chessdotcom.username`      | accounts      | learner | none                                                                     | basic    |
+| `games.count`               | accounts      | learner | 50 most recent games per site                                            | advanced |
+| `games.fetchOnOpen`         | accounts      | learner | off                                                                      | advanced |
+| `progress.showStreak`       | progress      | learner | on                                                                       | basic    |
+| `data.exportReminder`       | progress      | learner | on (20 edits or 7 days)                                                  | advanced |
+| `access.reducedMotion`      | accessibility | device  | follows the system                                                       | basic    |
+| `access.highContrast`       | accessibility | device  | off                                                                      | basic    |
+| `access.largerPieces`       | accessibility | device  | off                                                                      | basic    |
+| `access.typedMoves`         | accessibility | device  | off                                                                      | basic    |
+| `access.squareCursor`       | accessibility | device  | off (arrow keys move a cursor while the board has focus)                 | advanced |
+| `access.readMoves`          | accessibility | device  | off                                                                      | basic    |
+
+Every opening-layer value is the same key stored as `opening:<id>:<key>` (stores/settings.md). Names are fixed once they
+ship: a renamed key is carried over once, like `migratePracticePrefs`.
+
 ## What is configurable
 
-The catalogue, by group. Defaults are suggestions; everything here is a registry entry.
+The catalogue by group, in words; each item is a key above. What used to be listed here and is a rule (hint fading,
+tries before the move is shown, what counts as known and mastered, the gates and testing out, which stages a step has,
+the checkpoint rules) is config ([config.md](config.md)).
 
-**Your level and what you meet**
+**Your level and what you meet**: your band (the baked data is 1000 to 1600, other bands go to the live explorer); the
+coverage target (answer every reply played in at least 1 game in 20); rare lines, alternatives, traps to spring as
+drills.
 
-- Your band (sets suggestions; the baked data is 1000 to 1600, other bands go to the live explorer).
-- Coverage target: answer every reply played in at least 1 game in 20 (`MIN_POPULARITY_FOR_CARD`, 5%).
-- Include rare lines (exists), alternatives, traps to spring as drills.
+**Spaced repetition**: new moves a day; reviews per session; review order; desired retention (within config's range);
+what a review asks (one move, a few, the rest of the line); grading, automatic or by hand (Anki-style, an open item in
+v1).
 
-**Spaced repetition**
+**Learning**: relaxing the gates (locked steps become suggestions); starting a step from move 1 or from where it
+branches off.
 
-- New moves a day (exists, 10); reviews per session (`SESSION_SIZE`, 20); review order (due first, by opening, mixed).
-- Desired retention (FSRS, default 90%) and the longest interval.
-- What a review asks: one move, a few moves, or the rest of the line (exists for Quiz).
-- Grading: automatic (exists; quick and right is Easy within `EASY_WITHIN_MS`, 5 s) or by hand, Anki-style (an open
-  item in v1).
-- What counts as known (two right in a row) and mastered (seven days and more).
-- What the cards cover: your moves, the opponent's mistakes to punish, puzzles, deviations from your games.
+**Feedback**: how much a wrong move explains; the tries table (live, at the end, off; its columns; right moves too or
+only wrong ones); evaluation after answering; the speed of play (one multiplier over config's base delays); Hint and
+Show me offered or not; sounds.
 
-**Learning**
+**The computer as opponent**: what it plays in Drill (the lines as written, what players at your level play, or the
+engine). How many moves a Play on lasts and how much it may lose are config (`opponent.*`).
 
-- A step's stages: which to show (Read, Watch, Try, Their mistakes).
-- Hints: how fast the arrow fades (two right) and comes back (two wrong).
-- Start from move 1 or from where the step branches off.
-- Gates: strict, advise only, or off; testing out allowed.
+**Puzzles**: rating range; who solves; themes shown before solving; themes included. Match levels and how many per step
+are config (`puzzles.*`).
 
-**Feedback**
+**Board and display** (device): theme, pieces, coordinates, legal-move dots, last move, hovered square, animation,
+notation, marks while studying, size cap; position previews and their delay; position features.
 
-- How much a wrong move explains: the symbol, a sentence, or the refutation on the board.
-- The tries table: shown live, only at the end, or off; which columns (cost in centipawns, winning chance, time,
-  help used); right moves listed too or only the wrong ones.
-- Evaluation after answering: off, words, words and numbers.
-- Speed of play: one multiplier over `FEEDBACK_DELAYS` (slow, normal, fast), and the computer's thinking time.
-- Tries before the move is shown (`WRONG_TRIES_ALLOWED`, 2); sounds; animation.
+**Engine** (device): on or off, depth, lines shown, baked analysis only; the explorer's cut-off.
 
-**The computer as opponent**
+**Accounts**: the Lichess token (secret), your Lichess and Chess.com usernames (for your games, read from both sites'
+public APIs in the browser; no token needed), how many games to read, fetching new games on opening the app.
 
-- What it plays: the lines as written, what players at your level play (weighted), or the engine.
-- In Play on: how many moves, how much evaluation you may lose, how often it leaves the book.
+**Progress and data**: the streak shown or hidden; the export reminder (20 edits or 7 days, exists); resetting progress
+for one opening or all is an action on the data page, not a setting.
 
-**Puzzles**
-
-- Rating range (fixed, or around your puzzle results); who solves (you, the opponent, both).
-- Which match levels to use (through the position down to same idea; puzzles.md); how many per step.
-- Themes to include or leave out.
-
-**Board and display** (device)
-
-- Theme, pieces (exists), coordinates, legal-move dots, last-move highlight, marks shown or not while studying.
-- Notation (letters or figurines), board size cap, animation speed.
-
-**Engine** (device)
-
-- On or off (exists), depth (exists), number of lines shown, baked analysis only.
-
-**Lichess**
-
-- Token (secret, exists), your username (for your games), fetching your new games on opening the app.
-
-**Data**
-
-- The export reminder (20 edits or 7 days, exists), backups, resetting progress for one opening or all.
-
-**Accessibility** (device)
-
-- Reduced motion, high-contrast board, larger pieces, moves typed instead of dragged, moves read aloud.
+**Accessibility** (device): reduced motion, high-contrast board, larger pieces, moves typed instead of dragged, a square
+cursor on the arrow keys, moves read aloud.
 
 ## Reused from v1
 
 `lib/local-prefs.ts` (field-by-field reading, `createPrefStore`), the `settings` table and its export,
 `migratePracticePrefs` as the pattern for carrying old keys over, `PracticeSetup` for session-level choices, shadcn
-controls (`Switch`, `Slider`, `Select`, `ToggleGroup`) for the generated rows, `FilterToggle` for one-of-several
-choices.
+controls (`Switch`, `Slider`, `Select`, `ToggleGroup`; `Slider` is to add, inventory.md) for the generated rows,
+`FilterToggle` for one-of-several choices.

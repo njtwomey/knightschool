@@ -72,11 +72,12 @@ Drawn in this order, each turned on by the reveal level:
 1. the last move (highlighted squares);
 2. **marks**: the author's arrows and rings, four colours with one meaning each (Idea, Threat, Target, Support;
    `MARK_MEANINGS` in core);
-3. **system arrows**: the move to play (Learn), a hint, the engine's best move, the opponent's threat. These use
+3. **system arrows**: the move to play (Learn), a hint, the engine's best move, your wrong move. These use
    colours and a style outside the four mark colours, so a green Idea mark and "play this" never look alike (in v1
    the Learn arrow is green, like an Idea);
-4. **feedback**: the verdict symbol on the target square (`!`, `?!`, `?`, `??`, in the usual colours), the refutation as
-   a Threat arrow, the tick or cross;
+4. **feedback**: the verdict symbol on the target square (`!`, `?!`, `?`, `??`, in the usual colours), the tick or
+   cross, and the refutation and the opponent's threat drawn in Threat red (mark colour R), because that is what they
+   mean: the one place the site draws in a mark colour;
 5. selection, legal-move dots, the hint pulse.
 
 ## Reveal levels: testing never leaks
@@ -102,7 +103,7 @@ preset, never the individual switches.
 | `learn`    | a step's Watch stage                             | play both sides   | learn               |
 | `test`     | Try, review, checkpoints, Speed, Name it         | play one side     | test, then answered |
 | `puzzle`   | puzzles                                          | play one side     | test, then answered |
-| `analysis` | Lab, explorer, after a game or a puzzle          | play both sides   | study               |
+| `analysis` | the Board page, after a game or a puzzle         | play both sides   | study               |
 | `author`   | Create                                           | play, or draw     | study               |
 | `thumb`    | cards, search results, the Home hero             | view, no controls | marks only          |
 

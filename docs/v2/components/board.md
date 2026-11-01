@@ -38,7 +38,7 @@ with no model.
   receives hovers and clicks from move chips anywhere on the page that are not inside another board.
 - **size**: `main` (capped at 36rem) or `aside` (22rem); never taller than the screen less the header and controls.
 - Settings read by the parts, not by the frame: the `board.*` keys (look), `engine.*`, `feedback.*`, `display.*` and
-  `level.band` (../settings.md). Each part's file names the ones it reads.
+  `level.band` (every key is in ../settings.md, "Keys"). Each part's file names the ones it reads.
 
 ## Behaviour
 
@@ -46,7 +46,7 @@ What the user asked for, and the rule that delivers each:
 
 - **Flip only when relevant.** The model says whether the side is fixed. In `test` and `puzzle` the learner's side is
   the bottom and there is no flip button; in `study`, `analysis` and `author` the flip button is there. A page that
-  keeps the side in its address (the analysis board) is told when it flips.
+  keeps the side in its address (the Board page) is told when it flips.
 - **One cursor, so the board and the feedback are visibly one thing.** The move table marks the current move, the
   notes show its comment, the eval shows its position and the feedback shows the verdict on it if it was played in this
   session. Step back three moves and the feedback for that move comes back; it is anchored to the move, not to "now".
@@ -82,7 +82,7 @@ Every page with a board: [opening](../pages/opening.md), [variation](../pages/va
 [line](../pages/line.md), [review](../pages/review.md), [drill](../pages/drill.md), [puzzles](../pages/puzzles.md),
 [play-on](../pages/play-on.md), [checkpoint](../pages/checkpoint.md), [speed](../pages/speed.md),
 [name-it](../pages/name-it.md), [your-games](../pages/your-games.md), [map](../pages/map.md),
-[analysis](../pages/analysis.md), [idea](../pages/idea.md), [first-visit](../pages/first-visit.md) (the hero, `thumb`
+[board](../pages/board.md), [idea](../pages/idea.md), [first-visit](../pages/first-visit.md) (the hero, `thumb`
 preset), [line-editor](../pages/line-editor.md).
 
 ## From v1
@@ -96,6 +96,4 @@ anywhere lights the board".
 
 ## Open questions
 
-- Settings keys: ../settings.md lists the catalogue by group but names few keys. The board files use proposed dotted
-  keys (`board.theme`, `engine.lines`, `feedback.triesTable`, ...); the registry should settle them.
 - Is the caption a part (`Board.Caption` in ../board.md) or a prop of the frame? Treated here as a prop.

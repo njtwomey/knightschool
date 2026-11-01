@@ -24,7 +24,7 @@ The set-up card for any practice mode: what to practise, how to weight it, the m
 - `only`: limit the fields (a line's quiz shows only moves per question; a variation's checkpoint shows none).
 - `startLabel`: Start, Start again, Again.
 - Each field is a registry entry with the **this session** layer ([settings](../settings.md), layer 1), so it also says
-  where the default came from ("from the Exam preset"). Reads `review.movesPerQuestion`, `opponent.plays`,
+  where the default came from ("from the Exam preset"). Reads `review.movesPerQuestion`, `computer.plays`,
   `puzzles.rating`, `puzzles.solver` and the per-mode saved choice (`knightschool.practice.<mode>`).
 
 ## Behaviour

@@ -14,14 +14,15 @@ Runs a session of exercises: ask, grade, feed back, record, next; one way for ev
 
 ## Takes
 
-- a **mode definition**: how to build the queue from a config, the grader (exact move, any move that keeps the
-  position, typed words), the responder (scripted, popular moves weighted by games, the engine) and what to record;
-- the **config** from [practice-setup](../components/practice-setup.md) (copied at Start, so changing the set-up
-  never touches a running session), or a fixed one from a step or checkpoint.
+- a **mode definition**: how to build the queue from a config, the grader (exact move, any move that keeps the position,
+  typed words), the responder (scripted, popular moves weighted by games, the engine) and what to record;
+- the **config** from [practice-setup](../components/practice-setup.md) (copied at Start, so changing the set-up never
+  touches a running session), or a fixed one from a step or checkpoint.
 
 ## Behaviour
 
-- Built on v1's attempt machine: hint, show, two wrong tries (the number is a setting), then the move is shown.
+- Built on v1's attempt machine: hint, show, two wrong tries (the number is config, `teach.triesBeforeShown`), then the
+  move is shown.
 - Timings come from `FEEDBACK_DELAYS`, scaled by the speed setting, scheduled with `createTimers` and all cleared on
   stop, restart or leaving the page. Nothing waits for a click when right; a miss with an explanation holds with Next.
 - A wrong move asks [use-judgement](use-judgement.md) for the verdict and refutation and shows them through
@@ -35,10 +36,10 @@ Runs a session of exercises: ask, grade, feed back, record, next; one way for ev
 
 [exercise-panel](../components/exercise-panel.md), [tries-table](../components/tries-table.md),
 [session-summary](../components/session-summary.md), [practice-bar](../components/practice-bar.md),
-[countdown](../components/countdown.md), [answer-input](../components/answer-input.md); pages
-[step](../pages/step.md) (Try, Their mistakes), [review](../pages/review.md), [drill](../pages/drill.md),
-[puzzles](../pages/puzzles.md), [play-on](../pages/play-on.md), [checkpoint](../pages/checkpoint.md), and later
-[speed](../pages/speed.md) and [name-it](../pages/name-it.md).
+[countdown](../components/countdown.md), [answer-input](../components/answer-input.md); pages [step](../pages/step.md)
+(Try, Their mistakes), [review](../pages/review.md), [drill](../pages/drill.md), [puzzles](../pages/puzzles.md),
+[play-on](../pages/play-on.md), [checkpoint](../pages/checkpoint.md), and later [speed](../pages/speed.md) and
+[name-it](../pages/name-it.md).
 
 ## From v1
 
@@ -50,5 +51,5 @@ Runs a session of exercises: ask, grade, feed back, record, next; one way for ev
 
 ## Open questions
 
-1. Keeping every try needs the shared attempts log (capabilities.md 4), a new table: until it is agreed, tries live
-   in the session and in the summary only.
+1. Keeping every try needs the shared attempts log (capabilities.md 4), a new table: until it is agreed, tries live in
+   the session and in the summary only.

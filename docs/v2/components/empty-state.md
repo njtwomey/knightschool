@@ -13,15 +13,15 @@ never only "No results".
 
 - `kind`, which sets the tone and the usual action:
 
-| Kind            | Example                                                                           | Action                 |
-| --------------- | --------------------------------------------------------------------------------- | ---------------------- |
-| `new`           | "Your repertoire is empty. Pick an opening for White to start."                   | Choose an opening      |
-| `done`          | "Nothing due today. Your next review is tomorrow, 6 moves."                       | Learn the next step    |
-| `no-match`      | "Nothing matches 'scotch gambit black'. Try fewer words or clear a filter."       | Clear filters          |
-| `not-covered`   | "No opening of yours reaches this position. Step back to go back."                | Step back              |
-| `locked`        | "Pass Step 2 first, or take its check to test out."                               | Go to Step 2, Test out |
-| `needs-lichess` | "Your games need your Lichess username."                                          | Add it in Settings     |
-| `offline`       | "The live explorer needs a connection. Showing the counts shipped with the site." | none                   |
+| Kind             | Example                                                                           | Action                 |
+| ---------------- | --------------------------------------------------------------------------------- | ---------------------- |
+| `new`            | "Your repertoire is empty. Pick an opening for White to start."                   | Choose an opening      |
+| `done`           | "Nothing due today. Your next review is tomorrow, 6 moves."                       | Learn the next step    |
+| `no-match`       | "Nothing matches 'scotch gambit black'. Try fewer words or clear a filter."       | Clear filters          |
+| `not-covered`    | "No opening of yours reaches this position. Step back to go back."                | Step back              |
+| `locked`         | "Opens when Step 2 is known. Or take its check to test out."                      | Go to Step 2, Test out |
+| `needs-username` | "Your games need your Lichess or Chess.com username."                             | Add it in Settings     |
+| `offline`        | "The live explorer needs a connection. Showing the counts shipped with the site." | none                   |
 
 - `text`, `action`: the page's own words and action, within the kind's shape.
 

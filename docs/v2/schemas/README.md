@@ -25,29 +25,34 @@ content/ (YAML, PGN)  ──build──▶  built JSON + knowledge.sqlite  ─�
 
 ## Keys, the same everywhere
 
-| Thing           | Key                                                                      | Example                                                      |
-| --------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------ |
-| Position        | EPD (FEN without the move counters), so transpositions are one           | `rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -` |
-| Position, short | a hash of the EPD, for addresses and the shipped files (v1 `positionId`) | `p3f9a1c2`                                                   |
-| Move            | UCI, from a position                                                     | `g1f3`                                                       |
-| Opening         | a slug                                                                   | `italian-white`                                              |
-| Variation       | a slug, unique within its opening                                        | `giuoco-piano`                                               |
-| Line            | a slug, unique across all lines (it is the file name)                    | `giuoco-piano-main`                                          |
-| Step            | `<line>:<n>`, from the automatic cut (v1 unit ids)                       | `giuoco-piano-main:2`                                        |
-| Idea            | a slug                                                                   | `fork`                                                       |
-| Puzzle          | Lichess's id                                                             | `0009B`                                                      |
-| Card            | `<kind>:<ref>`; a move card keeps v1's `<opening>:<epd>`                 | `puzzle:0009B`                                               |
+| Thing           | Key                                                                                                                   | Example                                                      |
+| --------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Position        | EPD (FEN without the move counters), so transpositions are one                                                        | `rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -` |
+| Position, short | a hash of the EPD, for addresses and the shipped files (v1 `positionId`)                                              | `p3f9a1c2`                                                   |
+| Move            | UCI, from a position                                                                                                  | `g1f3`                                                       |
+| Opening         | a slug                                                                                                                | `italian-white`                                              |
+| Variation       | a slug, unique within its opening                                                                                     | `giuoco-piano`                                               |
+| Line            | a slug, unique across all lines (it is the file name)                                                                 | `giuoco-piano-main`                                          |
+| Step            | `<line>:<n>`, from the automatic cut (v1 unit ids)                                                                    | `giuoco-piano-main:2`                                        |
+| Idea            | a slug                                                                                                                | `fork`                                                       |
+| Puzzle          | Lichess's id                                                                                                          | `0009B`                                                      |
+| Card            | `<kind>:<ref>`; a move card is `move:<epd>:<uci>` (recommended, [upgrades.md](upgrades.md); v1 used `<course>:<epd>`) | `puzzle:0009B`, `move:<epd>:g1f3`                            |
+| Game            | `<source>:<id>`, source `lichess` or `chessdotcom`                                                                    | `lichess:q7ZvsdUF`                                           |
 
-Ids that reach learner data (opening, line, step, puzzle, card) are never renamed casually: history is keyed by them.
+Ids that reach learner data (opening, line, puzzle, idea, card) are permanent; a rename is written as `renamed:` in the
+content and applied on load ([upgrades.md](upgrades.md)). Progress itself is keyed by position and move, so steps,
+variations and lines can be recut without losing any.
 
 ## The documents
 
-| File                             | What it describes                                                              |
-| -------------------------------- | ------------------------------------------------------------------------------ |
-| [content.md](content.md)         | The authored files: `opening.yaml`, line PGN, `ideas.yaml`, `tracks.yaml`      |
-| [annotations.md](annotations.md) | A move's note: text, symbol, marks, tags, ideas, refutations                   |
-| [built.md](built.md)             | What the build ships: opening trees, the catalogue, the knowledge file, search |
-| [learner.md](learner.md)         | The browser database: settings, repertoire, cards, answers, games, authoring   |
+| File                             | What it describes                                                                |
+| -------------------------------- | -------------------------------------------------------------------------------- |
+| [content.md](content.md)         | The authored files: `opening.yaml`, line PGN, `ideas.yaml`, `tracks.yaml`        |
+| [annotations.md](annotations.md) | A move's note: text, symbol, marks, tags, ideas, refutations                     |
+| [built.md](built.md)             | What the build ships: opening trees, the catalogue, the knowledge file, search   |
+| [learner.md](learner.md)         | The browser database: settings, repertoire, cards, answers, games, authoring     |
+| [upgrades.md](upgrades.md)       | Keeping learners' data through updates: migrations, re-keyed move cards, renames |
+| [sync.md](sync.md)               | Local first, a server later: what keeps the door open to syncing                 |
 
 Config (`content/config.yaml`) is in [../config.md](../config.md).
 

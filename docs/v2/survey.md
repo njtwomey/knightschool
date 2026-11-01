@@ -96,7 +96,7 @@ Sources: https://listudy.org/en/about · https://lichess.org/forum/general-chess
   - The icon colours (teal !!, blue !, green star, yellow ?!, orange ?, red ??) are from memory **(unverified)**.
   - The coach draws arrows when you hover a phrase in its explanation, and the review ends with grades for opening, middlegame and endgame.
 - **Complaints:** classifications are noisy, and practising an opening against the bots is clumsy.
-- Sources: https://support.chess.com/en/articles/8609703-how-do-lessons-work · https://support.chess.com/en/articles/8572705-how-does-game-review-work · https://www.chess.com/news/view/chesscom-launches-game-review-v2 · https://support.chess.com/en/articles/8724749-what-is-practice-on-chess-com
+- Sources: https://support.chess.com/en/articles/8609703-how-do-lessons-work · https://support.chess.com/en/articles/8572705-how-does-game-review-work · https://www.chess.com/news/view/chessdotcom-launches-game-review-v2 · https://support.chess.com/en/articles/8724749-what-is-practice-on-chess-com
 
 ## 8. Chesstempo (opening trainer)
 

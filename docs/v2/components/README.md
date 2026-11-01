@@ -66,7 +66,7 @@ Short and concrete: what we want, not how to code it.
 | [opening-card.md](opening-card.md)         | An opening in a list: name, side, style tags, mode counts, progress                   |
 | [opening-intro.md](opening-intro.md)       | An opening's introduction: idea, risks, who it suits, origin, sources                 |
 | [variation-list.md](variation-list.md)     | An opening's variations in order, each with its steps and checkpoint                  |
-| [step-row.md](step-row.md)                 | One step in a list: state, its moves, what unlocks it, Learn and Try                  |
+| [step-row.md](step-row.md)                 | One step in a list: state, its moves, what opens it, Learn and Try                    |
 | [line-row.md](line-row.md)                 | One line in a list: name, kind, moves, state                                          |
 | [line-story.md](line-story.md)             | A line told in words: its moves with comments, where it branches, what grows from it  |
 | [sources-list.md](sources-list.md)         | The videos, books and articles an opening credits                                     |
@@ -82,7 +82,7 @@ Short and concrete: what we want, not how to code it.
 | [gap-link.md](gap-link.md)                   | The most common reply you do not answer yet, and a way to learn it              |
 | [streak.md](streak.md)                       | Days in a row practised                                                         |
 | [activity-calendar.md](activity-calendar.md) | Days practised over the past months                                             |
-| [next-step-button.md](next-step-button.md)   | The one button that says what to do now                                         |
+| [next-action.md](next-action.md)             | The one button that says what to do now                                         |
 | [due-card.md](due-card.md)                   | Reviews due, and a way into them                                                |
 
 ## Practice

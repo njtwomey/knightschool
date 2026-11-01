@@ -34,7 +34,7 @@ shadcn `Button`; [use-board](../hooks/use-board.md) for the cursor.
 ## Used by
 
 [board-controls](board-controls.md). Pages reach it through the board: [opening](../pages/opening.md),
-[line](../pages/line.md), [step](../pages/step.md), [map](../pages/map.md), [analysis](../pages/analysis.md),
+[line](../pages/line.md), [step](../pages/step.md), [map](../pages/map.md), [board](../pages/board.md),
 [review](../pages/review.md) (the moves so far), [line-editor](../pages/line-editor.md).
 
 ## From v1

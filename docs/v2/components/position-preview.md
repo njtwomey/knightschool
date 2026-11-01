@@ -12,7 +12,7 @@ A floating card about 15rem wide:
 - in study contexts: [eval-words](eval-words.md) from baked analysis ("about equal, +0.2") and how often players at the
   learner's band reach it ("12% of games");
 - the learner's state for the move here when it is in their repertoire ([state-badge](state-badge.md));
-- a footer link, "Open", to the [line](../pages/line.md) or [analysis](../pages/analysis.md) page at that position.
+- a footer link, "Open", to the [line](../pages/line.md) or [board](../pages/board.md) page at that position.
 
 ## Configuration
 
@@ -37,7 +37,8 @@ A floating card about 15rem wide:
 ## Composed of
 
 [board-thumb](board-thumb.md), [opening-name](opening-name.md), [eval-words](eval-words.md),
-[state-badge](state-badge.md), shadcn `HoverCard` (not yet added in v1; `Popover` and `Tooltip` are).
+[state-badge](state-badge.md), shadcn `HoverCard` (to add from shadcn, [inventory](../inventory.md); v1 has `Popover`
+and `Tooltip`).
 
 ## Used by
 

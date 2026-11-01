@@ -18,7 +18,7 @@ follow, the latest branch nearest, so no lines cross. Move numbers stay along th
 **Overlays**, each switchable, drawn over the same pills:
 
 - **Lines**: each pill in its line's lane colour (v1's look).
-- **Progress**: each learner move filled by its state, not seen, learning, known or mastered (the
+- **Progress**: each learner move filled by its state, open (not yet seen), learning, known or mastered (the
   [state-badge](state-badge.md) dot colours); opponent moves outlined in the colour of the learner's answer that
   follows.
 - **Gaps**: short dashed stubs off an opponent's turn for replies players at the band make that no line answers, each
@@ -27,7 +27,7 @@ follow, the latest branch nearest, so no lines cross. Move numbers stay along th
   often they are played and whether the learner has practised the punishment.
 - **Coverage**: lanes drawn thicker where more games at the band reach them, so the well-trodden paths stand out.
 - **Puzzles**: a small puzzle mark on positions with matched puzzles, with the count.
-- **Your games** (later, features.md Z3): the moves from the learner's own Lichess games beside the lines.
+- **Your games** (later, features.md Z3): the moves from the learner's own Lichess and Chess.com games beside the lines.
 
 Progress and Gaps are on by default on the learner's map; the theory-tree view (an opening's Tree tab, the line page)
 starts on Lines.

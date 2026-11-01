@@ -14,7 +14,7 @@ link, so a learner who learns one surface has learned them all.
 | Gesture                        | What happens                                                                                                                                                                                                                                                                        |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Hover** (mouse)              | After 100 ms the move is **highlighted on the nearest board**: its two squares tinted and a faint preview arrow (a system arrow, [colours](colours.md)). The item itself is tinted.                                                                                                 |
-| Hover, held                    | After 400 ms, if the setting `display.hoverPreview` is on, a [position-preview](../components/position-preview.md) card opens beside the item: a small board of the position after the move, its name, how often it is reached.                                                     |
+| Hover, held                    | After 400 ms, if the setting `display.previews` is on, a [position-preview](../components/position-preview.md) card opens beside the item: a small board of the position after the move, its name, how often it is reached.                                                         |
 | Hover ends                     | Highlight and preview go after 150 ms of grace, so the pointer can cross a gap to the next item without flicker.                                                                                                                                                                    |
 | **Focus** (keyboard)           | Exactly as hover, at once, with the visible focus ring.                                                                                                                                                                                                                             |
 | **Click / tap / Enter**        | **Goes there.** If the nearest board can show the position (it is on the board's moves, or the board is free to roam: study, analysis, author), the board's cursor moves to it. Otherwise it navigates to the page that owns it: the line at that move (`#m=`), the step, the idea. |
@@ -34,13 +34,13 @@ opens the preview card and click navigates.
 | Hover               | The row tints; if the row has a position (a step's key position, a line's end), it is highlighted on the nearest board as above.        |
 | Click anywhere      | Opens it: one link stretched over the row ([sortable-table](../components/sortable-table.md)'s `RowLink`). Never an `onClick` on a row. |
 | Controls in the row | Keep their own click and never open the row ([icon-action](../components/icon-action.md)).                                              |
-| Locked row          | Hover or long-press shows what unlocks it; click opens the row with the locked state explained, never nothing.                          |
+| Locked row          | Hover or long-press shows what opens it; click opens the row with the locked state explained, never nothing.                            |
 
 **The board itself** ([board-surface](../components/board-surface.md)):
 
 | Gesture                      | What happens                                                                                                                            |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Hover a square               | Tints it only if the device setting `board.hover` is on (off by default, as in v1).                                                     |
+| Hover a square               | Tints it only if the device setting `board.hoverSquare` is on (off by default, as in v1).                                               |
 | Click a piece, then a square | Plays the move; dots show legal squares (`board.legalMoves`).                                                                           |
 | Drag a piece                 | Plays the move; dropped off the board or on an illegal square, it goes back with no penalty.                                            |
 | Right-drag, right-click      | Draws a mark in draw mode (author, analysis), with Shift, Alt and both for the colours ([marks-editor](../components/marks-editor.md)). |
@@ -65,7 +65,7 @@ These sit beside `FEEDBACK_DELAYS` in one table ([feedback-timing](feedback-timi
 ## Where it applies
 
 Every component that shows a move, a position or a linked thing; the board's parts; every page. The settings that
-change it: `display.hoverPreview` (off, small board, on), `board.hover`, `board.legalMoves`, and reduced motion
+change it: `display.previews` (off, small board, on), `board.hoverSquare`, `board.legalMoves`, and reduced motion
 ([accessibility](accessibility.md)), which drops the fade of highlights and previews but not the highlights.
 
 ## From v1

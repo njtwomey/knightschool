@@ -35,7 +35,7 @@ The keys themselves are in [shortcuts](../navigation/shortcuts.md).
 (`h`, `r`), [exercise-panel](../components/exercise-panel.md) (`Enter` for Next),
 [page-shell](../components/page-shell.md) (`?`, `/`, `g` sequences), [map-tree](../components/map-tree.md),
 [position-preview](../components/position-preview.md) (`Esc`); pages [step](../pages/step.md),
-[map](../pages/map.md), [analysis](../pages/analysis.md), [search](../pages/search.md),
+[map](../pages/map.md), [board](../pages/board.md), [search](../pages/search.md),
 [line-editor](../pages/line-editor.md).
 
 ## From v1

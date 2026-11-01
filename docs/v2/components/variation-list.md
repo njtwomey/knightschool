@@ -1,36 +1,37 @@
 # Variation list
 
-An opening's variations in study order, each with its steps and its checkpoint: the learner's path through the
-opening.
+An opening's variations in study order, each with its steps and its checkpoint: the learner's path through the opening.
 
 ## Shows
 
-- One section per variation, in order. Its header: number, Lichess name ("Two Knights Defence"), the decision it is
-  about in a line ("When Black plays 3...Nf6"), a [state-badge](state-badge.md) (locked, open, checkpoint passed) and a
-  small [progress-ring](progress-ring.md).
-- Under the header, the variation's introduction (two or three sentences, [rich-text](rich-text.md)), shown for the
-  open variation and folded for the rest.
+- One section per variation, in order. Its header: number, Lichess name ("Two Knights Defense"), the decision it is
+  about in a line ("When Black plays 3...Nf6"), a [state-badge](state-badge.md) (locked, open, learning, known once its
+  checkpoint is cleared, mastered) and a small [progress-ring](progress-ring.md).
+- Under the header, the variation's introduction (two or three sentences, [rich-text](rich-text.md)), shown for the open
+  variation and folded for the rest.
 - Its steps as [step-row](step-row.md)s, in order.
-- At the end of each variation, the **checkpoint** as a row of its own: "Checkpoint: 12 positions from these steps",
-  its state, and **Take the checkpoint** (or **Test out** while the steps are not all passed).
+- At the end of each variation, the **checkpoint** as a row of its own: "Checkpoint: 12 positions from these steps", its
+  state, and **Take the checkpoint** (or **Test out** while the steps are not all known).
 - Extras attached to a variation (puzzles, traps to spring, questions) listed under its last step, muted, marked "not
-  needed to pass".
+  needed to know the variation".
 - At the very end, the opening's final test, as a checkpoint row for the whole opening.
 
 ## Configuration
 
 - `opening` and its derived progress ([use-progress](../hooks/use-progress.md)).
 - `selected`: the step shown on the page's board; `onSelect(step)`.
-- `fold`: `auto` (open the variation in progress, fold passed and locked ones) or `all-open` (Create's preview).
-- Reads `learning.gates` (strict, advise or off: whether locked rows say "locked" or only "suggested later"),
-  `learning.testOut` (whether Test out is offered) and `level.includeRare` (whether steps from rare lines appear).
+- `fold`: `auto` (open the variation in progress, fold known, mastered and locked ones) or `all-open` (Create's
+  preview).
+- Reads the config keys `teach.gates` (strict, advise or off: whether locked rows say "locked" or only "suggested
+  later") and `teach.testOut` (whether Test out is offered), the learner settings `learning.gatesRelaxed` (relaxed reads
+  as advise) and `level.includeRare` (whether steps from rare lines appear).
 
 ## Behaviour
 
 - Click a variation header: fold or unfold it. Fold state is per visit, not stored.
 - Click a step row: selects it, and the page's board shows its stretch ([step-row](step-row.md)).
 - On arrival the list scrolls to the step in progress and selects it.
-- **Test out** opens the checkpoint at once; passing it marks the variation passed and opens the next one, without
+- **Test out** opens the checkpoint at once; clearing it makes the variation known and opens the next one, without
   touching the steps' own states.
 - Locked variations are still readable: rows show their moves, and free choice still lets any step be opened (the step
   row asks once).

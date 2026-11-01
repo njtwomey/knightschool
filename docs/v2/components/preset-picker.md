@@ -10,8 +10,8 @@ learner has changed things since. Most people choose here once and never open a 
 - **The chosen card** is marked, with "Your preset".
 - **Custom**: when any of the learner's own choices sit on top of the preset, the chosen card says "Club player, with 3
   changes of your own" and a link lists them (each a compact [settings-row](settings-row.md) with its reset).
-- **What changes**: hovering or focusing another card lists what picking it would change, old value to new ("Hints:
-  fade slowly → never shown"), so nothing is a surprise.
+- **What changes**: hovering or focusing another card lists what picking it would change, old value to new ("Hint and
+  Show me: offered → not offered"), so nothing is a surprise.
 
 ## Configuration
 

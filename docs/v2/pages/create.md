@@ -11,7 +11,7 @@ land here.
 ## Reached from
 
 **Create** in the menu ([../navigation/menu.md](../navigation/menu.md)); the opening crumb's root on
-[create-opening](create-opening.md) and [line-editor](line-editor.md); [analysis](analysis.md)'s **Write a line from
+[create-opening](create-opening.md) and [line-editor](line-editor.md); [board](board.md)'s **Write a line from
 here**.
 
 ## Layout

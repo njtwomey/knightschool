@@ -5,7 +5,7 @@ The five-second count before a timed run and between its lines, with the name of
 ## Shows
 
 - A panel over the board area (the header stays visible and usable), with:
-  - "Next up", the opening's name large, and the variation under it ("Italian Game", "Two Knights Defence");
+  - "Next up", the opening's name large, and the variation under it ("Italian Game", "Two Knights Defense");
   - the side the learner plays ("You play White");
   - the seconds left as a large number, 5 to 1, and a bar emptying under it;
   - **Start now**.

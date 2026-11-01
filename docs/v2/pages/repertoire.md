@@ -35,11 +35,12 @@ Hash: `#side=white|black` for the side whose gaps are listed ([../navigation/url
 
 ## Behaviour
 
-- Coverage counts a move as covered once it is known (two right in a row), and as half-covered while learning; the
-  meter says which ([../hooks/use-progress.md](../hooks/use-progress.md)). Numbers come from the shipped popularity
-  data; another band asks the live explorer ([../hooks/use-explorer.md](../hooks/use-explorer.md)) and says "live".
-- **Change** opens the [openings](openings.md) list filtered to that slot; choosing keeps the old opening's progress
-  (history is keyed by opening and position) and asks once before replacing.
+- Coverage counts a move as covered once it is known (two right in a row), and as half-covered while learning; the meter
+  says which ([../hooks/use-progress.md](../hooks/use-progress.md)). Numbers come from the shipped popularity data;
+  another band asks the live explorer ([../hooks/use-explorer.md](../hooks/use-explorer.md)) and says "live".
+- **Change** opens the [openings](openings.md) list filtered to that slot; choosing keeps everything learned (history is
+  keyed by position and move, so a new opening that reaches the same positions starts with it) and asks once before
+  replacing.
 - **Remove** asks, then empties the slot; its cards stop being introduced but stay in the log.
 - Transpositions count: a reply answered by another opening in the repertoire is not a gap.
 - Per-opening settings ("only main lines here") are on each [opening](opening.md) page, not here.
@@ -52,6 +53,5 @@ Hash: `#side=white|black` for the side whose gaps are listed ([../navigation/url
 
 ## From v1
 
-"Courses I am learning" (`data/training-settings.ts`, enrolled from `features/courses/enrol-button.tsx`) and the
-gaps report (`scripts/gaps.ts`, `make gaps`), whose logic moves into core. Verdict: **new** page over repurposed
-parts.
+"Courses I am learning" (`data/training-settings.ts`, enrolled from `features/courses/enrol-button.tsx`) and the gaps
+report (`scripts/gaps.ts`, `make gaps`), whose logic moves into core. Verdict: **new** page over repurposed parts.

@@ -47,7 +47,7 @@ Each item names the side it favours, so the list reads as "good for you" and "wa
 ## Used by
 
 [board](board.md) as a part; [move-explanation](move-explanation.md) ("what it leaves"); pages
-[analysis](../pages/analysis.md), [step](../pages/step.md) (Read and Done), [puzzles](../pages/puzzles.md) (after
+[board](../pages/board.md), [step](../pages/step.md) (Read and Done), [puzzles](../pages/puzzles.md) (after
 solving), [idea](../pages/idea.md) (the position that shows a structure).
 
 ## From v1

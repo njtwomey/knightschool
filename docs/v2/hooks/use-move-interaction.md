@@ -6,7 +6,7 @@ a chip, a table row or a map pill.
 ## Gives
 
 - **props** to spread on the element: pointer enter and leave, focus and blur, click, long press on touch, key handling
-  (`Enter`, `Space`), `href` when the move has an address, and the accessible name ("3...Nf6, Two Knights Defence");
+  (`Enter`, `Space`), `href` when the move has an address, and the accessible name ("3...Nf6, Two Knights Defense");
 - **state**: whether this move is the one hovered anywhere (so the same move highlights in the table, on the map and in
   the text at once), whether it is the board's current move, and whether it is hidden by the reveal level.
 

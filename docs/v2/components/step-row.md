@@ -6,13 +6,13 @@ One step in a list: its state, its title, its moves, what opens it, and the ways
 
 - A number in a circle (the step's place in the opening) and the title ("Bishop to c4, aiming at f7"). An untitled
   step, cut automatically, gets a headline from its first move ("When 3...Nf6 is played").
-- A [state-badge](state-badge.md): locked, open, learning, passed, mastered.
+- A [state-badge](state-badge.md): locked, open, learning, known, mastered.
 - Its moves as a [move-run](move-run.md): the last two moves leading in, greyed, then the step's own moves, the
   learner's in bold and ticked once known. A step with several short branches shows one run per branch.
 - A count line: "4 moves of yours: 2 known, 3 in your reviews".
-- Locked: "Opens when you pass step 3 (Giuoco Piano)", with step 3 as a link.
+- Locked: "Opens when step 3 (Giuoco Piano) is known", with step 3 as a link.
 - The stage reached, when started: Read, Watch, Try, Their mistakes, Done, as five small dots, the current one filled.
-- Extras, muted: puzzles, traps, questions attached to this step, "not needed to pass".
+- Extras, muted: puzzles, traps, questions attached to this step, "not needed to know the step".
 - Buttons: **Learn** (start or continue the stages) and **Try** (the Try stage alone, for review), the more useful of
   the two filled.
 
@@ -21,7 +21,8 @@ One step in a list: its state, its title, its moves, what opens it, and the ways
 - `step`, its progress, and the step list it sits in (for "opens when" and the headline).
 - `selected`, `onSelect`.
 - `compact`: number, title, badge and buttons only (Today, the variation page's sidebar).
-- Reads `learning.gates` (wording of the locked line), `learning.testOut`, `learning.stages` (which stage dots show).
+- Reads the config keys `teach.gates` (wording of the locked line), `teach.testOut` and `teach.stages` (which stage
+  dots show), and the learner setting `learning.gatesRelaxed`.
 
 ## Behaviour
 
@@ -30,9 +31,9 @@ One step in a list: its state, its title, its moves, what opens it, and the ways
 - Hover a move chip: highlight on the page's board ([use-move-interaction](../hooks/use-move-interaction.md)).
 - **The first step of every opening is always open.** Learn on a locked step asks once, in a small dialog: "This step
   builds on step 3. Start it anyway?", with **Start anyway**, **Go to step 3** and "Don't ask again for this opening".
-  With `learning.gates` off it never asks.
+  With gates off (`teach.gates`) or relaxed (`learning.gatesRelaxed`) it never asks.
 - With testing out allowed, a locked row also offers **Test out** (the Try stage without Read and Watch).
-- States: passed rows are quieter; locked rows are slightly faded but fully readable.
+- States: known and mastered rows are quieter; locked rows are slightly faded but fully readable.
 - Touch: tap selects; the buttons are full-height touch targets.
 
 ## Composed of

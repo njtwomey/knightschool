@@ -39,7 +39,7 @@ The board's keys belong to the one board on the page that has them (v1: one step
 | [map](../pages/map.md)                                                     | `↑` `↓`                                       | The lane above or below (the next line)         |
 | [map](../pages/map.md)                                                     | `+` `-` `0`                                   | Zoom in, out, fit                               |
 | [map](../pages/map.md)                                                     | `Enter` or `Space`                            | Pick the focused pill (as v1)                   |
-| [analysis](../pages/analysis.md)                                           | `e`                                           | Engine on or off                                |
+| [board](../pages/board.md)                                                 | `e`                                           | Engine on or off                                |
 | [search](../pages/search.md)                                               | `b`                                           | Opens board search                              |
 | [name-it](../pages/name-it.md), [review](../pages/review.md) typed answers | none while the box has focus; `Enter` answers |
 | [line-editor](../pages/line-editor.md)                                     | `Delete`                                      | Takes back the last move of the line, with Undo |

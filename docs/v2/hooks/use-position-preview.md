@@ -15,12 +15,12 @@ default 350 ms to open, 150 ms grace to close), so the card does not flash while
 
 ## Behaviour
 
-- **One at a time**: opening a new card closes the last; moving from one chip to the next while a card is open
-  switches at once, without the delay again.
+- **One at a time**: opening a new card closes the last; moving from one chip to the next while a card is open switches
+  at once, without the delay again.
 - **Grace**: leaving the trigger starts the close timer; entering the card cancels it, so its Open in links can be
   clicked.
-- **Placement**: below the anchor by default, above when there is no room, never off screen; on a phone it is a
-  bottom sheet instead of a floating card.
+- **Placement**: below the anchor by default, above when there is no room, never off screen; on a phone it is a bottom
+  sheet instead of a floating card.
 - **Pinned** (a long press, or v1's click-to-pin in text): stays until `Esc`, the close button or a tap elsewhere.
 - **Suppressed** while a piece is being dragged, while a dialog is open, and when the trigger sits in a board's panel
   whose board shows the position itself (cross-links.md, "On the nearest board").
@@ -38,9 +38,5 @@ default 350 ms to open, 150 ms grace to close), so the card does not flash while
 - `apps/web/src/components/board/preview.ts`: `usePreview`, a Zustand store with `epd`, `pinned`, `show`, `hide`,
   `toggle`, `clear`. v1 shows the position on a `previewable` board rather than in a card; v2 keeps that store's shape
   and adds the anchor, the delay and the card.
-- shadcn `Sheet` in `components/ui` for the phone's sheet; `HoverCard` is not added yet
-  (`npx shadcn@latest add hover-card`).
-
-## Open questions
-
-1. Should the delay be a setting at all, or fixed in `FEEDBACK_DELAYS` beside the other timings?
+- shadcn `Sheet` in `components/ui` for the phone's sheet; `HoverCard` is to be added from shadcn
+  ([inventory](../inventory.md)) (`npx shadcn@latest add hover-card`).

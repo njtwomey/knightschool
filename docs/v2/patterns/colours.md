@@ -6,15 +6,16 @@ value, and is always paired with a symbol, an icon, a word or a line style, so c
 ## The rule
 
 - **One token per meaning**, defined on `:root` and `.dark` in `index.css` and exposed to Tailwind
-  (`bg-verdict-blunder`,
-  `text-state-known`). Components use the token, never a hex value, an `rgb()` string or a Tailwind palette class such
-  as `emerald-500`. The board, which takes colour strings, reads the same tokens.
-- **The four mark colours belong to the author's marks.** Nothing else drawn on the board uses those four hues, so a
-  green Idea arrow and "play this" never look alike.
+  (`bg-verdict-blunder`, `text-state-known`). Components use the token, never a hex value, an `rgb()` string or a
+  Tailwind palette class such as `emerald-500`. The board, which takes colour strings, reads the same tokens.
+- **The four mark colours belong to the author's marks**, with one exception: the refutation and the opponent's threat
+  are drawn in Threat red (`--mark-threat`, letter R), because that is what they mean. Every other system arrow (the
+  move to play, a hint, the engine's best move, your wrong move, a preview) uses a hue outside the four, so a green Idea
+  arrow and "play this" never look alike.
 - **Never colour alone**: every row below names its pairing. Red and green pairs (tick and cross, Best and Blunder)
   always differ by shape as well.
-- **Contrast**: text tokens at least 4.5:1 against the background in both themes; fills and arrows at least 3:1
-  against both board square colours.
+- **Contrast**: text tokens at least 4.5:1 against the background in both themes; fills and arrows at least 3:1 against
+  both board square colours.
 - A meaning used on several surfaces (a verdict on the board, in the tries table, on the map) is the same token on all.
 
 ## The table
@@ -42,11 +43,11 @@ value, and is always paired with a symbol, an icon, a word or a line style, so c
 | `--feedback-right` | Tick on a right move                                            | green, v1 `#98b84a`      | a tick shape               |
 | `--feedback-wrong` | Cross on a wrong move                                           | red, v1 `#c0392b`        | a cross shape              |
 
-The refutation is drawn in `--mark-threat`, as board.md asks: it is the threat, in the one colour that means it.
+The refutation and the opponent's threat are drawn in `--mark-threat` (board.md): they are threats, in the one colour
+that means it. They are the only system drawing in a mark colour.
 
-**Verdicts** ([verdict-badge](../components/verdict-badge.md), [tries-table](../components/tries-table.md),
-the symbol on
-the target square). The usual colours from Chess.com's Game Review, which beginners already know.
+**Verdicts** ([verdict-badge](../components/verdict-badge.md), [tries-table](../components/tries-table.md), the symbol
+on the target square). The usual colours from Chess.com's Game Review, which beginners already know.
 
 | Token                  | Grade      | Symbol    | Value        |
 | ---------------------- | ---------- | --------- | ------------ |
@@ -59,8 +60,9 @@ the target square). The usual colours from Chess.com's Game Review, which beginn
 | `--verdict-blunder`    | Blunder    | `??`      | red          |
 | `--verdict-miss`       | Miss       | `×`       | rose         |
 
-**States** of a step and a move ([state-badge](../components/state-badge.md), [step-row](../components/step-row.md),
-the map).
+The **not your repertoire move** flag (a move as good as the line's, but not it: capabilities.md section 2) has no
+colour of its own: muted text with a branch icon, beside the grade's own colour. **States** of a move, a step and a
+variation ([state-badge](../components/state-badge.md), [step-row](../components/step-row.md), the map).
 
 | Token              | State    | Icon (v1)        | Value                         |
 | ------------------ | -------- | ---------------- | ----------------------------- |
@@ -97,7 +99,7 @@ the rest are neutral with an icon.
 | ------------------------------- | --------------------------------------------------------- | ----------------------------- |
 | `--line-0` to `--line-9`        | A line's lane on the map: identity only, no meaning       | v1's ten hues, light and dark |
 | `--gap`                         | A reply your repertoire does not answer, as a dashed stub | muted text, dashed            |
-| `--eval-white`, `--eval-black`  | The two halves of the eval bar                            | near white, near black        |
+| `--eval-white`, `--eval-black`  | The two halves of the eval bar (White's winning chance)   | near white, near black        |
 | `--board-light`, `--board-dark` | The squares, per board theme                              | v1 themes                     |
 
 Where you stand in words ("White is a little better") has no colour: green for one side would mean red for the other.
@@ -115,8 +117,8 @@ Every component and page; the board's layers ([board-surface](../components/boar
   clash v2 removes; `played` is red, like Threat.
 - `components/board/app-board.tsx`: tick and cross as hard-coded hex (`#98b84a`, `#c0392b`); become tokens.
 - `components/tags/tag-specs.ts` (`TONE_CLASS`): kinds, risk and character as Tailwind palette classes; become tokens.
-- `index.css`: `--line-0` to `--line-9` and `--board-light` / `--board-dark` with light and dark values, the pattern
-  to follow. `features/tree/colours.ts` (`laneColour`).
+- `index.css`: `--line-0` to `--line-9` and `--board-light` / `--board-dark` with light and dark values, the pattern to
+  follow. `features/tree/colours.ts` (`laneColour`).
 - `features/path/unit-state.ts`: state icons and names; `features/quiz/miss-list.tsx`: regret verdicts as badge
   variants, the only verdict colours in v1.
 

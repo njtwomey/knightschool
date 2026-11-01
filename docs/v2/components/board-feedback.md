@@ -8,8 +8,10 @@ The verdict on the move just played, and why, kept next to the board and tied to
   which stays until the learner's next move.
 - **Wrong move**: the cross and snap back, the badge (Inaccuracy, Mistake, Blunder), the
   [verdict-note](verdict-note.md) ("A mistake: after ...Nxg5 the knight is lost"), the author's note on that wrong move
-  when there is one, and **Show why** to step through the refutation. A move as good as the book move but not the
-  opening's says so plainly: "As good, but this opening plays 4.c3."
+  when there is one, and **Show why** to step through the refutation.
+- **As good, but not the line's move**: no cross and no try used; the badge keeps its grade (Good or Excellent) with
+  the flag "not your repertoire move", the note says "Excellent, but not your repertoire move: this opening plays 4.c3",
+  and the learner is asked for the line's move ([capabilities](../capabilities.md) section 2).
 - **Opponent's mistake**: "Black's ...g5? is played in about a quarter of games at your level, and loses a piece. Find
   the punishment." The move is marked on the board in its verdict colour.
 - **Missed punishment** (Miss): what the punishing move was, with Show why.

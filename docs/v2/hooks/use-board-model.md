@@ -41,7 +41,7 @@ A sketch: `const model = useBoardModel({ source, preset: 'learn', start: 4 })`.
 ## Used by
 
 [board](../components/board.md) (provides it), and every page with a board: [opening](../pages/opening.md),
-[step](../pages/step.md), [line](../pages/line.md), [map](../pages/map.md), [analysis](../pages/analysis.md),
+[step](../pages/step.md), [line](../pages/line.md), [map](../pages/map.md), [board](../pages/board.md),
 [review](../pages/review.md), [drill](../pages/drill.md), [puzzles](../pages/puzzles.md),
 [play-on](../pages/play-on.md), [speed](../pages/speed.md), [name-it](../pages/name-it.md),
 [line-editor](../pages/line-editor.md). [use-exercise-session](use-exercise-session.md) drives one.

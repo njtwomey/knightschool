@@ -6,7 +6,7 @@ An opening's or a variation's name, written one way everywhere, with its ECO cod
 
 - the name in Lichess's form, split into its levels: **Opening** then **Variation** ("Italian Game: Giuoco Piano"),
   with the variation part in a lighter weight;
-- for one of our openings, the side it is for when it matters ("Italian Game, as White"; "Caro-Kann Defence, against
+- for one of our openings, the side it is for when it matters ("Italian Game, as White"; "Caro-Kann Defense, against
   1.e4");
 - the ECO code as a small outline badge ("C50") with an icon that says it leaves the site.
 
@@ -45,8 +45,3 @@ shadcn `Badge`, [hint](hint.md).
 Repurpose `apps/web/src/components/eco-link.tsx` (`EcoLink`: the ECO code as a Lichess link from `lichess` in
 index.json, a plain badge without one) and the names from core `content/lichess.ts` (Lichess opening names, fetched
 once into `.cache/`). New: one component for the name itself, split into Opening and Variation.
-
-## Open questions
-
-- "Variation" here is Lichess's name level (Giuoco Piano); in our model a variation is a named branch of one opening.
-  They usually agree; when an author's variation has no Lichess name, which name wins?

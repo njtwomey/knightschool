@@ -12,16 +12,16 @@ preview card. Addresses are built with the router's builders (routes.md), never 
 
 ### Where each thing can be opened
 
-| From          | Map                               | Line page                | Analysis                            | Search                                                  | Step / opening                                              | Also                                                                     |
-| ------------- | --------------------------------- | ------------------------ | ----------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
-| **Move**      | `/explore/map#l=<line>&m=<path>`  | `/lines/<line>#m=<path>` | `/explore/analysis#m=<path>`        | `/explore/search#bm=<path>`                             | the step whose stretch holds it, at that move               | its ideas (`/ideas/<idea>`), its refutation stepped through on the board |
-| **Position**  | the first line through it, picked | every line through it    | `#m=<a path>` or `#fen=`            | `#bm=<path>`: every line through it, transpositions too | every step that reaches it                                  | puzzles matched to it, explorer numbers                                  |
-| **Line**      | `/explore/map#l=<line>`           | `/lines/<line>`          | `#m=<its moves>`                    | `#q=<its name>`                                         | `/openings/<o>/lines/<line>` for each opening that lists it | Drill, Review scoped to it                                               |
-| **Variation** | `/explore/map/<o>#f=<first line>` | its lines, listed        | `#m=<its branch point>`             | `#q=<its name>`                                         | `/openings/<o>/<variation>`                                 | checkpoint, Drill scoped to it                                           |
-| **Opening**   | `/explore/map/<o>`                | its lines, listed        | `#m=<its trigger>`                  | `#q=<its name>`                                         | `/openings/<o>`                                             | Lichess page (ECO link), practice scoped to it                           |
-| **Step**      | the map at its stretch            | the line it teaches      | `#m=<its last position>`            |                                                         | `/openings/<o>/step/<n>`                                    | its ideas and puzzles                                                    |
-| **Idea**      | moves tagged with it, ringed      | lines with such moves    |                                     | `#kind=idea&q=<name>`                                   | steps that show it                                          | `/ideas/<idea>`, its puzzles                                             |
-| **Puzzle**    | the position it was matched at    | the line it follows      | `#fen=<puzzle start>` after solving | `#bm=<matched path>`                                    | the step it is attached after                               | `/practice/puzzles/p/<id>`, Lichess game                                 |
+| From          | Map                                      | Line page               | Board                               | Search                                                  | Step / opening                                              | Also                                                                     |
+| ------------- | ---------------------------------------- | ----------------------- | ----------------------------------- | ------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **Move**      | `/explore/map#line=<line>&m=<path>`      | `/lines/<line>#ply=<n>` | `/board#m=<path>`                   | `/explore/search#bm=<path>`                             | the step whose stretch holds it, at that move               | its ideas (`/ideas/<idea>`), its refutation stepped through on the board |
+| **Position**  | the first line through it, picked        | every line through it   | `#m=<a path>` or `#fen=`            | `#bm=<path>`: every line through it, transpositions too | every step that reaches it                                  | puzzles matched to it, explorer numbers                                  |
+| **Line**      | `/explore/map#line=<line>`               | `/lines/<line>`         | `#m=<its moves>`                    | `#q=<its name>`                                         | `/openings/<o>/lines/<line>` for each opening that lists it | Drill, Review scoped to it                                               |
+| **Variation** | `/openings/<o>/map#focus=<branch point>` | its lines, listed       | `#m=<its branch point>`             | `#q=<its name>`                                         | `/openings/<o>/<variation>`                                 | checkpoint, Drill scoped to it                                           |
+| **Opening**   | `/openings/<o>/map`                      | its lines, listed       | `#m=<its trigger>`                  | `#q=<its name>`                                         | `/openings/<o>`                                             | Lichess page (ECO link), practice scoped to it                           |
+| **Step**      | the map at its stretch                   | the line it teaches     | `#m=<its last position>`            |                                                         | `/openings/<o>/step/<n>`                                    | its ideas and puzzles                                                    |
+| **Idea**      | moves tagged with it, ringed             | lines with such moves   |                                     | `#scope=ideas&q=<name>`                                 | steps that show it                                          | `/ideas/<idea>`, its puzzles (`/practice/puzzles/ideas/<idea>`)          |
+| **Puzzle**    | the position it was matched at           | the line it follows     | `#fen=<puzzle start>` after solving | `#bm=<matched path>`                                    | the step it is attached after                               | `/practice/puzzle/<id>`, Lichess game                                    |
 
 `<path>` is the UCI moves from the start (`e2e4.e7e5`, url-state.md). A position reached by several paths uses the
 path of the context it was clicked in, else the shortest line through it.
@@ -47,7 +47,7 @@ dragging a piece.
   the author's marks; the deepest Lichess name reached ([opening-name](../components/opening-name.md)); how often it
   is reached at your band; the move's [verdict-badge](../components/verdict-badge.md) when known; your state on it
   ([state-badge](../components/state-badge.md)); how many of your openings and steps reach it.
-- **Open in:** a footer row of [icon-action](../components/icon-action.md)s: Map, Line, Analysis, Search, and the step
+- **Open in:** a footer row of [icon-action](../components/icon-action.md)s: Map, Line, Board, Search, and the step
   when there is one. Hidden entries are never shown disabled.
 - **On the nearest board:** while a chip inside a board's panel is hovered, that board also shows the position (v1's
   `previewable` boards), with the card suppressed so the same position is not drawn twice.
@@ -76,6 +76,6 @@ ideas from move tags. Authored openings are added from the authored build, which
 ## Open questions
 
 1. Is a page of its own for a position (`/positions/<positionId>`, everything above on one page) worth having, or is
-   the preview card plus analysis enough? The proposal is no page: the preview and analysis cover it.
+   the preview card plus the Board enough? The proposal is no page: the preview and the Board cover it.
 2. `search.json` leaves out authored openings and steps; ship a fuller position index, or compute steps in the browser
    when the preview opens?

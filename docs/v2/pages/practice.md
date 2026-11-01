@@ -6,7 +6,7 @@ returning learner who wants to choose for themselves rather than take Today's bu
 ## Address
 
 `/practice`. Each mode has its own page below it: `/practice/review`, `/practice/drill`, `/practice/puzzles`,
-`/practice/play-on`, `/practice/speed`, `/practice/name-it`, `/practice/your-games`. A mode's address can carry a
+`/practice/play-on`, `/practice/speed`, `/practice/name-it`, `/practice/games`. A mode's address can carry a
 **scope** that starts at once: `/practice/<mode>/<opening>`, `/practice/<mode>/<opening>/<variation>` or
 `/practice/<mode>/<opening>/lines/<line>`. Without one, the mode opens on its set-up card with the last choice saved.
 No hash on the hub ([../navigation/routes.md](../navigation/routes.md)). v1's `/quiz` and `/review` lead to Review.
@@ -31,7 +31,7 @@ No hash on the hub ([../navigation/routes.md](../navigation/routes.md)). v1's `/
    - **Play on**: five more moves from a line's end; or the computer leaves the book.
    - **Speed**: lines against the clock; your best time.
    - **Name it**: which opening is this.
-   - **Your games**: where your Lichess games left your repertoire; "2 new".
+   - **Your games**: where your Lichess and Chess.com games left your repertoire; "2 new".
    - **Checkpoints**: the variations whose checkpoint is ready, each a link.
 3. **Per opening**: the repertoire's [opening-card](../components/opening-card.md)s with
    [mode-counts](../components/mode-counts.md), so a mode can be started for one opening in one click.

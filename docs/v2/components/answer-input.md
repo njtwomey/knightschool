@@ -47,7 +47,3 @@ Repurpose. `apps/web/src/features/name-it/name-it-page.tsx` has the input, sugge
 (`packages/core/src/modes/guess.ts`), Answer and "I don't know"; `apps/web/src/features/quiz/quiz-view.tsx` has the
 plain input for worded questions, graded by `training/quiz.ts`. v2 makes one component and adds keyboard movement
 through the suggestions.
-
-## Open questions
-
-- `access.typedMoves` (moves typed instead of dragged) is in settings.md's Accessibility list but has no key yet.

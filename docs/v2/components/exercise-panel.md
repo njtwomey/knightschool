@@ -17,12 +17,13 @@ The panel beside the board in any exercise: what to do, how many tries are left,
 
 ## Configuration
 
-- `exercise` and the session state from [use-exercise-session](../hooks/use-exercise-session.md) (the panel reads,
-  never grades).
-- `slots`: what the page adds under the prompt: the [answer-input](answer-input.md) (typed modes), a step's stage
-  dots, a Play on target ("Stay above +1.0").
-- Reads `feedback.triesAllowed` (how many markers), `feedback.speed` (how long a right answer's note stays before the
-  next exercise), `feedback.explain` (symbol, sentence, or refutation too) and `learning.hintsFade`.
+- `exercise` and the session state from [use-exercise-session](../hooks/use-exercise-session.md) (the panel reads, never
+  grades).
+- `slots`: what the page adds under the prompt: the [answer-input](answer-input.md) (typed modes), a step's stage dots,
+  a Play on target ("Stay above +1.0").
+- Reads the config keys `teach.triesBeforeShown` (how many markers) and `teach.hintFadeAfterRight` /
+  `teach.hintReturnAfterWrong` (whether the arrow shows), and the settings `feedback.speed` (how long a right answer's
+  note stays before the next exercise) and `feedback.explain` (symbol, sentence, or refutation too).
 
 ## Behaviour
 

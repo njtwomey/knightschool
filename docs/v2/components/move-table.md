@@ -13,7 +13,7 @@ Three layouts of the same moves, every move a [move-chip](move-chip.md):
 - **paragraphs**: runs of moves, each ending with the comment on its last move, as a line reads in words.
 
 Moves have states, each with one look: played, still to come (dimmed), explored off the line (accent), leading in
-(muted), the point of the step (bold), already passed (bold accent). Refutations and side lines sit folded under the
+(muted), the point of the step (bold), already known (bold accent). Refutations and side lines sit folded under the
 move they branch from ("▸ 4...Nxe4? why it fails"), opened in place.
 
 ## Configuration
@@ -42,7 +42,7 @@ move they branch from ("▸ 4...Nxe4? why it fails"), opened in place.
 
 [board](board.md) (`Board.Moves`); [line-story](line-story.md) (paragraphs); [step-row](step-row.md) (inline); pages
 [step](../pages/step.md), [review](../pages/review.md), [drill](../pages/drill.md), [line](../pages/line.md),
-[analysis](../pages/analysis.md), [line-editor](../pages/line-editor.md).
+[board](../pages/board.md), [line-editor](../pages/line-editor.md).
 
 ## From v1
 

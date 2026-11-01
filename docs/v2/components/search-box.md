@@ -18,7 +18,8 @@ A forgiving search over openings, variations, lines and ideas, ranked by relevan
 - `form`: `page` (the search page: box, filters, results), `compact` (the map index, the header: box only, results in
   a drop-down of the top eight), `filter` (filters a list in place, such as the openings page).
 - `kinds`: which kinds to search (openings, variations, lines, ideas, positions by name).
-- `filters`: what [filter-toggle](filter-toggle.md)s sit beside it (side, level, kind, scope).
+- `filters`: what [filter-toggle](filter-toggle.md)s sit beside it (who plays it, side, scope, line kind, as v1; level
+  on the openings page).
 - Reads `level.includeRare` (rare lines found but ranked lower) and nothing else.
 
 ## Behaviour
@@ -49,7 +50,9 @@ shadcn `Input`, [filter-toggle](filter-toggle.md), [opening-card](opening-card.m
 
 ## From v1
 
-Keep. `apps/web/src/features/search/search-page.tsx` searches courses and lines with `editDistance`, `matchesText` and
+**Keep**, behaviour unchanged: matching, ranking, "why it matched", the filters and the hash all work as in v1.
+`apps/web/src/features/search/search-page.tsx` searches courses and lines with `editDistance`, `matchesText` and
 `relevance` (`packages/core/src/search/text-match.ts`) and says why with `matchReason`
 (`packages/core/src/search/filter.ts`); the query lives in the hash (`apps/web/src/features/search/hash-state.ts`).
-v2 adds ideas, the compact drop-down and the `/` key.
+v2 adds ideas and authored openings to what is searched, plus the compact drop-down and the `/` key, which change
+nothing about how a search matches.

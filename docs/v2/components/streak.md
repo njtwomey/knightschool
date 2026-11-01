@@ -45,5 +45,4 @@ in `apps/web/src/lib/days.ts`. v2 counts every graded answer, not only reviews, 
 
 ## Open questions
 
-- `progress.showStreak` is a proposed key; settings.md does not list a streak setting yet.
 - Whether a Learn session (every move shown) should count as practice. This file says no.

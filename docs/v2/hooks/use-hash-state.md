@@ -31,7 +31,7 @@ default. Keys and their meaning per page are in [url-state](../navigation/url-st
 Pages: [opening](../pages/opening.md), [variation](../pages/variation.md), [step](../pages/step.md),
 [line](../pages/line.md), [openings](../pages/openings.md), [repertoire](../pages/repertoire.md),
 [review](../pages/review.md) (`start=due`), [drill](../pages/drill.md), [map](../pages/map.md),
-[search](../pages/search.md), [analysis](../pages/analysis.md), [ideas](../pages/ideas.md),
+[search](../pages/search.md), [board](../pages/board.md), [ideas](../pages/ideas.md),
 [idea](../pages/idea.md), [stats](../pages/stats.md), [settings](../pages/settings.md),
 [line-editor](../pages/line-editor.md). [use-board-model](use-board-model.md) uses it when given `hash`.
 

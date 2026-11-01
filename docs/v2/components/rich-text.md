@@ -7,7 +7,7 @@ inline, each hoverable and tied to the board beside it.
 
 Plain paragraphs with these inline:
 
-- **positions**: words that stand for a position ("[the position after Nxf7](FEN)"), underlined with dots;
+- **positions**: words that stand for a position ("`[the position after Nxf7](FEN)`"), underlined with dots;
 - **moves**: a move written in the text ("3...Nf6", "4. Ng5 d5") as [move-chip](move-chip.md)s or a
   [move-run](move-run.md), resolved against the line or step the text belongs to;
 - **squares and pieces**: "the d5 square", "the bishop on b5", which light up on the board;

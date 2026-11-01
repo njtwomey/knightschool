@@ -50,7 +50,7 @@ Explore › (line, a menu of the lines it branches from and that grow from it).
 
 **Learn it** → the [step](step.md) that teaches its first unknown move; **Drill this line** → [drill](drill.md)
 (`/practice/drill/<opening>/lines/<line>`); **Play on from the end** → [play-on](play-on.md); **See on the map** →
-[map](map.md) with the line picked; **Analyse** → [analysis](analysis.md) with its moves; another line or opening.
+[map](map.md) with the line picked; **Open on the board** → [board](board.md) with its moves; another line or opening.
 
 ## From v1
 

@@ -4,8 +4,8 @@ Explorer answers from Lichess (what players at a band play from a position), cac
 
 ## Holds
 
-- the **baked counts** shipped with the app (positions on the openings' lines and the replies just off them, at 1000
-  to 1600), loaded once;
+- the **baked counts** shipped with the app in `knowledge.sqlite` (positions on the openings' lines and the replies just
+  off them, at 1000 to 1600), read as needed;
 - **live answers** by position and band, as read from the cache or fetched: total games, results, moves with their
   counts, the Lichess opening name, when fetched;
 - the **queue**: one request in flight, the rest waiting, deduplicated by position and band;
@@ -15,9 +15,8 @@ Explorer answers from Lichess (what players at a band play from a position), cac
 
 ## Written by
 
-Its own fetcher, asked by [use-explorer](../hooks/use-explorer.md); clearing the cache from the
-[data](../pages/data.md) page; saving or removing the token on the [settings](../pages/settings.md) page (which wakes
-or stops it).
+Its own fetcher, asked by [use-explorer](../hooks/use-explorer.md); clearing the cache from the [data](../pages/data.md)
+page; saving or removing the token on the [settings](../pages/settings.md) page (which wakes or stops it).
 
 ## Read by
 
@@ -31,7 +30,8 @@ or stops it).
 - Live answers: the existing `explorer_cache` table (key, epd, db, speeds, ratings, results, moves, opening name,
   fetchedAt), 30-day TTL. v1 exports it; like `eval_cache` it is a cache and could be left out.
 - The token: localStorage `knightschool.explorerToken`, this browser only, never in the database or an export.
-- Baked counts: shipped JSON from `content/popularity/popularity.json`, cached by the service worker.
+- Baked counts: the shipped, read-only `knowledge.sqlite` ([../schemas/built.md](../schemas/built.md)), built from
+  `content/popularity/popularity.json`, cached by the service worker.
 
 No new table. Shipping a slice of popularity to the app is a content change.
 

@@ -33,7 +33,7 @@ A sketch: `const { moves, total, source, status } = useExplorer(epd)`.
 
 [board-explorer](../components/board-explorer.md), [coverage-meter](../components/coverage-meter.md),
 [gap-link](../components/gap-link.md), [position-preview](../components/position-preview.md) (how often reached),
-[map-tree](../components/map-tree.md) (gaps); pages [analysis](../pages/analysis.md), [opening](../pages/opening.md),
+[map-tree](../components/map-tree.md) (gaps); pages [board](../pages/board.md), [opening](../pages/opening.md),
 [repertoire](../pages/repertoire.md), [map](../pages/map.md); and [use-exercise-session](use-exercise-session.md)'s
 popular responder.
 

@@ -1,7 +1,7 @@
 # Step
 
-Learning one step, about four of the learner's moves, through five stages on one page: Read, Watch, Try, Their
-mistakes, Done. Five to ten minutes; the heart of Learn.
+Learning one step, about four of the learner's moves, through five stages on one page: Read, Watch, Try, Their mistakes,
+Done. Five to ten minutes; the heart of Learn.
 
 ## Address
 
@@ -11,7 +11,7 @@ plays only moves a to b of it (v1's "Next 3 moves"). Hash: `#stage=read|watch|tr
 
 ## Reached from
 
-[next-step-button](../components/next-step-button.md) on [Today](today.md) and [opening](opening.md);
+[next-action](../components/next-action.md) on [Today](today.md) and [opening](opening.md);
 [step-row](../components/step-row.md)s on [opening](opening.md) and [variation](variation.md) (**Learn** opens Read,
 **Try** opens Try); a [gap-link](../components/gap-link.md) whose reply a step teaches.
 
@@ -51,10 +51,10 @@ Two columns from lg (`.board-columns`); on a phone: board, controls, feedback, t
 - **Their mistakes**: `test`. Where the opponent commonly goes wrong in this stretch, they do, and the panel says
   "Black's ...g5? is played in about a quarter of games at your level"; the learner finds the punishment. Skipped, with
   a word, when the stretch has none.
-- **Done**: `answered`. The step is passed when every move has been right twice running; otherwise Done says which
-  moves are not yet and offers **Try again**. Its moves join reviews either way.
+- **Done**: `answered`. The step is known when every move has been right twice running; otherwise Done says which moves
+  are not yet and offers **Try again**. Its moves join reviews either way.
 - **Locked**: the first step of an opening is always open. A later locked step asks once per opening ("Start here?"),
-  then opens. **Test me instead** on Read skips to Try; passing it passes the step (testing out).
+  then opens. **Test me instead** on Read skips to Try; getting every move right makes the step known (testing out).
 - The stages a learner sees and the fading rule follow settings ([../hooks/use-setting.md](../hooks/use-setting.md)).
 
 ## Leads to

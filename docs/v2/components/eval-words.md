@@ -5,15 +5,16 @@ Where a position stands, in words a beginner understands and, if wanted, the num
 
 ## Shows
 
-One short phrase from the engine score, with the number after it in brackets:
+One short phrase from the engine score, with the number after it in brackets. The words follow winning chance, as
+the verdicts and the eval bar do, with the bands from config `judge.evalWords` ([config](../config.md)):
 
-| Score (pawns, from White's side) | Words                               |
-| -------------------------------- | ----------------------------------- |
-| -0.3 to +0.3                     | About equal                         |
-| 0.3 to 1.0                       | White (or Black) is a little better |
-| 1.0 to 2.5                       | White is clearly better             |
-| 2.5 and more                     | White is winning                    |
-| a forced mate                    | White mates in 4                    |
+| White's winning chance, -1 to 1 (about, in pawns) | Words                               |
+| ------------------------------------------------- | ----------------------------------- |
+| within 0.05 either way (about -0.3 to +0.3)       | About equal                         |
+| 0.05 to 0.18 (about 0.3 to 1.0)                   | White (or Black) is a little better |
+| 0.18 to 0.43 (about 1.0 to 2.5)                   | White is clearly better             |
+| 0.43 and more                                     | White is winning                    |
+| a forced mate                                     | White mates in 4                    |
 
 When the opening is the learner's, "you" can replace the side: "You are a little better (+0.6)". After a move it can
 say the change: "Black is a little better now; it was equal".
@@ -48,8 +49,3 @@ say the change: "Black is a little better now; it was equal".
 
 New. Scores are formatted today by `formatScore` in `packages/engine` and shown as numbers in
 `apps/web/src/components/engine/eval-bar.tsx` and `engine-strip.tsx`, over `data/analysis.ts` (baked, then live).
-
-## Open questions
-
-- The bands above are a first guess; they should probably follow winning chances, like the verdicts, so a +2.0 in a
-  quiet position and in a sharp one read the same.

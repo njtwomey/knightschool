@@ -1,7 +1,7 @@
 # Settings row
 
-One setting drawn from the registry: its label, its control, a line of hint, what the value means in practice, where
-the value comes from, and a reset. Every setting on every surface is one of these, so it reads the same everywhere.
+One setting drawn from the registry: its label, its control, a line of hint, what the value means in practice, where the
+value comes from, and a reset. Every setting on every surface is one of these, so it reads the same everywhere.
 
 ## Shows
 
@@ -31,15 +31,16 @@ the value comes from, and a reset. Every setting on every surface is one of thes
 - **Saved as you go.** A change writes at once through [use-setting](../hooks/use-setting.md); a [notice](notice.md)
   says "New moves a day set to 15" with an [undo-button](undo-button.md). A slider writes when it is let go, not on
   every step. The session layer is the exception: it edits the practice card's copy and nothing saves until Start.
-- **A bad value never saves.** A number out of range shows the allowed range under the control and keeps the last
-  good value; reading a damaged stored value falls back to the next layer, as v1's `parsePrefs` does.
+- **A bad value never saves.** A number out of range shows the allowed range under the control and keeps the last good
+  value; reading a damaged stored value falls back to the next layer, as v1's `parsePrefs` does.
 - **Locked by a lower layer**: never. Every layer can be overridden; the source line explains what is underneath.
 - Keyboard: Tab reaches the control then the reset; the label is the control's accessible name.
 
 ## Composed of
 
 [hint](hint.md), [icon-action](icon-action.md), [filter-toggle](filter-toggle.md), [notice](notice.md),
-[undo-button](undo-button.md), shadcn `Switch`, `Select`, `Input` and a `Slider` (not yet in `components/ui`).
+[undo-button](undo-button.md), shadcn `Switch`, `Select`, `Input` and a `Slider` (to add from shadcn,
+[inventory](../inventory.md)).
 
 ## Used by
 

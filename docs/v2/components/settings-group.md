@@ -14,8 +14,9 @@ in the registry's order.
 - When the preset or an opening sets anything in the group, a line under the title: "Some values here come from the
   Exam preset."
 
-The groups, from settings.md: Your level, Review, Learning, Feedback, The computer, Puzzles, Board and display, Engine,
-Lichess, Data, Accessibility. The order is the registry's; the page's side list is drawn from it.
+The groups, from settings.md: Your level, Review, Learning, Feedback, The computer, Puzzles, Board, Display, Engine,
+Accounts (Lichess and Chess.com), Progress and data, Accessibility. The order is the registry's; the page's side list is
+drawn from it; every key and its group is in settings.md, "Keys".
 
 ## Configuration
 

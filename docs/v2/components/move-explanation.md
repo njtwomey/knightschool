@@ -45,7 +45,7 @@ Top to bottom, each part left out when there is nothing to say:
 
 [board-notes](board-notes.md) ("More about this move"), [line-story](line-story.md) (a move opened in place),
 [tries-table](tries-table.md) (an expanded row); pages [map](../pages/map.md) (the picked move),
-[line](../pages/line.md), [analysis](../pages/analysis.md), [your-games](../pages/your-games.md) (the move you played
+[line](../pages/line.md), [board](../pages/board.md), [your-games](../pages/your-games.md) (the move you played
 and the one the opening plays).
 
 ## From v1

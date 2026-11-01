@@ -32,7 +32,8 @@ the strongest matches first and picks one to three.
 ## Composed of
 
 [puzzle-card](puzzle-card.md), [filter-toggle](filter-toggle.md), [board-thumb](board-thumb.md), [board](board.md)
-(puzzle preset), [empty-state](empty-state.md), [undo-button](undo-button.md).
+(puzzle preset), [empty-state](empty-state.md), [undo-button](undo-button.md), shadcn `Checkbox` (to add from shadcn,
+[inventory](../inventory.md)).
 
 ## Used by
 

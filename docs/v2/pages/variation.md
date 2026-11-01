@@ -1,6 +1,6 @@
 # Variation
 
-One named branch of an opening ("The Two Knights Defence, when Black plays 3...Nf6"): the decision it is about, its
+One named branch of an opening ("The Two Knights Defense, when Black plays 3...Nf6"): the decision it is about, its
 steps in order, its lines, its ideas and puzzles, and the checkpoint that opens the next variation. For a learner
 deciding where to go inside an opening, or coming back to one part of it.
 
@@ -20,13 +20,13 @@ deciding where to go inside an opening, or coming back to one part of it.
 
 [breadcrumbs](../components/breadcrumbs.md): Learn › opening › (variation, a menu of the opening's variations).
 
-1. Heading: [opening-name](../components/opening-name.md) with ECO, [state-badge](../components/state-badge.md)
-   (locked, open, checkpoint passed) and [progress-ring](../components/progress-ring.md).
+1. Heading: [opening-name](../components/opening-name.md) with ECO, [state-badge](../components/state-badge.md) (locked,
+   open, learning, known once its checkpoint is cleared, mastered) and [progress-ring](../components/progress-ring.md).
 2. Two columns from lg:
    - Left: the introduction, two or three sentences as [rich-text](../components/rich-text.md), with the decisive
      position as a clickable inline board. Then its steps, each a [step-row](../components/step-row.md) (state, moves,
-     what unlocks it, **Learn** and **Try**). Then the checkpoint row: what it asks (about ten exercises), its state,
-     and **Take the checkpoint** or **Test out**.
+     what opens it, **Learn** and **Try**). Then the checkpoint row: what it asks (about ten exercises), its state, and
+     **Take the checkpoint** or **Test out**.
    - Right: a [board](../components/board.md) in the `study` preset on the variation's branch point, with
      [board-controls](../components/board-controls.md), [board-notes](../components/board-notes.md),
      [board-explorer](../components/board-explorer.md) (how often players at the band reach and choose this) and
@@ -38,11 +38,11 @@ deciding where to go inside an opening, or coming back to one part of it.
 
 ## Behaviour
 
-- A locked variation still shows everything; its steps say "opens when the Giuoco Piano checkpoint is passed", and
-  **Test out** takes this variation's checkpoint at once. Opening a locked step asks once per opening, as on the
-  opening page.
+- A locked variation still shows everything; its steps say "opens when the Giuoco Piano checkpoint is cleared", and
+  **Test out** takes this variation's checkpoint at once. Opening a locked step asks once per opening, as on the opening
+  page.
 - Hovering a step row puts the board on where that step starts; clicking a move in the introduction does the same.
-- When every step is passed the checkpoint row becomes the page's main action.
+- When every step is known the checkpoint row becomes the page's main action.
 - An unknown variation in a known opening goes to [not found](not-found.md), which offers the opening.
 
 ## Leads to

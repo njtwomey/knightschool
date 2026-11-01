@@ -8,112 +8,123 @@ not used or developed), _delete_ (nothing needs it). Feature codes (L1, T4, ...)
 
 ## 1. Walking through v2
 
+Each component is named by its file in [components/](components/README.md); pages by theirs in
+[pages/](pages/README.md).
+
 ### Arriving (A1, A2, A3)
 
-| On screen                                     | Component                                   | From v1                                                           |
-| --------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------- |
-| The promise and a line playing with its ideas | `Hero` (a thumb-preset Board)               | Home's showcase (`features/home`) — repurpose                     |
-| Three questions: level, White, Black          | `Onboarding`                                | new                                                               |
-| Opening suggestions with style tags           | `OpeningCard`                               | course rows on Courses and Search — repurpose                     |
-| "Show me what I play" (Lichess username)      | `GamesImport`                               | new (Z2)                                                          |
-| The result: your repertoire                   | `RepertoireSlots` (White, vs 1.e4, vs 1.d4) | "courses I am learning" (`data/training-settings.ts`) — repurpose |
+| On screen                                     | Component                                                                            | From v1                                                           |
+| --------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| The promise and a line playing with its ideas | [board](components/board.md), `thumb` preset, on [first-visit](pages/first-visit.md) | Home's showcase (`features/home`) — repurpose                     |
+| Three questions: level, White, Black          | the [onboarding](pages/onboarding.md) page                                           | new                                                               |
+| Opening suggestions with style tags           | [opening-card](components/opening-card.md)                                           | course rows on Courses and Search — repurpose                     |
+| "Show me what I play" (Lichess or Chess.com)  | [onboarding](pages/onboarding.md), over the [games store](stores/games.md)           | new (Z2)                                                          |
+| The result: your repertoire                   | [repertoire-slots](components/repertoire-slots.md) (White, vs 1.e4, vs 1.d4)         | "courses I am learning" (`data/training-settings.ts`) — repurpose |
 
 ### Today (A3, P1, P2, P3)
 
-| On screen                                  | Component                    | From v1                                                             |
-| ------------------------------------------ | ---------------------------- | ------------------------------------------------------------------- |
-| One main button: continue / review / start | `NextAction`                 | the path's sessions registry (`features/path/sessions`) — repurpose |
-| Reviews due                                | `DueCard`                    | Overview and Home's due count — repurpose                           |
-| A puzzle from your openings                | `PuzzleCard`                 | new                                                                 |
-| Streak, calendar                           | `Streak`, `ActivityCalendar` | new, from the existing answer logs                                  |
-| Coverage per side, biggest gap             | `CoverageMeter`, `GapLink`   | `scripts/gaps.ts` logic, moved into core — repurpose                |
+| On screen                                  | Component                                                                            | From v1                                                             |
+| ------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| One main button: continue / review / start | [next-action](components/next-action.md)                                             | the path's sessions registry (`features/path/sessions`) — repurpose |
+| Reviews due                                | [due-card](components/due-card.md)                                                   | Overview and Home's due count — repurpose                           |
+| A puzzle from your openings                | [puzzle-card](components/puzzle-card.md)                                             | new                                                                 |
+| Streak, calendar                           | [streak](components/streak.md), [activity-calendar](components/activity-calendar.md) | new, from the existing answer logs                                  |
+| Coverage per side, biggest gap             | [coverage-meter](components/coverage-meter.md), [gap-link](components/gap-link.md)   | `scripts/gaps.ts` logic, moved into core — repurpose                |
 
 ### An opening (L1, L3, P1, T6, T7)
 
-| On screen                                         | Component                                | From v1                                                                     |
-| ------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------- |
-| Introduction: idea, risks, suits, origin, sources | `OpeningIntro`                           | `CourseIntro` in `features/course` — keep                                   |
-| Counts per mode, coloured                         | `ModeCounts`                             | new                                                                         |
-| Variations, each with steps and their states      | `VariationList`, `StepRow`, `StateBadge` | the Path tab (`features/path`, `unit-row.tsx`, `unit-state.ts`) — repurpose |
-| The board beside the list                         | Board, `study` preset                    | `unit-board.tsx`, `board-panel.tsx` — repurpose onto Board                  |
-| Every line, openable freely                       | `LineList`                               | the course page's lines by kind — keep                                      |
+| On screen                                         | Component                                                                                                                    | From v1                                                                     |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Introduction: idea, risks, suits, origin, sources | [opening-intro](components/opening-intro.md), [sources-list](components/sources-list.md)                                     | `CourseIntro` in `features/course` — keep                                   |
+| Counts per mode, coloured                         | [mode-counts](components/mode-counts.md)                                                                                     | new                                                                         |
+| Variations, each with steps and their states      | [variation-list](components/variation-list.md), [step-row](components/step-row.md), [state-badge](components/state-badge.md) | the Path tab (`features/path`, `unit-row.tsx`, `unit-state.ts`) — repurpose |
+| The board beside the list                         | [board](components/board.md), `study` preset                                                                                 | `unit-board.tsx`, `board-panel.tsx` — repurpose onto Board                  |
+| Every line, openable freely (the Lines tab)       | [line-row](components/line-row.md) in a [sortable-table](components/sortable-table.md)                                       | the course page's lines by kind — keep                                      |
 
 ### A step (L5, L6, F2, F3, F6)
 
-| On screen                            | Component                                           | From v1                                                |
-| ------------------------------------ | --------------------------------------------------- | ------------------------------------------------------ |
-| Title, text with clickable positions | `StepText` (RichText with inline boards)            | `RichText`, `StaticBoard` — repurpose                  |
-| Watch: moves with comments and marks | Board `learn` preset + `Board.Moves`, `Board.Notes` | Learn (`features/play`), `MoveList`, marks — repurpose |
-| The fading arrow                     | Board system arrow, rule in the session             | Learn's arrow — repurpose                              |
-| Try: play without help               | Board `test` preset + `ExerciseSession`             | Drill (`features/play/store.ts`) — repurpose           |
-| A wrong move: why                    | `Board.Feedback`, `VerdictNote`, `VerdictBadge`     | tick/cross badge; `regret.ts` — repurpose              |
-| Their mistake: punish it             | an exercise, `Board.Feedback`                       | new                                                    |
-| Done: ideas learned, where you stand | `StepSummary`, `EvalWords`, `IdeaBadge`             | complete card (`complete-card.tsx`) — repurpose        |
+| On screen                            | Component                                                                                                                                         | From v1                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Title, text with clickable positions | [rich-text](components/rich-text.md) with inline boards                                                                                           | `RichText`, `StaticBoard` — repurpose                  |
+| Watch: moves with comments and marks | [board](components/board.md) `learn` preset, [move-table](components/move-table.md), [board-notes](components/board-notes.md)                     | Learn (`features/play`), `MoveList`, marks — repurpose |
+| The fading arrow                     | a system arrow on [board-surface](components/board-surface.md), rule in config (`teach.hintFadeAfterRight`)                                       | Learn's arrow — repurpose                              |
+| Try: play without help               | [board](components/board.md) `test` preset, [use-exercise-session](hooks/use-exercise-session.md), [exercise-panel](components/exercise-panel.md) | Drill (`features/play/store.ts`) — repurpose           |
+| A wrong move: why                    | [board-feedback](components/board-feedback.md), [verdict-note](components/verdict-note.md), [verdict-badge](components/verdict-badge.md)          | tick/cross badge; `regret.ts` — repurpose              |
+| Their mistake: punish it             | an exercise, [board-feedback](components/board-feedback.md)                                                                                       | new                                                    |
+| Done: ideas learned, where you stand | [session-summary](components/session-summary.md), [eval-words](components/eval-words.md), [idea-badge](components/idea-badge.md)                  | complete card (`complete-card.tsx`) — repurpose        |
 
 ### Practice (T1 to T5, T8, Z1)
 
-| On screen                         | Component                      | From v1                                                                  |
-| --------------------------------- | ------------------------------ | ------------------------------------------------------------------------ |
-| The set-up card and summary bar   | `PracticeSetup`, `PracticeBar` | `components/practice-setup.tsx` — keep                                   |
-| Review                            | `ExerciseSession` (review)     | Quiz (`features/quiz`) — repurpose                                       |
-| Drill, every branch               | `ExerciseSession` (drill)      | `features/play` — repurpose                                              |
-| Puzzles                           | `ExerciseSession` (puzzle)     | new                                                                      |
-| Play on, leaving the book         | `ExerciseSession` (play on)    | new                                                                      |
-| Speed, Name it                    | their sessions                 | `features/speed`, `features/name-it` — keep, move onto the session later |
-| End of a session: what went wrong | `SessionSummary`, `MissList`   | quiz summary and miss list (`summary.tsx`, `miss-list.tsx`) — repurpose  |
+| On screen                         | Component                                                                                                 | From v1                                                                  |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| The set-up card and summary bar   | [practice-setup](components/practice-setup.md), [practice-bar](components/practice-bar.md)                | `components/practice-setup.tsx` — keep                                   |
+| Review                            | [use-exercise-session](hooks/use-exercise-session.md) (review)                                            | Quiz (`features/quiz`) — repurpose                                       |
+| Drill, every branch               | [use-exercise-session](hooks/use-exercise-session.md) (drill)                                             | `features/play` — repurpose                                              |
+| Puzzles                           | [use-exercise-session](hooks/use-exercise-session.md) (puzzle)                                            | new                                                                      |
+| Play on, leaving the book         | [use-exercise-session](hooks/use-exercise-session.md) (play on)                                           | new                                                                      |
+| Speed, Name it                    | their own sessions, with [countdown](components/countdown.md), [answer-input](components/answer-input.md) | `features/speed`, `features/name-it` — keep, move onto the session later |
+| End of a session: what went wrong | [session-summary](components/session-summary.md), [tries-table](components/tries-table.md)                | quiz summary and miss list (`summary.tsx`, `miss-list.tsx`) — repurpose  |
 
 ### The map (ours)
 
-| On screen                              | Component            | From v1                                                   |
-| -------------------------------------- | -------------------- | --------------------------------------------------------- |
-| The tree, coloured by what you know    | `MapTree`            | `TreeExplorer`, lane layout (`features/tree`) — repurpose |
-| Gaps and the opponent's mistakes on it | `MapTree` overlays   | new, from popularity and judgement                        |
-| The index of lines                     | `TreeIndex`          | `tree-index.tsx` — keep                                   |
-| The board for the picked move          | Board `study` preset | `tree-board.tsx` — repurpose onto Board                   |
+| On screen                              | Component                                                                           | From v1                                                   |
+| -------------------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| The tree, coloured by what you know    | [map-tree](components/map-tree.md)                                                  | `TreeExplorer`, lane layout (`features/tree`) — repurpose |
+| Gaps and the opponent's mistakes on it | [map-tree](components/map-tree.md) overlays, [map-legend](components/map-legend.md) | new, from popularity and judgement                        |
+| The index of lines                     | [map-index](components/map-index.md)                                                | `tree-index.tsx` — keep                                   |
+| The board for the picked move          | [board](components/board.md), `study` preset                                        | `tree-board.tsx` — repurpose onto Board                   |
 
 ### Explore and Ideas
 
-| On screen                    | Component                                 | From v1                                           |
-| ---------------------------- | ----------------------------------------- | ------------------------------------------------- |
-| Search, board search         | `SearchPage`, `BoardSearch`               | `features/search` — keep                          |
-| Analysis board, explorer     | Board `analysis` preset, `Board.Explorer` | Lab (`features/lab`), `ExplorerPanel` — repurpose |
-| A line's page                | `LineAbout`                               | `features/line/about-tab.tsx` — keep              |
-| Ideas A to Z, an idea's page | `IdeaList`, `IdeaPage`                    | Glossary (`features/glossary`) — repurpose        |
+| On screen                    | Component                                                                                                                              | From v1                                           |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Search, board search         | [search-box](components/search-box.md), [board-search](components/board-search.md)                                                     | `features/search` — keep, behaviour unchanged     |
+| The Board page (`/board`)    | [board](components/board.md) `analysis` preset, [board-eval](components/board-eval.md), [board-explorer](components/board-explorer.md) | Lab (`features/lab`), `ExplorerPanel` — repurpose |
+| A line's page                | [line-story](components/line-story.md) on the [line](pages/line.md) page                                                               | `features/line/about-tab.tsx` — keep              |
+| Ideas A to Z, an idea's page | the [ideas](pages/ideas.md) and [idea](pages/idea.md) pages, [idea-badge](components/idea-badge.md)                                    | Glossary (`features/glossary`) — repurpose        |
 
 ### Create (C1)
 
-| On screen                               | Component           | From v1                                      |
-| --------------------------------------- | ------------------- | -------------------------------------------- |
-| Openings, details, lines, path, publish | as now              | `features/create` — keep                     |
-| Steps and variations, their text        | new tabs or panels  | the Path tab (`path-order.tsx`) — repurpose  |
-| Refutations, symbols, ideas on moves    | `MoveNote` extended | `move-note`, `move-marks.tsx` — keep, extend |
-| Pick puzzles for a step                 | `PuzzlePicker`      | new (puzzles.md, look-up)                    |
-| Import PGN or a Lichess study           | `ImportPgn`         | new                                          |
+| On screen                               | Component                                                                                                                                            | From v1                                      |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| Openings, details, lines, path, publish | the [create](pages/create.md) and [create-opening](pages/create-opening.md) pages                                                                    | `features/create` — keep                     |
+| Steps and variations, their text        | [step-editor](components/step-editor.md)                                                                                                             | the Path tab (`path-order.tsx`) — repurpose  |
+| Refutations, symbols, ideas on moves    | [move-note-editor](components/move-note-editor.md), [refutation-editor](components/refutation-editor.md), [marks-editor](components/marks-editor.md) | `move-note`, `move-marks.tsx` — keep, extend |
+| Pick puzzles for a step                 | [puzzle-picker](components/puzzle-picker.md)                                                                                                         | new (puzzles.md, look-up)                    |
+| Import PGN or a Lichess study           | [pgn-import](components/pgn-import.md)                                                                                                               | new                                          |
 
 ## 2. The reusable components
 
 What the walk-through keeps asking for, each with one job. Everything on screen is one of these, or a page built from
-them.
+them. The full list is [components/README.md](components/README.md).
 
-| Component                                        | Job                                                                                                 | Source                                 |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| **Board** and its parts                          | every chessboard (board.md)                                                                         | `components/board`, repurposed         |
-| **ExerciseSession**                              | ask, grade, feed back, record, one exercise after another                                           | the four session stores, merged        |
-| **VerdictBadge**, **VerdictNote**                | how good a move was, and why                                                                        | new, over `judgeMove`                  |
-| **TriesTable**                                   | every guess in a session with its grade, centipawn cost, time and help used; rows open the position | from `miss-list.tsx`                   |
-| **EvalWords**                                    | where a position stands, in words and numbers                                                       | new, over `components/engine`          |
-| **MoveList**                                     | moves as a table, inline, or told with comments                                                     | `components/move-list.tsx`, keep       |
-| **RichText** with inline boards                  | step and opening text                                                                               | `components/rich-text`, extend         |
-| **PracticeSetup**, **PracticeBar**               | choosing what to practise                                                                           | keep                                   |
-| **StateBadge**                                   | locked, open, learning, passed, mastered, everywhere the same                                       | `unit-state.ts`, generalised           |
-| **ModeCounts**                                   | the coloured counts per mode                                                                        | new                                    |
-| **OpeningCard**, **StepRow**                     | an opening or a step in any list                                                                    | from v1 course rows and `unit-row.tsx` |
-| **IdeaBadge**                                    | an idea's name, linking to its page                                                                 | from `TagBadge`, motifs                |
-| **CoverageMeter**, **GapLink**                   | how much of what you meet you know, and where the hole is                                           | new                                    |
-| **MapTree**                                      | the tree of lines, with overlays                                                                    | `TreeExplorer`, repurposed             |
-| **TrailCrumbs**                                  | breadcrumbs with menus and tabs                                                                     | `components/breadcrumbs`, keep         |
-| **SortableTable**, **RowLink**, **FilterToggle** | tables and filters                                                                                  | keep                                   |
-| shadcn `ui`                                      | every control                                                                                       | keep                                   |
+| Component                                                                                                     | Job                                                                                                 | Source                                 |
+| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| [board](components/board.md) and its parts                                                                    | every chessboard (board.md)                                                                         | `components/board`, repurposed         |
+| [use-exercise-session](hooks/use-exercise-session.md)                                                         | ask, grade, feed back, record, one exercise after another                                           | the four session stores, merged        |
+| [verdict-badge](components/verdict-badge.md), [verdict-note](components/verdict-note.md)                      | how good a move was, and why                                                                        | new, over `judgeMove`                  |
+| [tries-table](components/tries-table.md)                                                                      | every guess in a session with its grade, centipawn cost, time and help used; rows open the position | from `miss-list.tsx`                   |
+| [eval-words](components/eval-words.md)                                                                        | where a position stands, in words and numbers                                                       | new, over `components/engine`          |
+| [move-table](components/move-table.md)                                                                        | moves as a table, inline, or told with comments                                                     | `components/move-list.tsx`, keep       |
+| [rich-text](components/rich-text.md) with inline boards                                                       | step and opening text                                                                               | `components/rich-text`, extend         |
+| [practice-setup](components/practice-setup.md), [practice-bar](components/practice-bar.md)                    | choosing what to practise                                                                           | keep                                   |
+| [state-badge](components/state-badge.md)                                                                      | locked, open, learning, known, mastered, everywhere the same                                        | `unit-state.ts`, generalised           |
+| [next-action](components/next-action.md)                                                                      | the one button that says what to do now                                                             | the path's sessions registry           |
+| [mode-counts](components/mode-counts.md)                                                                      | the coloured counts per mode                                                                        | new                                    |
+| [opening-card](components/opening-card.md), [step-row](components/step-row.md)                                | an opening or a step in any list                                                                    | from v1 course rows and `unit-row.tsx` |
+| [idea-badge](components/idea-badge.md)                                                                        | an idea's name, linking to its page                                                                 | from `TagBadge`, motifs                |
+| [coverage-meter](components/coverage-meter.md), [gap-link](components/gap-link.md)                            | how much of what you meet you know, and where the hole is                                           | new                                    |
+| [map-tree](components/map-tree.md), [map-index](components/map-index.md)                                      | the tree of lines, with overlays, and its index                                                     | `TreeExplorer`, repurposed             |
+| [breadcrumbs](components/breadcrumbs.md)                                                                      | breadcrumbs with menus and tabs                                                                     | `TrailCrumbs`, keep                    |
+| [sortable-table](components/sortable-table.md) (with `RowLink`), [filter-toggle](components/filter-toggle.md) | tables and filters                                                                                  | keep                                   |
+| shadcn `ui`                                                                                                   | every control                                                                                       | keep                                   |
+
+**shadcn pieces to add when building.** v2 needs four shadcn components that are not yet in
+`apps/web/src/components/ui`: `HoverCard` ([position-preview](components/position-preview.md), opened by
+[use-position-preview](hooks/use-position-preview.md)), `Slider` ([settings-row](components/settings-row.md), the
+settings registry's `slider` control), `Checkbox` ([pgn-import](components/pgn-import.md),
+[puzzle-picker](components/puzzle-picker.md)'s "tick to include") and `NavigationMenu` (the header's sub-menus,
+[menu](navigation/menu.md)). Each is added with `npx shadcn@latest add <name>` from `apps/web`, as CLAUDE.md says.
 
 ## 3. Every part of v1
 
@@ -172,7 +183,7 @@ them.
 | `features/tree`                                                                                                          | repurpose | the map                                                              |
 | `features/explorer`                                                                                                      | repurpose | `Board.Explorer`                                                     |
 | `features/search`                                                                                                        | keep      | under Explore                                                        |
-| `features/lab`                                                                                                           | repurpose | the analysis board                                                   |
+| `features/lab`                                                                                                           | repurpose | the Board page (`/board`)                                            |
 | `features/glossary`                                                                                                      | repurpose | Ideas                                                                |
 | `features/profile`                                                                                                       | keep      | Stats and Settings; Overview folds into Today                        |
 | `features/create`                                                                                                        | keep      | extended                                                             |
@@ -215,6 +226,7 @@ puzzle matching and the board work are tried on.
 
 ## 5. Stored data
 
-Learners' progress is keyed by v1 course id and position, and line ids appear in it. Parking v1's courses leaves that
-history in their databases, unread. Decide before v2 ships whether v1 progress is carried into v2 (where a v2 opening
-reaches the same positions, it could be) or simply left behind.
+v1 keys learners' progress by course id and position (`<course>:<epd>`), and line ids appear in it. v2 recommends
+re-keying move cards by position and move (`move:<epd>:<uci>`, [schemas/upgrades.md](schemas/upgrades.md)), with a
+one-off migration of v1's cards: then parking v1's courses loses nothing, since any v2 opening that reaches the same
+positions and moves picks the history up. The decision is in [decisions.md](decisions.md).

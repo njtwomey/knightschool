@@ -31,17 +31,22 @@ Each key is marked **build** (used only by the scripts), **app** (used only in t
 |                | `teach.hintFadeAfterRight`     | 2                                                  | app     | right answers in a row before the Watch arrow stops showing                                                    |
 |                | `teach.hintReturnAfterWrong`   | 2                                                  | app     | wrong answers before it comes back                                                                             |
 |                | `teach.triesBeforeShown`       | 2                                                  | app     | wrong tries before the move is shown (v1 `WRONG_TRIES_ALLOWED`)                                                |
-|                | `teach.gates`                  | on                                                 | app     | whether steps and checkpoints lock what follows                                                                |
-|                | `teach.testOut`                | allowed                                            | app     | whether a gate can be passed by taking its check                                                               |
+|                | `teach.gates`                  | strict (strict, advise, off)                       | app     | whether steps and checkpoints lock what follows; a learner may relax it (`learning.gatesRelaxed`)              |
+|                | `teach.testOut`                | allowed                                            | app     | whether a gate can be opened by clearing its check                                                             |
 |                | `teach.firstStepOpen`          | true                                               | app     | the first step of every opening is always open                                                                 |
-| **Judging**    | `judge.grades`                 | Lichess-style                                      | both    | winning-chance drops for Inaccuracy, Mistake, Blunder (0.1, 0.2, 0.3)                                          |
-|                | `judge.knownRule`              | last 2 right                                       | app     | when a move counts as known (v1's "passed")                                                                    |
+|                | `teach.checkpointTries`        | 1                                                  | app     | tries per move in a checkpoint or final test                                                                   |
+|                | `teach.checkpointMark`         | 9 of 10, no blunders                               | app     | what clears a checkpoint or final test                                                                         |
+| **Judging**    | `judge.grades`                 | Lichess-style                                      | both    | winning-chance drops: Best ≤ 0.01, Excellent < 0.04, Good < 0.1, then Inaccuracy 0.1, Mistake 0.2, Blunder 0.3 |
+|                | `judge.evalWords`              | 0.05, 0.18, 0.43                                   | app     | winning-chance bands for "equal", "a little better", "clearly better", "winning" (eval-words)                  |
+|                | `judge.refutationPlies`        | 6                                                  | both    | how many plies of the punishing line a refutation shows                                                        |
+|                | `judge.knownRule`              | last 2 right                                       | app     | when a move counts as known (v1's "passed"); a step is known when all its moves are                            |
 |                | `judge.masteredDays`           | 7                                                  | app     | FSRS interval at which a move counts as mastered (v1 "graduated")                                              |
 |                | `judge.easyWithinMs`           | 5000                                               | app     | a quick right answer is Easy (v1 `EASY_WITHIN_MS`)                                                             |
 | **Scheduling** | `schedule.retention`           | 0.9                                                | app     | FSRS's target, the default of the learner's setting                                                            |
 |                | `schedule.maxIntervalDays`     | 365                                                | app     | longest gap between reviews                                                                                    |
 |                | `schedule.newPerDay`           | 10, range 0–50                                     | app     | default and range of the learner's setting                                                                     |
 |                | `schedule.sessionSize`         | 20, range 5–100                                    | app     | default and range (v1 `SESSION_SIZE`)                                                                          |
+|                | `schedule.reviewsFirstAt`      | 5                                                  | app     | due reviews at which the next action puts review before new steps                                              |
 | **Timing**     | `timing.delays`                | v1's table                                         | app     | base delays: tick, cross, reply, next card (v1 `FEEDBACK_DELAYS`); the learner's speed setting multiplies them |
 | **Coverage**   | `coverage.band`                | 1000–1600, blitz and rapid                         | both    | the explorer band baked into the data (v1 `EXPLORER_BAND`)                                                     |
 |                | `coverage.minShare`            | 0.05                                               | both    | a reply this common must be answered, and earns cards (v1 `MIN_POPULARITY_FOR_CARD`)                           |
@@ -52,7 +57,7 @@ Each key is marked **build** (used only by the scripts), **app** (used only in t
 |                | `puzzles.select`               | rating 600–1800, popularity ≥ 80, plays ≥ 500      | build   | which puzzles are worth shipping                                                                               |
 |                | `puzzles.perOpening`           | 300                                                | build   | the most shipped per opening                                                                                   |
 | **Opponent**   | `opponent.playOnMoves`         | 5                                                  | app     | moves in a Play on                                                                                             |
-|                | `opponent.playOnTolerance`     | Mistake                                            | app     | the worst grade allowed for a pass                                                                             |
+|                | `opponent.playOnTolerance`     | Mistake                                            | app     | the worst grade allowed for a Play on to count as kept                                                         |
 |                | `opponent.deviationJudgeAfter` | 3                                                  | app     | moves after leaving the book before "kept or gave away your advantage"                                         |
 | **Engine**     | `engine.liveDepth`             | 14                                                 | app     | browser engine depth for judgements                                                                            |
 |                | `engine.bakedDepth`            | 24                                                 | build   | native analysis depth                                                                                          |
@@ -66,9 +71,11 @@ Each key is marked **build** (used only by the scripts), **app** (used only in t
 What the learner chooses, inside the ranges above: their band and repertoire; new moves a day and session size; review
 order; desired retention (within limits); how much a wrong move explains; evaluation after answering; feedback speed;
 the tries table (live, at the end, off; columns); what the computer plays in Drill; puzzle rating and who solves; board
-look, notation, engine lines; accessibility; the Lichess token and username; the preset.
+look, notation, engine lines; accessibility; the Lichess token; the Lichess and Chess.com usernames; relaxing the gates;
+the preset. Every setting key is listed once in settings.md, "Keys".
 
 ## Changes from settings.md
 
-Hint fading, tries before the move is shown, the known and mastered rules, grade thresholds and the base delays move
-from the settings catalogue to config. The learner keeps a speed multiplier over the delays, not the delays themselves.
+Hint fading, tries before the move is shown, the known and mastered rules, the gates and testing out, the stages of a
+step, the checkpoint rules, when reviews come first, grade thresholds and the base delays move from the settings
+catalogue to config. The learner keeps a speed multiplier over the delays, not the delays themselves.
