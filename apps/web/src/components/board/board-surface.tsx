@@ -12,7 +12,8 @@ import { Check, X } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { cn } from '@/lib/utils';
-import { BOARD_SQUARES, MARK_RGB, SYSTEM_RGB } from './colours';
+import { BOARD_THEMES, useBoardSettings } from './board-settings-menu';
+import { MARK_RGB, SYSTEM_RGB } from './colours';
 import { SquareIconGlyph } from './square-icon';
 
 export type SystemArrow = { from: string; to: string; kind: keyof typeof SYSTEM_RGB };
@@ -28,8 +29,8 @@ export type BoardSurfaceProps = {
   /** The move to play, a hint, the engine's move, a wrong move: never in a mark colour. */
   arrows?: SystemArrow[];
   badge?: BoardBadge;
-  /** Squares lit by something hovered elsewhere (a move chip, a position feature). */
-  lit?: string[];
+  /** Squares lit by something hovered elsewhere (a move chip, a position feature), grey or in a mark colour. */
+  lit?: (string | { square: string; colour: MarkColour })[];
   interactive?: boolean;
   /** The letters and numbers round the edge; off on small boards. */
   notation?: boolean;
@@ -103,8 +104,10 @@ export function BoardSurface({
   className,
   id = 'board',
 }: BoardSurfaceProps) {
+  const settings = useBoardSettings();
+  const theme = BOARD_THEMES.find((candidate) => candidate.id === settings.theme) ?? BOARD_THEMES[0];
   const squareStyles: Record<string, CSSProperties> = {};
-  if (lastMove) {
+  if (lastMove && settings.lastMove) {
     for (const square of [lastMove.from, lastMove.to]) squareStyles[square] = { background: 'rgb(255 214 0 / 0.38)' };
   }
   for (const text of marks?.circles ?? []) {
@@ -116,8 +119,11 @@ export function BoardSurface({
       };
     }
   }
-  for (const square of lit) {
-    squareStyles[square] = { ...squareStyles[square], boxShadow: 'inset 0 0 0 100vmax rgb(100 116 139 / 0.28)' };
+  for (const item of lit) {
+    const square = typeof item === 'string' ? item : item.square;
+    const tint =
+      typeof item === 'string' ? 'rgb(100 116 139 / 0.28)' : MARK_RGB[item.colour].replace(/\/ [\d.]+\)/, '/ 0.35)');
+    squareStyles[square] = { ...squareStyles[square], boxShadow: `inset 0 0 0 100vmax ${tint}` };
   }
   const drawn = [
     ...(marks?.arrows ?? []).flatMap((text) => {
@@ -136,12 +142,12 @@ export function BoardSurface({
           arrows: drawn,
           squareStyles,
           allowDragging: interactive,
-          showNotation: notation,
+          showNotation: notation && settings.coordinates,
           boardStyle: { borderRadius: 0 },
           allowDrawingArrows: false,
-          lightSquareStyle: { backgroundColor: BOARD_SQUARES.light },
-          darkSquareStyle: { backgroundColor: BOARD_SQUARES.dark },
-          animationDurationInMs: 180,
+          lightSquareStyle: { backgroundColor: theme.light },
+          darkSquareStyle: { backgroundColor: theme.dark },
+          animationDurationInMs: settings.animation ? 180 : 0,
           onPieceDrop: ({ sourceSquare, targetSquare }) =>
             targetSquare && onMove ? onMove(sourceSquare, targetSquare) : false,
         }}

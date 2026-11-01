@@ -226,3 +226,28 @@
   --color-eval-black: var(--eval-black);
   --color-brand: var(--brand);
 }
+
+/* Line kinds and risk (docs/v2/patterns/colours.md). */
+:root {
+  --kind-main: var(--foreground);
+  --kind-sideline: var(--muted-foreground);
+  --kind-rare: var(--muted-foreground);
+  --risk-low: oklch(0.6 0.15 150);
+  --risk-medium: oklch(0.72 0.16 75);
+  --risk-high: oklch(0.58 0.22 27);
+}
+
+.dark {
+  --risk-low: oklch(0.7 0.15 150);
+  --risk-medium: oklch(0.8 0.15 75);
+  --risk-high: oklch(0.68 0.2 27);
+}
+
+@theme inline {
+  --color-kind-main: var(--kind-main);
+  --color-kind-sideline: var(--kind-sideline);
+  --color-kind-rare: var(--kind-rare);
+  --color-risk-low: var(--risk-low);
+  --color-risk-medium: var(--risk-medium);
+  --color-risk-high: var(--risk-high);
+}

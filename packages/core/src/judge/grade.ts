@@ -17,8 +17,8 @@ export const GRADES: readonly Grade[] = [
 
 export const GRADE_INFO: Record<Grade, { name: string; symbol: string | null; hint: string }> = {
   book: { name: 'Book', symbol: null, hint: 'The move the line plays.' },
-  best: { name: 'Best', symbol: '!', hint: 'The engine’s first choice, or as good as it.' },
-  excellent: { name: 'Excellent', symbol: null, hint: 'Almost as good as the best move.' },
+  best: { name: 'Best', symbol: '★', hint: 'The engine’s first choice, or as good as it.' },
+  excellent: { name: 'Excellent', symbol: '!', hint: 'Almost as good as the best move.' },
   good: { name: 'Good', symbol: null, hint: 'A sound move that gives a little away.' },
   inaccuracy: { name: 'Inaccuracy', symbol: '?!', hint: 'Not a disaster, but a better move was there.' },
   mistake: { name: 'Mistake', symbol: '?', hint: 'Gives away a real part of the advantage.' },

@@ -18,5 +18,3 @@ export const SYSTEM_RGB = {
   wrong: 'rgb(219 39 119 / 0.8)',
   preview: 'rgb(100 116 139 / 0.5)',
 } as const;
-
-export const BOARD_SQUARES = { light: '#eeeed2', dark: '#769656' } as const;

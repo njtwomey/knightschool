@@ -2,8 +2,8 @@ import type { Marks, Score } from '@knightschool/core';
 import { useState, type ReactNode } from 'react';
 import { MarkKey } from '@/components/chess/mark-key';
 import { cn } from '@/lib/utils';
-import { BoardControls } from './board-controls';
-import { BoardSurface, type BoardBadge, type SystemArrow } from './board-surface';
+import { BoardControls, type ControlsExercise } from './board-controls';
+import { BoardSurface, type BoardBadge, type BoardSurfaceProps, type SystemArrow } from './board-surface';
 import { EvalBar } from './eval-bar';
 
 /**
@@ -38,8 +38,16 @@ export type BoardProps = {
   flippable?: boolean;
   badge?: BoardBadge;
   arrows?: SystemArrow[];
-  lit?: string[];
+  lit?: BoardSurfaceProps['lit'];
   interactive?: boolean;
+  /** An exercise waiting for an answer: Hint and Show me in the control row. */
+  exercise?: ControlsExercise;
+  /** Stepping stops here: before it is not part of what is shown (a step starting part-way). */
+  stepMin?: number;
+  /** Stepping forward stops at the move being asked, so the answer is never one click away. */
+  asked?: number;
+  /** The key to the marks under the board; off where a notes panel shows it instead. */
+  markKey?: boolean;
   onMove?: (from: string, to: string) => boolean;
   caption?: ReactNode;
   actions?: ReactNode;
@@ -64,6 +72,10 @@ export function Board({
   arrows = [],
   lit,
   interactive,
+  exercise,
+  stepMin,
+  asked,
+  markKey = true,
   onMove,
   caption,
   actions,
@@ -101,11 +113,12 @@ export function Board({
       <BoardControls
         onFlip={flippable ? () => setFlipped(!flipped) : undefined}
         keys={keys}
-        stepper={onIndex ? { index, last, onIndex, keys } : undefined}
+        stepper={onIndex ? { index, last, onIndex, keys, min: stepMin, asked } : undefined}
+        exercise={exercise}
         actions={actions}
       />
       {caption ? <div className="text-sm">{caption}</div> : null}
-      {shows.marks ? <MarkKey marks={position.marks} /> : null}
+      {shows.marks && markKey ? <MarkKey marks={position.marks} /> : null}
     </div>
   );
 }
