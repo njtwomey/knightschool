@@ -18,13 +18,13 @@ import { cn } from '@/lib/utils';
  * choice still reads, and the new settings sit beside them.
  */
 
-/** Board colours: the swatches are the boards themselves, so these are colour data, like the mark colours in colours.ts. */
+/** Board themes: each square colour is a token in index.css (`--board-<theme>-light`, `-dark`). */
 export const BOARD_THEMES = [
-  { id: 'green', name: 'Green', light: '#ebecd0', dark: '#7a9459' },
-  { id: 'tan', name: 'Tan', light: '#e8dbbc', dark: '#c1a07a' },
-  { id: 'blue', name: 'Blue', light: '#dee3e6', dark: '#8ca2ad' },
-  { id: 'slate', name: 'Slate', light: '#d9dde3', dark: '#7b8794' },
-  { id: 'purple', name: 'Purple', light: '#e9e3f1', dark: '#9884bd' },
+  { id: 'green', name: 'Green', light: 'var(--board-green-light)', dark: 'var(--board-green-dark)' },
+  { id: 'tan', name: 'Tan', light: 'var(--board-tan-light)', dark: 'var(--board-tan-dark)' },
+  { id: 'blue', name: 'Blue', light: 'var(--board-blue-light)', dark: 'var(--board-blue-dark)' },
+  { id: 'slate', name: 'Slate', light: 'var(--board-slate-light)', dark: 'var(--board-slate-dark)' },
+  { id: 'purple', name: 'Purple', light: 'var(--board-purple-light)', dark: 'var(--board-purple-dark)' },
 ] as const;
 
 export const PIECE_SETS = [

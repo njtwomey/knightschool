@@ -2,7 +2,7 @@ import { epdToFen, MARK_MEANINGS, parseIcon, type MarkColour, type Side } from '
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { Pin } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { MARK_RGB } from '@/components/board/colours';
+import { MARK_COLOUR } from '@/components/board/colours';
 import type { BoardPosition, BoardProps, Reveal } from '@/components/board/board';
 import type { SystemArrow } from '@/components/board/board-surface';
 import { SquareIconGlyph } from '@/components/board/square-icon';
@@ -389,7 +389,7 @@ export function PositionFeatures({
                 ) : (
                   <span
                     className="mt-1.5 size-2.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: MARK_RGB[feature.colour] }}
+                    style={{ backgroundColor: MARK_COLOUR[feature.colour] }}
                     aria-label={MARK_MEANINGS[feature.colour].name}
                   />
                 )}

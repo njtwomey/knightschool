@@ -108,7 +108,7 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="grid size-5 place-items-center rounded-full bg-feedback-right text-white" aria-hidden>
+              <span className="grid size-5 place-items-center rounded-full bg-feedback-right text-on-fill" aria-hidden>
                 <Check className="size-3.5" strokeWidth={3} />
               </span>
               <MoveChip ply={feedback.ply} san={feedback.san} mine preview={false} />
@@ -126,7 +126,7 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex items-center gap-2">
-              <span className="grid size-5 place-items-center rounded-full bg-feedback-wrong text-white" aria-hidden>
+              <span className="grid size-5 place-items-center rounded-full bg-feedback-wrong text-on-fill" aria-hidden>
                 <X className="size-3.5" strokeWidth={3} />
               </span>
               <span className="text-sm text-muted-foreground">Not this one</span>

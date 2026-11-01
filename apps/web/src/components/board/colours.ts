@@ -1,20 +1,29 @@
 import type { MarkColour } from '@knightschool/core';
 
 /*
- * Colours for things the board draws in SVG (arrows), where CSS variables cannot be used. They match the tokens of the
- * same name in index.css (docs/v2/patterns/colours.md).
+ * The board's colours, as references to the tokens in index.css (docs/v2/patterns/colours.md): every value lives
+ * there, once, for light and dark. CSS variables work in inline styles and in the SVG the board draws arrows with.
  */
-export const MARK_RGB: Record<MarkColour, string> = {
-  G: 'rgb(21 128 61 / 0.85)',
-  R: 'rgb(185 28 28 / 0.85)',
-  Y: 'rgb(202 138 4 / 0.9)',
-  B: 'rgb(29 78 216 / 0.85)',
+export const MARK_COLOUR: Record<MarkColour, string> = {
+  G: 'var(--mark-idea)',
+  R: 'var(--mark-threat)',
+  Y: 'var(--mark-target)',
+  B: 'var(--mark-support)',
 };
 
 /** System arrows: never one of the four mark colours, so "play this" never looks like an Idea. */
-export const SYSTEM_RGB = {
-  play: 'rgb(124 58 237 / 0.8)',
-  engine: 'rgb(100 116 139 / 0.75)',
-  wrong: 'rgb(219 39 119 / 0.8)',
-  preview: 'rgb(100 116 139 / 0.5)',
+export const SYSTEM_COLOUR = {
+  play: 'var(--arrow-play)',
+  engine: 'var(--arrow-engine)',
+  wrong: 'var(--arrow-wrong)',
+  preview: 'var(--arrow-preview)',
 } as const;
+
+export const BOARD_COLOUR = {
+  lastMove: 'var(--board-last-move)',
+  lit: 'var(--board-lit)',
+  dot: 'var(--board-dot)',
+} as const;
+
+/** A colour token made see-through, for tints over a square. */
+export const tint = (colour: string, percent: number) => `color-mix(in srgb, ${colour} ${percent}%, transparent)`;

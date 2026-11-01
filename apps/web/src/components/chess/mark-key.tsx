@@ -1,5 +1,5 @@
 import { MARK_MEANINGS, markColours, parseIcon, SQUARE_ICONS, type Marks, type SquareIcon } from '@knightschool/core';
-import { MARK_RGB } from '@/components/board/colours';
+import { MARK_COLOUR } from '@/components/board/colours';
 import { SquareIconGlyph } from '@/components/board/square-icon';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -14,7 +14,7 @@ export function MarkKey({ marks }: { marks: Partial<Marks> | undefined }) {
         <Tooltip key={colour}>
           <TooltipTrigger asChild>
             <li className="inline-flex cursor-default items-center gap-1.5">
-              <span className="size-2.5 rounded-full" style={{ backgroundColor: MARK_RGB[colour] }} aria-hidden />
+              <span className="size-2.5 rounded-full" style={{ backgroundColor: MARK_COLOUR[colour] }} aria-hidden />
               {MARK_MEANINGS[colour].name}
             </li>
           </TooltipTrigger>

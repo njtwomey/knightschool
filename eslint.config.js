@@ -85,6 +85,36 @@ export default tseslint.config(
     },
   },
   {
+    // Colours live in index.css as tokens, once, for light and dark. Code refers to them (Tailwind token classes, or
+    // var(--token)); a colour literal or a raw palette class fails here.
+    files: ['apps/web/src/**/*.{ts,tsx}'],
+    ignores: ['apps/web/src/components/ui/**', 'apps/web/src/components/progress/css-colour.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        // A later block replaces an earlier one's rule, so the raw-element rule is repeated here.
+        ...RAW_ELEMENTS.map((name) => ({
+          selector: `JSXOpeningElement[name.name='${name}']`,
+          message: `Use the shadcn component from @/components/ui instead of a raw <${name}>.`,
+        })),
+        {
+          selector: 'Literal[value=/(#[0-9a-fA-F]{3,8}\\b|rgba?\\(|oklch\\(|hsla?\\()/]',
+          message: 'Define the colour as a token in index.css and refer to it.',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/(#[0-9a-fA-F]{6}\\b|rgba?\\(|oklch\\(|hsla?\\()/]',
+          message: 'Define the colour as a token in index.css and refer to it.',
+        },
+        {
+          selector:
+            'Literal[value=/\\b(bg|text|border|ring|fill|stroke|from|to|via|outline|decoration|shadow)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|white|black)\\b/]',
+          message:
+            'Use a colour token class (bg-background, text-muted-foreground, bg-verdict-mistake...), not a palette colour.',
+        },
+      ],
+    },
+  },
+  {
     files: ['packages/core/src/**/*.ts'],
     ignores: ['packages/core/src/**/*.test.ts', 'packages/core/src/testing/**'],
     rules: {

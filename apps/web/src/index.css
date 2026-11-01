@@ -284,3 +284,30 @@
   --color-arrow-engine: var(--arrow-engine);
   --color-arrow-wrong: var(--arrow-wrong);
 }
+
+/* The board's own colours: highlights, dots, selection, square icons, and each board theme's squares. */
+:root {
+  --arrow-preview: rgb(100 116 139 / 0.5);
+  --board-last-move: rgb(255 214 0 / 0.38);
+  --board-lit: rgb(100 116 139 / 0.28);
+  --board-dot: rgb(0 0 0 / 0.22);
+  --board-selection: rgb(23 23 23 / 0.8);
+  --board-icon: rgb(255 255 255 / 0.9);
+  --on-fill: #ffffff;
+  --board-green-light: #ebecd0;
+  --board-green-dark: #7a9459;
+  --board-tan-light: #e8dbbc;
+  --board-tan-dark: #c1a07a;
+  --board-blue-light: #dee3e6;
+  --board-blue-dark: #8ca2ad;
+  --board-slate-light: #d9dde3;
+  --board-slate-dark: #7b8794;
+  --board-purple-light: #e9e3f1;
+  --board-purple-dark: #9884bd;
+}
+
+@theme inline {
+  --color-board-selection: var(--board-selection);
+  --color-board-icon: var(--board-icon);
+  --color-on-fill: var(--on-fill);
+}

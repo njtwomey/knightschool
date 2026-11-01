@@ -17,10 +17,10 @@ import { siteConfig } from '@/data/site-config';
 import { cn } from '@/lib/utils';
 import { BOARD_THEMES, useBoardSettings } from './board-settings-menu';
 import { GRADE_FILL } from '@/components/chess/grade-style';
-import { MARK_RGB, SYSTEM_RGB } from './colours';
+import { BOARD_COLOUR, MARK_COLOUR, SYSTEM_COLOUR, tint } from './colours';
 import { SquareIconGlyph } from './square-icon';
 
-export type SystemArrow = { from: string; to: string; kind: keyof typeof SYSTEM_RGB };
+export type SystemArrow = { from: string; to: string; kind: keyof typeof SYSTEM_COLOUR };
 export type BoardBadge = { square: string } & ({ kind: 'right' | 'wrong' } | { kind: 'grade'; grade: Grade });
 
 export type BoardSurfaceProps = {
@@ -73,7 +73,7 @@ function Badge({ badge, orientation }: { badge: BoardBadge; orientation: 'white'
     <div className="pointer-events-none absolute z-10 size-[12.5%]" style={box}>
       <div
         className={cn(
-          'absolute -top-[18%] -right-[18%] grid size-[46%] place-items-center rounded-full text-[0.7rem] font-bold text-white shadow-md ring-2 ring-background',
+          'absolute -top-[18%] -right-[18%] grid size-[46%] place-items-center rounded-full text-[0.7rem] font-bold text-on-fill shadow-md ring-2 ring-background',
           tone,
         )}
       >
@@ -87,7 +87,7 @@ function Badge({ badge, orientation }: { badge: BoardBadge; orientation: 'white'
 
 /** Corner brackets round the selected piece, so it is clear which piece is being moved. */
 function Selection({ square, orientation }: { square: string; orientation: 'white' | 'black' }) {
-  const corner = 'absolute size-[30%] border-neutral-900/80';
+  const corner = 'absolute size-[30%] border-board-selection';
   return (
     <div className="pointer-events-none absolute z-10 size-[12.5%]" style={squareBox(square, orientation)} aria-hidden>
       <div className="absolute inset-[5%]">
@@ -147,39 +147,39 @@ export function BoardSurface({
   };
   const squareStyles: Record<string, CSSProperties> = {};
   if (lastMove && settings.lastMove) {
-    for (const square of [lastMove.from, lastMove.to]) squareStyles[square] = { background: 'rgb(255 214 0 / 0.38)' };
+    for (const square of [lastMove.from, lastMove.to])
+      squareStyles[square] = { backgroundColor: BOARD_COLOUR.lastMove };
   }
   for (const text of marks?.circles ?? []) {
     const ring = parseRing(text);
     if (ring) {
       squareStyles[ring.square] = {
         ...squareStyles[ring.square],
-        boxShadow: `inset 0 0 0 4px ${MARK_RGB[ring.colour]}`,
+        boxShadow: `inset 0 0 0 4px ${MARK_COLOUR[ring.colour]}`,
       };
     }
   }
   for (const item of lit) {
     const square = typeof item === 'string' ? item : item.square;
-    const tint =
-      typeof item === 'string' ? 'rgb(100 116 139 / 0.28)' : MARK_RGB[item.colour].replace(/\/ [\d.]+\)/, '/ 0.35)');
-    squareStyles[square] = { ...squareStyles[square], boxShadow: `inset 0 0 0 100vmax ${tint}` };
+    const colour = typeof item === 'string' ? BOARD_COLOUR.lit : tint(MARK_COLOUR[item.colour], 40);
+    squareStyles[square] = { ...squareStyles[square], boxShadow: `inset 0 0 0 100vmax ${colour}` };
   }
   if (settings.legalMoves) {
     for (const target of targets) {
       squareStyles[target.to] = {
         ...squareStyles[target.to],
         backgroundImage: target.capture
-          ? 'radial-gradient(circle, transparent 56%, rgb(0 0 0 / 0.22) 58%, rgb(0 0 0 / 0.22) 70%, transparent 72%)'
-          : 'radial-gradient(circle, rgb(0 0 0 / 0.22) 16%, transparent 18%)',
+          ? `radial-gradient(circle, transparent 56%, ${BOARD_COLOUR.dot} 58%, ${BOARD_COLOUR.dot} 70%, transparent 72%)`
+          : `radial-gradient(circle, ${BOARD_COLOUR.dot} 16%, transparent 18%)`,
       };
     }
   }
   const drawn = [
     ...(marks?.arrows ?? []).flatMap((text) => {
       const arrow = parseArrow(text);
-      return arrow ? [{ startSquare: arrow.from, endSquare: arrow.to, color: MARK_RGB[arrow.colour] }] : [];
+      return arrow ? [{ startSquare: arrow.from, endSquare: arrow.to, color: MARK_COLOUR[arrow.colour] }] : [];
     }),
-    ...arrows.map((arrow) => ({ startSquare: arrow.from, endSquare: arrow.to, color: SYSTEM_RGB[arrow.kind] })),
+    ...arrows.map((arrow) => ({ startSquare: arrow.from, endSquare: arrow.to, color: SYSTEM_COLOUR[arrow.kind] })),
   ];
   return (
     <div className={cn('relative aspect-square h-auto w-full min-w-0 shrink overflow-hidden shadow-sm', className)}>
@@ -218,7 +218,7 @@ export function BoardSurface({
             style={squareBox(mark.square, orientation)}
             title={SQUARE_ICONS[mark.icon].name}
           >
-            <div className="absolute bottom-[6%] left-[6%] grid size-[44%] place-items-center rounded-full bg-white/90 shadow-sm">
+            <div className="absolute bottom-[6%] left-[6%] grid size-[44%] place-items-center rounded-full bg-board-icon shadow-sm">
               <SquareIconGlyph icon={mark.icon} className="size-3/4" />
             </div>
           </div>,

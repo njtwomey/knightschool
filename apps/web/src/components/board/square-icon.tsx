@@ -13,7 +13,7 @@ import {
   TriangleAlert,
   type LucideIcon,
 } from 'lucide-react';
-import { MARK_RGB } from './colours';
+import { MARK_COLOUR } from './colours';
 
 const GLYPHS: Record<Icon, LucideIcon> = {
   pin: Pin,
@@ -33,6 +33,11 @@ const GLYPHS: Record<Icon, LucideIcon> = {
 export function SquareIconGlyph({ icon, className }: { icon: Icon; className?: string }) {
   const Glyph = GLYPHS[icon];
   return (
-    <Glyph className={className} style={{ color: MARK_RGB[SQUARE_ICONS[icon].colour] }} aria-hidden strokeWidth={2.5} />
+    <Glyph
+      className={className}
+      style={{ color: MARK_COLOUR[SQUARE_ICONS[icon].colour] }}
+      aria-hidden
+      strokeWidth={2.5}
+    />
   );
 }
