@@ -26,6 +26,7 @@ schedule:
   maxIntervalDays: 365 # app
   newPerDay: { default: 10, min: 0, max: 50 } # app: default and range of the learner's setting
   sessionSize: { default: 20, min: 5, max: 100 } # app
+  reviewsFirstAt: 5 # app: with at least this many reviews due, Today offers reviews before a new step
 
 timing: # app: base delays in milliseconds; the learner's speed setting multiplies them
   correctBadge: 250

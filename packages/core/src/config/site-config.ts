@@ -31,6 +31,7 @@ export const SiteConfig = z.object({
     maxIntervalDays: z.number().int().positive(),
     newPerDay: range,
     sessionSize: range,
+    reviewsFirstAt: z.number().int().nonnegative(),
   }),
   timing: z.record(z.string(), z.number().int().nonnegative()),
   coverage: z.object({
