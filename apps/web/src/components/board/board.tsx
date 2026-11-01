@@ -1,9 +1,8 @@
 import type { Marks, Score } from '@knightschool/core';
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, ArrowUpDown } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { MarkKey } from '@/components/chess/mark-key';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { BoardControls } from './board-controls';
 import { BoardSurface, type BoardBadge, type SystemArrow } from './board-surface';
 import { EvalBar } from './eval-bar';
 
@@ -76,24 +75,6 @@ export function Board({
   const shows = SHOWS[reveal];
   const position = positions[index]!;
   const last = positions.length - 1;
-  const go = (next: number) => onIndex?.(Math.max(0, Math.min(last, next)));
-
-  useEffect(() => {
-    if (!keys || !onIndex) return;
-    const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (event.metaKey || event.ctrlKey || event.altKey || target?.closest('input, textarea, [contenteditable]'))
-        return;
-      const step = { ArrowLeft: -1, ArrowRight: 1 }[event.key];
-      if (step) go(index + step);
-      else if (event.key === 'Home') go(0);
-      else if (event.key === 'End') go(last);
-      else return;
-      event.preventDefault();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  });
 
   const drawn: SystemArrow[] = [
     ...(shows.play && position.next ? [{ ...position.next, kind: 'play' as const }] : []),
@@ -117,36 +98,12 @@ export function Board({
           onMove={onMove}
         />
       </div>
-      <div className="flex flex-wrap items-center gap-1">
-        {flippable ? (
-          <Button variant="ghost" size="icon" aria-label="Flip the board" onClick={() => setFlipped(!flipped)}>
-            <ArrowUpDown aria-hidden />
-          </Button>
-        ) : null}
-        {onIndex ? (
-          <div className="flex items-center" role="group" aria-label="Step through the moves">
-            <Button variant="ghost" size="icon" aria-label="Start" disabled={index === 0} onClick={() => go(0)}>
-              <ChevronFirst aria-hidden />
-            </Button>
-            <Button variant="ghost" size="icon" aria-label="Back" disabled={index === 0} onClick={() => go(index - 1)}>
-              <ChevronLeft aria-hidden />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Forward"
-              disabled={index === last}
-              onClick={() => go(index + 1)}
-            >
-              <ChevronRight aria-hidden />
-            </Button>
-            <Button variant="ghost" size="icon" aria-label="End" disabled={index === last} onClick={() => go(last)}>
-              <ChevronLast aria-hidden />
-            </Button>
-          </div>
-        ) : null}
-        <div className="ml-auto flex flex-wrap items-center gap-2">{actions}</div>
-      </div>
+      <BoardControls
+        onFlip={flippable ? () => setFlipped(!flipped) : undefined}
+        keys={keys}
+        stepper={onIndex ? { index, last, onIndex, keys } : undefined}
+        actions={actions}
+      />
       {caption ? <div className="text-sm">{caption}</div> : null}
       {shows.marks ? <MarkKey marks={position.marks} /> : null}
     </div>
