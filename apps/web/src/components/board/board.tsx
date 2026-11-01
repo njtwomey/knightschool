@@ -17,7 +17,7 @@ const SHOWS: Record<Reveal, { marks: boolean; eval: boolean; play: boolean }> = 
   study: { marks: true, eval: true, play: false },
   learn: { marks: true, eval: true, play: true },
   test: { marks: false, eval: false, play: false },
-  answered: { marks: true, eval: true, play: true },
+  answered: { marks: true, eval: true, play: false },
 };
 
 export type BoardPosition = {

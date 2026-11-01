@@ -1,9 +1,16 @@
-import { ChevronLeft, ChevronRight, ExternalLink, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Search, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { CATALOGUE, specUrl, type CatalogueEntry } from './catalogue';
@@ -106,11 +113,11 @@ export function MocksPage() {
         </section>
       ))}
       <Dialog open={Boolean(openItem)} onOpenChange={(next) => !next && choose(null)}>
-        <DialogContent className="max-h-[90svh] overflow-y-auto sm:max-w-5xl">
+        <DialogContent showCloseButton={false} className="max-h-[90svh] overflow-y-auto sm:max-w-5xl">
           {openEntry && openItem ? (
             <>
-              <DialogHeader>
-                <div className="flex items-center gap-2 pr-8">
+              <DialogHeader className="sticky -top-4 z-20 -mx-4 -mt-4 border-b bg-popover px-4 pt-4 pb-3">
+                <div className="flex items-center gap-2">
                   <DialogTitle className="mr-auto">{openEntry.name}</DialogTitle>
                   <span className="text-xs text-muted-foreground tabular-nums">
                     {at + 1} of {built.length}
@@ -135,6 +142,11 @@ export function MocksPage() {
                   >
                     <ChevronRight aria-hidden />
                   </Button>
+                  <DialogClose asChild>
+                    <Button variant="ghost" size="icon" aria-label="Close">
+                      <X aria-hidden />
+                    </Button>
+                  </DialogClose>
                 </div>
                 <DialogDescription>
                   {openEntry.summary}{' '}
