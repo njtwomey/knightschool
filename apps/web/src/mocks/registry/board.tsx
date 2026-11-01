@@ -162,6 +162,34 @@ export const boardMocks: MockItem[] = [
         ),
       },
       {
+        name: 'Icons on squares',
+        note: 'Legal Mate, after 5...Bh5: the knight on f3 is pinned, f7 is the weak square, e5 hangs. Written [%icon pin@f3,weak@f7,hanging@e5].',
+        render: () => {
+          const marks = { arrows: ['Rh5d1'], icons: ['pin@f3', 'weak@f7', 'hanging@e5'] };
+          return (
+            <div className="grid max-w-xs gap-2">
+              <BoardSurface epd={LEGAL[10]!.epd} lastMove={LEGAL[10]!.lastMove} marks={marks} />
+              <MarkKey marks={marks} />
+            </div>
+          );
+        },
+      },
+      {
+        name: 'Every icon',
+        note: 'The fixed vocabulary, each in the colour of its meaning: danger red, targets yellow, good squares green, support blue.',
+        render: () => {
+          const marks = {
+            icons: ['pin@a8', 'fork@b8', 'hanging@c8', 'attack@d8', 'check@e8', 'mate@f8', 'trap@g8', 'weak@a1', 'key@b1', 'outpost@c1', 'defended@d1'],
+          };
+          return (
+            <div className="grid max-w-xs gap-2">
+              <BoardSurface epd="8/8/8/8/8/8/8/8 w - -" marks={marks} />
+              <MarkKey marks={marks} />
+            </div>
+          );
+        },
+      },
+      {
         name: 'System arrows',
         note: 'The move to play (violet), the engine’s move (slate), a wrong move (magenta): never a mark colour.',
         render: () => (

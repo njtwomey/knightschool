@@ -9,14 +9,15 @@ One move, one note, across all lines (as in v1).
 7. Bb3 $1 { Back to the diagonal that aims at f7. [%cal Ge4e5,Gb3f7] [%csl Yf7] [%tag tip] [%idea f7-weakness] }
 ```
 
-| Part   | Written as                        | Standard           | Meaning                                                          |
-| ------ | --------------------------------- | ------------------ | ---------------------------------------------------------------- |
-| Text   | the comment's words               | PGN comment        | what the move does and why; plain, neutral, one or two sentences |
-| Symbol | `!` `?` `!?` `?!` or `$1` `$2`... | PGN NAG            | the author's grade; wins over the engine's                       |
-| Arrows | `[%cal Gc4f7,Rd8h4]`              | Lichess, ChessBase | colour letter, from, to                                          |
-| Rings  | `[%csl Yd5]`                      | Lichess, ChessBase | colour letter, square                                            |
-| Tags   | `[%tag tip]`, `[%tag trap]`       | ours (v1)          | a kind of note: tip, trap, common mistake, or any word           |
-| Ideas  | `[%idea fork]`                    | ours (new)         | ids from `ideas.yaml` that this move shows                       |
+| Part   | Written as                        | Standard           | Meaning                                                                                                                                 |
+| ------ | --------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Text   | the comment's words               | PGN comment        | what the move does and why; plain, neutral, one or two sentences                                                                        |
+| Symbol | `!` `?` `!?` `?!` or `$1` `$2`... | PGN NAG            | the author's grade; wins over the engine's                                                                                              |
+| Arrows | `[%cal Gc4f7,Rd8h4]`              | Lichess, ChessBase | colour letter, from, to                                                                                                                 |
+| Rings  | `[%csl Yd5]`                      | Lichess, ChessBase | colour letter, square                                                                                                                   |
+| Tags   | `[%tag tip]`, `[%tag trap]`       | ours (v1)          | a kind of note: tip, trap, common mistake, or any word                                                                                  |
+| Ideas  | `[%idea fork]`                    | ours (new)         | ids from `ideas.yaml` that this move shows                                                                                              |
+| Icons  | `[%icon pin@f6,weak@f7]`          | ours (new)         | an icon on a square from a fixed set: pin, fork, hanging, attack, check, mate, trap, weak, key, outpost, defended (core `SQUARE_ICONS`) |
 
 **Colours** mean one thing everywhere: G Idea, R Threat, Y Target, B Support (v1 `MARK_MEANINGS`). Any other letter
 fails the build. One to three marks per move.

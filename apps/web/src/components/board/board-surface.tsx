@@ -1,9 +1,10 @@
-import { epdToFen, GRADE_INFO, parseArrow, parseRing, type Grade, type Marks } from '@knightschool/core';
+import { epdToFen, GRADE_INFO, parseArrow, parseIcon, parseRing, SQUARE_ICONS, type Grade, type Marks } from '@knightschool/core';
 import { Check, X } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { cn } from '@/lib/utils';
 import { BOARD_SQUARES, MARK_RGB, SYSTEM_RGB } from './colours';
+import { SquareIconGlyph } from './square-icon';
 
 export type SystemArrow = { from: string; to: string; kind: keyof typeof SYSTEM_RGB };
 export type BoardBadge = { square: string } & ({ kind: 'right' | 'wrong' } | { kind: 'grade'; grade: Grade });
@@ -131,6 +132,22 @@ export function BoardSurface({
             targetSquare && onMove ? onMove(sourceSquare, targetSquare) : false,
         }}
       />
+      {(marks?.icons ?? []).flatMap((text) => {
+        const mark = parseIcon(text);
+        if (!mark) return [];
+        return [
+          <div
+            key={text}
+            className="pointer-events-none absolute z-10 size-[12.5%]"
+            style={squareBox(mark.square, orientation)}
+            title={SQUARE_ICONS[mark.icon].name}
+          >
+            <div className="absolute bottom-[6%] left-[6%] grid size-[44%] place-items-center rounded-full bg-white/90 shadow-sm">
+              <SquareIconGlyph icon={mark.icon} className="size-3/4" />
+            </div>
+          </div>,
+        ];
+      })}
       {badge ? <Badge badge={badge} orientation={orientation} /> : null}
     </div>
   );

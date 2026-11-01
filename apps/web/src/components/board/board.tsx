@@ -1,5 +1,5 @@
 import type { Marks, Score } from '@knightschool/core';
-import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, FlipVertical2 } from 'lucide-react';
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, ArrowUpDown } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { MarkKey } from '@/components/chess/mark-key';
 import { Button } from '@/components/ui/button';
@@ -118,7 +118,7 @@ export function Board({
       <div className="flex flex-wrap items-center gap-1">
         {flippable ? (
           <Button variant="ghost" size="icon" aria-label="Flip the board" onClick={() => setFlipped(!flipped)}>
-            <FlipVertical2 aria-hidden />
+            <ArrowUpDown aria-hidden />
           </Button>
         ) : null}
         {onIndex ? (

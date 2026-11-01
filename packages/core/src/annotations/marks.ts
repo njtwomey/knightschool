@@ -14,7 +14,8 @@ export const MARK_MEANINGS: Record<MarkColour, { name: string; hint: string }> =
 
 export type Arrow = { colour: MarkColour; from: string; to: string };
 export type Ring = { colour: MarkColour; square: string };
-export type Marks = { arrows: string[]; circles: string[] };
+/** A move's marks as written: arrows `Gc4f7`, rings `Yd5`, icons `pin@f6`. */
+export type Marks = { arrows: string[]; circles: string[]; icons?: string[] };
 
 const SQUARE = '[a-h][1-8]';
 const ARROW = new RegExp(`^([GRYB])(${SQUARE})(${SQUARE})$`);
