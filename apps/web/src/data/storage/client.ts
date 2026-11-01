@@ -76,8 +76,9 @@ function connect(worker: Worker) {
 }
 
 /**
- * Takes the tab lock and starts the database worker. Opening is retried briefly, because the tab that just lost the
- * lock may take a moment to let go of the files.
+ * Takes the tab lock and starts the database worker. A page being reloaded may still hold the files for a moment, so
+ * a failed open starts a fresh worker and tries again, backing off, for about ten seconds; and this page lets go of
+ * the files as soon as it is being left (`pagehide`), so the next page can open them at once.
  */
 export async function openBrowserDatabase(onLost: () => void): Promise<BrowserDatabase> {
   const held: { stop?: (error: Error) => void } = {};
@@ -85,29 +86,34 @@ export async function openBrowserDatabase(onLost: () => void): Promise<BrowserDa
     held.stop?.(new TabLostError()); // release the files so the tab that took over can open them
     onLost();
   });
-  const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module', name: 'knightschool-db' });
-  const { call, stop } = connect(worker);
-  held.stop = stop;
-  const exec: SqlExecutor = {
-    execute: async (sql, params) => (await call({ op: 'execute', sql, params })) as Row[],
-    transaction: async (statements) => void (await call({ op: 'transaction', statements })),
+  let connection: ReturnType<typeof connect> | undefined;
+  const start = () => {
+    const worker = new Worker(new URL('./worker.ts', import.meta.url), { type: 'module', name: 'knightschool-db' });
+    connection = connect(worker);
+    held.stop = connection.stop;
   };
-  for (let attempt = 1; ; attempt++) {
+  const exec: SqlExecutor = {
+    execute: async (sql, params) => (await connection!.call({ op: 'execute', sql, params })) as Row[],
+    transaction: async (statements) => void (await connection!.call({ op: 'transaction', statements })),
+  };
+  const waits = [150, 250, 400, 600, 800, 1000, 1200, 1500, 1800, 2200];
+  for (let attempt = 0; ; attempt++) {
+    start();
     try {
       await exec.execute('select 1');
       break;
     } catch (error) {
-      if (attempt >= 8 || error instanceof TabLostError) {
-        stop(error instanceof Error ? error : new Error(String(error)));
-        throw error;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 250));
+      connection!.stop(error instanceof Error ? error : new Error(String(error)));
+      if (attempt >= waits.length || error instanceof TabLostError) throw error;
+      await new Promise((resolve) => setTimeout(resolve, waits[attempt]));
     }
   }
+  window.addEventListener('pagehide', () => connection?.stop(new Error('The page was left.')), { once: true });
+  const call = (message: Parameters<ReturnType<typeof connect>['call']>[0]) => connection!.call(message);
   return {
     exec,
     snapshot: async (label) => (await call({ op: 'snapshot', label })) as string,
     restore: async (name) => void (await call({ op: 'restore', name })),
-    close: () => stop(new Error('The database was closed.')),
+    close: () => connection?.stop(new Error('The database was closed.')),
   };
 }

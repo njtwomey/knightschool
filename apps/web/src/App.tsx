@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Header } from '@/app/header';
+import { StorageNotice } from '@/app/storage-notice';
 import { NotFoundPage } from '@/pages/not-found-page';
 import { usePath } from '@/router/location';
 
@@ -89,6 +90,7 @@ export function App() {
     <TooltipProvider delayDuration={300}>
       <div className="min-h-svh bg-background text-foreground">
         <Header />
+        <StorageNotice />
         <Suspense fallback={<div className="p-8 text-muted-foreground">Loading…</div>}>
           <Page path={path} />
         </Suspense>
