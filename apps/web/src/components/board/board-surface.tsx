@@ -6,6 +6,7 @@ import {
   parseRing,
   SQUARE_ICONS,
   type Grade,
+  type MarkColour,
   type Marks,
 } from '@knightschool/core';
 import { Check, X } from 'lucide-react';
