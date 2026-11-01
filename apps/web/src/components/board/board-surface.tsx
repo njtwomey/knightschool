@@ -1,4 +1,13 @@
-import { epdToFen, GRADE_INFO, parseArrow, parseIcon, parseRing, SQUARE_ICONS, type Grade, type Marks } from '@knightschool/core';
+import {
+  epdToFen,
+  GRADE_INFO,
+  parseArrow,
+  parseIcon,
+  parseRing,
+  SQUARE_ICONS,
+  type Grade,
+  type Marks,
+} from '@knightschool/core';
 import { Check, X } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Chessboard } from 'react-chessboard';
@@ -118,7 +127,7 @@ export function BoardSurface({
     ...arrows.map((arrow) => ({ startSquare: arrow.from, endSquare: arrow.to, color: SYSTEM_RGB[arrow.kind] })),
   ];
   return (
-    <div className={cn('relative aspect-square w-full overflow-hidden rounded-md shadow-sm', className)}>
+    <div className={cn('relative aspect-square w-full overflow-hidden shadow-sm', className)}>
       <Chessboard
         options={{
           id,
@@ -128,6 +137,7 @@ export function BoardSurface({
           squareStyles,
           allowDragging: interactive,
           showNotation: notation,
+          boardStyle: { borderRadius: 0 },
           allowDrawingArrows: false,
           lightSquareStyle: { backgroundColor: BOARD_SQUARES.light },
           darkSquareStyle: { backgroundColor: BOARD_SQUARES.dark },

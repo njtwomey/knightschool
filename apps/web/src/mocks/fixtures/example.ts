@@ -1,4 +1,4 @@
-import { gradeOf, moveCost, sideToMove, type Grade, type Score } from '@knightschool/core';
+import { gameOver, gradeOf, moveCost, sideToMove, type Grade, type Score } from '@knightschool/core';
 import { siteConfig } from '@/data/site-config';
 import type { BoardPosition } from '@/components/board/board';
 import raw from './italian.json';
@@ -60,6 +60,8 @@ export const mainLine = line('giuoco-piano-main');
 
 /** The engine's score of a position (its best line), from White's point of view. */
 export function scoreOf(epd: string): Score | null {
+  const over = gameOver(epd);
+  if (over) return { over };
   const best = example.evals[epd]?.lines[0];
   if (!best) return null;
   return best.mate !== undefined ? { mate: best.mate } : { cp: best.cp ?? 0 };

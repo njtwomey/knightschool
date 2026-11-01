@@ -32,3 +32,11 @@ export function replay(startEpd: string, moves: readonly string[]): Played[] {
 
 /** One move from a position, or null when it is not legal there. */
 export const playMove = (epd: string, move: string): Played | null => replay(epd, [move])[0] ?? null;
+
+/** A game over on the board: checkmate (who won) or a draw by stalemate, material or repetition rules; else null. */
+export function gameOver(epd: string): 'white' | 'black' | 'draw' | null {
+  const chess = new Chess(epdToFen(epd));
+  if (chess.isCheckmate()) return chess.turn() === 'w' ? 'black' : 'white';
+  if (chess.isStalemate() || chess.isInsufficientMaterial()) return 'draw';
+  return null;
+}

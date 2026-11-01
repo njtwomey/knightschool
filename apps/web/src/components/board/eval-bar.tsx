@@ -19,7 +19,7 @@ export function EvalBar({
   const white = `${share * 100}%`;
   return (
     <div
-      className={cn('relative w-3 overflow-hidden rounded-sm bg-eval-black ring-1 ring-border', className)}
+      className={cn('relative w-3 overflow-hidden bg-eval-black ring-1 ring-border', className)}
       role="img"
       aria-label={words ? `${words.words}, ${words.number}` : 'No evaluation yet'}
       title={words ? `${words.words} (${words.number})` : undefined}

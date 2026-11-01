@@ -1,8 +1,11 @@
 import type { Side } from '../chess/epd';
 import type { EvalWordBands } from '../config/site-config';
 
-/** An engine score from White's point of view: centipawns, or moves to mate (negative when Black mates). */
-export type Score = { cp?: number; mate?: number };
+/**
+ * An engine score from White's point of view: centipawns, or moves to mate (negative when Black mates), or a game already
+ * over on the board (`over`: who won, or a draw), which the engine cannot score.
+ */
+export type Score = { cp?: number; mate?: number; over?: Side | 'draw' };
 
 /** cp is capped here before anything else, so a forced mate or a won rook never swamps a cost or an average. */
 export const CP_CAP = 1000;
@@ -11,12 +14,14 @@ const LICHESS_K = 0.00368208;
 
 /** Centipawns for White, capped; a mate counts as the cap for the side that mates. */
 export function capped(score: Score): number {
+  if (score.over) return score.over === 'draw' ? 0 : score.over === 'white' ? CP_CAP : -CP_CAP;
   if (score.mate !== undefined) return score.mate === 0 ? 0 : score.mate > 0 ? CP_CAP : -CP_CAP;
   return Math.max(-CP_CAP, Math.min(CP_CAP, score.cp ?? 0));
 }
 
 /** Lichess's winning chances, from -1 (Black wins) to 1 (White wins). A mate is ±1. */
 export function winningChances(score: Score): number {
+  if (score.over) return score.over === 'draw' ? 0 : score.over === 'white' ? 1 : -1;
   if (score.mate !== undefined && score.mate !== 0) return score.mate > 0 ? 1 : -1;
   return 2 / (1 + Math.exp(-LICHESS_K * capped(score))) - 1;
 }
@@ -65,13 +70,17 @@ export type EvalWords = {
   side: Side | null;
   /** "+0.6", "-2.3", "M3", "-M2". */
   number: string;
-  level: 'equal' | 'little' | 'clear' | 'winning' | 'mate';
+  level: 'equal' | 'little' | 'clear' | 'winning' | 'mate' | 'over';
 };
 
 const name = (side: Side) => (side === 'white' ? 'White' : 'Black');
 
 /** Words for a score, with bands on the winning chance from config `judge.evalWords`. */
 export function evalWords(score: Score, bands: EvalWordBands): EvalWords {
+  if (score.over === 'draw') return { words: 'Draw', side: null, number: '½-½', level: 'over' };
+  if (score.over) {
+    return { words: `Checkmate: ${name(score.over)} wins`, side: score.over, number: '#', level: 'over' };
+  }
   if (score.mate !== undefined && score.mate !== 0) {
     const side: Side = score.mate > 0 ? 'white' : 'black';
     const n = Math.abs(score.mate);

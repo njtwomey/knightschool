@@ -45,3 +45,15 @@ describe('eval words', () => {
     expect(evalWords(score, siteConfig.judge.evalWords)).toMatchObject({ words, number });
   });
 });
+
+describe('a game over on the board', () => {
+  it('reads as won, not equal', () => {
+    expect(winningChances({ over: 'white' })).toBe(1);
+    expect(whiteShare({ over: 'black' })).toBe(0);
+    expect(evalWords({ over: 'white' }, siteConfig.judge.evalWords)).toMatchObject({
+      words: 'Checkmate: White wins',
+      number: '#',
+    });
+    expect(evalWords({ over: 'draw' }, siteConfig.judge.evalWords).words).toBe('Draw');
+  });
+});
