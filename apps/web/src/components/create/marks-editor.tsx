@@ -26,13 +26,6 @@ const COLOUR_OPTIONS: FilterOption<MarkColour>[] = MARK_COLOURS.map((c, i) => ({
   icon: <span className={cn('size-3 rounded-full', SWATCH[c])} aria-hidden />,
 }));
 
-const FILES = 'abcdefgh';
-function squareAt(column: number, row: number, orientation: 'white' | 'black') {
-  const file = orientation === 'white' ? column : 7 - column;
-  const rank = orientation === 'white' ? 8 - row : row + 1;
-  return `${FILES[file]}${rank}`;
-}
-
 export type MarksEditorProps = {
   /** The position the marks are drawn on (after the move being edited). */
   epd: string;
@@ -82,8 +75,8 @@ export function MarksEditor({
   const count = marks.arrows.length + marks.circles.length;
   const label = `mark ${moveName}`;
 
-  const tap = (square: string, event: MouseEvent) => {
-    const drawn = markColourFor(event, colour);
+  const tap = (square: string) => {
+    const drawn = colour;
     if (!first) {
       setFirst(square);
       return;
@@ -169,30 +162,9 @@ export function MarksEditor({
           interactive={false}
           onSquareMouseDown={editable ? rightDown : undefined}
           onSquareMouseUp={editable ? rightUp : undefined}
+          onSquareClick={editable && tapping ? (square) => tap(square) : undefined}
           className="max-w-none"
         />
-        {editable && tapping ? (
-          // Over the squares only: without an eval bar the surface is the board's full width, at its top.
-          <div
-            className="absolute inset-x-0 top-0 z-20 grid aspect-square grid-cols-8 grid-rows-8"
-            role="grid"
-            aria-label="Squares"
-          >
-            {Array.from({ length: 64 }, (_, i) => {
-              const square = squareAt(i % 8, Math.floor(i / 8), orientation);
-              return (
-                <Button
-                  key={square}
-                  variant="ghost"
-                  aria-label={first === square ? `${square}, picked: tap again for a ring` : square}
-                  aria-pressed={first === square}
-                  className="size-full rounded-none p-0 hover:bg-foreground/10 aria-pressed:bg-foreground/15 dark:hover:bg-foreground/10"
-                  onClick={(event) => tap(square, event)}
-                />
-              );
-            })}
-          </div>
-        ) : null}
       </div>
 
       <div className="grid gap-1 text-sm">

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { START_EPD, sideToMove } from './epd';
-import { gameOver, replay } from './play';
+import { gameOver, legalTargets, replay } from './play';
 
 describe('replay', () => {
   it('plays SAN and UCI alike and stops at an illegal move', () => {
@@ -19,5 +19,24 @@ describe('gameOver', () => {
     expect(played).toHaveLength(15);
     expect(gameOver(played.at(-1)!.epd)).toBe('white');
     expect(gameOver(START_EPD)).toBeNull();
+  });
+});
+
+describe('legalTargets', () => {
+  it('lists where a piece can go, marking captures, once per square', () => {
+    const afterE4E5 = replay(START_EPD, ['e4', 'd5']).at(-1)!.epd;
+    const pawn = legalTargets(afterE4E5, 'e4');
+    expect(pawn).toEqual(
+      expect.arrayContaining([
+        { to: 'e5', capture: false },
+        { to: 'd5', capture: true },
+      ]),
+    );
+    expect(
+      legalTargets(START_EPD, 'b1')
+        .map((target) => target.to)
+        .sort(),
+    ).toEqual(['a3', 'c3']);
+    expect(legalTargets(START_EPD, 'e7')).toEqual([]);
   });
 });

@@ -29,6 +29,7 @@ schedule:
   reviewsFirstAt: 5 # app: with at least this many reviews due, Today offers reviews before a new step
 
 timing: # app: base delays in milliseconds; the learner's speed setting multiplies them
+  pieceMove: 250 # how long a piece takes to slide to its square
   correctBadge: 250
   wrongBadge: 900
   afterCorrect: 350

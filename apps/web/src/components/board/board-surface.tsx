@@ -1,5 +1,6 @@
 import {
   epdToFen,
+  legalTargets,
   GRADE_INFO,
   parseArrow,
   parseIcon,
@@ -10,8 +11,9 @@ import {
   type Marks,
 } from '@knightschool/core';
 import { Check, X } from 'lucide-react';
-import type { CSSProperties, MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type MouseEvent } from 'react';
 import { Chessboard } from 'react-chessboard';
+import { siteConfig } from '@/data/site-config';
 import { cn } from '@/lib/utils';
 import { BOARD_THEMES, useBoardSettings } from './board-settings-menu';
 import { GRADE_FILL } from '@/components/chess/grade-style';
@@ -41,6 +43,8 @@ export type BoardSurfaceProps = {
   onSquareMouseDown?: (square: string, event: MouseEvent) => void;
   onSquareMouseUp?: (square: string, event: MouseEvent) => void;
   onSquareRightClick?: (square: string) => void;
+  /** A click or tap on a square (tap-to-draw); works on touch screens too. */
+  onSquareClick?: (square: string) => void;
   className?: string;
   id?: string;
 };
@@ -81,6 +85,21 @@ function Badge({ badge, orientation }: { badge: BoardBadge; orientation: 'white'
   );
 }
 
+/** Corner brackets round the selected piece, so it is clear which piece is being moved. */
+function Selection({ square, orientation }: { square: string; orientation: 'white' | 'black' }) {
+  const corner = 'absolute size-[30%] border-neutral-900/80';
+  return (
+    <div className="pointer-events-none absolute z-10 size-[12.5%]" style={squareBox(square, orientation)} aria-hidden>
+      <div className="absolute inset-[5%]">
+        <span className={cn(corner, 'top-0 left-0 border-t-[3px] border-l-[3px]')} />
+        <span className={cn(corner, 'top-0 right-0 border-t-[3px] border-r-[3px]')} />
+        <span className={cn(corner, 'bottom-0 left-0 border-b-[3px] border-l-[3px]')} />
+        <span className={cn(corner, 'right-0 bottom-0 border-r-[3px] border-b-[3px]')} />
+      </div>
+    </div>
+  );
+}
+
 /**
  * The squares and pieces, with their layers in a fixed order: the last move, the author's marks, system arrows,
  * feedback, then lit squares (docs/v2/components/board-surface.md).
@@ -99,11 +118,31 @@ export function BoardSurface({
   onSquareMouseDown,
   onSquareMouseUp,
   onSquareRightClick,
+  onSquareClick,
   className,
   id = 'board',
 }: BoardSurfaceProps) {
   const settings = useBoardSettings();
   const theme = BOARD_THEMES.find((candidate) => candidate.id === settings.theme) ?? BOARD_THEMES[0];
+  // Moving a piece, two ways: click it then a target square, or drag it. The selected piece gets corner brackets and
+  // its legal moves small dots (a ring on a capture).
+  const [selected, setSelected] = useState<string | null>(null);
+  useEffect(() => setSelected(null), [epd]);
+  const canMove = interactive && Boolean(onMove);
+  const targets = useMemo(() => (canMove && selected ? legalTargets(epd, selected) : []), [canMove, selected, epd]);
+  const move = (from: string, to: string) => {
+    setSelected(null);
+    return onMove ? onMove(from, to) : false;
+  };
+  const clickSquare = (square: string) => {
+    if (onSquareClick) return onSquareClick(square);
+    if (!canMove) return;
+    if (selected && targets.some((target) => target.to === square)) {
+      move(selected, square);
+      return;
+    }
+    setSelected(selected !== square && legalTargets(epd, square).length ? square : null);
+  };
   const squareStyles: Record<string, CSSProperties> = {};
   if (lastMove && settings.lastMove) {
     for (const square of [lastMove.from, lastMove.to]) squareStyles[square] = { background: 'rgb(255 214 0 / 0.38)' };
@@ -122,6 +161,16 @@ export function BoardSurface({
     const tint =
       typeof item === 'string' ? 'rgb(100 116 139 / 0.28)' : MARK_RGB[item.colour].replace(/\/ [\d.]+\)/, '/ 0.35)');
     squareStyles[square] = { ...squareStyles[square], boxShadow: `inset 0 0 0 100vmax ${tint}` };
+  }
+  if (settings.legalMoves) {
+    for (const target of targets) {
+      squareStyles[target.to] = {
+        ...squareStyles[target.to],
+        backgroundImage: target.capture
+          ? 'radial-gradient(circle, transparent 56%, rgb(0 0 0 / 0.22) 58%, rgb(0 0 0 / 0.22) 70%, transparent 72%)'
+          : 'radial-gradient(circle, rgb(0 0 0 / 0.22) 16%, transparent 18%)',
+      };
+    }
   }
   const drawn = [
     ...(marks?.arrows ?? []).flatMap((text) => {
@@ -145,12 +194,16 @@ export function BoardSurface({
           allowDrawingArrows: false,
           lightSquareStyle: { backgroundColor: theme.light },
           darkSquareStyle: { backgroundColor: theme.dark },
-          animationDurationInMs: settings.animation ? 180 : 0,
-          onPieceDrop: ({ sourceSquare, targetSquare }) =>
-            targetSquare && onMove ? onMove(sourceSquare, targetSquare) : false,
+          animationDurationInMs: settings.animation ? (siteConfig.timing.pieceMove ?? 250) : 0,
+          showAnimations: settings.animation,
+          onPieceDrag: ({ square }) => {
+            if (canMove && square) setSelected(square);
+          },
+          onPieceDrop: ({ sourceSquare, targetSquare }) => (targetSquare ? move(sourceSquare, targetSquare) : false),
           onSquareMouseDown: onSquareMouseDown ? ({ square }, event) => onSquareMouseDown(square, event) : undefined,
           onSquareMouseUp: onSquareMouseUp ? ({ square }, event) => onSquareMouseUp(square, event) : undefined,
           onSquareRightClick: onSquareRightClick ? ({ square }) => onSquareRightClick(square) : undefined,
+          onSquareClick: ({ square }) => clickSquare(square),
         }}
       />
       {(marks?.icons ?? []).flatMap((text) => {
@@ -169,6 +222,7 @@ export function BoardSurface({
           </div>,
         ];
       })}
+      {selected && canMove ? <Selection square={selected} orientation={orientation} /> : null}
       {badge ? <Badge badge={badge} orientation={orientation} /> : null}
     </div>
   );

@@ -65,6 +65,7 @@ export type BoardProps = {
   onSquareMouseDown?: BoardSurfaceProps['onSquareMouseDown'];
   onSquareMouseUp?: BoardSurfaceProps['onSquareMouseUp'];
   onSquareRightClick?: BoardSurfaceProps['onSquareRightClick'];
+  onSquareClick?: BoardSurfaceProps['onSquareClick'];
   caption?: ReactNode;
   actions?: ReactNode;
   /** Arrow keys step through the positions (one board per page owns them). */
@@ -102,6 +103,7 @@ export function Board({
   onSquareMouseDown,
   onSquareMouseUp,
   onSquareRightClick,
+  onSquareClick,
   caption,
   actions,
   keys = false,
@@ -136,6 +138,7 @@ export function Board({
           onSquareMouseDown={onSquareMouseDown}
           onSquareMouseUp={onSquareMouseUp}
           onSquareRightClick={onSquareRightClick}
+          onSquareClick={onSquareClick}
         />
       </div>
       <BoardControls

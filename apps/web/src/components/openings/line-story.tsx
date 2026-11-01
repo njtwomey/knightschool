@@ -209,8 +209,16 @@ export function LineStory({
         <section className="grid gap-3">
           {paragraphsOf(moves).map(({ from, to }) => {
             const closing = moves[to]!;
+            // The paragraph holding the move shown: tinted, with an edge, so it is clear where the board is.
+            const here = current !== undefined && current >= from && current <= to;
             return (
-              <div key={from}>
+              <div
+                key={from}
+                className={cn(
+                  '-mx-2 rounded-md border px-2 py-1.5 transition-colors',
+                  here ? 'border-primary/60 bg-accent ring-1 ring-primary/30' : 'border-transparent',
+                )}
+              >
                 <span className="inline-flex flex-wrap items-baseline gap-x-0.5">
                   {moves.slice(from, to + 1).map((move, i) => chip(move, from + i, i === 0 ? 'always' : 'white'))}
                 </span>

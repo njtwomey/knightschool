@@ -1,4 +1,4 @@
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { epdToFen, fenToEpd } from './epd';
 
 /** A move played from a position: its UCI, its SAN, and the position after it. */
@@ -39,4 +39,17 @@ export function gameOver(epd: string): 'white' | 'black' | 'draw' | null {
   if (chess.isCheckmate()) return chess.turn() === 'w' ? 'black' : 'white';
   if (chess.isStalemate() || chess.isInsufficientMaterial()) return 'draw';
   return null;
+}
+
+/** Where the piece on a square can legally go, and whether each move captures: for dots on the board. */
+export function legalTargets(epd: string, square: string): { to: string; capture: boolean }[] {
+  const chess = new Chess(epdToFen(epd));
+  try {
+    return chess
+      .moves({ square: square as Square, verbose: true })
+      .map((move) => ({ to: move.to, capture: Boolean(move.captured) || move.flags.includes('e') }))
+      .filter((target, i, all) => all.findIndex((other) => other.to === target.to) === i);
+  } catch {
+    return [];
+  }
 }
