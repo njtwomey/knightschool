@@ -8,7 +8,15 @@ is ready to replace it (or to move to a repo of its own). Each stage names what 
 Agree the vocabulary (model.md), the experience (experience.md) and the shape of the board and capabilities. Settle the
 decisions listed at the end.
 
-## Stage 1: the board model
+## Stage 1a: the settings registry
+
+The registry, the layers (session, opening, you, material, preset, default), presets, the three stores and the settings
+page (settings.md). First, because every later stage reads its numbers from it: the fixed numbers in `constants.ts`,
+`FEEDBACK_DELAYS` and the training rules become registry entries as each stage touches them.
+
+_Reuses:_ `lib/local-prefs.ts`, the `settings` table, `data/practice-config.ts`, board and engine prefs, the Settings page.
+
+## Stage 1b: the board model
 
 `useBoardModel` and the `Board.*` parts (board.md), with presets and reveal levels. Move the pages onto it one at a
 time: the course page, About, Learn and Drill, the tree, the path, Quiz, Speed, Name it, Lab, Create. Each move deletes

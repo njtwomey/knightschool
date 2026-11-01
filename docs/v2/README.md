@@ -21,6 +21,7 @@ below says where the existing piece lives.
 | [features.md](features.md)         | The survey mapped to what we build: adopt, adapt, later, skip                                   |
 | [puzzles.md](puzzles.md)           | All Lichess puzzles matched to positions: levels, uses, the jobs                                |
 | [inventory.md](inventory.md)       | v2 walked through, the reusable components, and every part of v1: keep, repurpose, park, delete |
+| [settings.md](settings.md)         | One settings registry: layers, presets, stores, the page, and everything configurable           |
 | [survey.md](survey.md)             | What similar sites do, and what to borrow                                                       |
 
 ## Principles
