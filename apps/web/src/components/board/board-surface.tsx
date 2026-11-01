@@ -22,6 +22,8 @@ export type BoardSurfaceProps = {
   /** Squares lit by something hovered elsewhere (a move chip, a position feature). */
   lit?: string[];
   interactive?: boolean;
+  /** The letters and numbers round the edge; off on small boards. */
+  notation?: boolean;
   onMove?: (from: string, to: string) => boolean;
   className?: string;
   id?: string;
@@ -87,6 +89,7 @@ export function BoardSurface({
   badge,
   lit = [],
   interactive = false,
+  notation = true,
   onMove,
   className,
   id = 'board',
@@ -124,6 +127,7 @@ export function BoardSurface({
           arrows: drawn,
           squareStyles,
           allowDragging: interactive,
+          showNotation: notation,
           allowDrawingArrows: false,
           lightSquareStyle: { backgroundColor: BOARD_SQUARES.light },
           darkSquareStyle: { backgroundColor: BOARD_SQUARES.dark },
