@@ -4,6 +4,11 @@ Almost everything in v2 has a sensible default and should be changeable: how man
 gates are, what the computer plays, how much the feedback says, which puzzles come up. That needs one settings system,
 designed once, rather than a switch added wherever it is wanted.
 
+**Settings are the learner's; config is the site's.** How the site teaches and judges (how many right answers before a
+hint fades, when a move counts as known, the grade thresholds, the base delays) is config, written by us and the same
+for everyone: see [config.md](config.md). Config also declares which settings exist, with their defaults, ranges and the
+presets. Where the catalogue below still lists a rule of that kind, config.md wins.
+
 ## What v1 has
 
 Settings work today, in five separate places:
@@ -96,7 +101,7 @@ into one committed file the scripts read, so they are visible and changed in one
 - Changes save as they are made, with Undo; no Save button. (The practice card stays the exception: it edits a copy
   until Start, as now.)
 - Settings also appear **where they bite**: the board's gear (board look), the practice card (this session), an
-  opening's page (this opening), the end of a lesson ("too fast? slow the feedback down"). Each is the same registry
+  opening's page (this opening), the end of a step ("too fast? slow the feedback down"). Each is the same registry
   entry.
 - Export and import carry learner settings with everything else (v1 already exports the settings table).
 
@@ -122,9 +127,9 @@ The catalogue, by group. Defaults are suggestions; everything here is a registry
 
 **Learning**
 
-- The lesson's steps: which to show (read, watch, try, their mistakes).
+- A step's stages: which to show (Read, Watch, Try, Their mistakes).
 - Hints: how fast the arrow fades (two right) and comes back (two wrong).
-- Start from move 1 or from where the lesson branches.
+- Start from move 1 or from where the step branches off.
 - Gates: strict, advise only, or off; testing out allowed.
 
 **Feedback**
@@ -144,7 +149,7 @@ The catalogue, by group. Defaults are suggestions; everything here is a registry
 **Puzzles**
 
 - Rating range (fixed, or around your puzzle results); who solves (you, the opponent, both).
-- Which match levels to use (through the position down to same idea; puzzles.md); how many per lesson.
+- Which match levels to use (through the position down to same idea; puzzles.md); how many per step.
 - Themes to include or leave out.
 
 **Board and display** (device)

@@ -24,7 +24,7 @@ decides for itself what to hide while testing.
 
 **The board model** (`useBoardModel`) owns everything the parts share:
 
-- **the moves**: a source (a course line, a path through the tree, a puzzle, a game, free play) as positions with
+- **the moves**: a source (a line of an opening, a path through the tree, a puzzle, a game, free play) as positions with
   their moves and annotations;
 - **the cursor**: which position is shown, and any moves played off the source (v1's Learn "explore" and Lab both do
   this separately);
@@ -46,7 +46,7 @@ v1's `useLineStepper` becomes the cursor part of this; the play store's `explore
 | `Board.Eval`     | the bar, and the strip or the engine's lines                                                                                                                                                                               | `components/engine/`                                                             |
 | `Board.Explorer` | what players at the learner's band play here, with each move's share and verdict                                                                                                                                           | `ExplorerPanel`                                                                  |
 | `Board.Feedback` | the verdict on the last move, "why", the refutation to step through, tick or cross                                                                                                                                         | badge in `AppBoard`; new note                                                    |
-| `Board.Caption`  | a line of context: "After 3.Bc4", "Unit 2 ends here"                                                                                                                                                                       | `caption`                                                                        |
+| `Board.Caption`  | a line of context: "After 3.Bc4", "Step 2 ends here"                                                                                                                                                                       | `caption`                                                                        |
 | `Board.Tries`    | every guess so far, one row each: the move, what you played, its grade and symbol, what it cost in centipawns against the line's move, the time, hint or show used; click a row to see it on the board with the refutation | the quiz's miss list (`features/quiz/miss-list.tsx`), live instead of at the end |
 
 A page composes the parts it needs and lays them out with the existing `.board-columns` rule:
@@ -96,15 +96,15 @@ preset, never the individual switches.
 
 ## Presets
 
-| Preset     | Used by                                         | Mode              | Reveal              |
-| ---------- | ----------------------------------------------- | ----------------- | ------------------- |
-| `study`    | course page, line About, tree, path, idea pages | view              | study               |
-| `learn`    | a lesson's Learn step                           | play both sides   | learn               |
-| `test`     | Try, review, checkpoints, Speed, Name it        | play one side     | test, then answered |
-| `puzzle`   | puzzles                                         | play one side     | test, then answered |
-| `analysis` | Lab, explorer, after a game or a puzzle         | play both sides   | study               |
-| `author`   | Create                                          | play, or draw     | study               |
-| `thumb`    | cards, search results, the Home hero            | view, no controls | marks only          |
+| Preset     | Used by                                          | Mode              | Reveal              |
+| ---------- | ------------------------------------------------ | ----------------- | ------------------- |
+| `study`    | opening page, line About, tree, path, idea pages | view              | study               |
+| `learn`    | a step's Watch stage                             | play both sides   | learn               |
+| `test`     | Try, review, checkpoints, Speed, Name it         | play one side     | test, then answered |
+| `puzzle`   | puzzles                                          | play one side     | test, then answered |
+| `analysis` | Lab, explorer, after a game or a puzzle          | play both sides   | study               |
+| `author`   | Create                                           | play, or draw     | study               |
+| `thumb`    | cards, search results, the Home hero             | view, no controls | marks only          |
 
 ## Size and layout
 
