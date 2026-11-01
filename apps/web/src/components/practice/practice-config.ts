@@ -1,0 +1,184 @@
+import { Crosshair, Puzzle, Repeat, Swords, Tag, Timer, type LucideIcon } from 'lucide-react';
+
+/*
+ * What a practice session is set up with, the same shape for every mode (docs/v2/components/practice-setup.md). The
+ * page keeps the saved choice per mode (`knightschool.practice.<mode>`) and each session keeps its own copy.
+ */
+
+export type PracticeMode = 'review' | 'drill' | 'puzzles' | 'play-on' | 'speed' | 'name-it';
+
+/** Where the items come from: `due`, `repertoire`, `everything`, `hardest`, or `opening:<id>`, `variation:<id>`, `rush:<id>`. */
+export type PracticeSourceId = string;
+
+export type PracticeConfig = {
+  source: PracticeSourceId;
+  weighting: 'random' | 'popular';
+  /** Review: moves per question; 0 is the rest of the line. */
+  movesPerQuestion: number;
+  /** Drill: how the computer replies. */
+  computerPlays: 'written' | 'level' | 'engine';
+  /** Puzzles. */
+  puzzleCount: number;
+  rating: [number, number];
+  solver: 'you' | 'opponent' | 'both';
+  /** Play on: how many moves, how much evaluation may be given away. */
+  playOnMoves: number;
+  playOnTolerance: 'inaccuracy' | 'mistake' | 'blunder';
+  /** Speed: a set of lines (`lines:5`) or a timed run (`time:60`), and how deep (0 is the whole line). */
+  run: string;
+  depth: number;
+  /** Name it. */
+  positions: number;
+};
+
+export const DEFAULT_CONFIG: PracticeConfig = {
+  source: 'repertoire',
+  weighting: 'popular',
+  movesPerQuestion: 1,
+  computerPlays: 'level',
+  puzzleCount: 10,
+  rating: [900, 1300],
+  solver: 'you',
+  playOnMoves: 5,
+  playOnTolerance: 'mistake',
+  run: 'lines:5',
+  depth: 10,
+  positions: 10,
+};
+
+/** One opening or variation the learner can practise from, with what it holds. */
+export type PracticeSource = {
+  id: PracticeSourceId;
+  name: string;
+  group: 'opening' | 'variation';
+  /** The opening a variation belongs to, for its label. */
+  opening?: string;
+  /** Items there are to practise from it in this mode; 0 disables Start. */
+  count?: number;
+};
+
+export type ModeInfo = {
+  name: string;
+  title: string;
+  blurb: string;
+  icon: LucideIcon;
+  /** Text and soft background in the mode's colour; modes without a colour are neutral. */
+  text: string;
+  soft: string;
+};
+
+export const MODE_INFO: Record<PracticeMode, ModeInfo> = {
+  review: {
+    name: 'Review',
+    title: 'Set up a review',
+    blurb: 'Moves you know, asked again just before you would forget them.',
+    icon: Repeat,
+    text: 'text-mode-review',
+    soft: 'bg-mode-review/10',
+  },
+  drill: {
+    name: 'Drill',
+    title: 'Set up a drill',
+    blurb: 'Play your lines against the computer, which answers the way you choose.',
+    icon: Crosshair,
+    text: 'text-mode-drill',
+    soft: 'bg-mode-drill/10',
+  },
+  puzzles: {
+    name: 'Puzzles',
+    title: 'Set up puzzles',
+    blurb: 'Lichess puzzles from games that went through your openings.',
+    icon: Puzzle,
+    text: 'text-mode-puzzle',
+    soft: 'bg-mode-puzzle/10',
+  },
+  'play-on': {
+    name: 'Play on',
+    title: 'Set up Play on',
+    blurb: 'Carry on past the end of a line against the engine and keep your advantage.',
+    icon: Swords,
+    text: 'text-mode-play-on',
+    soft: 'bg-mode-play-on/10',
+  },
+  speed: {
+    name: 'Speed',
+    title: 'Set up a speed run',
+    blurb: 'Your lines from memory against the clock; the other side answers at once.',
+    icon: Timer,
+    text: 'text-foreground',
+    soft: 'bg-muted',
+  },
+  'name-it': {
+    name: 'Name it',
+    title: 'Set up Name it',
+    blurb: 'A position from your openings: type which opening and variation it is.',
+    icon: Tag,
+    text: 'text-foreground',
+    soft: 'bg-muted',
+  },
+};
+
+export const FIXED_SOURCES = {
+  due: 'Due today (your schedule)',
+  repertoire: 'My repertoire',
+  everything: 'Everything',
+  hardest: 'The hardest moves',
+} as const;
+
+export function sourceName(id: PracticeSourceId, sources: readonly PracticeSource[]): string {
+  if (id in FIXED_SOURCES) return FIXED_SOURCES[id as keyof typeof FIXED_SOURCES];
+  const found = sources.find((source) => source.id === id || `rush:${source.id.split(':')[1]}` === id);
+  if (!found) return id;
+  return id.startsWith('rush:') ? `an opening rush through the ${found.name}` : `the ${found.name}`;
+}
+
+const RUNS: Record<string, string> = {
+  'lines:3': '3 lines',
+  'lines:5': '5 lines',
+  'lines:10': '10 lines',
+  'time:30': '30 seconds',
+  'time:60': '1 minute',
+  'time:120': '2 minutes',
+};
+export const runName = (run: string) => RUNS[run] ?? run;
+export const depthName = (depth: number) => (depth === 0 ? 'the whole line' : `to move ${depth}`);
+export const SOLVER_NAME = { you: 'you solve', opponent: 'the opponent solves', both: 'both sides solve' } as const;
+export const COMPUTER_NAME = {
+  written: 'the computer plays the lines as written',
+  level: 'the computer plays as your level does',
+  engine: 'the engine replies',
+} as const;
+
+export const TOLERANCE_NAME = { inaccuracy: 'an inaccuracy', mistake: 'a mistake', blunder: 'a blunder' } as const;
+
+/** The session's set-up in words, for the practice bar. */
+export function describeConfig(mode: PracticeMode, config: PracticeConfig, sources: readonly PracticeSource[]): string {
+  const from = config.source === 'due' ? FIXED_SOURCES.due : `From ${sourceName(config.source, sources)}`;
+  const parts = [from];
+  if (config.source !== 'due' && config.weighting === 'popular') parts.push('favouring popular');
+  if (mode === 'review') {
+    parts.push(
+      config.movesPerQuestion === 0
+        ? 'the rest of the line per question'
+        : `${config.movesPerQuestion} ${config.movesPerQuestion === 1 ? 'move' : 'moves'} per question`,
+    );
+  }
+  if (mode === 'drill') parts.push(COMPUTER_NAME[config.computerPlays]);
+  if (mode === 'puzzles')
+    parts.push(
+      `${config.puzzleCount} puzzles, ${config.rating[0]} to ${config.rating[1]}, ${SOLVER_NAME[config.solver]}`,
+    );
+  if (mode === 'play-on')
+    parts.push(`${config.playOnMoves} moves, giving away no more than ${TOLERANCE_NAME[config.playOnTolerance]}`);
+  if (mode === 'speed') parts.push(`${runName(config.run)} ${depthName(config.depth)}`);
+  if (mode === 'name-it') parts.push(`${config.positions} positions`);
+  return parts.join(', ');
+}
+
+/** Why Start cannot go ahead with this choice, or null. */
+export function cannotStart(config: PracticeConfig, sources: readonly PracticeSource[], due: number): string | null {
+  if (config.source === 'due' && due === 0) return 'Nothing due. Pick My repertoire for free practice.';
+  const source = sources.find((s) => s.id === config.source);
+  if (source && source.count === 0) return `Nothing to practise in the ${source.name} yet. Pick another source.`;
+  return null;
+}

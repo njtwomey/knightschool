@@ -251,3 +251,36 @@
   --color-risk-medium: var(--risk-medium);
   --color-risk-high: var(--risk-high);
 }
+
+/* A line's lane on the map: identity only, no meaning (docs/v2/patterns/colours.md). */
+:root {
+  --line-0: oklch(0.55 0.13 250);
+  --line-1: oklch(0.6 0.15 150);
+  --line-2: oklch(0.65 0.16 60);
+  --line-3: oklch(0.58 0.18 320);
+  --line-4: oklch(0.6 0.12 200);
+  --line-5: oklch(0.6 0.17 25);
+  --line-6: oklch(0.55 0.15 290);
+  --line-7: oklch(0.65 0.14 110);
+  --line-8: oklch(0.6 0.12 350);
+  --line-9: oklch(0.55 0.08 230);
+}
+
+.dark {
+  --line-0: oklch(0.7 0.12 250);
+  --line-1: oklch(0.72 0.14 150);
+  --line-2: oklch(0.78 0.14 60);
+  --line-3: oklch(0.72 0.15 320);
+  --line-4: oklch(0.74 0.11 200);
+  --line-5: oklch(0.72 0.15 25);
+  --line-6: oklch(0.7 0.13 290);
+  --line-7: oklch(0.78 0.13 110);
+  --line-8: oklch(0.74 0.11 350);
+  --line-9: oklch(0.7 0.07 230);
+}
+
+@theme inline {
+  --color-arrow-play: var(--arrow-play);
+  --color-arrow-engine: var(--arrow-engine);
+  --color-arrow-wrong: var(--arrow-wrong);
+}

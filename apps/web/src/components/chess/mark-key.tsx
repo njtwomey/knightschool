@@ -6,9 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 /** What the marks on the board mean: the colours present, then the square icons present. */
 export function MarkKey({ marks }: { marks: Partial<Marks> | undefined }) {
   const colours = markColours(marks);
-  const icons = [
-    ...new Set((marks?.icons ?? []).flatMap((text) => parseIcon(text)?.icon ?? [])),
-  ] as SquareIcon[];
+  const icons = [...new Set((marks?.icons ?? []).flatMap((text) => parseIcon(text)?.icon ?? []))] as SquareIcon[];
   if (colours.length === 0 && icons.length === 0) return null;
   return (
     <ul className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground" aria-label="What the marks mean">

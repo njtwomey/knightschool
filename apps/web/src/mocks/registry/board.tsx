@@ -179,7 +179,19 @@ export const boardMocks: MockItem[] = [
         note: 'The fixed vocabulary, each in the colour of its meaning: danger red, targets yellow, good squares green, support blue.',
         render: () => {
           const marks = {
-            icons: ['pin@a8', 'fork@b8', 'hanging@c8', 'attack@d8', 'check@e8', 'mate@f8', 'trap@g8', 'weak@a1', 'key@b1', 'outpost@c1', 'defended@d1'],
+            icons: [
+              'pin@a8',
+              'fork@b8',
+              'hanging@c8',
+              'attack@d8',
+              'check@e8',
+              'mate@f8',
+              'trap@g8',
+              'weak@a1',
+              'key@b1',
+              'outpost@c1',
+              'defended@d1',
+            ],
           };
           return (
             <div className="grid max-w-xs gap-2">
