@@ -1,0 +1,91 @@
+# Roadmap
+
+Built on the `v2` branch in this repo, in stages that each leave the site working. `main` keeps deploying v1 until v2
+is ready to replace it (or to move to a repo of its own). Each stage names what it reuses.
+
+## Stage 0: the plan (this folder)
+
+Agree the vocabulary (model.md), the experience (experience.md) and the shape of the board and capabilities. Settle the
+decisions listed at the end.
+
+## Stage 1: the board model
+
+`useBoardModel` and the `Board.*` parts (board.md), with presets and reveal levels. Move the pages onto it one at a
+time: the course page, About, Learn and Drill, the tree, the path, Quiz, Speed, Name it, Lab, Create. Each move deletes
+that page's own wiring. Ends with system arrows in their own colours.
+
+_Reuses:_ `AppBoard`, `StudyBoard`, `useLineStepper`, `MoveList`, `components/engine/`, `ExplorerPanel`, `shapes.ts`.
+
+## Stage 2: judgement
+
+`judgeMove` with the author and live layers, `Board.Feedback` and the verdict badge, on a wrong move in Learn and Drill.
+Refutation variations in lines. Where a line leaves you, in words. Then baked analysis of popular replies
+(`pnpm analyse --replies`) and the common-mistake finder (`make punish`).
+
+_Reuses:_ `regret.ts`, `data/analysis.ts`, `explain/`, `pnpm analyse`, `popularity.json`, the board marks.
+
+## Stage 3: lessons and chapters
+
+Lessons (named stretches with text and ideas, the automatic unit cut as default) and chapters (today's sections, with an
+introduction and a checkpoint) in course.yaml and in Create. The lesson page with its five steps. Ideas in place of
+motifs, with pages.
+
+_Reuses:_ `courseUnits` and overrides, unit progress, the path, `section`, motifs and the glossary, Create's Path tab.
+
+## Stage 4: the exercise session and puzzles
+
+The shared session with graders and responders (capabilities.md, 3). Puzzles first: `make puzzles`, the structure key,
+puzzle cards, the Puzzles mode. Then checkpoints, made of existing modes.
+
+_Reuses:_ the attempt machine, feedback delays and timers, `sessionLoader`, the practice set-up, the cards table.
+
+## Stage 5: arriving and moving around
+
+The v2 menu (Today, Learn, Practice, Explore, Ideas, Create), Today, onboarding to a repertoire, repertoire coverage,
+streak and calendar, the map (the tree coloured by progress, with gaps).
+
+_Reuses:_ Home, Overview, Stats, the tree explorer and lane layout, `scripts/gaps.ts` logic moved into core.
+
+## Stage 6: Play on, and your own games
+
+Play on from line ends, popular replies then the engine, graded by judgement; checkable plans. Reading a learner's
+public Lichess games by username: where they leave their repertoire, what they face most.
+
+_Reuses:_ the browser engine, popularity data and the explorer cache, Every branch's weighted replies.
+
+## Stage 7: the catalogue
+
+Bring the first catalogue (courses.md) up to the bar, course by course, with the pipeline. Other courses follow.
+
+## Moving pieces
+
+| v1                                                    | v2                                                |
+| ----------------------------------------------------- | ------------------------------------------------- |
+| "chapter" (a PGN file in the tree)                    | "line" (files and ids unchanged)                  |
+| course `section`                                      | chapter                                           |
+| unit                                                  | lesson (automatic cut kept as the default)        |
+| motif, glossary                                       | idea, Ideas                                       |
+| `regret.ts`, `data/analysis.ts`                       | `judge/`, `data/judgement.ts`                     |
+| play, quiz, speed, name-it stores                     | definitions on one exercise session (once proved) |
+| `StudyBoard` props, per-page conditions               | `Board` parts, presets and reveal levels          |
+| Courses, Search, Tree, Quiz, Speed, Name it, Glossary | Today, Learn, Practice, Explore, Ideas            |
+| courses I am learning                                 | repertoire, with coverage                         |
+
+## From the survey
+
+What survey.md adds to the stages above: fading hints in Learn (stage 3), counts per mode on courses and "go to your
+biggest gap" (stage 5), leaving the book early with "kept or gave away your advantage" (stage 6), your games as
+review cards (stage 6), Chess.com's grade words (stage 2). And what to avoid: currencies and leagues, locking learners
+into a course's order, hiding the limits that stop overload.
+
+## Decisions needed
+
+1. **The menu and names** in experience.md (Today, Learn, Practice, Explore, Ideas, Create).
+2. **Drilling the opponent's common mistakes** as lesson steps and cards, rather than quizzes only (changes which cards
+   exist).
+3. **Gates**: checkpoints that lock the next chapter, with testing out; or advice only, nothing locked.
+4. **Stored format**: puzzle cards in the cards table, one shared attempts log for new modes.
+5. **The puzzle database download** (about 250 MB, maintainer machine only).
+6. **Reading a learner's Lichess games** in the browser (public data, by username, no token needed).
+7. **The first catalogue**: which White and Black courses form the first repertoires.
+8. **Where v2 lives** when it is ready: replace `main` here, or a new repo.
