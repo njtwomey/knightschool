@@ -45,7 +45,8 @@ on) is a known mistake, the board says so and the next exercise is to punish it.
 An exercise is a start position, the learner's side, a **grader** (exact move; any move that keeps the position;
 typed words) and a **responder** for the other side (scripted from the course or puzzle; popular moves weighted by
 games; the engine). One session runs exercises in turn, with hints, two tries, the feedback delays, judgement on a
-wrong move, and recording.
+wrong move, and recording. It keeps **every try** (v1's attempt keeps only the last move played), so the tries table
+and the summary can list each guess with its cost; saving every try is part of the attempts log decision (section 4).
 
 | Mode        | Grader                               | Responder            | v1                                |
 | ----------- | ------------------------------------ | -------------------- | --------------------------------- |

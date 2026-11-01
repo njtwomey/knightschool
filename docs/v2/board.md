@@ -37,16 +37,17 @@ v1's `useLineStepper` becomes the cursor part of this; the play store's `explore
 
 **Parts**, each optional, each reading the model from context so they stay in step with no wiring:
 
-| Part             | Shows                                                                                                                    | From v1                       |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
-| `Board.Surface`  | the board and its layers                                                                                                 | `AppBoard`                    |
-| `Board.Controls` | settings, flip (when allowed), steps, Hint and Show me, the page's actions                                               | `StudyBoard`'s control row    |
-| `Board.Moves`    | the moves so far as a table or text; click one to go there; the current one marked; refutations and side lines folded in | `MoveList`                    |
-| `Board.Notes`    | the shown move's comment, tags and the key to its marks                                                                  | panels in About, Learn, tree  |
-| `Board.Eval`     | the bar, and the strip or the engine's lines                                                                             | `components/engine/`          |
-| `Board.Explorer` | what players at the learner's band play here, with each move's share and verdict                                         | `ExplorerPanel`               |
-| `Board.Feedback` | the verdict on the last move, "why", the refutation to step through, tick or cross                                       | badge in `AppBoard`; new note |
-| `Board.Caption`  | a line of context: "After 3.Bc4", "Unit 2 ends here"                                                                     | `caption`                     |
+| Part             | Shows                                                                                                                                                                                                                      | From v1                                                                          |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `Board.Surface`  | the board and its layers                                                                                                                                                                                                   | `AppBoard`                                                                       |
+| `Board.Controls` | settings, flip (when allowed), steps, Hint and Show me, the page's actions                                                                                                                                                 | `StudyBoard`'s control row                                                       |
+| `Board.Moves`    | the moves so far as a table or text; click one to go there; the current one marked; refutations and side lines folded in                                                                                                   | `MoveList`                                                                       |
+| `Board.Notes`    | the shown move's comment, tags and the key to its marks                                                                                                                                                                    | panels in About, Learn, tree                                                     |
+| `Board.Eval`     | the bar, and the strip or the engine's lines                                                                                                                                                                               | `components/engine/`                                                             |
+| `Board.Explorer` | what players at the learner's band play here, with each move's share and verdict                                                                                                                                           | `ExplorerPanel`                                                                  |
+| `Board.Feedback` | the verdict on the last move, "why", the refutation to step through, tick or cross                                                                                                                                         | badge in `AppBoard`; new note                                                    |
+| `Board.Caption`  | a line of context: "After 3.Bc4", "Unit 2 ends here"                                                                                                                                                                       | `caption`                                                                        |
+| `Board.Tries`    | every guess so far, one row each: the move, what you played, its grade and symbol, what it cost in centipawns against the line's move, the time, hint or show used; click a row to see it on the board with the refutation | the quiz's miss list (`features/quiz/miss-list.tsx`), live instead of at the end |
 
 A page composes the parts it needs and lays them out with the existing `.board-columns` rule:
 
@@ -58,6 +59,7 @@ A page composes the parts it needs and lays them out with the existing `.board-c
     <Board.Feedback />
     <Board.Notes />
     <Board.Moves layout="table" />
+    <Board.Tries />
     <Board.Eval view="lines" />
   </aside>
 </Board>

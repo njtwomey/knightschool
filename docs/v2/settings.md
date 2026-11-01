@@ -130,6 +130,8 @@ The catalogue, by group. Defaults are suggestions; everything here is a registry
 **Feedback**
 
 - How much a wrong move explains: the symbol, a sentence, or the refutation on the board.
+- The tries table: shown live, only at the end, or off; which columns (cost in centipawns, winning chance, time,
+  help used); right moves listed too or only the wrong ones.
 - Evaluation after answering: off, words, words and numbers.
 - Speed of play: one multiplier over `FEEDBACK_DELAYS` (slow, normal, fast), and the computer's thinking time.
 - Tries before the move is shown (`WRONG_TRIES_ALLOWED`, 2); sounds; animation.

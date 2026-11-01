@@ -95,24 +95,25 @@ not used or developed), _delete_ (nothing needs it). Feature codes (L1, T4, ...)
 What the walk-through keeps asking for, each with one job. Everything on screen is one of these, or a page built from
 them.
 
-| Component                                        | Job                                                           | Source                              |
-| ------------------------------------------------ | ------------------------------------------------------------- | ----------------------------------- |
-| **Board** and its parts                          | every chessboard (board.md)                                   | `components/board`, repurposed      |
-| **ExerciseSession**                              | ask, grade, feed back, record, one exercise after another     | the four session stores, merged     |
-| **VerdictBadge**, **VerdictNote**                | how good a move was, and why                                  | new, over `judgeMove`               |
-| **EvalWords**                                    | where a position stands, in words and numbers                 | new, over `components/engine`       |
-| **MoveList**                                     | moves as a table, inline, or told with comments               | `components/move-list.tsx`, keep    |
-| **RichText** with inline boards                  | lesson and course text                                        | `components/rich-text`, extend      |
-| **PracticeSetup**, **PracticeBar**               | choosing what to practise                                     | keep                                |
-| **StateBadge**                                   | locked, open, learning, passed, mastered, everywhere the same | `unit-state.ts`, generalised        |
-| **ModeCounts**                                   | the coloured counts per mode                                  | new                                 |
-| **CourseCard**, **LessonRow**                    | a course or a lesson in any list                              | from course rows and `unit-row.tsx` |
-| **IdeaBadge**                                    | an idea's name, linking to its page                           | from `TagBadge`, motifs             |
-| **CoverageMeter**, **GapLink**                   | how much of what you meet you know, and where the hole is     | new                                 |
-| **MapTree**                                      | the tree of lines, with overlays                              | `TreeExplorer`, repurposed          |
-| **TrailCrumbs**                                  | breadcrumbs with menus and tabs                               | `components/breadcrumbs`, keep      |
-| **SortableTable**, **RowLink**, **FilterToggle** | tables and filters                                            | keep                                |
-| shadcn `ui`                                      | every control                                                 | keep                                |
+| Component                                        | Job                                                                                                 | Source                              |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| **Board** and its parts                          | every chessboard (board.md)                                                                         | `components/board`, repurposed      |
+| **ExerciseSession**                              | ask, grade, feed back, record, one exercise after another                                           | the four session stores, merged     |
+| **VerdictBadge**, **VerdictNote**                | how good a move was, and why                                                                        | new, over `judgeMove`               |
+| **TriesTable**                                   | every guess in a session with its grade, centipawn cost, time and help used; rows open the position | from `miss-list.tsx`                |
+| **EvalWords**                                    | where a position stands, in words and numbers                                                       | new, over `components/engine`       |
+| **MoveList**                                     | moves as a table, inline, or told with comments                                                     | `components/move-list.tsx`, keep    |
+| **RichText** with inline boards                  | lesson and course text                                                                              | `components/rich-text`, extend      |
+| **PracticeSetup**, **PracticeBar**               | choosing what to practise                                                                           | keep                                |
+| **StateBadge**                                   | locked, open, learning, passed, mastered, everywhere the same                                       | `unit-state.ts`, generalised        |
+| **ModeCounts**                                   | the coloured counts per mode                                                                        | new                                 |
+| **CourseCard**, **LessonRow**                    | a course or a lesson in any list                                                                    | from course rows and `unit-row.tsx` |
+| **IdeaBadge**                                    | an idea's name, linking to its page                                                                 | from `TagBadge`, motifs             |
+| **CoverageMeter**, **GapLink**                   | how much of what you meet you know, and where the hole is                                           | new                                 |
+| **MapTree**                                      | the tree of lines, with overlays                                                                    | `TreeExplorer`, repurposed          |
+| **TrailCrumbs**                                  | breadcrumbs with menus and tabs                                                                     | `components/breadcrumbs`, keep      |
+| **SortableTable**, **RowLink**, **FilterToggle** | tables and filters                                                                                  | keep                                |
+| shadcn `ui`                                      | every control                                                                                       | keep                                |
 
 ## 3. Every part of v1
 

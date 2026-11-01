@@ -35,14 +35,15 @@ other documents.
 
 ## Feedback
 
-| #   | Seen on                        | Feature                                            | Decision | Our version                                                                           | Where             |
-| --- | ------------------------------ | -------------------------------------------------- | -------- | ------------------------------------------------------------------------------------- | ----------------- |
-| F1  | Chess.com Game Review, Lichess | Move grades and symbols                            | adopt    | Book, Best, Excellent, Good, Inaccuracy ?!, Mistake ?, Blunder ??, Miss; no Brilliant | capabilities.md 2 |
-| F2  | Chessly review (complaint)     | Wrong moves only marked wrong                      | avoid    | Every wrong move says why, with the refutation on the board                           | experience.md     |
-| F3  | Chessly review (complaint)     | The note of a right move vanishes in half a second | avoid    | The note stays until your next move                                                   | experience.md     |
-| F4  | Chessly review (complaint)     | No evaluation in drills                            | adapt    | No bar while answering; where you stand shown after, and at every line's end          | board.md (reveal) |
-| F5  | Chess.com coach                | Arrows drawn when a phrase is hovered              | adapt    | Board marks exist; lesson text can name squares and moves that light up on the board  | experience.md     |
-| F6  | Chessly review                 | The opponent's common mistakes are missing         | adopt    | The bar requires them; a lesson step to punish them; the finder (`make punish`)       | courses.md        |
+| #   | Seen on                        | Feature                                            | Decision | Our version                                                                                      | Where                   |
+| --- | ------------------------------ | -------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------ | ----------------------- |
+| F1  | Chess.com Game Review, Lichess | Move grades and symbols                            | adopt    | Book, Best, Excellent, Good, Inaccuracy ?!, Mistake ?, Blunder ??, Miss; no Brilliant            | capabilities.md 2       |
+| F2  | Chessly review (complaint)     | Wrong moves only marked wrong                      | avoid    | Every wrong move says why, with the refutation on the board                                      | experience.md           |
+| F3  | Chessly review (complaint)     | The note of a right move vanishes in half a second | avoid    | The note stays until your next move                                                              | experience.md           |
+| F4  | Chessly review (complaint)     | No evaluation in drills                            | adapt    | No bar while answering; where you stand shown after, and at every line's end                     | board.md (reveal)       |
+| F5  | Chess.com coach                | Arrows drawn when a phrase is hovered              | adapt    | Board marks exist; lesson text can name squares and moves that light up on the board             | experience.md           |
+| F6  | Chessly review                 | The opponent's common mistakes are missing         | adopt    | The bar requires them; a lesson step to punish them; the finder (`make punish`)                  | courses.md              |
+| F7  | ours (from the quiz miss list) | Every guess collected in a table with its cost     | adopt    | `Board.Tries`: live during Learn, Try, Drill, Review and Play on; the session summary at the end | board.md, experience.md |
 
 ## Progress
 

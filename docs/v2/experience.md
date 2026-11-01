@@ -102,6 +102,11 @@ The theory tree (v1: `features/tree`, `TreeExplorer`, one lane per line) becomes
   in half a second).
 - **Your move, wrong:** a cross and snap back, the verdict ("a mistake: the knight is lost after ...Nxg5"), the
   refutation as a red arrow with a button to step through it, and the author's note when there is one.
+- **Every guess, collected:** below the board, a table fills as you go: each move you were asked, what you played
+  (every try, not only the last), its grade and symbol, the cost in centipawns against the line's move and the drop in
+  winning chances, how long you took, and whether you used a hint. A cost fills in as soon as the judgement knows it.
+  Click a row and the board goes to that position, showing your move and the refutation. The same table ends the
+  session as its summary. (v1 lists wrong moves with their cost only at the end of a Quiz, `miss-list.tsx`.)
 - **Their move, a mistake:** "Black's ...g5? is played in about a quarter of games at your level, and loses a piece"; the
   next move is yours to find.
 - **Where you stand:** at the end of every line and puzzle, in words and numbers.
