@@ -40,9 +40,26 @@ export type SessionOptions = {
    * the exercise as one card (a puzzle); `none` is free practice, never saved (docs/v2/pages/practice.md).
    */
   save: 'moves' | 'exercise' | 'none';
+  /**
+   * Overrides of the base delays in milliseconds (config `timing`): Speed has the other side answer at once
+   * (`opponent: 0`) and moves straight on to the next line (`next: 0`).
+   */
+  delays?: { opponent?: number; next?: number };
 };
 
-export type ExerciseResult = { id: string; right: boolean; tries: number; hint: boolean; shown: boolean; ms: number };
+export type ExerciseResult = {
+  id: string;
+  right: boolean;
+  tries: number;
+  hint: boolean;
+  shown: boolean;
+  ms: number;
+  /** Where it started and the moves played (UCI, both sides), for a page that shows or judges the game afterwards. */
+  start: string;
+  moves: string[];
+  /** Every try of the exercise, for a page that writes its own attempt row (Play on). */
+  attempt: Attempt;
+};
 
 type Played = { uci: string; san: string; epd: string; mine: boolean };
 
@@ -50,7 +67,7 @@ type Played = { uci: string; san: string; epd: string; mine: boolean };
  * Runs exercises one after another (docs/v2/hooks/use-exercise-session.md): the other side answers by itself, each
  * learner move is judged and graded (exact or tolerant), every try is kept, and answers are saved as `save` says.
  */
-export function useExerciseSession({ exercises, opening, facts, save }: SessionOptions) {
+export function useExerciseSession({ exercises, opening, facts, save, delays }: SessionOptions) {
   const [at, setAt] = useState(0);
   const [played, setPlayed] = useState<Played[]>([]);
   const [attempt, setAttempt] = useState<Attempt>(startAttempt);
@@ -61,6 +78,8 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
   const [arrows, setArrows] = useState<SystemArrow[]>([]);
   const [results, setResults] = useState<ExerciseResult[]>([]);
   const [thinking, setThinking] = useState(false);
+  /** A move a tolerant grader is waiting to hear about: it stays on the board while the engine judges it. */
+  const [pending, setPending] = useState<{ uci: string; epd: string } | null>(null);
   const started = useRef(Date.now());
   const exerciseStarted = useRef(Date.now());
   const live = useRef(new Map<string, EvalEntry>());
@@ -72,10 +91,11 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
   const exercise = exercises[at];
+  const triesBeforeShown = exercise?.tries ?? siteConfig.teach.triesBeforeShown;
   const epd = played.at(-1)?.epd ?? exercise?.start ?? '';
   const ply = played.length;
   const done = at >= exercises.length;
-  const learnerTurn = Boolean(exercise && !done && sideToMove(epd) === exercise.side && !over());
+  const learnerTurn = Boolean(exercise && !done && !pending && sideToMove(epd) === exercise.side && !over());
 
   function over() {
     if (!exercise) return true;
@@ -165,6 +185,9 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
                 hint: exerciseAttempt.hint,
                 shown: exerciseAttempt.shown,
                 ms: total,
+                start: exercise.start,
+                moves: played.map((move) => move.uci),
+                attempt: exerciseAttempt,
               },
             ],
       );
@@ -180,17 +203,17 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
           setArrows([]);
           exerciseStarted.current = Date.now();
           started.current = Date.now();
-        }, siteConfig.timing.nextCard);
+        }, delays?.next ?? siteConfig.timing.nextCard);
       }
       return;
     }
-    if (learnerTurn) return;
+    if (learnerTurn || pending) return;
     let cancelled = false;
     const respond = async () => {
       let uci: string | undefined;
       if (exercise.responder.kind === 'scripted') uci = scriptedMove(exercise, ply);
       else if (exercise.responder.kind === 'popular') {
-        const book = opening?.positions[epd]?.moves.map((move) => move.uci);
+        const book = exercise.responder.replies?.[epd] ?? opening?.positions[epd]?.moves.map((move) => move.uci);
         uci = popularReply(facts?.counts[epd], book?.length ? book : undefined, Math.random());
       }
       if (!uci) {
@@ -206,12 +229,12 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
       setPlayed((list) => [...list, { uci: move.uci, san: move.san, epd: move.epd, mine: false }]);
       started.current = Date.now();
     };
-    const timer = setTimeout(() => void respond(), siteConfig.timing.opponent);
+    const timer = setTimeout(() => void respond(), delays?.opponent ?? siteConfig.timing.opponent);
     return () => {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [at, ply, done, learnerTurn]);
+  }, [at, ply, done, learnerTurn, pending]);
 
   const advance = (move: { uci: string; san: string; epd: string }, finished: Attempt) => {
     if (save === 'moves' && exercise)
@@ -232,9 +255,35 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
     const ms = Date.now() - started.current;
     const expected = expectedMove(exercise, epd, ply);
     const verdict = move.uci === expected ? null : judge(epd, move.uci, expected);
-    const settled = verdict && verdict !== 'needs' ? verdict : null;
-    const outcome = gradeMove(exercise, epd, ply, move.uci, settled);
-    const next = reduceAttempt(attempt, { type: 'try', uci: move.uci, ms, outcome }, siteConfig.teach.triesBeforeShown);
+    if (verdict === 'needs' && exercise.grader.kind === 'tolerant') {
+      // A tolerant grade is the judgement itself: the move stays on the board until the engine has looked at it. A
+      // move it cannot judge (the engine failed to start) counts as passed.
+      setPending({ uci: move.uci, epd: move.epd });
+      void evaluateLive([epd, move.epd].filter((position) => !evalOf(position)))
+        .catch(() => undefined)
+        .then(() => {
+          const late = judge(epd, move.uci, expected);
+          setPending(null);
+          settle(exercise, move, from, to, ms, expected, late === 'needs' ? 'unjudged' : late);
+        });
+      return true;
+    }
+    return settle(exercise, move, from, to, ms, expected, verdict);
+  };
+
+  /** Grades a learner move once its judgement is in (or known to be coming later, for an exact grader). */
+  const settle = (
+    exercise: Exercise,
+    move: NonNullable<ReturnType<typeof playMove>>,
+    from: string,
+    to: string,
+    ms: number,
+    expected: string | undefined,
+    verdict: Verdict | 'needs' | 'unjudged' | null,
+  ): boolean => {
+    const settled = verdict && verdict !== 'needs' && verdict !== 'unjudged' ? verdict : null;
+    const outcome = verdict === 'unjudged' ? 'right' : gradeMove(exercise, epd, ply, move.uci, settled);
+    const next = reduceAttempt(attempt, { type: 'try', uci: move.uci, ms, outcome }, triesBeforeShown);
     setExerciseAttempt((a) => ({ ...a, tries: [...a.tries, ...next.tries.slice(-1)] }));
     const rowIndex = tries.length;
     setTries((rows) => [
@@ -308,11 +357,13 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
       setBadge({ square: to, kind: 'wrong' });
     }
     setAttempt(next);
-    if (next.shown && expected) {
-      setArrows([{ from: expected.slice(0, 2), to: expected.slice(2, 4), kind: 'play' }]);
+    // With no single right move (tolerant), the move shown after the tries run out is the engine's best.
+    const shownMove = expected ?? (exercise.grader.kind === 'tolerant' ? evalOf(epd)?.pv?.[0] : undefined);
+    if (next.shown && shownMove) {
+      setArrows([{ from: shownMove.slice(0, 2), to: shownMove.slice(2, 4), kind: 'play' }]);
       setExerciseAttempt((a) => ({ ...a, shown: true }));
       later(() => {
-        const shown = playMove(epd, expected)!;
+        const shown = playMove(epd, shownMove)!;
         advance(shown, next);
         setArrows([]);
       }, siteConfig.timing.wrongBadge * 1.5);
@@ -321,13 +372,13 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
   };
 
   const hint = () => {
-    setAttempt((a) => reduceAttempt(a, { type: 'hint' }, siteConfig.teach.triesBeforeShown));
+    setAttempt((a) => reduceAttempt(a, { type: 'hint' }, triesBeforeShown));
     setExerciseAttempt((a) => ({ ...a, hint: true }));
   };
   const show = () => {
     const expected = exercise ? expectedMove(exercise, epd, ply) : undefined;
     if (!expected) return;
-    const next = reduceAttempt(attempt, { type: 'show' }, siteConfig.teach.triesBeforeShown);
+    const next = reduceAttempt(attempt, { type: 'show' }, triesBeforeShown);
     setAttempt(next);
     setExerciseAttempt((a) => ({ ...a, shown: true }));
     setArrows([{ from: expected.slice(0, 2), to: expected.slice(2, 4), kind: 'play' }]);
@@ -344,9 +395,18 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
     index: at,
     total: exercises.length,
     done,
-    epd,
+    /** The position on the board: with a move waiting for its judgement, the position after it. */
+    epd: pending?.epd ?? epd,
     played,
-    lastMove: last ? { from: last.uci.slice(0, 2), to: last.uci.slice(2, 4) } : undefined,
+    /** A move is on the board waiting for the engine's judgement (tolerant grading). */
+    judging: Boolean(pending),
+    lastMove: pending
+      ? { from: pending.uci.slice(0, 2), to: pending.uci.slice(2, 4) }
+      : last
+        ? { from: last.uci.slice(0, 2), to: last.uci.slice(2, 4) }
+        : exercise?.before
+          ? { from: exercise.before.slice(0, 2), to: exercise.before.slice(2, 4) }
+          : undefined,
     learnerTurn,
     thinking,
     hintSquare: attempt.hint && expectedNow ? expectedNow.slice(0, 2) : undefined,
@@ -359,7 +419,8 @@ export function useExerciseSession({ exercises, opening, facts, save }: SessionO
     play,
     hint,
     show,
-    canShow: Boolean(expectedNow),
+    canShow: Boolean(expectedNow) && exercise?.help !== false,
+    triesBeforeShown,
   };
 }
 

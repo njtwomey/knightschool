@@ -1,6 +1,7 @@
 import { START_EPD, type Side } from '../chess/epd';
 import { numberedMove } from '../chess/notation';
 import { replay } from '../chess/play';
+import { buildQuestions, type BuiltQuestion } from '../questions/questions';
 import type { Note } from './note';
 import type { OpeningFile } from './schema';
 import { isLearnerMove, type ResolvedLine, type TreeMove } from './theory';
@@ -42,6 +43,8 @@ export type BuiltOpening = {
   lines: BuiltLine[];
   variations: { id: string; name?: string; intro?: string; plans: string[]; lines: string[] }[];
   steps: BuiltStep[];
+  /** Questions in words, from the variations' `questions:`, checked against the matcher when built. */
+  questions: BuiltQuestion[];
 };
 
 /**
@@ -145,6 +148,7 @@ export function buildOpening(
       lines: variation.lines,
     })),
     steps: cutSteps(file, resolved, startPly, stepMoves),
+    questions: buildQuestions(id, file.variations),
   };
 }
 

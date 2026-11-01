@@ -19,5 +19,6 @@ describe('content/', () => {
     const refuted = Object.values(italian.positions).flatMap((position) => position.refutations ?? []);
     expect(refuted.map((refutation) => refutation.san)).toContain('Ng5');
     expect(italian.lines.find((line) => line.id === 'legal-mate')?.kind).toBe('trap');
+    expect(italian.questions.map((question) => question.id)).toEqual(['what-c3-prepares', 'why-bb3', 'why-nxe5-works']);
   });
 });

@@ -10,6 +10,8 @@ teach:
   gates: true # app: steps and checkpoints lock what follows
   testOut: true # app: a gate can be passed by taking its check
   firstStepOpen: true # app: the first step of every opening is always open
+  checkpointTries: 1 # app: tries per move in a checkpoint
+  checkpointMark: 0.9 # app: the share of a checkpoint answered right that clears it
 
 judge:
   # app and build: drops in the mover's winning chances (Lichess's scale, -1 to 1) for each grade
@@ -47,6 +49,8 @@ puzzles:
   levels: [through, after, variation, family, structure, idea] # both: match levels, strongest first
   perStep: 2 # app
   perOpening: 300 # build
+  rating: [900, 1300] # app: the puzzle rating range a learner starts with
+  ratingFalloff: 200 # app: outside the range, a puzzle's chance of being drawn halves every this many points
   select: { minRating: 600, maxRating: 1800, minPopularity: 80, minPlays: 500 } # build
 
 opponent:
@@ -61,3 +65,10 @@ engine:
 lichess:
   pauseAfter429Ms: 60000 # both
   cacheDays: 30 # app
+
+practice: # app: the practice modes' defaults
+  speedLines: 3 # lines in a Speed set
+  speedSeconds: 60 # seconds in a timed Speed run
+  countdownSeconds: 5 # the count before a Speed run and between the lines of a set
+  nameItPositions: 5 # positions in a Name it run
+  drillRuns: 5 # branches played in one Drill session

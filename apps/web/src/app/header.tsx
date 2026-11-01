@@ -1,4 +1,4 @@
-import { BookOpen, Grid2x2, LayoutGrid, Moon, Sun } from 'lucide-react';
+import { BookOpen, Dumbbell, Grid2x2, LayoutGrid, Moon, Sun, SunMedium } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/lib/theme';
 import { to } from '@/router/location';
@@ -14,8 +14,18 @@ export function Header() {
         </a>
         <nav className="ml-auto flex items-center gap-1">
           <Button asChild variant="ghost" size="sm">
+            <a href={to('/today')}>
+              <SunMedium aria-hidden /> Today
+            </a>
+          </Button>
+          <Button asChild variant="ghost" size="sm">
             <a href={to('/openings')}>
               <BookOpen aria-hidden /> Openings
+            </a>
+          </Button>
+          <Button asChild variant="ghost" size="sm">
+            <a href={to('/practice')}>
+              <Dumbbell aria-hidden /> Practice
             </a>
           </Button>
           <Button asChild variant="ghost" size="sm">

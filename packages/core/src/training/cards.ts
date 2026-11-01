@@ -12,6 +12,10 @@ export type MoveCardDefinition = { id: string; epd: string; uci: string; san: st
 /** Lines whose learner moves earn cards: traps to spring are exercises instead, alternatives are shown, never drilled. */
 const CARD_KINDS: ReadonlySet<LineKind> = new Set(['main', 'sideline', 'gambit', 'danger']);
 
+/** Whether a line's learner moves earn cards (and so are drilled and reviewed). */
+export const lineEarnsCards = (line: { kind: LineKind; alternative: boolean }, includeRare = false): boolean =>
+  !line.alternative && (CARD_KINDS.has(line.kind) || (includeRare && line.kind === 'rare'));
+
 /**
  * The move cards an opening offers, in step order: each learner move of a line that earns cards, once, tagged with the
  * step that teaches it. Rare lines join when `includeRare`.
@@ -22,7 +26,7 @@ export function moveCards(opening: BuiltOpening, options: { includeRare?: boolea
   const seen = new Set<string>();
   for (const step of opening.steps) {
     const line = kinds.get(step.line)!;
-    if (line.alternative || !(CARD_KINDS.has(line.kind) || (options.includeRare && line.kind === 'rare'))) continue;
+    if (!lineEarnsCards(line, options.includeRare)) continue;
     for (const ply of rangeOf(step)) {
       const uci = line.moves[ply]!;
       const epd = ply === 0 ? undefined : findBefore(opening, line.moves, ply);
@@ -51,3 +55,6 @@ function findBefore(opening: BuiltOpening, ucis: readonly string[], ply: number)
   }
   return epd;
 }
+
+/** A question in words (content `questions:`), scheduled like any card: `quiz:<opening>:<id>`. */
+export const quizCardId = (opening: string, id: string) => `quiz:${opening}:${id}`;

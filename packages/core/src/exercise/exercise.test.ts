@@ -61,6 +61,22 @@ describe('ending and responding', () => {
     expect(exerciseOver({ ...line, responder: { kind: 'engine' }, learnerMoves: 5 }, START_EPD, 4, 2)).toBe(false);
   });
 
+  it('ends a drill where the book ends, on either side', () => {
+    const [e4, e5] = replay(START_EPD, ['e4', 'e5']);
+    const drill: Exercise = {
+      ...line,
+      mode: 'drill',
+      grader: { kind: 'exact', book: { [START_EPD]: 'e2e4' } },
+      responder: { kind: 'popular', replies: { [e4!.epd]: ['e7e5'] } },
+    };
+    expect(exerciseOver(drill, START_EPD, 0, 0)).toBe(false);
+    expect(exerciseOver(drill, e4!.epd, 1, 1)).toBe(false);
+    // White to move with no answer in the book.
+    expect(exerciseOver(drill, e5!.epd, 2, 1)).toBe(true);
+    // Black to move with no reply in scope.
+    expect(exerciseOver({ ...drill, responder: { kind: 'popular', replies: {} } }, e4!.epd, 1, 1)).toBe(true);
+  });
+
   it('picks replies in proportion to games, within the allowed ones', () => {
     const counts = {
       moves: [

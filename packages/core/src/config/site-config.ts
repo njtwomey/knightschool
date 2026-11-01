@@ -17,6 +17,8 @@ export const SiteConfig = z.object({
     gates: z.boolean(),
     testOut: z.boolean(),
     firstStepOpen: z.boolean(),
+    checkpointTries: z.number().int().positive(),
+    checkpointMark: share,
   }),
   judge: z.object({
     grades: z.object({ best: share, excellent: share, good: share, inaccuracy: share, mistake: share }),
@@ -52,6 +54,8 @@ export const SiteConfig = z.object({
     levels: z.array(z.enum(['through', 'after', 'variation', 'family', 'structure', 'idea'])),
     perStep: z.number().int().nonnegative(),
     perOpening: z.number().int().positive(),
+    rating: z.tuple([z.number().int(), z.number().int()]),
+    ratingFalloff: z.number().positive(),
     select: z.object({ minRating: z.number(), maxRating: z.number(), minPopularity: z.number(), minPlays: z.number() }),
   }),
   opponent: z.object({
@@ -61,6 +65,13 @@ export const SiteConfig = z.object({
   }),
   engine: z.object({ liveDepth: z.number().int().positive(), bakedDepth: z.number().int().positive() }),
   lichess: z.object({ pauseAfter429Ms: z.number().int().positive(), cacheDays: z.number().positive() }),
+  practice: z.object({
+    speedLines: z.number().int().positive(),
+    speedSeconds: z.number().int().positive(),
+    countdownSeconds: z.number().int().nonnegative(),
+    nameItPositions: z.number().int().positive(),
+    drillRuns: z.number().int().positive(),
+  }),
 });
 export type SiteConfig = z.infer<typeof SiteConfig>;
 export type GradeCutoffs = SiteConfig['judge']['grades'];

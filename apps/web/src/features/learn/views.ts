@@ -10,6 +10,7 @@ import { stepMoves } from './model';
 export const openingHref = (id: string) => to(`/openings/${id}`);
 export const stepHref = (id: string, n: number, stage?: string) =>
   to(`/openings/${id}/step/${n}${stage ? `#stage=${stage}` : ''}`);
+export const checkpointHref = (id: string, variation: string) => to(`/openings/${id}/${variation}/checkpoint`);
 
 /** A catalogue entry as an opening card. */
 export function openingSummary(entry: Catalog['openings'][number]): OpeningSummary {
@@ -31,8 +32,15 @@ export function openingSummary(entry: Catalog['openings'][number]): OpeningSumma
 
 type StepInfo = { state: ProgressState; counts: { mine: number; known: number; inReviews: number } };
 
+/** A variation's checkpoint as recorded: cleared when its latest attempt passed (features/practice/progress.ts). */
+export type CheckpointRecord = { cleared: boolean; score?: string; positions?: number };
+
 /** An opening's variations and steps, as the variation list shows them. */
-export function variationViews(opening: BuiltOpening, info: Map<string, StepInfo>): VariationData[] {
+export function variationViews(
+  opening: BuiltOpening,
+  info: Map<string, StepInfo>,
+  checkpoints: ReadonlyMap<string, CheckpointRecord> = new Map(),
+): VariationData[] {
   let number = 0;
   return opening.variations.map((variation, v) => {
     const steps: StepData[] = opening.steps
@@ -54,6 +62,7 @@ export function variationViews(opening: BuiltOpening, info: Map<string, StepInfo
         };
       });
     const states = steps.map((step) => step.state);
+    const recorded = checkpoints.get(variation.id);
     const known = steps.reduce((sum, step) => sum + step.counts.known, 0);
     const total = steps.reduce((sum, step) => sum + step.counts.mine, 0);
     return {
@@ -74,8 +83,13 @@ export function variationViews(opening: BuiltOpening, info: Map<string, StepInfo
       progress: { total, known, mastered: 0 },
       steps,
       checkpoint: {
-        positions: total,
-        state: states.every((s) => s === 'known' || s === 'mastered') ? 'open' : 'locked',
+        positions: recorded?.positions ?? total,
+        state: recorded?.cleared
+          ? 'cleared'
+          : states.every((s) => s === 'known' || s === 'mastered')
+            ? 'open'
+            : 'locked',
+        ...(recorded?.score ? { score: recorded.score } : {}),
       },
     };
   });

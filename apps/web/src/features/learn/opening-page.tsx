@@ -11,7 +11,10 @@ import { loadFacts, loadOpening } from '@/data/content';
 import { learnerStore } from '@/data/learner';
 import { useLoad } from '@/hooks/use-load';
 import { bakedScore, stepMoves, stepStates } from './model';
-import { stepHref, variationViews } from './views';
+import type { AttemptRow } from '@/data/learner-store';
+import { checkpointsOf, latestCheckpoints } from '@/features/practice/progress';
+import { navigate, to } from '@/router/location';
+import { checkpointHref, stepHref, variationViews } from './views';
 
 /** One opening: its introduction, its variations with their steps, and a board for the step picked. */
 export function OpeningPage({ id }: { id: string }) {
@@ -23,7 +26,8 @@ export function OpeningPage({ id }: { id: string }) {
     ]);
     const cards = await store.cards.all();
     const reviews = await store.reviews.forCards(cards.map((card) => card.id));
-    return { opening, facts, cards, reviews };
+    const attempts = await store.attempts.recent(20_000);
+    return { opening, facts, cards, reviews, attempts };
   }, [id]);
   if (data.error) return <main className="mx-auto max-w-7xl px-4 py-8 text-destructive">{data.error}</main>;
   if (!data.data) return <main className="mx-auto max-w-7xl px-4 py-8 text-muted-foreground">Loading…</main>;
@@ -35,9 +39,11 @@ function OpeningView({
   facts,
   cards,
   reviews,
+  attempts,
 }: {
   opening: BuiltOpening;
   facts?: OpeningFacts;
+  attempts: AttemptRow[];
   cards: Awaited<ReturnType<Awaited<ReturnType<typeof learnerStore>>['cards']['all']>>;
   reviews: Awaited<ReturnType<Awaited<ReturnType<typeof learnerStore>>['reviews']['forCards']>>;
 }) {
@@ -49,7 +55,17 @@ function OpeningView({
     }
     return map;
   }, [opening, progress]);
-  const variations = useMemo(() => variationViews(opening, info), [opening, info]);
+  const checkpoints = useMemo(
+    () =>
+      new Map(
+        checkpointsOf(opening, progress.states, latestCheckpoints(attempts)).map((checkpoint) => [
+          checkpoint.variation,
+          { cleared: checkpoint.state === 'cleared', score: checkpoint.score, positions: checkpoint.positions },
+        ]),
+      ),
+    [opening, progress, attempts],
+  );
+  const variations = useMemo(() => variationViews(opening, info, checkpoints), [opening, info, checkpoints]);
   const [picked, setPicked] = useState(opening.steps[0]?.id);
   const step = opening.steps.find((candidate) => candidate.id === picked) ?? opening.steps[0];
   const shown = useMemo(() => (step ? stepMoves(opening, step) : null), [opening, step]);
@@ -86,6 +102,9 @@ function OpeningView({
             setIndex(0);
           }}
           fold="all-open"
+          onCheckpoint={(variation) => {
+            if (variation) navigate(checkpointHref(opening.id, variation.id).slice(to('').length));
+          }}
         />
         <div className="grid content-start gap-3 lg:sticky lg:top-20">
           <Board

@@ -1,4 +1,4 @@
-import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
+import type { BuiltOpening, OpeningFacts, OpeningNames } from '@knightschool/core/content';
 import type { IdeasFile, TracksFile } from '@knightschool/core/content';
 
 /** What content:build ships in catalog.json (scripts/content/build.ts). */
@@ -27,6 +27,18 @@ export type ShippedPuzzle = {
   rating: number;
   themes: string[];
   level: string;
+  /** What content:build ships beside these (scripts/puzzles): how often played, who solves, and what it matched. */
+  popularity?: number;
+  plays?: number;
+  solver?: 'white' | 'black';
+  /** The opening's side solves. */
+  mine?: boolean;
+  /** The opening's position it was matched at, the line that holds it, and what matched (a tag, structure or theme). */
+  position?: string;
+  line?: string | null;
+  by?: string;
+  /** The game on Lichess and the ply: `fU9DCMlT#19`. */
+  game?: string;
 };
 
 const loaded = new Map<string, Promise<unknown>>();
@@ -49,3 +61,8 @@ export const loadOpening = (id: string) => load<BuiltOpening>(`openings/${id}.js
 export const loadFacts = (id: string) => load<OpeningFacts>(`openings/${id}.facts.json`);
 export const loadPuzzles = (id: string) =>
   load<{ puzzles: ShippedPuzzle[] } | ShippedPuzzle[]>(`openings/${id}.puzzles.json`).catch(() => []);
+/** The Lichess names of an opening's positions and variations (Name it); none when the build had no names. */
+export const loadNames = (id: string) =>
+  load<OpeningNames>(`openings/${id}.names.json`).catch((): OpeningNames => ({ positions: {}, variations: {} }));
+/** Every Lichess opening name, for Name it's suggestions. */
+export const loadNameList = () => load<string[]>('names.json').catch((): string[] => []);

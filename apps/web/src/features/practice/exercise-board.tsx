@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { Board } from '@/components/board/board';
 import { BoardFeedback } from '@/components/board/board-feedback';
 import { TriesTable } from '@/components/chess/tries-table';
-import { siteConfig } from '@/data/site-config';
 import type { useExerciseSession } from './use-exercise-session';
 
 type Session = ReturnType<typeof useExerciseSession>;
@@ -17,6 +16,7 @@ export function ExerciseBoard({
   prompt,
   aside,
   footer,
+  feedback = true,
 }: {
   session: Session;
   /** Under the board: what is asked ("Your move", "Find the win"). */
@@ -25,9 +25,10 @@ export function ExerciseBoard({
   aside?: ReactNode;
   /** Under the tries table: the mode's own actions or summary. */
   footer?: ReactNode;
+  /** The feedback panel on the last move; Speed leaves it out (the tick and cross on the board say enough). */
+  feedback?: boolean;
 }) {
-  const triesLeft =
-    siteConfig.teach.triesBeforeShown - session.attempt.tries.filter((t) => t.outcome === 'wrong').length;
+  const triesLeft = session.triesBeforeShown - session.attempt.tries.filter((t) => t.outcome === 'wrong').length;
   const side = session.exercise?.side ?? 'white';
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
@@ -43,7 +44,7 @@ export function ExerciseBoard({
         arrows={session.arrows}
         lit={session.hintSquare ? [session.hintSquare] : undefined}
         exercise={
-          session.learnerTurn
+          session.learnerTurn && session.exercise?.help !== false
             ? {
                 help: session.attempt.shown ? 'shown' : session.attempt.hint ? 'hint' : 'none',
                 onHint: session.hint,
@@ -58,14 +59,18 @@ export function ExerciseBoard({
             (prompt ?? <p className="font-medium">Your move: what does {side === 'white' ? 'White' : 'Black'} play?</p>)
           ) : session.done ? null : (
             <p className="text-muted-foreground">
-              {session.thinking ? 'The engine is thinking…' : 'The other side is moving…'}
+              {session.judging
+                ? 'Judging your move…'
+                : session.thinking
+                  ? 'The engine is thinking…'
+                  : 'The other side is moving…'}
             </p>
           )
         }
       />
       <div className="grid content-start gap-4">
         {aside}
-        <BoardFeedback feedback={session.feedback} reveal="answered" triesLeft={triesLeft} />
+        {feedback ? <BoardFeedback feedback={session.feedback} reveal="answered" triesLeft={triesLeft} /> : null}
         <TriesTable tries={session.tries} />
         {footer}
       </div>

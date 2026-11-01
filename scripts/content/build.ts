@@ -4,9 +4,10 @@
  */
 import { mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { openingFacts } from '../../packages/core/src/content/index.ts';
+import { openingFacts, openingNames } from '../../packages/core/src/content/index.ts';
 import { readAnalysis, readPopularity, readSelection, selectionPath } from '../data-files.ts';
 import { loadContent, root } from './load.ts';
+import { lichessNames } from './names.ts';
 
 const started = Date.now();
 let content;
@@ -41,12 +42,18 @@ const catalog = {
   tracks: content.tracks,
 };
 writeFileSync(join(staging, 'catalog.json'), JSON.stringify(catalog));
+const names = await lichessNames();
+if (names) writeFileSync(join(staging, 'names.json'), JSON.stringify(names.all));
 const analysis = readAnalysis().byEpd;
 const popularity = readPopularity().byEpd;
 for (const opening of content.openings) {
   writeFileSync(join(staging, 'openings', `${opening.id}.json`), JSON.stringify(opening));
   const facts = openingFacts(opening, analysis, popularity, content.config.coverage.analyseShare);
   writeFileSync(join(staging, 'openings', `${opening.id}.facts.json`), JSON.stringify(facts));
+  if (names) {
+    const named = openingNames(opening, names.positions);
+    writeFileSync(join(staging, 'openings', `${opening.id}.names.json`), JSON.stringify(named));
+  }
   const puzzles = readSelection(selectionPath(opening.id));
   if (puzzles) writeFileSync(join(staging, 'openings', `${opening.id}.puzzles.json`), JSON.stringify(puzzles));
 }

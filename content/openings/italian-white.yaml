@@ -17,10 +17,49 @@ variations:
     lines: [giuoco-main, giuoco-d5, giuoco-bg4]
     plans:
       - Play c3 and d3, castle, then Re1, Bb3 and h3 before the d4 break.
+    questions:
+      - id: what-c3-prepares
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3
+        ask: What does White's 4.c3 prepare?
+        answers: [[d4]]
+        examples:
+          right: [It prepares d4, so the d-pawn can go to d4 and hit the bishop, White wants to push d4 next]
+          wrong: [It develops a piece, it attacks the bishop on c5]
+        explain: >-
+          The d4 push. With a pawn on c3, White can play d4 to take the centre and hit the bishop on c5 in one move,
+          and if Black takes on d4, the c-pawn takes back and keeps two pawns in the middle.
+      - id: why-bb3
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6
+        ask: Black has played 7...a6. Why does White step the bishop back with 8.Bb3?
+        answers: [[b5], [pawn, attack], [tempo]]
+        examples:
+          right:
+            - Black threatens b5, hitting the bishop
+            - to get out of the way of ...b5
+            - so a pawn cannot attack it and gain a tempo
+          wrong: [to defend e4, it develops, the bishop is bad on c4]
+        explain: >-
+          7...a6 gets ready for ...b5, which would chase the bishop and gain time. On b3 it is out of reach of the
+          pawns and still points at f7. Black's ...Ba7 does the same for the other bishop.
   - id: traps
     name: Traps to know
     intro: What to do when Black pins the knight too early.
     lines: [legal-mate]
+    questions:
+      - id: why-nxe5-works
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. Nc3 Bg4 5. h3 Bh5
+        ask: Black keeps the pin with 5...Bh5. Why can White play 6.Nxe5 and leave the queen to be taken?
+        answers: [[mate, queen], [mate, Bxd1], [Bxf7, Nd5]]
+        examples:
+          right:
+            - If Black takes the queen, Bxf7+ and Nd5 is mate
+            - taking the queen allows checkmate
+            - after Bxd1 White mates
+            - Bxf7 check Ke7 then knight d5 mate
+          wrong: [it wins a pawn, the knight attacks f7, the pin is not real]
+        explain: >-
+          6.Nxe5 offers the queen. If 6...Bxd1, then 7.Bxf7+ Ke7 8.Nd5 is mate: the bishop and both knights cover every
+          square round the king. If Black leaves the queen alone, White has won the e5 pawn and is clearly better.
 steps:
   giuoco-main:1:
     title: The quiet bishop

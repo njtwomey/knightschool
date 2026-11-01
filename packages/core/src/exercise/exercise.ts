@@ -18,6 +18,12 @@ export type Exercise = {
   responder: Responder;
   /** How many of the learner's moves end it; with a script, the script's end does. */
   learnerMoves?: number;
+  /** Wrong tries before the move is shown; config `teach.triesBeforeShown` when left out (a checkpoint gives fewer). */
+  tries?: number;
+  /** Whether Hint and Show me are offered (false in a checkpoint). */
+  help?: boolean;
+  /** The move that reached the start (UCI), highlighted as the last move before anything is played (a review card). */
+  before?: string;
 };
 
 /**
@@ -37,7 +43,11 @@ export type Grader =
  *   opening's book replies), else the engine;
  * - engine: the engine's best move.
  */
-export type Responder = { kind: 'scripted'; script: string[] } | { kind: 'popular' } | { kind: 'engine' };
+export type Responder =
+  | { kind: 'scripted'; script: string[] }
+  /** `replies`: the replies in scope by EPD (Drill); with it the exercise ends where the book does (exerciseOver). */
+  | { kind: 'popular'; replies?: Record<string, string[]> }
+  | { kind: 'engine' };
 
 /** The move the script expects at a ply of the exercise (plies counted from its start), if it has one. */
 export const scriptedMove = (exercise: Exercise, ply: number): string | undefined =>
@@ -75,6 +85,13 @@ export function gradeMove(
 export function exerciseOver(exercise: Exercise, epd: string, plies: number, learnerMovesPlayed: number): boolean {
   if (gameOver(epd)) return true;
   if (exercise.responder.kind === 'scripted' && plies >= exercise.responder.script.length) return true;
+  if (exercise.responder.kind === 'popular' && exercise.responder.replies) {
+    // A drill runs to the end of the book: no reply in scope, or no answer of the learner's.
+    const learnerToMove = sideToMove(epd) === exercise.side;
+    const book = exercise.grader.kind === 'exact' ? exercise.grader.book : undefined;
+    if (!learnerToMove && !exercise.responder.replies[epd]?.length) return true;
+    if (learnerToMove && book && !book[epd]) return true;
+  }
   return exercise.learnerMoves !== undefined && learnerMovesPlayed >= exercise.learnerMoves;
 }
 

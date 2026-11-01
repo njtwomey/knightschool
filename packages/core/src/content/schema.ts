@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { QuestionEntry } from '../questions/questions';
 
 const Slug = z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, 'lower-case words joined by hyphens');
 
@@ -35,6 +36,8 @@ export const OpeningFile = z.object({
         intro: z.string().optional(),
         lines: z.array(Slug).min(1),
         plans: z.array(z.string()).default([]),
+        /** Questions in words about this variation's positions (docs/v2/schemas/content.md). */
+        questions: z.array(QuestionEntry).default([]),
       }),
     )
     .min(1),
