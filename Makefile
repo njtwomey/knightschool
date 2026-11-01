@@ -42,6 +42,9 @@ fix: ## ESLint autofix and Prettier
 	$(PNPM) exec eslint . --fix
 	$(PNPM) format
 
+content-check: ## Where the authors and the engine disagree (a report, never a gate)
+	$(PNPM) content:check
+
 pre-push: check build ## What must pass before every push
 
 hooks: ## Install the git pre-push hook

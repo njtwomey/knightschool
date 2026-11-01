@@ -23,7 +23,8 @@
     "format:check": "prettier --check .",
     "content:build": "node --import tsx scripts/content/build.ts",
     "engine:copy": "node --import tsx scripts/copy-engine.ts",
-    "analyse": "node --import tsx scripts/analyse/analyse.ts"
+    "analyse": "node --import tsx scripts/analyse/analyse.ts",
+    "content:check": "node --import tsx scripts/content/check.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
