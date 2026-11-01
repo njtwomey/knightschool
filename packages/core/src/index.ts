@@ -11,3 +11,4 @@ export * from './puzzles/opening-tags';
 export * from './puzzles/structure';
 export * from './puzzles/select';
 export * from './judge/judge';
+export * from './training';
