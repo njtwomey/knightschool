@@ -33,6 +33,58 @@ export default tseslint.config(
     },
   },
   {
+    // One board, one control row: outside components/board, every board is Board (or BoardThumb for a still picture),
+    // so its controls are always BoardControls. A bare surface or hand-made step buttons fail here.
+    files: ['apps/web/src/**/*.tsx'],
+    ignores: ['apps/web/src/components/board/**', 'apps/web/src/mocks/registry/board.tsx'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@/components/board/board-surface',
+              message: 'Use Board (it brings the shared control row) or BoardThumb for a still picture.',
+              allowTypeImports: true,
+            },
+            {
+              name: '@/components/board/step-buttons',
+              message: 'Use Board; its control row has the step buttons.',
+              allowTypeImports: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Chevrons mean "step through the moves" on a board; only these files use them for something else.
+    files: ['apps/web/src/**/*.tsx'],
+    ignores: [
+      'apps/web/src/components/board/**',
+      'apps/web/src/components/ui/**',
+      'apps/web/src/mocks/mocks-page.tsx',
+      'apps/web/src/components/shared/breadcrumbs.tsx',
+      'apps/web/src/components/map/map-index.tsx',
+      'apps/web/src/components/openings/line-story.tsx',
+      'apps/web/src/components/create/step-editor.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'lucide-react',
+              importNames: ['ChevronFirst', 'ChevronLast', 'ChevronLeft', 'ChevronRight'],
+              message: "Stepping through moves is Board's control row; do not draw step buttons by hand.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['packages/core/src/**/*.ts'],
     ignores: ['packages/core/src/**/*.test.ts', 'packages/core/src/testing/**'],
     rules: {
@@ -41,6 +93,27 @@ export default tseslint.config(
         {
           patterns: [
             { group: ['react', 'react-dom', 'node:*'], message: 'core is pure: no React, DOM or node imports.' },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // The engine speaks UCI over a transport it is given: no React, DOM or node, and only core's types.
+    files: ['packages/engine/src/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@knightschool/core',
+              message: 'The engine may import core types only (import type).',
+              allowTypeImports: true,
+            },
+          ],
+          patterns: [
+            { group: ['react', 'react-dom', 'node:*'], message: 'The engine is pure: no React, DOM or node.' },
           ],
         },
       ],

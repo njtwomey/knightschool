@@ -1,7 +1,6 @@
 import { replay } from '@knightschool/core';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { BoardThumb } from '@/components/board/board-thumb';
+import { Board } from '@/components/board/board';
 import type { Idea } from '@/components/chess/idea-badge';
 import type { RunMove } from '@/components/chess/move-run';
 import { LineRow, LineTable, type LineData } from '@/components/openings/line-row';
@@ -596,34 +595,18 @@ const growsFromMain = [lineData[1]!, lineData[2]!];
 /** The story beside a small board, bound to its cursor through the chips and two step buttons. */
 function StoryWithBoard() {
   const [current, setCurrent] = useState(6);
-  const move = m[current];
   return (
-    <div className="grid gap-4 md:grid-cols-[14rem_minmax(0,1fr)]">
-      <div className="grid content-start gap-2">
-        <BoardThumb
-          epd={move ? move.after : START}
-          lastMove={move ? { from: move.uci.slice(0, 2), to: move.uci.slice(2, 4) } : undefined}
-          className="w-full"
-        />
-        <div className="flex justify-center gap-1">
-          <Button
-            size="icon-sm"
-            variant="outline"
-            aria-label="Back"
-            onClick={() => setCurrent((c) => Math.max(0, c - 1))}
-          >
-            <ChevronLeft />
-          </Button>
-          <Button
-            size="icon-sm"
-            variant="outline"
-            aria-label="Forward"
-            onClick={() => setCurrent((c) => Math.min(m.length - 1, c + 1))}
-          >
-            <ChevronRight />
-          </Button>
-        </div>
-      </div>
+    <div className="grid gap-4 md:grid-cols-[18rem_minmax(0,1fr)]">
+      <Board
+        positions={[
+          { epd: START },
+          ...m.map((move) => ({ epd: move.after, lastMove: { from: move.uci.slice(0, 2), to: move.uci.slice(2, 4) } })),
+        ]}
+        index={current + 1}
+        onIndex={(index) => setCurrent(Math.max(0, index - 1))}
+        flippable={false}
+        settings={false}
+      />
       <div className="max-h-[28rem] overflow-y-auto pr-2">
         <LineStory
           moves={mainStory}

@@ -2,19 +2,18 @@ import { gradeOf, moveCost, numberedMove, playMove, sideToMove, START_EPD, type 
 import { ArrowRight, RotateCcw, SquareArrowOutUpRight } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Board, type BoardPosition } from '@/components/board/board';
-import { BoardControls, type ControlsExercise } from '@/components/board/board-controls';
+import type { ControlsExercise } from '@/components/board/board-controls';
 import { BoardExplorer, type ExplorerRow, type ExplorerState } from '@/components/board/board-explorer';
 import { BoardFeedback, type Feedback } from '@/components/board/board-feedback';
 import { BoardNotes, type NotesMove } from '@/components/board/board-notes';
 import { BoardSettingsForm, BoardSettingsMenu, useBoardSettings } from '@/components/board/board-settings-menu';
-import { BoardSurface, type SystemArrow } from '@/components/board/board-surface';
-import { StepButtons } from '@/components/board/step-buttons';
+import type { SystemArrow } from '@/components/board/board-surface';
 import { IdeaBadge, type Idea } from '@/components/chess/idea-badge';
 import { KindBadge } from '@/components/chess/kind-badge';
 import { MoveExplanation, type Alternative } from '@/components/chess/move-explanation';
 import { lichessOpeningUrl, OpeningName } from '@/components/chess/opening-name';
 import { PositionCard } from '@/components/chess/position-card';
-import { findFeatures, PositionFeatures, type Feature } from '@/components/chess/position-features';
+import { featureOnBoard, findFeatures, PositionFeatures, type Feature } from '@/components/chess/position-features';
 import { RichText, type RichTextBoard, type RichTextContext } from '@/components/chess/rich-text';
 import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/data/site-config';
@@ -223,24 +222,21 @@ function ControlsDemo({
   asked?: number;
 }) {
   const [index, setIndex] = useState(start);
-  const [flipped, setFlipped] = useState(false);
   const [help, setHelp] = useState<ControlsExercise['help']>('none');
   const answer = MAIN[asked ?? start]!.next;
   const arrows: SystemArrow[] = help === 'shown' && answer ? [{ ...answer, kind: 'play' }] : [];
   return (
     <div className="grid max-w-xs gap-2">
-      <BoardSurface
-        epd={MAIN[index]!.epd}
-        lastMove={MAIN[index]!.lastMove}
-        orientation={flipped ? 'black' : 'white'}
+      <Board
+        positions={MAIN}
+        index={index}
+        onIndex={stepper ? setIndex : undefined}
+        reveal={exercise ? 'test' : 'study'}
+        flippable={flippable}
+        settings={settings}
+        asked={asked}
         arrows={arrows}
         lit={help === 'hint' && answer ? [answer.from] : undefined}
-        id="controls-demo"
-      />
-      <BoardControls
-        settings={settings}
-        onFlip={flippable ? () => setFlipped(!flipped) : undefined}
-        stepper={stepper ? { index, last: MAIN.length - 1, onIndex: setIndex, asked } : undefined}
         exercise={
           exercise
             ? {
@@ -290,15 +286,18 @@ function StepDemo({
   const at = m[index - 1];
   return (
     <div className="grid gap-2">
-      <StepButtons
+      <Board
+        positions={MAIN}
         index={index}
-        last={MAIN.length - 1}
-        min={min}
-        asked={asked}
         onIndex={setIndex}
+        stepMin={min}
+        asked={asked}
         offLine={off}
         onBackToLine={() => setOff(false)}
         keys={keys}
+        flippable={false}
+        settings={false}
+        className="max-w-xs"
       />
       <p className="text-sm text-muted-foreground">
         {index === 0 || !at ? 'The start' : `After ${numberedMove(index - 1, at.san)}`}
@@ -549,7 +548,7 @@ function NotesDemo() {
   const explained = i >= 0 ? explanationFor(i) : null;
   return (
     <Columns>
-      <Board {...linked.props} />
+      <Board {...linked.props} markKey={false} />
       <BoardNotes
         move={notesFor(i)}
         startText={example.opening.variations[0]!.intro}
@@ -587,14 +586,12 @@ function FeaturesDemo({ lineId, start, limit }: { lineId: string; start: number;
   return (
     <Columns>
       <Board
-        positions={positions}
+        {...featureOnBoard(lit, positions, index)}
         index={index}
         onIndex={(next) => {
           setIndex(next);
           setLit(null);
         }}
-        lit={lit?.squares}
-        arrows={lit?.arrows.map((arrow) => ({ ...arrow, kind: 'preview' as const })) ?? []}
       />
       <PositionFeatures epd={positions[index]!.epd} learner={LEARNER} limit={limit} onLight={setLit} />
     </Columns>

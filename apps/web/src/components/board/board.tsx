@@ -3,6 +3,7 @@ import { useState, type ReactNode } from 'react';
 import { MarkKey } from '@/components/chess/mark-key';
 import { cn } from '@/lib/utils';
 import { BoardControls, type ControlsExercise } from './board-controls';
+import type { SettingsGroup } from './board-settings-menu';
 import { BoardSurface, type BoardBadge, type BoardSurfaceProps, type SystemArrow } from './board-surface';
 import { EvalBar } from './eval-bar';
 
@@ -36,6 +37,12 @@ export type BoardProps = {
   orientation?: 'white' | 'black';
   /** Whether the page lets the board flip (not in an exercise that fixes the side). */
   flippable?: boolean;
+  /** The page keeps the side (in its address): flipping calls this and `orientation` is used as given. */
+  onFlip?: () => void;
+  /** The eval bar beside the board where the reveal level allows it; off when the engine is off. */
+  evalBar?: boolean;
+  /** Which groups the gear's menu shows (a board with the engine adds Engine). */
+  settingsGroups?: SettingsGroup[];
   badge?: BoardBadge;
   arrows?: SystemArrow[];
   lit?: BoardSurfaceProps['lit'];
@@ -48,7 +55,16 @@ export type BoardProps = {
   asked?: number;
   /** The key to the marks under the board; off where a notes panel shows it instead. */
   markKey?: boolean;
+  /** The settings gear in the control row (on unless turned off). */
+  settings?: boolean;
+  /** Stepping through a side line (a refutation): the step row offers "Back to the line". */
+  offLine?: boolean;
+  onBackToLine?: () => void;
   onMove?: (from: string, to: string) => boolean;
+  /** Passed through to the surface, for drawing with the mouse (the marks editor's right button). */
+  onSquareMouseDown?: BoardSurfaceProps['onSquareMouseDown'];
+  onSquareMouseUp?: BoardSurfaceProps['onSquareMouseUp'];
+  onSquareRightClick?: BoardSurfaceProps['onSquareRightClick'];
   caption?: ReactNode;
   actions?: ReactNode;
   /** Arrow keys step through the positions (one board per page owns them). */
@@ -68,6 +84,9 @@ export function Board({
   reveal = 'study',
   orientation: fixed = 'white',
   flippable = true,
+  onFlip,
+  evalBar = true,
+  settingsGroups,
   badge,
   arrows = [],
   lit,
@@ -76,14 +95,20 @@ export function Board({
   stepMin,
   asked,
   markKey = true,
+  settings = true,
+  offLine,
+  onBackToLine,
   onMove,
+  onSquareMouseDown,
+  onSquareMouseUp,
+  onSquareRightClick,
   caption,
   actions,
   keys = false,
   className,
 }: BoardProps) {
   const [flipped, setFlipped] = useState(false);
-  const orientation = flipped ? (fixed === 'white' ? 'black' : 'white') : fixed;
+  const orientation = !onFlip && flipped ? (fixed === 'white' ? 'black' : 'white') : fixed;
   const shows = SHOWS[reveal];
   const position = positions[index]!;
   const last = positions.length - 1;
@@ -95,7 +120,7 @@ export function Board({
   return (
     <div className={cn('grid w-full max-w-xl content-start gap-2 self-start', className)}>
       <div className="flex items-start gap-2">
-        {shows.eval ? (
+        {shows.eval && evalBar ? (
           <EvalBar score={position.score ?? null} orientation={orientation} className="self-stretch" />
         ) : null}
         <BoardSurface
@@ -108,12 +133,17 @@ export function Board({
           lit={lit}
           interactive={interactive}
           onMove={onMove}
+          onSquareMouseDown={onSquareMouseDown}
+          onSquareMouseUp={onSquareMouseUp}
+          onSquareRightClick={onSquareRightClick}
         />
       </div>
       <BoardControls
-        onFlip={flippable ? () => setFlipped(!flipped) : undefined}
+        onFlip={flippable ? (onFlip ?? (() => setFlipped(!flipped))) : undefined}
+        settingsGroups={settingsGroups}
         keys={keys}
-        stepper={onIndex ? { index, last, onIndex, keys, min: stepMin, asked } : undefined}
+        settings={settings}
+        stepper={onIndex ? { index, last, onIndex, keys, min: stepMin, asked, offLine, onBackToLine } : undefined}
         exercise={exercise}
         actions={actions}
       />
