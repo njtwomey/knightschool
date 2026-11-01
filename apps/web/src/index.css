@@ -132,3 +132,97 @@
     @apply font-sans;
   }
 }
+
+/*
+ * Knight School's colours, each with one meaning everywhere (docs/v2/patterns/colours.md). Components use them through
+ * Tailwind classes (`bg-verdict-mistake`, `text-state-known`), never as raw values.
+ */
+:root {
+  --mark-idea: rgb(21 128 61 / 0.85);
+  --mark-threat: rgb(185 28 28 / 0.85);
+  --mark-target: rgb(202 138 4 / 0.9);
+  --mark-support: rgb(29 78 216 / 0.85);
+  --arrow-play: oklch(0.55 0.2 295 / 0.85);
+  --arrow-engine: oklch(0.55 0.03 255 / 0.8);
+  --arrow-wrong: oklch(0.58 0.24 340 / 0.85);
+  --feedback-right: #6f9a2c;
+  --feedback-wrong: #c0392b;
+  --verdict-book: oklch(0.55 0.08 60);
+  --verdict-best: oklch(0.62 0.19 145);
+  --verdict-excellent: oklch(0.6 0.15 150);
+  --verdict-good: oklch(0.6 0.06 150);
+  --verdict-inaccuracy: oklch(0.72 0.16 90);
+  --verdict-mistake: oklch(0.68 0.18 55);
+  --verdict-blunder: oklch(0.58 0.22 27);
+  --verdict-miss: oklch(0.62 0.18 10);
+  --state-locked: oklch(0.65 0 0);
+  --state-open: oklch(0.45 0 0);
+  --state-learning: oklch(0.72 0.16 75);
+  --state-known: oklch(0.55 0.1 180);
+  --state-mastered: oklch(0.42 0.09 180);
+  --mode-learn: oklch(0.62 0.14 230);
+  --mode-review: oklch(0.52 0.18 275);
+  --mode-drill: oklch(0.55 0.12 160);
+  --mode-puzzle: oklch(0.66 0.17 50);
+  --mode-play-on: oklch(0.55 0.16 320);
+  --kind-gambit: oklch(0.6 0.18 350);
+  --kind-trap-spring: oklch(0.7 0.16 75);
+  --kind-trap-avoid: oklch(0.58 0.22 27);
+  --eval-white: oklch(0.97 0 0);
+  --eval-black: oklch(0.25 0 0);
+  --board-light: #eeeed2;
+  --board-dark: #769656;
+  --brand: #2f5d50;
+}
+
+.dark {
+  --verdict-book: oklch(0.7 0.08 60);
+  --verdict-best: oklch(0.72 0.19 145);
+  --verdict-excellent: oklch(0.7 0.15 150);
+  --verdict-good: oklch(0.72 0.06 150);
+  --verdict-inaccuracy: oklch(0.82 0.15 90);
+  --verdict-mistake: oklch(0.76 0.16 55);
+  --verdict-blunder: oklch(0.68 0.2 27);
+  --verdict-miss: oklch(0.72 0.16 10);
+  --state-open: oklch(0.75 0 0);
+  --state-known: oklch(0.7 0.1 180);
+  --state-mastered: oklch(0.62 0.1 180);
+  --mode-learn: oklch(0.72 0.12 230);
+  --mode-review: oklch(0.68 0.15 275);
+  --mode-drill: oklch(0.7 0.11 160);
+  --mode-puzzle: oklch(0.75 0.15 50);
+  --mode-play-on: oklch(0.7 0.14 320);
+}
+
+@theme inline {
+  --color-mark-idea: var(--mark-idea);
+  --color-mark-threat: var(--mark-threat);
+  --color-mark-target: var(--mark-target);
+  --color-mark-support: var(--mark-support);
+  --color-feedback-right: var(--feedback-right);
+  --color-feedback-wrong: var(--feedback-wrong);
+  --color-verdict-book: var(--verdict-book);
+  --color-verdict-best: var(--verdict-best);
+  --color-verdict-excellent: var(--verdict-excellent);
+  --color-verdict-good: var(--verdict-good);
+  --color-verdict-inaccuracy: var(--verdict-inaccuracy);
+  --color-verdict-mistake: var(--verdict-mistake);
+  --color-verdict-blunder: var(--verdict-blunder);
+  --color-verdict-miss: var(--verdict-miss);
+  --color-state-locked: var(--state-locked);
+  --color-state-open: var(--state-open);
+  --color-state-learning: var(--state-learning);
+  --color-state-known: var(--state-known);
+  --color-state-mastered: var(--state-mastered);
+  --color-mode-learn: var(--mode-learn);
+  --color-mode-review: var(--mode-review);
+  --color-mode-drill: var(--mode-drill);
+  --color-mode-puzzle: var(--mode-puzzle);
+  --color-mode-play-on: var(--mode-play-on);
+  --color-kind-gambit: var(--kind-gambit);
+  --color-kind-trap-spring: var(--kind-trap-spring);
+  --color-kind-trap-avoid: var(--kind-trap-avoid);
+  --color-eval-white: var(--eval-white);
+  --color-eval-black: var(--eval-black);
+  --color-brand: var(--brand);
+}
