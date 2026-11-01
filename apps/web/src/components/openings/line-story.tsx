@@ -215,7 +215,7 @@ export function LineStory({
               <div
                 key={from}
                 className={cn(
-                  '-mx-2 rounded-md border px-2 py-1.5 transition-colors',
+                  'rounded-md border px-2 py-1.5 transition-colors',
                   here ? 'border-primary/60 bg-accent ring-1 ring-primary/30' : 'border-transparent',
                 )}
               >
