@@ -44,13 +44,15 @@ export type SettingDef = {
   valueLabel?: (value: SettingValue) => string;
 };
 
-export type SettingGroupId = 'level' | 'review' | 'feedback' | 'board' | 'engine' | 'accounts';
+export type SettingGroupId = 'level' | 'review' | 'computer' | 'puzzles' | 'feedback' | 'board' | 'engine' | 'accounts';
 
 export type SettingGroupDef = { id: SettingGroupId; title: string; description: string };
 
 export const SETTING_GROUPS: SettingGroupDef[] = [
   { id: 'level', title: 'Your level', description: 'What you meet: rare lines, alternatives and traps.' },
   { id: 'review', title: 'Review', description: 'How many new moves join your reviews, and how much a review asks.' },
+  { id: 'computer', title: 'The computer', description: 'How the computer answers when you drill your lines.' },
+  { id: 'puzzles', title: 'Puzzles', description: 'Which puzzles from your openings come up.' },
   { id: 'feedback', title: 'Feedback', description: 'How much the board tells you after a move, and how fast.' },
   { id: 'board', title: 'Board', description: 'How the board looks on this screen.' },
   { id: 'engine', title: 'Engine', description: 'The computer’s evaluation beside the board.' },
@@ -120,24 +122,72 @@ const defs: SettingDef[] = [
     label: 'Moves per question',
     hint: 'How far a review asks you to play from the position it shows.',
     control: {
-      kind: 'select',
+      kind: 'toggle',
       options: [
-        { value: '1', label: 'One move' },
-        { value: '2', label: 'Two moves' },
-        { value: '3', label: 'Three moves' },
-        { value: '5', label: 'Five moves' },
-        { value: 'rest', label: 'The rest of the line' },
+        ...['1', '2', '3', '4', '5'].map((n) => ({ value: n, label: n })),
+        { value: 'rest', label: 'Rest of the line', hint: 'Every move of yours to the end of the line' },
       ],
     },
     default: '1',
     level: 'basic',
     store: 'learner',
+    valueLabel: (v) => (v === 'rest' ? 'the rest of the line' : `${v} ${v === '1' ? 'move' : 'moves'}`),
     explain: (v) =>
       v === '1'
         ? 'Each question asks for one of your moves.'
         : v === 'rest'
           ? 'Each question plays on to the end of the line.'
           : `Each question asks for ${v} of your moves in a row.`,
+  },
+  {
+    key: 'computer.plays',
+    group: 'computer',
+    label: 'The computer plays',
+    hint: 'How the computer chooses its replies in a drill.',
+    control: {
+      kind: 'toggle',
+      options: [
+        { value: 'written', label: 'As written', hint: 'The replies the lines give, chosen at random' },
+        {
+          value: 'level',
+          label: 'As your level plays',
+          hint: 'Replies weighted by how often players at your level choose them',
+        },
+        { value: 'engine', label: 'The engine', hint: 'The strongest reply, which may leave the lines' },
+      ],
+    },
+    default: 'level',
+    level: 'basic',
+    store: 'learner',
+    synonyms: ['opponent', 'replies', 'drill'],
+    explain: (v) =>
+      v === 'written'
+        ? 'Any reply the lines give, each as likely as the next.'
+        : v === 'engine'
+          ? 'The best reply, even off your lines: a stiffer test.'
+          : 'The replies you will meet most often come up most often.',
+  },
+  {
+    key: 'puzzles.solver',
+    group: 'puzzles',
+    label: 'Who solves',
+    hint: 'Puzzles where your side wins something, or where you find what the other side threatens.',
+    control: {
+      kind: 'toggle',
+      options: [
+        { value: 'you', label: 'You', hint: 'Puzzles where your side wins something' },
+        {
+          value: 'opponent',
+          label: 'The opponent',
+          hint: 'Find what the other side threatens, so you see it coming',
+        },
+        { value: 'both', label: 'Both' },
+      ],
+    },
+    default: 'you',
+    level: 'advanced',
+    store: 'learner',
+    synonyms: ['threat', 'side'],
   },
   {
     key: 'feedback.speed',

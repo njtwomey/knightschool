@@ -1,11 +1,15 @@
-import { epdToFen, MARK_MEANINGS, type MarkColour, type Side } from '@knightschool/core';
+import { epdToFen, MARK_MEANINGS, parseIcon, type MarkColour, type Side } from '@knightschool/core';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { Pin } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { MARK_RGB } from '@/components/board/colours';
-import type { Reveal } from '@/components/board/board';
+import type { BoardPosition, BoardProps, Reveal } from '@/components/board/board';
+import type { SystemArrow } from '@/components/board/board-surface';
+import { SquareIconGlyph } from '@/components/board/square-icon';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { GRADE_TEXT } from './grade-style';
 
 /*
  * A few cheap features, found by looking at the board with chess.js. A stand-in for core's `positionFeatures`
@@ -21,9 +25,11 @@ export type Feature = {
   favours: Side | null;
   colour: MarkColour;
   text: string;
-  /** What the board lights on hover. */
+  /** What the board lights on hover, in the feature's colour. */
   squares: string[];
   arrows: { from: string; to: string }[];
+  /** Square icons drawn on the board on hover (`pin@f6`, core `SQUARE_ICONS`); the first is the list item's icon. */
+  icons?: string[];
 };
 
 const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -67,6 +73,7 @@ function loose(chess: Chess, all: Placed[], inCheck: boolean): Feature[] {
     if (!defended) {
       found.push({
         ...base,
+        icons: [`hanging@${piece.square}`],
         id: `hanging-${piece.square}`,
         kind: 'hanging',
         text: `The ${NAME[piece.type]} on ${piece.square} is undefended and attacked by ${by}.`,
@@ -74,6 +81,7 @@ function loose(chess: Chess, all: Placed[], inCheck: boolean): Feature[] {
     } else if (VALUE[cheapest.piece.type] < VALUE[piece.type]) {
       found.push({
         ...base,
+        icons: [`attack@${piece.square}`],
         id: `attacked-${piece.square}`,
         kind: 'attacked',
         text: `The ${NAME[piece.type]} on ${piece.square} is attacked by ${by}, a cheaper piece.`,
@@ -134,6 +142,7 @@ function pinsAndSkewers(chess: Chess, all: Placed[]): Feature[] {
       if (back.type === 'k' || VALUE[back.type] > VALUE[front.type]) {
         found.push({
           ...base,
+          icons: [`pin@${front.square}`],
           id: `pin-${front.square}`,
           kind: 'pin',
           text:
@@ -144,6 +153,7 @@ function pinsAndSkewers(chess: Chess, all: Placed[]): Feature[] {
       } else if (front.type === 'k' || VALUE[front.type] > VALUE[back.type]) {
         found.push({
           ...base,
+          icons: [`attack@${front.square}`, `attack@${back.square}`],
           id: `skewer-${front.square}`,
           kind: 'skewer',
           text: `${by[0]!.toUpperCase()}${by.slice(1)} skewers the ${NAME[front.type]} on ${front.square} and the ${NAME[back.type]} behind it.`,
@@ -155,8 +165,9 @@ function pinsAndSkewers(chess: Chess, all: Placed[]): Feature[] {
 }
 
 /** The side to move's checks, and mate in one. Plays every move, so only for the one board being looked at. */
-function checks(chess: Chess): Feature[] {
+function checks(chess: Chess, all: Placed[]): Feature[] {
   const mover = SIDE[chess.turn()];
+  const king = all.find((p) => p.type === 'k' && p.color !== chess.turn())?.square;
   const moves = chess.moves({ verbose: true }).filter((move) => move.san.includes('+') || move.san.includes('#'));
   const mates = moves.filter((move) => move.san.includes('#'));
   if (mates.length > 0) {
@@ -168,6 +179,7 @@ function checks(chess: Chess): Feature[] {
       text: `${SIDE_NAME[mover]} mates with ${move.san}.`,
       squares: [move.from, move.to],
       arrows: [{ from: move.from, to: move.to }],
+      icons: king ? [`mate@${king}`] : [],
     }));
   }
   if (moves.length === 0) return [];
@@ -181,6 +193,7 @@ function checks(chess: Chess): Feature[] {
       text: `${SIDE_NAME[mover]} has ${moves.length === 1 ? 'a check' : `${moves.length} checks`}: ${named.join(', ')}${moves.length > 3 ? ' and more' : ''}.`,
       squares: moves.flatMap((move) => [move.from, move.to]),
       arrows: moves.map((move) => ({ from: move.from, to: move.to })),
+      icons: king ? [`check@${king}`] : [],
     },
   ];
 }
@@ -206,6 +219,7 @@ function kings(epd: string, all: Placed[]): Feature[] {
         text: `${SIDE_NAME[side]}'s king can no longer castle and is stuck in the centre.`,
         squares: [king.square],
         arrows: [],
+        icons: [`attack@${king.square}`],
       });
     } else if (openCentre.length > 0) {
       found.push({
@@ -216,6 +230,7 @@ function kings(epd: string, all: Placed[]): Feature[] {
         text: `${SIDE_NAME[side]}'s king is still in the centre with the ${openCentre.join('- and ')}-file open.`,
         squares: [king.square, ...openCentre.map((file) => `${file}${colour === 'w' ? 2 : 7}`)],
         arrows: [],
+        icons: [`attack@${king.square}`],
       });
     }
   }
@@ -263,7 +278,7 @@ export function findFeatures(epd: string, kinds?: FeatureKind[]): Feature[] {
   const all = pieces(chess);
   const want = (kind: FeatureKind) => !kinds || kinds.includes(kind);
   const found = [
-    ...(want('mate') || want('check') ? checks(chess) : []),
+    ...(want('mate') || want('check') ? checks(chess, all) : []),
     ...(want('hanging') || want('attacked') ? loose(chess, all, chess.inCheck()) : []),
     ...(want('pin') || want('skewer') ? pinsAndSkewers(chess, all) : []),
     ...(want('king') ? kings(epd, all) : []),
@@ -271,6 +286,30 @@ export function findFeatures(epd: string, kinds?: FeatureKind[]): Feature[] {
     ...(want('file') ? files(all) : []),
   ].filter((feature) => want(feature.kind));
   return found.sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind));
+}
+
+/**
+ * A lit feature on the board: its squares in its colour, its arrows, and its square icons added to the marks of the
+ * position shown. Spread into `Board` with the positions and index it shows.
+ */
+export function featureOnBoard(
+  feature: Feature | null,
+  positions: BoardPosition[],
+  index: number,
+): Pick<BoardProps, 'positions' | 'lit' | 'arrows'> {
+  if (!feature) return { positions, lit: [], arrows: [] };
+  const icons = feature.icons ?? [];
+  return {
+    positions: icons.length
+      ? positions.map((position, i) =>
+          i === index
+            ? { ...position, marks: { ...position.marks, icons: [...(position.marks?.icons ?? []), ...icons] } }
+            : position,
+        )
+      : positions,
+    lit: feature.squares.map((square) => ({ square, colour: feature.colour })),
+    arrows: feature.arrows.map((arrow): SystemArrow => ({ ...arrow, kind: 'preview' })),
+  };
 }
 
 /**
@@ -312,7 +351,7 @@ export function PositionFeatures({
   const light = (feature: Feature | null) => onLight?.(feature ?? pinnedFeature);
   if (features.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">Nothing urgent here: both kings are safe and nothing is attacked.</p>
+      <EmptyState kind="done" size="part" text="Nothing urgent here: both kings are safe and nothing is attacked." />
     );
   }
   const shown = more ? features : features.slice(0, limit);
@@ -323,6 +362,7 @@ export function PositionFeatures({
           const isPinned = pinned === feature.id;
           const whose =
             learner && feature.favours ? (feature.favours === learner ? 'good for you' : 'watch out') : null;
+          const icon = feature.icons?.[0] ? parseIcon(feature.icons[0])?.icon : undefined;
           return (
             <li key={feature.id}>
               <Button
@@ -342,19 +382,22 @@ export function PositionFeatures({
                   onLight?.(next ? feature : null);
                 }}
               >
-                <span
-                  className="mt-1.5 size-2.5 shrink-0 rounded-full"
-                  style={{ backgroundColor: MARK_RGB[feature.colour] }}
-                  aria-label={MARK_MEANINGS[feature.colour].name}
-                />
+                {icon ? (
+                  <span className="mt-0.5 shrink-0" aria-label={MARK_MEANINGS[feature.colour].name}>
+                    <SquareIconGlyph icon={icon} className="size-4" />
+                  </span>
+                ) : (
+                  <span
+                    className="mt-1.5 size-2.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: MARK_RGB[feature.colour] }}
+                    aria-label={MARK_MEANINGS[feature.colour].name}
+                  />
+                )}
                 <span className="grid gap-0.5">
                   <span className="text-sm">{feature.text}</span>
                   {whose ? (
                     <span
-                      className={cn(
-                        'text-xs',
-                        whose === 'watch out' ? 'text-verdict-mistake' : 'text-muted-foreground',
-                      )}
+                      className={cn('text-xs', whose === 'watch out' ? GRADE_TEXT.mistake : 'text-muted-foreground')}
                     >
                       {whose === 'good for you' ? 'Good for you' : 'Watch out'}
                     </span>

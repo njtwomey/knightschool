@@ -1,8 +1,11 @@
 import { numberedMove } from '@knightschool/core';
-import { ChevronLeft, ChevronRight, FileText, Lightbulb, Plus, RotateCcw, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, FileText, Plus, RotateCcw, X } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Board, type BoardPosition } from '@/components/board/board';
+import { IDEA_KINDS, IdeaBadge, type Idea } from '@/components/chess/idea-badge';
 import { MoveRun, type RunMove } from '@/components/chess/move-run';
+import { RichText } from '@/components/chess/rich-text';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Hint } from '@/components/shared/hint';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,7 +15,6 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { MarksEditor, type MarkSet } from './marks-editor';
-import type { IdeaOption } from './move-note-editor';
 import { ProblemsList, type Problem } from './problems-list';
 
 export type StepMove = RunMove & { before: string };
@@ -49,7 +51,7 @@ export type StepEditorProps = {
   auto: { first: number; last: number }[];
   /** Every change saves as one undoable action ("rename step 3", "move the end of step 2 to 6.c3"). */
   onChange: (steps: Step[], label: string) => void;
-  ideas: IdeaOption[];
+  ideas: Idea[];
   /** Ideas written on the stretch's moves, offered as suggestions. */
   suggestedIdeas?: (step: Step) => string[];
   /** What feeds each stage ("2 refutations in this stretch"), or null when it has nothing to show and is skipped. */
@@ -225,7 +227,12 @@ export function StepEditor({
             <p className="text-xs text-muted-foreground">As the Read stage shows it</p>
             <p className="font-medium">{step.name ?? `Step ${n}`}</p>
             {step.text ? (
-              <p>{step.text}</p>
+              <RichText
+                text={step.text}
+                side={side}
+                ideas={Object.fromEntries(ideas.map((idea) => [idea.id, idea]))}
+                context={{ startEpd: stretch[0]!.before, firstPly: step.first, moves: stretch }}
+              />
             ) : (
               <p className="text-muted-foreground">No text: learners go straight to Watch.</p>
             )}
@@ -336,12 +343,11 @@ export function StepEditor({
             {(step.ideas ?? []).map((id) => {
               const idea = ideas.find((option) => option.id === id);
               return (
-                <Badge key={id} variant="secondary" className="gap-1 pr-0.5">
-                  <Lightbulb aria-hidden /> {idea?.name ?? id}
+                <span key={id} className="inline-flex items-center">
+                  <IdeaBadge idea={idea} name={idea ? undefined : id} />
                   <Button
                     variant="ghost"
                     size="icon-xs"
-                    className="size-4"
                     aria-label={`Remove ${idea?.name ?? id}`}
                     onClick={() =>
                       replace(
@@ -352,28 +358,31 @@ export function StepEditor({
                   >
                     <X aria-hidden />
                   </Button>
-                </Badge>
+                </span>
               );
             })}
             {suggested.map((id) => {
               const idea = ideas.find((option) => option.id === id);
+              const Icon = idea ? IDEA_KINDS[idea.kind].icon : null;
               return (
                 <Hint key={id} text={`Suggested from its moves. ${idea?.summary ?? ''}`}>
                   <Button
                     variant="outline"
                     size="xs"
                     className="border-dashed"
+                    aria-label={`Add ${idea?.name ?? id}`}
                     onClick={() =>
                       replace({ ...step, ideas: [...(step.ideas ?? []), id] }, `edit the ideas of step ${n}`)
                     }
                   >
-                    <Plus aria-hidden /> {idea?.name ?? id}
+                    <Plus aria-hidden />
+                    {Icon ? <Icon aria-hidden /> : null} {idea?.name ?? id}
                   </Button>
                 </Hint>
               );
             })}
             {(step.ideas ?? []).length === 0 && suggested.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No ideas on these moves yet.</p>
+              <EmptyState kind="new" size="part" text="No ideas on these moves yet." />
             ) : null}
           </div>
         </div>

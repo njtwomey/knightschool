@@ -2,12 +2,14 @@ import { numberedMove, type Score } from '@knightschool/core';
 import { Check, ChevronDown, CircleHelp, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { EvalWords } from '@/components/chess/eval-words';
+import { IdeaBadge, type Idea } from '@/components/chess/idea-badge';
+import { OpeningName } from '@/components/chess/opening-name';
 import { TriesTable, type Try } from '@/components/chess/tries-table';
-import { Badge } from '@/components/ui/badge';
+import { NextAction, type NextActionProps } from '@/components/progress/next-action';
+import { EmptyState, type EmptyAction } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { MODE_INFO, type PracticeConfig, type PracticeMode, type PracticeSource } from './practice-config';
@@ -34,11 +36,11 @@ export type SessionSummaryProps = {
   /** `feedback.triesTable`: with off, the table here is folded behind "See every try". */
   triesTable?: 'live' | 'end' | 'off';
   /** The ideas the session touched. */
-  ideas?: string[];
+  ideas?: Idea[];
   /** Where the line leaves you, for a step's Done stage. */
   evalAfter?: Score | null;
   /** The next action for the same scope. */
-  next?: ReactNode;
+  next?: NextActionProps;
   /** The set-up card labelled Again; left out for a step's Done stage. */
   again?: {
     config: PracticeConfig;
@@ -49,8 +51,11 @@ export type SessionSummaryProps = {
   };
   /** Free practice: nothing here changes the schedule. */
   free?: boolean;
-  /** An empty session: no figures or table, the reason and the ways on. */
-  empty?: { reason: string; ways: ReactNode };
+  /**
+   * An empty session: no figures or table, the reason and the ways on (free practice, the next step); `more` holds
+   * anything else, such as the setting-inline to raise new moves a day.
+   */
+  empty?: { reason: string; action?: EmptyAction; secondary?: EmptyAction; more?: ReactNode };
   className?: string;
 };
 
@@ -79,7 +84,9 @@ function NamedTable({ named }: { named: NamedAnswer[] }) {
                 <TableCell className={cn(!answer.typed && 'text-muted-foreground')}>
                   {answer.typed || 'I don’t know'}
                 </TableCell>
-                <TableCell>{answer.right}</TableCell>
+                <TableCell>
+                  <OpeningName name={answer.right} />
+                </TableCell>
                 <TableCell>
                   <span className={cn('inline-flex items-center gap-1', CREDIT_TONE[answer.credit])}>
                     <Icon className="size-4" aria-hidden />
@@ -122,16 +129,19 @@ export function SessionSummary({
   if (empty) {
     return (
       <div className={cn('grid gap-4', className)}>
-        <Empty className="border">
-          <EmptyHeader>
-            <EmptyTitle className="flex items-center gap-2">
-              <Icon className={cn('size-4', tone)} aria-hidden />
-              {headline}
-            </EmptyTitle>
-            <EmptyDescription>{empty.reason}</EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent className="flex-row flex-wrap justify-center">{empty.ways}</EmptyContent>
-        </Empty>
+        <EmptyState
+          kind="done"
+          text={
+            <>
+              <span className="block font-medium">{headline}</span>
+              {empty.reason}
+            </>
+          }
+          action={empty.action}
+          secondary={empty.secondary}
+        />
+        {empty.more}
+        {next ? <NextAction {...next} /> : null}
       </div>
     );
   }
@@ -200,9 +210,7 @@ export function SessionSummary({
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="text-sm text-muted-foreground">Ideas you met:</span>
                   {ideas.map((idea) => (
-                    <Badge key={idea} variant="secondary">
-                      {idea}
-                    </Badge>
+                    <IdeaBadge key={idea.id} idea={idea} />
                   ))}
                 </div>
               ) : null}
@@ -215,7 +223,7 @@ export function SessionSummary({
             </div>
           ) : null}
 
-          {next ? <div className="flex flex-wrap gap-2">{next}</div> : null}
+          {next ? <NextAction {...next} /> : null}
         </CardContent>
       </Card>
       {again && mode !== 'step' ? (

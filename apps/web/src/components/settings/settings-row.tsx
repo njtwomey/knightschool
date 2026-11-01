@@ -1,5 +1,6 @@
 import { Eye, EyeOff, KeyRound, MonitorSmartphone, RotateCcw } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
+import { FilterToggle } from '@/components/finding/filter-toggle';
 import { Hint } from '@/components/shared/hint';
 import { IconAction } from '@/components/shared/icon-action';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +9,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import {
   canReset,
@@ -290,37 +290,16 @@ function Control({
       );
     case 'toggle':
       return (
-        <ToggleGroup
+        <FilterToggle
           id={id}
-          type="single"
-          variant="outline"
+          label={def.label}
+          showLabel={false}
           size="sm"
-          spacing={0}
           value={String(value)}
           disabled={disabled}
-          aria-labelledby={`${id}-label`}
-          onValueChange={(next) => next && onChange(next)}
-          className="flex-wrap"
-        >
-          {control.options.map((option) => {
-            const item = (
-              <ToggleGroupItem
-                key={option.value}
-                value={option.value}
-                className="px-3 aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                {option.label}
-              </ToggleGroupItem>
-            );
-            return option.hint ? (
-              <Hint key={option.value} text={option.hint}>
-                {item}
-              </Hint>
-            ) : (
-              item
-            );
-          })}
-        </ToggleGroup>
+          options={control.options}
+          onChange={onChange}
+        />
       );
     case 'number':
       return (

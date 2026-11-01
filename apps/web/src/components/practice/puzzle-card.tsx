@@ -1,12 +1,14 @@
 import { fenToEpd, playMove, sideToMove, type Side } from '@knightschool/core';
 import { Check, ExternalLink, Lightbulb, X } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { BoardThumb } from '@/components/board/board-thumb';
+import { IdeaBadge, type Idea } from '@/components/chess/idea-badge';
 import { Badge } from '@/components/ui/badge';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { ABOVE_ROW_LINK, RowLink } from '@/components/finding/sortable-table';
 import { cn } from '@/lib/utils';
 import { puzzleThemes } from './puzzle-themes';
+import { PositionPreview } from '@/components/chess/position-preview';
 
 /** A Lichess puzzle: the FEN before the opponent's move that sets it up, then the moves (the first is that move). */
 export type PuzzleData = { id: string; fen: string; moves: string[]; rating: number; themes: string[] };
@@ -19,8 +21,19 @@ export type PuzzleCardProps = {
   from?: string;
   /** The matching position, previewed on hover of the "where it comes from" line. */
   fromPosition?: { epd: string; lastMove?: { from: string; to: string } };
-  href: string;
+  /** The puzzle as an exercise; the whole card links to it. Left out where the card opens something else (Create). */
+  href?: string;
   size?: 'card' | 'row';
+  /** Our ideas, by the Lichess theme they match: those themes show as idea badges, the rest as plain tags. */
+  ideas?: Record<string, Idea>;
+  /** Before the title, keeping its own click: the puzzle picker's checkbox. */
+  lead?: ReactNode;
+  /** More badges before the themes: how it matched, where it is used. */
+  badges?: ReactNode;
+  /** Buttons under the card, keeping their own clicks: Try it. */
+  actions?: ReactNode;
+  /** Chosen, in a picker. */
+  selected?: boolean;
   /** On for a puzzle about to be solved, since a theme can give the answer away. */
   hideThemes?: boolean;
   /** The learner's puzzle range (`puzzles.rating`), for "about your level". */
@@ -59,6 +72,11 @@ export function PuzzleCard({
   level = [1100, 1300],
   state,
   learnerSide,
+  ideas: ideaOf = {},
+  lead,
+  badges,
+  actions,
+  selected,
   className,
 }: PuzzleCardProps) {
   const before = fenToEpd(puzzle.fen);
@@ -69,6 +87,12 @@ export function PuzzleCard({
   const title =
     learnerSide && learnerSide !== solver ? `What ${SIDE_NAME[solver]} threatens` : `${SIDE_NAME[solver]} to play`;
   const lichess = `https://lichess.org/training/${puzzle.id}`;
+  const heading = (
+    <>
+      {lead ? <span className={cn('inline-flex self-center', ABOVE_ROW_LINK)}>{lead}</span> : null}
+      {href ? <RowLink href={href}>{title}</RowLink> : <span className="font-medium">{title}</span>}
+    </>
+  );
 
   const rating = (
     <Tooltip>
@@ -86,21 +110,16 @@ export function PuzzleCard({
 
   const fromLine = from ? (
     fromPosition ? (
-      <HoverCard openDelay={400} closeDelay={150}>
-        <HoverCardTrigger asChild>
-          <p
-            className={cn(
-              'cursor-default text-sm text-muted-foreground underline decoration-dotted underline-offset-4',
-              ABOVE_ROW_LINK,
-            )}
-          >
-            {from}
-          </p>
-        </HoverCardTrigger>
-        <HoverCardContent className="w-auto p-2">
-          <BoardThumb epd={fromPosition.epd} lastMove={fromPosition.lastMove} orientation={solver} className="w-44" />
-        </HoverCardContent>
-      </HoverCard>
+      <PositionPreview position={{ ...fromPosition, orientation: solver }}>
+        <p
+          className={cn(
+            'cursor-default text-sm text-muted-foreground underline decoration-dotted underline-offset-4',
+            ABOVE_ROW_LINK,
+          )}
+        >
+          {from}
+        </p>
+      </PositionPreview>
     ) : (
       <p className="text-sm text-muted-foreground">{from}</p>
     )
@@ -148,7 +167,7 @@ export function PuzzleCard({
         />
         <div className="grid min-w-0 gap-0.5">
           <div className="flex flex-wrap items-baseline gap-x-2">
-            <RowLink href={href}>{title}</RowLink>
+            {heading}
             {rating}
           </div>
           {from ? <p className="truncate text-sm text-muted-foreground">{from}</p> : null}
@@ -162,6 +181,7 @@ export function PuzzleCard({
     <div
       className={cn(
         'relative grid w-full max-w-72 gap-2 rounded-xl border p-3 transition-colors hover:bg-muted/40',
+        selected && 'ring-2 ring-primary',
         className,
       )}
     >
@@ -172,25 +192,35 @@ export function PuzzleCard({
         className="w-full"
       />
       <div className="flex flex-wrap items-baseline justify-between gap-x-2">
-        <RowLink href={href}>{title}</RowLink>
+        <span className="flex items-baseline gap-2">{heading}</span>
         {rating}
       </div>
       {fromLine}
-      {!hideThemes && ideas.length + tags.length > 0 ? (
-        <div className="flex flex-wrap gap-1">
-          {ideas.map((idea) => (
-            <Badge key={idea} variant="secondary">
-              {idea}
-            </Badge>
-          ))}
-          {tags.map((tag) => (
-            <Badge key={tag} variant="outline" className="text-muted-foreground">
-              {tag}
-            </Badge>
-          ))}
+      {badges || (!hideThemes && ideas.length + tags.length > 0) ? (
+        <div className={cn('flex flex-wrap gap-1', ABOVE_ROW_LINK)}>
+          {badges}
+          {hideThemes
+            ? null
+            : ideas.map(({ theme, name }) =>
+                ideaOf[theme] ? (
+                  <IdeaBadge key={theme} idea={ideaOf[theme]} />
+                ) : (
+                  <Badge key={theme} variant="outline" className="text-muted-foreground">
+                    {name}
+                  </Badge>
+                ),
+              )}
+          {hideThemes
+            ? null
+            : tags.map((tag) => (
+                <Badge key={tag} variant="outline" className="text-muted-foreground">
+                  {tag}
+                </Badge>
+              ))}
         </div>
       ) : null}
       {result}
+      {actions ? <div className={cn('flex flex-wrap items-center gap-1', ABOVE_ROW_LINK)}>{actions}</div> : null}
       {credit}
     </div>
   );

@@ -3,6 +3,8 @@ import { BookOpen, Eye, Play, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { Board } from '@/components/board/board';
 import { BoardThumb } from '@/components/board/board-thumb';
+import { KindBadge, type LineKind } from '@/components/chess/kind-badge';
+import { OpeningName } from '@/components/chess/opening-name';
 import { VerdictNote } from '@/components/chess/verdict-note';
 import { Button } from '@/components/ui/button';
 import { BoardSearch, type PositionLine } from '@/components/finding/board-search';
@@ -29,6 +31,7 @@ import {
 import { PracticeSetup } from '@/components/practice/practice-setup';
 import { PuzzleCard } from '@/components/practice/puzzle-card';
 import { SessionSummary } from '@/components/practice/session-summary';
+import type { NextState } from '@/components/progress/next-action-pickers';
 import {
   example,
   explorerMoves,
@@ -40,6 +43,7 @@ import {
   scoreOf,
   squares,
 } from '../fixtures/example';
+import { OPENING_IDEAS, PUZZLE_IDEAS } from '../fixtures/ideas';
 import { sampleTries } from '../fixtures/tries';
 import type { MockItem } from './types';
 
@@ -115,10 +119,14 @@ const knownShare = (id: string) => {
   return mine.length ? known.length / mine.length : 0;
 };
 
+/** The example's kinds as content writes them: its trap is one White springs. */
+const lineKind = (kind: string): LineKind => (kind === 'trap' ? 'for-us' : (kind as LineKind));
+
 const INDEX_LINES: MapIndexLine[] = MAP_LINES.map((l) => ({
   id: l.id,
   name: l.name,
-  kind: l.kind,
+  kind: lineKind(l.kind),
+  writtenFor: 'white',
   parent: LAYOUT.parents.get(l.id) ?? null,
   lane: laneOf(l.id),
   group: 'e4e5',
@@ -128,6 +136,9 @@ const INDEX_LINES: MapIndexLine[] = MAP_LINES.map((l) => ({
 }));
 
 /* Practice sources and set-up. */
+
+const NEXT_BASE: NextState = { hasRepertoire: true, due: 0, dueHref: '#review', newLeftToday: 6 };
+const NEXT_STEP = { number: 3, title: 'Prepare d4 with c3', opening: 'Italian Game', side: 'White', href: '#step-3' };
 
 const SOURCES: PracticeSource[] = [
   { id: 'opening:italian-white', name: 'Italian Game', group: 'opening', count: 24 },
@@ -206,7 +217,12 @@ const wrongNote = (
     lineMove={wrongAt.san}
   />
 );
-const CONTEXT = 'Italian Game, Giuoco Piano, step 2';
+const CONTEXT = (
+  <span className="inline-flex flex-wrap items-baseline gap-x-1">
+    <OpeningName name="Italian Game: Giuoco Piano" />
+    <span>, step 2</span>
+  </span>
+);
 
 function ExerciseWithBoard() {
   const [phase, setPhase] = useState<'ask' | 'wrong' | 'right'>('ask');
@@ -697,7 +713,8 @@ const POSITION_LINES: PositionLine[] = MAP_LINES.map((l) => ({
   id: l.id,
   name: l.name,
   opening: 'Italian Game',
-  kind: l.kind,
+  kind: lineKind(l.kind),
+  writtenFor: 'white',
   moves: l.moves,
   href: (ply) => `#${l.id}:${ply}`,
 }));
@@ -767,7 +784,12 @@ const ROWS: Row[] = MAP_LINES.map((l, order) => ({
 }));
 const COLUMNS: Column<Row, 'name' | 'kind' | 'variation' | 'moves' | 'games' | 'known'>[] = [
   { key: 'name', heading: 'Line', compare: (a, b) => a.name.localeCompare(b.name), cell: (r) => r.name },
-  { key: 'kind', heading: 'Kind', compare: (a, b) => a.kind.localeCompare(b.kind), cell: (r) => r.kind },
+  {
+    key: 'kind',
+    heading: 'Kind',
+    compare: (a, b) => a.kind.localeCompare(b.kind),
+    cell: (r) => <KindBadge kind={lineKind(r.kind)} writtenFor="white" learner="white" />,
+  },
   {
     key: 'variation',
     heading: 'Variation',
@@ -1087,7 +1109,7 @@ export const practiceMapFindingMocks: MockItem[] = [
           <ExercisePanel
             mode="speed"
             prompt="Your move as White"
-            context="Italian Game, Giuoco Piano"
+            context={<OpeningName name="Italian Game: Giuoco Piano" />}
             help={{ hint: false, shown: false }}
             clock={<span className="text-2xl font-semibold">0:42</span>}
             className="max-w-md"
@@ -1195,8 +1217,8 @@ export const practiceMapFindingMocks: MockItem[] = [
               { value: '2', label: 'to see again soon' },
             ]}
             tries={TRIES}
-            ideas={['Development', 'The centre', 'Pin']}
-            next={<Button>Next: learn step 3 of the Giuoco Piano</Button>}
+            ideas={[OPENING_IDEAS.development!, OPENING_IDEAS.centre!, OPENING_IDEAS.pin!]}
+            next={{ state: { ...NEXT_BASE, nextOpenStep: NEXT_STEP } }}
             again={{ config: configFor('review'), sources: SOURCES, due: 12, onStart: () => {} }}
           />
         ),
@@ -1236,7 +1258,7 @@ export const practiceMapFindingMocks: MockItem[] = [
               { value: '6 of 8', label: 'solved' },
               { value: '1414 to 1485', label: 'rating range' },
             ]}
-            ideas={['Fork', 'Discovered attack', 'Deflection']}
+            ideas={[PUZZLE_IDEAS.fork!, PUZZLE_IDEAS.discoveredAttack!, PUZZLE_IDEAS.deflection!]}
             again={{ config: configFor('puzzles'), sources: SOURCES, onStart: () => {} }}
           />
         ),
@@ -1304,9 +1326,9 @@ export const practiceMapFindingMocks: MockItem[] = [
           <SessionSummary
             mode="step"
             headline="Step known. 4 moves join your reviews."
-            ideas={['Development', 'The centre']}
+            ideas={[OPENING_IDEAS.development!, OPENING_IDEAS.centre!]}
             evalAfter={scoreOf(mainLine.moves[11]!.after)}
-            next={<Button>Next step: 7.Re1</Button>}
+            next={{ state: { ...NEXT_BASE, nextOpenStep: { ...NEXT_STEP, number: 4, title: 'Castle, then Re1' } } }}
           />
         ),
       },
@@ -1319,14 +1341,10 @@ export const practiceMapFindingMocks: MockItem[] = [
             headline="Nothing to review right now"
             empty={{
               reason: 'Every move you know is scheduled for later. The next ones are due tomorrow.',
-              ways: (
-                <>
-                  <Button variant="outline">Practise My repertoire</Button>
-                  <Button variant="outline">Raise new moves a day</Button>
-                  <Button>Learn the next step</Button>
-                </>
-              ),
+              action: { label: 'Practise My repertoire', href: '#practice' },
+              secondary: { label: 'Raise new moves a day', href: '#settings' },
             }}
+            next={{ state: { ...NEXT_BASE, nextOpenStep: NEXT_STEP } }}
           />
         ),
       },
@@ -1348,6 +1366,7 @@ export const practiceMapFindingMocks: MockItem[] = [
                 from={fromOf(puzzle.openingTags)}
                 fromPosition={MAIN[9]}
                 level={[1350, 1500]}
+                ideas={PUZZLE_IDEAS}
               />
             ))}
           </div>
@@ -1388,7 +1407,13 @@ export const practiceMapFindingMocks: MockItem[] = [
         name: 'The opponent solves',
         note: 'For a White repertoire, a puzzle Black solves asks what Black threatens.',
         render: () => (
-          <PuzzleCard puzzle={PUZZLES[1]!} href="#" from={fromOf(PUZZLES[1]!.openingTags)} learnerSide="white" />
+          <PuzzleCard
+            puzzle={PUZZLES[1]!}
+            href="#"
+            from={fromOf(PUZZLES[1]!.openingTags)}
+            learnerSide="white"
+            ideas={PUZZLE_IDEAS}
+          />
         ),
       },
       {

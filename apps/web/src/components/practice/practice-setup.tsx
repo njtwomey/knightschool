@@ -15,6 +15,9 @@ import {
 import { Slider } from '@/components/ui/slider';
 import { FilterToggle, type FilterOption } from '@/components/finding/filter-toggle';
 import { WEIGHTING_OPTIONS } from '@/components/finding/filter-options';
+import { OpeningName } from '@/components/chess/opening-name';
+import { resolveSetting, SETTINGS, type LayerValues, type SettingValue } from '@/components/settings/registry';
+import { SettingsRow } from '@/components/settings/settings-row';
 import { cn } from '@/lib/utils';
 import {
   cannotStart,
@@ -37,25 +40,7 @@ const MODE_FIELDS: Record<PracticeMode, SetupField[]> = {
   'name-it': ['source', 'weighting', 'positions'],
 };
 
-const MOVES_PER_QUESTION: FilterOption[] = [
-  ...[1, 2, 3, 4, 5].map((n) => ({ value: String(n), label: String(n) })),
-  { value: '0', label: 'Rest of the line', hint: 'Every move of yours to the end of the line' },
-];
-const COMPUTER: FilterOption<PracticeConfig['computerPlays']>[] = [
-  { value: 'written', label: 'As written', hint: 'The replies the lines give, chosen at random' },
-  {
-    value: 'level',
-    label: 'As your level plays',
-    hint: 'Replies weighted by how often players at your level choose them',
-  },
-  { value: 'engine', label: 'The engine', hint: 'The strongest reply, which may leave the lines' },
-];
 const PUZZLE_COUNT: FilterOption[] = [5, 10, 20].map((n) => ({ value: String(n), label: String(n) }));
-const SOLVER: FilterOption<PracticeConfig['solver']>[] = [
-  { value: 'you', label: 'You', hint: 'Puzzles where your side wins something' },
-  { value: 'opponent', label: 'The opponent', hint: 'Find what the other side threatens, so you see it coming' },
-  { value: 'both', label: 'Both' },
-];
 const PLAY_ON_MOVES: FilterOption[] = [3, 5, 10].map((n) => ({ value: String(n), label: `${n} moves` }));
 const TOLERANCE: FilterOption<PracticeConfig['playOnTolerance']>[] = [
   { value: 'inaccuracy', label: 'An inaccuracy', hint: 'Strict: any slip ends the run' },
@@ -77,6 +62,28 @@ const DEPTH: FilterOption[] = [
   { value: '0', label: 'Whole line' },
 ];
 const POSITIONS: FilterOption[] = [5, 10, 20].map((n) => ({ value: String(n), label: String(n) }));
+
+/** The fields that are settings, drawn by the settings row with this session's layer over the learner's values. */
+const SETTING_KEYS = {
+  movesPerQuestion: 'review.movesPerQuestion',
+  computerPlays: 'computer.plays',
+  solver: 'puzzles.solver',
+} as const;
+type SettingField = keyof typeof SETTING_KEYS;
+
+/** A field's value as the registry writes it (moves per question 0 is `rest`). */
+const toSetting = (config: PracticeConfig, field: SettingField): string =>
+  field === 'movesPerQuestion'
+    ? config.movesPerQuestion === 0
+      ? 'rest'
+      : String(config.movesPerQuestion)
+    : config[field];
+
+function fromSetting(field: SettingField, value: SettingValue): Partial<PracticeConfig> {
+  if (field === 'movesPerQuestion') return { movesPerQuestion: value === 'rest' ? 0 : Number(value) };
+  if (field === 'computerPlays') return { computerPlays: String(value) as PracticeConfig['computerPlays'] };
+  return { solver: String(value) as PracticeConfig['solver'] };
+}
 
 function Row({ label, origin, children }: { label: string; origin?: string; children: ReactNode }) {
   return (
@@ -104,8 +111,10 @@ export type PracticeSetupProps = {
   /** Limit the fields: a line's quiz shows only moves per question, a checkpoint none. */
   only?: readonly SetupField[];
   startLabel?: string;
-  /** Where a field's default came from ("from the Exam preset"). */
+  /** Where a field's default came from ("from the Exam preset"), for the fields that are not settings. */
   origins?: Partial<Record<SetupField, string>>;
+  /** The learner's setting layers and preset: the fields that are settings show where their value comes from. */
+  settings?: { layers: LayerValues; presetId: string };
   title?: string;
   className?: string;
 };
@@ -124,6 +133,7 @@ export function PracticeSetup({
   only,
   startLabel = 'Start',
   origins = {},
+  settings = { layers: {}, presetId: 'club' },
   title,
   className,
 }: PracticeSetupProps) {
@@ -138,6 +148,28 @@ export function PracticeSetup({
   const blocked = cannotStart(draft, sources, due);
   const openings = sources.filter((source) => source.group === 'opening');
   const variations = sources.filter((source) => source.group === 'variation');
+  /** The value a field has below this session: the learner's, the preset's or the default. */
+  const below = (field: SettingField) =>
+    resolveSetting(SETTINGS[SETTING_KEYS[field]]!, settings.layers, settings.presetId, 'opening').value;
+  const session: Record<string, SettingValue> = {};
+  for (const field of Object.keys(SETTING_KEYS) as SettingField[]) {
+    const value = toSetting(draft, field);
+    if (value !== String(below(field))) session[SETTING_KEYS[field]] = value;
+  }
+  const settingRow = (field: SettingField, label: string) => (
+    <Row label={label}>
+      <SettingsRow
+        setting={SETTING_KEYS[field]}
+        layers={{ ...settings.layers, session }}
+        presetId={settings.presetId}
+        layer="session"
+        density="compact"
+        hideLabel
+        onChange={(_key, value) => setDraft((d) => ({ ...d, ...fromSetting(field, value) }))}
+        onReset={() => setDraft((d) => ({ ...d, ...fromSetting(field, below(field)) }))}
+      />
+    </Row>
+  );
   const count = (n: number | undefined) =>
     n === undefined ? null : <span className="ml-auto pl-3 text-xs text-muted-foreground tabular-nums">{n}</span>;
 
@@ -189,7 +221,7 @@ export function PracticeSetup({
                           <SelectLabel>One opening</SelectLabel>
                           {openings.map((source) => (
                             <SelectItem key={source.id} value={source.id}>
-                              {source.name}
+                              <OpeningName name={source.name} level="opening" />
                               {count(source.count)}
                             </SelectItem>
                           ))}
@@ -203,10 +235,7 @@ export function PracticeSetup({
                           <SelectLabel>One variation</SelectLabel>
                           {variations.map((source) => (
                             <SelectItem key={source.id} value={source.id}>
-                              {source.name}
-                              {source.opening ? (
-                                <span className="text-muted-foreground"> in the {source.opening}</span>
-                              ) : null}
+                              <OpeningName name={source.opening ? `${source.opening}: ${source.name}` : source.name} />
                               {count(source.count)}
                             </SelectItem>
                           ))}
@@ -241,28 +270,8 @@ export function PracticeSetup({
                 />
               </Row>
             ) : null}
-            {shows('movesPerQuestion') ? (
-              <Row label="Moves per question" origin={origins.movesPerQuestion}>
-                <FilterToggle
-                  label="Moves per question"
-                  showLabel={false}
-                  value={String(draft.movesPerQuestion)}
-                  options={MOVES_PER_QUESTION}
-                  onChange={(value) => set('movesPerQuestion', Number(value))}
-                />
-              </Row>
-            ) : null}
-            {shows('computerPlays') ? (
-              <Row label="The computer plays" origin={origins.computerPlays}>
-                <FilterToggle
-                  label="The computer plays"
-                  showLabel={false}
-                  value={draft.computerPlays}
-                  options={COMPUTER}
-                  onChange={(value) => set('computerPlays', value)}
-                />
-              </Row>
-            ) : null}
+            {shows('movesPerQuestion') ? settingRow('movesPerQuestion', 'Moves per question') : null}
+            {shows('computerPlays') ? settingRow('computerPlays', 'The computer plays') : null}
             {shows('puzzleCount') ? (
               <Row label="How many" origin={origins.puzzleCount}>
                 <FilterToggle
@@ -292,17 +301,7 @@ export function PracticeSetup({
                 </div>
               </Row>
             ) : null}
-            {shows('solver') ? (
-              <Row label="Who solves" origin={origins.solver}>
-                <FilterToggle
-                  label="Who solves"
-                  showLabel={false}
-                  value={draft.solver}
-                  options={SOLVER}
-                  onChange={(value) => set('solver', value)}
-                />
-              </Row>
-            ) : null}
+            {shows('solver') ? settingRow('solver', 'Who solves') : null}
             {shows('playOnMoves') ? (
               <Row label="How long" origin={origins.playOnMoves}>
                 <FilterToggle

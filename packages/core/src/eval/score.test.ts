@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { siteConfig } from '../testing/site-config';
-import { evalWords, moveCost, whiteShare, winningChances } from './score';
+import { evalWords, formatPawns, moveCost, whiteShare, winningChances } from './score';
 
 describe('winning chances', () => {
   it.each([
@@ -56,4 +56,14 @@ describe('a game over on the board', () => {
     });
     expect(evalWords({ over: 'draw' }, siteConfig.judge.evalWords).words).toBe('Draw');
   });
+});
+
+describe('formatPawns', () => {
+  it.each([
+    [60, '+0.6'],
+    [-230, '-2.3'],
+    [0, '0.0'],
+  ])('%i cp is %s', (cp, text) => expect(formatPawns(cp)).toBe(text));
+
+  it('can leave the sign off, for a cost', () => expect(formatPawns(-45, { signed: false })).toBe('0.5'));
 });

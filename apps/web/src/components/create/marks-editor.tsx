@@ -1,13 +1,11 @@
 import { MARK_COLOURS, MARK_MEANINGS, type MarkColour } from '@knightschool/core';
 import { Eraser } from 'lucide-react';
 import { useId, useState, type KeyboardEvent, type MouseEvent } from 'react';
-import { BoardSurface } from '@/components/board/board-surface';
-import { MarkKey } from '@/components/chess/mark-key';
-import { Hint } from '@/components/shared/hint';
+import { Board } from '@/components/board/board';
+import { FilterToggle, type FilterOption } from '@/components/finding/filter-toggle';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { markColourFor, toggleArrow, toggleRing, type MarkSet } from './marks';
 
@@ -19,6 +17,14 @@ const SWATCH: Record<MarkColour, string> = {
   Y: 'bg-mark-target',
   B: 'bg-mark-support',
 };
+
+/** The four colours, each named for its meaning, with its key (1 to 4) in the hint. */
+const COLOUR_OPTIONS: FilterOption<MarkColour>[] = MARK_COLOURS.map((c, i) => ({
+  value: c,
+  label: MARK_MEANINGS[c].name,
+  hint: `${i + 1}: ${MARK_MEANINGS[c].hint}`,
+  icon: <span className={cn('size-3 rounded-full', SWATCH[c])} aria-hidden />,
+}));
 
 const FILES = 'abcdefgh';
 function squareAt(column: number, row: number, orientation: 'white' | 'black') {
@@ -49,8 +55,9 @@ export type MarksEditorProps = {
 /**
  * Drawing an author's arrows and rings for the move being edited: pick a colour, draw, clear. The four colours each
  * mean one thing everywhere, so the swatches teach the meanings as they are used (docs/v2/components/marks-editor.md).
- * Tap a square, then another for an arrow, or the same one again for a ring; 1 to 4 pick a colour while the board
- * has focus.
+ * Tap a square, then another for an arrow, or the same one again for a ring; with a mouse, right-drag draws an arrow
+ * and right-click a ring (Shift red, Alt blue, both yellow, as on Lichess); 1 to 4 pick a colour while the board has
+ * focus.
  */
 export function MarksEditor({
   epd,
@@ -70,6 +77,8 @@ export function MarksEditor({
     () => tapStart ?? (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches),
   );
   const [first, setFirst] = useState<string | null>(null);
+  /** Where a right-button drag started. */
+  const [dragFrom, setDragFrom] = useState<string | null>(null);
   const count = marks.arrows.length + marks.circles.length;
   const label = `mark ${moveName}`;
 
@@ -83,39 +92,43 @@ export function MarksEditor({
     setFirst(null);
   };
 
+  /** Right-drag for an arrow, right-click for a ring, in the colour the modifiers pick when the button is let go. */
+  const rightDown = (square: string, event: MouseEvent) => {
+    if (editable && event.button === 2) setDragFrom(square);
+  };
+  const rightUp = (square: string, event: MouseEvent) => {
+    if (event.button !== 2 || !dragFrom) return;
+    const drawn = markColourFor(event, colour);
+    onChange(
+      square === dragFrom ? toggleRing(marks, drawn, square) : toggleArrow(marks, drawn, dragFrom, square),
+      label,
+    );
+    setDragFrom(null);
+  };
+
   const onKey = (event: KeyboardEvent) => {
     const picked = MARK_COLOURS[Number(event.key) - 1];
     if (picked && editable) {
       setColour(picked);
       event.preventDefault();
-    } else if (event.key === 'Escape') setFirst(null);
+    } else if (event.key === 'Escape') {
+      setFirst(null);
+      setDragFrom(null);
+    }
   };
 
   return (
     <div className={cn('grid gap-3', className)}>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <ToggleGroup
-          type="single"
-          variant="outline"
+        <FilterToggle
+          label="Mark colour"
+          showLabel={false}
           size="sm"
-          spacing={0}
           value={colour}
           disabled={!editable}
-          aria-label="Mark colour"
-          onValueChange={(next) => next && setColour(next as MarkColour)}
-        >
-          {MARK_COLOURS.map((c, i) => (
-            <Hint key={c} text={`${i + 1}: ${MARK_MEANINGS[c].hint}`}>
-              <ToggleGroupItem
-                value={c}
-                className="gap-1.5 px-2.5 aria-checked:bg-muted aria-checked:font-semibold aria-checked:ring-2 aria-checked:ring-ring aria-checked:ring-inset"
-              >
-                <span className={cn('size-3 rounded-full', SWATCH[c])} aria-hidden />
-                {MARK_MEANINGS[c].name}
-              </ToggleGroupItem>
-            </Hint>
-          ))}
-        </ToggleGroup>
+          options={COLOUR_OPTIONS}
+          onChange={setColour}
+        />
         <div className="flex items-center gap-2">
           <Switch
             id={`${id}-tap`}
@@ -144,18 +157,27 @@ export function MarksEditor({
         tabIndex={0}
         aria-label={`Board for drawing marks on ${moveName}`}
         onKeyDown={onKey}
+        onMouseLeave={() => setDragFrom(null)}
       >
-        <BoardSurface
-          id={`marks-${id}`}
-          epd={epd}
+        <Board
+          positions={[{ epd, lastMove, marks }]}
+          index={0}
           orientation={orientation}
-          lastMove={lastMove}
-          marks={marks}
-          lit={first ? [first] : []}
+          flippable={false}
+          evalBar={false}
+          lit={first ? [first] : dragFrom ? [dragFrom] : []}
           interactive={false}
+          onSquareMouseDown={editable ? rightDown : undefined}
+          onSquareMouseUp={editable ? rightUp : undefined}
+          className="max-w-none"
         />
         {editable && tapping ? (
-          <div className="absolute inset-0 z-20 grid grid-cols-8 grid-rows-8" role="grid" aria-label="Squares">
+          // Over the squares only: without an eval bar the surface is the board's full width, at its top.
+          <div
+            className="absolute inset-x-0 top-0 z-20 grid aspect-square grid-cols-8 grid-rows-8"
+            role="grid"
+            aria-label="Squares"
+          >
             {Array.from({ length: 64 }, (_, i) => {
               const square = squareAt(i % 8, Math.floor(i / 8), orientation);
               return (
@@ -174,7 +196,6 @@ export function MarksEditor({
       </div>
 
       <div className="grid gap-1 text-sm">
-        <MarkKey marks={marks} />
         {!editable ? (
           <p className="text-muted-foreground">
             The marks live in the move’s comment, which {owner ? `the line ${owner}` : 'another line'} writes. Edit them
@@ -188,7 +209,8 @@ export function MarksEditor({
           </p>
         ) : (
           <p className="text-muted-foreground">
-            Turn on Tap to draw to add marks with clicks or taps. With a mouse, Shift draws red, Alt blue, both yellow.
+            Right-drag for an arrow, right-click for a ring: Shift draws red, Alt blue, both yellow. Or turn on Tap to
+            draw to add marks with clicks or taps.
           </p>
         )}
       </div>

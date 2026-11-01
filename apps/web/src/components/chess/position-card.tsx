@@ -3,13 +3,13 @@ import { BoardThumb } from '@/components/board/board-thumb';
 import { StateBadge } from '@/components/progress/state-badge';
 import type { ProgressState } from '@/components/progress/states';
 import { Card } from '@/components/ui/card';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { EvalWords } from './eval-words';
 import { KindBadge, type LineKind } from './kind-badge';
 import { MoveRun, type RunMove } from './move-run';
 import { OpeningName, type OpeningNameProps } from './opening-name';
+import { PositionPreview } from './position-preview';
 
 export type CardLine = {
   id: string;
@@ -57,13 +57,7 @@ function LineLink({ line }: { line: CardLine }) {
   return (
     <li className="flex min-w-0 items-center gap-2">
       {line.endEpd ? (
-        <HoverCard openDelay={400} closeDelay={150}>
-          <HoverCardTrigger asChild>{link}</HoverCardTrigger>
-          <HoverCardContent className="w-auto p-2" side="top">
-            <BoardThumb epd={line.endEpd} className="w-44" id={`card-line-${line.id}`} />
-            <p className="mt-1.5 max-w-44 text-center text-xs text-muted-foreground">Where {line.name} goes</p>
-          </HoverCardContent>
-        </HoverCard>
+        <PositionPreview position={{ epd: line.endEpd, caption: <>Where {line.name} goes</> }}>{link}</PositionPreview>
       ) : (
         link
       )}

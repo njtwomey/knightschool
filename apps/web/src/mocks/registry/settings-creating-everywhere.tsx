@@ -2,7 +2,7 @@ import { fenToEpd, numberedMove, type Marks } from '@knightschool/core';
 import { BookOpen, Copy, GraduationCap, Pencil, Play, Trash2 } from 'lucide-react';
 import { useCallback, useState, type ReactNode } from 'react';
 import { MarksEditor, type MarkSet } from '@/components/create/marks-editor';
-import { MoveNoteEditor, type IdeaOption, type MoveNote } from '@/components/create/move-note-editor';
+import { MoveNoteEditor, type MoveNote } from '@/components/create/move-note-editor';
 import { PgnImport } from '@/components/create/pgn-import';
 import { ProblemsList, type Problem } from '@/components/create/problems-list';
 import { PuzzlePicker, type PuzzleFilters, type PuzzleMatch } from '@/components/create/puzzle-picker';
@@ -33,7 +33,9 @@ import { PAUSED_REASON } from '@/components/shared/paused';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
+import type { Idea } from '@/components/chess/idea-badge';
 import { MarkKey } from '@/components/chess/mark-key';
+import { PUZZLE_IDEAS } from '../fixtures/ideas';
 import { example, explorerMoves, gamesAt, engineLines, judgeAgainstLine, line, mainLine } from '../fixtures/example';
 import type { MockItem } from './types';
 
@@ -298,27 +300,50 @@ function InlineDemo({
 // ---------------------------------------------------------------------------------------------------------------
 // Creating: the Italian example.
 
-const IDEAS: IdeaOption[] = [
+const IDEAS: Idea[] = [
   {
     id: 'f7-weakness',
     name: 'The weak f7 square',
+    kind: 'tactic',
     summary: 'At the start only the king guards f7, so it is the first target.',
   },
-  { id: 'centre', name: 'Control the centre', summary: 'Pawns and pieces on e4, d4, e5 and d5 give your pieces room.' },
+  {
+    id: 'centre',
+    name: 'Control the centre',
+    kind: 'principle',
+    summary: 'Pawns and pieces on e4, d4, e5 and d5 give your pieces room.',
+  },
   {
     id: 'development',
     name: 'Develop before you attack',
+    kind: 'principle',
     summary: 'Bring out knights and bishops before moving a piece twice.',
   },
-  { id: 'castling', name: 'Castle early', summary: 'Get the king out of the centre before it opens.' },
-  { id: 'fork', name: 'Fork', summary: 'One piece attacks two at once.' },
-  { id: 'pin', name: 'Pin', summary: 'A piece cannot move without exposing a more valuable one behind it.' },
+  {
+    id: 'castling',
+    name: 'Castle early',
+    kind: 'principle',
+    summary: 'Get the king out of the centre before it opens.',
+  },
+  { id: 'fork', name: 'Fork', kind: 'tactic', summary: 'One piece attacks two at once.' },
+  {
+    id: 'pin',
+    name: 'Pin',
+    kind: 'tactic',
+    summary: 'A piece cannot move without exposing a more valuable one behind it.',
+  },
   {
     id: 'd4-break',
     name: 'The d4 break',
+    kind: 'plan',
     summary: 'With c3 in, White opens the centre with d4 when the pieces are ready.',
   },
-  { id: 'fianchetto', name: 'Fianchetto', summary: 'A bishop on the long diagonal from g2, b2, g7 or b7.' },
+  {
+    id: 'fianchetto',
+    name: 'Fianchetto',
+    kind: 'structure',
+    summary: 'A bishop on the long diagonal from g2, b2, g7 or b7.',
+  },
 ];
 
 const noteOf = (i: number, extra: Partial<MoveNote> = {}): MoveNote => ({
@@ -357,6 +382,8 @@ function NoteDemo({
         owner={owner}
         editable={editable}
         ideas={IDEAS}
+        context={{ startEpd: m[0]!.before, moves: m }}
+        side="white"
         onRefute={() => setLast('opened the refutation editor')}
         onSave={(next, label) => {
           setNote(next);
@@ -555,6 +582,7 @@ function PuzzleDemo({
       <PuzzlePicker
         targetName={target}
         matches={PUZZLES}
+        ideas={PUZZLE_IDEAS}
         chosen={chosen}
         max={max}
         defaults={defaults}

@@ -1,4 +1,4 @@
-import { numberedMove, type Grade } from '@knightschool/core';
+import { formatPawns, type Grade, numberedMove } from '@knightschool/core';
 import { Lightbulb, Eye } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { VerdictBadge } from './verdict-badge';
@@ -54,7 +54,7 @@ export function TriesTable({ tries, onSelect }: { tries: Try[]; onSelect?: (inde
                 ) : attempt.costCp === 0 ? (
                   <span className="text-muted-foreground">0</span>
                 ) : (
-                  `−${(attempt.costCp / 100).toFixed(1)}`
+                  `−${formatPawns(attempt.costCp, { signed: false })}`
                 )}
               </TableCell>
               <TableCell className="text-right text-sm text-muted-foreground tabular-nums">

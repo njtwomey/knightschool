@@ -1,9 +1,11 @@
 import { fenToEpd, playMove, replay, sideToMove } from '@knightschool/core';
-import { ArrowDown, ArrowUp, ExternalLink, Puzzle, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, Puzzle, X } from 'lucide-react';
 import { useState } from 'react';
 import { Board, type BoardPosition } from '@/components/board/board';
 import { type BoardBadge } from '@/components/board/board-surface';
-import { BoardThumb } from '@/components/board/board-thumb';
+import type { Idea } from '@/components/chess/idea-badge';
+import { FilterToggle, type FilterOption } from '@/components/finding/filter-toggle';
+import { PuzzleCard } from '@/components/practice/puzzle-card';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Hint } from '@/components/shared/hint';
 import { IconAction } from '@/components/shared/icon-action';
@@ -15,8 +17,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Toggle } from '@/components/ui/toggle';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { cn } from '@/lib/utils';
 
 export type MatchLevel = 'through' | 'after' | 'variation' | 'family' | 'structure' | 'idea';
 const MATCH_LEVEL_NAME: Record<MatchLevel, string> = {
@@ -28,6 +28,22 @@ const MATCH_LEVEL_NAME: Record<MatchLevel, string> = {
   idea: 'Same idea',
 };
 const LEVELS = siteConfig.puzzles.levels as MatchLevel[];
+
+const SOON_PLIES = 10;
+const LEVEL_OPTIONS: FilterOption<MatchLevel | 'any'>[] = [
+  ...LEVELS.map((level) => ({ value: level, label: MATCH_LEVEL_NAME[level] })),
+  { value: 'any', label: 'Any level' },
+];
+const SOLVER_OPTIONS: FilterOption<'you' | 'them' | 'either'>[] = [
+  { value: 'you', label: 'You', hint: 'The opening’s side solves' },
+  { value: 'them', label: 'Them', hint: 'The other side solves: what they threaten' },
+  { value: 'either', label: 'Either' },
+];
+const SOON_OPTIONS: FilterOption<'soon' | 'later' | 'any'>[] = [
+  { value: 'soon', label: `Within ${SOON_PLIES} plies` },
+  { value: 'later', label: 'Later' },
+  { value: 'any', label: 'Any' },
+];
 
 /** A Lichess puzzle matched to the target's positions. */
 export type PuzzleMatch = {
@@ -70,9 +86,10 @@ export type PuzzlePickerProps = {
   defaults: PuzzleFilters;
   /** Saves one undoable action ("choose puzzle 0Xa3b for step 4"). */
   onChange: (chosen: string[], label: string) => void;
+  /** Our ideas by the Lichess theme they match, so those themes show as idea badges. */
+  ideas?: Record<string, Idea>;
 };
 
-const SOON_PLIES = 10;
 const { minRating, maxRating } = siteConfig.puzzles.select;
 
 /** The puzzle as it is shown: after the opponent's first move, from the solver's side. */
@@ -135,7 +152,7 @@ function TryIt({ match, onClose }: { match: PuzzleMatch; onClose: () => void }) 
  * matches first (docs/v2/components/puzzle-picker.md). With nothing at the chosen level, the list falls down the levels
  * and says so.
  */
-export function PuzzlePicker({ targetName, matches, chosen, max, defaults, onChange }: PuzzlePickerProps) {
+export function PuzzlePicker({ targetName, matches, chosen, max, defaults, onChange, ideas }: PuzzlePickerProps) {
   const [filters, setFilters] = useState<PuzzleFilters>(defaults);
   const [trying, setTrying] = useState<PuzzleMatch | null>(null);
   const set = (patch: Partial<PuzzleFilters>) => setFilters({ ...filters, ...patch });
@@ -182,7 +199,7 @@ export function PuzzlePicker({ targetName, matches, chosen, max, defaults, onCha
           </span>
         </h3>
         {chosen.length === 0 ? (
-          <p className="text-sm text-muted-foreground">None yet: tick a puzzle below.</p>
+          <EmptyState kind="new" size="part" text="None yet: tick a puzzle below." />
         ) : (
           <ol className="grid divide-y rounded-lg border">
             {chosen.map((id, i) => {
@@ -221,88 +238,28 @@ export function PuzzlePicker({ targetName, matches, chosen, max, defaults, onCha
       </section>
 
       <section className="grid gap-3 rounded-lg border p-3" aria-label="Filters">
-        <div className="grid gap-1.5">
-          <Label id="pp-level">Match</Label>
-          <ToggleGroup
-            type="single"
-            variant="outline"
-            size="sm"
-            value={filters.level}
-            aria-labelledby="pp-level"
-            className="flex-wrap"
-            onValueChange={(next) => next && set({ level: next as PuzzleFilters['level'] })}
-          >
-            {LEVELS.map((level) => (
-              <ToggleGroupItem
-                key={level}
-                value={level}
-                className="aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                {MATCH_LEVEL_NAME[level]}
-              </ToggleGroupItem>
-            ))}
-            <ToggleGroupItem
-              value="any"
-              className="aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-            >
-              Any level
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
+        <FilterToggle
+          label="Match"
+          size="sm"
+          value={filters.level}
+          options={LEVEL_OPTIONS}
+          onChange={(level) => set({ level })}
+        />
         <div className="flex flex-wrap gap-x-6 gap-y-3">
-          <div className="grid gap-1.5">
-            <Label id="pp-solver">Who solves</Label>
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              size="sm"
-              spacing={0}
-              value={filters.solver}
-              aria-labelledby="pp-solver"
-              onValueChange={(next) => next && set({ solver: next as PuzzleFilters['solver'] })}
-            >
-              {(['you', 'them', 'either'] as const).map((solver) => (
-                <ToggleGroupItem
-                  key={solver}
-                  value={solver}
-                  className="px-3 capitalize aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-                >
-                  {solver}
-                </ToggleGroupItem>
-              ))}
-            </ToggleGroup>
-          </div>
-          <div className="grid gap-1.5">
-            <Label id="pp-soon">How soon</Label>
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              size="sm"
-              spacing={0}
-              value={filters.soon}
-              aria-labelledby="pp-soon"
-              onValueChange={(next) => next && set({ soon: next as PuzzleFilters['soon'] })}
-            >
-              <ToggleGroupItem
-                value="soon"
-                className="px-3 aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                Within {SOON_PLIES} plies
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="later"
-                className="px-3 aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                Later
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="any"
-                className="px-3 aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                Any
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
+          <FilterToggle
+            label="Who solves"
+            size="sm"
+            value={filters.solver}
+            options={SOLVER_OPTIONS}
+            onChange={(solver) => set({ solver })}
+          />
+          <FilterToggle
+            label="How soon"
+            size="sm"
+            value={filters.soon}
+            options={SOON_OPTIONS}
+            onChange={(soon) => set({ soon })}
+          />
           <div className="grid min-w-56 flex-1 gap-1.5">
             <Label id="pp-rating">
               Rating {filters.rating[0]} to {filters.rating[1]}
@@ -356,35 +313,36 @@ export function PuzzlePicker({ targetName, matches, chosen, max, defaults, onCha
           secondary={{ label: 'Any level', onClick: () => set({ level: 'any', themes: [] }) }}
         />
       ) : (
-        <ul className="grid gap-2 sm:grid-cols-2" aria-label="Matches">
+        <ul className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-3" aria-label="Matches">
           {shown.map((match) => {
-            const start = startOf(match);
+            const solver = startOf(match).side;
             const isChosen = chosen.includes(match.id);
             const full = !isChosen && chosen.length >= max;
             return (
               <li
                 key={match.id}
-                className={cn('flex gap-3 rounded-lg border p-2', isChosen && 'ring-2 ring-primary')}
                 onKeyDown={(event) => {
-                  if (event.key === 'Enter' && event.target === event.currentTarget) setTrying(match);
+                  // Enter on a card's checkbox opens Try it; Space ticks it.
+                  if (event.key === 'Enter' && (event.target as HTMLElement).getAttribute('role') === 'checkbox') {
+                    event.preventDefault();
+                    setTrying(match);
+                  }
                 }}
               >
-                <BoardThumb
-                  id={`pp-${match.id}`}
-                  epd={start.epd}
-                  lastMove={start.lastMove}
-                  orientation={start.side}
-                  className="w-28 shrink-0 self-start"
-                />
-                <div className="grid min-w-0 flex-1 content-start gap-1 text-sm">
-                  <div className="flex items-center gap-2">
+                <PuzzleCard
+                  puzzle={match}
+                  from={match.how}
+                  learnerSide={match.solver === 'you' ? solver : solver === 'white' ? 'black' : 'white'}
+                  ideas={ideas}
+                  selected={isChosen}
+                  className="h-full max-w-none content-start"
+                  lead={
                     <Hint
                       text={full ? `Already ${max} chosen. Remove one first.` : isChosen ? 'Remove it' : 'Choose it'}
                       off={!full}
                     >
                       <span className="inline-flex">
                         <Checkbox
-                          id={`pp-check-${match.id}`}
                           checked={isChosen}
                           disabled={full}
                           onCheckedChange={(on) => choose(match.id, on === true)}
@@ -392,32 +350,19 @@ export function PuzzlePicker({ targetName, matches, chosen, max, defaults, onCha
                         />
                       </span>
                     </Hint>
-                    <Label htmlFor={`pp-check-${match.id}`} className="font-mono">
-                      {match.id}
-                    </Label>
-                    <span className="ml-auto tabular-nums text-muted-foreground">{match.rating}</span>
-                  </div>
-                  <p className="text-muted-foreground">{match.how}</p>
-                  <div className="flex flex-wrap gap-1">
-                    <Badge variant="secondary">{MATCH_LEVEL_NAME[match.level]}</Badge>
-                    {match.usedIn ? <Badge variant="outline">Used in {match.usedIn}</Badge> : null}
-                    {match.themes.slice(0, 3).map((theme) => (
-                      <Badge key={theme} variant="outline" className="font-normal text-muted-foreground">
-                        {theme}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-1">
+                  }
+                  badges={
+                    <>
+                      <Badge variant="secondary">{MATCH_LEVEL_NAME[match.level]}</Badge>
+                      {match.usedIn ? <Badge variant="outline">Used in {match.usedIn}</Badge> : null}
+                    </>
+                  }
+                  actions={
                     <Button variant="outline" size="xs" onClick={() => setTrying(match)}>
                       <Puzzle aria-hidden /> Try it
                     </Button>
-                    <Button asChild variant="ghost" size="xs">
-                      <a href={match.url} target="_blank" rel="noreferrer">
-                        Lichess <ExternalLink aria-hidden />
-                      </a>
-                    </Button>
-                  </div>
-                </div>
+                  }
+                />
               </li>
             );
           })}

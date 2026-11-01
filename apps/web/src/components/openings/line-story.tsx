@@ -1,12 +1,14 @@
+import { GRADE_INFO, gradeFromNags } from '@knightschool/core';
+import { GRADE_TEXT } from '@/components/chess/grade-style';
 import { evalWords, numberedMove, type Score } from '@knightschool/core';
 import { ChevronRight, GitBranch } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { MoveTag } from '@/components/board/board-notes';
 import { EvalWords } from '@/components/chess/eval-words';
 import { IdeaBadge, type Idea } from '@/components/chess/idea-badge';
 import { MoveChip } from '@/components/chess/move-chip';
 import { MoveRun, type RunMove } from '@/components/chess/move-run';
 import { OpeningName } from '@/components/chess/opening-name';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -14,16 +16,6 @@ import { siteConfig } from '@/data/site-config';
 import { cn } from '@/lib/utils';
 import { LineRow, type LineData } from './line-row';
 import type { Side } from './types';
-
-/** NAG numbers as move symbols, and the grade colour each borrows. */
-const SYMBOLS: Record<number, { symbol: string; tone: string }> = {
-  1: { symbol: '!', tone: 'text-verdict-excellent' },
-  2: { symbol: '?', tone: 'text-verdict-mistake' },
-  3: { symbol: '!!', tone: 'text-verdict-best' },
-  4: { symbol: '??', tone: 'text-verdict-blunder' },
-  5: { symbol: '!?', tone: 'text-muted-foreground' },
-  6: { symbol: '?!', tone: 'text-verdict-inaccuracy' },
-};
 
 export type StoryMove = RunMove & {
   note?: { text?: string; ideas?: Idea[]; tags?: string[] };
@@ -150,11 +142,12 @@ export function LineStory({
 
   const show = (part: StoryPart) => parts.includes(part);
   const mine = (ply: number) => (ply % 2 === 0) === (side === 'white');
-  const symbolOf = (move: StoryMove) => move.nag?.map((n) => SYMBOLS[n]).find(Boolean);
+  const gradeOf = (move: StoryMove) => gradeFromNags(move.nag);
 
   const chip = (move: StoryMove, index: number, numbered: 'always' | 'white') => {
     const ply = firstPly + index;
-    const symbol = symbolOf(move);
+    const grade = gradeOf(move);
+    const symbol = grade ? GRADE_INFO[grade].symbol : null;
     return (
       <span key={`${ply}-${move.uci}`} className="inline-flex items-baseline">
         <MoveChip
@@ -171,7 +164,7 @@ export function LineStory({
           orientation={side}
         />
         {symbol ? (
-          <span className={cn('-ml-0.5 font-mono text-sm font-bold', symbol.tone)}>{symbol.symbol}</span>
+          <span className={cn('-ml-0.5 font-mono text-sm font-bold', grade && GRADE_TEXT[grade])}>{symbol}</span>
         ) : null}
       </span>
     );
@@ -228,9 +221,7 @@ export function LineStory({
                       <IdeaBadge key={idea.id} idea={idea} />
                     ))}
                     {closing.note.tags?.map((tag) => (
-                      <Badge key={tag} variant="secondary">
-                        {tag}
-                      </Badge>
+                      <MoveTag key={tag} tag={tag} />
                     ))}
                   </span>
                 ) : null}

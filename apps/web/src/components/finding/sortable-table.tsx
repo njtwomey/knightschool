@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { useMemo, useState, type ReactNode } from 'react';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -127,6 +128,13 @@ export function SortableTable<R, K extends string>({
     );
   }, [rows, columns, sort, fallback]);
   const onSort = (key: K) => setSort((current) => nextSort(current, key, ownOrder));
+  // A sentence becomes the shared empty state; a page can pass its own, with an action.
+  const emptyShown =
+    typeof empty === 'string' ? (
+      <EmptyState kind="no-match" size="part" text={empty} className="justify-center" />
+    ) : (
+      empty
+    );
 
   const title = (row: R) => {
     const column = columns.find((c) => c.key === titleColumn)!;
@@ -180,7 +188,7 @@ export function SortableTable<R, K extends string>({
                   colSpan={columns.length + (actions ? 1 : 0)}
                   className="py-6 text-center text-muted-foreground"
                 >
-                  {empty}
+                  {emptyShown}
                 </TableCell>
               </TableRow>
             ) : (
@@ -211,7 +219,7 @@ export function SortableTable<R, K extends string>({
         {loading ? (
           [0, 1, 2].map((i) => <Skeleton key={i} className="h-20 rounded-lg" />)
         ) : sorted.length === 0 ? (
-          <li className="rounded-lg border p-4 text-sm text-muted-foreground">{empty}</li>
+          <li className="rounded-lg border p-4 text-sm text-muted-foreground">{emptyShown}</li>
         ) : (
           sorted.map((row) => (
             <li

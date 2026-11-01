@@ -51,7 +51,7 @@ export type Verdict = {
 export type Judgement = { status: 'known'; verdict: Verdict } | { status: 'needs'; epds: string[] };
 
 /** The author's grade from a PGN symbol: !! Best, ! Excellent, !? Good, ?! Inaccuracy, ? Mistake, ?? Blunder. */
-const NAG_GRADE: Record<number, Grade> = {
+export const NAG_GRADE: Record<number, Grade> = {
   3: 'best',
   1: 'excellent',
   5: 'good',
@@ -59,10 +59,12 @@ const NAG_GRADE: Record<number, Grade> = {
   2: 'mistake',
   4: 'blunder',
 };
-const authorGrade = (note: Note | undefined): Grade | null => {
-  for (const nag of note?.nag ?? []) if (NAG_GRADE[nag]) return NAG_GRADE[nag]!;
+/** The author's grade from a move's PGN symbols, if it has one. */
+export function gradeFromNags(nags: readonly number[] | undefined): Grade | null {
+  for (const nag of nags ?? []) if (NAG_GRADE[nag]) return NAG_GRADE[nag]!;
   return null;
-};
+}
+const authorGrade = (note: Note | undefined): Grade | null => gradeFromNags(note?.nag);
 
 /**
  * How good a move is here and why (docs/v2/library/judge.md). Layers, first that knows wins: the author (the opening's

@@ -3,10 +3,10 @@ import { Chess } from 'chess.js';
 import { Fragment, useMemo, type ReactNode } from 'react';
 import { BoardThumb } from '@/components/board/board-thumb';
 import type { Reveal } from '@/components/board/board';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { cn } from '@/lib/utils';
 import { IdeaBadge, type Idea } from './idea-badge';
 import { MoveChip } from './move-chip';
+import { PositionPreview } from './position-preview';
 
 /*
  * The written syntax (explicit, so the build can check every reference):
@@ -170,15 +170,7 @@ function PositionLink({
     </a>
   );
   if (board) return link;
-  return (
-    <HoverCard openDelay={400} closeDelay={150}>
-      <HoverCardTrigger asChild>{link}</HoverCardTrigger>
-      <HoverCardContent className="w-auto p-2" side="top">
-        <BoardThumb epd={epd} className="w-48" id={`rich-${epd.replace(/[^a-z0-9]/gi, '')}`} />
-        <p className="mt-1.5 max-w-48 text-center text-xs text-muted-foreground">{label}</p>
-      </HoverCardContent>
-    </HoverCard>
-  );
+  return <PositionPreview position={{ epd, caption: label }}>{link}</PositionPreview>;
 }
 
 function Moves({

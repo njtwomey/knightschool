@@ -1,13 +1,14 @@
 import type { Grade } from '@knightschool/core';
-import { BookOpen, ChevronDown, ChevronUp, CircleAlert, KeyRound } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronUp, CircleAlert } from 'lucide-react';
 import { useState } from 'react';
 import { MoveChip } from '@/components/chess/move-chip';
 import { VerdictBadge } from '@/components/chess/verdict-badge';
 import { Button } from '@/components/ui/button';
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import type { Reveal } from './board';
+import { GRADE_TEXT } from '@/components/chess/grade-style';
 
 export type ExplorerRow = {
   uci: string;
@@ -140,7 +141,9 @@ function Row({
           onHover={(hovering) => onHover?.(hovering ? row.uci : null)}
           orientation={orientation}
         />
-        {row.book ? <BookOpen className="size-3.5 shrink-0 text-verdict-book" aria-label="The opening's move" /> : null}
+        {row.book ? (
+          <BookOpen className={`size-3.5 shrink-0 ${GRADE_TEXT.book}`} aria-label="The opening's move" />
+        ) : null}
       </span>
       <PlayedBar value={pct(row.games, total)} />
       <ResultsBar row={row} />
@@ -202,21 +205,15 @@ export function BoardExplorer({
     );
   } else if (state.status === 'no-token') {
     body = (
-      <Empty className="p-4">
-        <EmptyHeader>
-          <EmptyTitle className="flex items-center gap-2 text-sm">
-            <KeyRound className="size-4" aria-hidden />
-            No numbers for this position yet
-          </EmptyTitle>
-          <EmptyDescription>
-            This position is not in the site's own counts. Add a Lichess token in <a href={settingsHref}>settings</a> to
-            ask the live explorer.
-          </EmptyDescription>
-        </EmptyHeader>
-      </Empty>
+      <EmptyState
+        kind="needs-username"
+        size="part"
+        text="No numbers for this position yet: it is not in the site's own counts. A Lichess token lets the live explorer answer."
+        action={{ label: 'Add a token in settings', href: settingsHref }}
+      />
     );
   } else if (state.rows.length === 0) {
-    body = <p className="text-sm text-muted-foreground">No games reach this position at {band}.</p>;
+    body = <EmptyState kind="not-covered" size="part" text={`No games reach this position at ${band}.`} />;
   } else {
     // Shares are of every game reaching the position, not only of the rows listed.
     const total = Math.max(

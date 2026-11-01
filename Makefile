@@ -4,19 +4,22 @@ PNPM_VERSION := 12.11.2
 PNPM ?= $(shell pnpm --version >/dev/null 2>&1 && echo pnpm || echo npx -y pnpm@$(PNPM_VERSION))
 
 .DEFAULT_GOAL := help
-.PHONY: help install dev build preview check lint typecheck test format fix pre-push hooks ux
+.PHONY: help install dev build engine preview check lint typecheck test format fix pre-push hooks ux
 
 help: ## List the targets
-	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-10s %s\n", $$1, $$2}'
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-15s %s\n", $$1, $$2}'
 
 install: ## Install dependencies
 	$(PNPM) install
 
-dev: ## Run the dev server
+dev: ## Run the dev server (copies Stockfish first)
 	$(PNPM) dev
 
-build: ## Build the site
+build: ## Build the site (copies Stockfish first)
 	$(PNPM) build
+
+engine: ## Copy Stockfish into apps/web/public/engine
+	$(PNPM) engine:copy
 
 preview: ## Serve the built site
 	$(PNPM) preview
@@ -43,6 +46,24 @@ pre-push: check build ## What must pass before every push
 
 hooks: ## Install the git pre-push hook
 	printf '#!/bin/sh\nmake pre-push\n' > .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+
+# Puzzle jobs (docs/v2/puzzles.md), on the maintainer's machine, never by the build. Options go in ARGS, as
+# make puzzles-lookup ARGS='--moves "e4 e5 Nf3 Nc6 Bc4" --theme fork'.
+.PHONY: puzzles-index puzzles-expand puzzles-select puzzles-lookup
+ARGS ?=
+
+puzzles-index: ## Index the Lichess puzzle file and name its opening tags (minutes)
+	$(PNPM) puzzles:index $(ARGS)
+	$(PNPM) puzzles:names
+
+puzzles-expand: ## Fetch puzzles' games from Lichess (resumable; hours)
+	$(PNPM) puzzles:expand $(ARGS)
+
+puzzles-select: ## Choose the Italian's puzzles into content/puzzles/
+	$(PNPM) puzzles:select $(ARGS)
+
+puzzles-lookup: ## Ask the puzzle index by hand (ARGS='--moves "e4 e5 Nf3"')
+	$(PNPM) puzzles:lookup $(ARGS)
 
 # The shadcn CLI runs `pnpm add` itself, so it is given a pnpm that works even where a version-manager shim does not.
 SHADCN := shadcn@4.22.0

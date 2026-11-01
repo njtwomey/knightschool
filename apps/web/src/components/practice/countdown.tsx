@@ -1,5 +1,6 @@
 import { Pause, Play, Square } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { OpeningName } from '@/components/chess/opening-name';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
@@ -108,8 +109,10 @@ export function Countdown({
       <div className="grid w-full max-w-sm justify-items-center gap-3 rounded-xl border bg-card p-6 text-center shadow-lg">
         <p className="text-sm font-medium text-muted-foreground">{first ? 'Get ready' : 'Next up'}</p>
         <div className="grid gap-0.5">
-          <p className="text-2xl font-semibold">{next.opening}</p>
-          {next.variation ? <p className="text-muted-foreground">{next.variation}</p> : null}
+          <OpeningName name={next.opening} level="opening" className="justify-center text-2xl" />
+          {next.variation ? (
+            <OpeningName name={`${next.opening}: ${next.variation}`} level="variation" className="justify-center" />
+          ) : null}
         </div>
         <p className="text-sm">
           You play {next.side === 'white' ? 'White' : 'Black'}

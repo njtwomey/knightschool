@@ -1,8 +1,7 @@
 import { GRADE_INFO, numberedMove, type Grade } from '@knightschool/core';
-import { BoardThumb } from '@/components/board/board-thumb';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { cn } from '@/lib/utils';
-import { gradeText } from './verdict-badge';
+import { GRADE_TEXT } from './grade-style';
+import { PositionPreview } from './position-preview';
 
 export type MoveChipProps = {
   ply: number;
@@ -74,22 +73,20 @@ export function MoveChip({
       aria-current={current ? 'step' : undefined}
     >
       {label}
-      {symbol ? <span className={cn('font-bold', !current && grade && gradeText[grade])}>{symbol}</span> : null}
+      {symbol ? <span className={cn('font-bold', !current && grade && GRADE_TEXT[grade])}>{symbol}</span> : null}
     </a>
   );
   if (!preview || !epd) return chip;
   return (
-    <HoverCard openDelay={250} closeDelay={80}>
-      <HoverCardTrigger asChild>{chip}</HoverCardTrigger>
-      <HoverCardContent className="w-auto p-2" side="top">
-        <BoardThumb
-          epd={epd}
-          lastMove={from && to ? { from, to } : undefined}
-          orientation={orientation}
-          className="w-48"
-        />
-        <p className="mt-1.5 text-center font-mono text-xs text-muted-foreground">After {numberedMove(ply, san)}</p>
-      </HoverCardContent>
-    </HoverCard>
+    <PositionPreview
+      position={{
+        epd,
+        lastMove: from && to ? { from, to } : undefined,
+        orientation,
+        caption: <span className="font-mono">After {numberedMove(ply, san)}</span>,
+      }}
+    >
+      {chip}
+    </PositionPreview>
   );
 }

@@ -6,10 +6,12 @@ import { NotFoundPage } from '@/pages/not-found-page';
 import { usePath } from '@/router/location';
 
 const MocksPage = lazy(() => import('@/mocks/mocks-page').then((module) => ({ default: module.MocksPage })));
+const BoardPage = lazy(() => import('@/pages/board/board-page').then((module) => ({ default: module.BoardPage })));
 
 function Page({ path }: { path: string }) {
   if (path === '/') return <HomePage />;
   if (path === '/mocks') return <MocksPage />;
+  if (path === '/board') return <BoardPage />;
   return <NotFoundPage />;
 }
 

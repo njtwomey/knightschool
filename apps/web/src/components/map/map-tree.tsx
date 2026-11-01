@@ -9,7 +9,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { cn } from '@/lib/utils';
 import { keyOf, layoutLines, type MapLine, type MapNode } from './lane-layout';
 import { laneColour } from './lane-colours';
-import { STATE_NAME, type MapGap, type MapOverlay, type MapOverlayData, type MoveState } from './map-types';
+import { PILL_FILL, STATE_NAME, type MapGap, type MapOverlay, type MapOverlayData, type MoveState } from './map-types';
+import { GRADE_FILL } from '@/components/chess/grade-style';
 
 const COL = 64;
 const TRIGGER_W = 256;
@@ -21,12 +22,6 @@ const clamp = (zoom: number) => Math.round(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM,
 const colX = (column: number) => (column === 0 ? TRIGGER_W / 2 : TRIGGER_W + (column - 1) * COL + COL / 2);
 const colLeft = (column: number) => (column === 0 ? 0 : TRIGGER_W + (column - 1) * COL);
 
-const FILL: Record<MoveState, string> = {
-  open: 'border-state-open bg-background',
-  learning: 'border-state-learning bg-state-learning/25',
-  known: 'border-state-known bg-state-known/25',
-  mastered: 'border-state-mastered bg-state-mastered text-background',
-};
 const OUTLINE: Record<MoveState, string> = {
   open: 'border-state-open',
   learning: 'border-state-learning',
@@ -220,7 +215,7 @@ export function MapTree({
     const style: CSSProperties = {};
     let tone = 'border-border bg-background';
     if (on('progress')) {
-      tone = learner ? FILL[state ?? 'open'] : cn('bg-background', OUTLINE[answerState(node) ?? 'open']);
+      tone = learner ? PILL_FILL[state ?? 'open'] : cn('bg-background', OUTLINE[answerState(node) ?? 'open']);
     } else if (on('lines')) {
       const colour = laneColour(node.lane);
       style.borderColor = colour;
@@ -270,7 +265,7 @@ export function MapTree({
                 size="icon-xs"
                 aria-label={`A common mistake, played in ${Math.round(mistake.share * 100)}% of games`}
                 onClick={() => onMistake?.(node)}
-                className="absolute -top-2.5 -right-2.5 size-4 rounded-full bg-verdict-mistake p-0 text-[0.65rem] font-bold text-background hover:bg-verdict-mistake/80"
+                className={`absolute -top-2.5 -right-2.5 size-4 rounded-full p-0 text-[0.65rem] font-bold text-background hover:opacity-80 ${GRADE_FILL.mistake}`}
               >
                 {mistake.practised ? <Check className="size-2.5" strokeWidth={4} aria-hidden /> : '?'}
               </Button>

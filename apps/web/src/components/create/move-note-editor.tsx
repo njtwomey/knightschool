@@ -1,6 +1,10 @@
-import { Lightbulb, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { useId, useState } from 'react';
+import { BoardNotes } from '@/components/board/board-notes';
+import { IdeaBadge, type Idea } from '@/components/chess/idea-badge';
+import type { RichTextContext } from '@/components/chess/rich-text';
 import { MoveChip } from '@/components/chess/move-chip';
+import { FilterToggle, type FilterOption } from '@/components/finding/filter-toggle';
 import { Hint } from '@/components/shared/hint';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,12 +12,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Toggle } from '@/components/ui/toggle';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { numberedMove } from '@knightschool/core';
-import { MOVE_SYMBOLS, MOVE_TAGS, SYMBOL_HINT, type IdeaOption, type MoveNote, type MoveSymbol } from './move-note';
+import { MOVE_SYMBOLS, MOVE_TAGS, SYMBOL_HINT, type MoveNote, type MoveSymbol } from './move-note';
 
-export type { IdeaOption, MoveNote, MoveSymbol } from './move-note';
+export type { MoveNote, MoveSymbol } from './move-note';
+
+const SYMBOL_OPTIONS: FilterOption[] = MOVE_SYMBOLS.map((symbol) => ({
+  value: symbol || 'none',
+  label: symbol || 'None',
+  hint: SYMBOL_HINT[symbol],
+}));
 
 export type MoveNoteEditorProps = {
   /** The move being edited, as the board is on it. */
@@ -35,52 +44,57 @@ export type MoveNoteEditorProps = {
   /** Opens the refutation editor, from the refusal. */
   onRefute?: () => void;
   /** The ideas list to choose from. */
-  ideas: IdeaOption[];
+  ideas: Idea[];
   /** The note as a learner sees it, under the editor. */
   preview?: boolean;
+  /** The line's moves, so moves written in the comment ("{4. c3}") preview as moves. */
+  context?: RichTextContext;
+  /** The learner's side, whose moves the preview draws bold. */
+  side?: 'white' | 'black';
   className?: string;
 };
 
+/** The note as a learner sees it beside the board: the board's own notes panel. */
 function NotePreview({
   move,
   note,
   ideas,
+  context,
+  side,
 }: {
   move: MoveNoteEditorProps['move'];
   note: MoveNote;
-  ideas: IdeaOption[];
+  ideas: Idea[];
+  context?: RichTextContext;
+  side?: 'white' | 'black';
 }) {
   const empty = !note.comment && !note.symbol && note.ideas.length === 0 && note.tags.length === 0;
   return (
-    <section className="grid gap-1.5 rounded-lg bg-muted/50 p-3 text-sm" aria-label="As a learner sees it">
+    <section className="grid gap-1.5 rounded-lg bg-muted/50 p-3" aria-label="As a learner sees it">
       <p className="text-xs text-muted-foreground">As a learner sees it</p>
-      {empty ? (
-        <p className="text-muted-foreground">No note on this move yet.</p>
-      ) : (
-        <>
-          <p>
-            <span className="mr-1.5 font-mono font-semibold">
-              {numberedMove(move.ply, move.san)}
-              {note.symbol}
-            </span>
-            {note.comment}
-          </p>
-          {note.ideas.length > 0 || note.tags.length > 0 ? (
-            <div className="flex flex-wrap gap-1">
-              {note.ideas.map((idea) => (
-                <Badge key={idea} variant="secondary">
-                  <Lightbulb aria-hidden /> {ideas.find((option) => option.id === idea)?.name ?? idea}
-                </Badge>
-              ))}
-              {note.tags.map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          ) : null}
-        </>
-      )}
+      <BoardNotes
+        startText="No note on this move yet."
+        marksWhileStudying={false}
+        context={context}
+        side={side}
+        move={
+          empty
+            ? undefined
+            : {
+                ply: move.ply,
+                san: move.san,
+                symbol: note.symbol || undefined,
+                comment: note.comment || undefined,
+                tags: note.tags,
+                ideas: note.ideas.length
+                  ? note.ideas.map((id) => {
+                      const idea = ideas.find((option) => option.id === id);
+                      return <IdeaBadge key={id} idea={idea} name={idea ? undefined : id} />;
+                    })
+                  : undefined,
+              }
+        }
+      />
     </section>
   );
 }
@@ -96,6 +110,8 @@ function Editor({
   onRefute,
   ideas,
   preview = true,
+  context,
+  side,
   className,
 }: MoveNoteEditorProps) {
   const id = useId();
@@ -116,7 +132,7 @@ function Editor({
       )
     : [];
   const exact = ideas.some((idea) => idea.name.toLowerCase() === ideaQuery.trim().toLowerCase());
-  const addIdea = (idea: IdeaOption) => {
+  const addIdea = (idea: Idea) => {
     save({ ideas: [...note.ideas, idea.id] });
     setIdeaQuery('');
   };
@@ -179,17 +195,13 @@ function Editor({
       </div>
 
       <div className="grid gap-1.5">
-        <Label id={`${id}-symbol`}>Symbol</Label>
-        <ToggleGroup
-          type="single"
-          variant="outline"
+        <FilterToggle
+          label="Symbol"
           size="sm"
-          spacing={0}
           value={note.symbol || 'none'}
           disabled={!editable}
-          aria-labelledby={`${id}-symbol`}
-          onValueChange={(next) => {
-            if (!next) return;
+          options={SYMBOL_OPTIONS}
+          onChange={(next) => {
             const symbol = (next === 'none' ? '' : next) as MoveSymbol;
             if (inLine && (symbol === '?' || symbol === '??')) {
               setRefused(true);
@@ -198,19 +210,7 @@ function Editor({
             setRefused(false);
             save({ symbol });
           }}
-        >
-          {MOVE_SYMBOLS.map((symbol) => (
-            <Hint key={symbol || 'none'} text={SYMBOL_HINT[symbol]}>
-              <ToggleGroupItem
-                value={symbol || 'none'}
-                aria-label={SYMBOL_HINT[symbol]}
-                className="min-w-10 font-mono aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                {symbol || <span className="font-sans text-xs">None</span>}
-              </ToggleGroupItem>
-            </Hint>
-          ))}
-        </ToggleGroup>
+        />
         {refused ? (
           <p role="alert" className="flex flex-wrap items-center gap-x-2 text-sm">
             <span>A wrong move is a refutation, never part of a line.</span>
@@ -230,22 +230,19 @@ function Editor({
             {note.ideas.map((ideaId) => {
               const idea = ideas.find((option) => option.id === ideaId);
               return (
-                <Hint key={ideaId} text={idea?.summary ?? 'Not in the ideas list yet.'}>
-                  <Badge variant="secondary" className="gap-1 pr-0.5">
-                    <Lightbulb aria-hidden /> {idea?.name ?? ideaId}
-                    {editable ? (
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        className="size-4"
-                        aria-label={`Remove ${idea?.name ?? ideaId}`}
-                        onClick={() => save({ ideas: note.ideas.filter((x) => x !== ideaId) })}
-                      >
-                        <X aria-hidden />
-                      </Button>
-                    ) : null}
-                  </Badge>
-                </Hint>
+                <span key={ideaId} className="inline-flex items-center">
+                  <IdeaBadge idea={idea} name={idea ? undefined : ideaId} />
+                  {editable ? (
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      aria-label={`Remove ${idea?.name ?? ideaId}`}
+                      onClick={() => save({ ideas: note.ideas.filter((x) => x !== ideaId) })}
+                    >
+                      <X aria-hidden />
+                    </Button>
+                  ) : null}
+                </span>
               );
             })}
           </div>
@@ -337,7 +334,9 @@ function Editor({
         </div>
       </div>
 
-      {preview ? <NotePreview move={move} note={{ ...note, comment }} ideas={ideas} /> : null}
+      {preview ? (
+        <NotePreview move={move} note={{ ...note, comment }} ideas={ideas} context={context} side={side} />
+      ) : null}
     </div>
   );
 }

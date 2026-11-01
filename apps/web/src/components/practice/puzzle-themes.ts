@@ -52,13 +52,13 @@ const OTHER: Record<string, string> = {
   equality: 'Saves the game',
 };
 
-/** A puzzle's themes as ideas (which link to an idea page) and plain tags. */
-export function puzzleThemes(themes: readonly string[]): { ideas: string[]; tags: string[] } {
-  const ideas: string[] = [];
+/** A puzzle's themes as ideas (each with its Lichess theme, which a page maps to our idea) and plain tags. */
+export function puzzleThemes(themes: readonly string[]): { ideas: { theme: string; name: string }[]; tags: string[] } {
+  const ideas: { theme: string; name: string }[] = [];
   const tags: string[] = [];
   for (const theme of themes) {
     if (SILENT.has(theme)) continue;
-    if (IDEA_THEMES[theme]) ideas.push(IDEA_THEMES[theme]);
+    if (IDEA_THEMES[theme]) ideas.push({ theme, name: IDEA_THEMES[theme] });
     else tags.push(OTHER[theme] ?? theme.replace(/([A-Z])/g, ' $1').replace(/^./, (c) => c.toUpperCase()));
   }
   return { ideas, tags };

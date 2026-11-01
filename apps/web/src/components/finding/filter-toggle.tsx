@@ -24,6 +24,8 @@ export type FilterToggleProps<T extends string> = {
   showLabel?: boolean;
   size?: 'sm' | 'default';
   disabled?: boolean;
+  /** The group's id, for a label elsewhere (a settings row's). */
+  id?: string;
   className?: string;
 };
 
@@ -40,12 +42,14 @@ export function FilterToggle<T extends string>({
   showLabel = true,
   size = 'default',
   disabled,
+  id,
   className,
 }: FilterToggleProps<T>) {
   return (
     <div className={cn('flex flex-wrap items-center gap-x-2 gap-y-1', className)}>
       {showLabel ? <span className="text-sm text-muted-foreground">{label}</span> : null}
       <ToggleGroup
+        id={id}
         type="single"
         variant="outline"
         size={size}

@@ -14,5 +14,5 @@ export const SYMBOL_HINT: Record<MoveSymbol, string> = {
 /** v1's set of tags; any other word is allowed too. */
 export const MOVE_TAGS = ['tip', 'trap', 'common blunder'] as const;
 
+/** `ideas` are idea ids, from the ideas list (chess `Idea`). */
 export type MoveNote = { comment: string; symbol: MoveSymbol; ideas: string[]; tags: string[] };
-export type IdeaOption = { id: string; name: string; summary: string };

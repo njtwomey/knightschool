@@ -1,7 +1,8 @@
 import { ChevronDown, ChevronRight, Crosshair, ListTree, SearchIcon } from 'lucide-react';
 import { useRef, useState, type KeyboardEvent } from 'react';
+import { KIND_INFO, KindBadge, shownKind, type LineKind } from '@/components/chess/kind-badge';
 import { MoveRun, type RunMove } from '@/components/chess/move-run';
-import { Badge } from '@/components/ui/badge';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
@@ -14,7 +15,9 @@ import { laneColour } from './lane-colours';
 export type MapIndexLine = {
   id: string;
   name: string;
-  kind: string;
+  kind: LineKind;
+  /** The side the line is written for; a trap for the other side shows flipped. */
+  writtenFor?: 'white' | 'black';
   /** The line it grows out of (the lane layout's parent), or null. */
   parent: string | null;
   /** Its lane on the map, for the colour dot. */
@@ -48,24 +51,6 @@ export type MapIndexProps = {
   rare?: 'grey' | 'hide';
   side?: 'white' | 'black';
   className?: string;
-};
-
-const KIND_LABEL: Record<string, string> = {
-  main: 'main',
-  sideline: 'sideline',
-  rare: 'rare',
-  gambit: 'gambit',
-  trap: 'trap',
-  'trap-spring': 'trap',
-  'trap-avoid': 'trap',
-};
-const KIND_TONE: Record<string, string> = {
-  rare: 'border-dotted text-muted-foreground',
-  sideline: 'text-muted-foreground',
-  gambit: 'text-kind-gambit',
-  trap: 'text-kind-trap-avoid',
-  'trap-spring': 'text-kind-trap-spring',
-  'trap-avoid': 'text-kind-trap-avoid',
 };
 
 /**
@@ -180,7 +165,7 @@ export function MapIndex({
             <HoverCardContent side="right" className="grid w-80 gap-1.5">
               <p className="font-medium">{line.name}</p>
               <p className="text-xs text-muted-foreground">
-                {KIND_LABEL[line.kind] ?? line.kind}
+                {KIND_INFO[shownKind(line.kind, line.writtenFor, side)].name}
                 {line.opening ? `, in the ${line.opening}` : ''}
                 {line.known !== undefined ? `, ${Math.round(line.known * 100)}% known` : ''}
               </p>
@@ -191,9 +176,7 @@ export function MapIndex({
               ) : null}
             </HoverCardContent>
           </HoverCard>
-          <Badge variant="outline" className={cn('h-4 px-1.5 text-[0.65rem]', KIND_TONE[line.kind])}>
-            {KIND_LABEL[line.kind] ?? line.kind}
-          </Badge>
+          <KindBadge kind={line.kind} writtenFor={line.writtenFor} learner={side} size="sm" />
           {showProgress && line.known !== undefined ? (
             <span
               className="h-1 w-8 overflow-hidden rounded-full bg-muted"
@@ -256,7 +239,14 @@ export function MapIndex({
       >
         {matches ? (
           matches.length === 0 ? (
-            <li className="px-2 py-3 text-sm text-muted-foreground">No line matches '{query}'.</li>
+            <li className="px-2 py-3">
+              <EmptyState
+                kind="no-match"
+                size="part"
+                text={`No line matches '${query}'.`}
+                action={{ label: 'Clear the search', onClick: () => setQuery('') }}
+              />
+            </li>
           ) : (
             matches.map((line) => entry(line, 0, groups && groups.length > 1 ? groupName(line.group) : undefined))
           )

@@ -1,4 +1,4 @@
-import { LayoutGrid, Moon, Sun } from 'lucide-react';
+import { Grid2x2, LayoutGrid, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/lib/theme';
 import { to } from '@/router/location';
@@ -13,6 +13,11 @@ export function Header() {
           <span className="text-lg font-semibold">Knight School</span>
         </a>
         <nav className="ml-auto flex items-center gap-1">
+          <Button asChild variant="ghost" size="sm">
+            <a href={to('/board')}>
+              <Grid2x2 aria-hidden /> Board
+            </a>
+          </Button>
           <Button asChild variant="ghost" size="sm">
             <a href={to('/mocks')}>
               <LayoutGrid aria-hidden /> Mocks

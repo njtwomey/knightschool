@@ -1,7 +1,8 @@
-import { GRADE_INFO, type Grade, type Score, type Side } from '@knightschool/core';
+import { formatPawns, type Grade, GRADE_INFO, type Score, type Side } from '@knightschool/core';
 import { Bot } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { Reveal } from '@/components/board/board';
+import { MoveTag } from '@/components/board/board-notes';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
@@ -146,9 +147,7 @@ export function MoveExplanation({
         <div className="flex flex-wrap items-center gap-1.5">
           {ideas}
           {tags.map((tag) => (
-            <Badge key={tag} variant="secondary">
-              {tag}
-            </Badge>
+            <MoveTag key={tag} tag={tag} />
           ))}
         </div>
       ) : null}
@@ -179,7 +178,7 @@ export function MoveExplanation({
                     {alt.grade ? <VerdictBadge grade={alt.grade} size="sm" /> : null}
                     {alt.costCp !== undefined && alt.costCp > 0 ? (
                       <span className="text-xs text-muted-foreground tabular-nums">
-                        costs {(alt.costCp / 100).toFixed(1)}
+                        costs {formatPawns(alt.costCp, { signed: false })}
                       </span>
                     ) : null}
                     {alt.authored ? <Badge variant="outline">the author's note</Badge> : null}

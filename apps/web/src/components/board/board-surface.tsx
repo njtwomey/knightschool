@@ -10,10 +10,11 @@ import {
   type Marks,
 } from '@knightschool/core';
 import { Check, X } from 'lucide-react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, MouseEvent } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { cn } from '@/lib/utils';
 import { BOARD_THEMES, useBoardSettings } from './board-settings-menu';
+import { GRADE_FILL } from '@/components/chess/grade-style';
 import { MARK_RGB, SYSTEM_RGB } from './colours';
 import { SquareIconGlyph } from './square-icon';
 
@@ -36,6 +37,10 @@ export type BoardSurfaceProps = {
   /** The letters and numbers round the edge; off on small boards. */
   notation?: boolean;
   onMove?: (from: string, to: string) => boolean;
+  /** Passed through to the board, for drawing with the mouse (the marks editor's right button). */
+  onSquareMouseDown?: (square: string, event: MouseEvent) => void;
+  onSquareMouseUp?: (square: string, event: MouseEvent) => void;
+  onSquareRightClick?: (square: string) => void;
   className?: string;
   id?: string;
 };
@@ -51,22 +56,11 @@ function squareBox(square: string, orientation: 'white' | 'black') {
   return { left: `${column * 12.5}%`, top: `${row * 12.5}%` };
 }
 
-const GRADE_CLASS: Record<Grade, string> = {
-  book: 'bg-verdict-book',
-  best: 'bg-verdict-best',
-  excellent: 'bg-verdict-excellent',
-  good: 'bg-verdict-good',
-  inaccuracy: 'bg-verdict-inaccuracy',
-  mistake: 'bg-verdict-mistake',
-  blunder: 'bg-verdict-blunder',
-  miss: 'bg-verdict-miss',
-};
-
 function Badge({ badge, orientation }: { badge: BoardBadge; orientation: 'white' | 'black' }) {
   const box = squareBox(badge.square, orientation);
   const tone =
     badge.kind === 'grade'
-      ? GRADE_CLASS[badge.grade]
+      ? GRADE_FILL[badge.grade]
       : badge.kind === 'right'
         ? 'bg-feedback-right'
         : 'bg-feedback-wrong';
@@ -102,6 +96,9 @@ export function BoardSurface({
   interactive = false,
   notation = true,
   onMove,
+  onSquareMouseDown,
+  onSquareMouseUp,
+  onSquareRightClick,
   className,
   id = 'board',
 }: BoardSurfaceProps) {
@@ -151,6 +148,9 @@ export function BoardSurface({
           animationDurationInMs: settings.animation ? 180 : 0,
           onPieceDrop: ({ sourceSquare, targetSquare }) =>
             targetSquare && onMove ? onMove(sourceSquare, targetSquare) : false,
+          onSquareMouseDown: onSquareMouseDown ? ({ square }, event) => onSquareMouseDown(square, event) : undefined,
+          onSquareMouseUp: onSquareMouseUp ? ({ square }, event) => onSquareMouseUp(square, event) : undefined,
+          onSquareRightClick: onSquareRightClick ? ({ square }) => onSquareRightClick(square) : undefined,
         }}
       />
       {(marks?.icons ?? []).flatMap((text) => {

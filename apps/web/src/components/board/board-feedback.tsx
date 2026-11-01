@@ -1,4 +1,5 @@
-import { GRADE_INFO, numberedMove, type Grade } from '@knightschool/core';
+import { GRADE_INFO, type Grade } from '@knightschool/core';
+import { MoveChip } from '@/components/chess/move-chip';
 import { ArrowRight, Check, Eye, GitBranch, Lightbulb, Undo2, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { MoveRun, type RunMove } from '@/components/chess/move-run';
@@ -110,7 +111,7 @@ export function BoardFeedback({
               <span className="grid size-5 place-items-center rounded-full bg-feedback-right text-white" aria-hidden>
                 <Check className="size-3.5" strokeWidth={3} />
               </span>
-              <span className="font-mono font-semibold">{numberedMove(feedback.ply, feedback.san)}</span>
+              <MoveChip ply={feedback.ply} san={feedback.san} mine preview={false} />
               <VerdictBadge grade={grade} size="sm" />
             </div>
             {sentence && feedback.comment && reveal !== 'test' ? (
@@ -142,10 +143,7 @@ export function BoardFeedback({
               />
             ) : (
               <div className="flex items-center gap-2">
-                <span className="font-mono font-semibold">
-                  {numberedMove(feedback.ply, feedback.san)}
-                  {GRADE_INFO[feedback.grade].symbol}
-                </span>
+                <MoveChip ply={feedback.ply} san={feedback.san} grade={feedback.grade} preview={false} />
                 <VerdictBadge grade={feedback.grade} size="sm" />
               </div>
             )}
@@ -162,7 +160,7 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono font-semibold">{numberedMove(feedback.ply, feedback.san)}</span>
+              <MoveChip ply={feedback.ply} san={feedback.san} mine preview={false} />
               <VerdictBadge grade={feedback.grade} size="sm" />
               <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                 <GitBranch className="size-3.5" aria-hidden />
@@ -172,8 +170,7 @@ export function BoardFeedback({
             {sentence ? (
               <p className="text-sm">
                 {GRADE_INFO[feedback.grade].name}, but not your repertoire move: this opening plays{' '}
-                <span className="font-mono font-semibold">{numberedMove(feedback.linePly, feedback.lineMove)}</span>.
-                Play it.
+                <MoveChip ply={feedback.linePly} san={feedback.lineMove} mine preview={false} />. Play it.
               </p>
             ) : null}
           </>
@@ -183,10 +180,7 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono font-semibold">
-                {numberedMove(feedback.ply, feedback.san)}
-                {GRADE_INFO[feedback.grade].symbol}
-              </span>
+              <MoveChip ply={feedback.ply} san={feedback.san} grade={feedback.grade} preview={false} />
               <VerdictBadge grade={feedback.grade} size="sm" />
             </div>
             {sentence ? (
@@ -211,15 +205,12 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono font-semibold">{numberedMove(feedback.ply, feedback.san)}</span>
+              <MoveChip ply={feedback.ply} san={feedback.san} mine preview={false} />
               <VerdictBadge grade="miss" size="sm" />
             </div>
             {sentence ? (
               <p className="text-sm">
-                A miss:{' '}
-                <span className="font-mono font-semibold">
-                  {numberedMove(feedback.punish.ply, feedback.punish.san)}
-                </span>{' '}
+                A miss: <MoveChip ply={feedback.punish.ply} san={feedback.punish.san} mine preview={false} />{' '}
                 {feedback.because ?? 'wins material here.'}
               </p>
             ) : null}

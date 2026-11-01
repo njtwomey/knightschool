@@ -1,4 +1,4 @@
-import { GRADE_INFO, numberedMove, type Grade } from '@knightschool/core';
+import { formatPawns, type Grade, GRADE_INFO, numberedMove } from '@knightschool/core';
 import { cn } from '@/lib/utils';
 import { MoveRun, type RunMove } from './move-run';
 import { VerdictBadge } from './verdict-badge';
@@ -39,7 +39,9 @@ export function VerdictNote({
         </span>
         <VerdictBadge grade={grade} size="sm" />
         {costCp !== undefined && costCp > 0 ? (
-          <span className="text-xs text-muted-foreground tabular-nums">costs {(costCp / 100).toFixed(1)}</span>
+          <span className="text-xs text-muted-foreground tabular-nums">
+            costs {formatPawns(costCp, { signed: false })}
+          </span>
         ) : null}
       </div>
       {because ? <p className="text-muted-foreground">{because}</p> : null}

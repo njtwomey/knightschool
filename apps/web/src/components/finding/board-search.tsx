@@ -3,11 +3,10 @@ import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Board, type BoardPosition } from '@/components/board/board';
 import { MoveRun } from '@/components/chess/move-run';
-import { Badge } from '@/components/ui/badge';
+import { KindBadge, type LineKind } from '@/components/chess/kind-badge';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
-import { cn } from '@/lib/utils';
 import { FilterToggle } from './filter-toggle';
 import { RowLink } from './sortable-table';
 
@@ -16,7 +15,9 @@ export type PositionLine = {
   id: string;
   name: string;
   opening: string;
-  kind: string;
+  kind: LineKind;
+  /** The side the line is written for. */
+  writtenFor?: 'white' | 'black';
   moves: { san: string; uci: string; before: string; after: string }[];
   /** The line's address at a ply (its board at that move). */
   href: (ply: number) => string;
@@ -30,7 +31,7 @@ const KIND_FILTER = [
   { value: 'traps' as const, label: 'Traps' },
 ];
 
-const isTrap = (kind: string) => kind.startsWith('trap');
+const isTrap = (kind: LineKind) => kind === 'for-us' || kind === 'against-us';
 
 type Hit = { line: PositionLine; ply: number; transposed: boolean };
 
@@ -162,19 +163,17 @@ function BoardSearchBody({ lines, start = [], kind: controlledKind, onKind, onMo
           }}
         />
         {hits.length === 0 ? (
-          <Empty className="border">
-            <EmptyHeader>
-              <EmptyTitle>No line here</EmptyTitle>
-              <EmptyDescription>
-                {cursor === 0 ? 'Play a move to start.' : 'None of the openings passes through this position.'}
-              </EmptyDescription>
-            </EmptyHeader>
-            {boardHref && cursor > 0 ? (
-              <Button variant="outline" asChild>
-                <a href={boardHref(sansTo(cursor))}>Open on the board</a>
-              </Button>
-            ) : null}
-          </Empty>
+          <EmptyState
+            kind={cursor === 0 ? 'new' : 'not-covered'}
+            text={
+              cursor === 0
+                ? 'Play a move to start.'
+                : 'No line here: none of the openings passes through this position.'
+            }
+            action={
+              boardHref && cursor > 0 ? { label: 'Open on the board', href: boardHref(sansTo(cursor)) } : undefined
+            }
+          />
         ) : (
           <>
             <p className="text-sm text-muted-foreground" aria-live="polite">
@@ -188,9 +187,7 @@ function BoardSearchBody({ lines, start = [], kind: controlledKind, onKind, onMo
                 >
                   <div className="flex flex-wrap items-center gap-2">
                     <RowLink href={line.href(ply)}>{line.name}</RowLink>
-                    <Badge variant="outline" className={cn(isTrap(line.kind) && 'text-kind-trap-avoid')}>
-                      {isTrap(line.kind) ? 'trap' : line.kind}
-                    </Badge>
+                    <KindBadge kind={line.kind} writtenFor={line.writtenFor} />
                   </div>
                   <p className="text-sm text-muted-foreground">
                     {line.opening}

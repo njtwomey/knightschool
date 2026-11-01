@@ -5,7 +5,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { laneColour } from './lane-colours';
-import { MOVE_STATES, OVERLAYS, STATE_NAME, type MapOverlay, type MoveState } from './map-types';
+import { MOVE_STATES, OVERLAYS, PILL_FILL, STATE_NAME, type MapOverlay, type MoveState } from './map-types';
+import { GRADE_FILL } from '@/components/chess/grade-style';
 
 const OVERLAY_NAME: Record<MapOverlay, string> = {
   progress: 'Progress',
@@ -14,13 +15,6 @@ const OVERLAY_NAME: Record<MapOverlay, string> = {
   coverage: 'Coverage',
   puzzles: 'Puzzles',
   lines: 'Lines',
-};
-
-const SAMPLE: Record<MoveState, string> = {
-  open: 'border-state-open bg-background',
-  learning: 'border-state-learning bg-state-learning/25',
-  known: 'border-state-known bg-state-known/25',
-  mastered: 'border-state-mastered bg-state-mastered text-background',
 };
 
 export type MapLegendProps = {
@@ -121,7 +115,7 @@ export function MapLegend({
                       : `Pick out the ${STATE_NAME[state].toLowerCase()} moves`
                   }
                 >
-                  <span className={cn('h-3.5 w-6 rounded-full border-2', SAMPLE[state])} aria-hidden />
+                  <span className={cn('h-3.5 w-6 rounded-full border-2', PILL_FILL[state])} aria-hidden />
                   <span className="text-foreground">{STATE_NAME[state]}</span>
                   {counts[state] !== undefined ? <span className="tabular-nums">{counts[state]}</span> : null}
                 </Button>
@@ -148,10 +142,15 @@ export function MapLegend({
         return (
           <div className="flex items-start gap-2">
             <span className="mt-0.5 flex shrink-0 gap-1" aria-hidden>
-              <span className="grid size-4 place-items-center rounded-full bg-verdict-mistake text-[0.65rem] font-bold text-background">
+              <span
+                className={cn(
+                  'grid size-4 place-items-center rounded-full text-[0.65rem] font-bold text-background',
+                  GRADE_FILL.mistake,
+                )}
+              >
                 ?
               </span>
-              <span className="grid size-4 place-items-center rounded-full bg-verdict-mistake text-background">
+              <span className={cn('grid size-4 place-items-center rounded-full text-background', GRADE_FILL.mistake)}>
                 <Check className="size-2.5" strokeWidth={4} />
               </span>
             </span>

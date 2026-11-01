@@ -4,3 +4,7 @@ packages:
 
 # Supply-chain safety: never install a version published less than 14 days ago (in minutes).
 minimumReleaseAge: 20160
+
+# Dependencies whose install scripts may run (pnpm blocks them by default). esbuild comes with tsx.
+allowBuilds:
+  esbuild: true

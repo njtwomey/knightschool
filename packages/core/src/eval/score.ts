@@ -75,6 +75,13 @@ export type EvalWords = {
 
 const name = (side: Side) => (side === 'white' ? 'White' : 'Black');
 
+/** Centipawns as pawns, signed, one decimal: "+0.6", "-2.3", "0.0". The one way a score or cost is written. */
+export function formatPawns(cp: number, { signed = true }: { signed?: boolean } = {}): string {
+  const value = (Math.abs(cp) / 100).toFixed(1);
+  if (!signed || cp === 0) return value;
+  return `${cp > 0 ? '+' : '-'}${value}`;
+}
+
 /** Words for a score, with bands on the winning chance from config `judge.evalWords`. */
 export function evalWords(score: Score, bands: EvalWordBands): EvalWords {
   if (score.over === 'draw') return { words: 'Draw', side: null, number: '½-½', level: 'over' };
@@ -87,7 +94,7 @@ export function evalWords(score: Score, bands: EvalWordBands): EvalWords {
     return { words: `${name(side)} mates in ${n}`, side, number: `${score.mate < 0 ? '-' : ''}M${n}`, level: 'mate' };
   }
   const cp = score.cp ?? 0;
-  const number = `${cp > 0 ? '+' : cp < 0 ? '-' : ''}${(Math.abs(cp) / 100).toFixed(1)}`;
+  const number = formatPawns(cp);
   const chances = Math.abs(winningChances(score));
   const side: Side = cp >= 0 ? 'white' : 'black';
   if (chances < bands.equal) return { words: 'Equal', side: null, number, level: 'equal' };

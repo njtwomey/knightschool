@@ -7,11 +7,11 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm content:build && pnpm --filter @knightschool/web dev",
-    "build": "pnpm content:build && pnpm --filter @knightschool/web build",
+    "dev": "pnpm content:build && pnpm engine:copy && pnpm --filter @knightschool/web dev",
+    "build": "pnpm content:build && pnpm engine:copy && pnpm --filter @knightschool/web build",
     "preview": "pnpm --filter @knightschool/web preview",
     "lint": "eslint .",
-    "typecheck": "pnpm -r typecheck && tsc -p scripts/puzzles && tsc -p scripts/content",
+    "typecheck": "pnpm -r typecheck && tsc -p scripts/puzzles && tsc -p scripts/content && tsc -p scripts/analyse",
     "puzzles:index": "node --import tsx scripts/puzzles/index.ts",
     "puzzles:names": "node --import tsx scripts/puzzles/names.ts",
     "puzzles:expand": "node --env-file-if-exists=.env --import tsx scripts/puzzles/expand.ts",
@@ -20,7 +20,9 @@
     "test": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "content:build": "node --import tsx scripts/content/build.ts"
+    "content:build": "node --import tsx scripts/content/build.ts",
+    "engine:copy": "node --import tsx scripts/copy-engine.ts",
+    "analyse": "node --import tsx scripts/analyse/analyse.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -2,7 +2,7 @@ import { Crosshair, SearchIcon, X } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
+import { EmptyState } from '@/components/shared/empty-state';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
 import { Kbd } from '@/components/ui/kbd';
 import { cn } from '@/lib/utils';
@@ -159,18 +159,11 @@ export function SearchBox({
   );
 
   const nothing = (
-    <Empty className="border">
-      <EmptyHeader>
-        <EmptyTitle>Nothing matches '{query}'</EmptyTitle>
-        <EmptyDescription>Try fewer words, or search by position.</EmptyDescription>
-      </EmptyHeader>
-      {onSearchByPosition ? (
-        <Button variant="outline" onClick={onSearchByPosition}>
-          <Crosshair aria-hidden />
-          Search by position
-        </Button>
-      ) : null}
-    </Empty>
+    <EmptyState
+      kind="no-match"
+      text={`Nothing matches '${query}'. Try fewer words, or search by position.`}
+      action={onSearchByPosition ? { label: 'Search by position', onClick: onSearchByPosition } : undefined}
+    />
   );
 
   if (form === 'compact') {
@@ -180,7 +173,7 @@ export function SearchBox({
         {dropOpen && query ? (
           <div className="absolute inset-x-0 top-full z-20 mt-1 rounded-md border bg-popover p-1 text-popover-foreground shadow-md">
             {shown.length === 0 ? (
-              <p className="px-3 py-2 text-sm text-muted-foreground">Nothing matches '{query}'.</p>
+              <EmptyState kind="no-match" size="part" text={`Nothing matches '${query}'.`} className="px-3 py-2" />
             ) : (
               <ul id={listId} role="listbox" aria-label="Results" className="grid">
                 {shown.map((result, i) => (

@@ -48,25 +48,22 @@ export const KIND_INFO: Record<ShownKind, { name: string; hint: string; tone: st
   },
 };
 
-/*
- * Risk has no tokens of its own yet (`--risk-low/medium/high` in docs/v2/patterns/colours.md are not in index.css),
- * so it borrows the nearest: green from Excellent, amber from Trap to spring, red from Trap to avoid.
- */
+/** Risk in its own colours (`--risk-low/medium/high`). */
 export const RISK_INFO: Record<Risk, { name: string; hint: string; tone: string }> = {
   low: {
     name: 'Low risk',
     hint: 'Low risk: calm play; a slip seldom costs much.',
-    tone: 'border-verdict-excellent/40 bg-verdict-excellent/10 text-verdict-excellent',
+    tone: 'border-risk-low/40 bg-risk-low/10 text-risk-low',
   },
   medium: {
     name: 'Medium risk',
     hint: 'Medium risk: some sharp moments where an exact move is needed.',
-    tone: 'border-kind-trap-spring/50 bg-kind-trap-spring/10 text-kind-trap-spring',
+    tone: 'border-risk-medium/50 bg-risk-medium/10 text-risk-medium',
   },
   high: {
     name: 'High risk',
     hint: 'High risk: sharp and forcing; one wrong move can lose quickly.',
-    tone: 'border-kind-trap-avoid/40 bg-kind-trap-avoid/10 text-kind-trap-avoid',
+    tone: 'border-risk-high/40 bg-risk-high/10 text-risk-high',
   },
 };
 
@@ -78,11 +75,27 @@ export function shownKind(kind: LineKind, writtenFor?: Side, learner?: Side): Sh
   return kind;
 }
 
-function Tag({ name, hint, tone, icon: Icon }: { name: string; hint: string; tone: string; icon?: LucideIcon }) {
+function Tag({
+  name,
+  hint,
+  tone,
+  icon: Icon,
+  small,
+}: {
+  name: string;
+  hint: string;
+  tone: string;
+  icon?: LucideIcon;
+  small?: boolean;
+}) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Badge variant="outline" className={cn('cursor-default', tone)} tabIndex={0}>
+        <Badge
+          variant="outline"
+          className={cn('cursor-default', small && 'h-4 px-1.5 text-[0.65rem] [&>svg]:size-2.5', tone)}
+          tabIndex={0}
+        >
           {Icon ? <Icon aria-hidden /> : null}
           {name}
         </Badge>
@@ -104,6 +117,7 @@ export function KindBadge({
   tags = [],
   show = 'kind',
   reveal,
+  size = 'default',
 }: {
   kind: LineKind;
   /** The side the line is written for, and the learner's side: a trap for the other side shows flipped. */
@@ -114,7 +128,10 @@ export function KindBadge({
   tags?: { name: string; hint: string }[];
   show?: 'kind' | 'kind and risk' | 'all';
   reveal?: Reveal;
+  /** `sm` in a dense list (the map's index). */
+  size?: 'default' | 'sm';
 }) {
+  const small = size === 'sm';
   const [open, setOpen] = useState(false);
   const shown = shownKind(kind, writtenFor, learner);
   // A trap to spring named before it is sprung gives the answer away.
@@ -123,10 +140,10 @@ export function KindBadge({
   const visible = open ? extra : extra.slice(0, 3);
   return (
     <span className="inline-flex flex-wrap items-center gap-1">
-      <Tag {...KIND_INFO[shown]} />
-      {risk && show !== 'kind' ? <Tag {...RISK_INFO[risk]} /> : null}
+      <Tag {...KIND_INFO[shown]} small={small} />
+      {risk && show !== 'kind' ? <Tag {...RISK_INFO[risk]} small={small} /> : null}
       {visible.map((tag) => (
-        <Tag key={tag.name} name={tag.name} hint={tag.hint} tone="border-border text-muted-foreground" />
+        <Tag key={tag.name} name={tag.name} hint={tag.hint} tone="border-border text-muted-foreground" small={small} />
       ))}
       {extra.length > 3 ? (
         <Button

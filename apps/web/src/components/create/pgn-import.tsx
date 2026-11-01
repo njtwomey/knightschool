@@ -1,6 +1,7 @@
 import { FileUp, Link2, ClipboardPaste } from 'lucide-react';
 import { useId, useState } from 'react';
 import { MoveRun } from '@/components/chess/move-run';
+import { FilterToggle, type FilterOption } from '@/components/finding/filter-toggle';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Notice } from '@/components/shared/notice';
 import { Button } from '@/components/ui/button';
@@ -10,12 +11,16 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { findRows, type FoundRow } from './pgn-rows';
 import { ProblemsList } from './problems-list';
 
 export type { FoundRow } from './pgn-rows';
+
+const SIDES: FilterOption<'white' | 'black'>[] = [
+  { value: 'white', label: 'White' },
+  { value: 'black', label: 'Black' },
+];
 
 export type ImportOpening = { id: string; name: string; side: 'white' | 'black' };
 
@@ -290,31 +295,14 @@ export function PgnImport({
                         onChange={(event) => setNewName(event.target.value)}
                       />
                     </div>
-                    <div className="grid gap-1.5">
-                      <Label id={`${id}-side`}>Written for</Label>
-                      <ToggleGroup
-                        type="single"
-                        variant="outline"
-                        size="sm"
-                        spacing={0}
-                        value={newSide}
-                        aria-labelledby={`${id}-side`}
-                        onValueChange={(next) => next && setNewSide(next as 'white' | 'black')}
-                      >
-                        <ToggleGroupItem
-                          value="white"
-                          className="px-3 aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-                        >
-                          White
-                        </ToggleGroupItem>
-                        <ToggleGroupItem
-                          value="black"
-                          className="px-3 aria-checked:bg-primary aria-checked:text-primary-foreground data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-                        >
-                          Black
-                        </ToggleGroupItem>
-                      </ToggleGroup>
-                    </div>
+                    <FilterToggle
+                      label="Written for"
+                      size="sm"
+                      value={newSide}
+                      options={SIDES}
+                      onChange={setNewSide}
+                      className="self-end"
+                    />
                   </div>
                 ) : null}
               </>

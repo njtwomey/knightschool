@@ -4,12 +4,13 @@ import { useState, type ReactNode } from 'react';
 import { MarkKey } from '@/components/chess/mark-key';
 import { OpeningName, type OpeningNameProps } from '@/components/chess/opening-name';
 import { RichText, type RichTextBoard, type RichTextContext } from '@/components/chess/rich-text';
-import { gradeText } from '@/components/chess/verdict-badge';
+import { GRADE_TEXT } from '@/components/chess/grade-style';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 import type { Reveal } from './board';
+import { GRADE_TONE } from '@/components/chess/grade-style';
 
 export type NotesMove = {
   ply: number;
@@ -27,10 +28,20 @@ export type NotesMove = {
 };
 
 const TAG_TONE: Record<string, string> = {
-  Tip: 'border-mark-idea/40 text-mark-idea',
-  Trap: 'border-kind-trap-avoid/40 text-kind-trap-avoid',
-  'Common blunder': 'border-verdict-mistake/40 text-verdict-mistake',
+  tip: 'border-mark-idea/40 text-mark-idea',
+  trap: 'border-kind-trap-avoid/40 text-kind-trap-avoid',
+  'common blunder': GRADE_TONE.mistake,
 };
+
+/** A move's tag (Tip, Trap, Common blunder, or the author's own word), drawn one way wherever a move's note shows. */
+export function MoveTag({ tag }: { tag: string }) {
+  const word = tag.charAt(0).toUpperCase() + tag.slice(1);
+  return (
+    <Badge variant="outline" className={TAG_TONE[tag.toLowerCase()] ?? 'text-muted-foreground'}>
+      {word}
+    </Badge>
+  );
+}
 
 /**
  * What the author says about the move on the board: its comment, ideas and tags, and what the marks mean
@@ -82,7 +93,7 @@ export function BoardNotes({
         <span className="font-mono text-sm font-semibold">
           {isAhead ? <span className="mr-1 font-sans font-normal text-muted-foreground">Next:</span> : null}
           {numberedMove(shown.ply, shown.san)}
-          {symbol ? <span className={cn(shown.grade && gradeText[shown.grade])}>{symbol}</span> : null}
+          {symbol ? <span className={cn(shown.grade && GRADE_TEXT[shown.grade])}>{symbol}</span> : null}
         </span>
         {shown.name ? <OpeningName {...shown.name} className="text-sm" /> : null}
       </div>
@@ -91,9 +102,7 @@ export function BoardNotes({
         <div className="flex flex-wrap items-center gap-1.5">
           {shown.ideas}
           {shown.tags?.map((tag) => (
-            <Badge key={tag} variant="outline" className={TAG_TONE[tag] ?? 'text-muted-foreground'}>
-              {tag}
-            </Badge>
+            <MoveTag key={tag} tag={tag} />
           ))}
         </div>
       ) : null}

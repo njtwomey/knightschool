@@ -2,16 +2,18 @@ import { numberedMove, playMove, sideToMove, type Grade, type Played } from '@kn
 import { GitBranch, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Board, type BoardPosition } from '@/components/board/board';
+import type { Idea } from '@/components/chess/idea-badge';
 import { MoveChip } from '@/components/chess/move-chip';
 import { MoveRun } from '@/components/chess/move-run';
 import { VerdictBadge } from '@/components/chess/verdict-badge';
+import { EmptyState } from '@/components/shared/empty-state';
 import { siteConfig } from '@/data/site-config';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { MoveNoteEditor, type IdeaOption, type MoveNote } from './move-note-editor';
+import { MoveNoteEditor, type MoveNote } from './move-note-editor';
 
 export type RefutationSymbol = '?!' | '?' | '??';
 
@@ -51,7 +53,7 @@ export type RefutationEditorProps = {
   onDelete?: (id: string, label: string) => void;
   /** A sound move is a line, not a refutation: goes to Branch here. */
   onBranch?: (uci: string) => void;
-  ideas: IdeaOption[];
+  ideas: Idea[];
   orientation?: 'white' | 'black';
   /** Opens straight on adding this wrong move (UCI), as when a common move is picked. */
   startWith?: string;
@@ -150,7 +152,7 @@ export function RefutationEditor({
           </p>
         </header>
         {refutations.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No wrong move is written here yet.</p>
+          <EmptyState kind="new" size="part" text="No wrong move is written here yet." />
         ) : (
           <ul className="grid divide-y rounded-lg border">
             {refutations.map((refutation) => {

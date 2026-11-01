@@ -12,6 +12,7 @@
     "@base-ui/react": "^1.9.0",
     "@fontsource-variable/geist": "5.3.0",
     "@knightschool/core": "workspace:*",
+    "@knightschool/engine": "workspace:*",
     "@shadcn/react": "^0.3.1",
     "chess.js": "1.4.0",
     "class-variance-authority": "0.7.1",
