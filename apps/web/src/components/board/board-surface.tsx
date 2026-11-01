@@ -127,7 +127,7 @@ export function BoardSurface({
     ...arrows.map((arrow) => ({ startSquare: arrow.from, endSquare: arrow.to, color: SYSTEM_RGB[arrow.kind] })),
   ];
   return (
-    <div className={cn('relative aspect-square w-full overflow-hidden shadow-sm', className)}>
+    <div className={cn('relative aspect-square h-auto w-full min-w-0 shrink overflow-hidden shadow-sm', className)}>
       <Chessboard
         options={{
           id,

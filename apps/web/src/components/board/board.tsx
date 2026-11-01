@@ -100,9 +100,11 @@ export function Board({
     ...arrows,
   ];
   return (
-    <div className={cn('grid w-full max-w-xl gap-2', className)}>
-      <div className="flex gap-2">
-        {shows.eval ? <EvalBar score={position.score ?? null} orientation={orientation} /> : null}
+    <div className={cn('grid w-full max-w-xl content-start gap-2 self-start', className)}>
+      <div className="flex items-start gap-2">
+        {shows.eval ? (
+          <EvalBar score={position.score ?? null} orientation={orientation} className="self-stretch" />
+        ) : null}
         <BoardSurface
           epd={position.epd}
           orientation={orientation}
