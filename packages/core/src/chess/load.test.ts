@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { checkFen, fenAfter, firstPlyOf, loadGame, pgnFor, START_FEN } from './load';
+import { checkFen, fenAfter, firstPlyOf, pgnFor, START_FEN } from './load';
+import { loadGame } from './load-game';
 
 const AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
 
@@ -51,10 +52,7 @@ describe('loadGame', () => {
 
   it('refuses text that is neither', () => {
     expect(loadGame('')).toEqual({ ok: false, problem: 'Paste a FEN or a PGN.' });
-    expect(loadGame('hello there')).toEqual({
-      ok: false,
-      problem: 'Not a FEN or a PGN this board can read: 1.hello is not legal here.',
-    });
+    expect(loadGame('hello there')).toEqual({ ok: false, problem: 'Not a FEN or a PGN this board can read.' });
     expect(loadGame('[Event "Nothing"]')).toEqual({ ok: false, problem: 'No moves found: paste a FEN or a PGN.' });
   });
 });

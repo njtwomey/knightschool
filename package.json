@@ -12,6 +12,7 @@
     "preview": "pnpm --filter @knightschool/web preview",
     "lint": "eslint .",
     "typecheck": "pnpm -r typecheck && tsc -p scripts/puzzles && tsc -p scripts/content && tsc -p scripts/analyse",
+    "puzzles": "node --import tsx scripts/puzzles/run.ts",
     "puzzles:index": "node --import tsx scripts/puzzles/index.ts",
     "puzzles:names": "node --import tsx scripts/puzzles/names.ts",
     "puzzles:expand": "node --env-file-if-exists=.env --import tsx scripts/puzzles/expand.ts",

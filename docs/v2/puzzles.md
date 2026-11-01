@@ -1,6 +1,11 @@
 # Puzzles: every Lichess puzzle, matched to where you are
 
-A plan, nothing built. The data is downloaded (below); the jobs and the matching are described, not written.
+Built from the puzzle file alone: `make puzzles` downloads it when missing, indexes it when it changed, names the
+tags and writes `content/puzzles/<opening>.json` for every opening, at the levels the file supports (named variation,
+family, structure, idea). **Expanding the puzzles' games is parked by the user's choice**: the through and after
+levels stay in the code (`scripts/puzzles/expand.ts`, `--games`) but nothing depends on them and no games are
+fetched. Code: `packages/core/src/puzzles/` (reading rows, the start, tags, pawn structure, the shipping filter and
+ranking) and `scripts/puzzles/` (the jobs).
 
 ## The data
 
@@ -58,10 +63,11 @@ Every level also filters by:
 
 ## The jobs
 
-All run on the maintainer's machine, resumable, never by the build. Output is a cache (git-ignored) plus a small
-committed selection, as `make popularity` does today.
+All run on the maintainer's machine, never by the build. Output is a cache (git-ignored) plus a small committed
+selection, as `make popularity` does today. `make puzzles` runs 1, 2 and 4 for every opening (a rerun skips the index
+when the file has not changed: about 30 s); `make puzzles-index`, `puzzles-select` and `puzzles-lookup` run one job.
 
-**1. Index** (minutes). Read the CSV once into a local SQLite file (`.cache/puzzles/puzzles.sqlite`; node has SQLite
+**1. Index** (about 15 minutes; 6,193,530 puzzles, 2.5 GB). Read the CSV once into a local SQLite file (`.cache/puzzles/puzzles.sqlite`; node has SQLite
 built in): one row per puzzle, plus its tags, themes, game id, ply, the solver's side and its pawn structure. Indexes on
 tag, theme, rating and structure.
 
@@ -69,7 +75,10 @@ tag, theme, rating and structure.
 fetched by the build) give each tag its moves: "Italian_Game_Classical_Variation" is the shortest named line in that
 variation. Replaying those moves gives the positions along each tag, so an opening's positions can be matched to tags.
 
-**3. Expand** (hours to days, in the background). Fetch each puzzle's game from Lichess (`POST
+**3. Expand: parked by the user's choice.** Nothing depends on it and `make puzzles` does not run it; the script
+(`scripts/puzzles/expand.ts`) stays for later. A sample of four requests (1,200 Italian games, kept in the cache)
+measured about 30 games a second, so the tagged puzzles would take about 12 hours and all of them about 2.5 days. As
+planned (hours to days, in the background): Fetch each puzzle's game from Lichess (`POST
 /api/games/export/_ids`, up to 300 games a request, one request at a time, a pause after a 429, the token from
 `.env`), replay its moves up to the puzzle, and keep, per game, the positions it passed through in the first 30 or so
 plies. Then an inverted index: **position → puzzles whose game passed through it**, kept for positions that at least
@@ -77,7 +86,7 @@ a few puzzle games reach.
 
 - The 1.2 million tagged puzzles first (their games are in the opening): roughly half a day.
 - Then the rest, which is what finds the middlegame puzzles from games that began in our openings: several days.
-- The streaming rate for this endpoint is not documented; measure it on a small run before estimating properly.
+- The streaming rate measured about 30 games a second with a token (above).
 - The alternative, Lichess's monthly game dumps, is tens of gigabytes per month across a decade: not worth it.
 
 **4. Select** (minutes). For an opening (or any set of lines, including one written in Create), walk its positions,
@@ -105,6 +114,6 @@ up: the matching can be tried on v1's lines today and kept for whatever replaces
 
 ## Questions
 
-1. How deep should expansion go: the tagged 1.2 million first, then all 6.2 million?
+1. How deep should expansion go: the tagged 1.2 million first, then all 6.2 million? (Parked: puzzles only for now.)
 2. How close counts as "same structure": identical pawns only, or most of them?
 3. How many puzzles per step and per opening before it feels like padding?

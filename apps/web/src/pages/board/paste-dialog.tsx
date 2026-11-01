@@ -1,4 +1,5 @@
-import { loadGame, type LoadedGame } from '@knightschool/core';
+import { type LoadedGame } from '@knightschool/core';
+import { loadGame } from '@knightschool/core/pgn';
 import { ClipboardPaste } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';

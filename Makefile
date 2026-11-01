@@ -49,17 +49,17 @@ hooks: ## Install the git pre-push hook
 
 # Puzzle jobs (docs/v2/puzzles.md), on the maintainer's machine, never by the build. Options go in ARGS, as
 # make puzzles-lookup ARGS='--moves "e4 e5 Nf3 Nc6 Bc4" --theme fork'.
-.PHONY: puzzles-index puzzles-expand puzzles-select puzzles-lookup
+.PHONY: puzzles puzzles-index puzzles-select puzzles-lookup
 ARGS ?=
+
+puzzles: ## Update content/puzzles/ for every opening (downloads and indexes only when needed)
+	$(PNPM) puzzles $(ARGS)
 
 puzzles-index: ## Index the Lichess puzzle file and name its opening tags (minutes)
 	$(PNPM) puzzles:index $(ARGS)
 	$(PNPM) puzzles:names
 
-puzzles-expand: ## Fetch puzzles' games from Lichess (resumable; hours)
-	$(PNPM) puzzles:expand $(ARGS)
-
-puzzles-select: ## Choose the Italian's puzzles into content/puzzles/
+puzzles-select: ## Choose puzzles for one opening JSON or --moves (default the Italian)
 	$(PNPM) puzzles:select $(ARGS)
 
 puzzles-lookup: ## Ask the puzzle index by hand (ARGS='--moves "e4 e5 Nf3"')

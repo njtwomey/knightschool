@@ -2,3 +2,6 @@ pnpm-lock.yaml
 dist
 coverage
 apps/web/src/components/ui
+content/popularity
+content/analysis
+content/puzzles
