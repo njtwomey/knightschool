@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, ExternalLink, Search, X } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -70,6 +70,11 @@ export function MocksPage() {
       entries: shown.filter((entry) => entry.group === group),
     }));
   }, [query]);
+  const content = useRef<HTMLDivElement>(null);
+  // Moving to another component starts at the top of its variants, not at the last one's scroll depth.
+  useEffect(() => {
+    content.current?.scrollTo({ top: 0 });
+  }, [open]);
   const openEntry = CATALOGUE.find((entry) => entry.id === open);
   // Built components in the gallery's order, so the dialog can move to the previous or next one without closing.
   const built = CATALOGUE.filter((entry) => BUILT.has(entry.id));
@@ -113,7 +118,7 @@ export function MocksPage() {
         </section>
       ))}
       <Dialog open={Boolean(openItem)} onOpenChange={(next) => !next && choose(null)}>
-        <DialogContent showCloseButton={false} className="max-h-[90svh] overflow-y-auto sm:max-w-5xl">
+        <DialogContent ref={content} showCloseButton={false} className="max-h-[90svh] overflow-y-auto sm:max-w-5xl">
           {openEntry && openItem ? (
             <>
               <DialogHeader className="sticky -top-4 z-20 -mx-4 -mt-4 border-b bg-popover px-4 pt-4 pb-3">
