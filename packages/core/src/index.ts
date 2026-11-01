@@ -14,3 +14,4 @@ export * from './puzzles/select';
 export * from './judge/judge';
 export * from './training';
 export * from './data/jsonl';
+export * from './exercise';

@@ -1,16 +1,14 @@
-import { numberedMove } from '@knightschool/core';
+import { numberedMove, type Exercise } from '@knightschool/core';
 import type { BuiltOpening, BuiltStep, OpeningFacts } from '@knightschool/core/content';
 import { ArrowLeft, ArrowRight, BookOpen, Target } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Board } from '@/components/board/board';
-import { BoardFeedback } from '@/components/board/board-feedback';
-import { TriesTable } from '@/components/chess/tries-table';
 import { Button } from '@/components/ui/button';
 import { loadFacts, loadOpening } from '@/data/content';
-import { siteConfig } from '@/data/site-config';
 import { useLoad } from '@/hooks/use-load';
 import { bakedScore, stepMoves } from './model';
-import { useTry } from './use-try';
+import { ExerciseBoard } from '@/features/practice/exercise-board';
+import { useExerciseSession } from '@/features/practice/use-exercise-session';
 import { openingHref, stepHref } from './views';
 
 type Stage = 'watch' | 'try' | 'done';
@@ -185,54 +183,33 @@ function TryStage({
   step: BuiltStep;
   onDone: () => void;
 }) {
-  const session = useTry(opening, step, facts);
-  const triesLeft =
-    siteConfig.teach.triesBeforeShown - session.attempt.tries.filter((t) => t.outcome === 'wrong').length;
+  const exercises = useMemo<Exercise[]>(() => {
+    const { moves } = stepMoves(opening, step);
+    return [
+      {
+        id: step.id,
+        mode: 'try',
+        start: moves[0]!.before,
+        side: opening.side,
+        grader: { kind: 'exact' },
+        responder: { kind: 'scripted', script: moves.map((move) => move.uci) },
+      },
+    ];
+  }, [opening, step]);
+  const session = useExerciseSession({ exercises, opening, facts, save: 'moves' });
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
-      <Board
-        positions={[{ epd: session.epd, lastMove: session.lastMove }]}
-        index={0}
-        reveal={session.phase === 'done' ? 'answered' : 'test'}
-        orientation={opening.side}
-        flippable={false}
-        interactive={Boolean(session.asking)}
-        onMove={session.play}
-        badge={session.badge}
-        arrows={session.arrows}
-        lit={session.hintSquare ? [session.hintSquare] : undefined}
-        exercise={
-          session.asking
-            ? {
-                help: session.attempt.shown ? 'shown' : session.attempt.hint ? 'hint' : 'none',
-                onHint: session.hint,
-                onShow: session.show,
-                triesSpent: triesLeft <= 0,
-              }
-            : undefined
-        }
-        caption={
-          session.asking ? (
-            <p className="font-medium">Your move: what does {opening.side === 'white' ? 'White' : 'Black'} play?</p>
-          ) : session.phase === 'done' ? (
-            <p className="font-medium">Step done.</p>
-          ) : (
-            <p className="text-muted-foreground">The other side is moving…</p>
-          )
-        }
-      />
-      <div className="grid content-start gap-4">
-        <BoardFeedback feedback={session.feedback} reveal="answered" triesLeft={triesLeft} />
-        <TriesTable tries={session.tries} />
-        {session.phase === 'done' ? (
+    <ExerciseBoard
+      session={session}
+      footer={
+        session.done ? (
           <div>
             <Button onClick={onDone}>
               <BookOpen aria-hidden /> Finish the step
             </Button>
           </div>
-        ) : null}
-      </div>
-    </div>
+        ) : null
+      }
+    />
   );
 }
 
