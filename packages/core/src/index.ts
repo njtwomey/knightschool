@@ -6,3 +6,8 @@ export * from './judge/grade';
 export * from './annotations/marks';
 export * from './config/site-config';
 export * from './annotations/icons';
+export * from './puzzles/puzzle';
+export * from './puzzles/opening-tags';
+export * from './puzzles/structure';
+export * from './puzzles/select';
+export * from './judge/judge';
