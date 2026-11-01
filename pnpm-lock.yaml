@@ -220,9 +220,15 @@ importers:
       '@knightschool/engine':
         specifier: workspace:*
         version: link:../../packages/engine
+      '@knightschool/storage':
+        specifier: workspace:*
+        version: link:../../packages/storage
       '@shadcn/react':
         specifier: ^0.3.1
         version: 0.3.1(@types/react@19.3.0)(react@19.3.1)
+      '@sqlite.org/sqlite-wasm':
+        specifier: 3.53.4-build2
+        version: 3.53.4-build2
       chess.js:
         specifier: 1.4.0
         version: 1.4.0
@@ -341,6 +347,18 @@ importers:
       '@knightschool/core':
         specifier: workspace:*
         version: link:../core
+
+  packages/storage:
+    dependencies:
+      '@knightschool/core':
+        specifier: workspace:*
+        version: link:../core
+      '@sqlite.org/sqlite-wasm':
+        specifier: 3.53.4-build2
+        version: 3.53.4-build2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
 
 packages:
 
@@ -1689,6 +1707,10 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@sqlite.org/sqlite-wasm@3.53.4-build2':
+    resolution: {integrity: sha512-kQVArGJA4z7s56Dm8t+eTBXad4LiohuVj9pfgDNOcxa+Ic5xMrWlLPTq6cT0hw5S4MIvtpsraW+B0wD+IPvC7A==}
+    engines: {node: '>=22'}
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -5305,6 +5327,8 @@ snapshots:
   '@shikijs/vscode-textmate@10.0.2': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@sqlite.org/sqlite-wasm@3.53.4-build2': {}
 
   '@standard-schema/spec@1.1.0': {}
 

@@ -196,7 +196,7 @@ export function BoardSurface({
           allowDrawingArrows: false,
           lightSquareStyle: { backgroundColor: theme.light },
           darkSquareStyle: { backgroundColor: theme.dark },
-          animationDurationInMs: settings.animation ? (siteConfig.timing.pieceMove ?? 250) : 0,
+          animationDurationInMs: settings.animation ? siteConfig.timing.pieceMove : 0,
           showAnimations: settings.animation,
           onPieceDrag: ({ square }) => {
             if (canMove && square) setSelected(square);

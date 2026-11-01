@@ -119,4 +119,29 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // The learner database works over an SqlExecutor it is given (the browser's worker lives in the web app): no React,
+    // DOM or node, nothing from the engine or the app, and only core's types.
+    files: ['packages/storage/src/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@knightschool/core',
+              message: 'Storage may import core types only (import type).',
+              allowTypeImports: true,
+            },
+          ],
+          patterns: [
+            {
+              group: ['react', 'react-dom', 'node:*', '@knightschool/engine', '@knightschool/web', '@/*'],
+              message: 'Storage is pure: no React, DOM, node, engine or app imports.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 );

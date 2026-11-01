@@ -4,14 +4,13 @@
  * Runs the native Stockfish (env STOCKFISH, else `stockfish` on the PATH) over every position of every opening, and
  * the positions after the moves players at the band play there (each played in at least --replies of the games, from
  * content/popularity), so the common wrong moves are judged before anyone plays them. Stores the results in
- * content/analysis/analysis.json (committed; White's point of view; three lines each). One engine, one thread, one
+ * content/analysis/analysis.jsonl (committed; White's point of view; three lines each). One engine, one thread, one
  * position at a time; resumable (a position already at the depth is skipped); saved every 10 positions and on Ctrl-C.
  */
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { gameOver, playMove } from '../../packages/core/src/index.ts';
-import { loadContent, root } from '../content/load.ts';
-import { startEngine, type Line } from './uci.ts';
+import { loadContent } from '../content/load.ts';
+import { readAnalysis, readPopularity, writeAnalysis, type AnalysisEntry } from '../data-files.ts';
+import { startEngine } from './uci.ts';
 
 const args = process.argv.slice(2);
 const flag = (name: string) => {
@@ -20,24 +19,19 @@ const flag = (name: string) => {
 };
 const content = loadContent();
 const depth = Number(flag('depth') ?? content.config.engine.bakedDepth);
-const minShare = Number(flag('replies') ?? 0.03);
+const minShare = Number(flag('replies') ?? content.config.coverage.analyseShare);
 const force = args.includes('--force');
 
-type Entry = { depth: number; lines: Line[] };
-const file = join(root, 'content/analysis/analysis.json');
-const stored: { engine: string; threads: number; hash: number; date: string; positions: Record<string, Entry> } =
-  existsSync(file)
-    ? JSON.parse(readFileSync(file, 'utf8'))
-    : { engine: '', threads: 1, hash: 256, date: '', positions: {} };
-const popularity: Record<
-  string,
-  {
-    white: number;
-    draws: number;
-    black: number;
-    moves: { uci: string }[] & { white: number; draws: number; black: number }[];
-  }
-> = JSON.parse(readFileSync(join(root, 'content/popularity/popularity.json'), 'utf8')).positions;
+type Entry = AnalysisEntry;
+const read = readAnalysis();
+const stored: { engine: string; threads: number; hash: number; date: string; positions: Record<string, Entry> } = {
+  engine: read.meta?.engine ?? '',
+  threads: 1,
+  hash: 256,
+  date: read.meta?.date ?? '',
+  positions: read.byEpd,
+};
+const popularity = readPopularity().byEpd;
 
 // What to analyse: every position of every opening, then the positions after the band's popular moves there.
 const targets = new Set<string>();
@@ -74,8 +68,10 @@ const engine = startEngine(process.env.STOCKFISH ?? 'stockfish', { threads: 1, h
 const save = async () => {
   stored.engine = await engine.name;
   stored.date = new Date().toISOString().slice(0, 10);
-  const positions = Object.fromEntries(Object.entries(stored.positions).sort(([a], [b]) => (a < b ? -1 : 1)));
-  writeFileSync(file, `${JSON.stringify({ ...stored, positions }, null, 1)}\n`);
+  writeAnalysis(
+    { kind: 'analysis', engine: stored.engine, threads: 1, hash: 256, date: stored.date },
+    stored.positions,
+  );
 };
 process.on('SIGINT', async () => {
   await save();

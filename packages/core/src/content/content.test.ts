@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildOpening } from './build-opening';
+import { explorerUci, openingFacts } from './facts';
 import { readLine } from './line-pgn';
 import { OpeningFile } from './schema';
 import { resolveLines } from './theory';
@@ -104,5 +105,21 @@ describe('building an opening', () => {
     const file = { ...opening, variations: [{ ...opening.variations[0]!, lines: ['main', 'other'] }] };
     expect(() => buildOpening('x', file, resolveLines([main, other]), 4)).toThrow(/two answers/);
     expect(() => buildOpening('x', { ...file, alternatives: ['other'] }, resolveLines([main, other]), 4)).not.toThrow();
+  });
+});
+
+describe('opening facts', () => {
+  const built = buildOpening('italian-white', opening, resolveLines([main, branch]), 4);
+  const start = built.startEpd;
+  it('keeps evaluations and counts for the opening and the band’s popular replies, mapping castling', () => {
+    const facts = openingFacts(
+      built,
+      { [start]: { depth: 20, lines: [{ cp: 30, pv: ['f8c5'] }] }, unrelated: { depth: 1, lines: [] } },
+      { [start]: { white: 6, draws: 0, black: 4, moves: [{ uci: 'f8c5', san: 'Bc5', white: 4, draws: 0, black: 2 }] } },
+      0.03,
+    );
+    expect(Object.keys(facts.evals)).toEqual([start]);
+    expect(facts.counts[start]).toEqual({ games: 10, moves: [{ uci: 'f8c5', san: 'Bc5', games: 6 }] });
+    expect(explorerUci('e1h1')).toBe('e1g1');
   });
 });

@@ -4,9 +4,8 @@
  * supports: through and after (expanded games), named variation and family (opening tags), structure (pawns), idea
  * (themes of the opening's ideas). Then core's `choosePuzzles` filters, keeps one puzzle per game, ranks and caps.
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
-import { format, resolveConfig } from 'prettier';
+import { writeSelection as writeJsonlSelection } from '../data-files.ts';
+import { relative } from 'node:path';
 import {
   choosePuzzles,
   pawnStructure,
@@ -143,13 +142,12 @@ function toSelection(input: MatchInput, chosen: Match[], config: SiteConfig, fil
   };
 }
 
-export const selectionPath = (id: string) => join(root, 'content/puzzles', `${id}.json`);
+export { selectionPath } from '../data-files.ts';
 
-/** Writes a selection as Prettier would format it, so `make check` passes on the committed file. */
-export async function writeSelection(path: string, selection: SelectionResult['selection']): Promise<void> {
-  mkdirSync(dirname(path), { recursive: true });
-  const prettier = (await resolveConfig(path)) ?? {};
-  writeFileSync(path, await format(JSON.stringify(selection), { ...prettier, filepath: path }));
+/** Writes a selection as JSON Lines: what it was chosen with on the meta line, then one puzzle per line. */
+export function writeSelection(path: string, selection: SelectionResult['selection']): void {
+  const { puzzles, ...meta } = selection;
+  writeJsonlSelection(path, meta, puzzles);
 }
 
 /** One line per opening: puzzles chosen per level, then the total and where they went. */

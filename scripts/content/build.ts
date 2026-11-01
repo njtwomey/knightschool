@@ -4,6 +4,8 @@
  */
 import { mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { openingFacts } from '../../packages/core/src/content/index.ts';
+import { readAnalysis, readPopularity, readSelection, selectionPath } from '../data-files.ts';
 import { loadContent, root } from './load.ts';
 
 const started = Date.now();
@@ -39,8 +41,15 @@ const catalog = {
   tracks: content.tracks,
 };
 writeFileSync(join(staging, 'catalog.json'), JSON.stringify(catalog));
-for (const opening of content.openings)
+const analysis = readAnalysis().byEpd;
+const popularity = readPopularity().byEpd;
+for (const opening of content.openings) {
   writeFileSync(join(staging, 'openings', `${opening.id}.json`), JSON.stringify(opening));
+  const facts = openingFacts(opening, analysis, popularity, content.config.coverage.analyseShare);
+  writeFileSync(join(staging, 'openings', `${opening.id}.facts.json`), JSON.stringify(facts));
+  const puzzles = readSelection(selectionPath(opening.id));
+  if (puzzles) writeFileSync(join(staging, 'openings', `${opening.id}.puzzles.json`), JSON.stringify(puzzles));
+}
 rmSync(out, { recursive: true, force: true });
 mkdirSync(join(root, 'apps/web/public'), { recursive: true });
 renameSync(staging, out);

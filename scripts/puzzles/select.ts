@@ -42,6 +42,6 @@ const matcher = createMatcher(db, filter, {}, { games: values.games });
 const result = selectPuzzles(input, matcher, config, filter, values.moves ? 'moves' : relative(root, openingPath));
 db.close();
 const out = values.out ?? selectionPath(input.id);
-await writeSelection(out, result.selection);
+writeSelection(out, result.selection);
 console.log(summary(result, out, config.puzzles.levels));
 console.log(seconds(started));

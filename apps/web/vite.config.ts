@@ -23,4 +23,8 @@ export default defineConfig({
       '@content': fileURLToPath(new URL('../../content', import.meta.url)),
     },
   },
+  // sqlite-wasm finds its .wasm next to its own module, so it must not be pre-bundled; the database worker
+  // (data/storage/worker.ts) is an ES module.
+  optimizeDeps: { exclude: ['@sqlite.org/sqlite-wasm'] },
+  worker: { format: 'es' },
 });

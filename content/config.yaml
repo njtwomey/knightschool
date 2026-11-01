@@ -39,6 +39,7 @@ timing: # app: base delays in milliseconds; the learner's speed setting multipli
 coverage:
   band: { ratings: [1000, 1200, 1400, 1600], speeds: [blitz, rapid] } # both: the explorer band
   minShare: 0.05 # both: a reply this common must be answered
+  analyseShare: 0.03 # build: the band's replies at least this common are analysed and shipped with an opening
   punishShare: 0.1 # build: an opponent mistake this common must be punished
   punishLossCp: 150 # build: ...when it loses at least this much
 

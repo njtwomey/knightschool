@@ -2,6 +2,7 @@
  * What the puzzle jobs read besides the puzzle database: Lichess's opening names, and the lines to match puzzles to
  * (a move list, a built opening from content:build, or the example fixture).
  */
+import { readPopularity } from '../data-files.ts';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse } from 'yaml';
@@ -159,20 +160,10 @@ export function linesFromBuilt(opening: BuiltOpening, ideas: IdeasFile, reach: M
   return { id: opening.id, side: opening.side, startPly: opening.startPly, lines, themes, reach, extra };
 }
 
-/** Games reaching each position in the explorer band (content/popularity/popularity.json); empty when it is missing. */
+/** Games reaching each position in the explorer band (content/popularity/popularity.jsonl); empty when it is missing. */
 export function loadReach(): Map<string, number> {
-  const path = join(root, 'content/popularity/popularity.json');
   const reach = new Map<string, number>();
-  if (!existsSync(path)) return reach;
-  try {
-    const json = JSON.parse(readFileSync(path, 'utf8')) as {
-      positions?: Record<string, { white?: number; draws?: number; black?: number }>;
-    };
-    for (const [epd, node] of Object.entries(json.positions ?? {})) {
-      reach.set(epd, (node.white ?? 0) + (node.draws ?? 0) + (node.black ?? 0));
-    }
-  } catch {
-    console.log('content/popularity/popularity.json did not read; ranking without reach');
-  }
+  for (const [epd, node] of Object.entries(readPopularity().byEpd))
+    reach.set(epd, node.white + node.draws + node.black);
   return reach;
 }

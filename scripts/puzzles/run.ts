@@ -82,7 +82,7 @@ for (const opening of content.openings) {
   const input = linesFromBuilt(opening, content.ideas, reach);
   const result = selectPuzzles(input, matcher, config, filter, `content/openings/${opening.id}.yaml`);
   const path = selectionPath(opening.id);
-  await writeSelection(path, result.selection);
+  writeSelection(path, result.selection);
   console.log(summary(result, path, config.puzzles.levels));
 }
 db.close();
