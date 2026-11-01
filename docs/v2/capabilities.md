@@ -1,7 +1,7 @@
 # Capabilities
 
 The shared engines under the pages. Each is one module with one job, used by every page that needs it. v1 has most of
-them in some form; the table under each says what moves in. [../BEYOND-OPENINGS.md](../BEYOND-OPENINGS.md) has the first
+them in some form; the table under each says what moves in. [beyond-openings.md](beyond-openings.md) has the first
 draft of the judgement and exercise designs in more detail.
 
 ## 1. Content: the tree, openings and the build

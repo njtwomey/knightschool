@@ -1,7 +1,6 @@
 packages:
   - apps/*
   - packages/*
-minimumReleaseAgeExclude:
-  - lucide-react@1.56.0
-allowBuilds:
-  esbuild: true
+
+# Supply-chain safety: never install a version published less than 14 days ago (in minutes).
+minimumReleaseAge: 20160

@@ -1,11 +1,4 @@
 pnpm-lock.yaml
-dist/
-coverage/
-apps/web/public/content/
-apps/web/public/engine/
-content/**/*.pgn
-docs/PLAN.md
-docs/CURRICULUM.md
-content/popularity/popularity.json
-.content/
-.claude/worktrees/
+dist
+coverage
+apps/web/src/components/ui

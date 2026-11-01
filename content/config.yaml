@@ -1,0 +1,60 @@
+# How the site behaves, the same for everyone (docs/v2/config.md). Learners never change these; their own choices are
+# settings. Each key says where it is used: build (scripts only), app (browser only) or both.
+
+teach:
+  stepMoves: 4 # both: about how many of your moves make a step
+  stages: [read, watch, try, mistakes, done] # app: the stages of a step, in order
+  hintFadeAfterRight: 2 # app: right answers in a row before the Watch arrow stops showing
+  hintReturnAfterWrong: 2 # app: wrong answers before it comes back
+  triesBeforeShown: 2 # app: wrong tries before the move is shown
+  gates: true # app: steps and checkpoints lock what follows
+  testOut: true # app: a gate can be passed by taking its check
+  firstStepOpen: true # app: the first step of every opening is always open
+
+judge:
+  # app and build: drops in the mover's winning chances (Lichess's scale, -1 to 1) for each grade
+  grades: { best: 0.01, excellent: 0.04, good: 0.1, inaccuracy: 0.2, mistake: 0.3 }
+  # app: winning-chance bands for the words: equal, a little better, clearly better, then winning
+  evalWords: { equal: 0.05, littleBetter: 0.18, clearlyBetter: 0.43 }
+  refutationPlies: 6 # both: plies of the punishing line a refutation shows
+  knownAfterRight: 2 # app: right answers in a row before a move counts as known
+  masteredDays: 7 # app: FSRS interval at which a move counts as mastered
+  easyWithinMs: 5000 # app: a quick right answer is Easy
+
+schedule:
+  retention: 0.9 # app: FSRS target, the default of the learner's setting
+  maxIntervalDays: 365 # app
+  newPerDay: { default: 10, min: 0, max: 50 } # app: default and range of the learner's setting
+  sessionSize: { default: 20, min: 5, max: 100 } # app
+
+timing: # app: base delays in milliseconds; the learner's speed setting multiplies them
+  correctBadge: 250
+  wrongBadge: 900
+  afterCorrect: 350
+  opponent: 500
+  nextCard: 700
+
+coverage:
+  band: { ratings: [1000, 1200, 1400, 1600], speeds: [blitz, rapid] } # both: the explorer band
+  minShare: 0.05 # both: a reply this common must be answered
+  punishShare: 0.1 # build: an opponent mistake this common must be punished
+  punishLossCp: 150 # build: ...when it loses at least this much
+
+puzzles:
+  levels: [through, after, variation, family, structure, idea] # both: match levels, strongest first
+  perStep: 2 # app
+  perOpening: 300 # build
+  select: { minRating: 600, maxRating: 1800, minPopularity: 80, minPlays: 500 } # build
+
+opponent:
+  playOnMoves: 5 # app
+  playOnTolerance: mistake # app: the worst grade allowed for a pass
+  deviationJudgeAfter: 3 # app
+
+engine:
+  liveDepth: 14 # app
+  bakedDepth: 24 # build
+
+lichess:
+  pauseAfter429Ms: 60000 # both
+  cacheDays: 30 # app

@@ -1,18 +1,61 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
 
 @custom-variant dark (&:is(.dark *));
 
-/* shadcn/ui tokens. Primary is the chalkboard green from the icon (#2f5d50). */
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
 :root {
-  --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.43 0.06 170);
+  --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -24,17 +67,20 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  /* Lines in a course's tree, one hue each (features/tree). Mid lightness so a tint and the full colour both read. */
-  --line-0: oklch(0.55 0.15 255);
-  --line-1: oklch(0.6 0.16 45);
-  --line-2: oklch(0.55 0.14 150);
-  --line-3: oklch(0.55 0.18 330);
-  --line-4: oklch(0.6 0.13 200);
-  --line-5: oklch(0.62 0.15 85);
-  --line-6: oklch(0.5 0.17 290);
-  --line-7: oklch(0.58 0.17 15);
-  --line-8: oklch(0.55 0.12 120);
-  --line-9: oklch(0.5 0.12 230);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 .dark {
@@ -44,8 +90,8 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.62 0.07 170);
-  --primary-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -56,41 +102,19 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --line-0: oklch(0.72 0.13 255);
-  --line-1: oklch(0.75 0.14 45);
-  --line-2: oklch(0.74 0.14 150);
-  --line-3: oklch(0.72 0.15 330);
-  --line-4: oklch(0.76 0.11 200);
-  --line-5: oklch(0.8 0.13 85);
-  --line-6: oklch(0.7 0.14 290);
-  --line-7: oklch(0.72 0.15 15);
-  --line-8: oklch(0.76 0.12 120);
-  --line-9: oklch(0.7 0.1 230);
-}
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
@@ -100,61 +124,11 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* Board squares follow the theme; the green matches the app icon. */
-:root {
-  --board-light: oklch(0.93 0.03 100);
-  --board-dark: oklch(0.58 0.07 160);
-  --board-highlight: oklch(0.85 0.15 95 / 55%);
-}
-
-.dark {
-  --board-light: oklch(0.8 0.03 100);
-  --board-dark: oklch(0.45 0.06 165);
-}
-
-/*
- * Board size: one rule for every board. A board is as wide as its column, never wider than its cap, and never taller
- * than the screen less --board-chrome: the header above and the controls below, so a move never needs a scroll. There
- * are two caps: 36rem for the board a page is about (Play, Quiz, Speed, Name it, Lab, a course, Create), and 22rem for a
- * board beside other content (`.board-aside`: a line's About, the tree, the path, board search). On a phone held
- * sideways the header scrolls away and the board sits beside its panel (the `short` variant), so it can use more of the
- * height. Every study board is a `StudyBoard` (components/board/study-board.tsx), which applies this.
- */
-@custom-variant short (@media (orientation: landscape) and (max-height: 32rem));
-/* When .board-columns is one column: the board and its panel stacked, on a phone held upright or a narrow window. */
-@custom-variant stacked (@media (width < 64rem) and (not ((orientation: landscape) and (max-height: 32rem))));
-
-:root {
-  --board-chrome: 11rem;
-  --board-cap: 36rem;
-}
-
-@media (orientation: landscape) and (max-height: 32rem) {
-  :root {
-    --board-chrome: 6rem;
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
-}
-
-/* Worked out again wherever the cap changes, since a custom property is computed where it is declared. */
-:root,
-.board-columns,
-.board-aside {
-  --board-size: min(var(--board-cap), max(12rem, calc(100dvh - var(--board-chrome))));
-}
-
-.board-aside {
-  --board-cap: 22rem;
-}
-
-/*
- * A page with the board in one column and its panel in the other: stacked on a phone, side by side from lg up and on a
- * phone held sideways. A plain class, outside Tailwind's layers, so the page's own grid classes cannot undo it.
- */
-.board-columns {
-  grid-template-columns: minmax(0, 1fr);
-  @media (width >= 64rem), (orientation: landscape) and (max-height: 32rem) {
-    grid-template-columns: minmax(0, var(--board-size)) minmax(0, 1fr);
+  html {
+    @apply font-sans;
   }
 }

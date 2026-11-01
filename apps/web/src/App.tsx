@@ -1,44 +1,28 @@
-import { useEffect } from 'react';
-import { PageErrorBoundary } from '@/components/error-boundary';
-import { SiteFooter } from '@/components/site-footer';
-import { useCatalog } from '@/data/catalog-store';
-import { useStorage } from '@/data/storage';
-import { navigate, usePathname } from '@/router/location';
-import { parseRoute } from '@/router/route';
-import { PausedBanner, SiteHeader } from './app/header';
-import { Routes } from './app/routes';
+import { lazy, Suspense } from 'react';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { Header } from '@/app/header';
+import { HomePage } from '@/pages/home-page';
+import { NotFoundPage } from '@/pages/not-found-page';
+import { usePath } from '@/router/location';
+
+const MocksPage = lazy(() => import('@/mocks/mocks-page').then((module) => ({ default: module.MocksPage })));
+
+function Page({ path }: { path: string }) {
+  if (path === '/') return <HomePage />;
+  if (path === '/mocks') return <MocksPage />;
+  return <NotFoundPage />;
+}
 
 export function App() {
-  const pathname = usePathname();
-  const route = parseRoute(pathname);
-  const selectCourse = useCatalog((state) => state.selectCourse);
-  const loadIndex = useCatalog((state) => state.loadIndex);
-  const courseId = route.page === 'course' ? route.id : null;
-
-  useEffect(() => {
-    void loadIndex();
-    void useStorage.getState().open();
-  }, [loadIndex]);
-
-  useEffect(() => {
-    void selectCourse(courseId);
-  }, [courseId, selectCourse]);
-
-  // Writing courses was once a Profile tab; its old address shows Create.
-  useEffect(() => {
-    if (/^\/profile\/author\/?$/.test(pathname)) navigate('/create', { replace: true });
-  }, [pathname]);
-
+  const path = usePath();
   return (
-    <div className="flex min-h-dvh flex-col bg-background text-foreground">
-      <SiteHeader route={route} />
-      <PausedBanner />
-      <main className="min-h-dvh flex-1">
-        <PageErrorBoundary resetKey={pathname}>
-          <Routes route={route} />
-        </PageErrorBoundary>
-      </main>
-      <SiteFooter />
-    </div>
+    <TooltipProvider delayDuration={300}>
+      <div className="min-h-svh bg-background text-foreground">
+        <Header />
+        <Suspense fallback={<div className="p-8 text-muted-foreground">Loading…</div>}>
+          <Page path={path} />
+        </Suspense>
+      </div>
+    </TooltipProvider>
   );
 }

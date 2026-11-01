@@ -1,70 +1,53 @@
-# Thin wrapper over the pnpm scripts in package.json. `make` alone lists the targets.
-# Uses a global pnpm if one runs, otherwise the pinned version through npx. (A version manager's shim can be on the PATH
-# with no version chosen, so the test is that `pnpm --version` works, not that the command exists.)
-
-PNPM_VERSION := $(shell node -p "require('./package.json').packageManager.split('@')[1]")
+# Knight School. Run `make` to list the targets.
+# A version-manager shim for pnpm can be on the PATH without working, so test that it runs before using it.
+PNPM_VERSION := 12.11.2
 PNPM ?= $(shell pnpm --version >/dev/null 2>&1 && echo pnpm || echo npx -y pnpm@$(PNPM_VERSION))
 
 .DEFAULT_GOAL := help
-.PHONY: help install dev doctor gaps popularity build preview test test-watch lint fix format format-check typecheck check pre-push hooks clean
+.PHONY: help install dev build preview check lint typecheck test format fix pre-push hooks ux
 
-help: ## List targets
-	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  make %-13s %s\n", $$1, $$2}'
+help: ## List the targets
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-10s %s\n", $$1, $$2}'
 
-node_modules: package.json pnpm-lock.yaml $(wildcard apps/*/package.json packages/*/package.json)
+install: ## Install dependencies
 	$(PNPM) install
-	@touch node_modules
 
-install: node_modules ## Install dependencies
-
-dev: node_modules ## Run the site locally with hot reload (http://localhost:5173)
+dev: ## Run the dev server
 	$(PNPM) dev
 
-build: node_modules ## Typecheck and build the site into apps/web/dist
+build: ## Build the site
 	$(PNPM) build
 
-doctor: node_modules ## Report overlaps in content/ (moves written twice, unlisted chapters, shared lines); never fails
-	$(PNPM) content:doctor
-
-gaps: node_modules ## Where the courses have no answer to replies club players often play, ranked by how often (popularity data)
-	$(PNPM) content:gaps
-
-popularity: node_modules ## Fetch how often players reach each position from Lichess into content/popularity (needs LICHESS_TOKEN in .env)
-	$(PNPM) popularity
-
-preview: build ## Serve the production build locally
+preview: ## Serve the built site
 	$(PNPM) preview
 
-test: node_modules ## Run all Vitest tests once
-	$(PNPM) test
-
-test-watch: node_modules ## Run Vitest in watch mode
-	$(PNPM) test:watch
-
-lint: node_modules ## ESLint, including the package boundary rules
+lint: ## ESLint
 	$(PNPM) lint
 
-fix: node_modules ## Auto-fix lint issues and format everything
-	$(PNPM) lint:fix
-	$(PNPM) format
-
-format: node_modules ## Format with Prettier
-	$(PNPM) format
-
-format-check: node_modules ## Fail if anything is not Prettier-formatted
-	$(PNPM) format:check
-
-typecheck: node_modules ## tsc --noEmit in every package
+typecheck: ## TypeScript, every package
 	$(PNPM) typecheck
 
-check: format-check lint typecheck test ## Everything CI checks except the build
+test: ## Vitest, every package
+	$(PNPM) test
 
-pre-push: check build ## What to run before pushing; same as CI
+format: ## Prettier check
+	$(PNPM) format:check
 
-hooks: ## Install a git pre-push hook that runs `make pre-push`
-	@printf '#!/bin/sh\nexec make pre-push\n' > .git/hooks/pre-push
-	@chmod +x .git/hooks/pre-push
-	@echo "Installed .git/hooks/pre-push"
+check: format lint typecheck test ## Everything checked before a push
 
-clean: ## Remove build output and node_modules
-	rm -rf apps/web/dist coverage node_modules apps/*/node_modules packages/*/node_modules
+fix: ## ESLint autofix and Prettier
+	$(PNPM) exec eslint . --fix
+	$(PNPM) format
+
+pre-push: check build ## What must pass before every push
+
+hooks: ## Install the git pre-push hook
+	printf '#!/bin/sh\nmake pre-push\n' > .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+
+# The shadcn CLI runs `pnpm add` itself, so it is given a pnpm that works even where a version-manager shim does not.
+SHADCN := shadcn@4.22.0
+SHIM := $(CURDIR)/.cache/bin
+
+ux: ## Install every shadcn component with the CLI, as generated
+	mkdir -p $(SHIM) && printf '#!/bin/sh\nexec npx -y pnpm@$(PNPM_VERSION) "$$@"\n' > $(SHIM)/pnpm && chmod +x $(SHIM)/pnpm
+	cd apps/web && PATH="$(SHIM):$$PATH" npx -y $(SHADCN) add --all --overwrite --yes
