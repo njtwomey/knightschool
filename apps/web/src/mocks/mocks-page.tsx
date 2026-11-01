@@ -1,6 +1,7 @@
-import { ExternalLink, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -63,6 +64,11 @@ export function MocksPage() {
     }));
   }, [query]);
   const openEntry = CATALOGUE.find((entry) => entry.id === open);
+  // Built components in the gallery's order, so the dialog can move to the previous or next one without closing.
+  const built = CATALOGUE.filter((entry) => BUILT.has(entry.id));
+  const at = built.findIndex((entry) => entry.id === open);
+  const previous = at > 0 ? built[at - 1] : undefined;
+  const next = at >= 0 && at < built.length - 1 ? built[at + 1] : undefined;
   const openItem = open ? BUILT.get(open) : undefined;
   const choose = (id: string | null) => {
     setOpen(id);
@@ -104,7 +110,32 @@ export function MocksPage() {
           {openEntry && openItem ? (
             <>
               <DialogHeader>
-                <DialogTitle>{openEntry.name}</DialogTitle>
+                <div className="flex items-center gap-2 pr-8">
+                  <DialogTitle className="mr-auto">{openEntry.name}</DialogTitle>
+                  <span className="text-xs text-muted-foreground tabular-nums">
+                    {at + 1} of {built.length}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={!previous}
+                    aria-label={previous ? `Previous: ${previous.name}` : 'No previous component'}
+                    title={previous?.name}
+                    onClick={() => previous && choose(previous.id)}
+                  >
+                    <ChevronLeft aria-hidden />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={!next}
+                    aria-label={next ? `Next: ${next.name}` : 'No next component'}
+                    title={next?.name}
+                    onClick={() => next && choose(next.id)}
+                  >
+                    <ChevronRight aria-hidden />
+                  </Button>
+                </div>
                 <DialogDescription>
                   {openEntry.summary}{' '}
                   <a
