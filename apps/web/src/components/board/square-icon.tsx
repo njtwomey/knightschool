@@ -32,5 +32,7 @@ const GLYPHS: Record<Icon, LucideIcon> = {
 /** One icon from the square-icon vocabulary, in the mark colour of its meaning. */
 export function SquareIconGlyph({ icon, className }: { icon: Icon; className?: string }) {
   const Glyph = GLYPHS[icon];
-  return <Glyph className={className} style={{ color: MARK_RGB[SQUARE_ICONS[icon].colour] }} aria-hidden strokeWidth={2.5} />;
+  return (
+    <Glyph className={className} style={{ color: MARK_RGB[SQUARE_ICONS[icon].colour] }} aria-hidden strokeWidth={2.5} />
+  );
 }
