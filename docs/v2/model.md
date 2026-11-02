@@ -30,7 +30,7 @@ become lines everywhere.**
 
 **Step.** About four of the learner's moves: the chunk learned and tested at once, five to ten minutes. A step has a
 title, two to four sentences of text, the stretch of a line it teaches, the ideas it shows, and a check. It runs through
-four **stages**: Read, Watch, Try, Done (experience.md). _v1: units (`training/units/`, `courseUnits`),
+three **stages**: Learn (the line story), Try, Done (experience.md), the same for a follow-up and a whole line. _v1: units (`training/units/`, `courseUnits`),
 cut automatically, with `units:` overrides in course.yaml._ v2 keeps the automatic cut as the default and lets an author
 name a step and write its text. **Rename: a v1 unit becomes a step.**
 
