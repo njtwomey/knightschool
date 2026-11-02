@@ -630,10 +630,8 @@ function StepDemo() {
               : ['castling']
         }
         stageFeeds={(step) => ({
-          read: step.text ? 'Its text and key position' : null,
-          watch: `${Math.ceil((step.last - step.first + 1) / 2)} of your moves, each shown first`,
+          learn: `${step.text ? 'Its text, then ' : ''}${Math.ceil((step.last - step.first + 1) / 2)} of your moves, each with its reason`,
           try: 'The same moves from memory',
-          mistakes: step.first === 0 ? '1 refutation in this stretch: 2...Bc5?' : null,
           done: 'Joins your reviews',
         })}
         puzzles={(step) => (

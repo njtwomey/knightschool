@@ -10,19 +10,21 @@ import type { Catalog } from '@/data/content';
 import { to } from '@/router/location';
 import { siteConfig } from '@/data/site-config';
 import { branchPly, lineCardIds, lineMoves, stepMoves } from './model';
-import { continueStage, rememberedStage } from './stage-memory';
+import { continueStage, rememberedStage, type Stage } from './stage-memory';
 
 export const openingHref = (id: string) => to(`/openings/${id}`);
 /** A step's page (docs/v2/pages/step.md): `range` plays only its moves a to b; `stage` opens that stage. */
-export const stepHref = (id: string, n: number, stage?: string, range?: [number, number]) =>
+export const stepHref = (id: string, n: number, stage?: Stage, range?: [number, number]) =>
   to(`/openings/${id}/step/${n}${range ? `/${range[0]}-${range[1]}` : ''}${stage ? `#stage=${stage}` : ''}`);
-/** A step's follow-up `k` (from 1): `#stage=show|try|done`. */
-export const followUpHref = (id: string, n: number, k: number, stage?: string) =>
+/** A step's follow-up `k` (from 1): `#stage=learn|try|done`. */
+export const followUpHref = (id: string, n: number, k: number, stage?: Stage) =>
   to(`/openings/${id}/step/${n}/follow-up/${k}${stage ? `#stage=${stage}` : ''}`);
 export const checkpointHref = (id: string, variation: string) => to(`/openings/${id}/${variation}/checkpoint`);
 export const variationHref = (id: string, variation: string) => to(`/openings/${id}/${variation}`);
 export const linesHref = (id: string) => to(`/openings/${id}/lines`);
-export const lineHref = (id: string, line: string) => to(`/openings/${id}/lines/${line}`);
+/** A line inside an opening (docs/v2/pages/line.md), taught through the same stages as a step. */
+export const lineHref = (id: string, line: string, stage?: Stage) =>
+  to(`/openings/${id}/lines/${line}${stage ? `#stage=${stage}` : ''}`);
 export const finalTestHref = (id: string) => to(`/openings/${id}/test`);
 export const mapHref = (id: string) => to(`/openings/${id}/map`);
 
@@ -83,7 +85,7 @@ export function variationViews(
           // The stage reached: where this device left it, else Try for a step being learned.
           ...stageReached(opening.id, step.id, state),
           // A click on the row continues where the learner left off.
-          href: stepHref(opening.id, number, continueStage(opening.id, step.id, state, 'read')),
+          href: stepHref(opening.id, number, continueStage(opening.id, step.id, state)),
         };
       });
     const states = steps.map((step) => step.state);
@@ -130,8 +132,8 @@ export function variationViews(
   return views;
 }
 
-/** A step's stage dot: the stage last opened on this device, or Try for a step being learned. */
-function stageReached(opening: string, step: string, state: ProgressState): { stage?: number } {
+/** A step's or follow-up's stage dot: the stage last opened on this device, or Try for one being learned. */
+export function stageReached(opening: string, step: string, state: ProgressState): { stage?: number } {
   if (state === 'known' || state === 'mastered' || state === 'locked') return {};
   const stages = siteConfig.teach.stages as readonly string[];
   const left = rememberedStage(opening, step);

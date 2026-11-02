@@ -3,9 +3,7 @@
 
 teach:
   stepMoves: 4 # both: about how many of your moves make a step
-  stages: [read, watch, try, done] # app: the stages of a step, in order (follow-ups teach the mistakes after)
-  hintFadeAfterRight: 2 # app: right answers in a row before the Watch arrow stops showing
-  hintReturnAfterWrong: 2 # app: wrong answers before it comes back
+  stages: [learn, try, done] # app: the stages of every step, follow-up and line, in order
   triesBeforeShown: 2 # app: wrong tries before the move is shown
   gates: true # app: steps and checkpoints lock what follows
   testOut: true # app: a gate can be passed by taking its check

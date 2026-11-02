@@ -1,12 +1,13 @@
 # Follow-up
 
 One of the opponent's common mistakes in a step's stretch, and how to punish it: taught after the step's main line is
-known, never mixed into it. First read, then tried.
+known, never mixed into it, through the same Learn flow as a step ([step.md](step.md#the-learn-flow)): Learn, Try,
+Done.
 
 ## Address
 
 `/openings/<opening>/step/<n>/follow-up/<k>`, `k` counting from 1 among step `n`'s follow-ups. Hash:
-`#stage=read|try|done`.
+`#stage=learn|try|done&m=…`, as a step's; an old `#stage=read` or `show` opens Learn.
 
 ## What a follow-up is
 
@@ -21,25 +22,25 @@ asked again in Review.
 ## Reached from
 
 The follow-up rows under their step on [opening](opening.md) and [variation](variation.md) (labelled 3a, 3b, under step
-3), and the step's Done stage.
+3), the step's Done stage, and the step crumb's menu.
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › opening › variation › step n › (follow-up, a menu of the step's
-follow-ups), then the stages Read, Try, Done.
+[breadcrumbs](../components/breadcrumbs.md): Learn › Opening ▾ › Variation ▾ › Step n ▾ › 3a ▾ (the step's follow-ups),
+then the heading ("3a. If 4...h6 is played") and the stages.
 
-- **Read**: first **why it is worth knowing**, in words and numbers: the evaluation before the mistake, after it and
-  after the punishment ([eval-words](../components/eval-words.md); a missing evaluation says so, never a number carried
-  over), and what the punishing line wins, from the board (core `followUpGain`, `gainWords`: material by piece, or
-  mate) or else the author's note. With neither, it says the opening does not say yet, and `make content-check` lists
-  it as a content gap. Then the [board](../components/board.md) in `study` from the position before the mistake,
-  stepped with the arrow keys; [board-notes](../components/board-notes.md) with each move's note arriving with it; the
-  [move-table](../components/move-table.md); **Try the punishment**.
-- **Try**: the exercise board from the position after the mistake (the mistake highlighted as the last move);
-  [exercise-panel](../components/exercise-panel.md) naming the mistake as a [move-chip](../components/move-chip.md); the
-  learner plays the punishing line, the other side its replies, graded exactly.
+- **Learn**: the story's introduction is **why it is worth knowing**, in words and numbers: the evaluation before the
+  mistake, after it and after the punishment ([eval-words](../components/eval-words.md); a missing evaluation says so,
+  never a number carried over), and what the punishing line wins, from the board (core `followUpGain`, `gainWords`:
+  material by piece, or mate) or else the author's last note on the line. With neither, it says the opening does not
+  say yet, and `make content-check` lists it as a content gap. Then the mistake and the punishing line move by move:
+  the mistake's note (the author's, or its grade, how common it is and what it costs), the punishment's (the author's,
+  or what it wins), and the rest as written. The board starts before the mistake, the move that led there highlighted.
+- **Try**: the exercise board from before the mistake; the other side plays the mistake, then its replies, and the
+  learner plays the punishment, graded exactly. [exercise-panel](../components/exercise-panel.md) names the mistake as a
+  [move-chip](../components/move-chip.md).
 - **Done**: [session-summary](../components/session-summary.md), whether it is known, **Try again**, **Next
-  follow-up**, **Read it again**, **Back to the opening**.
+  follow-up**, **Learn it again**, **Back to the opening**.
 
 ## Behaviour
 

@@ -1,46 +1,28 @@
-import { followUpGain, formatPawns, gainWords, GRADE_INFO, type Exercise, type FollowUp } from '@knightschool/core';
-import { ArrowLeft, ArrowRight, Eye, RotateCcw, Target } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Board } from '@/components/board/board';
-import { BoardColumns } from '@/components/shared/board-columns';
-import { BoardNotes } from '@/components/board/board-notes';
-import { MoveChip } from '@/components/chess/move-chip';
-import type { Try as TryRow } from '@/components/chess/tries-table';
-import { MoveTable } from '@/components/chess/move-table';
+import { followUpGain, formatPawns, gainWords, GRADE_INFO, type FollowUp } from '@knightschool/core';
+import { ArrowRight } from 'lucide-react';
+import { useMemo } from 'react';
 import { EvalWords } from '@/components/chess/eval-words';
+import { MoveChip } from '@/components/chess/move-chip';
 import { RichText } from '@/components/chess/rich-text';
-import { stepLabel, stepTitle, type StepData } from '@/components/openings/steps';
-import { ExercisePanel } from '@/components/practice/exercise-panel';
-import { SessionSummary } from '@/components/practice/session-summary';
+import { stepLabel, stepTitle } from '@/components/openings/steps';
 import { Notice } from '@/components/shared/notice';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { siteConfig } from '@/data/site-config';
-import { ExerciseBoard } from '@/features/practice/exercise-board';
-import { loadProgress } from '@/features/practice/progress';
-import { useExerciseSession } from '@/features/practice/use-exercise-session';
-import { useLoad } from '@/hooks/use-load';
-import { bakedScore, lineMoves } from './model';
+import { LearnFlow } from './learn-flow';
+import { bakedScore, lineMoves, type LineMove } from './model';
 import { followUpMoves, openingFollowUps, openingVariations, type OpeningData } from './opening-data';
-import { OpeningCrumbs, OpeningFrame } from './opening-frame';
-import { rememberStage } from './stage-memory';
+import { LearnCrumbs } from './learn-crumbs';
+import { OpeningFrame } from './opening-frame';
 import { useGates } from './use-learn';
-import { followUpHref, openingHref, stepHref, variationHref } from './views';
+import { followUpHref, openingHref, stepHref } from './views';
 
 /*
  * A follow-up (docs/v2/pages/follow-up.md): after a step's main line, one of the opponent's common mistakes in its
- * stretch. First shown (the mistake, why it is bad, the punishing line, stepped with the keys), then tried (the learner
- * plays the punishment; its moves are saved as cards and come back in Review), then Done.
+ * stretch, taught through the same Learn flow as a step: Learn (why it is worth knowing, then the mistake and the
+ * punishing line, each move with its note), Try (the learner plays the punishment; its moves are saved as cards and come
+ * back in Review), Done.
  */
 
-type Stage = 'read' | 'try' | 'done';
-const STAGES: Stage[] = ['read', 'try', 'done'];
-const STAGE_LABEL: Record<Stage, string> = { read: 'Read', try: 'Try', done: 'Done' };
-
-const readStage = (): Stage => {
-  const stage = new URLSearchParams(window.location.hash.slice(1)).get('stage') as Stage | null;
-  return stage && STAGES.includes(stage) ? stage : 'read';
-};
 const squares = (uci: string) => ({ from: uci.slice(0, 2), to: uci.slice(2, 4) });
 const sideName = (side: 'white' | 'black') => (side === 'white' ? 'White' : 'Black');
 
@@ -86,186 +68,103 @@ export function FollowUpPage({ id, n, k }: { id: string; n: number; k: number })
 }
 
 function FollowUpView({ data, followUp, n, k }: { data: OpeningData; followUp: FollowUp; n: number; k: number }) {
-  const { one, progress } = data;
+  const { one } = data;
   const opening = one.opening;
   const gates = useGates(opening.id);
-  const [stage, setStageState] = useState<Stage>(readStage);
-  const [record, setRecord] = useState<TryRow[]>([]);
-  const [run, setRun] = useState(0);
-  const setStage = (next: Stage) => {
-    setStageState(next);
-    window.history.replaceState(null, '', `#stage=${next}`);
-  };
-  useEffect(() => rememberStage(opening.id, followUp.id, stage), [opening.id, followUp.id, stage]);
   const variations = useMemo(() => openingVariations(data), [data]);
   const variation = variations.find((v) => v.steps.some((row) => row.number === n))!;
   const parent = variation.steps.find((row) => row.number === n)!;
   const row = variation.followUps?.[parent.id]?.[k - 1];
   const siblings = variation.followUps?.[parent.id] ?? [];
   const title = row ? stepTitle(row) : `Follow-up ${k}`;
-
-  return (
-    <main className="mx-auto grid max-w-7xl gap-5 px-4 py-6">
-      <OpeningCrumbs
-        catalog={progress.catalog}
-        opening={opening}
-        crumbs={[
-          { label: variation.name, href: variationHref(opening.id, variation.id) },
-          { label: `Step ${n}`, href: stepHref(opening.id, n) },
-          {
-            label: `Follow-up ${row ? stepLabel(row) : k}`,
-            siblings: {
-              current: followUp.id,
-              label: 'Follow-ups',
-              items: siblings.map((sibling, i) => ({
-                id: sibling.id,
-                label: `${stepLabel(sibling)}: ${stepTitle(sibling)}`,
-                href: followUpHref(opening.id, n, i + 1),
-              })),
-            },
-          },
-        ]}
-      />
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div className="grid gap-1">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {row ? stepLabel(row) : k}. {title}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            A follow-up of step {n}, {stepTitle(parent)}: the mistake, then how to punish it.
-          </p>
-        </div>
-        <Tabs value={stage} onValueChange={(value) => setStage(value as Stage)}>
-          <TabsList aria-label="Stages">
-            {STAGES.map((name) => (
-              <TabsTrigger key={name} value={name}>
-                {STAGE_LABEL[name]}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
-      {row?.state === 'locked' && gates ? (
-        <Notice
-          kind="reminder"
-          text={`This follow-up opens once step ${n} is known: the main line first, then the mistakes to exploit.`}
-          action={
-            <Button asChild size="sm" variant="outline">
-              <a href={stepHref(opening.id, n)}>Go to step {n}</a>
-            </Button>
-          }
-        />
-      ) : null}
-      {stage === 'read' ? <ReadStage data={data} followUp={followUp} onTry={() => setStage('try')} /> : null}
-      {stage === 'try' ? (
-        <TryStage
-          key={run}
-          data={data}
-          followUp={followUp}
-          onDone={(tries) => {
-            setRecord(tries);
-            setStage('done');
-          }}
-        />
-      ) : null}
-      {stage === 'done' ? (
-        <DoneStage
-          data={data}
-          followUp={followUp}
-          row={row}
-          n={n}
-          k={k}
-          more={siblings.length}
-          record={record}
-          onAgain={() => {
-            setRun((r) => r + 1);
-            setStage('try');
-          }}
-          onShow={() => setStage('read')}
-        />
-      ) : null}
-    </main>
-  );
-}
-
-/**
- * Read: why the follow-up is worth knowing (the evaluation before the mistake, after it and after the punishment, and
- * what the punishing line wins), then the mistake and the line, stepped with the arrow keys, each note with its move.
- */
-function ReadStage({ data, followUp, onTry }: { data: OpeningData; followUp: FollowUp; onTry: () => void }) {
-  const { one } = data;
-  const opening = one.opening;
-  const moves = useMemo(() => followUpMoves(followUp), [followUp]);
+  const label = row ? stepLabel(row) : String(k);
   const step = opening.steps.find((s) => s.id === followUp.step)!;
   const lead = lineMoves(opening, step.line)[followUp.ply - 1];
   const gain = gainWords(followUpGain(followUp, opening.side));
-  // Each move's note: the author's where written; else, for the mistake, its verdict and for the punishment, what it wins.
-  const notes = (i: number) =>
-    followUp.notes[i]?.text ??
-    (i === 0
-      ? whyBad(followUp)
-      : i === 1
-        ? `The punishment, the engine’s best${gain ? `: ${sideName(opening.side)} ${gain}` : ''}.`
-        : undefined);
-  const positions = useMemo(
-    () => [
-      {
-        epd: followUp.mistake.epd,
-        ...(lead ? { lastMove: squares(lead.uci) } : {}),
-        score: bakedScore(one.facts, followUp.mistake.epd),
-      },
-      ...moves.map((move, i) => ({
-        epd: move.after,
-        lastMove: squares(move.uci),
-        ...(followUp.notes[i] ? { marks: followUp.notes[i] } : {}),
-        score: bakedScore(one.facts, move.after),
-      })),
-    ],
-    [moves, followUp, lead, one.facts],
+  // Each move with its note: the author's where written; else, for the mistake, its verdict and for the punishment,
+  // what it wins.
+  const moves = useMemo<LineMove[]>(
+    () =>
+      followUpMoves(followUp).map((move, i) => {
+        const text =
+          followUp.notes[i]?.text ??
+          (i === 0
+            ? whyBad(followUp)
+            : i === 1
+              ? `The punishment, the engine’s best${gain ? `: ${sideName(opening.side)} ${gain}` : ''}.`
+              : undefined);
+        const note = { ...followUp.notes[i], ...(text ? { text } : {}) };
+        return { ...move, ...(Object.keys(note).length ? { note } : {}) };
+      }),
+    [followUp, gain, opening.side],
   );
-  const [index, setIndex] = useState(0);
-  const at = moves[index - 1];
+  const mistake = moves[0]!;
+
   return (
-    <BoardColumns
-      board={
-        <Board
-          positions={positions}
-          index={index}
-          onIndex={setIndex}
-          reveal="study"
-          orientation={opening.side}
-          flippable={false}
-        />
+    <LearnFlow
+      data={data}
+      item={followUp.id}
+      remember
+      crumbs={<LearnCrumbs data={data} at={{ step: n, followUp: k }} />}
+      title={`${label}. ${title}`}
+      subtitle={`A follow-up of step ${n}, ${stepTitle(parent)}: the mistake, then how to punish it.`}
+      notice={() =>
+        row?.state === 'locked' && gates ? (
+          <Notice
+            kind="reminder"
+            text={`This follow-up opens once step ${n} is known: the main line first, then the mistakes to exploit.`}
+            action={
+              <Button asChild size="sm" variant="outline">
+                <a href={stepHref(opening.id, n)}>Go to step {n}</a>
+              </Button>
+            }
+          />
+        ) : null
       }
-    >
-      <WorthKnowing data={data} followUp={followUp} moves={moves} gain={gain} />
-      <BoardNotes
-        move={
-          at
-            ? {
-                ply: at.ply,
-                san: at.san,
-                ...(notes(index - 1) ? { comment: notes(index - 1) } : {}),
-                ...(followUp.notes[index - 1] ? { marks: followUp.notes[index - 1] } : {}),
-              }
-            : undefined
-        }
-        startText="Step forward with the right arrow key to see the mistake, then the punishment."
-        side={opening.side}
-      />
-      <MoveTable
-        moves={moves.map((move) => ({ san: move.san, uci: move.uci, after: move.after }))}
-        current={index - 1}
-        onSelect={(i) => setIndex(i + 1)}
-        side={opening.side}
-        firstPly={followUp.ply}
-      />
-      <div>
-        <Button onClick={onTry}>
-          <Target aria-hidden /> Try the punishment
-        </Button>
-      </div>
-    </BoardColumns>
+      moves={moves}
+      {...(lead ? { lead: { uci: lead.uci } } : {})}
+      intro={<WorthKnowing data={data} followUp={followUp} moves={moves} gain={gain} />}
+      refutations="none"
+      practice={{
+        prompt: `Punish ${sideName(opening.side === 'white' ? 'black' : 'white')}'s mistake`,
+        context: (
+          <span className="inline-flex flex-wrap items-baseline gap-1">
+            <span>After</span>
+            <MoveChip
+              ply={mistake.ply}
+              san={mistake.san}
+              epd={mistake.after}
+              {...squares(mistake.uci)}
+              orientation={opening.side}
+            />
+            <span>play the punishment; the other side plays its replies.</span>
+          </span>
+        ),
+        save: 'moves',
+      }}
+      done={{
+        known: (now) => {
+          const view = openingVariations(now)
+            .flatMap((v) => Object.values(v.followUps ?? {}).flat())
+            .find((candidate) => candidate.id === followUp.id);
+          return view?.state === 'known' || view?.state === 'mastered';
+        },
+        words: ({ known }) => ({
+          headline: known ? `Follow-up ${label} is known` : `Follow-up ${label} done`,
+          sentence: known
+            ? 'The punishment has been right twice running. It comes back in your reviews.'
+            : `A move is known once it has been right ${siteConfig.judge.knownAfterRight} times running. Its moves are in your reviews either way.`,
+        }),
+        actions: ({ known }) =>
+          k < siblings.length ? (
+            <Button asChild variant={known ? 'default' : 'outline'}>
+              <a href={followUpHref(opening.id, n, k + 1)}>
+                Next follow-up <ArrowRight aria-hidden />
+              </a>
+            </Button>
+          ) : null,
+      }}
+    />
   );
 }
 
@@ -282,13 +181,13 @@ function WorthKnowing({
 }: {
   data: OpeningData;
   followUp: FollowUp;
-  moves: ReturnType<typeof followUpMoves>;
+  moves: LineMove[];
   gain: string | null;
 }) {
   const { one } = data;
   const side = one.opening.side;
   const [mistake, punish] = moves;
-  const chip = (move: (typeof moves)[number]) => (
+  const chip = (move: LineMove) => (
     <MoveChip
       ply={move.ply}
       san={move.san}
@@ -298,11 +197,14 @@ function WorthKnowing({
       orientation={side}
     />
   );
-  // What the line wins: from the board, and the author's last word on the punishing line (it says what is won and why).
-  const summary = followUp.notes
-    .slice(1)
-    .reverse()
-    .find((note) => note?.text)?.text;
+  // What the line wins: from the board; else the author's last word on the punishing line, which says what is won
+  // (with the board's words, that note is left to its move in the story below).
+  const summary = gain
+    ? undefined
+    : followUp.notes
+        .slice(1)
+        .reverse()
+        .find((note) => note?.text)?.text;
   const won = gain
     ? `${sideName(side)} ${gain}.`
     : summary || followUp.mistake.note?.text
@@ -345,154 +247,5 @@ function WorthKnowing({
         ) : null}
       </dl>
     </section>
-  );
-}
-
-/** Try: the mistake has been played; the learner plays the punishing line, the other side its replies. Saved as cards. */
-function TryStage({
-  data,
-  followUp,
-  onDone,
-}: {
-  data: OpeningData;
-  followUp: FollowUp;
-  onDone: (tries: TryRow[]) => void;
-}) {
-  const { one } = data;
-  const opening = one.opening;
-  const moves = useMemo(() => followUpMoves(followUp), [followUp]);
-  const exercises = useMemo<Exercise[]>(
-    () => [
-      {
-        id: followUp.id,
-        mode: 'try',
-        start: moves[0]!.after,
-        startPly: followUp.ply + 1,
-        before: followUp.mistake.uci,
-        side: opening.side,
-        grader: { kind: 'exact' },
-        responder: { kind: 'scripted', script: followUp.line.slice(1) },
-      },
-    ],
-    [followUp, moves, opening],
-  );
-  const session = useExerciseSession({ exercises, opening, facts: one.facts, save: 'moves' });
-  const finished = useRef(false);
-  useEffect(() => {
-    if (!session.done || finished.current) return;
-    finished.current = true;
-    onDone(session.tries);
-  }, [session.done, session.tries, onDone]);
-  const mistake = moves[0]!;
-  const done = session.played.filter((move) => move.mine).length;
-  return (
-    <ExerciseBoard
-      session={session}
-      aside={
-        <ExercisePanel
-          mode="step"
-          prompt={`Punish ${sideName(opening.side === 'white' ? 'black' : 'white')}'s mistake`}
-          context={
-            <span className="inline-flex flex-wrap items-baseline gap-1">
-              <MoveChip
-                ply={mistake.ply}
-                san={mistake.san}
-                epd={mistake.after}
-                {...squares(mistake.uci)}
-                orientation={opening.side}
-              />
-              <span>has been played. {whyBad(followUp)}</span>
-            </span>
-          }
-          tries={{
-            left: session.triesBeforeShown - session.attempt.tries.filter((t) => t.outcome === 'wrong').length,
-            total: session.triesBeforeShown,
-          }}
-          help={{ hint: session.attempt.hint, shown: session.attempt.shown }}
-          progress={{ done, total: followUp.cards.length }}
-        />
-      }
-    />
-  );
-}
-
-/** Done: the tries, whether the follow-up is known, and the way on. Reads the log again once the answers have landed. */
-function DoneStage({
-  data,
-  followUp,
-  row,
-  n,
-  k,
-  more,
-  record,
-  onAgain,
-  onShow,
-}: {
-  data: OpeningData;
-  followUp: FollowUp;
-  row?: StepData;
-  n: number;
-  k: number;
-  more: number;
-  record: TryRow[];
-  onAgain: () => void;
-  onShow: () => void;
-}) {
-  const opening = data.one.opening;
-  const fresh = useLoad(
-    () =>
-      new Promise<Awaited<ReturnType<typeof loadProgress>>>((resolve, reject) =>
-        setTimeout(() => loadProgress().then(resolve, reject), siteConfig.timing.nextCard),
-      ),
-    [followUp.id, record],
-  );
-  const freshData = fresh.data
-    ? { ...data, progress: fresh.data, one: fresh.data.openings.find((o) => o.opening.id === opening.id) ?? data.one }
-    : data;
-  const view = openingVariations(freshData)
-    .flatMap((v) => Object.values(v.followUps ?? {}).flat())
-    .find((candidate) => candidate.id === followUp.id);
-  const known = view?.state === 'known' || view?.state === 'mastered';
-  const label = row ? stepLabel(row) : String(k);
-  return (
-    <div className="grid gap-6">
-      <SessionSummary
-        mode="step"
-        headline={
-          fresh.loading ? 'Saving your answers…' : known ? `Follow-up ${label} is known` : `Follow-up ${label} done`
-        }
-        sentence={
-          known
-            ? 'The punishment has been right twice running. It comes back in your reviews.'
-            : `A move is known once it has been right ${siteConfig.judge.knownAfterRight} times running. Its moves are in your reviews either way.`
-        }
-        tries={record}
-        evalAfter={
-          bakedScore(data.one.facts, followUpMoves(followUp).at(-1)?.after ?? followUp.mistake.epd) ?? undefined
-        }
-      />
-      <div className="flex flex-wrap gap-2">
-        {!known ? (
-          <Button onClick={onAgain}>
-            <RotateCcw aria-hidden /> Try again
-          </Button>
-        ) : null}
-        {k < more ? (
-          <Button asChild variant={known ? 'default' : 'outline'}>
-            <a href={followUpHref(opening.id, n, k + 1)}>
-              Next follow-up <ArrowRight aria-hidden />
-            </a>
-          </Button>
-        ) : null}
-        <Button variant="outline" onClick={onShow}>
-          <Eye aria-hidden /> Read it again
-        </Button>
-        <Button asChild variant="outline">
-          <a href={openingHref(opening.id)}>
-            <ArrowLeft aria-hidden /> Back to the opening
-          </a>
-        </Button>
-      </div>
-    </div>
   );
 }

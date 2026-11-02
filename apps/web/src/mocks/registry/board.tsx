@@ -73,7 +73,7 @@ export const boardMocks: MockItem[] = [
         render: () => <SteppingBoard lineId="giuoco-piano-main" reveal="study" start={5} />,
       },
       {
-        name: 'Watch: the move to play',
+        name: 'Learn: the move to play',
         note: 'The violet arrow is the move to play, in a colour no mark uses.',
         render: () => <SteppingBoard lineId="giuoco-piano-main" reveal="learn" start={6} />,
       },

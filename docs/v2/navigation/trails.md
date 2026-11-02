@@ -18,7 +18,7 @@ holds previous and next or one action. Crumbs marked ▾ below are menus.
 | [openings](../pages/openings.md)                                                       | Learn ▾ (Your repertoire, All openings, Tracks)                                  |                                                             |
 | [opening](../pages/opening.md)                                                         | Learn › Opening ▾ (your repertoire first, then all, grouped by side)             | tabs Overview, Lines, Map                                   |
 | [variation](../pages/variation.md)                                                     | Learn › Opening ▾ › Variation ▾                                                  | trailing: previous, next variation                          |
-| [step](../pages/step.md)                                                               | Learn › Opening ▾ › Variation ▾ › Step n ▾ (steps of the variation)              | tabs: the five stages; trailing: previous, next step        |
+| [step](../pages/step.md)                                                               | Learn › Opening ▾ › Variation ▾ › Step n ▾ (steps with their follow-ups)         | the stages Learn, Try, Done as tabs                         |
 | [checkpoint](../pages/checkpoint.md)                                                   | Learn › Opening ▾ › Variation ▾ › Checkpoint                                     |                                                             |
 | final test                                                                             | Learn › Opening ▾ › Final test                                                   |                                                             |
 | [line](../pages/line.md) inside an opening (`/openings/<o>/lines/<l>`)                 | Learn › Opening ▾ › Line ▾ (lines of the opening)                                | trailing: Learn it, Drill this line                         |
@@ -58,5 +58,4 @@ opening's Overview, Lines and Map) replace the history entry; tabs that are a di
 
 ## Open questions
 
-1. Should the step's stages be tabs at all, given Try is gated on Watch? The proposal: tabs, with later stages disabled
-   until reached, so a learner returning to a step can jump back to Read.
+1. Previous and next step in the trailing slot: not built; the step crumb's menu and Done's **Next step** cover it.

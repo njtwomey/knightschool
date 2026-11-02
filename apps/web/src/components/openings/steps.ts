@@ -37,11 +37,10 @@ export type StepData = {
   followUp?: { index: number };
 };
 
+/** The stages of the Learn flow (config `teach.stages`), as the stage dots and tabs word them. */
 export const STAGE_NAMES: Record<string, string> = {
-  read: 'Read',
-  watch: 'Watch',
+  learn: 'Learn',
   try: 'Try',
-  mistakes: 'Their mistakes',
   done: 'Done',
 };
 

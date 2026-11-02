@@ -49,6 +49,54 @@ export type StepRowProps = {
   className?: string;
 };
 
+/**
+ * "Start step 3 anyway?": asked once per opening when a locked step or follow-up is opened, from its row or a crumb's
+ * menu, with "Don't ask again for this opening" (docs/v2/components/step-row.md).
+ */
+export function StartAnywayDialog({
+  open,
+  onOpenChange,
+  label,
+  buildsOn,
+  onStart,
+  onGoToStep,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /** The step's label: "3", or "3a" for a follow-up. */
+  label: string;
+  /** The step it builds on. */
+  buildsOn: { number: number; name?: string };
+  onStart: (dontAsk: boolean) => void;
+  onGoToStep: (dontAsk: boolean) => void;
+}) {
+  const [dontAsk, setDontAsk] = useState(false);
+  const checkboxId = useId();
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent size="sm">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Start step {label} anyway?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This step builds on step {buildsOn.number}
+            {buildsOn.name ? ` (${buildsOn.name})` : ''}.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <div className="flex items-center gap-2">
+          <Checkbox id={checkboxId} checked={dontAsk} onCheckedChange={(value) => setDontAsk(value === true)} />
+          <Label htmlFor={checkboxId} className="text-sm font-normal">
+            Don&apos;t ask again for this opening
+          </Label>
+        </div>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => onGoToStep(dontAsk)}>Go to step {buildsOn.number}</AlertDialogCancel>
+          <AlertDialogAction onClick={() => onStart(dontAsk)}>Start anyway</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
 const EXTRA_ICON = { puzzle: Puzzle, trap: Crosshair, question: HelpCircle } as const;
 
 export function ExtrasList({ extras, note }: { extras: Extra[]; note: string }) {
@@ -126,8 +174,6 @@ export function StepRow({
 }: StepRowProps) {
   /** What the ask-once dialog will start when the learner says yes. */
   const [asking, setAsking] = useState<'learn' | 'try' | null>(null);
-  const [dontAsk, setDontAsk] = useState(false);
-  const checkboxId = useId();
   const locked = step.state === 'locked';
   const quiet = step.state === 'known' || step.state === 'mastered';
   const title = stepTitle(step);
@@ -139,7 +185,7 @@ export function StepRow({
     if (locked && gates && !skipAsk) setAsking(action);
     else (action === 'learn' ? onLearn : onTry)?.(step);
   };
-  const start = () => {
+  const start = (dontAsk: boolean) => {
     if (dontAsk) onSkipAsk?.();
     (asking === 'try' ? onTry : onLearn)?.(step);
   };
@@ -253,34 +299,19 @@ export function StepRow({
         </div>
         {buttons}
       </div>
-      <AlertDialog open={asking !== null} onOpenChange={(next) => setAsking(next ? asking : null)}>
-        <AlertDialogContent size="sm">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Start step {stepLabel(step)} anyway?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This step builds on step {opens?.number ?? step.number - 1}
-              {opens ? ` (${opens.name})` : ''}.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="flex items-center gap-2">
-            <Checkbox id={checkboxId} checked={dontAsk} onCheckedChange={(value) => setDontAsk(value === true)} />
-            <Label htmlFor={checkboxId} className="text-sm font-normal">
-              Don&apos;t ask again for this opening
-            </Label>
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel
-              onClick={() => {
-                if (dontAsk) onSkipAsk?.();
-                onGoToStep?.(opens?.number ?? step.number - 1);
-              }}
-            >
-              Go to step {opens?.number ?? step.number - 1}
-            </AlertDialogCancel>
-            <AlertDialogAction onClick={start}>Start anyway</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <StartAnywayDialog
+        open={asking !== null}
+        onOpenChange={(next) => {
+          if (!next) setAsking(null);
+        }}
+        label={stepLabel(step)}
+        buildsOn={{ number: opens?.number ?? step.number - 1, ...(opens ? { name: opens.name } : {}) }}
+        onStart={start}
+        onGoToStep={(dontAsk) => {
+          if (dontAsk) onSkipAsk?.();
+          onGoToStep?.(opens?.number ?? step.number - 1);
+        }}
+      />
     </div>
   );
 }

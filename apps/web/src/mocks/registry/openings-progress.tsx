@@ -426,7 +426,7 @@ const step1: StepData = {
   stretches: [{ moves: m.slice(0, 7), firstPly: 0 }],
   known: [0, 2, 4, 6],
   counts: { mine: 4, known: 4, inReviews: 4 },
-  stage: 4,
+  stage: 2,
 };
 const step2: StepData = {
   id: 'giuoco-piano-main:2',
@@ -438,7 +438,7 @@ const step2: StepData = {
   stretches: [{ moves: m.slice(7, 15), firstPly: 7 }],
   known: [8, 10],
   counts: { mine: 4, known: 2, inReviews: 3 },
-  stage: 2,
+  stage: 1,
 };
 const step3: StepData = {
   id: 'giuoco-piano-side:1',
@@ -816,7 +816,7 @@ export const openingsProgressMocks: MockItem[] = [
               ...step2,
               state: 'known',
               known: [8, 10, 12, 14],
-              stage: 4,
+              stage: 2,
               counts: { mine: 4, known: 4, inReviews: 4 },
             }}
           />
@@ -903,8 +903,22 @@ export const openingsProgressMocks: MockItem[] = [
         ),
       },
       {
-        name: 'Moves only, for a step’s Read stage',
-        render: () => <LineStory moves={mainStory.slice(0, 8)} side="white" parts={['moves']} />,
+        name: 'Learn: the introduction, then the moves',
+        note: 'The Learn stage of a step, follow-up or line: what it is for first, then every move with its reason. The board’s arrow keys move the mark.',
+        render: () => (
+          <LineStory
+            moves={mainStory.slice(0, 8)}
+            side="white"
+            current={3}
+            intro={
+              <p className="max-w-prose">
+                White develops the bishop to its most active square, aiming at f7, the one square only the king guards.
+                Step through the moves with the reason for each, then play them without help.
+              </p>
+            }
+            parts={['intro', 'moves']}
+          />
+        ),
       },
       { name: 'Loading', render: () => <LineStory moves={[]} side="white" loading /> },
     ],

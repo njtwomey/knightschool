@@ -28,8 +28,14 @@ export type CrumbSibling = {
   href: string;
   /** Drawn after the name: a state badge. */
   badge?: ReactNode;
-  /** What opens it, when it is locked: shown, and the item is not a link. */
+  /** What opens it, when it is locked: its hover text; the item is not a link unless `opens`. */
   locked?: string;
+  /** A locked item that still opens (gates that only suggest, or after asking): drawn locked, and chosen as usual. */
+  opens?: boolean;
+  /** Chosen instead of following `href`: a locked step asks once before it opens (step-row.md). */
+  onSelect?: () => void;
+  /** Drawn in a little, under the item before it: a step's follow-ups under the step. */
+  indent?: boolean;
   /** A heading the item sits under, for long menus. */
   group?: string;
 };
@@ -80,28 +86,40 @@ function SiblingMenu({
               .filter((item) => (item.group ?? '') === group)
               .map((item) => {
                 const here = item.id === current;
-                if (item.locked) {
+                // One line per item: the name and its state mark. What opens a locked item is its hover text,
+                // not a sentence in the menu.
+                const body = (
+                  <>
+                    <Check aria-hidden className={here ? '' : 'invisible'} />
+                    <span className="flex-1 truncate">{item.label}</span>
+                    {item.badge ?? (item.locked ? <Lock aria-hidden /> : null)}
+                  </>
+                );
+                const className = cn(item.indent && 'pl-6', here && 'bg-accent font-medium');
+                if (item.locked && !item.opens) {
                   return (
-                    <DropdownMenuItem key={item.id} disabled className="items-start">
-                      <Lock aria-hidden className="mt-0.5" />
-                      <span className="grid">
-                        <span>{item.label}</span>
-                        <span className="text-xs">{item.locked}</span>
-                      </span>
+                    <DropdownMenuItem key={item.id} disabled className={className} title={item.locked}>
+                      {body}
+                    </DropdownMenuItem>
+                  );
+                }
+                if (item.onSelect) {
+                  return (
+                    <DropdownMenuItem
+                      key={item.id}
+                      ref={here ? scrollHere : undefined}
+                      className={className}
+                      title={item.locked}
+                      onSelect={item.onSelect}
+                    >
+                      {body}
                     </DropdownMenuItem>
                   );
                 }
                 return (
-                  <DropdownMenuItem
-                    key={item.id}
-                    asChild
-                    ref={here ? scrollHere : undefined}
-                    className={here ? 'bg-accent font-medium' : undefined}
-                  >
+                  <DropdownMenuItem key={item.id} asChild ref={here ? scrollHere : undefined} className={className}>
                     <a href={item.href} aria-current={here ? 'page' : undefined}>
-                      <Check aria-hidden className={here ? '' : 'invisible'} />
-                      <span className="flex-1">{item.label}</span>
-                      {item.badge}
+                      {body}
                     </a>
                   </DropdownMenuItem>
                 );
@@ -117,29 +135,18 @@ function CrumbItem({ crumb }: { crumb: Crumb }) {
   const { label, href, siblings } = crumb;
   if (siblings && siblings.items.length > 1) {
     const withSiblings = crumb as Crumb & { siblings: NonNullable<Crumb['siblings']> };
-    // A crumb you can go back to keeps its name as a link and opens the menu from the chevron; the current page
-    // opens the menu from the whole crumb.
-    if (href) {
-      return (
-        <span className="inline-flex items-center gap-0.5">
-          <BreadcrumbLink href={href}>{label}</BreadcrumbLink>
-          <SiblingMenu
-            crumb={withSiblings}
-            trigger={
-              <Button variant="ghost" size="icon-xs" aria-label={siblings.label}>
-                <ChevronDown aria-hidden />
-              </Button>
-            }
-          />
-        </span>
-      );
-    }
+    // A click anywhere on a crumb with a menu opens the menu; the crumb's own page is its ticked item there.
     return (
       <SiblingMenu
         crumb={withSiblings}
         trigger={
-          <Button variant="ghost" size="sm" className="-ml-2 h-7 gap-1 px-2 font-normal" aria-label={siblings.label}>
-            <BreadcrumbPage>{label}</BreadcrumbPage>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn('-ml-2 h-7 gap-1 px-2 font-normal', href && 'text-muted-foreground hover:text-foreground')}
+            aria-label={`${label}: ${siblings.label}`}
+          >
+            {href ? label : <BreadcrumbPage>{label}</BreadcrumbPage>}
             <ChevronDown aria-hidden />
           </Button>
         }

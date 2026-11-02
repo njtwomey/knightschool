@@ -26,18 +26,16 @@ export type Step = {
   text?: string;
   first: number;
   last: number;
-  /** The position the Read stage shows, as an index into the stretch's positions (0 is before its first move). */
+  /** The position the introduction is about, as an index into the stretch's positions (0 is before its first move). */
   keyIndex?: number;
   keyMarks?: MarkSet;
   ideas?: string[];
 };
 
-export type StageName = 'read' | 'watch' | 'try' | 'mistakes' | 'done';
+export type StageName = 'learn' | 'try' | 'done';
 const STAGE_NAME: Record<StageName, string> = {
-  read: 'Read',
-  watch: 'Watch',
+  learn: 'Learn',
   try: 'Try',
-  mistakes: 'Their mistakes',
   done: 'Done',
 };
 
@@ -222,9 +220,9 @@ export function StepEditor({
           </div>
           <section
             className="grid content-start gap-1.5 rounded-lg bg-muted/50 p-3 text-sm"
-            aria-label="Read stage preview"
+            aria-label="Introduction preview"
           >
-            <p className="text-xs text-muted-foreground">As the Read stage shows it</p>
+            <p className="text-xs text-muted-foreground">As Learn introduces it</p>
             <p className="font-medium">{step.name ?? `Step ${n}`}</p>
             {step.text ? (
               <RichText
@@ -234,7 +232,7 @@ export function StepEditor({
                 context={{ startEpd: stretch[0]!.before, firstPly: step.first, moves: stretch }}
               />
             ) : (
-              <p className="text-muted-foreground">No text: learners go straight to Watch.</p>
+              <p className="text-muted-foreground">No text: the story opens with a sentence made from the moves.</p>
             )}
           </section>
         </div>
@@ -332,7 +330,7 @@ export function StepEditor({
               onIndex={(index) => replace({ ...step, keyIndex: index }, `pick the key position of step ${n}`)}
               orientation={side}
               flippable={false}
-              caption={<span className="text-muted-foreground">Step to the position the Read stage shows.</span>}
+              caption={<span className="text-muted-foreground">Step to the position the introduction is about.</span>}
             />
           )}
         </div>

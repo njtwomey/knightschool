@@ -1,7 +1,9 @@
 # Line
 
-One exact line told in words: its moves with their comments, where it branches off and what grows from it, and every
-opening that teaches it. For the curious who want to read a line through, and anyone arriving from the map or search.
+One exact line, taught through the same Learn flow as a step ([step.md](step.md#the-learn-flow)): Learn (the line
+told in words beside the board), Try (the learner plays their moves of it), Done. For the curious who want to read a
+line through, anyone arriving from the Lines tab, the map or search, and a trap or danger line worth knowing on its
+own.
 
 ## Address
 
@@ -11,7 +13,7 @@ Two addresses, one page ([../navigation/routes.md](../navigation/routes.md)):
   shown. The trail sits under the opening.
 - `/lines/<line>`: the line on its own (lines are shared), side from the line's `[For]`, from the map and search.
 
-`<line>` is the v1 PGN file name. Hash: `#ply=<n>` for the board
+`<line>` is the v1 PGN file name. Hash: `#stage=learn|try|done&m=…`, as a step's
 ([../navigation/url-state.md](../navigation/url-state.md)).
 
 ## Reached from
@@ -21,38 +23,36 @@ name on the [map](map.md) and in [search](search.md); "grows from" and "branches
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › opening › (line, a menu of the opening's lines), or on its own
+[breadcrumbs](../components/breadcrumbs.md): Learn › Opening ▾ › Line ▾ (lines of the opening), or on its own
 Explore › (line, a menu of the lines it branches from and that grow from it).
 
 1. Heading: the line's name with its [kind-badge](../components/kind-badge.md) (main, sideline, rare, gambit, trap to
-   spring, trap to avoid) and [opening-name](../components/opening-name.md) of the position that names it.
-2. Two columns from lg:
-   - Left: [line-story](../components/line-story.md): the moves with their comments as paragraphs, made of
-     [move-chip](../components/move-chip.md)s, refutations folded under the move they answer; above it "branches off
-     the Giuoco Piano after 4.c3", below it the lines that grow from it.
-   - Right: a [board](../components/board.md) in the `study` preset on the naming position, with
-     [board-controls](../components/board-controls.md), [board-notes](../components/board-notes.md),
-     [board-eval](../components/board-eval.md), [board-explorer](../components/board-explorer.md) and
-     [mark-key](../components/mark-key.md). At the end of the line, [eval-words](../components/eval-words.md).
-3. Inside an opening: **Steps that teach it**, as [step-row](../components/step-row.md)s with their states.
-4. **Other openings that teach it**: [opening-card](../components/opening-card.md)s, small.
+   spring, trap to avoid), then the stages as tabs.
+2. **Learn**: the [line-story](../components/line-story.md) beside a [board](../components/board.md) in `learn`: the
+   introduction (how many of the learner's moves, and whether the line is drilled), "branches off the Giuoco Piano
+   after 4.c3", the moves from the branch with every note, refutations folded under the move they follow, where it ends
+   ([eval-words](../components/eval-words.md) and the variation's plan), and the lines that grow from it. **Try it**.
+3. **Try**: the learner's moves from the branch, the other side playing the line's replies. A line that earns cards
+   (core `lineEarnsCards`) saves them; an alternative or rare line saves nothing and says so.
+4. **Done**: [session-summary](../components/session-summary.md), the moves not yet known, **Try again**, **Drill the
+   variation**, **Play on from the end**, **Learn it again**, **Back to the opening**.
+5. Inside an opening, under every stage: **Steps that teach it**, as [step-row](../components/step-row.md)s with their
+   states.
 
 ## Behaviour
 
-- Nothing is asked: this page only shows. The board follows the story: clicking a move goes there, hovering previews
-  it ([../hooks/use-move-interaction.md](../hooks/use-move-interaction.md)); arrow keys step
-  ([../navigation/shortcuts.md](../navigation/shortcuts.md)).
-- A line has no progress of its own; the state shown on each move chip is the move's.
+- A line has no state of its own: Done's "known" is every one of the learner's moves in it known.
+- The board follows the story and the story the board, as in every Learn stage
+  ([line-story](../components/line-story.md)).
 - Opening a line inside an opening it is not part of redirects to `/lines/<line>` with a
   [notice](../components/notice.md).
 
-**Built so far** (features/learn/line-page.tsx): `/openings/<opening>/lines/<line>` only, with the story, the board,
-"grows from" and "what grows from it", the steps that teach it, Learn it, Drill (the line's variation: Drill has no
-per-line address yet) and Play on. Not yet: `/lines/<line>`, the explorer, other openings that teach it.
+**Built so far** (features/learn/line-page.tsx): `/openings/<opening>/lines/<line>` only. Not yet: `/lines/<line>`, the
+explorer, other openings that teach it, a per-line Drill address.
 
 ## Leads to
 
-**Learn it** → the [step](step.md) that teaches its first unknown move; **Drill this line** → [drill](drill.md)
+A step row → the [step](step.md) that teaches it; **Drill this line** → [drill](drill.md)
 (`/practice/drill/<opening>/lines/<line>`); **Play on from the end** → [play-on](play-on.md); **See on the map** →
 [map](map.md) with the line picked; **Open on the board** → [board](board.md) with its moves; another line or opening.
 

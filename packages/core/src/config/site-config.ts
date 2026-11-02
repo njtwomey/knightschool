@@ -10,9 +10,8 @@ const range = z.object({ default: z.number(), min: z.number(), max: z.number() }
 export const SiteConfig = z.object({
   teach: z.object({
     stepMoves: z.number().int().positive(),
-    stages: z.array(z.enum(['read', 'watch', 'try', 'mistakes', 'done'])),
-    hintFadeAfterRight: z.number().int().positive(),
-    hintReturnAfterWrong: z.number().int().positive(),
+    /** The stages every step, follow-up and line is taught through, in order (docs/v2/pages/step.md). */
+    stages: z.array(z.enum(['learn', 'try', 'done'])),
     triesBeforeShown: z.number().int().positive(),
     gates: z.boolean(),
     testOut: z.boolean(),

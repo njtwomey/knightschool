@@ -11,14 +11,14 @@ step.
 - For the chosen step:
   - **Name**: short, in plain words ("Castle, then strike in the centre").
   - **Text**: two to four sentences, with positions and moves written inline ([rich-text](rich-text.md)); a live preview
-    beside it as the Read stage will show it.
-  - **Key position**: the position the Read stage shows, picked by stepping the board; its marks are edited with
+    beside it as Learn will introduce it (the first thing in the line story).
+  - **Key position**: the position the introduction is about, picked by stepping the board; its marks are edited with
     [marks-editor](marks-editor.md).
   - **Stretch**: the line drawn as chips with two handles, first and last move. Dragging a handle (or the arrows beside
     it) moves where the step starts and ends; the neighbouring step grows or shrinks to match.
   - **Ideas** it shows ([idea-badge](idea-badge.md)), suggested from the ideas on its moves.
-  - **Stages**: Read, Watch, Try, Their mistakes, Done, each with what feeds it ("Their mistakes: 2 refutations in this
-    stretch"); a stage with nothing to show says so and is skipped for learners.
+  - **Stages**: Learn, Try, Done, each with what feeds it ("Learn: its text, then 4 of your moves, each with its
+    reason"). The opponent's mistakes in the stretch are its follow-ups, taught after it.
   - **Puzzles**: up to three, from [puzzle-picker](puzzle-picker.md).
 
 ## Configuration

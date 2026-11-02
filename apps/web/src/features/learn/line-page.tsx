@@ -1,23 +1,25 @@
-import { playMove } from '@knightschool/core';
-import { BookOpen, Play, Target } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { Board } from '@/components/board/board';
-import { BoardColumns } from '@/components/shared/board-columns';
-import { BoardNotes } from '@/components/board/board-notes';
+import { lineEarnsCards, numberedMove } from '@knightschool/core';
+import { Play, Target } from 'lucide-react';
+import { useMemo } from 'react';
 import { KindBadge } from '@/components/chess/kind-badge';
-import { LineStory, type StoryMove } from '@/components/openings/line-story';
 import { StepRow } from '@/components/openings/step-row';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/data/site-config';
 import { modeHref } from '@/features/practice/sources';
 import { to } from '@/router/location';
+import { LearnFlow } from './learn-flow';
 import { bakedScore, branchPly, cardStates, lineMoves } from './model';
-import { openingIdeas, openingVariations, useStepActions, type OpeningData } from './opening-data';
-import { OpeningCrumbs, OpeningFrame } from './opening-frame';
+import { openingVariations, useStepActions, type OpeningData } from './opening-data';
+import { LearnCrumbs } from './learn-crumbs';
+import { OpeningFrame } from './opening-frame';
 import { lineHref, lineViews, linesHref } from './views';
 
-/** One line told in words, inside an opening (docs/v2/pages/line.md): its moves and comments, and the steps teaching it. */
+/**
+ * One line inside an opening (docs/v2/pages/line.md), taught through the same Learn flow as a step: Learn (the line's
+ * story from where it branches off, every note and refutation, beside the board), Try (the learner plays their moves of
+ * it), Done. Below, the steps that teach it.
+ */
 export function LinePage({ id, line }: { id: string; line: string }) {
   return (
     <OpeningFrame id={id}>
@@ -49,40 +51,8 @@ function LineView({ data, lineId }: { data: OpeningData; lineId: string }) {
   const branch = branchPly(opening, lineId);
   const all = useMemo(() => lineMoves(opening, lineId), [opening, lineId]);
   const own = useMemo(() => all.slice(branch), [all, branch]);
-  const ideaList = useMemo(
-    () => openingIdeas(progress.catalog, [...new Set(own.flatMap((move) => move.note?.ideas ?? []))]),
-    [progress, own],
-  );
-  const story: StoryMove[] = own.map((move) => {
-    const refutation = opening.positions[move.before]?.refutations?.[0];
-    let epd = move.before;
-    const refMoves = refutation
-      ? [{ uci: refutation.uci, san: refutation.san }, ...refutation.then].flatMap((m) => {
-          const played = playMove(epd, m.uci);
-          if (!played) return [];
-          epd = played.epd;
-          return [{ san: played.san, uci: played.uci, after: played.epd }];
-        })
-      : [];
-    return {
-      san: move.san,
-      uci: move.uci,
-      after: move.after,
-      ...(move.note
-        ? {
-            note: {
-              ...(move.note.text ? { text: move.note.text } : {}),
-              ...(move.note.tags ? { tags: move.note.tags } : {}),
-              ideas: ideaList.filter((idea) => move.note?.ideas?.includes(idea.id)),
-            },
-            ...(move.note.nag ? { nag: move.note.nag } : {}),
-          }
-        : {}),
-      ...(refutation && refMoves.length
-        ? { refutation: { moves: refMoves, ...(refutation.note?.text ? { text: refutation.note.text } : {}) } }
-        : {}),
-    };
-  });
+  const lead = all[branch - 1];
+  const earns = lineEarnsCards(line);
   // The parent: the earlier line it shares the most moves with.
   const parent = opening.lines
     .slice(0, opening.lines.indexOf(line))
@@ -103,129 +73,100 @@ function LineView({ data, lineId }: { data: OpeningData; lineId: string }) {
   const variations = useMemo(() => openingVariations(data), [data]);
   const teaching = variations.flatMap((v) => v.steps).filter((row) => opening.steps[row.number - 1]?.line === lineId);
   const variation = opening.variations.find((v) => v.id === line.variation);
-
-  const positions = useMemo(
-    () => [
-      { epd: own[0]?.before ?? opening.startEpd, score: bakedScore(one.facts, own[0]?.before ?? opening.startEpd) },
-      ...own.map((move) => ({
-        epd: move.after,
-        lastMove: { from: move.uci.slice(0, 2), to: move.uci.slice(2, 4) },
-        marks: move.note,
-        score: bakedScore(one.facts, move.after),
-      })),
-    ],
-    [own, opening, one.facts],
-  );
-  const [index, setIndex] = useState(0);
-  const at = own[index - 1];
+  const mine = own.filter((move) => move.mine);
+  const sideName = opening.side === 'white' ? 'White' : 'Black';
 
   return (
-    <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
-      <OpeningCrumbs
-        catalog={progress.catalog}
-        opening={opening}
-        crumbs={[
-          {
-            label: view.name,
-            siblings: {
-              current: lineId,
-              label: 'Lines',
-              items: views.map((v) => ({ id: v.id, label: v.name, href: lineHref(opening.id, v.id) })),
-            },
-          },
-        ]}
-      />
-      <div className="grid gap-2">
-        <h1 className="flex flex-wrap items-center gap-3 text-2xl font-semibold tracking-tight">
+    <LearnFlow
+      data={data}
+      item={`line:${lineId}`}
+      remember={false}
+      crumbs={<LearnCrumbs data={data} at={{ line: lineId }} />}
+      title={
+        <>
           {view.name}
           <KindBadge kind={view.kind} writtenFor={view.writtenFor} learner={view.side} />
-        </h1>
-        <p className="text-muted-foreground">
-          In the {variation?.name ?? line.variation} of the {opening.name}
+        </>
+      }
+      subtitle={`In the ${variation?.name ?? line.variation} of the ${opening.name}`}
+      moves={own}
+      {...(lead ? { lead: { uci: lead.uci, ...(lead.note ? { note: lead.note } : {}) } } : {})}
+      intro={
+        <p className="max-w-prose">
+          {mine.length
+            ? `${mine.length} ${mine.length === 1 ? 'move' : 'moves'} of yours, from ${numberedMove(mine[0]!.ply, mine[0]!.san)}. Step through the line with the reason for each move, then play your moves without help.`
+            : 'Step through the line with the reason for each move.'}
+          {earns ? null : ' This line is shown, never drilled: playing it saves nothing to your reviews.'}
         </p>
-        <div className="flex flex-wrap gap-2">
-          {view.learnHref ? (
-            <Button asChild>
-              <a href={view.learnHref}>
-                <BookOpen aria-hidden /> Learn it
+      }
+      story={{
+        ...(parent && branch > opening.startPly
+          ? {
+              start: {
+                parent: parent.other.name ?? parent.other.id,
+                href: lineHref(opening.id, parent.other.id),
+                shared: all.slice(Math.max(opening.startPly, branch - 2), branch).map((move) => ({
+                  san: move.san,
+                  uci: move.uci,
+                  after: move.after,
+                })),
+              },
+            }
+          : {}),
+        end: { score: bakedScore(one.facts, all.at(-1)?.after ?? opening.startEpd), plan: variation?.plans[0] },
+        grows,
+      }}
+      refutations="all"
+      practice={{
+        prompt: `Play ${sideName}'s moves of the line`,
+        context: 'The other side plays the line’s replies. A wrong move snaps back and says why.',
+        save: earns ? 'moves' : 'none',
+      }}
+      done={{
+        known: (now) => {
+          const states = cardStates(now.progress.cards, now.progress.reviews);
+          return (
+            earns &&
+            mine.every((move) => ['known', 'mastered'].includes(states.get(`move:${move.before}:${move.uci}`) ?? ''))
+          );
+        },
+        words: ({ known }) => ({
+          headline: known ? `${view.name} is known` : `${view.name} done`,
+          sentence: !earns
+            ? 'This line is shown, never drilled, so nothing was saved.'
+            : known
+              ? 'Every move of yours in it has been right twice running. They come back in your reviews.'
+              : `A move is known once it has been right ${siteConfig.judge.knownAfterRight} times running. Its moves are in your reviews either way.`,
+        }),
+        actions: () => (
+          <>
+            <Button asChild variant="outline">
+              <a href={modeHref('drill', { opening: opening.id, variation: line.variation })}>
+                <Target aria-hidden /> Drill the {variation?.name ?? 'variation'}
               </a>
             </Button>
-          ) : null}
-          <Button asChild variant="outline">
-            <a href={modeHref('drill', { opening: opening.id, variation: line.variation })}>
-              <Target aria-hidden /> Drill the {variation?.name ?? 'variation'}
-            </a>
-          </Button>
-          <Button asChild variant="outline">
-            <a href={to(`/practice/play-on/${opening.id}/lines/${lineId}`)}>
-              <Play aria-hidden /> Play on from the end
-            </a>
-          </Button>
-        </div>
-      </div>
-      <BoardColumns
-        side="right"
-        board={
-          <>
-            <Board
-              positions={positions}
-              index={Math.min(index, positions.length - 1)}
-              onIndex={setIndex}
-              orientation={opening.side}
-            />
-            <BoardNotes
-              move={
-                at
-                  ? {
-                      ply: at.ply,
-                      san: at.san,
-                      ...(at.note?.text ? { comment: at.note.text } : {}),
-                      ...(at.note ? { marks: at.note } : {}),
-                    }
-                  : undefined
-              }
-              startText="Step through the line with the arrows, or click a move in the story."
-              side={opening.side}
-            />
+            <Button asChild variant="outline">
+              <a href={to(`/practice/play-on/${opening.id}/lines/${lineId}`)}>
+                <Play aria-hidden /> Play on from the end
+              </a>
+            </Button>
           </>
-        }
-      >
-        <LineStory
-          moves={story}
-          firstPly={branch}
-          side={opening.side}
-          {...(parent && branch > opening.startPly
-            ? {
-                start: {
-                  parent: parent.other.name ?? parent.other.id,
-                  href: lineHref(opening.id, parent.other.id),
-                  shared: all.slice(Math.max(opening.startPly, branch - 2), branch).map((move) => ({
-                    san: move.san,
-                    uci: move.uci,
-                    after: move.after,
-                  })),
-                },
-              }
-            : {})}
-          end={{ score: bakedScore(one.facts, all.at(-1)?.after ?? opening.startEpd), plan: variation?.plans[0] }}
-          grows={grows}
-          current={index - 1}
-          onSelect={(i) => setIndex(i + 1)}
-          evalAfter="words"
-        />
-      </BoardColumns>
-      {teaching.length ? (
-        <section className="grid gap-3" aria-labelledby="line-steps">
-          <h2 id="line-steps" className="text-lg font-semibold">
-            Steps that teach it
-          </h2>
-          <div className="grid gap-2">
-            {teaching.map((row) => (
-              <StepRow key={row.id} step={row} testOut={siteConfig.teach.testOut} {...actions} />
-            ))}
-          </div>
-        </section>
-      ) : null}
-    </main>
+        ),
+      }}
+      footer={
+        teaching.length ? (
+          <section className="grid gap-3" aria-labelledby="line-steps">
+            <h2 id="line-steps" className="text-lg font-semibold">
+              Steps that teach it
+            </h2>
+            <div className="grid gap-2">
+              {teaching.map((row) => (
+                <StepRow key={row.id} step={row} testOut={siteConfig.teach.testOut} {...actions} />
+              ))}
+            </div>
+          </section>
+        ) : null
+      }
+    />
   );
 }

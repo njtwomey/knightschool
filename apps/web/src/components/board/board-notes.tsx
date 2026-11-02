@@ -61,7 +61,7 @@ export function BoardNotes({
 }: {
   /** The move at the cursor; undefined at the start position. */
   move?: NotesMove;
-  /** In Watch (`learn`), the move about to be played, shown before it is played. */
+  /** In the `learn` reveal, the move about to be played, shown before it is played. */
   ahead?: NotesMove;
   /** At the start: the line's or step's own text. */
   startText?: string;

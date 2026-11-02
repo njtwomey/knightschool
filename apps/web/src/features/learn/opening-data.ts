@@ -10,7 +10,15 @@ import { navigate, to } from '@/router/location';
 import { cardStates, lineMoves, stepMoves } from './model';
 import { continueStage } from './stage-memory';
 import { useGates, useSkipAsk } from './use-learn';
-import { checkpointHref, finalTestHref, followUpHref, stepHref, variationViews, type CheckpointRecord } from './views';
+import {
+  checkpointHref,
+  finalTestHref,
+  followUpHref,
+  stageReached,
+  stepHref,
+  variationViews,
+  type CheckpointRecord,
+} from './views';
 
 /** Goes to an address made with `to()` (it carries the base path) without a reload. */
 export const go = (href: string) => navigate(href.slice(to('').length));
@@ -115,6 +123,7 @@ export function openingVariations(data: OpeningData): VariationData[] {
           known: followUp.cards.filter((card) => isKnown(states.get(card.id))).length,
           inReviews: followUp.cards.filter((card) => states.has(card.id)).length,
         },
+        ...stageReached(one.opening.id, followUp.id, state),
         ...(state === 'locked'
           ? { opensWhen: { number: parent.number, name: stepTitle(parent), href: parent.href } }
           : {}),
@@ -122,7 +131,7 @@ export function openingVariations(data: OpeningData): VariationData[] {
           one.opening.id,
           parent.number,
           followUp.index + 1,
-          continueStage(one.opening.id, followUp.id, state, 'read'),
+          continueStage(one.opening.id, followUp.id, state),
         ),
       });
     }
@@ -144,8 +153,8 @@ export function useStepActions(opening: BuiltOpening) {
     onLearn: (step: StepData) =>
       go(
         step.followUp
-          ? followUpHref(opening.id, step.number, step.followUp.index + 1, 'read')
-          : stepHref(opening.id, step.number, 'read'),
+          ? followUpHref(opening.id, step.number, step.followUp.index + 1, 'learn')
+          : stepHref(opening.id, step.number, 'learn'),
       ),
     onTry: (step: StepData) =>
       go(

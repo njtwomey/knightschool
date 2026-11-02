@@ -2,7 +2,7 @@ import { GRADE_INFO, gradeFromNags } from '@knightschool/core';
 import { GRADE_TEXT } from '@/components/chess/grade-style';
 import { evalWords, numberedMove, type Score } from '@knightschool/core';
 import { ChevronRight, GitBranch } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { MoveTag } from '@/components/board/board-notes';
 import { EvalWords } from '@/components/chess/eval-words';
 import { IdeaBadge, type Idea } from '@/components/chess/idea-badge';
@@ -24,13 +24,23 @@ export type StoryMove = RunMove & {
   refutation?: { moves: RunMove[]; text?: string };
 };
 
-export type StoryPart = 'start' | 'moves' | 'end' | 'grows' | 'others';
-const ALL_PARTS: StoryPart[] = ['start', 'moves', 'end', 'grows', 'others'];
+export type StoryPart = 'intro' | 'start' | 'moves' | 'end' | 'grows' | 'others';
+const ALL_PARTS: StoryPart[] = ['intro', 'start', 'moves', 'end', 'grows', 'others'];
 
 export type LineStoryProps = {
   /** The line's moves from where it branches, from `firstPly`. */
   moves: StoryMove[];
   firstPly?: number;
+  /**
+   * What comes before the moves when the story teaches (the Learn stage): a step's text, a follow-up's reasons it is
+   * worth knowing, a line's place in the opening.
+   */
+  intro?: ReactNode;
+  /**
+   * The story is its own scroll area (from lg, as tall as the board beside it): it follows the board's cursor, holding
+   * the entry shown about 38% of the way down, level with the middle of the board.
+   */
+  follow?: boolean;
   /** The learner's side ("yours" is bold). */
   side: Side;
   /** Where it branches off: the parent line, and the shared moves before it (greyed). */
@@ -54,6 +64,9 @@ export type LineStoryProps = {
 };
 
 type Paragraph = { from: number; to: number };
+
+/** Where a following story holds the entry shown: its top this far down the scroll area (level with rank 5 or 6). */
+const FOLLOW_AT = 0.38;
 
 /** Runs of moves, each closed by a move with a comment or a refutation. */
 function paragraphsOf(moves: StoryMove[]): Paragraph[] {
@@ -99,12 +112,15 @@ function Refutation({
 }
 
 /**
- * A line told in words: where it branches off, its moves with their comments, where it ends, and what grows out of it
- * (docs/v2/components/line-story.md). Bound to the board's cursor; the move shown is marked and kept in view.
+ * A line told in words: its introduction, where it branches off, its moves with their comments, where it ends, and what
+ * grows out of it (docs/v2/components/line-story.md). Bound to the board's cursor; the move shown is marked and kept in
+ * view. It is the Learn stage of every step, follow-up and line.
  */
 export function LineStory({
   moves,
   firstPly = 0,
+  intro,
+  follow,
   side,
   start,
   end,
@@ -120,11 +136,32 @@ export function LineStory({
 }: LineStoryProps) {
   const holder = useRef<HTMLDivElement>(null);
 
-  // The board's step buttons move the mark through the text; keep it in view.
+  // The board's keys and buttons move the mark through the text; keep it in view. When the story is its own scroll
+  // area (`follow`), the entry shown is held level with the middle of the board: its top at `FOLLOW_AT` of the area's
+  // height. Nothing moves on the first render at the start, and a hand scroll is left alone until the cursor moves.
+  const seen = useRef(false);
   useEffect(() => {
-    if (current === undefined) return;
-    holder.current?.querySelector('[aria-current="step"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  }, [current]);
+    const box = holder.current;
+    if (current === undefined || !box) return;
+    const first = !seen.current;
+    seen.current = true;
+    if (first && current < 0) return;
+    const scrolls = follow && box.scrollHeight > box.clientHeight && getComputedStyle(box).overflowY !== 'visible';
+    const entry = box.querySelector<HTMLElement>('[data-story-here]');
+    if (!scrolls) {
+      box.querySelector('[aria-current="step"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      return;
+    }
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const top =
+      current < 0 || !entry
+        ? 0
+        : entry.getBoundingClientRect().top -
+          box.getBoundingClientRect().top +
+          box.scrollTop -
+          box.clientHeight * FOLLOW_AT;
+    box.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
+  }, [current, follow]);
 
   if (loading) {
     return (
@@ -174,7 +211,16 @@ export function LineStory({
   const words = end?.score ? evalWords(end.score, siteConfig.judge.evalWords) : null;
 
   return (
-    <div ref={holder} className={cn('grid gap-5 text-sm leading-relaxed', className)}>
+    <div
+      ref={holder}
+      className={cn(
+        'grid content-start gap-5 text-sm leading-relaxed',
+        // Room after the last entry, so it too can be held level with the board's middle.
+        follow && 'lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2 lg:pb-[50dvh]',
+        className,
+      )}
+    >
+      {show('intro') && intro ? <section className="grid gap-3">{intro}</section> : null}
       {show('start') && start ? (
         <section className="grid gap-1">
           <p className="flex flex-wrap items-center gap-x-1.5">
@@ -214,6 +260,7 @@ export function LineStory({
             return (
               <div
                 key={from}
+                data-story-here={here ? '' : undefined}
                 className={cn(
                   'rounded-md border px-2 py-1.5 transition-colors',
                   here ? 'border-primary/60 bg-accent ring-1 ring-primary/30' : 'border-transparent',

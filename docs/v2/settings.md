@@ -4,8 +4,8 @@ Almost everything in v2 has a sensible default and should be changeable: how man
 are, what the computer plays, how much the feedback says, which puzzles come up. That needs one settings system,
 designed once, rather than a switch added wherever it is wanted.
 
-**Settings are the learner's; config is the site's.** How the site teaches and judges (how many right answers before a
-hint fades, when a move counts as known, the grade thresholds, the base delays) is config, written by us and the same
+**Settings are the learner's; config is the site's.** How the site teaches and judges (how many tries before a move
+is shown, when a move counts as known, the grade thresholds, the base delays) is config, written by us and the same
 for everyone: see [config.md](config.md). Config also declares which settings exist, with their defaults, ranges and the
 presets. Every learner setting key is listed once under "Keys" below; anything that is a rule lives in config.md.
 

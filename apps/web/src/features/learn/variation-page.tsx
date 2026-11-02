@@ -25,8 +25,9 @@ import {
   useStepActions,
   type OpeningData,
 } from './opening-data';
-import { OpeningCrumbs, OpeningFrame } from './opening-frame';
-import { lineViews, openingHref, stepHref, variationHref } from './views';
+import { LearnCrumbs } from './learn-crumbs';
+import { OpeningFrame } from './opening-frame';
+import { lineViews, openingHref, stepHref } from './views';
 
 /** One variation of an opening: its decision, steps, checkpoint, lines, ideas and puzzles (docs/v2/pages/variation.md). */
 export function VariationPage({ id, variation }: { id: string; variation: string }) {
@@ -117,20 +118,7 @@ function VariationView({ data, variation: variationId }: { data: OpeningData; va
 
   return (
     <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
-      <OpeningCrumbs
-        catalog={progress.catalog}
-        opening={opening}
-        crumbs={[
-          {
-            label: view.name,
-            siblings: {
-              current: view.id,
-              label: 'Variations',
-              items: variations.map((v) => ({ id: v.id, label: v.name, href: variationHref(opening.id, v.id) })),
-            },
-          },
-        ]}
-      />
+      <LearnCrumbs data={data} at={{ variation: view.id }} />
       <div className="flex flex-wrap items-center gap-4">
         <div className="grid gap-1">
           <h1 className="flex flex-wrap items-center gap-2 text-2xl font-semibold tracking-tight">

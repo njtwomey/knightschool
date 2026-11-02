@@ -909,7 +909,7 @@ export const boardMoreMocks: MockItem[] = [
         render: () => <BoardNotes startText={example.opening.variations[0]!.intro} />,
       },
       {
-        name: 'Watch: the comment ahead of the move',
+        name: 'Learn: the comment ahead of the move',
         note: 'At the learn level the next move’s comment shows before it is played.',
         render: () => <BoardNotes reveal="learn" move={notesFor(5)} ahead={notesFor(6)} />,
       },

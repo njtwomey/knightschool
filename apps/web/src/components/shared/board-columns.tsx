@@ -10,6 +10,7 @@ export function BoardColumns({
   board,
   children,
   side = 'left',
+  fit,
   className,
 }: {
   /** The board and what sits right under it (controls, caption, the actions for it). */
@@ -18,6 +19,12 @@ export function BoardColumns({
   children: ReactNode;
   /** Which side the board takes from lg; on a phone it always comes first. */
   side?: 'left' | 'right';
+  /**
+   * From lg, the panel is as tall as the board column and never makes the page longer: its children stack in a column,
+   * and the one that should scroll takes the room left (`min-h-0 flex-1 overflow-y-auto`), so what it points at stays
+   * level with the board. On a phone it is in the page's flow as usual.
+   */
+  fit?: boolean;
   className?: string;
 }) {
   return (
@@ -38,7 +45,13 @@ export function BoardColumns({
       >
         {board}
       </div>
-      <div className="grid min-w-0 content-start gap-4">{children}</div>
+      {fit ? (
+        <div className="relative min-w-0 lg:self-stretch">
+          <div className="grid min-w-0 content-start gap-4 lg:absolute lg:inset-0 lg:flex lg:flex-col">{children}</div>
+        </div>
+      ) : (
+        <div className="grid min-w-0 content-start gap-4">{children}</div>
+      )}
     </div>
   );
 }
