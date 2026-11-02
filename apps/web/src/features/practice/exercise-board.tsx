@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 import { Board } from '@/components/board/board';
 import { BoardFeedback } from '@/components/board/board-feedback';
+import { BoardColumns } from '@/components/shared/board-columns';
 import { TriesTable } from '@/components/chess/tries-table';
+import { useSetting } from '@/data/settings';
 import type { useExerciseSession } from './use-exercise-session';
 
 type Session = ReturnType<typeof useExerciseSession>;
@@ -30,50 +32,58 @@ export function ExerciseBoard({
 }) {
   const triesLeft = session.triesBeforeShown - session.attempt.tries.filter((t) => t.outcome === 'wrong').length;
   const side = session.exercise?.side ?? 'white';
+  // The learner's choices: Hint and Show me offered or not, and the tries table live, after answering, or off.
+  const hints = useSetting('feedback.hints').value;
+  const triesTable = useSetting('feedback.triesTable').value;
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
-      <Board
-        positions={[{ epd: session.epd, lastMove: session.lastMove }]}
-        index={0}
-        reveal={session.done ? 'answered' : 'test'}
-        orientation={side}
-        flippable={false}
-        interactive={session.learnerTurn}
-        onMove={session.play}
-        badge={session.badge}
-        arrows={session.arrows}
-        lit={session.hintSquare ? [session.hintSquare] : undefined}
-        exercise={
-          session.learnerTurn && session.exercise?.help !== false
-            ? {
-                help: session.attempt.shown ? 'shown' : session.attempt.hint ? 'hint' : 'none',
-                onHint: session.hint,
-                onShow: session.show,
-                hintsAllowed: session.canShow,
-                triesSpent: triesLeft <= 0,
-              }
-            : undefined
-        }
-        caption={
-          session.learnerTurn ? (
-            (prompt ?? <p className="font-medium">Your move: what does {side === 'white' ? 'White' : 'Black'} play?</p>)
-          ) : session.done ? null : (
-            <p className="text-muted-foreground">
-              {session.judging
-                ? 'Judging your move…'
-                : session.thinking
-                  ? 'The engine is thinking…'
-                  : 'The other side is moving…'}
-            </p>
-          )
-        }
-      />
-      <div className="grid content-start gap-4">
-        {aside}
-        {feedback ? <BoardFeedback feedback={session.feedback} reveal="answered" triesLeft={triesLeft} /> : null}
+    <BoardColumns
+      board={
+        <Board
+          positions={[{ epd: session.epd, lastMove: session.lastMove }]}
+          index={0}
+          reveal={session.done ? 'answered' : 'test'}
+          orientation={side}
+          flippable={false}
+          interactive={session.learnerTurn}
+          onMove={session.play}
+          badge={session.badge}
+          arrows={session.arrows}
+          lit={session.hintSquare ? [session.hintSquare] : undefined}
+          exercise={
+            session.learnerTurn && hints && session.exercise?.help !== false
+              ? {
+                  help: session.attempt.shown ? 'shown' : session.attempt.hint ? 'hint' : 'none',
+                  onHint: session.hint,
+                  onShow: session.show,
+                  hintsAllowed: session.canShow,
+                  triesSpent: triesLeft <= 0,
+                }
+              : undefined
+          }
+          caption={
+            session.learnerTurn ? (
+              (prompt ?? (
+                <p className="font-medium">Your move: what does {side === 'white' ? 'White' : 'Black'} play?</p>
+              ))
+            ) : session.done ? null : (
+              <p className="text-muted-foreground">
+                {session.judging
+                  ? 'Judging your move…'
+                  : session.thinking
+                    ? 'The engine is thinking…'
+                    : 'The other side is moving…'}
+              </p>
+            )
+          }
+        />
+      }
+    >
+      {aside}
+      {feedback ? <BoardFeedback feedback={session.feedback} reveal="answered" triesLeft={triesLeft} /> : null}
+      {triesTable === 'live' || (triesTable === 'end' && session.done) ? (
         <TriesTable tries={session.exerciseTries} />
-        {footer}
-      </div>
-    </div>
+      ) : null}
+      {footer}
+    </BoardColumns>
   );
 }

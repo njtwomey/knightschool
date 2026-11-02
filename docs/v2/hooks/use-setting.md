@@ -48,7 +48,23 @@ dots); pages [settings](../pages/settings.md), [opening](../pages/opening.md) (t
   `migratePracticePrefs`), `features/explorer/service.ts` (`getToken`, `setToken`): the other four places a setting
   lives today, all behind one hook in v2.
 
+## As built
+
+`apps/web/src/data/settings` (import from `@/data/settings`):
+
+- `useSetting(key, { opening?, openingName?, session?, onSessionChange?, material?, layer? })` gives `value`, `source`,
+  `sourceText`, `meaning`, `valueText`, `set(value, layer?)`, `reset(layer?)`, `layer` (the one written by default: session
+  when a session copy is given, else opening when an opening is given, else you), `below` (what a reset falls back
+  to), `canReset`, `definition` and `ready`. The session layer is the caller's copy: `set` and `reset` at it call
+  `onSessionChange`; nothing is stored.
+- Outside React: `getSetting(key, scope?)`, `setSetting(key, value | undefined, { opening?, label? })` (undoable),
+  `whenSettingsReady()` (loaders that decide something with a learner setting await it), `useSettingsSnapshot()`,
+  `currentPreset()`, `settingLayers(snapshot, scope)`.
+- Undo: `undoSettingChange()`, `useLastSettingChange()` and `settingsBatch(label, fn)` (several writes as one action);
+  kept in memory for the page's life.
+- Helpers for the rules a setting softens: `feedbackDelay(ms)` (a `timing.*` delay times the `feedback.speed`
+  multiplier from config `settings.feedbackSpeeds`) and `scheduleConfig()` (config's schedule with `review.retention`).
+
 ## Open questions
 
-1. Is the "this opening" layer stored as one settings-table row per opening and key (`opening:<id>:<key>`)? That is a
-   new key pattern in an existing table; see [settings store](../stores/settings.md).
+1. Settled: the opening layer is one settings-table row per opening and key, `opening:<id>:<key>`.

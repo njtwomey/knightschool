@@ -1,6 +1,7 @@
 import {
   drawRound,
   gradeGuess,
+  nameItAttempt,
   nameItPositions,
   nameItRef,
   replay,
@@ -19,10 +20,12 @@ import { PracticeBar } from '@/components/practice/practice-bar';
 import type { PracticeConfig } from '@/components/practice/practice-config';
 import { PracticeSetup } from '@/components/practice/practice-setup';
 import { SessionSummary, type NamedAnswer } from '@/components/practice/session-summary';
+import { BoardColumns } from '@/components/shared/board-columns';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { EmptyState } from '@/components/shared/empty-state';
 import { loadCatalog, loadFacts, loadNameList, loadNames, loadOpening } from '@/data/content';
 import { learnerStore } from '@/data/learner';
+import { feedbackDelay } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { useLoad } from '@/hooks/use-load';
 import { to } from '@/router/location';
@@ -199,6 +202,9 @@ function NameItRun({
   const respond = (typed: string) => {
     const graded = typed ? gradeGuess(typed, position.names) : { credit: 'none' as const };
     setAnswers((list) => [...list, { typed, credit: graded.credit, earned: graded.name?.name }]);
+    const ms = Date.now() - shownAt.current;
+    // Half credit (the opening, not the variation) is kept in the try: its outcome is `another` (nameItAttempt).
+    const logged = nameItAttempt(typed, graded.credit, ms);
     void learnerStore().then((store) =>
       store.attempts.add({
         id: newId(),
@@ -206,11 +212,11 @@ function NameItRun({
         session: session.current,
         mode: 'name-it',
         ref: nameItRef(position.opening, position.epd),
-        result: graded.credit === 'full' ? 'right' : 'wrong',
-        tries: [],
-        ms: Date.now() - shownAt.current,
+        result: logged.result,
+        tries: logged.tries,
+        ms,
         hint: false,
-        shown: !typed,
+        shown: logged.result === 'shown',
       }),
     );
   };
@@ -257,7 +263,7 @@ function NameItQuestion({
   // Full credit moves on by itself; a miss or a half answer waits with Next so the name can be read.
   useEffect(() => {
     if (answer?.credit !== 'full') return;
-    const timer = window.setTimeout(onNext, siteConfig.timing.nextCard);
+    const timer = window.setTimeout(onNext, feedbackDelay(siteConfig.timing.nextCard));
     return () => window.clearTimeout(timer);
   }, [answer, onNext]);
   const toMove = sideToMove(position.epd) === 'white' ? 'White' : 'Black';
@@ -273,16 +279,19 @@ function NameItQuestion({
         : { credit: 'none', message: `this is the ${primary!.name}.`, accepted: position.names.map((n) => n.name) }
     : null;
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
-      <Board
-        positions={[
-          { epd: position.epd, lastMove: last ? { from: last.slice(0, 2), to: last.slice(2, 4) } : undefined },
-        ]}
-        index={0}
-        reveal={answer ? 'answered' : 'test'}
-        evalBar={false}
-        orientation={side}
-      />
+    <BoardColumns
+      board={
+        <Board
+          positions={[
+            { epd: position.epd, lastMove: last ? { from: last.slice(0, 2), to: last.slice(2, 4) } : undefined },
+          ]}
+          index={0}
+          reveal={answer ? 'answered' : 'test'}
+          evalBar={false}
+          orientation={side}
+        />
+      }
+    >
       <ExercisePanel
         mode="name-it"
         prompt={`Which opening is this? ${toMove} to play`}
@@ -313,6 +322,6 @@ function NameItQuestion({
           onGiveUp={() => onAnswer('')}
         />
       </ExercisePanel>
-    </div>
+    </BoardColumns>
   );
 }

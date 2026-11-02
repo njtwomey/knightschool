@@ -11,7 +11,11 @@ One step in a list: its state, its title, its moves, what opens it, and the ways
   learner's in bold and ticked once known. A step with several short branches shows one run per branch.
 - A count line: "4 moves of yours: 2 known, 3 in your reviews".
 - Locked: "Opens when step 3 (Giuoco Piano) is known", with step 3 as a link.
-- The stage reached, when started: Read, Watch, Try, Their mistakes, Done, as five small dots, the current one filled.
+- The stage reached, when started: Read, Watch, Try, Done, as small dots (config `teach.stages`), the current one
+  filled.
+- A follow-up row (`followUp`): labelled 3a, 3b under step 3, set in a little with a dashed border, titled from its
+  mistake ("If 4...h6 is played"), its moves the mistake and the punishing line; locked until its step is known, Learn
+  opens its Show stage and Try its Try ([../pages/follow-up.md](../pages/follow-up.md)).
 - Extras, muted: puzzles, traps, questions attached to this step, "not needed to know the step".
 - Buttons: **Learn** (start or continue the stages) and **Try** (the Try stage alone, for review), the more useful of
   the two filled.
@@ -26,10 +30,13 @@ One step in a list: its state, its title, its moves, what opens it, and the ways
 
 ## Behaviour
 
-- Click anywhere on the row: select it; the page's board shows the stretch at its end, to step back through. The
-  buttons and links in the row keep their own clicks ([sortable-table](sortable-table.md)'s row link).
+- Hover or focus the row: the page's board previews the step (where it starts or ends, as the page says) and goes back
+  when the pointer or focus leaves (`onPreview`). Click anywhere on the row: open the step where the learner left off
+  (`href`, a `CardLink`): Read for a step not started, the stage last opened on this device, Try for one being learned
+  or known (features/learn/stage-memory.ts). **Learn**, **Try** and **Test out** stay as explicit choices, and the
+  buttons, links and move chips keep their own clicks (`ABOVE_ROW_LINK`).
 - Hover a move chip: highlight on the page's board ([use-move-interaction](../hooks/use-move-interaction.md)).
-- **The first step of every opening is always open.** Learn on a locked step asks once, in a small dialog: "This step
+- **The first step of every opening is always open.** Learn or Try on a locked step asks once, in a small dialog: "This step
   builds on step 3. Start it anyway?", with **Start anyway**, **Go to step 3** and "Don't ask again for this opening".
   With gates off (`teach.gates`) or relaxed (`learning.gatesRelaxed`) it never asks.
 - With testing out allowed, a locked row also offers **Test out** (the Try stage without Read and Watch).

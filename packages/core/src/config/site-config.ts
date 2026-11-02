@@ -19,6 +19,15 @@ export const SiteConfig = z.object({
     firstStepOpen: z.boolean(),
     checkpointTries: z.number().int().positive(),
     checkpointMark: share,
+    /** How many of each kind a variation's checkpoint asks. */
+    checkpointMix: z.object({
+      positions: z.number().int().nonnegative(),
+      mistakes: z.number().int().nonnegative(),
+      questions: z.number().int().nonnegative(),
+      puzzles: z.number().int().nonnegative(),
+    }),
+    /** What an opening's final test adds to every branch of the opening. */
+    finalTest: z.object({ puzzles: z.number().int().nonnegative(), playOn: z.number().int().nonnegative() }),
   }),
   judge: z.object({
     grades: z.object({ best: share, excellent: share, good: share, inaccuracy: share, mistake: share }),
@@ -38,6 +47,7 @@ export const SiteConfig = z.object({
   timing: z.object({
     correctBadge: z.number().int().nonnegative(),
     wrongBadge: z.number().int().nonnegative(),
+    wrongHold: z.number().int().nonnegative(),
     afterCorrect: z.number().int().nonnegative(),
     opponent: z.number().int().nonnegative(),
     nextCard: z.number().int().nonnegative(),
@@ -70,7 +80,36 @@ export const SiteConfig = z.object({
     speedSeconds: z.number().int().positive(),
     countdownSeconds: z.number().int().nonnegative(),
     nameItPositions: z.number().int().positive(),
-    drillRuns: z.number().int().positive(),
+  }),
+  /** Defaults and ranges of learner settings that no key above sets (the registry reads them: settings/registry.ts). */
+  settings: z.object({
+    retention: z.object({ min: share, max: share }),
+    feedbackSpeeds: z.object({
+      slow: z.number().positive(),
+      normal: z.number().positive(),
+      fast: z.number().positive(),
+    }),
+    engineDepth: range,
+    engineLines: range,
+    explorerMinShare: share,
+    gamesCount: range,
+    boardSizeCapRem: range,
+    previewDelayMs: range,
+  }),
+  /** Named bundles of learner setting values; each is checked against the registry by `checkPresets`. */
+  presets: z.object({
+    default: z.string(),
+    list: z
+      .array(
+        z.object({
+          id: z.string().min(1),
+          name: z.string().min(1),
+          for: z.string(),
+          highlights: z.array(z.string()),
+          values: z.record(z.string(), z.unknown()),
+        }),
+      )
+      .min(1),
   }),
 });
 export type SiteConfig = z.infer<typeof SiteConfig>;

@@ -16,6 +16,7 @@ import {
   type SettingValue,
   type WritableLayer,
 } from './registry';
+import { useLiveSettings } from './live';
 import { SettingsRow } from './settings-row';
 
 const STORE_LINE = {
@@ -25,10 +26,14 @@ const STORE_LINE = {
 
 export type SettingsGroupProps = {
   group: SettingGroupId;
-  layers: LayerValues;
-  presetId: string;
+  /** The values set in each layer; by default the learner's stored settings. */
+  layers?: LayerValues;
+  presetId?: string;
   /** Passed to every row. */
   layer?: WritableLayer;
+  /** The opening whose layer the rows show and write (with `layer="opening"`). */
+  opening?: string;
+  openingName?: string;
   /** From the page's Basic / Advanced switch. */
   level?: 'basic' | 'all';
   /** Search words: rows that do not match hide, and a group with no match hides. */
@@ -36,10 +41,13 @@ export type SettingsGroupProps = {
   /** Folds on a phone; open when the address names it. */
   collapsible?: boolean;
   defaultOpen?: boolean;
-  onChange: (key: string, value: SettingValue) => void;
-  onReset: (key: string) => void;
+  /** By default each change saves to the stored settings, undoable. */
+  onChange?: (key: string, value: SettingValue) => void;
+  onReset?: (key: string) => void;
   /** Resets every row that differs, as one undoable change. */
-  onResetGroup: (keys: string[]) => void;
+  onResetGroup?: (keys: string[]) => void;
+  /** Only these keys (the board's gear shows a few of a group). */
+  keys?: readonly string[];
   disabledReason?: string;
 };
 
@@ -50,29 +58,39 @@ export type SettingsGroupProps = {
  */
 export function SettingsGroup({
   group,
-  layers,
-  presetId,
+  layers: givenLayers,
+  presetId: givenPreset,
   layer = 'you',
+  opening,
+  openingName,
+  keys,
   level = 'basic',
   query = '',
   collapsible = false,
   defaultOpen = true,
-  onChange,
-  onReset,
-  onResetGroup,
+  onChange: givenChange,
+  onReset: givenReset,
+  onResetGroup: givenResetGroup,
   disabledReason,
 }: SettingsGroupProps) {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [open, setOpen] = useState(defaultOpen);
+  const live = useLiveSettings({ layer, opening });
+  const stored = !givenLayers;
+  const layers = givenLayers ?? live.layers;
+  const presetId = givenPreset ?? live.presetId;
+  const onChange = givenChange ?? (stored ? live.onChange : undefined);
+  const onReset = givenReset ?? (stored ? live.onReset : undefined);
+  const onResetGroup = givenResetGroup ?? live.onResetGroup;
   const info = groupOf(group);
-  const all = settingsOf(group).filter((def) => matchesSetting(def, query));
+  const all = settingsOf(group).filter((def) => (!keys || keys.includes(def.key)) && matchesSetting(def, query));
   if (all.length === 0) return null;
 
   const basic = all.filter((def) => def.level === 'basic');
   const advanced = all.filter((def) => def.level === 'advanced');
   const advancedShown = level === 'all' || showAdvanced;
   const rows = advancedShown ? [...basic, ...advanced] : basic;
-  const stores = new Set(settingsOf(group).map((def) => def.store));
+  const stores = new Set(all.map((def) => def.store));
   const store = stores.size === 1 ? [...stores][0]! : 'learner';
   const resettable = all.filter((def) => canReset(def, layers, presetId, layer)).map((def) => def.key);
   const fromAbove = all
@@ -91,9 +109,11 @@ export function SettingsGroup({
           {i > 0 ? <Separator /> : null}
           <SettingsRow
             setting={def.key}
-            layers={layers}
+            layers={stored ? undefined : layers}
             presetId={presetId}
             layer={layer}
+            opening={opening}
+            openingName={openingName}
             onChange={onChange}
             onReset={onReset}
             highlight={query}

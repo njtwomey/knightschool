@@ -1,15 +1,16 @@
 import { BookOpen, Eye, Target } from 'lucide-react';
 import { BoardThumb } from '@/components/board/board-thumb';
-import { KindBadge, type LineKind, type Risk } from '@/components/chess/kind-badge';
+import { KIND_INFO, KindBadge, shownKind, type LineKind, type Risk } from '@/components/chess/kind-badge';
 import { MoveChip } from '@/components/chess/move-chip';
 import { MoveRun, type RunMove } from '@/components/chess/move-run';
-import type { ProgressCounts } from '@/components/progress/counts';
+import { knownShare, type ProgressCounts } from '@/components/progress/counts';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Hint } from '@/components/shared/hint';
 import { ABOVE_ROW_LINK } from '@/components/shared/card-link';
 import { IconAction } from '@/components/shared/icon-action';
 import { cn } from '@/lib/utils';
+import type { Column } from '@/components/finding/sortable-table';
 import type { Side, Thumb } from './types';
 
 /** One line as a list shows it. A line has no state of its own: only the share of its moves the learner knows. */
@@ -18,6 +19,8 @@ export type LineData = {
   name: string;
   /** The opening it is seen in, when the list mixes openings. */
   opening?: string;
+  /** The variation it belongs to, inside one opening (the Lines tab's column). */
+  variation?: string;
   kind: LineKind;
   /** The side the line is written for; a trap for the other side shows flipped. */
   writtenFor?: Side;
@@ -249,4 +252,63 @@ export function LineCard({ line, onShow, maxMoves = 6, className }: { line: Line
       </div>
     </Card>
   );
+}
+
+export type LineColumnKey = 'name' | 'kind' | 'variation' | 'opponent' | 'moves' | 'known';
+
+/**
+ * The line row's cells as sortable-table columns (the opening's Lines tab): the name is the row's link, the rest keep
+ * their own hover and clicks above it. `Actions` go in the table's `actions`.
+ */
+export function lineColumns(
+  keys: LineColumnKey[] = ['name', 'kind', 'variation', 'moves', 'known'],
+  maxMoves = 8,
+): Column<LineData, LineColumnKey>[] {
+  const all: Record<LineColumnKey, Column<LineData, LineColumnKey>> = {
+    name: {
+      key: 'name',
+      heading: 'Line',
+      compare: (a, b) => a.name.localeCompare(b.name),
+      cell: (line) => line.name,
+      className: 'whitespace-normal',
+    },
+    kind: {
+      key: 'kind',
+      heading: 'Kind',
+      compare: (a, b) =>
+        KIND_INFO[shownKind(a.kind, a.writtenFor, a.side)].name.localeCompare(
+          KIND_INFO[shownKind(b.kind, b.writtenFor, b.side)].name,
+        ),
+      cell: (line) => (
+        <span className={ABOVE_ROW_LINK}>
+          <KindBadge kind={line.kind} writtenFor={line.writtenFor} learner={line.side} risk={line.risk} />
+        </span>
+      ),
+    },
+    variation: {
+      key: 'variation',
+      heading: 'Variation',
+      compare: (a, b) => (a.variation ?? '').localeCompare(b.variation ?? ''),
+      cell: (line) => <span className="text-muted-foreground">{line.variation}</span>,
+    },
+    opponent: { key: 'opponent', heading: 'Reached by', cell: (line) => <Opponent line={line} /> },
+    moves: {
+      key: 'moves',
+      heading: 'Moves',
+      cell: (line) => <Moves line={line} max={maxMoves} />,
+      className: 'whitespace-normal',
+    },
+    known: {
+      key: 'known',
+      heading: 'Known',
+      compare: (a, b) => knownShare(a.known) - knownShare(b.known),
+      cell: (line) => <KnownBar known={line.known} />,
+    },
+  };
+  return keys.map((key) => all[key]);
+}
+
+/** Show, Learn and Drill for one line, as icon actions (the table's `actions`). */
+export function LineActions({ line, onShow }: { line: LineData; onShow?: (line: LineData) => void }) {
+  return <Actions line={line} onShow={onShow} />;
 }

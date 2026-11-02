@@ -58,6 +58,11 @@ export function createLearnerStore(exec: SqlExecutor, { now = () => new Date() }
         return row ? String(row.value) : undefined;
       },
       set: (key, value) => run(putSetting({ key, value, at: now().toISOString() })),
+      all: async () =>
+        Object.fromEntries(
+          (await exec.execute('select key, value from settings')).map((row) => [String(row.key), String(row.value)]),
+        ),
+      remove: (key) => run({ sql: 'delete from settings where key = ?', params: [key] }),
     },
   };
 }

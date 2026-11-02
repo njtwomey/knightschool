@@ -3,7 +3,7 @@
 
 teach:
   stepMoves: 4 # both: about how many of your moves make a step
-  stages: [read, watch, try, mistakes, done] # app: the stages of a step, in order
+  stages: [read, watch, try, done] # app: the stages of a step, in order (follow-ups teach the mistakes after)
   hintFadeAfterRight: 2 # app: right answers in a row before the Watch arrow stops showing
   hintReturnAfterWrong: 2 # app: wrong answers before it comes back
   triesBeforeShown: 2 # app: wrong tries before the move is shown
@@ -12,6 +12,8 @@ teach:
   firstStepOpen: true # app: the first step of every opening is always open
   checkpointTries: 1 # app: tries per move in a checkpoint
   checkpointMark: 0.9 # app: the share of a checkpoint answered right that clears it
+  checkpointMix: { positions: 6, mistakes: 2, questions: 1, puzzles: 1 } # app: what a variation's checkpoint asks
+  finalTest: { puzzles: 3, playOn: 1 } # app: what an opening's final test asks besides every branch
 
 judge:
   # app and build: drops in the mover's winning chances (Lichess's scale, -1 to 1) for each grade
@@ -34,6 +36,7 @@ timing: # app: base delays in milliseconds; the learner's speed setting multipli
   pieceMove: 250 # how long a piece takes to slide to its square
   correctBadge: 250
   wrongBadge: 900
+  wrongHold: 1000 # a wrong move stays on the board, with its cross, this long before it slides back
   afterCorrect: 350
   opponent: 500
   nextCard: 700
@@ -71,4 +74,61 @@ practice: # app: the practice modes' defaults
   speedSeconds: 60 # seconds in a timed Speed run
   countdownSeconds: 5 # the count before a Speed run and between the lines of a set
   nameItPositions: 5 # positions in a Name it run
-  drillRuns: 5 # branches played in one Drill session
+
+settings: # app: defaults and ranges of learner settings no key above sets (docs/v2/settings.md, "Keys")
+  retention: { min: 0.8, max: 0.97 } # review.retention's range; its default is schedule.retention
+  feedbackSpeeds: { slow: 1.5, normal: 1, fast: 0.6 } # feedback.speed: what each choice multiplies timing by
+  engineDepth: { default: 24, min: 10, max: 30 } # engine.depth: how deep the analysis beside a board goes
+  engineLines: { default: 1, min: 1, max: 5 } # engine.lines
+  explorerMinShare: 0.01 # explorer.minShare: replies below this share fold under More
+  gamesCount: { default: 50, min: 10, max: 300 } # games.count, per site
+  boardSizeCapRem: { default: 36, min: 24, max: 60 } # board.sizeCap
+  previewDelayMs: { default: 350, min: 0, max: 1500 } # display.previewDelay, to open (closing takes half)
+
+presets: # app: named bundles of learner setting values (device settings are never in a preset)
+  default: club
+  list:
+    - id: getting-started
+      name: Getting started
+      for: New players
+      highlights: [5 new moves a day, Full explanations after a wrong move, Slower play and gates relaxed]
+      values:
+        review.newPerDay: 5
+        feedback.explain: refutation
+        feedback.evalAfter: words
+        feedback.speed: slow
+        feedback.hints: true
+        learning.gatesRelaxed: true
+    - id: club
+      name: Club player
+      for: Rated 1000 to 1600
+      highlights: [10 new moves a day, Gates as written, The computer plays what your level plays]
+      values:
+        review.newPerDay: 10
+        feedback.explain: sentence
+        feedback.evalAfter: words
+        feedback.speed: normal
+        feedback.hints: true
+        learning.gatesRelaxed: false
+        computer.plays: level
+    - id: exam
+      name: Exam
+      for: Testing yourself honestly
+      highlights: [No Hint or Show me, The tries table only at the end, The computer may leave the book]
+      values:
+        feedback.explain: symbol
+        feedback.evalAfter: 'off'
+        feedback.hints: false
+        feedback.triesTable: end
+        computer.plays: engine
+    - id: relaxed
+      name: Relaxed
+      for: Browsing and studying
+      highlights: [No daily limit on new moves, Gates relaxed and rare lines included, Everything shown]
+      values:
+        review.newPerDay: 50
+        learning.gatesRelaxed: true
+        level.includeRare: true
+        feedback.explain: refutation
+        feedback.evalAfter: both
+        feedback.hints: true

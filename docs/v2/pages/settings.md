@@ -11,6 +11,9 @@ its group is in [../settings.md](../settings.md), "Keys"). Hash: `#q=<text>` for
 `#key=<setting key>` to scroll to and highlight one row, `&advanced=1` to show advanced rows
 ([../navigation/url-state.md](../navigation/url-state.md)). v1's `/settings` and `/profile/settings` land here.
 
+As built, the page lives at `/settings` and `/settings/<group>` (the address the header, the board's gear and every
+link use); `/you/settings[/<group>]` and `/profile/settings` show the same page.
+
 ## Reached from
 
 **You** › Settings in the header ([../navigation/menu.md](../navigation/menu.md)); every

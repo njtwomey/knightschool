@@ -14,6 +14,13 @@ const OpeningPage = lazy(() =>
   import('@/features/learn/opening-page').then((module) => ({ default: module.OpeningPage })),
 );
 const StepPage = lazy(() => import('@/features/learn/step-page').then((module) => ({ default: module.StepPage })));
+const VariationPage = lazy(() =>
+  import('@/features/learn/variation-page').then((module) => ({ default: module.VariationPage })),
+);
+const FollowUpPage = lazy(() =>
+  import('@/features/learn/follow-up-page').then((module) => ({ default: module.FollowUpPage })),
+);
+const LinePage = lazy(() => import('@/features/learn/line-page').then((module) => ({ default: module.LinePage })));
 const PuzzlesPage = lazy(() =>
   import('@/features/practice/puzzles/puzzles-page').then((module) => ({ default: module.PuzzlesPage })),
 );
@@ -44,6 +51,9 @@ const ReviewPage = lazy(() =>
 const DrillPage = lazy(() =>
   import('@/features/practice/drill/drill-page').then((module) => ({ default: module.DrillPage })),
 );
+const SettingsPage = lazy(() =>
+  import('@/pages/settings/settings-page').then((module) => ({ default: module.SettingsPage })),
+);
 const CheckpointPage = lazy(() =>
   import('@/features/practice/checkpoint/checkpoint-page').then((module) => ({ default: module.CheckpointPage })),
 );
@@ -62,7 +72,12 @@ function Page({ path }: { path: string }) {
   if (drill) return <DrillPage key={path} scope={scoped(drill)} />;
   const checkpoint = /^\/openings\/([a-z0-9-]+)\/([a-z0-9-]+)\/checkpoint$/.exec(path);
   if (checkpoint) return <CheckpointPage key={path} opening={checkpoint[1]!} variation={checkpoint[2]!} />;
+  const finalTest = /^\/openings\/([a-z0-9-]+)\/test$/.exec(path);
+  if (finalTest) return <CheckpointPage key={path} opening={finalTest[1]!} />;
   if (path === '/mocks') return <MocksPage />;
+  // `/you/settings` (the spec's address) and v1's `/profile/settings` land on the same page.
+  const settings = /^\/(?:you\/|profile\/)?settings(?:\/([a-z]+))?$/.exec(path);
+  if (settings) return <SettingsPage key={path} group={settings[1]} />;
   if (path === '/board') return <BoardPage />;
   if (path === '/openings') return <OpeningsPage />;
   const puzzles = /^\/practice\/puzzles(?:\/([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/.exec(path);
@@ -77,10 +92,26 @@ function Page({ path }: { path: string }) {
   if (speed) return <SpeedPage opening={speed[1]} variation={speed[2]} />;
   const nameIt = /^\/practice\/name-it(?:\/([a-z0-9-]+))?$/.exec(path);
   if (nameIt) return <NameItPage opening={nameIt[1]} />;
-  const step = /^\/openings\/([a-z0-9-]+)\/step\/(\d+)$/.exec(path);
-  if (step) return <StepPage id={step[1]!} n={Number(step[2])} />;
-  const opening = /^\/openings\/([a-z0-9-]+)$/.exec(path);
-  if (opening) return <OpeningPage id={opening[1]!} />;
+  const step = /^\/openings\/([a-z0-9-]+)\/step\/(\d+)(?:\/(\d+)-(\d+))?$/.exec(path);
+  if (step)
+    return (
+      <StepPage
+        key={path}
+        id={step[1]!}
+        n={Number(step[2])}
+        range={step[3] ? [Number(step[3]), Number(step[4])] : undefined}
+      />
+    );
+  const followUp = /^\/openings\/([a-z0-9-]+)\/step\/(\d+)\/follow-up\/(\d+)$/.exec(path);
+  if (followUp) return <FollowUpPage key={path} id={followUp[1]!} n={Number(followUp[2])} k={Number(followUp[3])} />;
+  const opening = /^\/openings\/([a-z0-9-]+)(?:\/(lines))?$/.exec(path);
+  if (opening) return <OpeningPage key={path} id={opening[1]!} tab={opening[2] ? 'lines' : 'overview'} />;
+  const line = /^\/openings\/([a-z0-9-]+)\/lines\/([a-z0-9-]+)$/.exec(path);
+  if (line) return <LinePage key={path} id={line[1]!} line={line[2]!} />;
+  // Reserved words under an opening (step, lines, map, test) are never variations.
+  const variation = /^\/openings\/([a-z0-9-]+)\/([a-z0-9-]+)$/.exec(path);
+  if (variation && !['step', 'lines', 'map', 'test'].includes(variation[2]!))
+    return <VariationPage key={path} id={variation[1]!} variation={variation[2]!} />;
   return <NotFoundPage />;
 }
 

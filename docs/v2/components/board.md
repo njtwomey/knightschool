@@ -35,7 +35,9 @@ with no model.
 - **parts**: which of the parts above, and where they sit. The page lays them out with the board columns
   ([layout](../patterns/layout.md)); on a phone the order is board, controls, feedback, then the rest.
 - **primary**: one board per page is primary. It owns the arrow keys ([use-shortcuts](../hooks/use-shortcuts.md)) and
-  receives hovers and clicks from move chips anywhere on the page that are not inside another board.
+  receives hovers and clicks from move chips anywhere on the page that are not inside another board. Without being told, the
+  first board on the page is primary; `keys` makes a board primary and `keys={false}` keeps it out
+  ([use-move-interaction](../hooks/use-move-interaction.md), "As built").
 - **size**: `main` (capped at 36rem) or `aside` (22rem); never taller than the screen less the header and controls.
 - Settings read by the parts, not by the frame: the `board.*` keys (look), `engine.*`, `feedback.*`, `display.*` and
   `level.band` (every key is in ../settings.md, "Keys"). Each part's file names the ones it reads.

@@ -36,7 +36,10 @@ named variations; Name it results on [stats](stats.md).
   ([../patterns/reveal.md](../patterns/reveal.md)).
 - Full credit for the variation, half for the opening alone; every opening and variation whose lines reach the position
   counts, transpositions included. A miss or a half answer waits with **Next** so the name can be read.
-- Answers are saved as guess attempts; no effect on the review schedule.
+- Answers are saved as guess attempts; no effect on the review schedule. The attempts log has no column for credit:
+  the result is `right` for full credit, `wrong` for half or none, `shown` for asking the answer, and the one try
+  holds the typed words with outcome `right`, `another` (half: the opening, not the variation) or `wrong`
+  (`nameItAttempt`, read back with `nameItCredit` in core).
 - The learner guesses names here, not moves, so there is no [tries-table](../components/tries-table.md) (it is for
   moves): the [session-summary](../components/session-summary.md) keeps its own list of names guessed, each with the
   right name and its credit.

@@ -14,6 +14,7 @@ import type { Idea } from '@/components/chess/idea-badge';
 import type { PracticeConfig, PracticeSource } from '@/components/practice/practice-config';
 import { loadCatalog, loadOpening, loadPuzzles, type Catalog, type ShippedPuzzle } from '@/data/content';
 import { learnerStore } from '@/data/learner';
+import { whenSettingsReady } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { writeBoardHash } from '@/pages/board/board-hash';
 import { to } from '@/router/location';
@@ -43,6 +44,8 @@ export async function loadPuzzleData(): Promise<PuzzleData> {
     Promise.all(catalog.openings.map((entry) => loadOpening(entry.id))),
     Promise.all(catalog.openings.map((entry) => loadPuzzles(entry.id))),
     learnerStore(),
+    // The set-up reads the puzzle rating and who solves from the settings once this resolves.
+    whenSettingsReady(),
   ]);
   const seen = new Set<string>();
   const puzzles: SessionPuzzle[] = [];

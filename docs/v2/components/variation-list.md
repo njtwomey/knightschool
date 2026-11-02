@@ -15,6 +15,8 @@ An opening's variations in study order, each with its steps and its checkpoint: 
 - Extras attached to a variation (puzzles, traps to spring, questions) listed under its last step, muted, marked "not
   needed to know the variation".
 - At the very end, the opening's final test, as a checkpoint row for the whole opening.
+- Each step's follow-ups (`followUps`, by step id) as [step-row](step-row.md)s right under it, with their own state;
+  they never count towards the variation's steps, its progress or its checkpoint.
 
 ## Configuration
 
@@ -28,7 +30,9 @@ An opening's variations in study order, each with its steps and its checkpoint: 
 
 ## Behaviour
 
-- Click a variation header: fold or unfold it. Fold state is per visit, not stored.
+- Click a variation header: open the variation's page (its `href`); the chevron folds or unfolds it. Without an
+  `href` the whole header folds. Fold state is per visit, not stored.
+- Click a checkpoint row or the final-test row: open its page (`checkpoint.href`); its button keeps its own click.
 - Click a step row: selects it, and the page's board shows its stretch ([step-row](step-row.md)).
 - On arrival the list scrolls to the step in progress and selects it.
 - **Test out** opens the checkpoint at once; clearing it makes the variation known and opens the next one, without

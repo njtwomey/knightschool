@@ -8,9 +8,9 @@ import { ExercisePanel, type ExerciseResult as PanelResult } from '@/components/
 import { puzzleThemes } from '@/components/practice/puzzle-themes';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { siteConfig } from '@/data/site-config';
 import { to } from '@/router/location';
 import { ExerciseBoard } from '../exercise-board';
+import { BoardColumns } from '@/components/shared/board-columns';
 import { useExerciseSession, type ExerciseResult } from '../use-exercise-session';
 import {
   levelWords,
@@ -63,7 +63,7 @@ export function PuzzleRun({
   learnerSide?: Side;
   progress?: { done: number; total: number };
   onFinished?: (result: ExerciseResult) => void;
-  /** In a session: the next puzzle. A solved puzzle goes on by itself. */
+  /** In a session: the next puzzle, from the answer panel's Next. */
   onNext?: () => void;
 }) {
   const exercises = useMemo(() => [puzzleExercise(puzzle)], [puzzle]);
@@ -74,11 +74,8 @@ export function PuzzleRun({
   useEffect(() => {
     if (!result || reported.current) return;
     reported.current = true;
+    // Solved or not, the puzzle waits on its answer panel until the learner presses Next (or Enter).
     onFinished?.(result);
-    if (onNext && result.right && !result.hint) {
-      const timer = setTimeout(onNext, siteConfig.timing.nextCard + siteConfig.timing.afterCorrect);
-      return () => clearTimeout(timer);
-    }
   }, [result]);
 
   if (result) return <PuzzleAfter puzzle={puzzle} data={data} result={result} progress={progress} onNext={onNext} />;
@@ -141,92 +138,93 @@ function PuzzleAfter({
   const game = puzzleGameHref(puzzle);
   const panelResult = puzzleResult(result);
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
-      <Board
-        positions={positions}
-        index={index}
-        onIndex={setIndex}
-        reveal="answered"
-        orientation={puzzle.solver}
-        keys
-        actions={
-          <Button asChild variant="ghost" size="sm">
-            <a href={to(puzzleBoardHref(puzzle, puzzle.solver))}>
-              <Grid2x2 aria-hidden /> Open on the board
-            </a>
-          </Button>
-        }
-      />
-      <div className="grid content-start gap-4">
-        <ExercisePanel
-          mode="puzzles"
-          prompt={`${SIDE[puzzle.solver]} to play and ${goal(puzzle)}`}
-          context={`Rated ${puzzle.rating}`}
-          result={panelResult}
-          progress={progress}
-          explanation={
-            <div className="grid gap-3">
-              <div className="grid gap-1">
-                <span className="text-muted-foreground">The solution</span>
-                <MoveRun
-                  moves={moves.map((move) => ({ san: move.san, uci: move.uci, after: move.epd }))}
-                  firstPly={firstPly(puzzle.fen)}
-                  side={puzzle.solver}
-                  current={index - 1}
-                  onSelect={(i) => setIndex(i + 1)}
-                  orientation={puzzle.solver}
-                />
-              </div>
-              {ideas.length + tags.length > 0 ? (
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-muted-foreground">What it was:</span>
-                  {ideas.map(({ theme, name }) =>
-                    data.ideas[theme] ? (
-                      <IdeaBadge key={theme} idea={data.ideas[theme]} />
-                    ) : (
-                      <Badge key={theme} variant="outline">
-                        {name}
-                      </Badge>
-                    ),
-                  )}
-                  {tags.map((tag) => (
-                    <Badge key={tag} variant="outline" className="text-muted-foreground">
-                      {tag}
+    <BoardColumns
+      board={
+        <Board
+          positions={positions}
+          index={index}
+          onIndex={setIndex}
+          reveal="answered"
+          orientation={puzzle.solver}
+          keys
+          actions={
+            <Button asChild variant="ghost" size="sm">
+              <a href={to(puzzleBoardHref(puzzle, puzzle.solver))}>
+                <Grid2x2 aria-hidden /> Open on the board
+              </a>
+            </Button>
+          }
+        />
+      }
+    >
+      <ExercisePanel
+        mode="puzzles"
+        prompt={`${SIDE[puzzle.solver]} to play and ${goal(puzzle)}`}
+        context={`Rated ${puzzle.rating}`}
+        result={panelResult}
+        progress={progress}
+        explanation={
+          <div className="grid gap-3">
+            <div className="grid gap-1">
+              <span className="text-muted-foreground">The solution</span>
+              <MoveRun
+                moves={moves.map((move) => ({ san: move.san, uci: move.uci, after: move.epd }))}
+                firstPly={firstPly(puzzle.fen)}
+                side={puzzle.solver}
+                current={index - 1}
+                onSelect={(i) => setIndex(i + 1)}
+                orientation={puzzle.solver}
+              />
+            </div>
+            {ideas.length + tags.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-muted-foreground">What it was:</span>
+                {ideas.map(({ theme, name }) =>
+                  data.ideas[theme] ? (
+                    <IdeaBadge key={theme} idea={data.ideas[theme]} />
+                  ) : (
+                    <Badge key={theme} variant="outline">
+                      {name}
                     </Badge>
-                  ))}
-                </div>
-              ) : null}
-              <p>
-                <Badge variant="secondary" className="mr-1.5">
-                  Matched {levelWords(puzzle.level)}
-                </Badge>
-                {matchedWhy(puzzle, data)}.
-              </p>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-muted-foreground">
-                {game ? (
-                  <a
-                    href={game}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 hover:text-foreground"
-                  >
-                    The game on Lichess <ExternalLink className="size-3.5" aria-hidden />
-                  </a>
-                ) : null}
+                  ),
+                )}
+                {tags.map((tag) => (
+                  <Badge key={tag} variant="outline" className="text-muted-foreground">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+            <p>
+              <Badge variant="secondary" className="mr-1.5">
+                Matched {levelWords(puzzle.level)}
+              </Badge>
+              {matchedWhy(puzzle, data)}.
+            </p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-muted-foreground">
+              {game ? (
                 <a
-                  href={puzzleUrl(puzzle.id)}
+                  href={game}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 hover:text-foreground"
                 >
-                  Lichess puzzle {puzzle.id} <ExternalLink className="size-3.5" aria-hidden />
+                  The game on Lichess <ExternalLink className="size-3.5" aria-hidden />
                 </a>
-              </div>
+              ) : null}
+              <a
+                href={puzzleUrl(puzzle.id)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 hover:text-foreground"
+              >
+                Lichess puzzle {puzzle.id} <ExternalLink className="size-3.5" aria-hidden />
+              </a>
             </div>
-          }
-          onNext={onNext}
-        />
-      </div>
-    </div>
+          </div>
+        }
+        onNext={onNext}
+      />
+    </BoardColumns>
   );
 }

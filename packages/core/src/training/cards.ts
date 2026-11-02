@@ -9,8 +9,11 @@ export const deviationCardId = (source: 'lichess' | 'chessdotcom', game: string,
 
 export type MoveCardDefinition = { id: string; epd: string; uci: string; san: string; step: string };
 
-/** Lines whose learner moves earn cards: traps to spring are exercises instead, alternatives are shown, never drilled. */
-const CARD_KINDS: ReadonlySet<LineKind> = new Set(['main', 'sideline', 'gambit', 'danger']);
+/**
+ * Lines whose learner moves earn cards: every kind an opening's path teaches as a step, a trap to spring included (its
+ * moves are the punishment to remember); rare lines only when included; alternatives are shown, never drilled.
+ */
+const CARD_KINDS: ReadonlySet<LineKind> = new Set(['main', 'sideline', 'gambit', 'trap', 'danger']);
 
 /** Whether a line's learner moves earn cards (and so are drilled and reviewed). */
 export const lineEarnsCards = (line: { kind: LineKind; alternative: boolean }, includeRare = false): boolean =>

@@ -46,6 +46,10 @@ Explore › (line, a menu of the lines it branches from and that grow from it).
 - Opening a line inside an opening it is not part of redirects to `/lines/<line>` with a
   [notice](../components/notice.md).
 
+**Built so far** (features/learn/line-page.tsx): `/openings/<opening>/lines/<line>` only, with the story, the board,
+"grows from" and "what grows from it", the steps that teach it, Learn it, Drill (the line's variation: Drill has no
+per-line address yet) and Play on. Not yet: `/lines/<line>`, the explorer, other openings that teach it.
+
 ## Leads to
 
 **Learn it** → the [step](step.md) that teaches its first unknown move; **Drill this line** → [drill](drill.md)

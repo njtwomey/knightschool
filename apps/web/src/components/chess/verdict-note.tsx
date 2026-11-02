@@ -1,5 +1,6 @@
-import { formatPawns, type Grade, GRADE_INFO, numberedMove } from '@knightschool/core';
+import { formatPawns, type Grade } from '@knightschool/core';
 import { cn } from '@/lib/utils';
+import { MoveChip } from './move-chip';
 import { MoveRun, type RunMove } from './move-run';
 import { VerdictBadge } from './verdict-badge';
 
@@ -10,6 +11,9 @@ export function VerdictNote({
   grade,
   ply,
   san,
+  epd,
+  from,
+  to,
   costCp,
   because,
   refutation,
@@ -20,6 +24,10 @@ export function VerdictNote({
   grade: Grade;
   ply: number;
   san: string;
+  /** The position after the move and its squares, so the move previews and shows on the board. */
+  epd?: string;
+  from?: string;
+  to?: string;
   costCp?: number;
   because?: string;
   refutation?: RunMove[];
@@ -28,15 +36,11 @@ export function VerdictNote({
   lineMove?: string;
   className?: string;
 }) {
-  const info = GRADE_INFO[grade];
   const sound = grade === 'best' || grade === 'excellent' || grade === 'good';
   return (
     <div className={cn('grid gap-1.5 text-sm', className)}>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-mono font-semibold">
-          {numberedMove(ply, san)}
-          {info.symbol}
-        </span>
+        <MoveChip ply={ply} san={san} epd={epd} from={from} to={to} mine />
         <VerdictBadge grade={grade} size="sm" />
         {costCp !== undefined && costCp > 0 ? (
           <span className="text-xs text-muted-foreground tabular-nums">
@@ -47,7 +51,7 @@ export function VerdictNote({
       {because ? <p className="text-muted-foreground">{because}</p> : null}
       {sound && lineMove ? (
         <p className="text-muted-foreground">
-          A sound move, but not your repertoire move. The line plays <span className="font-mono">{lineMove}</span>.
+          A sound move, but not your repertoire move. The line plays <MoveChip ply={ply} san={lineMove} mine />.
         </p>
       ) : null}
       {refutation && refutation.length > 0 ? (

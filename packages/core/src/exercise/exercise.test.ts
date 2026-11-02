@@ -92,3 +92,21 @@ describe('ending and responding', () => {
     expect(pickWeighted([], 0.5)).toBeUndefined();
   });
 });
+
+describe('a drill against the engine', () => {
+  it('ends where the book ends', () => {
+    const afterE4 = replay(START_EPD, ['e4'])[0]!.epd;
+    const afterE5 = replay(START_EPD, ['e4', 'e5']).at(-1)!.epd;
+    const afterC5 = replay(START_EPD, ['e4', 'c5']).at(-1)!.epd;
+    const drill: Exercise = {
+      ...line,
+      mode: 'drill',
+      grader: { kind: 'exact', book: { [START_EPD]: 'e2e4', [afterE5]: 'g1f3' } },
+      responder: { kind: 'engine' },
+    };
+    expect(exerciseOver(drill, START_EPD, 0, 0)).toBe(false);
+    expect(exerciseOver(drill, afterE4, 1, 1)).toBe(false);
+    expect(exerciseOver(drill, afterE5, 2, 1)).toBe(false);
+    expect(exerciseOver(drill, afterC5, 2, 1)).toBe(true);
+  });
+});

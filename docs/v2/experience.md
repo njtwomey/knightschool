@@ -41,15 +41,19 @@ A step is short and always runs through the same five stages on one page, with t
 
 1. **Read.** The title, two to four sentences, the position that matters with its marks. (v1 has the text for a course,
    not for a unit; steps get their own.)
-2. **Watch.** Go through the moves one at a time, each with its comment and marks; your moves in bold. (v1: Learn, with
-   the arrow for the move to play.) The arrow fades: once you have played a move right twice it is no longer shown, and
-   it comes back after two mistakes (Listudy does this; survey.md).
+2. **Watch.** Step through the moves with the arrow keys, each arriving with its comment and marks; your moves in bold,
+   the arrow showing the move to come. Playing the move on the board steps forward too, but is never needed. (v1:
+   Learn, with the arrow for the move to play.)
 3. **Try.** Play your side without help; the other side plays the step's replies. A wrong move snaps back and says why
    (the verdict, the refutation on the board). (v1: Drill for a unit, `/play/<course>/<line>/drill/<n>`.)
-4. **Their mistakes.** Where the opponent commonly goes wrong in this stretch, they do, and you find the punishment. The
-   board says how often players at your level make that mistake.
-5. **Done.** What you learned (the ideas, by name), where the line leaves you in words ("White is a little better,
+4. **Done.** What you learned (the ideas, by name), where the line leaves you in words ("White is a little better,
    +0.6"), and what comes next. The moves join your reviews.
+
+**Follow-ups come after.** A step teaches only the main line: the key ideas first. Once it is known, its follow-ups
+open, one per common opponent mistake in its stretch (the refutations written in the PGN and the band's popular
+inferior replies): each first shown (the mistake, why it is bad, the punishing line, stepped with the keys), then tried
+(you play the punishment). They sit under their step on the opening page with their own state, and their moves come
+back in Review ([pages/follow-up.md](pages/follow-up.md)).
 
 A step is known when every move in it has been played right twice running (v1's unit rule, `judge.knownRule`). Nothing
 waits for a click when you are right; a miss stays up with Next while there is an explanation to read (v1's rule, kept).

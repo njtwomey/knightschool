@@ -17,6 +17,7 @@ import { FilterToggle, type FilterOption } from '@/components/finding/filter-tog
 import { WEIGHTING_OPTIONS } from '@/components/finding/filter-options';
 import { OpeningName } from '@/components/chess/opening-name';
 import { resolveSetting, SETTINGS, type LayerValues, type SettingValue } from '@/components/settings/registry';
+import { useLiveSettings } from '@/components/settings/live';
 import { SettingsRow } from '@/components/settings/settings-row';
 import { cn } from '@/lib/utils';
 import {
@@ -71,16 +72,11 @@ const SETTING_KEYS = {
 } as const;
 type SettingField = keyof typeof SETTING_KEYS;
 
-/** A field's value as the registry writes it (moves per question 0 is `rest`). */
-const toSetting = (config: PracticeConfig, field: SettingField): string =>
-  field === 'movesPerQuestion'
-    ? config.movesPerQuestion === 0
-      ? 'rest'
-      : String(config.movesPerQuestion)
-    : config[field];
+/** A field's value as the registry holds it. */
+const toSetting = (config: PracticeConfig, field: SettingField): SettingValue => config[field];
 
 function fromSetting(field: SettingField, value: SettingValue): Partial<PracticeConfig> {
-  if (field === 'movesPerQuestion') return { movesPerQuestion: value === 'rest' ? 0 : Number(value) };
+  if (field === 'movesPerQuestion') return { movesPerQuestion: Number(value) };
   if (field === 'computerPlays') return { computerPlays: String(value) as PracticeConfig['computerPlays'] };
   return { solver: String(value) as PracticeConfig['solver'] };
 }
@@ -113,7 +109,8 @@ export type PracticeSetupProps = {
   startLabel?: string;
   /** Where a field's default came from ("from the Exam preset"), for the fields that are not settings. */
   origins?: Partial<Record<SetupField, string>>;
-  /** The learner's setting layers and preset: the fields that are settings show where their value comes from. */
+  /** The learner's setting layers and preset (by default the stored ones): the fields that are settings show where
+   * their value comes from. */
   settings?: { layers: LayerValues; presetId: string };
   title?: string;
   className?: string;
@@ -133,11 +130,13 @@ export function PracticeSetup({
   only,
   startLabel = 'Start',
   origins = {},
-  settings = { layers: {}, presetId: 'club' },
+  settings: givenSettings,
   title,
   className,
 }: PracticeSetupProps) {
   const [draft, setDraft] = useState<PracticeConfig>(initial);
+  const live = useLiveSettings();
+  const settings = givenSettings ?? live;
   const set = <K extends SetupField>(key: K, value: PracticeConfig[K]) => setDraft((d) => ({ ...d, [key]: value }));
   const info = MODE_INFO[mode];
   const Icon = info.icon;
@@ -154,7 +153,7 @@ export function PracticeSetup({
   const session: Record<string, SettingValue> = {};
   for (const field of Object.keys(SETTING_KEYS) as SettingField[]) {
     const value = toSetting(draft, field);
-    if (value !== String(below(field))) session[SETTING_KEYS[field]] = value;
+    if (value !== below(field)) session[SETTING_KEYS[field]] = value;
   }
   const settingRow = (field: SettingField, label: string) => (
     <Row label={label}>

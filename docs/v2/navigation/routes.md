@@ -27,8 +27,9 @@ id is a new slug of its name, unique within its opening. Step numbers count alon
 | `/openings/<opening>/lines/<line>`           | [line](../pages/line.md) inside the opening: its side, its trail, the steps that teach it             | Learn   |
 | `/openings/<opening>/<variation>`            | [variation](../pages/variation.md): its steps, lines, ideas, checkpoint                               | Learn   |
 | `/openings/<opening>/<variation>/checkpoint` | [checkpoint](../pages/checkpoint.md): the variation's mixed test                                      | Learn   |
-| `/openings/<opening>/step/<n>`               | [step](../pages/step.md): Read, Watch, Try, Their mistakes, Done                                      | Learn   |
+| `/openings/<opening>/step/<n>`               | [step](../pages/step.md): Read, Watch, Try, Done                                                      | Learn   |
 | `/openings/<opening>/step/<n>/<a>-<b>`       | [step](../pages/step.md), only moves a to b of it (v1's "Next 3 moves")                               | Learn   |
+| `/openings/<opening>/step/<n>/follow-up/<k>` | [follow-up](../pages/follow-up.md): step n's follow-up k, Show, Try, Done                             | Learn   |
 | `/openings/<opening>/test`                   | [checkpoint](../pages/checkpoint.md) as the opening's final test                                      | Learn   |
 | `/lines/<line>`                              | [line](../pages/line.md) on its own (lines are shared), from the map and search                       | Explore |
 

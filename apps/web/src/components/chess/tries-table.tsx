@@ -5,6 +5,8 @@ import { VerdictBadge } from './verdict-badge';
 
 export type Try = {
   ply: number;
+  /** The position the move was played in (EPD), so a row can open it. */
+  before?: string;
   /** The line's move, the one asked for. */
   asked: string;
   played: string;

@@ -1,15 +1,20 @@
-import { Eye, EyeOff, KeyRound, MonitorSmartphone, RotateCcw } from 'lucide-react';
+import { Check, ExternalLink, Eye, EyeOff, KeyRound, MonitorSmartphone, RotateCcw } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
 import { FilterToggle } from '@/components/finding/filter-toggle';
 import { Hint } from '@/components/shared/hint';
 import { IconAction } from '@/components/shared/icon-action';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
+import { to } from '@/router/location';
 import {
   canReset,
   resetText,
@@ -22,20 +27,42 @@ import {
   type SettingValue,
   type WritableLayer,
 } from './registry';
+import { useLiveSettings } from './live';
+
+/** Board colours for the swatch control: each square colour is a token in index.css. */
+const SWATCH_COLOURS: Record<string, { light: string; dark: string }> = {
+  green: { light: 'var(--board-green-light)', dark: 'var(--board-green-dark)' },
+  tan: { light: 'var(--board-tan-light)', dark: 'var(--board-tan-dark)' },
+  blue: { light: 'var(--board-blue-light)', dark: 'var(--board-blue-dark)' },
+  slate: { light: 'var(--board-slate-light)', dark: 'var(--board-slate-dark)' },
+  purple: { light: 'var(--board-purple-light)', dark: 'var(--board-purple-dark)' },
+};
+
+/** An option's value as the controls carry it (text), and back to the setting's own value. */
+const optionKey = (value: unknown) => JSON.stringify(value);
+const optionValue = (options: readonly { value: SettingValue }[], key: string): SettingValue | undefined =>
+  options.find((option) => optionKey(option.value) === key)?.value;
 
 export type SettingsRowProps = {
   /** The registry key; everything else comes from the entry. */
   setting: string;
-  /** The values set in each layer. */
-  layers: LayerValues;
-  /** The learner's preset, for the preset layer. */
-  presetId: string;
+  /** The values set in each layer; by default the learner's stored settings (`use-setting`). */
+  layers?: LayerValues;
+  /** The learner's preset, for the preset layer; by default the stored one. */
+  presetId?: string;
   /** Which layer this row writes: the settings page (`you`), an opening's page, or the practice card. */
   layer?: WritableLayer;
-  /** Writes at once (a slider when it is let go); the session layer edits the practice card's copy. */
-  onChange: (key: string, value: SettingValue) => void;
+  /** The opening whose layer this row shows and writes (with `layer="opening"`). */
+  opening?: string;
+  /** The opening's name, for the source line ("Set for the Italian Game"). */
+  openingName?: string;
+  /** Writes at once (a slider when it is let go); the session layer edits the practice card's copy. By default it
+   * saves to the stored settings, undoable. */
+  onChange?: (key: string, value: SettingValue) => void;
   /** Takes the written layer's value away, so the layer below shows through. */
-  onReset: (key: string) => void;
+  onReset?: (key: string) => void;
+  /** Disables the control with this reason on hover (engine depth with the engine off). */
+  unavailable?: string;
   /** `full` on the settings page; `compact` in the board's gear, the practice card and inline. */
   density?: 'full' | 'compact';
   /** Search words to mark in the label and hint. */
@@ -92,7 +119,7 @@ function SliderControl({
   disabled,
   onDrag,
 }: {
-  def: SettingDef & { control: { kind: 'slider' } };
+  def: SettingDef & { control: { kind: 'slider'; unit?: string } };
   value: number;
   id: string;
   onCommit: (value: number) => void;
@@ -123,7 +150,9 @@ function SliderControl({
             if (next !== undefined && next !== value) onCommit(next);
           }}
         />
-        <span className="w-8 text-right font-mono text-sm tabular-nums">{shown}</span>
+        <span className="w-12 text-right font-mono text-sm whitespace-nowrap tabular-nums">
+          {def.control.unit === '%' ? `${Math.round(shown * 100)}%` : shown}
+        </span>
       </div>
       {marks.length > 0 ? (
         <div className="relative mr-11 h-3 text-[0.65rem] text-muted-foreground" aria-hidden>
@@ -187,6 +216,48 @@ function NumberControl({
           Between {min} and {max}. Still {value}.
         </p>
       ) : null}
+    </div>
+  );
+}
+
+/** Two thumbs for a range value; writes when let go. */
+function RangeControl({
+  def,
+  value,
+  id,
+  onCommit,
+  disabled,
+}: {
+  def: SettingDef & { control: { kind: 'range' } };
+  value: [number, number];
+  id: string;
+  onCommit: (value: [number, number]) => void;
+  disabled?: boolean;
+}) {
+  const [dragging, setDragging] = useState<[number, number] | null>(null);
+  const shown = dragging ?? value;
+  const { min, max, step } = def.control;
+  return (
+    <div className="flex w-full items-center gap-3 sm:w-64">
+      <Slider
+        id={id}
+        min={min}
+        max={max}
+        step={step}
+        value={shown}
+        disabled={disabled}
+        aria-labelledby={`${id}-label`}
+        onValueChange={(next) => setDragging([next[0] ?? min, next[1] ?? max])}
+        onValueCommit={(next) => {
+          setDragging(null);
+          const low = next[0] ?? min;
+          const high = next[1] ?? max;
+          if (low !== value[0] || high !== value[1]) onCommit([low, high]);
+        }}
+      />
+      <span className="font-mono text-sm whitespace-nowrap tabular-nums">
+        {shown[0]}–{shown[1]}
+      </span>
     </div>
   );
 }
@@ -275,13 +346,20 @@ function Control({
       );
     case 'select':
       return (
-        <Select value={String(value)} onValueChange={onChange} disabled={disabled}>
+        <Select
+          value={optionKey(value)}
+          onValueChange={(key) => {
+            const next = optionValue(control.options, key);
+            if (next !== undefined) onChange(next);
+          }}
+          disabled={disabled}
+        >
           <SelectTrigger id={id} aria-labelledby={`${id}-label`} className="w-full sm:w-64">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
             {control.options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
+              <SelectItem key={optionKey(option.value)} value={optionKey(option.value)}>
                 {option.label}
               </SelectItem>
             ))}
@@ -295,11 +373,99 @@ function Control({
           label={def.label}
           showLabel={false}
           size="sm"
-          value={String(value)}
+          value={optionKey(value)}
           disabled={disabled}
-          options={control.options}
-          onChange={onChange}
+          options={control.options.map((option) => ({ ...option, value: optionKey(option.value) }))}
+          onChange={(key) => {
+            const next = optionValue(control.options, key);
+            if (next !== undefined) onChange(next);
+          }}
         />
+      );
+    case 'swatch':
+      return (
+        <ToggleGroup
+          id={id}
+          type="single"
+          value={String(value)}
+          onValueChange={(next) => next && onChange(next)}
+          spacing={1}
+          disabled={disabled}
+          aria-labelledby={`${id}-label`}
+        >
+          {control.options.map((option) => {
+            const colours = SWATCH_COLOURS[String(option.value)];
+            return (
+              <Tooltip key={String(option.value)}>
+                <TooltipTrigger asChild>
+                  <ToggleGroupItem
+                    value={String(option.value)}
+                    aria-label={option.label}
+                    className="size-9 p-0.5 aria-checked:ring-2 aria-checked:ring-ring data-[state=on]:bg-transparent"
+                  >
+                    <span className="relative grid size-full grid-cols-2 overflow-hidden rounded-md" aria-hidden>
+                      <span style={{ background: colours?.light }} />
+                      <span style={{ background: colours?.dark }} />
+                      <span style={{ background: colours?.dark }} />
+                      <span style={{ background: colours?.light }} />
+                      {value === option.value ? (
+                        <Check className="absolute inset-0 m-auto size-4 text-foreground drop-shadow" />
+                      ) : null}
+                    </span>
+                  </ToggleGroupItem>
+                </TooltipTrigger>
+                <TooltipContent>{option.label}</TooltipContent>
+              </Tooltip>
+            );
+          })}
+        </ToggleGroup>
+      );
+    case 'multi': {
+      const chosen = Array.isArray(value) ? value.map(String) : [];
+      return (
+        <ToggleGroup
+          id={id}
+          type="multiple"
+          variant="outline"
+          size="sm"
+          spacing={0}
+          value={chosen}
+          disabled={disabled}
+          aria-labelledby={`${id}-label`}
+          onValueChange={(next) =>
+            onChange(control.options.map((option) => option.value).filter((v) => next.includes(v)))
+          }
+        >
+          {control.options.map((option) => (
+            <ToggleGroupItem
+              key={option.value}
+              value={option.value}
+              className="aria-pressed:bg-primary! aria-pressed:text-primary-foreground!"
+            >
+              {option.label}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      );
+    }
+    case 'range':
+      return (
+        <RangeControl
+          def={def as SettingDef & { control: typeof control }}
+          value={value as [number, number]}
+          id={id}
+          onCommit={onChange}
+          disabled={disabled}
+        />
+      );
+    case 'elsewhere':
+      return (
+        <Button asChild variant="outline" size="sm">
+          <a href={to(control.href)} id={id} aria-labelledby={`${id}-label`}>
+            {control.text}
+            <ExternalLink aria-hidden />
+          </a>
+        </Button>
       );
     case 'number':
       return (
@@ -333,20 +499,31 @@ function Control({
  */
 export function SettingsRow({
   setting,
-  layers,
-  presetId,
+  layers: givenLayers,
+  presetId: givenPreset,
   layer = 'you',
-  onChange,
-  onReset,
+  opening,
+  openingName,
+  onChange: givenChange,
+  onReset: givenReset,
   density = 'full',
   highlight = '',
   hideLabel = false,
-  disabledReason,
+  disabledReason: givenDisabled,
+  unavailable,
 }: SettingsRowProps) {
   const id = useId();
   const def = SETTINGS[setting];
+  const live = useLiveSettings({ layer, opening });
   const [dragging, setDragging] = useState<number | null>(null);
   if (!def) return null;
+  const layers = givenLayers ?? live.layers;
+  const presetId = givenPreset ?? live.presetId;
+  const onChange = givenChange ?? live.onChange;
+  const onReset = givenReset ?? live.onReset;
+  const disabledReason = givenDisabled ?? unavailable;
+  // Learner rows wait for the database before they can be changed (device rows work at once).
+  const waiting = !givenLayers && !live.ready && def.store === 'learner';
   const resolved = resolveSetting(def, layers, presetId, layer);
   const shownValue = dragging ?? resolved.value;
   const words = highlight.toLowerCase().split(/\s+/).filter(Boolean);
@@ -355,11 +532,14 @@ export function SettingsRow({
     <IconAction
       label={resetText(resolveBelow(def, layers, presetId, layer), def, presetId)}
       onClick={() => onReset(def.key)}
+      disabled={!!disabledReason}
     >
       <RotateCcw aria-hidden />
     </IconAction>
   ) : null;
-  const control = (
+  const control = waiting ? (
+    <Skeleton className="h-8 w-32" aria-label="Loading your settings" />
+  ) : (
     <Control
       def={def}
       value={resolved.value}
@@ -392,11 +572,15 @@ export function SettingsRow({
           Advanced
         </Badge>
       ) : null}
-      <StoreIcon def={def} />
+      {compact ? null : <StoreIcon def={def} />}
     </div>
   );
 
-  const source = <p className="text-xs text-muted-foreground">{sourceText(resolved.source, presetId)}</p>;
+  const source = (
+    <p className="text-xs text-muted-foreground" data-source={resolved.source}>
+      {sourceText(resolved.source, presetId, openingName)}
+    </p>
+  );
 
   if (compact) {
     return (
@@ -431,7 +615,7 @@ export function SettingsRow({
         <p className="text-sm text-muted-foreground">
           <Marked text={def.hint} words={words} />
         </p>
-        {def.explain ? <p className="text-sm">{def.explain(shownValue)}</p> : null}
+        {def.explain ? <p className="text-sm">{def.explain(shownValue as never)}</p> : null}
         {source}
       </div>
       <div className={cn('flex items-start gap-1 sm:justify-end')}>

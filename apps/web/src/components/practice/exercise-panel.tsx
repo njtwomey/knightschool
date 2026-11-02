@@ -116,7 +116,8 @@ export function ExercisePanel({
   useEffect(() => {
     if (!onNext) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Enter' && event.key !== 'ArrowRight') return;
+      // Enter only: the arrow keys belong to the board, which steps through the answer.
+      if (event.key !== 'Enter') return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       const target = event.target as HTMLElement | null;
       const typing = target?.closest('input:not([readonly]), textarea:not([readonly]), [contenteditable]');

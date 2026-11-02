@@ -6,7 +6,8 @@ waits for a click when you are right; a miss with an explanation stays up until 
 ## The rule
 
 1. **Right: carry on by itself.** A tick flashes, the computer replies, the next exercise appears. No button.
-2. **Wrong: cross, snap back, say why.** The cross shows on the square, the piece goes back, and the verdict with its
+2. **Wrong: cross, hold, slide back, say why.** The move stays where it was played with the cross on its square for
+   `wrongHold`, then the piece slides back (never a snap: the learner sees what they played), and the verdict with its
    reason ([verdict-note](../components/verdict-note.md)) and the refutation stay in the panel until the next try.
 3. **A miss with something to read stays up with Next.** When the move is shown after two wrong tries, a worded answer
    is missed or half right, or a Name it guess is partly right, the board and explanation wait for Next (or Enter).
@@ -22,7 +23,8 @@ waits for a click when you are right; a miss with an explanation stays up until 
 | Delay (v1 name) | v1 value | When                                                         | v2                                                |
 | --------------- | -------- | ------------------------------------------------------------ | ------------------------------------------------- |
 | `correctBadge`  | 250 ms   | Tick on a right move where play goes straight on (Speed)     | kept                                              |
-| `wrongBadge`    | 900 ms   | Cross on a wrong move, before it snaps back                  | kept; the note stays after the cross goes         |
+| `wrongBadge`    | 900 ms   | Cross on a wrong move                                        | kept; the note stays after the cross goes         |
+| `wrongHold`     | 1000 ms  | A wrong move stays on the board, then slides back            | new: was an instant snap back                     |
 | `afterCorrect`  | 350 ms   | After a right move in Watch and Try, before the line goes on | kept                                              |
 | `opponent`      | 500 ms   | Before the computer answers                                  | kept; also before an opponent's mistake is played |
 | `nextCard`      | 700 ms   | After a right move in Review, before the next card           | kept                                              |
@@ -38,12 +40,13 @@ The hover and long-press delays are in [interactions](interactions.md), in the s
 played right twice running, and comes back after two mistakes on it (experience.md, Watch; config
 `teach.hintFadeAfterRight` and `teach.hintReturnAfterWrong`).
 
-**Their mistakes**: the opponent's mistaken move is played after `opponent`, its note ("Played in a quarter of games at
-your level, and it loses a piece") appears with it, and the board waits for the learner's punishment with no timer.
+**A follow-up's Try**: the opponent's mistake is already on the board as the last move, its note ("Played in a quarter
+of games at your level; it gives away about 1.4 pawns") beside it, and the board waits for the learner's punishment
+with no timer.
 
 ## Where it applies
 
-Every exercise through [use-exercise-session](../hooks/use-exercise-session.md): a step's Watch, Try and Their mistakes,
+Every exercise through [use-exercise-session](../hooks/use-exercise-session.md): a step's Try and a follow-up's Try,
 Review, Drill, Puzzles, Play on, Checkpoint, Speed, Name it. Shown by [board-feedback](../components/board-feedback.md)
 and [exercise-panel](../components/exercise-panel.md).
 

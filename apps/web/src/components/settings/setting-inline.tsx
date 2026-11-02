@@ -9,17 +9,21 @@ import {
   type SettingValue,
   type WritableLayer,
 } from './registry';
+import { useLiveSettings } from './live';
 import { SettingsRow } from './settings-row';
 
 export type SettingInlineProps = {
   setting: string;
   /** The line's words, written for the moment: "Too fast? Slow the feedback down". */
   prompt: string;
-  layers: LayerValues;
-  presetId: string;
+  /** By default the learner's stored settings, and changes save there, undoable. */
+  layers?: LayerValues;
+  presetId?: string;
   layer?: WritableLayer;
-  onChange: (key: string, value: SettingValue) => void;
-  onReset: (key: string) => void;
+  /** The opening whose layer it writes (with `layer="opening"`). */
+  opening?: string;
+  onChange?: (key: string, value: SettingValue) => void;
+  onReset?: (key: string) => void;
   /** Hides it for this session (three of these for one setting stop it for good: the page counts). */
   onNotNow: () => void;
   /** The group on the settings page, `/settings#group=feedback`. */
@@ -38,9 +42,10 @@ export type SettingInlineProps = {
 export function SettingInline({
   setting,
   prompt,
-  layers,
-  presetId,
+  layers: givenLayers,
+  presetId: givenPreset,
   layer = 'you',
+  opening,
   onChange,
   onReset,
   onNotNow,
@@ -50,7 +55,10 @@ export function SettingInline({
   className,
 }: SettingInlineProps) {
   const def = SETTINGS[setting];
+  const live = useLiveSettings({ layer, opening });
   if (!def) return null;
+  const layers = givenLayers ?? live.layers;
+  const presetId = givenPreset ?? live.presetId;
   const now = valueLabel(def, resolveSetting(def, layers, presetId, layer).value);
   const where = layer === 'opening' ? 'for this opening' : 'everywhere';
   return (
@@ -63,9 +71,10 @@ export function SettingInline({
         <p className="text-sm text-muted-foreground">{prompt}</p>
         <SettingsRow
           setting={setting}
-          layers={layers}
+          layers={givenLayers}
           presetId={presetId}
           layer={layer}
+          opening={opening}
           onChange={onChange}
           onReset={onReset}
           density="compact"

@@ -30,11 +30,16 @@ become lines everywhere.**
 
 **Step.** About four of the learner's moves: the chunk learned and tested at once, five to ten minutes. A step has a
 title, two to four sentences of text, the stretch of a line it teaches, the ideas it shows, and a check. It runs through
-five **stages**: Read, Watch, Try, Their mistakes, Done (experience.md). _v1: units (`training/units/`, `courseUnits`),
+four **stages**: Read, Watch, Try, Done (experience.md). _v1: units (`training/units/`, `courseUnits`),
 cut automatically, with `units:` overrides in course.yaml._ v2 keeps the automatic cut as the default and lets an author
 name a step and write its text. **Rename: a v1 unit becomes a step.**
 
 ## Beside the hierarchy
+
+**Follow-up.** One of the opponent's common mistakes in a step's stretch and how to punish it, taught after the step's
+main line is known and hanging off that step (3a, 3b under step 3). Worked out from the refutations in the PGN and the
+band's popular inferior replies in the shipped facts, never stored; its id is `follow-up:<epd>:<uci>` and its learner
+moves are ordinary move cards. Locked until its step is known ([pages/follow-up.md](pages/follow-up.md)). _New._
 
 **Idea.** A reusable piece of understanding that has a name: a tactic (fork, pin), a plan (minority attack, kingside
 pawn storm), a structure (Carlsbad, isolated queen's pawn), a principle (develop before attacking), a trap pattern (the
@@ -105,14 +110,14 @@ Two rules keep this simple:
 One set of states serves moves, steps and variations: **locked**, **open**, **learning**, **known**, **mastered**. The
 rules behind known and mastered are config (`judge.knownRule`, `judge.masteredDays`; [config.md](config.md)).
 
-| Piece      | Progress                                                                                                                 | v1                                           |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
-| Repertoire | coverage by move 5, 10, 15 at the learner's band                                                                         | new                                          |
-| Opening    | a progress ring (share of its moves known and mastered) and whether its final test is cleared                            | partly, on Overview                          |
-| Variation  | locked, open, learning, known (its checkpoint is cleared), mastered (every step mastered)                                | new                                          |
-| Step       | locked, open, learning, known (every move known), mastered (every move mastered)                                         | unit states (`features/path/unit-state.ts`)  |
-| Move       | locked (in a locked step), open (not yet seen), learning, known (last two answers good), mastered (FSRS 7 days and more) | cards, `unitProgress` in `units/progress.ts` |
-| Idea       | open, learning (seen), known (practised: puzzles and moves showing it answered well)                                     | new                                          |
+| Piece      | Progress                                                                                                                            | v1                                           |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| Repertoire | coverage by move 5, 10, 15 at the learner's band                                                                                    | new                                          |
+| Opening    | a progress ring (share of its moves known and mastered) and whether its final test is cleared                                       | partly, on Overview                          |
+| Variation  | locked, open, learning, known (its checkpoint is cleared), mastered (every step mastered)                                           | new                                          |
+| Step       | locked, open, learning, known (every move known), mastered (every move mastered)                                                    | unit states (`features/path/unit-state.ts`)  |
+| Move       | locked (in a locked step), open (not yet seen), learning, known (last two answers good), mastered (known, and FSRS 7 days and more) | cards, `unitProgress` in `units/progress.ts` |
+| Idea       | open, learning (seen), known (practised: puzzles and moves showing it answered well)                                                | new                                          |
 
 v1 calls known "passed" and mastered "graduated"; v2 uses only the five words above.
 

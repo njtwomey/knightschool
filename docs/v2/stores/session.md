@@ -20,7 +20,7 @@ One session at a time across the app: starting one stops any other, and leaving 
 
 [use-exercise-session](../hooks/use-exercise-session.md) only: `start`, `answer`, `hint`, `next`, `skip`, `stop`.
 Started from [practice-setup](../components/practice-setup.md) (Start), [practice-bar](../components/practice-bar.md)
-(Change, then Start), the [step](../pages/step.md) page (Try, Their mistakes), the
+(Change, then Start), the [step](../pages/step.md) page (Try), the [follow-up](../pages/follow-up.md) page (Try), the
 [checkpoint](../pages/checkpoint.md) page, and a scoped address (routes.md).
 
 ## Read by

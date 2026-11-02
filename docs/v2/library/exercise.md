@@ -7,7 +7,8 @@ the attempt that keeps every try; checkpoints made of exercises.
 
 - **`Exercise`**: `{ id, ref, start, side, prompt, moves, grader, responder, help }`. `moves` is how many of the
   learner's moves it asks for (one for a card, a stretch for a step, the solution for a puzzle, `opponent.playOnMoves`
-  for Play on); `ref` is what gets recorded (a card, step or puzzle id); `help`: whether Hint and Show me are offered.
+  for Play on); `ref` is what gets recorded (a card, step or puzzle id); `help`: whether Hint and Show me are offered; `record`: what answering saves over the session's choice (a mistake to
+  punish or a puzzle inside a checkpoint is `none`, never a move card).
 - **Graders**, `grade(position, answer, context) → right | another | wrong | pending`:
   - **`exact(expected)`**: one of the expected moves is `right`; a move [judge](judge.md) grades Best, Excellent or Good
     is `another` (sound, not the line's move); anything else `wrong`. A puzzle also accepts any mate where the solution

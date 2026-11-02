@@ -174,7 +174,9 @@ function GroupDemo({
 }) {
   const s = useSettingsState(initial);
   const [query, setQuery] = useState(startQuery ?? '');
-  const anyMatch = Object.values(SETTINGS).some((def) => groups.includes(def.group) && matchesSetting(def, query));
+  const anyMatch = Object.values(SETTINGS).some(
+    (def) => def && groups.includes(def.group as SettingGroupId) && matchesSetting(def, query),
+  );
   return (
     <div className="grid max-w-3xl gap-3">
       {search ? (

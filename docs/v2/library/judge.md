@@ -53,7 +53,7 @@ verdict on the opponent's previous move, for Miss.
 - **Opponent mistakes** are `judgeMove` with the side flipped. `share` is the move's games over the position's games at
   `coverage.band`. A move is **common** when graded Mistake or worse, played at least `coverage.punishShare` (10%) of
   the time and losing at least `coverage.punishLoss` (150 cp). The build fails an opening that leaves a common mistake
-  unpunished; the map and Their mistakes stage list them.
+  unpunished; the map and a step's follow-ups list them.
 - **Refutation**: the author's refutation (the move plus its `then`) when written, else the first six plies of the
   engine's line from the position after the move (proposed `judge.refutationPlies`). Only for Inaccuracy and worse.
 - **Never stored**: worked out again from cached evaluations; the store keeps the first live verdict for the session,

@@ -165,6 +165,15 @@ describe('repositories', () => {
     await store.settings.set('preset', 'strict');
     expect(await store.settings.get('preset')).toBe('strict');
   });
+
+  it('lists every setting and removes one', async () => {
+    await store.settings.set('preset', '"club"');
+    await store.settings.set('opening:italian:review.newPerDay', '5');
+    expect(await store.settings.all()).toEqual({ preset: '"club"', 'opening:italian:review.newPerDay': '5' });
+    await store.settings.remove('preset');
+    expect(await store.settings.all()).toEqual({ 'opening:italian:review.newPerDay': '5' });
+    expect(await store.settings.get('preset')).toBeUndefined();
+  });
 });
 
 describe('logs are append-only', () => {

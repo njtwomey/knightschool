@@ -30,15 +30,15 @@ level from the board model. No page turns individual parts on or off.
 - One learner setting reaches in: `board.marksWhileStudying` (on by default) can hide marks in `study` and `learn` for
   someone who wants a clean board. No setting can show more in `test`.
 
-| Preset     | Level               | Used by                                                                    |
-| ---------- | ------------------- | -------------------------------------------------------------------------- |
-| `study`    | study               | opening page, line, map, idea pages, a step's Read                         |
-| `learn`    | learn               | a step's Watch                                                             |
-| `test`     | test, then answered | a step's Try and Their mistakes, Review, Drill, Checkpoint, Speed, Name it |
-| `puzzle`   | test, then answered | puzzles                                                                    |
-| `analysis` | study               | the Board page (`/board`), after a puzzle, Play on's review                |
-| `author`   | study               | Create                                                                     |
-| `thumb`    | marks only          | cards, search results, the Today hero                                      |
+| Preset     | Level               | Used by                                                                       |
+| ---------- | ------------------- | ----------------------------------------------------------------------------- |
+| `study`    | study               | opening page, line, map, idea pages, a step's Read                            |
+| `learn`    | learn               | a step's Watch                                                                |
+| `test`     | test, then answered | a step's Try and a follow-up's Try, Review, Drill, Checkpoint, Speed, Name it |
+| `puzzle`   | test, then answered | puzzles                                                                       |
+| `analysis` | study               | the Board page (`/board`), after a puzzle, Play on's review                   |
+| `author`   | study               | Create                                                                        |
+| `thumb`    | marks only          | cards, search results, the Today hero                                         |
 
 ## Where it applies
 

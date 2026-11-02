@@ -29,11 +29,13 @@ opens the preview card and click navigates.
 
 **Rows and cards** that stand for a thing (an opening, a variation, a step, a line, a puzzle, a mode, what is due, a
 checkpoint, a preset, a setting group). **No dead cards**: every card or row has a default action when clicked anywhere
-on it, and it is the obvious one: a mode's tile opens the mode, the due card starts the review, a step row shows the
-step on the page's board (or opens it where the page has no board), a puzzle opens the puzzle, a preset is chosen. One
+on it, and it is the obvious one: a mode's tile opens the mode, the due card starts the review, a step or follow-up
+row opens it where the learner left off (hover previews it on the page's board, click opens it), a puzzle opens the
+puzzle, a preset is chosen. One
 module does it, `components/shared/card-link.tsx`: `LINKED_CARD` on the card, a `CardLink` (opens a page) or
-`CardAction` (acts on this page) inside, and `ABOVE_ROW_LINK` on controls that keep their own click. A card's own
-button for that same action is dropped, as redundant, unless its label carries information ("Review 20 of 45").
+`CardAction` (acts on this page) inside, and `ABOVE_ROW_LINK` on controls that keep their own click. The card's key
+action stays visible as a button too (Review now, Open, Learn), so the default is discoverable; the whole card is the
+larger target for the same thing.
 
 | Gesture             | What happens                                                                                                                         |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |

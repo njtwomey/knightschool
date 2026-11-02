@@ -1,4 +1,4 @@
-import { dayKey, type Exercise } from '@knightschool/core';
+import type { Exercise } from '@knightschool/core';
 import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
 import { Square } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -11,7 +11,10 @@ import { Button } from '@/components/ui/button';
 import { useLoad } from '@/hooks/use-load';
 import { to } from '@/router/location';
 import { ExerciseBoard } from '../exercise-board';
-import { INTRODUCED_KEY, loadProgress, practiceOpenings, type LearnerProgress } from '../progress';
+import { loadProgress, practiceOpenings, type LearnerProgress } from '../progress';
+import type { QuestionAnswer } from '../questions/asked';
+import { QuestionRun } from '../questions/question-run';
+import { openTry } from '../try-position';
 import { readPracticeConfig, savePracticeConfig } from '../saved-config';
 import { openingSource, practiceSources, sourceOfScope, type PracticeScope } from '../sources';
 import { nextStateOf } from '../today/next';
@@ -54,7 +57,7 @@ function planFor(
   puzzles: Awaited<ReturnType<typeof shippedPuzzles>>,
   config: PracticeConfig,
 ) {
-  return config.source === 'due' ? duePlan(progress, puzzles) : freePlan(progress, config);
+  return config.source === 'due' ? duePlan(progress, puzzles, config) : freePlan(progress, config);
 }
 
 function ReviewView({
@@ -94,7 +97,16 @@ function ReviewView({
   );
 }
 
-type Phase = { results: ExerciseResult[]; tries: Try[] };
+/** One part of the session done: its answers (moves, puzzles or questions alike) and, for moves, every try. */
+type Answered = Pick<ExerciseResult, 'id' | 'right' | 'hint' | 'shown'>;
+type Phase = { results: Answered[]; tries: Try[] };
+
+const fromQuestions = (answers: readonly QuestionAnswer[]): Answered[] =>
+  answers.map((answer) => ({ id: answer.cardId, right: answer.matched, hint: false, shown: !answer.typed }));
+
+/** "one move each", "3 moves each", "to the end of the line". */
+const perQuestion = (moves: number) =>
+  moves === 0 ? 'to the end of the line' : moves === 1 ? 'one move each' : `${moves} moves each`;
 
 function ReviewSession({
   session,
@@ -110,23 +122,21 @@ function ReviewSession({
   onStart: (config: PracticeConfig) => void;
 }) {
   const { plan, config } = session;
-  const recorded = useRef(false);
-  // New cards are introduced when the session starts: they count against today's allowance.
-  useEffect(() => {
-    if (recorded.current || plan.free || !plan.introduced) return;
-    recorded.current = true;
-    const today = dayKey(new Date());
-    const used = progress.introduced?.day === today ? progress.introduced.count : 0;
-    void progress.store.settings.set(INTRODUCED_KEY, JSON.stringify({ day: today, count: used + plan.introduced }));
-  }, [plan, progress]);
+  // New cards count against today's allowance once answered: the count is read from the reviews they leave.
   const [phases, setPhases] = useState<Phase[]>([]);
   const [stopped, setStopped] = useState(false);
-  const parts = [plan.moves, plan.puzzles].filter((list) => list.length);
-  const total = plan.moves.length + plan.puzzles.length;
+  const parts = (
+    [
+      { kind: 'moves', list: plan.moves },
+      { kind: 'questions', list: plan.questions },
+      { kind: 'puzzles', list: plan.puzzles },
+    ] as const
+  ).filter((part) => part.list.length);
+  const total = plan.moves.length + plan.questions.length + plan.puzzles.length;
   const doneCount = phases.reduce((sum, phase) => sum + phase.results.length, 0);
   const summary =
     config.source === 'due'
-      ? `Due today: ${total} ${total === 1 ? 'card' : 'cards'}${plan.introduced ? `, ${plan.introduced} new` : ''}, one move each`
+      ? `Due today: ${total} ${total === 1 ? 'card' : 'cards'}${plan.introduced ? `, ${plan.introduced} new` : ''}, moves ${perQuestion(config.movesPerQuestion)}`
       : undefined;
   const bar = (
     <PracticeBar
@@ -134,7 +144,7 @@ function ReviewSession({
       config={config}
       sources={sources}
       due={due}
-      only={['source', 'weighting']}
+      only={['source', 'weighting', 'movesPerQuestion']}
       onStart={onStart}
       {...(summary ? { summary } : {})}
       progress={{ done: doneCount, total }}
@@ -168,22 +178,43 @@ function ReviewSession({
     return <ReviewSummary session={session} phases={phases} sources={sources} due={due} onStart={onStart} />;
   }
 
-  const exercises = parts[phases.length]!;
+  const part = parts[phases.length]!;
+  const onDone = (phase: Phase, stop?: boolean) => {
+    setPhases((list) => [...list, phase]);
+    if (stop) setStopped(true);
+  };
+  if (part.kind === 'questions') {
+    return (
+      <div className="grid gap-4">
+        {bar}
+        <QuestionRun
+          key={phases.length}
+          asked={part.list}
+          mode="review"
+          save={!plan.free}
+          progress={{ done: doneCount, total }}
+          aside={
+            plan.free ? (
+              <p className="text-sm text-muted-foreground">Free practice: not saved to your schedule.</p>
+            ) : undefined
+          }
+          onDone={(answers) => onDone({ results: fromQuestions(answers), tries: [] })}
+        />
+      </div>
+    );
+  }
   return (
     <div className="grid gap-4">
       {bar}
       <Run
         key={phases.length}
-        exercises={exercises}
-        save={plan.free ? 'none' : exercises === plan.puzzles ? 'exercise' : 'moves'}
+        exercises={part.list}
+        save={plan.free ? 'none' : part.kind === 'puzzles' ? 'exercise' : 'moves'}
         opening={plan.opening}
         facts={plan.facts}
         context={plan.context}
         free={plan.free}
-        onDone={(phase, stop) => {
-          setPhases((list) => [...list, phase]);
-          if (stop) setStopped(true);
-        }}
+        onDone={onDone}
       />
     </div>
   );
@@ -277,6 +308,7 @@ function ReviewSummary({
         { value: String(shown), label: 'shown' },
       ]}
       tries={tries}
+      onSelectTry={openTry(tries)}
       free={session.plan.free}
       {...(next.data
         ? {
@@ -290,7 +322,7 @@ function ReviewSummary({
             },
           }
         : {})}
-      again={{ config: session.config, sources, due, only: ['source', 'weighting'], onStart }}
+      again={{ config: session.config, sources, due, only: ['source', 'weighting', 'movesPerQuestion'], onStart }}
     />
   );
 }

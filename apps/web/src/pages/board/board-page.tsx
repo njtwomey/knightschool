@@ -17,12 +17,6 @@ import { CopyMenu } from './copy-menu';
 import { PasteDialog } from './paste-dialog';
 
 /**
- * How deep the board's analysis goes before it rests. Single-threaded Stockfish in the browser reaches this in well
- * under a minute on a laptop; the `engine.depth` setting will take its place.
- */
-const BOARD_MAX_DEPTH = 26;
-
-/**
  * The view, kept in the address as it changes (replacing, so Back leaves the page), and read again when the hash is
  * edited.
  */
@@ -64,7 +58,7 @@ export function BoardPage() {
   const analysis = useAnalysis(epd, {
     lines: settings.engineLines,
     enabled: settings.engineOn,
-    maxDepth: BOARD_MAX_DEPTH,
+    maxDepth: settings.engineDepth,
   });
   const score = analysis.lines[0]?.score ?? null;
 

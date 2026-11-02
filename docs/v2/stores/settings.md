@@ -57,6 +57,16 @@ Every read is checked field by field, so a bad stored value falls back to the ne
 - `packages/storage/src/schema.ts` (`settings` table) and `transfer.ts` (exported with everything else).
 - `apps/web/src/features/profile/settings/` (`training-section.tsx`, `explorer-section.tsx`, `data-section.tsx`).
 
+**As built.** Device settings live in one localStorage object, `knightschool.settings` (key to value, read key by
+key); `knightschool.board` from the first board menu is carried over into it once and removed. The token stays under
+`knightschool.explorerToken`. Learner settings are one row per registry key (JSON text) plus `opening:<id>:<key>` rows,
+in the existing `settings` table: no new table and no migration (the store gained `settings.all()` and
+`settings.remove(key)`; a reset removes the row). v1's `newCardsPerDay`, `includeRareLines`, `minPopularityPercent` and
+`enrolled` are read as their registry keys when the registry key has no row, and written under the new name once.
+Device settings are not exported. The practice card's registry fields (moves per question, how the computer plays,
+the puzzle rating, who solves) are no longer kept in `knightschool.practice.<mode>`: they are read from the settings,
+Start saves a changed one as the learner's choice, and values an older build kept there are carried over once.
+
 ## Open questions
 
 1. Is Undo for a setting kept in memory for the page's life, or recorded (a history like `authored_history`)? The

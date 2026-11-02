@@ -122,5 +122,8 @@ export async function exportLearnerData(): Promise<LearnerExport> {
 /** Merges an export into this device's data by `at`; refuses a newer file and writes nothing if a row is bad. */
 export async function importLearnerData(input: unknown): Promise<ImportReport> {
   const [{ importJson }, exec] = await Promise.all([import('@knightschool/storage'), savedDatabase()]);
-  return importJson(exec, input);
+  const report = await importJson(exec, input);
+  // Imported settings rows apply at once, without a reload.
+  await import('../settings').then((settings) => settings.reloadLearnerSettings());
+  return report;
 }

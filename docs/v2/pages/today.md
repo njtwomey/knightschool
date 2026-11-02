@@ -40,6 +40,15 @@ glance and a light streak. Comes first in the menu; most visits start and end he
   repertoire's openings, taking turns between them; reviews, if any are due at all; otherwise "All done for today"
   with **Practise anyway** ([../hooks/use-progress.md](../hooks/use-progress.md)).
 - Everything is worked out from the answer log on arrival; nothing on the page is stored.
+- A step is in progress when its Try is begun and not finished (some of its moves in reviews, not all); the latest
+  answered wins and the button opens its Try.
+- The coverage meter has one row per opening started: the baked counts begin at each opening's own first position,
+  so its shares are of the games that reach the opening (not of every game after 1.e4). "Known" is a move known or
+  its step known (tested out included); the outline is what the opening covers. The gap link is the reply met most
+  often that the learner cannot answer yet, with the step that teaches it when the opening does; with no map page
+  yet, "See it on the map" opens the Board page at the reply.
+- The calendar counts every graded answer in the attempts log (Watch is not an answer), tinted by the mode answered
+  most that day; the streak above it stays the one streak line.
 - With the new-move limit reached, the button never offers a new step; the due card says when more open.
 - No repertoire at all: `/` shows [first visit](first-visit.md); `/today` shows an
   [empty-state](../components/empty-state.md) with **Choose a repertoire**.

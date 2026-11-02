@@ -1,137 +1,229 @@
-import type { ItemState } from '@knightschool/core';
-import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
-import { BookOpen } from 'lucide-react';
+import type { BuiltOpening } from '@knightschool/core/content';
 import { useMemo, useState } from 'react';
 import { Board } from '@/components/board/board';
-import { Button } from '@/components/ui/button';
+import { BoardColumns } from '@/components/shared/board-columns';
+import { BoardNotes } from '@/components/board/board-notes';
+import { FilterToggle } from '@/components/finding/filter-toggle';
+import { KIND_OPTIONS } from '@/components/finding/filter-options';
+import { SortableTable } from '@/components/finding/sortable-table';
+import { LineActions, lineColumns, type LineData } from '@/components/openings/line-row';
 import { OpeningIntro } from '@/components/openings/opening-intro';
-import type { StepData } from '@/components/openings/steps';
+import type { Source } from '@/components/openings/types';
 import { VariationList } from '@/components/openings/variation-list';
-import { loadFacts, loadOpening } from '@/data/content';
-import { learnerStore } from '@/data/learner';
-import { useLoad } from '@/hooks/use-load';
-import { bakedScore, stepMoves, stepStates } from './model';
-import type { AttemptRow } from '@/data/learner-store';
-import { checkpointsOf, latestCheckpoints } from '@/features/practice/progress';
-import { navigate, to } from '@/router/location';
-import { checkpointHref, stepHref, variationViews } from './views';
+import { PuzzleCard } from '@/components/practice/puzzle-card';
+import { ModeCounts } from '@/components/progress/mode-counts';
+import { NextAction } from '@/components/progress/next-action';
+import { ProgressRing } from '@/components/progress/progress-ring';
+import type { ShippedPuzzle } from '@/data/content';
+import { siteConfig } from '@/data/site-config';
+import { to } from '@/router/location';
+import { bakedScore, cardStates, stepMoves } from './model';
+import {
+  followUpMoves,
+  openingFollowUps,
+  openingIdeas,
+  openingVariations,
+  topPuzzles,
+  useStepActions,
+  type OpeningData,
+} from './opening-data';
+import { OpeningCrumbs, OpeningFrame } from './opening-frame';
+import { nextStepNumber, openingModeCounts, openingModeHrefs, openingNextState } from './opening-progress';
+import { finalTestHref, lineViews } from './views';
 
-/** One opening: its introduction, its variations with their steps, and a board for the step picked. */
-export function OpeningPage({ id }: { id: string }) {
-  const data = useLoad(async () => {
-    const [opening, facts, store] = await Promise.all([
-      loadOpening(id),
-      loadFacts(id).catch(() => undefined),
-      learnerStore(),
-    ]);
-    const cards = await store.cards.all();
-    const reviews = await store.reviews.forCards(cards.map((card) => card.id));
-    const attempts = await store.attempts.recent(20_000);
-    return { opening, facts, cards, reviews, attempts };
-  }, [id]);
-  if (data.error) return <main className="mx-auto max-w-7xl px-4 py-8 text-destructive">{data.error}</main>;
-  if (!data.data) return <main className="mx-auto max-w-7xl px-4 py-8 text-muted-foreground">Loading…</main>;
-  return <OpeningView {...data.data} />;
+/** One opening: its introduction, what to do next, its variations with their steps, and a board for the step picked. */
+export function OpeningPage({ id, tab = 'overview' }: { id: string; tab?: 'overview' | 'lines' }) {
+  return (
+    <OpeningFrame id={id}>
+      {(data) => (tab === 'lines' ? <LinesTab data={data} /> : <Overview key={id} data={data} />)}
+    </OpeningFrame>
+  );
 }
 
-function OpeningView({
-  opening,
-  facts,
-  cards,
-  reviews,
-  attempts,
-}: {
-  opening: BuiltOpening;
-  facts?: OpeningFacts;
-  attempts: AttemptRow[];
-  cards: Awaited<ReturnType<Awaited<ReturnType<typeof learnerStore>>['cards']['all']>>;
-  reviews: Awaited<ReturnType<Awaited<ReturnType<typeof learnerStore>>['reviews']['forCards']>>;
-}) {
-  const progress = useMemo(() => stepStates(opening, cards, reviews), [opening, cards, reviews]);
-  const info = useMemo(() => {
-    const map = new Map<string, { state: ItemState; counts: { mine: number; known: number; inReviews: number } }>();
-    for (const step of opening.steps) {
-      map.set(step.id, { state: progress.states.get(step.id)!, counts: progress.counts.get(step.id)! });
-    }
-    return map;
-  }, [opening, progress]);
-  const checkpoints = useMemo(
+function Overview({ data }: { data: OpeningData }) {
+  const { one, progress, puzzles } = data;
+  const opening = one.opening;
+  const actions = useStepActions(opening);
+  const variations = useMemo(() => openingVariations(data), [data]);
+  const counts = useMemo(() => openingModeCounts(one, progress, puzzles), [one, progress, puzzles]);
+  const next = useMemo(() => openingNextState(one, progress, puzzles), [one, progress, puzzles]);
+  const ideas = useMemo(() => openingIdeas(progress.catalog, opening.ideas), [progress, opening]);
+  // The board rests on the next step; hovering a step or follow-up row previews it there until the pointer leaves.
+  const [home] = useState(() => opening.steps[(nextStepNumber(one) ?? 1) - 1]?.id ?? opening.steps[0]?.id);
+  const [previewing, setPreviewing] = useState<string | null>(null);
+  const picked = previewing ?? home;
+  const followUp = useMemo(() => openingFollowUps(data).find((candidate) => candidate.id === picked), [data, picked]);
+  const step = opening.steps.find((candidate) => candidate.id === (followUp?.step ?? picked)) ?? opening.steps[0];
+  // A follow-up row shows its mistake and punishing line; a step row its stretch.
+  const shown = useMemo(
     () =>
-      new Map(
-        checkpointsOf(opening, progress.states, latestCheckpoints(attempts)).map((checkpoint) => [
-          checkpoint.variation,
-          { cleared: checkpoint.state === 'cleared', score: checkpoint.score, positions: checkpoint.positions },
-        ]),
-      ),
-    [opening, progress, attempts],
+      followUp
+        ? { moves: followUpMoves(followUp).map((move) => ({ ...move, note: undefined })) }
+        : step
+          ? stepMoves(opening, step)
+          : null,
+    [opening, step, followUp],
   );
-  const variations = useMemo(() => variationViews(opening, info, checkpoints), [opening, info, checkpoints]);
-  const [picked, setPicked] = useState(opening.steps[0]?.id);
-  const step = opening.steps.find((candidate) => candidate.id === picked) ?? opening.steps[0];
-  const shown = useMemo(() => (step ? stepMoves(opening, step) : null), [opening, step]);
-  const [index, setIndex] = useState(0);
   const positions = useMemo(() => {
-    if (!shown) return [{ epd: opening.startEpd }];
-    const moves = shown.moves;
+    if (!shown?.moves.length) return [{ epd: opening.startEpd }];
+    const start = shown.moves[0]!.before;
     return [
-      { epd: moves[0]?.before ?? opening.startEpd, score: bakedScore(facts, moves[0]?.before ?? opening.startEpd) },
-      ...moves.map((move) => ({
+      { epd: start, score: bakedScore(one.facts, start) },
+      ...shown.moves.map((move) => ({
         epd: move.after,
         lastMove: { from: move.uci.slice(0, 2), to: move.uci.slice(2, 4) },
         marks: move.note,
-        score: bakedScore(facts, move.after),
+        score: bakedScore(one.facts, move.after),
       })),
     ];
-  }, [shown, opening, facts]);
-  const stepNumber = (data: StepData) => data.number;
+  }, [shown, opening, one.facts]);
+  // The board shows the step's stretch at its end, to step back through; a preview shows where the row's step ends.
+  const [resting, setIndex] = useState(positions.length - 1);
+  // A step previews at the end of its stretch; a follow-up on the position after the punishment.
+  const index = previewing ? (followUp ? Math.min(2, positions.length - 1) : positions.length - 1) : resting;
   const at = shown?.moves[index - 1];
+  const known = counts.learn?.known ?? 0;
+  const moves = [...one.stepCounts.values()].reduce(
+    (sum, c) => ({ total: sum.total + c.mine, known: sum.known + c.known }),
+    { total: 0, known: 0 },
+  );
+  const finalTest = {
+    positions: one.cards.length,
+    state: one.checkpoints.every((c) => c.state === 'cleared') ? ('open' as const) : ('locked' as const),
+    href: finalTestHref(opening.id),
+  };
 
   return (
-    <main className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
-      <div className="grid gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{opening.name}</h1>
-        <p className="text-muted-foreground">{opening.side === 'white' ? 'As White' : 'As Black'}</p>
-      </div>
-      <OpeningIntro summary={opening.summary} about={opening.about} side={opening.side} variant="short" />
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)]">
-        <VariationList
-          variations={variations}
-          selected={picked}
-          onSelect={(data) => {
-            setPicked(data.id);
-            setIndex(0);
-          }}
-          fold="all-open"
-          onCheckpoint={(variation) => {
-            if (variation) navigate(checkpointHref(opening.id, variation.id).slice(to('').length));
-          }}
-        />
-        <div className="grid content-start gap-3 lg:sticky lg:top-20">
-          <Board
-            positions={positions}
-            index={Math.min(index, positions.length - 1)}
-            onIndex={setIndex}
-            orientation={opening.side}
-            caption={at?.note?.text ?? (step?.title ? <span className="font-medium">{step.title}</span> : null)}
-            actions={
-              step ? (
-                <span className="text-sm text-muted-foreground">
-                  Step {stepNumber(variations.flatMap((v) => v.steps).find((s) => s.id === step.id)!)}
-                </span>
-              ) : null
-            }
-          />
-          {step ? (
-            <div>
-              <Button asChild>
-                <a href={stepHref(opening.id, opening.steps.indexOf(step) + 1)}>
-                  <BookOpen aria-hidden /> Learn this step
-                </a>
-              </Button>
-            </div>
-          ) : null}
+    <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
+      <OpeningCrumbs catalog={progress.catalog} opening={opening} tab="overview" />
+      <div className="flex flex-wrap items-center gap-4">
+        <div className="grid gap-1">
+          <h1 className="text-2xl font-semibold tracking-tight">{opening.name}</h1>
+          <p className="text-muted-foreground">
+            {opening.side === 'white' ? 'As White' : 'As Black'}
+            {known ? `, ${known} of ${opening.steps.length} steps known` : ''}
+          </p>
         </div>
+        <ProgressRing counts={{ ...moves, mastered: 0 }} label="long" size="md" />
       </div>
+      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
+        <NextAction state={next} />
+        <ModeCounts counts={counts} hrefs={openingModeHrefs(one)} />
+      </div>
+      <BoardColumns
+        side="right"
+        board={
+          <>
+            <Board
+              positions={positions}
+              index={Math.min(index, positions.length - 1)}
+              onIndex={setIndex}
+              orientation={opening.side}
+            />
+            <BoardNotes
+              move={
+                at
+                  ? {
+                      ply: at.ply,
+                      san: at.san,
+                      ...(at.note?.text ? { comment: at.note.text } : {}),
+                      ...(at.note ? { marks: at.note } : {}),
+                    }
+                  : undefined
+              }
+              startText={step?.text ?? 'Pick a step to see its moves here.'}
+              side={opening.side}
+            />
+          </>
+        }
+      >
+        <div className="grid content-start gap-6">
+          <OpeningIntro
+            summary={opening.summary}
+            about={opening.about}
+            side={opening.side}
+            ideas={ideas}
+            sources={opening.sources as Source[]}
+          />
+          <VariationList
+            variations={variations}
+            finalTest={finalTest}
+            selected={home}
+            onPreview={(row) => setPreviewing(row?.id ?? null)}
+            testOut={siteConfig.teach.testOut}
+            {...actions}
+          />
+        </div>
+      </BoardColumns>
+      <PuzzleSection opening={opening} puzzles={puzzles} />
+    </main>
+  );
+}
+
+/** Puzzles from this opening: three cards, family and named-variation level first. */
+function PuzzleSection({ opening, puzzles }: { opening: BuiltOpening; puzzles: readonly ShippedPuzzle[] }) {
+  const three = topPuzzles(puzzles, 3);
+  if (!three.length) return null;
+  return (
+    <section className="grid gap-3" aria-labelledby="opening-puzzles">
+      <h2 id="opening-puzzles" className="text-lg font-semibold">
+        Puzzles from this opening
+      </h2>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {three.map((puzzle) => (
+          <PuzzleCard
+            key={puzzle.id}
+            puzzle={puzzle}
+            href={to(`/practice/puzzle/${puzzle.id}`)}
+            hideThemes
+            learnerSide={opening.side}
+            level={siteConfig.puzzles.rating}
+            from={`From a game that went through your ${opening.name}`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+type KindFilter = (typeof KIND_OPTIONS)[number]['value'];
+
+const matchesKind = (line: LineData, kind: KindFilter) =>
+  kind === 'all' || (kind === 'trap' ? line.kind === 'for-us' || line.kind === 'against-us' : line.kind === kind);
+
+/** The Lines tab: every line of the opening, sortable, filtered by kind; a row opens the line. */
+function LinesTab({ data }: { data: OpeningData }) {
+  const { one, progress } = data;
+  const opening = one.opening;
+  const lines = useMemo(() => lineViews(opening, cardStates(progress.cards, progress.reviews)), [opening, progress]);
+  const [kind, setKind] = useState<KindFilter>('all');
+  const options = KIND_OPTIONS.map((option) => ({
+    ...option,
+    count: lines.filter((line) => matchesKind(line, option.value)).length,
+    disabled: option.value !== 'all' && !lines.some((line) => matchesKind(line, option.value)),
+  }));
+  return (
+    <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
+      <OpeningCrumbs catalog={progress.catalog} opening={opening} tab="lines" />
+      <div className="grid gap-1">
+        <h1 className="text-2xl font-semibold tracking-tight">Lines of the {opening.name}</h1>
+        <p className="text-muted-foreground">
+          Every line the opening teaches, each from where it branches off. Open one to read it through.
+        </p>
+      </div>
+      <SortableTable
+        label={`Lines of the ${opening.name}`}
+        columns={lineColumns()}
+        rows={lines.filter((line) => matchesKind(line, kind))}
+        rowKey={(line) => line.id}
+        rowHref={(line) => line.href}
+        titleColumn="name"
+        actions={(line) => <LineActions line={line} />}
+        empty="No lines of this kind."
+        filters={
+          <FilterToggle label="Kind" value={kind} options={options} allValue="all" onChange={setKind} size="sm" />
+        }
+      />
     </main>
   );
 }

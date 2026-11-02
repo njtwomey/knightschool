@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { Reveal } from './board';
 
-type Move = { ply: number; san: string; from: string; to: string };
+/** The move the feedback is about; `epd` (the position after it) lets its chip preview and show it on the board. */
+type Move = { ply: number; san: string; from: string; to: string; epd?: string };
 
 /** The verdict on the move at the board's cursor: one shape per case in docs/v2/components/board-feedback.md. */
 export type Feedback =
@@ -27,8 +28,11 @@ export type Feedback =
     } & Move)
   /** As good as the line's move, but not it: no cross, no try used, and the line's move asked for. */
   | ({ kind: 'alternative'; grade: Grade; lineMove: string; linePly: number } & Move)
-  /** The opponent's mistake: how often it is played at the band, what it costs, and "find the punishment". */
-  | ({ kind: 'opponent-mistake'; grade: Grade; sharePct?: number; because: string } & Move)
+  /**
+   * The opponent's mistake: how often it is played at the band and what it costs. `ask` is the prompt under it, when
+   * the page asks for the punishment (a follow-up's Try); none when the mistake is only being shown.
+   */
+  | ({ kind: 'opponent-mistake'; grade: Grade; sharePct?: number; because: string; ask?: string } & Move)
   /** The punishment was there and not found. */
   | ({ kind: 'miss'; punish: Move; because?: string; refutation?: RunMove[] } & Move);
 
@@ -56,6 +60,9 @@ export type BoardFeedbackProps = {
 };
 
 const sideName = (ply: number) => (ply % 2 === 0 ? 'White' : 'Black');
+const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1);
+/** A move as a live chip: it previews on hover and shows its position on the board when clicked. */
+const chipOf = (move: Move) => ({ ply: move.ply, san: move.san, from: move.from, to: move.to, epd: move.epd });
 const runPly = (feedback: Feedback) => feedback.ply + 1;
 
 function ShowWhy({
@@ -111,7 +118,7 @@ export function BoardFeedback({
               <span className="grid size-5 place-items-center rounded-full bg-feedback-right text-on-fill" aria-hidden>
                 <Check className="size-3.5" strokeWidth={3} />
               </span>
-              <MoveChip ply={feedback.ply} san={feedback.san} mine preview={false} />
+              <MoveChip {...chipOf(feedback)} mine />
               <VerdictBadge grade={grade} size="sm" />
             </div>
             {sentence && feedback.comment && reveal !== 'test' ? (
@@ -136,6 +143,9 @@ export function BoardFeedback({
                 grade={feedback.grade}
                 ply={feedback.ply}
                 san={feedback.san}
+                epd={feedback.epd}
+                from={feedback.from}
+                to={feedback.to}
                 costCp={feedback.costCp}
                 because={feedback.because}
                 refutation={explain === 'refutation' ? feedback.refutation : undefined}
@@ -143,7 +153,7 @@ export function BoardFeedback({
               />
             ) : (
               <div className="flex items-center gap-2">
-                <MoveChip ply={feedback.ply} san={feedback.san} grade={feedback.grade} preview={false} />
+                <MoveChip {...chipOf(feedback)} />
                 <VerdictBadge grade={feedback.grade} size="sm" />
               </div>
             )}
@@ -160,7 +170,7 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex flex-wrap items-center gap-2">
-              <MoveChip ply={feedback.ply} san={feedback.san} mine preview={false} />
+              <MoveChip {...chipOf(feedback)} mine />
               <VerdictBadge grade={feedback.grade} size="sm" />
               <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                 <GitBranch className="size-3.5" aria-hidden />
@@ -170,7 +180,7 @@ export function BoardFeedback({
             {sentence ? (
               <p className="text-sm">
                 {GRADE_INFO[feedback.grade].name}, but not your repertoire move: this opening plays{' '}
-                <MoveChip ply={feedback.linePly} san={feedback.lineMove} mine preview={false} />. Play it.
+                <MoveChip ply={feedback.linePly} san={feedback.lineMove} mine />. Play it.
               </p>
             ) : null}
           </>
@@ -180,24 +190,18 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex flex-wrap items-center gap-2">
-              <MoveChip ply={feedback.ply} san={feedback.san} grade={feedback.grade} preview={false} />
+              <MoveChip {...chipOf(feedback)} />
               <VerdictBadge grade={feedback.grade} size="sm" />
             </div>
             {sentence ? (
               <p className="text-sm">
-                {sideName(feedback.ply)}'s{' '}
-                <span className="font-mono">
-                  {feedback.ply % 2 === 0 ? '' : '...'}
-                  {feedback.san}
-                  {GRADE_INFO[feedback.grade].symbol}
-                </span>{' '}
+                {sideName(feedback.ply)}'s <MoveChip {...chipOf(feedback)} grade={feedback.grade} />{' '}
                 {feedback.sharePct !== undefined
-                  ? `is played in ${feedback.sharePct}% of games at your level, and `
-                  : ''}
-                {feedback.because}
+                  ? `is played in ${feedback.sharePct}% of games at your level, and ${lowerFirst(feedback.because)}`
+                  : feedback.because}
               </p>
             ) : null}
-            <p className="text-sm font-medium">Find the punishment.</p>
+            {feedback.ask ? <p className="text-sm font-medium">{feedback.ask}</p> : null}
           </>
         );
         break;
@@ -205,13 +209,12 @@ export function BoardFeedback({
         body = (
           <>
             <div className="flex flex-wrap items-center gap-2">
-              <MoveChip ply={feedback.ply} san={feedback.san} mine preview={false} />
+              <MoveChip {...chipOf(feedback)} mine />
               <VerdictBadge grade="miss" size="sm" />
             </div>
             {sentence ? (
               <p className="text-sm">
-                A miss: <MoveChip ply={feedback.punish.ply} san={feedback.punish.san} mine preview={false} />{' '}
-                {feedback.because ?? 'wins material here.'}
+                A miss: <MoveChip {...chipOf(feedback.punish)} mine /> {feedback.because ?? 'wins material here.'}
               </p>
             ) : null}
             {explain === 'refutation' && feedback.refutation?.length ? (

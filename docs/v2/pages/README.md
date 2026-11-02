@@ -34,7 +34,8 @@ One sentence: what the page is for, and who comes to it.
 | [openings.md](openings.md)     | Every opening: filters (side, style, level), opening cards, "what to pick"                 |
 | [opening.md](opening.md)       | One opening: introduction, mode counts, variations with their steps, the board, every line |
 | [variation.md](variation.md)   | One variation: its steps, lines, ideas and checkpoint                                      |
-| [step.md](step.md)             | Learning one step: read, watch, try, their mistakes, done                                  |
+| [step.md](step.md)             | Learning one step's main line: read, watch, try, done                                      |
+| [follow-up.md](follow-up.md)   | After a step: one opponent mistake in its stretch, shown then tried                        |
 | [line.md](line.md)             | One line in words: its moves and comments, branches, other openings that use it            |
 
 ## Practice

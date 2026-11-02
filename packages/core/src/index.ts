@@ -21,3 +21,4 @@ export * from './play-on/play-on';
 export * from './questions';
 export * from './names';
 export * from './speed';
+export * from './settings';

@@ -46,3 +46,8 @@ One line in a list: its name, kind, moves and what the learner knows of it, with
 Repurpose. `apps/web/src/features/course/lines-table.tsx` draws a course's lines grouped by section and kind with
 tags, ECO link and show, learn and drill icons; `apps/web/src/features/search/variation-card.tsx` is the card form
 with a thumb. v2 merges them into one component with two forms and adds the known bar.
+
+## Columns
+
+`lineColumns(keys)` gives the row's cells as [sortable-table](sortable-table.md) columns (name, kind, variation,
+opponent, moves, known) and `LineActions` its actions, for the opening's Lines tab; `LineTable` stays for plain lists.

@@ -21,6 +21,7 @@ import { PracticeSetup } from '@/components/practice/practice-setup';
 import { SessionSummary } from '@/components/practice/session-summary';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { EmptyState } from '@/components/shared/empty-state';
+import { BoardColumns } from '@/components/shared/board-columns';
 import { Button } from '@/components/ui/button';
 import { loadCatalog, loadFacts, loadOpening, type Catalog } from '@/data/content';
 import { learnerStore } from '@/data/learner';
@@ -403,65 +404,66 @@ function PlayOnAfter({
     side,
   })}`;
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)]">
-      <Board
-        positions={positions}
-        index={index}
-        onIndex={setIndex}
-        reveal="answered"
-        orientation={side}
-        keys
-        actions={
-          <Button asChild variant="ghost" size="sm">
-            <a href={to(board)}>
-              <Grid2x2 aria-hidden /> Open on the board
-            </a>
-          </Button>
-        }
-      />
-      <div className="grid content-start gap-4">
-        <ExercisePanel
-          mode="play-on"
-          prompt={
-            judged
-              ? judged.verdict
-                ? verdictWords(judged.verdict, judged.from, side)
-                : 'Played on: the engine could not judge the result'
-              : 'Judging where it leaves you…'
-          }
-          context={start.exit ? `After ${numberedMove(start.exit.ply, start.exit.san)}, off the book` : start.lineName}
-        >
-          {judged?.from || judged?.to ? (
-            <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
-              <EvalWords score={judged.from} />
-              <ArrowRight className="size-3.5 self-center text-muted-foreground" aria-label="to" />
-              <EvalWords score={judged.to} />
-            </p>
-          ) : null}
-          <div className="grid gap-1 text-sm">
-            <span className="text-muted-foreground">The moves played</span>
-            <MoveRun
-              moves={moves.map((move) => ({ san: move.san, uci: move.uci, after: move.epd }))}
-              firstPly={start.moves.length}
-              side={side}
-              current={index - 1}
-              onSelect={(i) => setIndex(i + 1)}
-              orientation={side}
-            />
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {wrong === 0
-              ? 'Every move kept the position the first time.'
-              : `${wrong} ${wrong === 1 ? 'move was' : 'moves were'} taken back for losing too much.`}
-          </p>
-          <div>
-            <Button onClick={onNext} disabled={!judged}>
-              {last ? <Flag aria-hidden /> : <ArrowRight aria-hidden />}
-              {last ? 'Finish' : 'Another position'}
+    <BoardColumns
+      board={
+        <Board
+          positions={positions}
+          index={index}
+          onIndex={setIndex}
+          reveal="answered"
+          orientation={side}
+          keys
+          actions={
+            <Button asChild variant="ghost" size="sm">
+              <a href={to(board)}>
+                <Grid2x2 aria-hidden /> Open on the board
+              </a>
             </Button>
-          </div>
-        </ExercisePanel>
-      </div>
-    </div>
+          }
+        />
+      }
+    >
+      <ExercisePanel
+        mode="play-on"
+        prompt={
+          judged
+            ? judged.verdict
+              ? verdictWords(judged.verdict, judged.from, side)
+              : 'Played on: the engine could not judge the result'
+            : 'Judging where it leaves you…'
+        }
+        context={start.exit ? `After ${numberedMove(start.exit.ply, start.exit.san)}, off the book` : start.lineName}
+      >
+        {judged?.from || judged?.to ? (
+          <p className="flex flex-wrap items-baseline gap-x-2 text-sm">
+            <EvalWords score={judged.from} />
+            <ArrowRight className="size-3.5 self-center text-muted-foreground" aria-label="to" />
+            <EvalWords score={judged.to} />
+          </p>
+        ) : null}
+        <div className="grid gap-1 text-sm">
+          <span className="text-muted-foreground">The moves played</span>
+          <MoveRun
+            moves={moves.map((move) => ({ san: move.san, uci: move.uci, after: move.epd }))}
+            firstPly={start.moves.length}
+            side={side}
+            current={index - 1}
+            onSelect={(i) => setIndex(i + 1)}
+            orientation={side}
+          />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {wrong === 0
+            ? 'Every move kept the position the first time.'
+            : `${wrong} ${wrong === 1 ? 'move was' : 'moves were'} taken back for losing too much.`}
+        </p>
+        <div>
+          <Button onClick={onNext} disabled={!judged}>
+            {last ? <Flag aria-hidden /> : <ArrowRight aria-hidden />}
+            {last ? 'Finish' : 'Another position'}
+          </Button>
+        </div>
+      </ExercisePanel>
+    </BoardColumns>
   );
 }

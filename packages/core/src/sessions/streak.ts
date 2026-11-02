@@ -38,3 +38,24 @@ export function practiceStreak(times: readonly string[], now: Date): StreakFacts
     since: `${since.getUTCFullYear()}-${String(since.getUTCMonth() + 1).padStart(2, '0')}-${String(since.getUTCDate()).padStart(2, '0')}`,
   };
 }
+
+/** One day of practice for the activity calendar: answers, those right, and the answers in each mode. */
+export type ActivityDayFacts = { date: string; answers: number; right: number; modes: Record<string, number> };
+
+/**
+ * The days practised, from the attempts log (docs/v2/components/activity-calendar.md): every graded answer in any
+ * mode, by the learner's local day, oldest first. Watching a step (mode `watch`) is not an answer.
+ */
+export function activityDays(attempts: readonly { at: string; mode: string; result: string }[]): ActivityDayFacts[] {
+  const days = new Map<string, ActivityDayFacts>();
+  for (const attempt of attempts) {
+    if (attempt.mode === 'watch') continue;
+    const date = dayKey(new Date(attempt.at));
+    const day = days.get(date) ?? { date, answers: 0, right: 0, modes: {} };
+    day.answers += 1;
+    if (attempt.result === 'right') day.right += 1;
+    day.modes[attempt.mode] = (day.modes[attempt.mode] ?? 0) + 1;
+    days.set(date, day);
+  }
+  return [...days.values()].sort((a, b) => a.date.localeCompare(b.date));
+}

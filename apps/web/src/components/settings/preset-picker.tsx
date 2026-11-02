@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { sameSetting } from '@knightschool/core';
 import {
   PRESETS,
   presetOf,
@@ -17,22 +18,25 @@ import {
   type LayerValues,
   type SettingValue,
 } from './registry';
+import { useLiveSettings } from './live';
 import { SettingsRow } from './settings-row';
 
 export type PresetPickerProps = {
-  /** The learner's preset id. */
-  value: string;
-  layers: LayerValues;
+  /** The learner's preset id; by default the stored one. */
+  value?: string;
+  /** By default the learner's stored settings. */
+  layers?: LayerValues;
   /** `cards` on the settings page and in onboarding; `select` for narrow places. */
   variant?: 'cards' | 'select';
   /** No "what changes" list (nothing is set yet). */
   onboarding?: boolean;
   /** Said on the cards when an opening's author asks for something a preset never undoes. */
   materialNote?: string;
-  onPick: (id: string) => void;
+  /** By default it saves the `preset` setting, undoable. */
+  onPick?: (id: string) => void;
   /** For the compact rows listing the learner's own changes. */
-  onChange: (key: string, value: SettingValue) => void;
-  onReset: (key: string) => void;
+  onChange?: (key: string, value: SettingValue) => void;
+  onReset?: (key: string) => void;
 };
 
 /** What picking another preset would change, old value to new; your own choices stay, so they are left out. */
@@ -42,7 +46,9 @@ function changesTo(targetId: string, currentId: string, layers: LayerValues) {
     const def = SETTINGS[key];
     if (!def || layers.you?.[key] !== undefined) return [];
     const now = resolveSetting(def, layers, currentId, 'you').value;
-    return now === next ? [] : [{ key, label: def.label, from: valueLabel(def, now), to: valueLabel(def, next) }];
+    return sameSetting(now, next)
+      ? []
+      : [{ key, label: def.label, from: valueLabel(def, now), to: valueLabel(def, next) }];
   });
 }
 
@@ -51,18 +57,28 @@ function changesTo(targetId: string, currentId: string, layers: LayerValues) {
  * since; hovering another card lists what picking it would change (docs/v2/components/preset-picker.md).
  */
 export function PresetPicker({
-  value,
-  layers,
+  value: givenValue,
+  layers: givenLayers,
   variant = 'cards',
   onboarding = false,
   materialNote,
-  onPick,
+  onPick: givenPick,
   onChange,
   onReset,
 }: PresetPickerProps) {
   const id = useId();
   const [looking, setLooking] = useState<string | null>(null);
-  const own = Object.keys(layers.you ?? {}).filter((key) => SETTINGS[key]);
+  const live = useLiveSettings();
+  const stored = !givenLayers;
+  const layers = givenLayers ?? live.layers;
+  const value = givenValue ?? live.presetId;
+  const onPick = givenPick ?? live.onPick;
+  // Your own choices on top of the preset: learner settings that differ from what the preset gives.
+  const own = stored
+    ? live.custom
+    : Object.keys(layers.you ?? {}).filter(
+        (key) => SETTINGS[key] && SETTINGS[key].store === 'learner' && key !== 'preset',
+      );
   const current = presetOf(value);
   const customName =
     own.length > 0
@@ -181,7 +197,7 @@ export function PresetPicker({
                 <SettingsRow
                   key={key}
                   setting={key}
-                  layers={layers}
+                  layers={stored ? undefined : layers}
                   presetId={value}
                   onChange={onChange}
                   onReset={onReset}

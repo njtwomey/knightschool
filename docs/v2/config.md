@@ -27,7 +27,7 @@ Each key is marked **build** (used only by the scripts), **app** (used only in t
 | Group          | Key (proposed)                 | Default                                            | Used by | What it decides                                                                                                |
 | -------------- | ------------------------------ | -------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
 | **Teaching**   | `teach.stepMoves`              | 4                                                  | both    | about how many of your moves make a step                                                                       |
-|                | `teach.stages`                 | read, watch, try, mistakes, done                   | app     | the stages of a step, in order                                                                                 |
+|                | `teach.stages`                 | read, watch, try, done                             | app     | the stages of a step, in order                                                                                 |
 |                | `teach.hintFadeAfterRight`     | 2                                                  | app     | right answers in a row before the Watch arrow stops showing                                                    |
 |                | `teach.hintReturnAfterWrong`   | 2                                                  | app     | wrong answers before it comes back                                                                             |
 |                | `teach.triesBeforeShown`       | 2                                                  | app     | wrong tries before the move is shown (v1 `WRONG_TRIES_ALLOWED`)                                                |
@@ -36,6 +36,8 @@ Each key is marked **build** (used only by the scripts), **app** (used only in t
 |                | `teach.firstStepOpen`          | true                                               | app     | the first step of every opening is always open                                                                 |
 |                | `teach.checkpointTries`        | 1                                                  | app     | tries per move in a checkpoint or final test                                                                   |
 |                | `teach.checkpointMark`         | 9 of 10, no blunders                               | app     | what clears a checkpoint or final test                                                                         |
+|                | `teach.checkpointMix`          | 6 positions, 2 mistakes, 1 question, 1 puzzle      | app     | what a variation's checkpoint asks; a kind short of items is made up with positions                            |
+|                | `teach.finalTest`              | 3 puzzles, 1 Play on                               | app     | what an opening's final test asks besides every branch of the opening                                          |
 | **Judging**    | `judge.grades`                 | Lichess-style                                      | both    | winning-chance drops: Best ≤ 0.01, Excellent < 0.04, Good < 0.1, then Inaccuracy 0.1, Mistake 0.2, Blunder 0.3 |
 |                | `judge.evalWords`              | 0.05, 0.18, 0.43                                   | app     | winning-chance bands for "equal", "a little better", "clearly better", "winning" (eval-words)                  |
 |                | `judge.refutationPlies`        | 6                                                  | both    | how many plies of the punishing line a refutation shows                                                        |
@@ -65,8 +67,8 @@ Each key is marked **build** (used only by the scripts), **app** (used only in t
 |                | `engine.bakedDepth`            | 24                                                 | build   | native analysis depth                                                                                          |
 | **Lichess**    | `lichess.pauseAfter429`        | 60 s                                               | both    | the pause after being rate limited                                                                             |
 |                | `lichess.cacheDays`            | 30                                                 | app     | explorer answers kept this long                                                                                |
-| **Presets**    | `presets`                      | four                                               | app     | named bundles of setting values: Getting started, Club player, Exam, Relaxed                                   |
-| **Settings**   | `settings`                     | the registry                                       | app     | which settings exist, with default, range and level (basic, advanced)                                          |
+| **Presets**    | `presets`                      | four, default `club`                               | app     | named bundles of learner setting values (never device ones): Getting started, Club player, Exam, Relaxed       |
+| **Settings**   | `settings`                     | ranges                                             | app     | defaults and ranges of settings no key above sets (retention range, speed multipliers, engine depth and lines) |
 
 ## What stays a setting
 

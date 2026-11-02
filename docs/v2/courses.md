@@ -26,7 +26,7 @@ An opening is ready when:
 1. **Coverage.** Every reply played in at least 5% of games at the 1000 to 1600 band is answered, to about move 10,
    and the opening's coverage at that band is shown. (`make gaps`; `popularity.json`.)
 2. **Their mistakes.** Every reply played in at least 10% of games that loses 1.5 pawns or more is punished, in a
-   step's Their mistakes stage, not only a quiz. (The common-mistake finder, `make punish`.)
+   follow-up of the step whose stretch it falls in, not only a quiz. (The common-mistake finder, `make punish`.)
 3. **Your mistakes.** The tempting wrong moves at each of your moves (the explorer's popular moves that are not the
    opening's) have a verdict, and the worst have a refutation written in words.
 4. **Engine-checked.** No move of yours loses more than an inaccuracy; every line ends in a position that is fine for

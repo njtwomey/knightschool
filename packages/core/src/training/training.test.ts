@@ -64,7 +64,9 @@ describe('states', () => {
     expect(moveState(undefined, [], judge)).toBe('open');
     expect(moveState(card, ['hard'], judge)).toBe('learning');
     expect(moveState(card, ['again', 'good', 'easy'], judge)).toBe('known');
-    expect(moveState({ ...card, state: 'review', scheduledDays: 9 }, ['good'], judge)).toBe('mastered');
+    expect(moveState({ ...card, state: 'review', scheduledDays: 9 }, ['good', 'easy'], judge)).toBe('mastered');
+    // One quick right answer can earn a long first interval; it is still not known, let alone mastered.
+    expect(moveState({ ...card, state: 'review', scheduledDays: 9 }, ['easy'], judge)).toBe('learning');
   });
 
   it('opens a step when the one it grows from is known, unless gates are off', () => {
@@ -91,7 +93,8 @@ describe('move cards', () => {
 
   it('gives one card per learner move of the lines that earn them, keyed by position and move', () => {
     const cards = moveCards(built);
-    expect(cards.map((card) => card.san)).toEqual(['c3', 'd3']);
+    // A trap to spring earns cards too: its moves are the punishment to remember.
+    expect(cards.map((card) => card.san)).toEqual(['c3', 'd3', 'Nc3', 'h3']);
     expect(cards[0]!.id).toMatch(/^move:.+ w KQkq - c2c3$|^move:.+:c2c3$/);
   });
 });

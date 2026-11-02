@@ -1,4 +1,4 @@
-import { Crosshair, Puzzle, Repeat, Swords, Tag, Timer, type LucideIcon } from 'lucide-react';
+import { Crosshair, MessageCircleQuestion, Puzzle, Repeat, Swords, Tag, Timer, type LucideIcon } from 'lucide-react';
 
 /*
  * What a practice session is set up with, the same shape for every mode (docs/v2/components/practice-setup.md). The
@@ -16,7 +16,7 @@ export type PracticeConfig = {
   /** Review: moves per question; 0 is the rest of the line. */
   movesPerQuestion: number;
   /** Drill: how the computer replies. */
-  computerPlays: 'written' | 'level' | 'engine';
+  computerPlays: 'written' | 'level' | 'least-known' | 'engine';
   /** Puzzles. */
   puzzleCount: number;
   rating: [number, number];
@@ -67,7 +67,11 @@ export type ModeInfo = {
   soft: string;
 };
 
-export const MODE_INFO: Record<PracticeMode, ModeInfo> = {
+/**
+ * Every practice mode's tile: the set-up modes, and Questions (no set-up card of its own). Questions are review cards,
+ * so they share Review's colour (only the counted modes have one, docs/v2/patterns/colours.md).
+ */
+export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   review: {
     name: 'Review',
     title: 'Set up a review',
@@ -99,6 +103,14 @@ export const MODE_INFO: Record<PracticeMode, ModeInfo> = {
     icon: Swords,
     text: 'text-mode-play-on',
     soft: 'bg-mode-play-on/10',
+  },
+  questions: {
+    name: 'Questions',
+    title: 'Questions',
+    blurb: 'Why a move is played, in your own words.',
+    icon: MessageCircleQuestion,
+    text: 'text-mode-review',
+    soft: 'bg-mode-review/10',
   },
   speed: {
     name: 'Speed',
@@ -146,6 +158,7 @@ export const SOLVER_NAME = { you: 'you solve', opponent: 'the opponent solves', 
 export const COMPUTER_NAME = {
   written: 'the computer plays the lines as written',
   level: 'the computer plays as your level does',
+  'least-known': 'the branches you know least first',
   engine: 'the engine replies',
 } as const;
 

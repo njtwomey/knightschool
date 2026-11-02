@@ -28,20 +28,20 @@ way everywhere.
 
 **The vocabulary**:
 
-| Say                                    | Means                                                     | Never say                     |
-| -------------------------------------- | --------------------------------------------------------- | ----------------------------- |
-| Repertoire                             | the openings you have chosen, one per slot                | courses I am learning         |
-| Opening                                | one opening for one side ("Italian Game, as White")       | course                        |
-| Variation                              | a named branch of an opening, with Lichess's name         | chapter, section              |
-| Line                                   | one exact sequence of moves                               | chapter, variation (for this) |
-| Step                                   | about four of your moves, learned and tested at once      | lesson, unit                  |
-| Idea                                   | a named piece of understanding: a tactic, plan, structure | motif                         |
-| Position                               | a board state                                             | node, FEN (in the interface)  |
-| Read, Watch, Try, Their mistakes, Done | the five stages of a step                                 | Learn and Drill (for stages)  |
-| Review                                 | the spaced-repetition session                             | Quiz (for this)               |
-| Locked, Open, Learning                 | the states before a move, step or variation is known      | ready, unlocked, new          |
-| Known, Mastered                        | a move right twice running; asked a week or more apart    | passed, graduated             |
-| Cleared                                | a checkpoint or final test done to its mark               | passed                        |
+| Say                    | Means                                                     | Never say                     |
+| ---------------------- | --------------------------------------------------------- | ----------------------------- |
+| Repertoire             | the openings you have chosen, one per slot                | courses I am learning         |
+| Opening                | one opening for one side ("Italian Game, as White")       | course                        |
+| Variation              | a named branch of an opening, with Lichess's name         | chapter, section              |
+| Line                   | one exact sequence of moves                               | chapter, variation (for this) |
+| Step                   | about four of your moves, learned and tested at once      | lesson, unit                  |
+| Idea                   | a named piece of understanding: a tactic, plan, structure | motif                         |
+| Position               | a board state                                             | node, FEN (in the interface)  |
+| Read, Watch, Try, Done | the four stages of a step                                 | Learn and Drill (for stages)  |
+| Review                 | the spaced-repetition session                             | Quiz (for this)               |
+| Locked, Open, Learning | the states before a move, step or variation is known      | ready, unlocked, new          |
+| Known, Mastered        | a move right twice running; asked a week or more apart    | passed, graduated             |
+| Cleared                | a checkpoint or final test done to its mark               | passed                        |
 
 **Grades** ([verdict-note](../components/verdict-note.md)), always the word with its symbol, then why:
 

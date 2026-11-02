@@ -1,4 +1,4 @@
-import { BookOpen, Dumbbell, Grid2x2, LayoutGrid, Moon, Sun, SunMedium } from 'lucide-react';
+import { BookOpen, Dumbbell, Grid2x2, LayoutGrid, Moon, Settings, Sun, SunMedium } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/lib/theme';
 import { to } from '@/router/location';
@@ -36,6 +36,11 @@ export function Header() {
           <Button asChild variant="ghost" size="sm">
             <a href={to('/mocks')}>
               <LayoutGrid aria-hidden /> Mocks
+            </a>
+          </Button>
+          <Button asChild variant="ghost" size="sm">
+            <a href={to('/settings')}>
+              <Settings aria-hidden /> Settings
             </a>
           </Button>
           <Button

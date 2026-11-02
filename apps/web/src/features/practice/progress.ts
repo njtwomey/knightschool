@@ -2,11 +2,14 @@ import {
   checkpointRef,
   dayKey,
   drillScope,
+  activityDays,
   dueCards,
+  introducedOn,
   newLeftToday,
   practiceStreak,
   puzzleCardId,
   scopePositions,
+  type ActivityDayFacts,
   type Card,
   type ItemState,
   type MoveCardDefinition,
@@ -16,6 +19,7 @@ import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
 import { loadCatalog, loadFacts, loadOpening, loadPuzzles, type Catalog, type ShippedPuzzle } from '@/data/content';
 import { learnerStore } from '@/data/learner';
 import type { AttemptRow, LearnerStore, ReviewRow } from '@/data/learner-store';
+import { getSetting, whenSettingsReady } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { stepStates } from '@/features/learn/model';
 
@@ -24,8 +28,6 @@ import { stepStates } from '@/features/learn/model';
  * new today, each opening's steps and checkpoints, and the streak. Today, the practice hub and Review read it.
  */
 
-/** Settings key holding how many new cards Review introduced today: `{ day, count }`. */
-export const INTRODUCED_KEY = 'schedule.introduced';
 /** Attempts read for the streak and the checkpoints; enough for years of daily practice. */
 const LOG_LIMIT = 20_000;
 
@@ -50,6 +52,11 @@ export type OpeningProgress = {
   started: boolean;
   due: number;
   checkpoints: CheckpointInfo[];
+  /**
+   * The step being learned: its Try begun (some of its moves in reviews, not all) and not finished; the most recently
+   * answered when there are several. `index` counts from 0 in the opening's steps.
+   */
+  inProgress?: { index: number; at: string };
 };
 
 export type LearnerProgress = {
@@ -64,8 +71,11 @@ export type LearnerProgress = {
   dueByKind: { moves: number; puzzles: number; questions: number };
   /** The soonest card not yet due. */
   nextDue?: Date;
-  introduced?: { day: string; count: number };
+  /** New moves and questions met today, from any mode (a step's Try as well as Review). */
+  introducedToday: number;
   newLeft: number;
+  /** Every day practised, oldest first, for the activity calendar. */
+  activity: ActivityDayFacts[];
   streak: StreakFacts;
   /** Average time per answer, for the due card's estimate. */
   msPerAnswer: number;
@@ -76,18 +86,6 @@ export const startedOpenings = (progress: LearnerProgress) => progress.openings.
 /** The openings practice draws from: the ones started, or every opening when none is. */
 export const practiceOpenings = (progress: LearnerProgress) =>
   startedOpenings(progress).length ? startedOpenings(progress) : progress.openings;
-
-export function readIntroduced(raw: string | undefined): { day: string; count: number } | undefined {
-  if (!raw) return undefined;
-  try {
-    const value = JSON.parse(raw) as { day?: unknown; count?: unknown };
-    return typeof value.day === 'string' && typeof value.count === 'number'
-      ? { day: value.day, count: value.count }
-      : undefined;
-  } catch {
-    return undefined;
-  }
-}
 
 /** The latest checkpoint attempt for each variation, by its ref. */
 export function latestCheckpoints(attempts: readonly AttemptRow[]): Map<string, AttemptRow> {
@@ -124,13 +122,31 @@ export function checkpointsOf(
   });
 }
 
+/** The step whose Try is begun and not finished, the latest answered first (see `OpeningProgress.inProgress`). */
+function inProgressOf(
+  opening: BuiltOpening,
+  cards: readonly MoveCardDefinition[],
+  counts: ReadonlyMap<string, { mine: number; inReviews: number }>,
+  reviews: readonly ReviewRow[],
+): Pick<OpeningProgress, 'inProgress'> {
+  const lastAt = new Map<string, string>();
+  for (const review of reviews) if ((lastAt.get(review.cardId) ?? '') < review.at) lastAt.set(review.cardId, review.at);
+  let found: OpeningProgress['inProgress'];
+  opening.steps.forEach((step, index) => {
+    const count = counts.get(step.id);
+    if (!count || count.inReviews === 0 || count.inReviews >= count.mine) return;
+    const at = cards
+      .filter((card) => card.step === step.id)
+      .map((card) => lastAt.get(card.id) ?? '')
+      .reduce((a, b) => (a > b ? a : b), '');
+    if (!found || at > found.at) found = { index, at };
+  });
+  return found ? { inProgress: found } : {};
+}
+
 export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
-  const [catalog, store] = await Promise.all([loadCatalog(), learnerStore()]);
-  const [cards, attempts, introducedRaw] = await Promise.all([
-    store.cards.all(),
-    store.attempts.recent(LOG_LIMIT),
-    store.settings.get(INTRODUCED_KEY),
-  ]);
+  const [catalog, store] = await Promise.all([loadCatalog(), learnerStore(), whenSettingsReady()]);
+  const [cards, attempts] = await Promise.all([store.cards.all(), store.attempts.recent(LOG_LIMIT)]);
   const reviews = await store.reviews.forCards(cards.map((card) => card.id));
   const have = new Set(cards.map((card) => card.id));
   const due = dueCards(cards, now);
@@ -139,7 +155,7 @@ export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
   const openings = await Promise.all(
     catalog.openings.map(async (entry): Promise<OpeningProgress> => {
       const [opening, facts] = await Promise.all([loadOpening(entry.id), loadFacts(entry.id).catch(() => undefined)]);
-      const progress = stepStates(opening, cards, reviews);
+      const progress = stepStates(opening, cards, reviews, attempts);
       return {
         entry,
         opening,
@@ -150,6 +166,7 @@ export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
         started: progress.cards.some((card) => have.has(card.id)),
         due: progress.cards.filter((card) => dueIds.has(card.id)).length,
         checkpoints: checkpointsOf(opening, progress.states, latest),
+        ...inProgressOf(opening, progress.cards, progress.counts, reviews),
       };
     }),
   );
@@ -157,7 +174,7 @@ export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
     .filter((card) => !dueIds.has(card.id))
     .map((card) => new Date(card.due))
     .sort((a, b) => a.getTime() - b.getTime())[0];
-  const introduced = readIntroduced(introducedRaw);
+  const introducedToday = introducedOn(reviews, dayKey(now));
   const answered = attempts.filter((attempt) => attempt.ms > 0).slice(0, 200);
   return {
     catalog,
@@ -173,8 +190,9 @@ export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
       questions: due.filter((card) => card.id.startsWith('quiz:')).length,
     },
     ...(later ? { nextDue: later } : {}),
-    ...(introduced ? { introduced } : {}),
-    newLeft: newLeftToday(introduced, dayKey(now), siteConfig.schedule.newPerDay.default),
+    introducedToday,
+    newLeft: newLeftToday(introducedToday, getSetting('review.newPerDay')),
+    activity: activityDays(attempts),
     streak: practiceStreak(
       attempts.map((attempt) => attempt.at),
       now,

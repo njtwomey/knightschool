@@ -36,6 +36,10 @@ reviews come first; the Review count in an opening's [mode-counts](../components
 
 - Board in the `test` preset, `answered` once a card is answered ([../patterns/reveal.md](../patterns/reveal.md)): no
   marks, eval or explorer while asking; the opponent's last move highlighted.
+- A session asks the move cards first, then the question cards (the Questions mode's `QuestionRun`, saved to the
+  schedule), then puzzle cards. With moves per question above one, a move card plays on along the line of the step
+  that teaches it (`runExercise`), stopping at a move the learner has not met; a later move of a run that is due
+  itself is not asked again. New cards are always asked one move at a time.
 - Card kinds: a move (the position before your move), a question (typed, matched by keyword groups), a puzzle (if
   puzzle cards are agreed), and a game deviation from [your games](your-games.md) ("In your game against ... you
   played 5.d3; the opening plays 5.c3. Find it").

@@ -1,5 +1,5 @@
 import { BookOpen, Crosshair, HelpCircle, Puzzle, Target } from 'lucide-react';
-import { useId, useState, type KeyboardEvent, type MouseEvent } from 'react';
+import { useId, useState } from 'react';
 import { StateBadge } from '@/components/progress/state-badge';
 import {
   AlertDialog,
@@ -14,17 +14,22 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { ABOVE_ROW_LINK, CardAction, CardLink, LINKED_CARD } from '@/components/shared/card-link';
 import { Hint } from '@/components/shared/hint';
 import { siteConfig } from '@/data/site-config';
 import { cn } from '@/lib/utils';
 import { StepMoves } from './step-moves';
-import { STAGE_NAMES, stepTitle, type Extra, type StepData } from './steps';
+import { STAGE_NAMES, stepLabel, stepTitle, type Extra, type StepData } from './steps';
 
 export type StepRowProps = {
   step: StepData;
   selected?: boolean;
   /** Click anywhere on the row: the page's board shows the stretch at its end. */
   onSelect?: (step: StepData) => void;
+  /** Where a click anywhere on the row goes: the step, at the stage the learner left it (continue). */
+  href?: string;
+  /** Hover or focus previews the step on the page's board; `null` when the pointer or focus leaves. */
+  onPreview?: (step: StepData | null) => void;
   onLearn?: (step: StepData) => void;
   onTry?: (step: StepData) => void;
   onTestOut?: (step: StepData) => void;
@@ -58,7 +63,7 @@ export function ExtrasList({ extras, note }: { extras: Extra[]; note: string }) 
             <li key={`${extra.kind}-${extra.label}`} className="inline-flex items-center gap-1.5">
               <Icon className="size-3.5" aria-hidden />
               {extra.href ? (
-                <a href={extra.href} className="relative z-10 underline-offset-4 hover:underline">
+                <a href={extra.href} className={cn(ABOVE_ROW_LINK, 'underline-offset-4 hover:underline')}>
                   {extra.label}
                 </a>
               ) : (
@@ -105,6 +110,8 @@ export function StepRow({
   step,
   selected,
   onSelect,
+  href = step.href,
+  onPreview,
   onLearn,
   onTry,
   onTestOut,
@@ -117,7 +124,8 @@ export function StepRow({
   onSkipAsk,
   className,
 }: StepRowProps) {
-  const [asking, setAsking] = useState(false);
+  /** What the ask-once dialog will start when the learner says yes. */
+  const [asking, setAsking] = useState<'learn' | 'try' | null>(null);
   const [dontAsk, setDontAsk] = useState(false);
   const checkboxId = useId();
   const locked = step.state === 'locked';
@@ -126,37 +134,26 @@ export function StepRow({
   const opens = step.opensWhen;
   const reason = opens ? `Opens when step ${opens.number} (${opens.name}) is known.` : undefined;
 
-  const learn = () => {
-    if (locked && gates && !skipAsk) setAsking(true);
-    else onLearn?.(step);
+  // Opening a locked step (Learn or Try) asks once per opening; Test out never asks, since it is the honest check.
+  const open = (action: 'learn' | 'try') => {
+    if (locked && gates && !skipAsk) setAsking(action);
+    else (action === 'learn' ? onLearn : onTry)?.(step);
   };
-
-  // The row selects; the buttons and links inside keep their own clicks.
-  const ownClick = (target: EventTarget) => (target as HTMLElement).closest('a, button, [role="button"], input');
-  const onClick = (event: MouseEvent) => {
-    // Clicks in the dialog arrive here through the portal; they are not the row's.
-    if (!event.currentTarget.contains(event.target as Node) || ownClick(event.target)) return;
-    onSelect?.(step);
-  };
-  const onKeyDown = (event: KeyboardEvent) => {
-    if (event.target !== event.currentTarget) return;
-    if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
-      if (event.key === 'Enter' && !locked) onLearn?.(step);
-      else onSelect?.(step);
-    }
+  const start = () => {
+    if (dontAsk) onSkipAsk?.();
+    (asking === 'try' ? onTry : onLearn)?.(step);
   };
 
   const tryFirst = quiet;
   const buttons = (
-    <div className="flex shrink-0 flex-wrap items-center gap-1.5">
-      <Button size="sm" variant={tryFirst ? 'outline' : 'default'} onClick={learn}>
+    <div className={cn('flex shrink-0 flex-wrap items-center gap-1.5', ABOVE_ROW_LINK)}>
+      <Button size="sm" variant={tryFirst ? 'outline' : 'default'} onClick={() => open('learn')}>
         <BookOpen aria-hidden /> {step.stage !== undefined && !quiet ? 'Continue' : 'Learn'}
       </Button>
-      <Button size="sm" variant={tryFirst ? 'default' : 'outline'} onClick={() => onTry?.(step)}>
+      <Button size="sm" variant={tryFirst ? 'default' : 'outline'} onClick={() => open('try')}>
         <Target aria-hidden /> Try
       </Button>
-      {locked && gates && testOut ? (
+      {locked && gates && testOut && !step.followUp ? (
         <Button size="sm" variant="ghost" onClick={() => onTestOut?.(step)}>
           Test out
         </Button>
@@ -167,18 +164,36 @@ export function StepRow({
   return (
     <div
       data-step-row={step.id}
-      tabIndex={0}
       aria-current={selected ? 'true' : undefined}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
+      onMouseEnter={onPreview ? () => onPreview(step) : undefined}
+      onMouseLeave={onPreview ? () => onPreview(null) : undefined}
+      onFocus={onPreview ? () => onPreview(step) : undefined}
+      onBlur={
+        onPreview
+          ? (event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) onPreview(null);
+            }
+          : undefined
+      }
       className={cn(
-        'group grid cursor-pointer gap-2 rounded-lg border p-3 transition-colors outline-none',
-        'hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring',
+        'group grid gap-2 rounded-lg border p-3 hover:bg-accent/40',
+        (onSelect || href) && LINKED_CARD,
+        // A follow-up sits under its step, a little in, so it never reads as part of the main line.
+        step.followUp && 'ml-6 border-dashed',
         selected && 'border-primary/40 bg-accent/60',
         locked && gates && 'opacity-75',
         className,
       )}
     >
+      {onSelect ? (
+        <CardAction
+          onClick={() => onSelect(step)}
+          label={`Show step ${stepLabel(step)}, ${title}`}
+          pressed={selected}
+        />
+      ) : href ? (
+        <CardLink href={href} label={`Learn step ${stepLabel(step)}, ${title}`} />
+      ) : null}
       <div className="flex flex-wrap items-start gap-3">
         <span
           className={cn(
@@ -186,14 +201,18 @@ export function StepRow({
             quiet && 'border-state-known/40 text-muted-foreground',
           )}
         >
-          {step.number}
+          {stepLabel(step)}
         </span>
         <div className="grid min-w-0 flex-1 gap-1.5">
           <div className="flex flex-wrap items-center gap-2">
             <span className={cn('font-medium', quiet && 'font-normal text-muted-foreground')}>{title}</span>
-            <StateBadge state={step.state} of="step" reason={reason} gates={gates} />
+            <span className={ABOVE_ROW_LINK}>
+              <StateBadge state={step.state} of="step" reason={reason} gates={gates} />
+            </span>
             {!compact && step.stage !== undefined && step.state !== 'locked' ? (
-              <StageDots stages={stages} stage={quiet ? stages.length - 1 : step.stage} />
+              <span className={ABOVE_ROW_LINK}>
+                <StageDots stages={stages} stage={quiet ? stages.length - 1 : step.stage} />
+              </span>
             ) : null}
           </div>
           {!compact ? (
@@ -217,7 +236,7 @@ export function StepRow({
                 <p className="text-sm">
                   {gates ? 'Opens when ' : 'Suggested after '}
                   {opens.href ? (
-                    <a href={opens.href} className="font-medium underline underline-offset-4">
+                    <a href={opens.href} className={cn('font-medium underline underline-offset-4', ABOVE_ROW_LINK)}>
                       step {opens.number} ({opens.name})
                     </a>
                   ) : (
@@ -234,10 +253,10 @@ export function StepRow({
         </div>
         {buttons}
       </div>
-      <AlertDialog open={asking} onOpenChange={setAsking}>
+      <AlertDialog open={asking !== null} onOpenChange={(next) => setAsking(next ? asking : null)}>
         <AlertDialogContent size="sm">
           <AlertDialogHeader>
-            <AlertDialogTitle>Start step {step.number} anyway?</AlertDialogTitle>
+            <AlertDialogTitle>Start step {stepLabel(step)} anyway?</AlertDialogTitle>
             <AlertDialogDescription>
               This step builds on step {opens?.number ?? step.number - 1}
               {opens ? ` (${opens.name})` : ''}.
@@ -258,14 +277,7 @@ export function StepRow({
             >
               Go to step {opens?.number ?? step.number - 1}
             </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                if (dontAsk) onSkipAsk?.();
-                onLearn?.(step);
-              }}
-            >
-              Start anyway
-            </AlertDialogAction>
+            <AlertDialogAction onClick={start}>Start anyway</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

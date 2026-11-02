@@ -45,6 +45,10 @@ deciding where to go inside an opening, or coming back to one part of it.
 - When every step is known the checkpoint row becomes the page's main action.
 - An unknown variation in a known opening goes to [not found](not-found.md), which offers the opening.
 
+**Built so far** (features/learn/variation-page.tsx): heading with state and ring, Learn count, introduction and plans,
+step rows (click puts the board on the step), the checkpoint row, the board with notes, lines, ideas, puzzles. Not yet:
+the explorer on the board, a clickable inline board in the introduction, hover previews.
+
 ## Leads to
 
 [step](step.md) (Learn: from Read; Try: straight to the Try stage), [checkpoint](checkpoint.md)

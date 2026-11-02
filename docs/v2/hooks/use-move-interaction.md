@@ -46,3 +46,19 @@ Rules from [interactions](../patterns/interactions.md) and [cross-links](../navi
   `toggle` to pin on click): the pattern, for text only.
 - `apps/web/src/features/tree/lane-tree.tsx`: pills picked by click, `Enter` or `Space`.
 - `apps/web/src/components/move-list.tsx`: moves as steps that move the board. Three behaviours become one.
+
+## As built
+
+Not a separate hook yet: the behaviour lives in [move-chip](../components/move-chip.md) and the board, through
+`components/board/key-owner.ts`.
+
+- Every `Board` that can step or flip registers with the page. The page's main board is one that asks (`keys`), else
+  the first on the page. It owns the arrow keys and F with no click first, and it is the board that moves elsewhere on
+  the page act on. A board's caption reaches its own board first (`BoardTargetContext`).
+- A `MoveChip` with no `onSelect` of its own uses `useBoardTarget()`. Hover or focus draws the move on that board as a
+  `preview` system arrow. A click goes to the position after it: the board's cursor if the board holds that position,
+  otherwise the board shows it (not playable) with **Back to the line** until the learner steps or goes back.
+- A move chip always sits above a card's or row's stretched click (`ABOVE_ROW_LINK`), so a chip inside a clickable
+  step row still hovers and clicks as a move.
+- Not yet built: the shared "hovered anywhere" store (the same move lit in the table, map and text at once), and
+  long-press.

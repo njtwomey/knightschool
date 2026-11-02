@@ -37,9 +37,14 @@ the final test row on [opening](opening.md).
 
 ## Behaviour
 
-- Exercises are drawn from the variation's steps: a position from each step's Try, the opponent's common mistakes to
-  punish, a typed question, one puzzle matched through the branch point. The final test is every branch of the opening
-  (as [drill](drill.md)), three puzzles and one [play-on](play-on.md).
+- Exercises are drawn from the variation's steps (`checkpointPlan`, config `teach.checkpointMix`: 6 positions, 2
+  mistakes, 1 question, 1 puzzle): a position from each step's Try and more to make up the positions, the opponent's
+  common mistakes to punish (`opponentMistakes` over the variation's lines), a typed question, one puzzle matched to
+  the variation's lines (the learner's side solving, strongest match first, unseen first). A kind with too few is
+  made up with positions. The board's exercises come in a mixed order, the questions after them. The final test
+  (`/openings/<opening>/test`) is every branch of the opening (as [drill](drill.md)) with one try a move, then
+  `teach.finalTest` puzzles (3) and Play ons (1). A mistake, a puzzle or a Play on inside a check is never made a move
+  card (the exercise's `record: 'none'`); positions and branches are answered into the move cards as usual.
 - Board `test`, then `answered` after each exercise. One try per move (config `teach.checkpointTries`,
   [../config.md](../config.md)); feedback still says why after each answer.
 - Clearing it (config `teach.checkpointMark`: nine of ten, no blunders) makes the variation known and opens the next

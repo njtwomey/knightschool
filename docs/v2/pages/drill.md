@@ -35,9 +35,17 @@ The Drill tile on [practice](practice.md); **Drill** on [opening](opening.md), [
 
 ## Behaviour
 
-- Board `test`, `answered` after each move. The computer's reply is a weighted random choice among the opening's
-  known replies by how often players at the band play them, and the caption says so; with "least-known first", it
-  steers to branches holding the learner's weakest moves.
+- Board `test`, `answered` after each move. A drill is every branch in scope once (`drillBranches`: each line's run
+  to where the book ends, ending on a learner move), in the order the setting `computer.plays` gives
+  (`orderBranches`): **as written**, each branch as likely as the next; **as players play**, a weighted draw by the
+  share of the band's games that take each branch (the product of each reply's share), so the caption's "played in
+  41% of games" is the real frequency; **least known first**, the branches holding the most moves not yet known
+  (then the most lapses) first; **the engine**, one run per opening with the engine replying, ending where the book
+  does. "My repertoire" and "Everything" drill every opening in scope in one session; "The hardest moves" is least
+  known first over the repertoire.
+- `#m=` holds the moves from the start of the game; a refresh finds the branch they lie on (`resumeBranch`) and
+  resumes it from there, the other branches following. After each branch, "The last branch left you" in eval words
+  and **Play on from there** (the branch's line in [play-on](play-on.md)).
 - Right moves carry on with no click; a wrong move snaps back with its verdict; two wrong tries show the move with
   **Next**. When the opponent's reply is a known mistake, the board says so and the next move is the punishment.
 - Answers feed the same cards as review ([../hooks/use-exercise-session.md](../hooks/use-exercise-session.md)); Drill

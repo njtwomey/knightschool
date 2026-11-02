@@ -7,7 +7,13 @@ import type { OpeningFile } from './schema';
 import { isLearnerMove, type ResolvedLine, type TreeMove } from './theory';
 
 export type BuiltMove = { uci: string; san: string; to: string; mine: boolean; lines: string[]; note?: Note };
-export type BuiltRefutation = { uci: string; san: string; note?: Note; then: { uci: string; san: string }[] };
+/** A wrong move written as a PGN variation (`?`/`??`): its note, and the punishing line after it with each move's note. */
+export type BuiltRefutation = {
+  uci: string;
+  san: string;
+  note?: Note;
+  then: { uci: string; san: string; note?: Note }[];
+};
 export type BuiltLine = {
   id: string;
   variation: string;
@@ -110,7 +116,7 @@ export function buildOpening(
             uci: first.uci,
             san: first.san,
             ...(first.note ? { note: first.note } : {}),
-            then: rest.map((move) => ({ uci: move.uci, san: move.san })),
+            then: rest.map((move) => ({ uci: move.uci, san: move.san, ...(move.note ? { note: move.note } : {}) })),
           });
         }
       }

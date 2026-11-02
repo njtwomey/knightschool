@@ -25,9 +25,11 @@ import type { Try as TryRow } from '@/components/chess/tries-table';
 import { startEngine } from '@/data/engine/store';
 import { learnerStore } from '@/data/learner';
 import type { AttemptRow } from '@/data/learner-store';
+import { feedbackDelay, scheduleConfig } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 
-const scheduler = createScheduler(siteConfig.schedule);
+/** FSRS with the learner's retention (`review.retention`), read when a card is graded. */
+const scheduler = () => createScheduler(scheduleConfig());
 const newId = () => crypto.randomUUID();
 
 export type SessionOptions = {
@@ -84,6 +86,8 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
   const [thinking, setThinking] = useState(false);
   /** A move a tolerant grader is waiting to hear about: it stays on the board while the engine judges it. */
   const [pending, setPending] = useState<{ uci: string; epd: string } | null>(null);
+  /** A wrong move left on the board with its cross for `timing.wrongHold`, before it slides back. */
+  const [held, setHeld] = useState<{ uci: string; epd: string } | null>(null);
   const started = useRef(Date.now());
   const exerciseStarted = useRef(Date.now());
   const live = useRef(new Map<string, EvalEntry>());
@@ -99,7 +103,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
   const epd = played.at(-1)?.epd ?? exercise?.start ?? '';
   const ply = played.length;
   const done = at >= exercises.length;
-  const learnerTurn = Boolean(exercise && !done && !pending && sideToMove(epd) === exercise.side && !over());
+  const learnerTurn = Boolean(exercise && !done && !pending && !held && sideToMove(epd) === exercise.side && !over());
 
   function over() {
     if (!exercise) return true;
@@ -144,14 +148,17 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
     }
   }, []);
 
+  /** What an exercise's answers save: its own choice (a puzzle or a mistake inside a checkpoint), unless nothing is. */
+  const savesAs = (one: Exercise) => (save === 'none' ? 'none' : (one.record ?? save));
+
   const saveAnswer = useCallback(
     async (cardId: string, done: Attempt, mode: AttemptRow['mode']) => {
       if (save === 'none') return;
       const store = await learnerStore();
       const now = new Date();
       const rating = autoGrade(done, siteConfig.judge.easyWithinMs);
-      const card = (await store.cards.get(cardId)) ?? scheduler.newCard(cardId, now);
-      await store.cards.put(scheduler.review(card, rating, now));
+      const card = (await store.cards.get(cardId)) ?? scheduler().newCard(cardId, now);
+      await store.cards.put(scheduler().review(card, rating, now));
       const ms = done.tries.reduce((sum, one) => sum + one.ms, 0);
       await store.reviews.add({ id: newId(), cardId, at: now.toISOString(), rating, ms, hint: done.hint });
       await store.attempts.add({
@@ -195,20 +202,23 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
               },
             ],
       );
-      if (save === 'exercise')
+      if (savesAs(exercise) === 'exercise')
         void saveAnswer(exercise.id, exerciseAttempt, exercise.mode === 'puzzle' ? 'puzzle' : exercise.mode);
       if (at < exercises.length) {
-        later(() => {
-          setAt((i) => i + 1);
-          setPlayed([]);
-          setLiveFrom(rowCount.current);
-          setAttempt(startAttempt());
-          setExerciseAttempt(startAttempt());
-          setBadge(undefined);
-          setArrows([]);
-          exerciseStarted.current = Date.now();
-          started.current = Date.now();
-        }, delays?.next ?? siteConfig.timing.nextCard);
+        later(
+          () => {
+            setAt((i) => i + 1);
+            setPlayed([]);
+            setLiveFrom(rowCount.current);
+            setAttempt(startAttempt());
+            setExerciseAttempt(startAttempt());
+            setBadge(undefined);
+            setArrows([]);
+            exerciseStarted.current = Date.now();
+            started.current = Date.now();
+          },
+          delays?.next ?? feedbackDelay(siteConfig.timing.nextCard),
+        );
       }
       return;
     }
@@ -234,7 +244,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
       setPlayed((list) => [...list, { uci: move.uci, san: move.san, epd: move.epd, mine: false }]);
       started.current = Date.now();
     };
-    const timer = setTimeout(() => void respond(), delays?.opponent ?? siteConfig.timing.opponent);
+    const timer = setTimeout(() => void respond(), delays?.opponent ?? feedbackDelay(siteConfig.timing.opponent));
     return () => {
       cancelled = true;
       clearTimeout(timer);
@@ -242,7 +252,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
   }, [at, ply, done, learnerTurn, pending]);
 
   const advance = (move: { uci: string; san: string; epd: string }, finished: Attempt) => {
-    if (save === 'moves' && exercise)
+    if (exercise && savesAs(exercise) === 'moves')
       void saveAnswer(
         moveCardId(epd, move.uci),
         finished,
@@ -301,6 +311,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
       ...rows,
       {
         ply: (exercise.startPly ?? 0) + ply,
+        before: epd,
         asked: expected ? (playMove(epd, expected)?.san ?? '?') : '(your choice)',
         played: move.san,
         grade:
@@ -314,7 +325,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
         hint: attempt.hint,
       },
     ]);
-    const where = { ply: (exercise.startPly ?? 0) + ply, san: move.san, from, to };
+    const where = { ply: (exercise.startPly ?? 0) + ply, san: move.san, from, to, epd: move.epd };
     if (verdict === 'needs') {
       // Not in the shipped facts: the browser engine fills the grade in when it has it.
       const lineAfter = expected ? playMove(epd, expected)?.epd : undefined;
@@ -366,6 +377,12 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
         refutation: settled?.refutation?.length ? runFrom(move.epd, settled.refutation) : undefined,
       });
       setBadge({ square: to, kind: 'wrong' });
+      // The move stays where it was played, with its cross, then slides back (not snapped: docs/v2/patterns/feedback-timing.md).
+      setHeld({ uci: move.uci, epd: move.epd });
+      later(() => {
+        setHeld(null);
+        setBadge(undefined);
+      }, feedbackDelay(siteConfig.timing.wrongHold));
     }
     setAttempt(next);
     // With no single right move (tolerant), the move shown after the tries run out is the engine's best.
@@ -373,13 +390,18 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
     if (next.shown && shownMove) {
       setArrows([{ from: shownMove.slice(0, 2), to: shownMove.slice(2, 4), kind: 'play' }]);
       setExerciseAttempt((a) => ({ ...a, shown: true }));
-      later(() => {
-        const shown = playMove(epd, shownMove)!;
-        advance(shown, next);
-        setArrows([]);
-      }, siteConfig.timing.wrongBadge * 1.5);
+      later(
+        () => {
+          const shown = playMove(epd, shownMove)!;
+          advance(shown, next);
+          setArrows([]);
+        },
+        feedbackDelay(siteConfig.timing.wrongHold + siteConfig.timing.wrongBadge),
+      );
     }
-    return false;
+    // A wrong move is kept on the board (held) rather than refused, so the piece does not snap back at once; a sound
+    // move that is not the line's goes back at once, as there is nothing to look at.
+    return outcome !== 'another';
   };
 
   const hint = () => {
@@ -393,10 +415,13 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
     setAttempt(next);
     setExerciseAttempt((a) => ({ ...a, shown: true }));
     setArrows([{ from: expected.slice(0, 2), to: expected.slice(2, 4), kind: 'play' }]);
-    later(() => {
-      advance(playMove(epd, expected)!, next);
-      setArrows([]);
-    }, siteConfig.timing.wrongBadge * 1.5);
+    later(
+      () => {
+        advance(playMove(epd, expected)!, next);
+        setArrows([]);
+      },
+      feedbackDelay(siteConfig.timing.wrongBadge * 1.5),
+    );
   };
 
   const last = played.at(-1);
@@ -407,17 +432,18 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
     total: exercises.length,
     done,
     /** The position on the board: with a move waiting for its judgement, the position after it. */
-    epd: pending?.epd ?? epd,
+    epd: held?.epd ?? pending?.epd ?? epd,
     played,
     /** A move is on the board waiting for the engine's judgement (tolerant grading). */
     judging: Boolean(pending),
-    lastMove: pending
-      ? { from: pending.uci.slice(0, 2), to: pending.uci.slice(2, 4) }
-      : last
-        ? { from: last.uci.slice(0, 2), to: last.uci.slice(2, 4) }
-        : exercise?.before
-          ? { from: exercise.before.slice(0, 2), to: exercise.before.slice(2, 4) }
-          : undefined,
+    lastMove:
+      (held ?? pending)
+        ? { from: (held ?? pending)!.uci.slice(0, 2), to: (held ?? pending)!.uci.slice(2, 4) }
+        : last
+          ? { from: last.uci.slice(0, 2), to: last.uci.slice(2, 4) }
+          : exercise?.before
+            ? { from: exercise.before.slice(0, 2), to: exercise.before.slice(2, 4) }
+            : undefined,
     learnerTurn,
     thinking,
     hintSquare: attempt.hint && expectedNow ? expectedNow.slice(0, 2) : undefined,

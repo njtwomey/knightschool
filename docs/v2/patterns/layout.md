@@ -17,7 +17,10 @@ answer to what just happened is always next to the board.
 | A thumb (cards, lists, preview card) | its card | [board-thumb](../components/board-thumb.md) |
 
 - **Board and panel**: pages with a board column and a panel use `.board-columns`: one column on a phone and narrow
-  windows, the board and its panel side by side from 64rem wide, and on a phone held sideways.
+  windows, the board and its panel side by side from 64rem wide, and on a phone held sideways. The board column stays
+  in view while the panel scrolls (sticky under the header), so whatever the panel points at is visible on the board.
+  Built once as `components/shared/board-columns.tsx` (`<BoardColumns board={…} side="left|right">`); no page lays
+  out its own board grid.
 - **The order on a phone**, top to bottom: the board, its controls, the feedback (verdict, why, the note of the move),
   then the rest (move table, tries table, explorer, engine lines). The panel's own order on a wide screen is the same,
   top to bottom beside the board.

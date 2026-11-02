@@ -8,7 +8,7 @@ import { PuzzleCard, type PuzzleState } from '@/components/practice/puzzle-card'
 import { SessionSummary } from '@/components/practice/session-summary';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { EmptyState } from '@/components/shared/empty-state';
-import { siteConfig } from '@/data/site-config';
+import { getSetting } from '@/data/settings';
 import { useLoad } from '@/hooks/use-load';
 import { to } from '@/router/location';
 import { readPracticeConfig, savePracticeConfig } from '../saved-config';
@@ -74,7 +74,7 @@ export function PuzzlesPage({ opening, variation }: { opening?: string; variatio
 type Run = { config: PracticeConfig; puzzles: SessionPuzzle[]; key: number };
 
 function PuzzlesView({ data, fixed }: { data: PuzzleData; fixed?: string }) {
-  const saved = readPracticeConfig('puzzles', { rating: siteConfig.puzzles.rating });
+  const saved = readPracticeConfig('puzzles');
   const start = (config: PracticeConfig, key = Date.now()): Run => ({
     config,
     puzzles: sessionPuzzles(data, config),
@@ -217,7 +217,7 @@ function PuzzleList({
               ideas={data.ideas}
               hideThemes={!state}
               state={state}
-              level={siteConfig.puzzles.rating}
+              level={getSetting('puzzles.rating')}
               learnerSide={data.openings.find((o) => o.id === puzzle.opening)?.side}
             />
           );

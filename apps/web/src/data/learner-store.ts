@@ -31,6 +31,8 @@ export function memoryStore(): LearnerStore {
     settings: {
       get: async (key) => settings.get(key),
       set: async (key, value) => void settings.set(key, value),
+      all: async () => Object.fromEntries(settings),
+      remove: async (key) => void settings.delete(key),
     },
   };
 }

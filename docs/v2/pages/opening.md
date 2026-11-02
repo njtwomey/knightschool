@@ -56,6 +56,13 @@ by kind with a [filter-toggle](../components/filter-toggle.md); a row opens the 
   ([../navigation/shortcuts.md](../navigation/shortcuts.md)).
 - An authored opening shows **Edit**. An unknown id goes to [not found](not-found.md).
 
+**Built so far** (features/learn): heading with progress ring, mode-counts (Learn, Review, Drill clean, Puzzles), the
+next-action for this opening, introduction with ideas and sources, the variation list wired (row click selects and
+shows the stretch at its end; Learn opens Read, Try opens Try, Test out opens Try with `test=1`; the ask-once choice is
+kept per opening in the learner's settings table under `learn.skipAsk:<opening>`), the final-test row linking to
+`/openings/<opening>/test`, the board with notes, three puzzles, and the Lines tab. Not yet: the Map tab (no map page),
+coverage and its gap-link, **Add to repertoire**, the opening's setting-inline rows, hovering a step row to preview.
+
 ## Leads to
 
 [step](step.md), [variation](variation.md), [line](line.md) (`/openings/<opening>/lines/<line>`),

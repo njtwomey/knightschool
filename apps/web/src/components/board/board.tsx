@@ -1,11 +1,12 @@
 import type { Marks, Score } from '@knightschool/core';
-import { useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { MarkKey } from '@/components/chess/mark-key';
 import { cn } from '@/lib/utils';
 import { BoardControls, type ControlsExercise } from './board-controls';
-import type { SettingsGroup } from './board-settings-menu';
+import { useBoardSettings, type SettingsGroup } from './board-settings-menu';
 import { BoardSurface, type BoardBadge, type BoardSurfaceProps, type SystemArrow } from './board-surface';
 import { EvalBar } from './eval-bar';
+import { BoardTargetContext, usePageBoard, type BoardTarget } from './key-owner';
 
 /**
  * What a board shows depends on what the learner is doing (docs/v2/patterns/reveal.md): everything while studying,
@@ -68,7 +69,10 @@ export type BoardProps = {
   onSquareClick?: BoardSurfaceProps['onSquareClick'];
   caption?: ReactNode;
   actions?: ReactNode;
-  /** Arrow keys step through the positions (one board per page owns them). */
+  /**
+   * The arrow keys step through the positions and F flips. One board per page has them: true asks for them, false
+   * never takes them, and by default the first board on the page has them (key-owner.ts).
+   */
   keys?: boolean;
   className?: string;
 };
@@ -106,21 +110,51 @@ export function Board({
   onSquareClick,
   caption,
   actions,
-  keys = false,
+  keys: wantKeys,
   className,
 }: BoardProps) {
   const [flipped, setFlipped] = useState(false);
   const orientation = !onFlip && flipped ? (fixed === 'white' ? 'black' : 'white') : fixed;
   const shows = SHOWS[reveal];
-  const position = positions[index]!;
   const last = positions.length - 1;
+  const { sizeCap } = useBoardSettings();
+  // A move hovered elsewhere on the page (a faint arrow), and a position clicked there that is not on this board's
+  // moves (shown until the learner steps or goes back to the line).
+  const [ghost, setGhost] = useState<{ from: string; to: string } | null>(null);
+  const [peek, setPeek] = useState<{ epd: string; lastMove?: { from: string; to: string } } | null>(null);
+  const target: BoardTarget = useMemo(
+    () => ({
+      show: (epd, lastMove) => {
+        const at = positions.findIndex((candidate) => candidate.epd === epd);
+        if (at >= 0 && onIndex) {
+          setPeek(null);
+          onIndex(at);
+        } else if (positions[index]?.epd !== epd) setPeek({ epd, lastMove });
+      },
+      light: setGhost,
+    }),
+    [positions, index, onIndex],
+  );
+  const keys = usePageBoard(wantKeys, Boolean(onIndex && positions.length > 1) || flippable, target);
+  const position: (typeof positions)[number] = peek ? { epd: peek.epd, lastMove: peek.lastMove } : positions[index]!;
+  const stepTo = onIndex
+    ? (next: number) => {
+        setPeek(null);
+        onIndex(next);
+      }
+    : undefined;
 
   const drawn: SystemArrow[] = [
-    ...(shows.play && position.next ? [{ ...position.next, kind: 'play' as const }] : []),
+    ...(shows.play && !peek && positions[index]!.next ? [{ ...positions[index]!.next!, kind: 'play' as const }] : []),
     ...arrows,
+    ...(ghost ? [{ ...ghost, kind: 'preview' as const }] : []),
   ];
   return (
-    <div className={cn('grid w-full max-w-xl content-start gap-2 self-start', className)}>
+    <div
+      className={cn('grid w-full content-start gap-2 self-start', className)}
+      // The learner's largest board (`board.sizeCap`, 36rem by default).
+      style={{ maxWidth: `${sizeCap}rem` }}
+    >
       <div className="flex items-start gap-2">
         {shows.eval && evalBar ? (
           <EvalBar score={position.score ?? null} orientation={orientation} className="self-stretch" />
@@ -133,7 +167,7 @@ export function Board({
           arrows={drawn}
           badge={badge}
           lit={lit}
-          interactive={interactive}
+          interactive={interactive && !peek}
           onMove={onMove}
           onSquareMouseDown={onSquareMouseDown}
           onSquareMouseUp={onSquareMouseUp}
@@ -146,11 +180,28 @@ export function Board({
         settingsGroups={settingsGroups}
         keys={keys}
         settings={settings}
-        stepper={onIndex ? { index, last, onIndex, keys, min: stepMin, asked, offLine, onBackToLine } : undefined}
+        stepper={
+          stepTo
+            ? {
+                index,
+                last,
+                onIndex: stepTo,
+                keys,
+                min: stepMin,
+                asked,
+                offLine: offLine || Boolean(peek),
+                onBackToLine: peek ? () => setPeek(null) : onBackToLine,
+              }
+            : undefined
+        }
         exercise={exercise}
         actions={actions}
       />
-      {caption ? <div className="text-sm">{caption}</div> : null}
+      {caption ? (
+        <BoardTargetContext.Provider value={target}>
+          <div className="text-sm">{caption}</div>
+        </BoardTargetContext.Provider>
+      ) : null}
       {shows.marks && markKey ? <MarkKey marks={position.marks} /> : null}
     </div>
   );

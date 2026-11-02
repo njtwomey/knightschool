@@ -3,6 +3,7 @@ import type { BuiltOpening } from '../content/build-opening';
 import type { Exercise } from '../exercise/exercise';
 import { moveCardId, type MoveCardDefinition } from '../training/cards';
 import type { Card } from '../training/scheduler';
+import { dayKey } from './streak';
 
 /** The position and move of a move card id (`move:<epd>:<uci>`), or null for another kind of card. */
 export function parseMoveCardId(id: string): { epd: string; uci: string } | null {
@@ -77,8 +78,81 @@ export function planIntroductions(
   return picked;
 }
 
-/** New cards left today: the daily allowance less those introduced today (a count kept for one day only). */
-export function newLeftToday(introduced: { day: string; count: number } | undefined, today: string, perDay: number) {
-  const used = introduced?.day === today ? introduced.count : 0;
-  return Math.max(0, perDay - used);
+/** Whether a card counts against the daily allowance of new material: moves and questions, not puzzles or games. */
+export const countsAsNew = (cardId: string) => cardId.startsWith('move:') || cardId.startsWith('quiz:');
+
+/**
+ * How many cards were met for the first time on `day` (the learner's local day, `dayKey`): their first review falls on
+ * it. Worked out from the log, so cards made by a step's Try count as well as those Review introduces
+ * (docs/v2/library/training.md, "New cards").
+ */
+export function introducedOn(reviews: readonly { cardId: string; at: string }[], day: string): number {
+  const first = new Map<string, string>();
+  for (const review of reviews) {
+    if (!countsAsNew(review.cardId)) continue;
+    const seen = first.get(review.cardId);
+    if (!seen || review.at < seen) first.set(review.cardId, review.at);
+  }
+  let count = 0;
+  for (const at of first.values()) if (dayKey(new Date(at)) === day) count += 1;
+  return count;
+}
+
+/** New cards left today: the daily allowance less those met today. */
+export const newLeftToday = (introducedToday: number, perDay: number) => Math.max(0, perDay - introducedToday);
+
+/**
+ * A review question of several moves (setting `review.movesPerQuestion`): from a card's position, the learner plays
+ * on along the line of the step that teaches it for `moves` of their moves (0: to the end of the line), the other side
+ * answering as the line does. The run stops early at a learner move `allowed` refuses (one the learner has not met, so
+ * a question never introduces a card by the back door). One move is the plain card (`moveExercise`).
+ */
+export function runExercise(
+  opening: BuiltOpening,
+  card: { epd: string; uci: string; step?: string },
+  options: {
+    mode: 'review' | 'checkpoint';
+    moves: number;
+    allowed?: (cardId: string) => boolean;
+    before?: string;
+    startPly?: number;
+    tries?: number;
+    help?: boolean;
+  },
+): Exercise {
+  const single = moveExercise(card, options);
+  if (options.moves === 1) return single;
+  const stepLine = opening.steps.find((step) => step.id === card.step)?.line;
+  const lines = [...opening.lines].sort((a, b) => Number(b.id === stepLine) - Number(a.id === stepLine));
+  for (const line of lines) {
+    let epd = opening.startEpd;
+    for (let ply = opening.startPly; ply < line.moves.length; ply++) {
+      if (epd === card.epd && line.moves[ply] === card.uci) {
+        const script: string[] = [];
+        let mine = 0;
+        let at = epd;
+        for (let i = ply; i < line.moves.length; i++) {
+          const uci = line.moves[i]!;
+          const learner = sideToMove(at) === single.side;
+          if (learner) {
+            if (options.moves > 0 && mine >= options.moves) break;
+            if (script.length && options.allowed && !options.allowed(moveCardId(at, uci))) break;
+            mine += 1;
+          }
+          script.push(uci);
+          const next = opening.positions[at]?.moves.find((move) => move.uci === uci);
+          if (!next) break;
+          at = next.to;
+        }
+        // End on the learner's move: a trailing reply would ask nothing.
+        while (script.length && script.length % 2 === 0) script.pop();
+        const { learnerMoves: _one, ...rest } = single;
+        return { ...rest, responder: { kind: 'scripted', script }, grader: { kind: 'exact' } };
+      }
+      const next = opening.positions[epd]?.moves.find((move) => move.uci === line.moves[ply]);
+      if (!next) break;
+      epd = next.to;
+    }
+  }
+  return single;
 }

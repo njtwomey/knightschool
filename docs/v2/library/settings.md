@@ -64,6 +64,19 @@ registry. `defineSetting`, layers, presets, `parseConfig`: **new**.
 the committed `config.yaml` parses and each kind of error names its key; opening overrides allowed and refused; v1
 aliases read a v1 export's settings.
 
+## As built
+
+`packages/core/src/settings`: `settingsRegistry(config)` (definitions in the page's order, `byKey`, `groups`, `presets`
+from config, `defaultPreset`), `defineSetting`, `checkPresets(config, registry)`, `resolveSetting(definition, layers,
+from?)`, `resolveBelow`, `checkSetting` (clamp, then schema), `layerApplies`, `presetValues`, `presetOf`,
+`customChanges` and `isCustom`, `sourceWords`, `valueWords`, `matchesSetting`, `settingRows`, `readStoredSettings`
+(rows to the you and opening layers, v1 aliases) and `openingSettingKey`. The learner's own layer is called `you` (as
+the components call it), not `learner`, so it is not confused with the learner store. A key's value type is declared in
+`SettingValues` (`types.ts`). Config holds the presets (`presets.default`, `presets.list`) and a `settings` block with
+the ranges no other key sets (retention's range, the feedback speed multipliers, engine depth and lines, the explorer
+cut-off, games to read, board size cap, preview delay). `parseConfig`, `appConfig` and `openingConfig` are not built:
+`SiteConfig` (zod) still checks the file.
+
 ## Open questions
 
 1. Settled: the learner's own choice wins over an opening's suggested values, on purpose; an opening's config overrides

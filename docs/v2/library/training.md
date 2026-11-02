@@ -28,18 +28,25 @@ the log from storage, through the web app.
 - **Grades** (v1): right, no hint, within `judge.easyWithinMs` (5 s) Easy; right Good; after a hint or a wrong try
   Hard; shown, Again. FSRS targets `schedule.retention` (0.9), never past `schedule.maxIntervalDays` (365).
 - **New cards** come at the start of a review session, up to `schedule.newPerDay` (10), in step order, taking turns
-  between repertoire openings; due cards are never limited. A session holds `schedule.sessionSize` (20); the next
+  between repertoire openings, then the questions of the variations begun; due cards are never limited. The day's
+  count is read from the log (`introducedOn`: move and question cards whose first review falls today), so cards a
+  step's Try makes count as well as those Review introduces, and a card planned but never answered does not. A session holds `schedule.sessionSize` (20); the next
   action puts review first at `schedule.reviewsFirstAt` (5) due.
-- **Which positions earn cards** (v1 `cardDefinitions`): main and gambit lines; sidelines reached by at least
-  `coverage.minShare` (5%) of games; rare lines only when the learner includes them; traps to avoid; never
-  alternatives, traps to spring (exercises) or a position after the learner's own mistake.
+- **Which positions earn cards** (v1 `cardDefinitions`, `lineEarnsCards` in core): main, sideline and gambit lines;
+  rare lines only when the learner includes them; traps to spring and traps to avoid (a trap an opening's path cuts
+  into a step is learned like any step: its moves are the punishment, or the escape, to remember); never alternatives
+  or a position after the learner's own mistake. (Sidelines are not yet filtered by `coverage.minShare`.)
 - **One set of states** (model.md): a move is **known** when its last two answers were Good or Easy
-  (`judge.knownRule`), **mastered** at an FSRS interval of `judge.masteredDays` (7) or more; a step is known or
+  (`judge.knownAfterRight`), **mastered** when known and at an FSRS interval of `judge.masteredDays` (7) or more (a
+  quick first Easy can earn a long interval at once; it is not mastered, or even known, until right twice running); a step is known or
   mastered when all its moves are; a variation is known when its checkpoint is cleared (`teach.checkpointMark`),
   mastered when every step is. Learning once a card exists; otherwise open or locked.
 - **Gates** (`teach.gates`, strict): a step opens when the step it grows from is known (the first always,
   `teach.firstStepOpen`); a checkpoint when its steps are known; the next variation when the checkpoint is cleared;
-  the final test when every variation is known. `teach.testOut` lets a check open a gate; `learning.gatesRelaxed`
+  the final test when every variation is known. `teach.testOut` lets a check open a gate: a step's own test (its Try
+  with no Read or Watch, every move right first time and no help) is logged as an attempt, mode `try`, ref
+  `test-out:<opening>:<step>`, and `testedOutSteps` reads it with cleared checkpoints and the final test, so a tested
+  out step is known (core `training/test-out.ts`; no stored-format change); `learning.gatesRelaxed`
   turns locks into "suggested later".
 - **The cut** (v1 `courseUnits`): the first line's main line, then branch after branch (most important kind, most
   popular, shallowest), in runs of about `teach.stepMoves` (4), cut where another branch leaves. Steps hold no

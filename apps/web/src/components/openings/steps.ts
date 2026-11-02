@@ -28,6 +28,13 @@ export type StepData = {
   /** The stage reached, as an index into `teach.stages`, once started. */
   stage?: number;
   extras?: Extra[];
+  /** The step's page (Learn): where a click on the row goes when there is no board to select it on. */
+  href?: string;
+  /**
+   * A follow-up of step `number` (docs/v2/model.md): one of the opponent's common mistakes in its stretch and the
+   * punishment, taught after the step's main line. `index` counts from 0 among the step's follow-ups.
+   */
+  followUp?: { index: number };
 };
 
 export const STAGE_NAMES: Record<string, string> = {
@@ -38,9 +45,17 @@ export const STAGE_NAMES: Record<string, string> = {
   done: 'Done',
 };
 
-/** A step's title, or a headline from its first move: "When 3...Nf6 is played". */
+/** A step's label in its circle: "3", and "3a", "3b" for its follow-ups. */
+export const stepLabel = (step: StepData) =>
+  step.followUp ? `${step.number}${String.fromCharCode(97 + step.followUp.index)}` : String(step.number);
+
+/** A step's title, or a headline from its first move: "When 3...Nf6 is played" ("If 4...h6 is played" for a follow-up). */
 export function stepTitle(step: StepData): string {
   if (step.title) return step.title;
+  if (step.followUp) {
+    const first = step.stretches[0]?.moves[0];
+    if (first) return `If ${numberedMove(step.stretches[0]!.firstPly, first.san)} is played`;
+  }
   const stretch = step.stretches[0];
   const first = stretch?.moves[0];
   if (!stretch || !first) return `Step ${step.number}`;

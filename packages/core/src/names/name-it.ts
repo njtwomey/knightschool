@@ -1,3 +1,4 @@
+import type { Try } from '../training/attempt';
 import { START_EPD } from '../chess/epd';
 import { replay } from '../chess/play';
 import type { BuiltOpening } from '../content/build-opening';
@@ -35,4 +36,28 @@ export function nameItPositions(
     });
   }
   return [...out.values()];
+}
+
+/** How much a Name it answer earned: the variation (full), its opening only (half) or neither. */
+export type NameItCredit = 'full' | 'half' | 'none';
+
+/**
+ * A Name it answer as the attempts log keeps it, with no column of its own: the result is `right` for full credit,
+ * `wrong` for half or none, `shown` when the learner gave up; the one try holds the typed words, its outcome `right`,
+ * `another` (half: the opening, not the variation) or `wrong`.
+ */
+export function nameItAttempt(
+  typed: string,
+  credit: NameItCredit,
+  ms: number,
+): { result: 'right' | 'wrong' | 'shown'; tries: Try[] } {
+  if (!typed.trim()) return { result: 'shown', tries: [] };
+  const outcome = credit === 'full' ? 'right' : credit === 'half' ? 'another' : 'wrong';
+  return { result: credit === 'full' ? 'right' : 'wrong', tries: [{ uci: typed.trim(), ms, outcome }] };
+}
+
+/** The credit a logged Name it answer earned, read back from `nameItAttempt`'s result and try. */
+export function nameItCredit(attempt: { result: string; tries: readonly Pick<Try, 'outcome'>[] }): NameItCredit {
+  if (attempt.result === 'right') return 'full';
+  return attempt.tries.at(-1)?.outcome === 'another' ? 'half' : 'none';
 }

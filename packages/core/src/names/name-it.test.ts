@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { START_EPD } from '../chess/epd';
 import { replay } from '../chess/play';
 import type { BuiltOpening } from '../content/build-opening';
-import { nameItPositions, nameItRef } from './name-it';
+import { nameItAttempt, nameItCredit, nameItPositions, nameItRef } from './name-it';
 
 const played = replay(START_EPD, 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3'.split(' '));
 const opening = {
@@ -25,5 +25,21 @@ describe('nameItPositions', () => {
       [7, 'Italian Game: Giuoco Piano', 1],
     ]);
     expect(nameItRef('italian', played[4]!.epd)).toBe(`name-it:italian:${played[4]!.epd}`);
+  });
+});
+
+describe('a Name it answer in the attempts log', () => {
+  it('keeps full, half and no credit in the result and the try, and reads them back', () => {
+    const full = nameItAttempt('Giuoco Piano', 'full', 3000);
+    expect(full).toEqual({ result: 'right', tries: [{ uci: 'Giuoco Piano', ms: 3000, outcome: 'right' }] });
+    const half = nameItAttempt(' Italian Game ', 'half', 2000);
+    expect(half).toEqual({ result: 'wrong', tries: [{ uci: 'Italian Game', ms: 2000, outcome: 'another' }] });
+    expect(nameItCredit(full)).toBe('full');
+    expect(nameItCredit(half)).toBe('half');
+    expect(nameItCredit(nameItAttempt('Sicilian', 'none', 1000))).toBe('none');
+  });
+  it('logs giving up as shown, with no try', () => {
+    expect(nameItAttempt('', 'none', 500)).toEqual({ result: 'shown', tries: [] });
+    expect(nameItCredit({ result: 'shown', tries: [] })).toBe('none');
   });
 });

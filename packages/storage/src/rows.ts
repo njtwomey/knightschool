@@ -39,6 +39,10 @@ export interface LearnerStore {
   settings: {
     get(key: string): Promise<string | undefined>;
     set(key: string, value: string): Promise<void>;
+    /** Every row, key to value: the settings store reads them all once when the database opens. */
+    all(): Promise<Record<string, string>>;
+    /** Removes a row (a setting reset to the layer below). */
+    remove(key: string): Promise<void>;
   };
 }
 

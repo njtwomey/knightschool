@@ -26,6 +26,11 @@ export type Exercise = {
   help?: boolean;
   /** The move that reached the start (UCI), highlighted as the last move before anything is played (a review card). */
   before?: string;
+  /**
+   * What answering it saves, over the session's own choice: a mistake to punish or a puzzle inside a checkpoint is
+   * never a move card (`none`); a session that saves nothing (free practice) still saves nothing.
+   */
+  record?: 'moves' | 'exercise' | 'none';
 };
 
 /**
@@ -93,6 +98,10 @@ export function exerciseOver(exercise: Exercise, epd: string, plies: number, lea
     const book = exercise.grader.kind === 'exact' ? exercise.grader.book : undefined;
     if (!learnerToMove && !exercise.responder.replies[epd]?.length) return true;
     if (learnerToMove && book && !book[epd]) return true;
+  }
+  if (exercise.responder.kind === 'engine' && exercise.grader.kind === 'exact' && exercise.grader.book) {
+    // A drill against the engine ends where the book does: the engine left the lines, or the line ran out.
+    if (sideToMove(epd) === exercise.side && !exercise.grader.book[epd]) return true;
   }
   return exercise.learnerMoves !== undefined && learnerMovesPlayed >= exercise.learnerMoves;
 }

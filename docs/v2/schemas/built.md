@@ -76,7 +76,8 @@ files the app loads as needed, and one read-only SQLite file for the large table
 ```
 
 The same shape as v1's opening content (EPD-keyed positions, moves with notes), plus variations, steps and
-refutations. `mine` is v1's `isRepertoire`.
+refutations. `mine` is v1's `isRepertoire`. A refutation (as built: `{ uci, san, note?, then: [{ uci, san, note? }] }`) keeps the author's
+note on every move of its punishing line, which a step's follow-ups show ([../pages/follow-up.md](../pages/follow-up.md)).
 
 **`config.json`**: the app's part of `content/config.yaml`.
 

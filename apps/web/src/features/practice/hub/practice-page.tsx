@@ -1,5 +1,5 @@
 import { drillScope, scopePositions } from '@knightschool/core';
-import { Flag, MessageCircleQuestion, Settings2, type LucideIcon } from 'lucide-react';
+import { ArrowRight, Flag, Settings2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { OpeningCard } from '@/components/openings/opening-card';
 import { MODE_INFO, type PracticeConfig, type PracticeMode } from '@/components/practice/practice-config';
@@ -8,7 +8,7 @@ import { DueCard } from '@/components/progress/due-card';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { siteConfig } from '@/data/site-config';
+import { getSetting } from '@/data/settings';
 import { checkpointHref, openingSummary } from '@/features/learn/views';
 import { useLoad } from '@/hooks/use-load';
 import { cn } from '@/lib/utils';
@@ -43,14 +43,6 @@ const TILES: { mode: PracticeMode | 'questions'; href: string }[] = [
   { mode: 'speed', href: '/practice/speed' },
   { mode: 'name-it', href: '/practice/name-it' },
 ];
-
-const QUESTIONS: { name: string; blurb: string; icon: LucideIcon; text: string; soft: string } = {
-  name: 'Questions',
-  blurb: 'Why a move is played, in your own words.',
-  icon: MessageCircleQuestion,
-  text: 'text-foreground',
-  soft: 'bg-muted',
-};
 
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
@@ -129,7 +121,7 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
       ) : null}
       <DueCard
         due={due}
-        minutes={minutesFor(Math.min(due, siteConfig.schedule.sessionSize.default), progress.msPerAnswer)}
+        minutes={minutesFor(Math.min(due, getSetting('review.sessionSize')), progress.msPerAnswer)}
         byKind={{
           moves: progress.dueByKind.moves,
           puzzles: progress.dueByKind.puzzles,
@@ -147,7 +139,7 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {TILES.map((tile) => {
-            const info = tile.mode === 'questions' ? QUESTIONS : MODE_INFO[tile.mode];
+            const info = MODE_INFO[tile.mode];
             const Icon = info.icon;
             const mode = tile.mode;
             return (
@@ -165,6 +157,11 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
                 </CardHeader>
                 <CardContent className="text-sm font-medium tabular-nums">{counts[tile.mode]}</CardContent>
                 <CardFooter className={cn('flex flex-wrap gap-2', ABOVE_ROW_LINK_GROUP)}>
+                  <Button asChild size="sm">
+                    <a href={to(tile.href)}>
+                      {tile.mode === 'review' ? 'Review now' : 'Open'} <ArrowRight aria-hidden />
+                    </a>
+                  </Button>
                   {mode !== 'questions' ? (
                     <Button size="sm" variant="ghost" onClick={() => setSetup(mode)} aria-pressed={setup === mode}>
                       <Settings2 aria-hidden /> Set up
@@ -219,10 +216,7 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
         <PracticeSetup
           key={setup}
           mode={setup}
-          initial={readPracticeConfig(
-            setup,
-            setup === 'review' ? { source: 'due' } : setup === 'puzzles' ? { rating: siteConfig.puzzles.rating } : {},
-          )}
+          initial={readPracticeConfig(setup, setup === 'review' ? { source: 'due' } : {})}
           sources={sources}
           due={due}
           {...(setup === 'review' || setup === 'drill'
