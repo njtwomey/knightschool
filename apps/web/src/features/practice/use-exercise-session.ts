@@ -23,7 +23,7 @@ import type { BoardBadge, SystemArrow } from '@/components/board/board-surface';
 import type { Feedback } from '@/components/board/board-feedback';
 import type { Try as TryRow } from '@/components/chess/tries-table';
 import { startEngine } from '@/data/engine/store';
-import { learnerStore } from '@/data/learner';
+import { learnerStore, trackWrite } from '@/data/learner';
 import type { AttemptRow } from '@/data/learner-store';
 import { feedbackDelay, scheduleConfig } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
@@ -203,7 +203,9 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
             ],
       );
       if (savesAs(exercise) === 'exercise')
-        void saveAnswer(exercise.id, exerciseAttempt, exercise.mode === 'puzzle' ? 'puzzle' : exercise.mode);
+        void trackWrite(
+          saveAnswer(exercise.id, exerciseAttempt, exercise.mode === 'puzzle' ? 'puzzle' : exercise.mode),
+        );
       if (at < exercises.length) {
         later(
           () => {
@@ -255,10 +257,8 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
 
   const advance = (move: { uci: string; san: string; epd: string }, finished: Attempt) => {
     if (exercise && savesAs(exercise) === 'moves')
-      void saveAnswer(
-        moveCardId(epd, move.uci),
-        finished,
-        exercise.mode === 'checkpoint' ? 'checkpoint' : exercise.mode,
+      void trackWrite(
+        saveAnswer(moveCardId(epd, move.uci), finished, exercise.mode === 'checkpoint' ? 'checkpoint' : exercise.mode),
       );
     setPlayed((list) => [...list, { ...move, mine: true }]);
     setAttempt(startAttempt());

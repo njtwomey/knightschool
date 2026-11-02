@@ -56,7 +56,8 @@ inferior replies): each learned (why it is worth knowing, then the mistake and t
 reason), then tried (you play the punishment). They sit under their step on the opening page with their own state, and their moves come
 back in Review ([pages/follow-up.md](pages/follow-up.md)).
 
-A step is known when every move in it has been played right twice running (v1's unit rule, `judge.knownRule`). Nothing
+A step (or follow-up, or line) is known as soon as a Try of it goes cleanly: every move right first time, no help. It
+also becomes known once every move in it has been right twice running in reviews (v1's unit rule). Nothing
 waits for a click when you are right; a miss stays up with Next while there is an explanation to read (v1's rule, kept).
 
 ## Testing

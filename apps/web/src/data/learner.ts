@@ -11,6 +11,21 @@ export function learnerStore(): Promise<LearnerStore> {
   return store;
 }
 
+/** Writes still landing (answers, attempts): a read that must include them waits for them first. */
+const writes = new Set<Promise<unknown>>();
+
+/** Tracks a write, so `whenWritesSettled` waits for it. */
+export function trackWrite<T>(write: Promise<T>): Promise<T> {
+  writes.add(write);
+  void write.catch(() => undefined).finally(() => writes.delete(write));
+  return write;
+}
+
+/** Resolves once every tracked write has landed (or failed), including writes started while waiting. */
+export async function whenWritesSettled(): Promise<void> {
+  while (writes.size) await Promise.allSettled([...writes]);
+}
+
 /** Swaps in another store (the SQLite one, when it opens). */
 export function setLearnerStore(next: Promise<LearnerStore>): void {
   store = next;

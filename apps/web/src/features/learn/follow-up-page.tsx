@@ -7,7 +7,6 @@ import { RichText } from '@/components/chess/rich-text';
 import { stepLabel, stepTitle } from '@/components/openings/steps';
 import { Notice } from '@/components/shared/notice';
 import { Button } from '@/components/ui/button';
-import { siteConfig } from '@/data/site-config';
 import { LearnFlow } from './learn-flow';
 import { bakedScore, lineMoves, type LineMove } from './model';
 import { followUpMoves, openingFollowUps, openingVariations, type OpeningData } from './opening-data';
@@ -105,6 +104,7 @@ function FollowUpView({ data, followUp, n, k }: { data: OpeningData; followUp: F
       data={data}
       item={followUp.id}
       remember
+      passRef={followUp.id}
       crumbs={<LearnCrumbs data={data} at={{ step: n, followUp: k }} />}
       title={`${label}. ${title}`}
       subtitle={`A follow-up of step ${n}, ${stepTitle(parent)}: the mistake, then how to punish it.`}
@@ -150,10 +150,10 @@ function FollowUpView({ data, followUp, n, k }: { data: OpeningData; followUp: F
           return view?.state === 'known' || view?.state === 'mastered';
         },
         words: ({ known }) => ({
-          headline: known ? `Follow-up ${label} is known` : `Follow-up ${label} done`,
+          headline: known ? 'Known' : 'Not known yet',
           sentence: known
-            ? 'The punishment has been right twice running. It comes back in your reviews.'
-            : `A move is known once it has been right ${siteConfig.judge.knownAfterRight} times running. Its moves are in your reviews either way.`,
+            ? 'The punishment right first time with no help, so this follow-up is known. It comes back in your reviews.'
+            : 'A run with every move right first time and no help makes it known. Its moves are in your reviews either way.',
         }),
         actions: ({ known }) =>
           k < siblings.length ? (

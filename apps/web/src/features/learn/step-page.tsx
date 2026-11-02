@@ -141,20 +141,18 @@ function StepView({
       done={{
         known: (now) => ['known', 'mastered'].includes(now.one.stepStates.get(step.id) ?? ''),
         words: ({ known, test, testedOut }) => ({
-          headline: test
-            ? testedOut
-              ? `Step ${n} is known: you tested out`
-              : 'Not tested out yet'
-            : known
-              ? `Step ${n} is known`
-              : `Step ${n} done: nearly there`,
-          sentence: test
-            ? testedOut
-              ? 'Every move right first time with no help. The step counts as known and opens the next one.'
-              : 'Testing out needs every move right first time with no help. Learn it first, or test out again.'
-            : known
-              ? 'Every move has been right twice running. Its moves join your reviews.'
-              : `A move is known once it has been right ${siteConfig.judge.knownAfterRight} times running. Its moves are in your reviews either way.`,
+          headline: known
+            ? test && testedOut
+              ? 'Known: you tested out'
+              : 'Known'
+            : test
+              ? 'Not tested out yet'
+              : 'Not known yet',
+          sentence: known
+            ? 'Every move right first time with no help, so this step is known and the next one opens. Its moves come back in your reviews.'
+            : test
+              ? 'Testing out needs every move right first time with no help. Learn it first, or test out again.'
+              : 'A run with every move right first time and no help makes it known. Its moves are in your reviews either way.',
         }),
         actions: ({ known }) => {
           const lastOfVariation = steps.at(-1)?.n === n;

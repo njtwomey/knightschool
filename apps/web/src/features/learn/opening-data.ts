@@ -49,9 +49,15 @@ export function openingFollowUps(data: OpeningData): FollowUp[] {
   });
 }
 
-/** Each follow-up's state: from its moves' cards, locked until the step it hangs off is known (`teach.gates`). */
+/**
+ * Each follow-up's state: from its moves' cards, locked until the step it hangs off is known (`teach.gates`), and known
+ * once a Try of it has gone cleanly (every move right first time, no help: an attempt under its id, result right).
+ */
 export function followUpStates(data: OpeningData, list: readonly FollowUp[]): Map<string, ItemState> {
   const states = cardStates(data.progress.cards, data.progress.reviews);
+  const passed = new Set(
+    data.progress.attempts.filter((attempt) => attempt.result === 'right').map((attempt) => attempt.ref),
+  );
   return new Map(
     list.map((followUp) => [
       followUp.id,
@@ -59,6 +65,7 @@ export function followUpStates(data: OpeningData, list: readonly FollowUp[]): Ma
         followUp.cards.map((card) => states.get(card.id) ?? 'open'),
         isKnown(data.one.stepStates.get(followUp.step)),
         siteConfig.teach.gates,
+        passed.has(followUp.id),
       ),
     ]),
   );

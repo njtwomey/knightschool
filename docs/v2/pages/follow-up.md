@@ -45,7 +45,7 @@ then the heading ("3a. If 4...h6 is played") and the stages.
 ## Behaviour
 
 - State, as a step's: from its move cards, **locked** until the step it hangs off is known (`teach.gates`), then open,
-  learning, known (every move right twice running), mastered. Opening a locked one asks once per opening, as a step
+  learning, known (a clean Try, or every move right twice running), mastered. Opening a locked one asks once per opening, as a step
   does; arriving at it directly shows a notice with a link to its step.
 - Not counted in the opening's or variation's steps, its checkpoint, or Learn's count.
 

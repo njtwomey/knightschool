@@ -12,8 +12,7 @@ import { SessionSummary } from '@/components/practice/session-summary';
 import { BoardColumns } from '@/components/shared/board-columns';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { learnerStore } from '@/data/learner';
-import { siteConfig } from '@/data/site-config';
+import { learnerStore, trackWrite } from '@/data/learner';
 import { ExerciseBoard } from '@/features/practice/exercise-board';
 import { loadProgress } from '@/features/practice/progress';
 import { useExerciseSession } from '@/features/practice/use-exercise-session';
@@ -68,6 +67,11 @@ export type LearnFlowProps = {
   practice: { prompt: string; context: ReactNode; save: 'moves' | 'none' };
   /** Test out (a step): "Test me instead" in the introduction, and the attempt's ref in the log. */
   testOut?: { ref: string };
+  /**
+   * Where a clean Try is recorded when not testing out (every move right first time, no help, from the first move): it
+   * passes the item there and then, as testing out does. Defaults to the test-out ref.
+   */
+  passRef?: string;
   /** Done: whether it is known, its words, its way on, and anything after. */
   done: {
     known: (data: OpeningData) => boolean;
@@ -312,6 +316,7 @@ function TryStage({
   lead,
   practice,
   testOut,
+  passRef,
   m,
   test,
   onPlayed,
@@ -354,28 +359,33 @@ function TryStage({
     if (!session.done || finished.current) return;
     finished.current = true;
     const result = session.results[0];
-    if (!test || !testOut) {
-      onDone(session.tries);
+    // A clean run from the first move passes the item at once, whether or not it was a test; a test is recorded
+    // either way, a plain Try only when it passed.
+    const passed = Boolean(result && result.right && !result.hint && !result.shown && offset === 0);
+    const ref = test ? testOut?.ref : (passRef ?? testOut?.ref);
+    if (!ref || (!test && !passed)) {
+      onDone(session.tries, test ? false : undefined);
       return;
     }
-    const passed = Boolean(result && result.right && !result.hint && !result.shown);
-    void learnerStore()
+    void trackWrite(learnerStore())
       .then((store) =>
-        store.attempts.add({
-          id: crypto.randomUUID(),
-          at: new Date().toISOString(),
-          session: crypto.randomUUID(),
-          mode: 'try',
-          ref: testOut.ref,
-          result: passed ? 'right' : result?.shown ? 'shown' : 'wrong',
-          tries: result?.attempt.tries ?? [],
-          ms: result?.ms ?? 0,
-          hint: Boolean(result?.hint),
-          shown: Boolean(result?.shown),
-        }),
+        trackWrite(
+          store.attempts.add({
+            id: crypto.randomUUID(),
+            at: new Date().toISOString(),
+            session: crypto.randomUUID(),
+            mode: 'try',
+            ref,
+            result: passed ? 'right' : result?.shown ? 'shown' : 'wrong',
+            tries: result?.attempt.tries ?? [],
+            ms: result?.ms ?? 0,
+            hint: Boolean(result?.hint),
+            shown: Boolean(result?.shown),
+          }),
+        ),
       )
       .finally(() => onDone(session.tries, passed));
-  }, [session.done, session.results, session.tries, test, testOut, onDone]);
+  }, [session.done, session.results, session.tries, test, testOut, passRef, offset, onDone]);
 
   const mine = moves.slice(offset).filter((move) => move.mine).length;
   const done = session.played.filter((move) => move.mine).length;
@@ -419,14 +429,8 @@ function DoneStage({
   onLearn: () => void;
 }) {
   const opening = data.one.opening;
-  // The answers of the Try just played are saved as it goes; read the log once they have landed.
-  const fresh = useLoad(
-    () =>
-      new Promise<Awaited<ReturnType<typeof loadProgress>>>((resolve, reject) =>
-        setTimeout(() => loadProgress().then(resolve, reject), siteConfig.timing.nextCard),
-      ),
-    [item, record],
-  );
+  // The Try's answers are saved as it goes; loadProgress waits for every save still landing, so this is what they did.
+  const fresh = useLoad(() => loadProgress(), [item, record]);
   const now: OpeningData = fresh.data
     ? {
         ...data,

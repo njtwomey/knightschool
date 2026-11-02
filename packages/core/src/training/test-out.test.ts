@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { stepState } from './states';
-import { checkpointRef, finalTestRef, stepTestOutRef, testedOutSteps } from './test-out';
+import { checkpointRef, finalTestRef, lineTestOutRef, stepTestOutRef, testedOutSteps } from './test-out';
 
 const opening = {
   id: 'italian',
   steps: [
-    { id: 'a:1', variation: 'piano' },
-    { id: 'a:2', variation: 'piano' },
+    { id: 'a:1', variation: 'piano', line: 'a' },
+    { id: 'a:2', variation: 'piano', line: 'a' },
     { id: 'b:1', variation: 'two-knights' },
     { id: 'b:2', variation: 'two-knights' },
   ],
@@ -32,6 +32,11 @@ describe('testing out', () => {
     );
     expect(testedOutSteps(opening, [{ mode: 'checkpoint', ref: finalTestRef('italian'), result: 'right' }]).size).toBe(
       4,
+    );
+  });
+  it('knows every step of a line whose clean Try passed', () => {
+    expect(testedOutSteps(opening, [{ mode: 'try', ref: lineTestOutRef('italian', 'a'), result: 'right' }])).toEqual(
+      new Set(['a:1', 'a:2']),
     );
   });
   it('makes a tested-out step known, but mastered still wins', () => {

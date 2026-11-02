@@ -61,8 +61,11 @@ Two columns from lg; on a phone: board, controls, then the panel in the page's f
 
 ## Behaviour
 
-- The step is known when every move has been right twice running; Done reads the log again once Try's answers have
-  landed, so what it says is what the answers just did. Its moves join reviews either way.
+- The step is known the moment a Try ends with every move right first time, no help, from the first move (recorded as
+  its test-out, so it counts exactly as testing out does), or once every move has been right twice running in reviews.
+  Done reads the log after every save has landed (`whenWritesSettled`), and so does every page that shows progress,
+  so what it says is what the answers just did. Its moves join reviews either way. Done's words are the state itself:
+  "Known", or "Not known yet" with the moves to go over.
 - **Locked**: the first step of an opening is always open. A later locked step asks once per opening ("Start step 3
   anyway?") where it is opened (its row, or a crumb's menu); arriving at it directly shows a quiet notice with a link to
   the step before.

@@ -17,7 +17,7 @@ import {
 } from '@knightschool/core';
 import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
 import { loadCatalog, loadFacts, loadOpening, loadPuzzles, type Catalog, type ShippedPuzzle } from '@/data/content';
-import { learnerStore } from '@/data/learner';
+import { learnerStore, whenWritesSettled } from '@/data/learner';
 import type { AttemptRow, LearnerStore, ReviewRow } from '@/data/learner-store';
 import { getSetting, whenSettingsReady } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
@@ -145,6 +145,8 @@ function inProgressOf(
 }
 
 export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
+  // Answers still being saved are part of the picture: read once they have landed.
+  await whenWritesSettled();
   const [catalog, store] = await Promise.all([loadCatalog(), learnerStore(), whenSettingsReady()]);
   const [cards, attempts] = await Promise.all([store.cards.all(), store.attempts.recent(LOG_LIMIT)]);
   const reviews = await store.reviews.forCards(cards.map((card) => card.id));

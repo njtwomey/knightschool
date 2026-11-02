@@ -14,6 +14,7 @@ import { openingVariations, useStepActions, type OpeningData } from './opening-d
 import { LearnCrumbs } from './learn-crumbs';
 import { OpeningFrame } from './opening-frame';
 import { lineHref, lineViews, linesHref } from './views';
+import { lineTestOutRef } from '@knightschool/core';
 
 /**
  * One line inside an opening (docs/v2/pages/line.md), taught through the same Learn flow as a step: Learn (the line's
@@ -81,6 +82,7 @@ function LineView({ data, lineId }: { data: OpeningData; lineId: string }) {
       data={data}
       item={`line:${lineId}`}
       remember={false}
+      {...(earns ? { passRef: lineTestOutRef(opening.id, lineId) } : {})}
       crumbs={<LearnCrumbs data={data} at={{ line: lineId }} />}
       title={
         <>
@@ -125,18 +127,20 @@ function LineView({ data, lineId }: { data: OpeningData; lineId: string }) {
       done={{
         known: (now) => {
           const states = cardStates(now.progress.cards, now.progress.reviews);
+          const ref = lineTestOutRef(opening.id, lineId);
+          if (now.progress.attempts.some((attempt) => attempt.ref === ref && attempt.result === 'right')) return earns;
           return (
             earns &&
             mine.every((move) => ['known', 'mastered'].includes(states.get(`move:${move.before}:${move.uci}`) ?? ''))
           );
         },
         words: ({ known }) => ({
-          headline: known ? `${view.name} is known` : `${view.name} done`,
+          headline: !earns ? view.name : known ? 'Known' : 'Not known yet',
           sentence: !earns
             ? 'This line is shown, never drilled, so nothing was saved.'
             : known
-              ? 'Every move of yours in it has been right twice running. They come back in your reviews.'
-              : `A move is known once it has been right ${siteConfig.judge.knownAfterRight} times running. Its moves are in your reviews either way.`,
+              ? 'Every move right first time with no help, so the line and the steps teaching it are known. Its moves come back in your reviews.'
+              : 'A run with every move right first time and no help makes it known. Its moves are in your reviews either way.',
         }),
         actions: () => (
           <>
