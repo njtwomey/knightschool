@@ -21,6 +21,9 @@ const FollowUpPage = lazy(() =>
   import('@/features/learn/follow-up-page').then((module) => ({ default: module.FollowUpPage })),
 );
 const LinePage = lazy(() => import('@/features/learn/line-page').then((module) => ({ default: module.LinePage })));
+const OpeningMapPage = lazy(() =>
+  import('@/features/map/map-page').then((module) => ({ default: module.OpeningMapPage })),
+);
 const PuzzlesPage = lazy(() =>
   import('@/features/practice/puzzles/puzzles-page').then((module) => ({ default: module.PuzzlesPage })),
 );
@@ -104,6 +107,8 @@ function Page({ path }: { path: string }) {
     );
   const followUp = /^\/openings\/([a-z0-9-]+)\/step\/(\d+)\/follow-up\/(\d+)$/.exec(path);
   if (followUp) return <FollowUpPage key={path} id={followUp[1]!} n={Number(followUp[2])} k={Number(followUp[3])} />;
+  const openingMap = /^\/openings\/([a-z0-9-]+)\/map$/.exec(path);
+  if (openingMap) return <OpeningMapPage key={path} id={openingMap[1]!} />;
   const opening = /^\/openings\/([a-z0-9-]+)(?:\/(lines))?$/.exec(path);
   if (opening) return <OpeningPage key={path} id={opening[1]!} tab={opening[2] ? 'lines' : 'overview'} />;
   const line = /^\/openings\/([a-z0-9-]+)\/lines\/([a-z0-9-]+)$/.exec(path);

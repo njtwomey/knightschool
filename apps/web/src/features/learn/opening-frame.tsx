@@ -8,7 +8,7 @@ import { to } from '@/router/location';
 import { loadOpeningData, type OpeningData } from './opening-data';
 import { linesHref, openingHref } from './views';
 
-/** The opening's crumbs and its tabs, Overview and Lines (docs/v2/pages/opening.md). */
+/** The opening's crumbs and its tabs, Overview, Lines and Map (docs/v2/pages/opening.md). */
 export function OpeningCrumbs({
   catalog,
   opening,
@@ -17,7 +17,7 @@ export function OpeningCrumbs({
 }: {
   catalog: Catalog;
   opening: BuiltOpening;
-  tab?: 'overview' | 'lines';
+  tab?: 'overview' | 'lines' | 'map';
   crumbs?: Crumb[];
 }) {
   return (
@@ -47,6 +47,7 @@ export function OpeningCrumbs({
               items: [
                 { value: 'overview', label: 'Overview', href: openingHref(opening.id) },
                 { value: 'lines', label: 'Lines', href: linesHref(opening.id) },
+                { value: 'map', label: 'Map', href: to(`/openings/${opening.id}/map`) },
               ],
             },
           }

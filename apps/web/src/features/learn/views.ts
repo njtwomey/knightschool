@@ -146,7 +146,7 @@ const runMove = (move: { san: string; uci: string; after: string }) => ({
 });
 
 /** The kind as the kind badge words it: a trap to spring is "for us", a danger "against us", for the line's side. */
-const KIND_SHOWN: Record<BuiltOpening['lines'][number]['kind'], LineKind> = {
+export const KIND_SHOWN: Record<BuiltOpening['lines'][number]['kind'], LineKind> = {
   main: 'main',
   sideline: 'sideline',
   rare: 'rare',
