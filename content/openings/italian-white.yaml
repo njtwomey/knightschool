@@ -16,7 +16,7 @@ variations:
     intro: >-
       Black copies White with 3...Bc5, and both bishops aim at the other side's weak f-pawn. White builds slowly: c3
       and d3, castle, then Re1 and Bb3, keeping the d4 break for when the pieces are ready.
-    lines: [giuoco-main, giuoco-d5, giuoco-bg4]
+    lines: [giuoco-main, giuoco-d6, giuoco-d5, giuoco-bg4]
     plans:
       - Play c3 and d3, castle, then Re1, Bb3 and h3 before the d4 break.
     questions:
@@ -43,6 +43,12 @@ variations:
         explain: >-
           7...a6 gets ready for ...b5, which would chase the bishop and gain time. On b3 it is out of reach of the
           pawns and still points at f7. Black's ...Ba7 does the same for the other bishop.
+  - id: two-knights
+    name: Two Knights Defence
+    intro: >-
+      Black develops the other knight first with 3...Nf6, hitting e4. White answers calmly with 4.d3 and, after
+      4...Bc5 5.c3, is back in the main line's position.
+    lines: [two-knights-d3]
   - id: traps
     name: Traps to know
     intro: >-
@@ -78,6 +84,17 @@ steps:
       keeps e4 safe, and the king castles before anything opens. Then Re1 and Bb3 put the last pieces where they are
       safe and useful. Nothing here is forced; you are building a position, so learn why each move is played and the
       moves follow.
+  giuoco-d6:1:
+    title: When Black holds e5 with ...d6
+    text: >-
+      4...d6 guards e5 but leaves White free to play d4 at once. Take the centre, recapture with the c-pawn, then
+      develop and castle; h3 keeps Black's bishop off g4. Black's most common answer, the check 6...Bb4+, is a
+      mistake: it comes next as a follow-up.
+  two-knights-d3:1:
+    title: When Black plays 3...Nf6
+    text: >-
+      The Two Knights. 4.d3 guards e4 without any fuss, and after 4...Bc5 5.c3 the position is the main line's, so
+      the plan is the same: castle, Re1, Bb3, and the d4 break when the pieces are ready.
   giuoco-d5:1:
     title: When Black strikes with ...d5
     text: >-

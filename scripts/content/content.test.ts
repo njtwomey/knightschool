@@ -15,7 +15,7 @@ describe('content/', () => {
 
   it('gives the Italian example its variations, a refutation and a trap', () => {
     const italian = content.openings.find((opening) => opening.id === 'italian-white')!;
-    expect(italian.variations.map((variation) => variation.id)).toEqual(['giuoco-piano', 'traps']);
+    expect(italian.variations.map((variation) => variation.id)).toEqual(['giuoco-piano', 'two-knights', 'traps']);
     const refuted = Object.values(italian.positions).flatMap((position) => position.refutations ?? []);
     expect(refuted.map((refutation) => refutation.san)).toContain('Ng5');
     expect(italian.lines.find((line) => line.id === 'legal-mate')?.kind).toBe('trap');

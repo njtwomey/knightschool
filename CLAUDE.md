@@ -35,6 +35,17 @@ exact versions.
   functions take config values as arguments; no thresholds or defaults are hard-coded. Learner choices are settings,
   not config (`docs/v2/config.md`).
 
+## Content
+
+- `content/openings/<id>.yaml` (one opening for one side) and `content/lines/<first move>/<line>.pgn` (one line each,
+  shared by openings), with `ideas.yaml`, `tracks.yaml` and `config.yaml`. Committed data, as JSON Lines:
+  `content/analysis/` (engine), `content/popularity/` (the explorer's counts at the band), `content/puzzles/`.
+- Adding or migrating content (from v1's `.content/` snapshot, a transcript, a book, or the map's gaps): follow the
+  `add-content` skill (`.claude/skills/add-content`). The pipeline: `content:build`, `make popularity` (needs
+  `LICHESS_TOKEN` in `.env`), `pnpm analyse` (long; run in the background), `content:check` (authors and engine must
+  agree), `make puzzles`.
+- One Stockfish at a time, one thread. `.content/` is reference only, never built.
+
 ## Conventions
 
 - shadcn for every control; ESLint rejects raw `<button>`, `<input>`, `<select>`, `<textarea>`, `<table>`, `<dialog>`

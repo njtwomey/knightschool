@@ -1,0 +1,28 @@
+// Engine check for candidate moves: one native Stockfish, one thread (never run two at once).
+// Copy to the session scratchpad as engine.mts and run from the repo root:
+//   node --import tsx "$SCRATCH/engine.mts" depth "name:moves (UCI or SAN)" ["name:moves ..."]
+// Prints the top lines (White's point of view, pawns) for the position after each move list, from the start.
+const root = process.cwd();
+const core = await import(`${root}/packages/core/src/index.ts`);
+const uci = await import(`${root}/scripts/analyse/uci.ts`);
+const [depthArg, ...specs] = process.argv.slice(2);
+const engine = uci.startEngine(process.env.STOCKFISH ?? 'stockfish', { threads: 1, hash: 128, multipv: 4 });
+// The principal variation in SAN, so it reads as moves.
+const fmt = (epd: string, l: { cp?: number; mate?: number; pv: string[] }) =>
+  `${l.mate !== undefined ? `#${l.mate}` : ((l.cp ?? 0) / 100).toFixed(2)} ${core
+    .replay(epd, l.pv.slice(0, 7))
+    .map((m: { san: string }) => m.san)
+    .join(' ')}`;
+for (const spec of specs) {
+  const [name, moves] = spec.includes(':') ? spec.split(':') : [spec, spec];
+  const list = moves!.trim().split(/\s+/);
+  const played = core.replay(core.START_EPD, list);
+  if (played.length !== list.length) {
+    console.log(name!.padEnd(28), `ILLEGAL at ${list[played.length]}`);
+    continue;
+  }
+  const epd = played.at(-1)!.epd;
+  const result = await engine.analyse(epd, Number(depthArg));
+  console.log(name!.padEnd(28), result.lines.map((l: { cp?: number; mate?: number; pv: string[] }) => fmt(epd, l)).join(' | '));
+}
+engine.quit();

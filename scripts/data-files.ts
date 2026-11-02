@@ -45,6 +45,16 @@ export function writeAnalysis(meta: AnalysisMeta, byEpd: Record<string, Analysis
   );
 }
 
+export function writePopularity(meta: PopularityMeta, byEpd: Record<string, PopularityEntry>): void {
+  writeFileSync(
+    popularityPath,
+    writeJsonl(
+      meta,
+      sorted(byEpd).map(([epd, entry]) => ({ epd, ...entry })),
+    ),
+  );
+}
+
 /** A puzzle selection: what it was chosen with (the meta line), then one puzzle per line. */
 export function writeSelection<M extends object, P>(path: string, meta: M, puzzles: readonly P[]): void {
   mkdirSync(dirname(path), { recursive: true });

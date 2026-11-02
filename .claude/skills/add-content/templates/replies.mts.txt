@@ -1,0 +1,34 @@
+// What players at the band play after each move list (content/popularity, from `make popularity`).
+// Copy to the session scratchpad as replies.mts and run from the repo root:
+//   node --import tsx "$SCRATCH/replies.mts" "name:moves (UCI or SAN)" ["name:moves ..."]
+// "NO DATA" means the explorer was never asked there: list the line in an opening and run `make popularity`.
+const root = process.cwd();
+const core = await import(`${root}/packages/core/src/index.ts`);
+const files = await import(`${root}/scripts/data-files.ts`);
+const popularity = files.readPopularity().byEpd;
+for (const spec of process.argv.slice(2)) {
+  const [name, moves] = spec.includes(':') ? spec.split(':') : [spec, spec];
+  const list = moves!.trim().split(/\s+/);
+  const played = core.replay(core.START_EPD, list);
+  if (played.length !== list.length) {
+    console.log(name!.padEnd(28), `ILLEGAL at ${list[played.length]}`);
+    continue;
+  }
+  const epd = played.at(-1)!.epd;
+  const entry = popularity[epd];
+  if (!entry) {
+    console.log(name!.padEnd(28), 'NO DATA');
+    continue;
+  }
+  const games = entry.white + entry.draws + entry.black;
+  const share = (m: { white: number; draws: number; black: number }) =>
+    Math.round((100 * (m.white + m.draws + m.black)) / games);
+  console.log(
+    name!.padEnd(28),
+    games,
+    entry.moves
+      .slice(0, 8)
+      .map((m: { san: string; white: number; draws: number; black: number }) => `${m.san} ${share(m)}%`)
+      .join(', '),
+  );
+}

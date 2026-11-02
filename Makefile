@@ -52,8 +52,11 @@ hooks: ## Install the git pre-push hook
 
 # Puzzle jobs (docs/v2/puzzles.md), on the maintainer's machine, never by the build. Options go in ARGS, as
 # make puzzles-lookup ARGS='--moves "e4 e5 Nf3 Nc6 Bc4" --theme fork'.
-.PHONY: puzzles puzzles-index puzzles-select puzzles-lookup
+.PHONY: popularity puzzles puzzles-index puzzles-select puzzles-lookup
 ARGS ?=
+
+popularity: ## Ask the Lichess explorer what the band plays at every opening position not yet asked (needs LICHESS_TOKEN)
+	$(PNPM) popularity $(ARGS)
 
 puzzles: ## Update content/puzzles/ for every opening (downloads and indexes only when needed)
 	$(PNPM) puzzles $(ARGS)

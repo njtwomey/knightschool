@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 4.c3"]
+[Name "Giuoco Piano: Black holds e5 with ...d6"]
+
+4... d6 { Holds e5 with a pawn, but it is slow: it does not hit e4 as 4...Nf6 does, so nothing stops White's d4 break. [%csl Ye5] }
+5. d4 { The break at once: two pawns in the centre, with e5 attacked and the bishop's diagonal blocked. [%cal Gd4e5] }
+5... exd4 { Black gives up the centre rather than leave the e5 pawn under attack. }
+6. cxd4 { Recapture with the c-pawn: this is what c3 was for. White has the two centre pawns, and the bishop on c5 is hit. [%cal Gd4c5] }
+6... Bb6 { The bishop steps back but keeps its diagonal towards f2. }
+( 6... Bb4+? { Black's most common move here, about half the games at this level. The check looks active, but the knight blocks it with a developing move, and the bishop stands worse on b4 than on b6. }
+  7. Nc3 { Develops and blocks the check. White is clearly better: the centre stays, and d5 next hits the c6 knight. [%cal Gd4d5] } )
+7. Nc3 { Develops and guards e4 a second time, so the centre is safe. }
+7... Nf6 { Develops and hits e4 again. }
+8. O-O { The king is safe before anything opens. }
+8... O-O
+9. h3 { Keeps the bishop off g4, where it would pin the knight on f3 to the queen. White has the big centre Black allowed with 4...d6, and plays for d5 or e5 later. [%cal Rc8g4] } *
