@@ -15,13 +15,14 @@ const fmt = (epd: string, l: { cp?: number; mate?: number; pv: string[] }) =>
     .join(' ')}`;
 for (const spec of specs) {
   const [name, moves] = spec.includes(':') ? spec.split(':') : [spec, spec];
-  const list = moves!.trim().split(/\s+/);
+  const list = moves!.trim().split(/\s+/).filter(Boolean);
   const played = core.replay(core.START_EPD, list);
   if (played.length !== list.length) {
     console.log(name!.padEnd(28), `ILLEGAL at ${list[played.length]}`);
     continue;
   }
-  const epd = played.at(-1)!.epd;
+  // No moves: the start position.
+  const epd = played.at(-1)?.epd ?? core.START_EPD;
   const result = await engine.analyse(epd, Number(depthArg));
   console.log(name!.padEnd(28), result.lines.map((l: { cp?: number; mate?: number; pv: string[] }) => fmt(epd, l)).join(' | '));
 }

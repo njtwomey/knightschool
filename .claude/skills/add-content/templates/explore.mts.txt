@@ -1,0 +1,46 @@
+// Live explorer at the band, cached in the scratchpad. Moves in SAN or UCI, space separated.
+//   node --env-file-if-exists=.env --import tsx explore.mts "d4 d5 Bf4" ...
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+const root = process.cwd();
+const core = await import(`${root}/packages/core/src/index.ts`);
+const files = await import(`${root}/scripts/data-files.ts`);
+const cachePath = new URL('./explorer-cache.json', import.meta.url);
+const cache: Record<string, any> = existsSync(cachePath) ? JSON.parse(readFileSync(cachePath, 'utf8')) : {};
+const pop = files.readPopularity().byEpd;
+const token = process.env.LICHESS_TOKEN;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+async function ask(epd: string) {
+  if (pop[epd]) return pop[epd];
+  if (cache[epd]) return cache[epd];
+  const url = new URL('https://explorer.lichess.ovh/lichess');
+  url.searchParams.set('variant', 'standard');
+  url.searchParams.set('fen', `${epd} 0 1`);
+  url.searchParams.set('speeds', 'blitz,rapid');
+  url.searchParams.set('ratings', '1000,1200,1400,1600');
+  url.searchParams.set('topGames', '0');
+  url.searchParams.set('recentGames', '0');
+  for (;;) {
+    const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (r.status === 429) { console.log('429, pausing'); await sleep(60000); continue; }
+    if (!r.ok) throw new Error(`explorer ${r.status}`);
+    const b: any = await r.json();
+    cache[epd] = { white: b.white, draws: b.draws, black: b.black, moves: b.moves.map(({ uci, san, white, draws, black }: any) => ({ uci, san, white, draws, black })) };
+    writeFileSync(cachePath, JSON.stringify(cache));
+    return cache[epd];
+  }
+}
+const minPct = Number(process.env.MIN ?? 2);
+for (const spec of process.argv.slice(2)) {
+  const moves = spec.trim() ? spec.trim().split(/\s+/) : [];
+  const played = core.replay(core.START_EPD, moves);
+  if (played.length !== moves.length) { console.log(spec, 'ILLEGAL at', moves[played.length]); continue; }
+  const epd = played.at(-1)?.epd ?? core.START_EPD;
+  const e = await ask(epd);
+  const games = e.white + e.draws + e.black;
+  const out = e.moves
+    .map((m: any) => { const n = m.white + m.draws + m.black; return { san: m.san, pct: (100 * n) / games, w: Math.round((100 * (m.white + m.draws / 2)) / Math.max(n, 1)) }; })
+    .filter((m: any) => m.pct >= minPct)
+    .map((m: any) => `${m.san} ${m.pct.toFixed(0)}% (W${m.w})`)
+    .join(', ');
+  console.log(`[${spec}] ${games}: ${out}`);
+}

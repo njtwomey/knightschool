@@ -79,11 +79,18 @@ pipeline), `docs/v2/schemas/annotations.md` (comments, marks, refutations). This
 
 `SCRATCH` is the session scratchpad. Copy the helpers once:
 `cp .claude/skills/add-content/templates/engine.mts.txt "$SCRATCH/engine.mts"` (and `replies.mts.txt` →
-`replies.mts`).
+`replies.mts`, `explore.mts.txt` → `explore.mts`). Moves in SAN or UCI; an illegal move list says where it fails.
+
+**One engine and one explorer client at a time, machine-wide** (several agents may be authoring). Wrap every command
+that runs Stockfish (`engine.mts`, `pnpm analyse`) or asks the explorer (`explore.mts`, `make popularity`):
+`until mkdir /private/tmp/claude-501/ks-engine.lock 2>/dev/null; do sleep 15; done; <command>; rmdir
+/private/tmp/claude-501/ks-engine.lock`, and wait while `pgrep -x stockfish` finds one. Stopping: Ctrl-C (`kill -INT`)
+saves `analyse` and `popularity`, which resume where they left off.
 
 1. **Scope.** Which opening, which replies. Look at the gaps (Map tab, or `node --import tsx "$SCRATCH/replies.mts"
-"after 3...Nf6:e2e4 e7e5 g1f3 b8c6 f1c4 g8f6"`). `NO DATA` means the explorer was never asked: write the line
-   first, then run `make popularity`.
+"after 3...Nf6:e2e4 e7e5 g1f3 b8c6 f1c4 g8f6"`). `NO DATA` means the explorer was never asked: ask it live with
+   `node --env-file-if-exists=.env --import tsx "$SCRATCH/explore.mts" "d4 d5 Bf4"` (cached beside the script), or
+   write the line first and run `make popularity`.
 2. **What exists.** `grep -rn "<move>" content/lines` and the opening's yaml: reuse lines, find the parent for `[Start]`,
    find the comment a shared move already has.
 3. **Engine-check the candidates** before writing: `node --import tsx "$SCRATCH/engine.mts" 20 "name:<uci moves>" ...`
