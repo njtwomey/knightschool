@@ -13,7 +13,9 @@ ideas: [f7-weakness, centre-pawns, castle-early, pin, legal-mate]
 variations:
   - id: giuoco-piano
     name: Giuoco Piano
-    intro: Black copies White with 3...Bc5; White builds the centre with c3 and d3 and castles.
+    intro: >-
+      Black copies White with 3...Bc5, and both bishops aim at the other side's weak f-pawn. White builds slowly: c3
+      and d3, castle, then Re1 and Bb3, keeping the d4 break for when the pieces are ready.
     lines: [giuoco-main, giuoco-d5, giuoco-bg4]
     plans:
       - Play c3 and d3, castle, then Re1, Bb3 and h3 before the d4 break.
@@ -43,7 +45,9 @@ variations:
           pawns and still points at f7. Black's ...Ba7 does the same for the other bishop.
   - id: traps
     name: Traps to know
-    intro: What to do when Black pins the knight too early.
+    intro: >-
+      Short traps from the same opening that win at once when Black goes wrong. Learn them so you see the chance when
+      it comes, not to play for them.
     lines: [legal-mate]
     questions:
       - id: why-nxe5-works
@@ -63,4 +67,25 @@ variations:
 steps:
   giuoco-main:1:
     title: The quiet bishop
-    text: White's bishop looks at f7 and the c-pawn prepares d4. Copy the plan, not just the moves.
+    text: >-
+      The plan of the Giuoco Piano, "the quiet game": the bishop on c4 points at f7, c3 prepares the d4 break, d3
+      keeps e4 safe, and the king castles before anything opens. Then Re1 and Bb3 put the last pieces where they are
+      safe and useful. Nothing here is forced; you are building a position, so learn why each move is played and the
+      moves follow.
+  giuoco-d5:1:
+    title: When Black strikes with ...d5
+    text: >-
+      Black opens the centre with 5...d5 before castling. After the pawns are swapped, Black's knight stands on d5 in
+      front of a king that has not castled, and 7.Qb3 hits the knight and f7 at once. Black has to spend a move
+      defending while White's pieces come out.
+  giuoco-bg4:1:
+    title: When Black pins with ...Bg4
+    text: >-
+      6...Bg4 pins the knight on f3 to the queen: the knight cannot move without exposing her. 7.h3 asks the bishop
+      to decide at once, and 8.Nbd2 gives f3 a second defender, so the pin never costs White anything.
+  legal-mate:1:
+    title: Légal's mate
+    text: >-
+      When Black pins the knight before developing, 6.Nxe5 offers the queen. Taking it walks into mate: 7.Bxf7+ Ke7
+      8.Nd5, the bishop and both knights covering every square round the king. If Black declines, White has won the
+      e5 pawn.

@@ -10,8 +10,16 @@
 4. c3 { Prepares d4. With a pawn on c3, White can take the centre and hit the bishop on c5 in one move. [%cal Gc3d4] [%idea centre-pawns] }
 ( 4. Ng5?? { Hangs the knight: with the e-pawn gone from e7, the queen takes it on g5. } 4... Qxg5 )
 4... Nf6 { Develops with an attack on e4, so White has to defend the pawn. [%cal Rf6e4] }
+( 4... h6? { A wasted move. It stops Ng5, which White was not threatening, and does nothing for e5 or for Black's development. White uses the time to chase away the pieces that guard e5. [%csl Re5] }
+  5. b4 { Hits the bishop. The pawn is safe: 5...Bxb4 6.cxb4 Nxb4 gives Black only two pawns for the bishop. [%cal Gb4c5] }
+  5... Bb6 6. b5 { Now the knight is hit, and the knight is the only piece guarding e5. Wherever it goes, e5 loses its defender. [%cal Gb5c6] [%csl Re5] }
+  6... Nce7 7. Nxe5 { White has won the e5 pawn, and the knight on e5 joins the bishop against f7. That is what 4...h6 cost: a move spent on nothing, while White's pawns gained time. [%cal Ge5f7,Gc4f7] } )
 5. d3 { Guards the pawn on e4 and keeps the centre closed. White builds slowly first; the d4 break can wait until the pieces are ready. }
 5... d6 { Gives e5 a pawn to defend it and frees the c8 bishop. }
+( 5... Ng4? { Aims at f2 with the knight and the bishop on c5 together: the threat is ...Nxf2, forking the queen and the rook on h1. But one piece jumping forward is not an attack, and it leaves the centre to White. [%cal Rg4f2,Rc5f2] [%csl Rf2] }
+  6. d4 { Blocks the bishop's line to f2 and hits the bishop at the same time: the threat is gone and Black has to move the bishop again. [%cal Gd4c5] }
+  6... Bd6 7. h3 { Now the knight is hit and has to go back. [%cal Gh3g4] }
+  7... Nf6 { Count the moves: Black's knight and bishop have each moved twice to end up worse placed, the bishop on d6 blocks its own d-pawn, and White has two pawns in the centre. White is clearly better without having won anything yet: the gain is time and space. } )
 6. O-O { Gets the king safe before the centre opens. [%idea castle-early] }
 6... O-O { Castle now: the king is safe behind its pawns and the rook is ready for the centre. }
 7. Re1 { Defends the pawn on e4 a second time, so the knight on f3 is free to move, and puts the rook on the file where the game will open. }
