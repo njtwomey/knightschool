@@ -102,7 +102,13 @@ for (const opening of content.openings) {
 
 // Follow-ups: each must say why it is worth knowing, from the board (material, mate) or the author's note.
 for (const opening of content.openings) {
-  const facts = openingFacts(opening, analysis, popularity, content.config.coverage.analyseShare);
+  const facts = openingFacts(
+    opening,
+    analysis,
+    popularity,
+    content.config.coverage.analyseShare,
+    content.config.judge.refutationPlies,
+  );
   for (const followUp of followUps(opening, facts, { ...config, minShare: content.config.coverage.minShare })) {
     const label = `${opening.id}: follow-up ${numberedMove(followUp.ply, followUp.mistake.san)} (step ${followUp.step})`;
     let epd = followUp.mistake.epd;

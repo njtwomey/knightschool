@@ -48,7 +48,13 @@ const analysis = readAnalysis().byEpd;
 const popularity = readPopularity().byEpd;
 for (const opening of content.openings) {
   writeFileSync(join(staging, 'openings', `${opening.id}.json`), JSON.stringify(opening));
-  const facts = openingFacts(opening, analysis, popularity, content.config.coverage.analyseShare);
+  const facts = openingFacts(
+    opening,
+    analysis,
+    popularity,
+    content.config.coverage.analyseShare,
+    content.config.judge.refutationPlies,
+  );
   writeFileSync(join(staging, 'openings', `${opening.id}.facts.json`), JSON.stringify(facts));
   if (names) {
     const named = openingNames(opening, names.positions);

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { playMove } from '../chess/play';
 import { buildOpening } from './build-opening';
 import { explorerUci, openingFacts } from './facts';
 import { readLine } from './line-pgn';
@@ -121,5 +122,24 @@ describe('opening facts', () => {
     expect(Object.keys(facts.evals)).toEqual([start]);
     expect(facts.counts[start]).toEqual({ games: 10, moves: [{ uci: 'f8c5', san: 'Bc5', games: 6 }] });
     expect(explorerUci('e1h1')).toBe('e1g1');
+  });
+
+  it('with linePlies, keeps the analysed positions along the engine line after a reply', () => {
+    const after = playMove(start, 'f8c5')!.epd;
+    // Moves no line plays, so only the walk can bring these positions in.
+    const next = playMove(after, 'a2a3')!.epd;
+    const third = playMove(next, 'h7h6')!.epd;
+    const analysis = {
+      [after]: { depth: 20, lines: [{ cp: 30, pv: ['a2a3', 'h7h6', 'h2h3'] }] },
+      [next]: { depth: 20, lines: [{ cp: 25, pv: ['h7h6'] }] },
+      // The third position is not analysed, so the walk stops before it.
+    };
+    const popularity = {
+      [start]: { white: 6, draws: 0, black: 4, moves: [{ uci: 'f8c5', san: 'Bc5', white: 4, draws: 0, black: 2 }] },
+    };
+    expect(Object.keys(openingFacts(built, analysis, popularity, 0.03).evals)).toEqual([after]);
+    const deep = openingFacts(built, analysis, popularity, 0.03, 6);
+    expect(Object.keys(deep.evals).sort()).toEqual([after, next].sort());
+    expect(deep.evals[third]).toBeUndefined();
   });
 });
