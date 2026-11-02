@@ -130,3 +130,17 @@ export function lineCardIds(opening: BuiltOpening, lineId: string, from = openin
 export function opponentPositions(moves: readonly LineMove[]): string[] {
   return moves.filter((move) => !move.mine).map((move) => move.before);
 }
+
+/**
+ * Where a position the learner moves from is taught: the line's name and the step's title, for prompts that ask for the
+ * opening's own move ("Find the book move", then this), so a sound move that is not the book's is never what was meant.
+ */
+export function taughtAt(opening: BuiltOpening, epd: string): { line: string; step?: string } | undefined {
+  for (const step of opening.steps) {
+    const moves = stepMoves(opening, step).moves;
+    if (!moves.some((move) => move.mine && move.before === epd)) continue;
+    const line = opening.lines.find((candidate) => candidate.id === step.line);
+    return { line: line?.name ?? opening.name, ...(step.title ? { step: step.title } : {}) };
+  }
+  return undefined;
+}

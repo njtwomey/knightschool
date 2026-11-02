@@ -250,14 +250,25 @@ function Run({
       ? 'A puzzle from your openings'
       : (context[current.id] ?? 'A move from your reviews')
     : '';
+  // A move card asks for the opening's own move, named by the line it is from.
+  const prompt =
+    current && current.mode !== 'puzzle' ? (
+      <div className="grid gap-0.5">
+        <p className="font-medium">Find the book move</p>
+        <p className="text-muted-foreground">{where}</p>
+      </div>
+    ) : undefined;
   return (
     <ExerciseBoard
       session={session}
+      prompt={prompt}
       aside={
-        <p className="text-sm text-muted-foreground">
-          {where}
-          {free ? '. Free practice: not saved to your schedule.' : null}
-        </p>
+        current?.mode === 'puzzle' || free ? (
+          <p className="text-sm text-muted-foreground">
+            {current?.mode === 'puzzle' ? where : null}
+            {free ? `${current?.mode === 'puzzle' ? '. ' : ''}Free practice: not saved to your schedule.` : null}
+          </p>
+        ) : undefined
       }
       footer={
         <div>

@@ -38,13 +38,14 @@ export type ReviewPlan = {
   facts?: OpeningFacts;
 };
 
-/** Where each move card of the openings is taught, by card id. */
+/** Where each move card of the openings is taught, by card id: the line's name and the step's title. */
 function contextOf(openings: readonly OpeningProgress[]): Record<string, string> {
   const out: Record<string, string> = {};
   for (const one of openings) {
     for (const card of one.cards) {
-      const n = one.opening.steps.findIndex((step) => step.id === card.step) + 1;
-      out[card.id] ??= `${one.opening.name}, step ${n}`;
+      const step = one.opening.steps.find((candidate) => candidate.id === card.step);
+      const line = one.opening.lines.find((candidate) => candidate.id === step?.line);
+      out[card.id] ??= `${line?.name ?? one.opening.name}${step?.title ? `: ${step.title}` : ''}`;
     }
   }
   return out;

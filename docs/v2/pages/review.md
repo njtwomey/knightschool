@@ -34,6 +34,8 @@ reviews come first; the Review count in an opening's [mode-counts](../components
 
 ## Behaviour
 
+- **The prompt names what is asked**: a move card says "Find the book move" with the line and step it is from, not
+  "step 3"; a sound move that is not the book's is answered as an alternative, never as wrong.
 - Board in the `test` preset, `answered` once a card is answered ([../patterns/reveal.md](../patterns/reveal.md)): no
   marks, eval or explorer while asking; the opponent's last move highlighted.
 - A session asks the move cards first, then the question cards (the Questions mode's `QuestionRun`, saved to the

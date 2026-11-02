@@ -37,6 +37,9 @@ the final test row on [opening](opening.md).
 
 ## Behaviour
 
+- **The prompt names what is asked**: a position or a branch says "Find the book move" (or "Play the book moves to
+  the end of the branch") with the line it is from ("Giuoco Piano: the quiet main line: The quiet bishop"), since a
+  position often has several good moves and only the opening's own one is the answer (`BookPrompt`, `taughtAt`).
 - Exercises are drawn from the variation's steps (`checkpointPlan`, config `teach.checkpointMix`: 6 positions, 2
   mistakes, 1 question, 1 puzzle): a position from each step's Try and more to make up the positions, the opponent's
   common mistakes to punish (`opponentMistakes` over the variation's lines), a typed question, one puzzle matched to

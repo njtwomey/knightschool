@@ -36,6 +36,7 @@ import { askedOf, type QuestionAnswer } from '../questions/asked';
 import { QuestionRun } from '../questions/question-run';
 import { openTry } from '../try-position';
 import { useExerciseSession, type ExerciseResult } from '../use-exercise-session';
+import { BookPrompt } from '../book-prompt';
 
 const percent = (share: number) => `${Math.round(share * 100)}%`;
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
@@ -436,18 +437,26 @@ function BoardPart({
         ? `${current.side === 'white' ? 'Black' : 'White'} has just made a mistake: punish it.`
         : current.mode === 'play-on'
           ? 'Play on from the end of a line and keep your advantage.'
-          : current.responder.kind === 'scripted' && current.responder.script.length > 1
-            ? 'A whole branch: play your moves to its end.'
-            : 'Find your move.';
+          : '';
+  // A position or a branch asks for the opening's own move, named by the line it is from.
+  const book =
+    current && !kind ? (
+      <BookPrompt
+        opening={one.opening}
+        epd={session.epd}
+        branch={current.responder.kind === 'scripted' && current.responder.script.length > 1}
+      />
+    ) : undefined;
   return (
     <ExerciseBoard
       session={session}
+      prompt={book}
       aside={
         <div className="grid gap-1 text-sm">
           <p className="font-medium">
             {Math.min(session.index + 1, session.total)} of {total}
           </p>
-          <p className="text-muted-foreground">{kind} One try, no help; feedback still says why.</p>
+          <p className="text-muted-foreground">{kind ? `${kind} ` : ''}One try, no help; feedback still says why.</p>
         </div>
       }
     />
