@@ -5,27 +5,21 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { ABOVE_ROW_LINK, CardLink } from '@/components/shared/card-link';
 import { nextSort, type SortState } from './sort';
 
-/** Put on a control inside a row with a `RowLink`, so it keeps its own click above the stretched link. */
-export const ABOVE_ROW_LINK = 'relative z-10';
-
-/**
- * A link stretched over its row or card, so a click anywhere opens it while the row's own controls keep theirs. One
- * focus stop, named by its text. Never an `onClick` on a row.
- */
+/** A link stretched over its row, so a click anywhere opens it while the row's own controls keep theirs. */
 export function RowLink({ href, children, className }: { href: string; children: ReactNode; className?: string }) {
   return (
-    <a
+    <CardLink
       href={href}
       className={cn(
-        'font-medium text-foreground no-underline outline-none after:absolute after:inset-0 after:content-[""]',
         'focus-visible:after:rounded-md focus-visible:after:ring-2 focus-visible:after:ring-ring',
         className,
       )}
     >
       {children}
-    </a>
+    </CardLink>
   );
 }
 

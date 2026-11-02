@@ -27,14 +27,20 @@ link, so a learner who learns one surface has learned them all.
 panel the item sits in, else the page's main board. With no board on the page (a search result, a table), hover still
 opens the preview card and click navigates.
 
-**Rows and cards** that stand for a thing (an opening, a variation, a step, a line, a puzzle, a setting group):
+**Rows and cards** that stand for a thing (an opening, a variation, a step, a line, a puzzle, a mode, what is due, a
+checkpoint, a preset, a setting group). **No dead cards**: every card or row has a default action when clicked anywhere
+on it, and it is the obvious one: a mode's tile opens the mode, the due card starts the review, a step row shows the
+step on the page's board (or opens it where the page has no board), a puzzle opens the puzzle, a preset is chosen. One
+module does it, `components/shared/card-link.tsx`: `LINKED_CARD` on the card, a `CardLink` (opens a page) or
+`CardAction` (acts on this page) inside, and `ABOVE_ROW_LINK` on controls that keep their own click. A card's own
+button for that same action is dropped, as redundant, unless its label carries information ("Review 20 of 45").
 
-| Gesture             | What happens                                                                                                                            |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Hover               | The row tints; if the row has a position (a step's key position, a line's end), it is highlighted on the nearest board as above.        |
-| Click anywhere      | Opens it: one link stretched over the row ([sortable-table](../components/sortable-table.md)'s `RowLink`). Never an `onClick` on a row. |
-| Controls in the row | Keep their own click and never open the row ([icon-action](../components/icon-action.md)).                                              |
-| Locked row          | Hover or long-press shows what opens it; click opens the row with the locked state explained, never nothing.                            |
+| Gesture             | What happens                                                                                                                         |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Hover               | The row tints; if the row has a position (a step's key position, a line's end), it is highlighted on the nearest board as above.     |
+| Click anywhere      | Its default action: a `CardLink` stretched over it (a page), or a `CardAction` (this page). Never an `onClick` on the row's element. |
+| Controls in the row | Keep their own click and never open the row ([icon-action](../components/icon-action.md)).                                           |
+| Locked row          | Hover or long-press shows what opens it; click opens the row with the locked state explained, never nothing.                         |
 
 **The board itself** ([board-surface](../components/board-surface.md)):
 
@@ -75,7 +81,8 @@ change it: `display.previews` (off, small board, on), `board.hoverSquare`, `boar
   used only by rich text.
 - `components/move-list.tsx` (`onSelect` on a move), `features/tree/lane-tree.tsx` (`onPick`),
   `features/tree/tree-explorer.tsx` ("only a click changes anything"): click behaviour, each wired by hand.
-- `components/sortable-table.tsx` (`RowLink`, `ABOVE_ROW_LINK`): the row rule, kept.
+- `components/sortable-table.tsx` (`RowLink`, `ABOVE_ROW_LINK`): the row rule, kept, now one module for rows and cards
+  (`components/shared/card-link.tsx`); `RowLink` is a `CardLink` with the row's focus ring.
 - `components/board/line-stepper.ts`: the arrow keys, never while typing or with a modifier, kept.
 - `components/board/prefs.ts` (`hover`, `legalMoves`), `features/create/mark-colour.ts` (right-drag colours).
 - v1 has no hover highlight from a move list to the board, no preview card, and no long-press anywhere.

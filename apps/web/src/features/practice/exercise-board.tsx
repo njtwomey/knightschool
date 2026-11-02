@@ -71,7 +71,7 @@ export function ExerciseBoard({
       <div className="grid content-start gap-4">
         {aside}
         {feedback ? <BoardFeedback feedback={session.feedback} reveal="answered" triesLeft={triesLeft} /> : null}
-        <TriesTable tries={session.tries} />
+        <TriesTable tries={session.exerciseTries} />
         {footer}
       </div>
     </div>

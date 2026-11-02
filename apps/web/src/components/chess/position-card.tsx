@@ -10,6 +10,7 @@ import { KindBadge, type LineKind } from './kind-badge';
 import { MoveRun, type RunMove } from './move-run';
 import { OpeningName, type OpeningNameProps } from './opening-name';
 import { PositionPreview } from './position-preview';
+import { ABOVE_ROW_LINK, ABOVE_ROW_LINK_GROUP, CardLink, LINKED_CARD } from '@/components/shared/card-link';
 
 export type CardLine = {
   id: string;
@@ -46,11 +47,10 @@ export type PositionCardProps = {
 };
 
 /** Controls inside the card keep their own clicks, above the link stretched over it. */
-const ABOVE = 'relative z-10';
 
 function LineLink({ line }: { line: CardLine }) {
   const link = (
-    <a href={line.href} className={cn(ABOVE, 'min-w-0 truncate text-sm underline-offset-2 hover:underline')}>
+    <a href={line.href} className={cn(ABOVE_ROW_LINK, 'min-w-0 truncate text-sm underline-offset-2 hover:underline')}>
       {line.name}
     </a>
   );
@@ -61,7 +61,7 @@ function LineLink({ line }: { line: CardLine }) {
       ) : (
         link
       )}
-      <span className={ABOVE}>
+      <span className={ABOVE_ROW_LINK}>
         <KindBadge kind={line.kind} />
       </span>
     </li>
@@ -93,11 +93,12 @@ export function PositionCard({
   return (
     <Card
       className={cn(
-        'relative content-start gap-3 p-3 transition-colors hover:border-primary/40 has-[a[data-card-link]:focus-visible]:ring-2 has-[a[data-card-link]:focus-visible]:ring-ring',
+        LINKED_CARD,
+        'content-start gap-3 p-3',
         row ? 'grid grid-cols-[auto_minmax(0,1fr)] items-start gap-4' : 'grid',
       )}
     >
-      <a href={href} data-card-link className="absolute inset-0 rounded-xl outline-none" aria-label={label} />
+      <CardLink href={href} label={label} />
       {loading ? (
         <Skeleton className={cn('aspect-square', row ? 'w-24' : 'w-full')} />
       ) : (
@@ -110,9 +111,9 @@ export function PositionCard({
         />
       )}
       <div className="grid min-w-0 content-start gap-2">
-        {name ? <OpeningName {...name} oneLine={row} className={cn('text-sm', ABOVE)} /> : null}
+        {name ? <OpeningName {...name} oneLine={row} className={cn('text-sm', ABOVE_ROW_LINK)} /> : null}
         {moves ? (
-          <p className={cn('flex min-w-0 items-baseline gap-0.5 text-muted-foreground', ABOVE)}>
+          <p className={cn('flex min-w-0 items-baseline gap-0.5 text-muted-foreground', ABOVE_ROW_LINK_GROUP)}>
             {moves.cut ? <span aria-label="earlier moves">…</span> : null}
             <MoveRun moves={moves.run} firstPly={moves.firstPly} orientation={orientation} />
           </p>
@@ -137,7 +138,7 @@ export function PositionCard({
         {openings.length > 0 ? (
           <ul className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {openings.map((opening) => (
-              <li key={opening.name} className={cn('flex items-center gap-1.5 text-xs', ABOVE)}>
+              <li key={opening.name} className={cn('flex items-center gap-1.5 text-xs', ABOVE_ROW_LINK)}>
                 {opening.state ? <StateBadge state={opening.state} of="variation" size="dot" /> : null}
                 {opening.name}
               </li>

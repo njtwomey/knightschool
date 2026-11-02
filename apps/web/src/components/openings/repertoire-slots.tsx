@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ABOVE_ROW_LINK } from '@/components/shared/icon-action';
+import { ABOVE_ROW_LINK, ABOVE_ROW_LINK_GROUP } from '@/components/shared/card-link';
 import { cn } from '@/lib/utils';
 import { OpeningCard } from './opening-card';
 import type { OpeningSummary } from './types';
@@ -100,7 +100,7 @@ function Filled({
         <p className="text-sm text-muted-foreground">Not started yet</p>
       )}
       {slot.coverage ? (
-        <div className={ABOVE_ROW_LINK}>
+        <div className={ABOVE_ROW_LINK_GROUP}>
           <CoverageMeter
             form="compact"
             band={band}
@@ -110,7 +110,7 @@ function Filled({
         </div>
       ) : null}
       {others.map((other) => (
-        <div key={other.id} className={cn('flex items-center gap-2 border-t pt-2 text-sm', ABOVE_ROW_LINK)}>
+        <div key={other.id} className={cn('flex items-center gap-2 border-t pt-2 text-sm', ABOVE_ROW_LINK_GROUP)}>
           <a href={other.href} className="min-w-0 flex-1 truncate underline-offset-4 hover:underline">
             Also: {other.name}
           </a>
@@ -123,7 +123,7 @@ function Filled({
         </div>
       ))}
       {editable ? (
-        <div className={cn('flex gap-1 border-t pt-2', ABOVE_ROW_LINK)}>
+        <div className={cn('flex gap-1 border-t pt-2', ABOVE_ROW_LINK_GROUP)}>
           <Button variant="ghost" size="sm" onClick={onChange}>
             <Repeat aria-hidden /> Change
           </Button>

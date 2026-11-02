@@ -7,7 +7,8 @@ import type { ProgressCounts } from '@/components/progress/counts';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Hint } from '@/components/shared/hint';
-import { ABOVE_ROW_LINK, IconAction } from '@/components/shared/icon-action';
+import { ABOVE_ROW_LINK } from '@/components/shared/card-link';
+import { IconAction } from '@/components/shared/icon-action';
 import { cn } from '@/lib/utils';
 import type { Side, Thumb } from './types';
 

@@ -8,7 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Hint } from '@/components/shared/hint';
-import { ABOVE_ROW_LINK, IconAction } from '@/components/shared/icon-action';
+import { ABOVE_ROW_LINK, ABOVE_ROW_LINK_GROUP, CardLink, LINKED_CARD } from '@/components/shared/card-link';
+import { IconAction } from '@/components/shared/icon-action';
 import { cn } from '@/lib/utils';
 import { STYLE_INFO, type OpeningSummary } from './types';
 
@@ -28,17 +29,6 @@ export type OpeningCardProps = {
 
 const LEVEL = { beginners: 'For beginners', improvers: 'For improvers' } as const;
 const plural = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;
-
-/** The whole card is a link to the opening; the action, the tags and the counts keep their own clicks. */
-function Stretched({ href, label }: { href: string; label: string }) {
-  return (
-    <a
-      href={href}
-      aria-label={label}
-      className="absolute inset-0 rounded-xl focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-    />
-  );
-}
 
 /**
  * An opening in a list: what it is, who it suits, and how far the learner has got with it
@@ -89,11 +79,8 @@ export function OpeningCard({
 
   if (size === 'small') {
     return (
-      <Card
-        size="sm"
-        className={cn('relative flex-row items-center gap-3 px-3 transition-colors hover:bg-accent/50', className)}
-      >
-        <Stretched href={opening.href} label={label} />
+      <Card size="sm" className={cn(LINKED_CARD, 'flex-row items-center gap-3 px-3', className)}>
+        <CardLink href={opening.href} label={label} />
         <BoardThumb {...opening.thumb} className="w-14 shrink-0" />
         <div className="grid min-w-0 flex-1 gap-0.5">
           <OpeningName name={opening.name} eco={opening.eco} oneLine className="text-sm" />
@@ -112,8 +99,8 @@ export function OpeningCard({
   }
 
   return (
-    <Card className={cn('relative flex-row gap-4 px-4 transition-colors hover:bg-accent/40', className)}>
-      <Stretched href={opening.href} label={label} />
+    <Card className={cn(LINKED_CARD, 'flex-row gap-4 px-4', className)}>
+      <CardLink href={opening.href} label={label} />
       <BoardThumb {...opening.thumb} className="w-28 shrink-0 self-start" />
       <div className="grid min-w-0 flex-1 content-start gap-2">
         <div className="flex items-start justify-between gap-2">
@@ -142,7 +129,7 @@ export function OpeningCard({
           {yours}
         </div>
         {opening.started ? (
-          <ModeCounts counts={opening.started.modes} hrefs={modeHrefs} className={ABOVE_ROW_LINK} />
+          <ModeCounts counts={opening.started.modes} hrefs={modeHrefs} className={ABOVE_ROW_LINK_GROUP} />
         ) : (
           <p className="text-sm text-muted-foreground">
             {plural(opening.size.variations, 'variation')}, {plural(opening.size.steps, 'step')}, about{' '}

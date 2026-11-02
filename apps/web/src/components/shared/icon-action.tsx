@@ -13,9 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Hint } from './hint';
-
-/** Keeps a control's own click inside a row that is itself a link (v1's `ABOVE_ROW_LINK`). */
-export const ABOVE_ROW_LINK = 'relative z-10';
+import { ABOVE_ROW_LINK } from './card-link';
 
 const LOOK =
   'transition-colors hover:bg-accent hover:text-foreground hover:ring-2 hover:ring-primary/60 pointer-coarse:size-10';

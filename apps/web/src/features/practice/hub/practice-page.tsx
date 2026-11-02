@@ -1,5 +1,5 @@
 import { drillScope, scopePositions } from '@knightschool/core';
-import { ArrowRight, Flag, MessageCircleQuestion, Settings2, type LucideIcon } from 'lucide-react';
+import { Flag, MessageCircleQuestion, Settings2, type LucideIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { OpeningCard } from '@/components/openings/opening-card';
 import { MODE_INFO, type PracticeConfig, type PracticeMode } from '@/components/practice/practice-config';
@@ -25,6 +25,7 @@ import {
 } from '../progress';
 import { readPracticeConfig, savePracticeConfig } from '../saved-config';
 import { modeHref, practiceSources, scopeOf } from '../sources';
+import { ABOVE_ROW_LINK_GROUP, CardLink, LINKED_CARD } from '@/components/shared/card-link';
 
 async function loadHub() {
   const progress = await loadProgress();
@@ -109,6 +110,9 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
   const checkpoints = openings.flatMap((one) =>
     one.checkpoints.filter((c) => c.positions > 0 && c.state !== 'locked').map((c) => ({ one, c })),
   );
+  /** The card's own click: the first checkpoint not yet cleared, else the first one. */
+  const firstPick = checkpoints.find(({ c }) => c.state !== 'cleared') ?? checkpoints[0];
+  const firstCheckpoint = firstPick ? checkpointHref(firstPick.one.opening.id, firstPick.c.variation) : undefined;
   const start = (mode: PracticeMode, config: PracticeConfig) => {
     savePracticeConfig(mode, config);
     navigate(modeHref(mode, scopeOf(config.source)).slice(to('').length));
@@ -147,25 +151,20 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
             const Icon = info.icon;
             const mode = tile.mode;
             return (
-              <Card key={tile.mode} size="sm" className="gap-3">
+              <Card key={tile.mode} size="sm" className={cn(LINKED_CARD, 'gap-3')}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <span className={cn('grid size-8 place-items-center rounded-md', info.soft, info.text)}>
                       <Icon className="size-4" aria-hidden />
                     </span>
-                    <a href={to(tile.href)} className="underline-offset-4 hover:underline">
+                    <CardLink href={to(tile.href)} className="underline-offset-4 hover:underline">
                       {info.name}
-                    </a>
+                    </CardLink>
                   </CardTitle>
                   <CardDescription>{info.blurb}</CardDescription>
                 </CardHeader>
                 <CardContent className="text-sm font-medium tabular-nums">{counts[tile.mode]}</CardContent>
-                <CardFooter className="flex flex-wrap gap-2">
-                  <Button asChild size="sm">
-                    <a href={to(tile.href)}>
-                      {tile.mode === 'review' ? 'Review now' : 'Open'} <ArrowRight aria-hidden />
-                    </a>
-                  </Button>
+                <CardFooter className={cn('flex flex-wrap gap-2', ABOVE_ROW_LINK_GROUP)}>
                   {mode !== 'questions' ? (
                     <Button size="sm" variant="ghost" onClick={() => setSetup(mode)} aria-pressed={setup === mode}>
                       <Settings2 aria-hidden /> Set up
@@ -175,17 +174,23 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
               </Card>
             );
           })}
-          <Card size="sm" className="gap-3">
+          <Card size="sm" className={cn(firstCheckpoint ? LINKED_CARD : undefined, 'gap-3')}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="grid size-8 place-items-center rounded-md bg-mode-learn/10 text-mode-learn">
                   <Flag className="size-4" aria-hidden />
                 </span>
-                Checkpoints
+                {firstCheckpoint ? (
+                  <CardLink href={firstCheckpoint} className="underline-offset-4 hover:underline">
+                    Checkpoints
+                  </CardLink>
+                ) : (
+                  'Checkpoints'
+                )}
               </CardTitle>
               <CardDescription>The test at the end of a variation.</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-1 text-sm">
+            <CardContent className={cn('grid justify-items-start gap-1 text-sm', ABOVE_ROW_LINK_GROUP)}>
               {checkpoints.length ? (
                 checkpoints.map(({ one, c }) => (
                   <a

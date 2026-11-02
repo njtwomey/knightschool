@@ -1,7 +1,10 @@
 # Tries table
 
-Every move guessed in a session in one table, filling in as the learner plays, each row able to take the board back to
-it. It is for moves only: [Name it](../pages/name-it.md) guesses names, and its summary keeps its own list of names
+The moves guessed in one exercise, filling in as the learner plays, each row able to take the board back to it. Live,
+beside the board, it holds only the exercise on the board (a step's stretch, one review card, one puzzle) and is empty
+again when the next exercise starts; the whole session's guesses are the record in
+[session-summary](session-summary.md) at the end (`exerciseTries` and `tries` from
+[use-exercise-session](../hooks/use-exercise-session.md)). It is for moves only: [Name it](../pages/name-it.md) guesses names, and its summary keeps its own list of names
 guessed with their credit.
 
 ## Shows

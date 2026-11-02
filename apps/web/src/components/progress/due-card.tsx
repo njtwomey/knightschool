@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Hint } from '@/components/shared/hint';
 import { siteConfig } from '@/data/site-config';
 import { cn } from '@/lib/utils';
+import { ABOVE_ROW_LINK, ABOVE_ROW_LINK_GROUP, CardLink, LINKED_CARD } from '@/components/shared/card-link';
 
 export type DueOpening = { name: string; count: number; href: string };
 
@@ -120,7 +121,8 @@ export function DueCard({
 
   if (!due) {
     return (
-      <Card className={cn('gap-3 border-l-4 border-l-border', className)}>
+      <Card className={cn(practiseHref && LINKED_CARD, 'gap-3 border-l-4 border-l-border', className)}>
+        {practiseHref ? <CardLink href={practiseHref} label="Practise anyway" /> : null}
         <CardContent className="grid gap-2">
           <p className="flex items-center gap-2 font-medium">
             <Repeat className="size-4 text-muted-foreground" aria-hidden /> Nothing due.
@@ -128,7 +130,7 @@ export function DueCard({
           </p>
           {newToday ? <p className="text-sm text-muted-foreground">+ {plural(newToday, 'new move')} today</p> : null}
           {practiseHref ? (
-            <div className="flex flex-wrap items-center gap-2">
+            <div className={cn('flex flex-wrap items-center gap-2', ABOVE_ROW_LINK_GROUP)}>
               <Button asChild variant="outline" size="sm">
                 <a href={practiseHref}>Practise anyway</a>
               </Button>
@@ -143,20 +145,27 @@ export function DueCard({
   const many = due > sessionSize * 3;
   const kindLine = kinds(byKind);
   return (
-    <Card className={cn('gap-3 border-l-4 border-l-mode-review', className)}>
+    <Card className={cn(LINKED_CARD, 'gap-3 border-l-4 border-l-mode-review', className)}>
+      <CardLink href={href} label={label} />
       <CardContent className="grid gap-3">
         <div className="flex flex-wrap items-baseline gap-x-3">
           <span className="text-4xl font-semibold text-mode-review tabular-nums">{due}</span>
           <span className="text-lg font-medium">due</span>
           <Hint text={ESTIMATE_HINT}>
-            <span tabIndex={0} className="text-sm text-muted-foreground underline decoration-dotted underline-offset-4">
+            <span
+              tabIndex={0}
+              className={cn(
+                'text-sm text-muted-foreground underline decoration-dotted underline-offset-4',
+                ABOVE_ROW_LINK,
+              )}
+            >
               about {plural(minutes, 'minute')}
             </span>
           </Hint>
         </div>
         {many ? <p className="text-sm">One session of {sessionSize} is a good start.</p> : null}
         {byOpening.length || kindLine ? (
-          <div className="grid gap-1 text-sm">
+          <div className={cn('grid justify-items-start gap-1 text-sm', ABOVE_ROW_LINK_GROUP)}>
             {byOpening.length ? (
               <p className="flex flex-wrap gap-x-3 gap-y-1">
                 {byOpening.map((opening) => (
@@ -175,7 +184,7 @@ export function DueCard({
           </div>
         ) : null}
         {newToday ? <p className="text-sm text-muted-foreground">+ {plural(newToday, 'new move')} today</p> : null}
-        <div>{button('default')}</div>
+        <div className={ABOVE_ROW_LINK_GROUP}>{button('default')}</div>
       </CardContent>
     </Card>
   );

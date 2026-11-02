@@ -73,6 +73,10 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
   const [attempt, setAttempt] = useState<Attempt>(startAttempt);
   const [exerciseAttempt, setExerciseAttempt] = useState<Attempt>(startAttempt);
   const [tries, setTries] = useState<TryRow[]>([]);
+  /** Where the current exercise's rows start in `tries`: the live table shows only those, so it clears per exercise. */
+  const [liveFrom, setLiveFrom] = useState(0);
+  const rowCount = useRef(0);
+  rowCount.current = tries.length;
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [badge, setBadge] = useState<BoardBadge | undefined>();
   const [arrows, setArrows] = useState<SystemArrow[]>([]);
@@ -197,6 +201,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
         later(() => {
           setAt((i) => i + 1);
           setPlayed([]);
+          setLiveFrom(rowCount.current);
           setAttempt(startAttempt());
           setExerciseAttempt(startAttempt());
           setBadge(undefined);
@@ -417,7 +422,10 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
     thinking,
     hintSquare: attempt.hint && expectedNow ? expectedNow.slice(0, 2) : undefined,
     attempt,
+    /** Every guess of the session, for the summary at the end. */
     tries,
+    /** The guesses of the exercise on the board, for the live table beside it (empty again at each new exercise). */
+    exerciseTries: tries.slice(liveFrom),
     results,
     feedback,
     badge,

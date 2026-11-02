@@ -5,7 +5,8 @@ import { BoardThumb } from '@/components/board/board-thumb';
 import { IdeaBadge, type Idea } from '@/components/chess/idea-badge';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { ABOVE_ROW_LINK, RowLink } from '@/components/finding/sortable-table';
+import { RowLink } from '@/components/finding/sortable-table';
+import { ABOVE_ROW_LINK, ABOVE_ROW_LINK_GROUP, LINKED_CARD } from '@/components/shared/card-link';
 import { cn } from '@/lib/utils';
 import { puzzleThemes } from './puzzle-themes';
 import { PositionPreview } from '@/components/chess/position-preview';
@@ -153,12 +154,7 @@ export function PuzzleCard({
 
   if (size === 'row') {
     return (
-      <div
-        className={cn(
-          'relative flex items-center gap-3 rounded-lg border p-2 transition-colors hover:bg-muted/50',
-          className,
-        )}
-      >
+      <div className={cn(href ? LINKED_CARD : 'relative', 'flex items-center gap-3 rounded-lg border p-2', className)}>
         <BoardThumb
           epd={epd}
           lastMove={setup ? { from: setup.from, to: setup.to } : undefined}
@@ -180,7 +176,8 @@ export function PuzzleCard({
   return (
     <div
       className={cn(
-        'relative grid w-full max-w-72 gap-2 rounded-xl border p-3 transition-colors hover:bg-muted/40',
+        href ? LINKED_CARD : 'relative',
+        'grid w-full max-w-72 gap-2 rounded-xl border p-3',
         selected && 'ring-2 ring-primary',
         className,
       )}
@@ -197,7 +194,7 @@ export function PuzzleCard({
       </div>
       {fromLine}
       {badges || (!hideThemes && ideas.length + tags.length > 0) ? (
-        <div className={cn('flex flex-wrap gap-1', ABOVE_ROW_LINK)}>
+        <div className={cn('flex flex-wrap gap-1', ABOVE_ROW_LINK_GROUP)}>
           {badges}
           {hideThemes
             ? null
@@ -220,7 +217,7 @@ export function PuzzleCard({
         </div>
       ) : null}
       {result}
-      {actions ? <div className={cn('flex flex-wrap items-center gap-1', ABOVE_ROW_LINK)}>{actions}</div> : null}
+      {actions ? <div className={cn('flex flex-wrap items-center gap-1', ABOVE_ROW_LINK_GROUP)}>{actions}</div> : null}
       {credit}
     </div>
   );
