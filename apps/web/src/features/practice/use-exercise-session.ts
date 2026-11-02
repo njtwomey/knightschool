@@ -222,7 +222,9 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
       }
       return;
     }
-    if (learnerTurn || pending) return;
+    // Nothing answers while a move is being judged or a wrong move is still held on the board: it is still the
+    // learner's turn, only not playable for that moment.
+    if (learnerTurn || pending || held) return;
     let cancelled = false;
     const respond = async () => {
       let uci: string | undefined;
@@ -249,7 +251,7 @@ export function useExerciseSession({ exercises, opening, facts, save, delays }: 
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [at, ply, done, learnerTurn, pending]);
+  }, [at, ply, done, learnerTurn, pending, held]);
 
   const advance = (move: { uci: string; san: string; epd: string }, finished: Attempt) => {
     if (exercise && savesAs(exercise) === 'moves')
