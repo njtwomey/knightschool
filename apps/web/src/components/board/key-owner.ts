@@ -16,6 +16,8 @@ export type BoardTarget = {
   show: (epd: string, lastMove?: { from: string; to: string }) => void;
   /** Draw a move as a faint arrow while it is hovered; null clears it. */
   light: (move: { from: string; to: string } | null) => void;
+  /** Show a position while a move is hovered, back to where the board was on null (no preview card then). */
+  preview: (epd: string | null, lastMove?: { from: string; to: string }) => void;
 };
 
 type Claim = { priority: number; order: number; target: { current: BoardTarget | null } };
@@ -81,6 +83,10 @@ export function useBoardTarget(): BoardTarget | null {
   if (near) return near;
   const claim = main ? claims.get(main) : undefined;
   return claim
-    ? { show: (...args) => claim.target.current?.show(...args), light: (move) => claim.target.current?.light(move) }
+    ? {
+        show: (...args) => claim.target.current?.show(...args),
+        light: (move) => claim.target.current?.light(move),
+        preview: (...args) => claim.target.current?.preview(...args),
+      }
     : null;
 }

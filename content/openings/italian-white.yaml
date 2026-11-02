@@ -64,6 +64,12 @@ variations:
         explain: >-
           6.Nxe5 offers the queen. If 6...Bxd1, then 7.Bxf7+ Ke7 8.Nd5 is mate: the bishop and both knights cover every
           square round the king. If Black leaves the queen alone, White has won the e5 pawn and is clearly better.
+setup:
+  title: How the Italian Game starts
+  text: >-
+    Three natural moves make the Italian Game. 1.e4 takes the centre and opens lines for the queen and a bishop, and
+    Black answers in kind with 1...e5. 2.Nf3 develops with an attack on e5, and 2...Nc6 defends it. Then 3.Bc4: the
+    bishop goes to its best diagonal, aimed at f7, the one square near Black's king that only the king defends.
 steps:
   giuoco-main:1:
     title: The quiet bishop

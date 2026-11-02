@@ -86,8 +86,8 @@ export function buildOpening(
         throw new Error(`${id}: "${lineId}" does not reach the opening's start (${file.start})`);
       }
       const alternative = alternatives.has(lineId);
+      // Every move from the first: the moves up to the start are the setup step's, and are taught too.
       line.moves.forEach((move, ply) => {
-        if (ply < startPly) return;
         const node = (positions[move.before] ??= { moves: [] });
         let edge = node.moves.find((candidate) => candidate.uci === move.uci);
         if (!edge) {
@@ -158,8 +158,11 @@ export function buildOpening(
   };
 }
 
+/** The id of an opening's setup step (the moves from the first to the opening's start). */
+export const SETUP_STEP = 'setup';
+
 /**
- * Steps: in teaching order, each line's learner moves not already taught, cut into runs of about `stepMoves`. A short
+ * Steps: in teaching order, the setup first (the learner's moves up to the opening's start), then each line's learner moves not already taught, cut into runs of about `stepMoves`. A short
  * last run (under half a step) joins the one before. A step begins with the opponent's move that leads into it.
  */
 export function cutSteps(
@@ -171,6 +174,24 @@ export function cutSteps(
   const taught = new Set<string>();
   const alternatives = new Set(file.alternatives);
   const steps: BuiltStep[] = [];
+  // The setup: how the opening comes about, the first move to the start, taught first as a step of its own.
+  const firstVariation = file.variations[0];
+  const firstLine = firstVariation?.lines.find((id) => !alternatives.has(id));
+  const setupMoves = firstLine
+    ? resolved.get(firstLine)!.moves.filter((move) => move.ply < startPly && isLearnerMove(move, file.side))
+    : [];
+  if (firstVariation && firstLine && setupMoves.length) {
+    setupMoves.forEach((move) => taught.add(`${move.before} ${move.uci}`));
+    steps.push({
+      id: SETUP_STEP,
+      variation: firstVariation.id,
+      line: firstLine,
+      from: 0,
+      to: setupMoves.at(-1)!.ply,
+      title: file.setup?.title ?? `How the ${file.name} starts`,
+      ...(file.setup?.text ? { text: file.setup.text } : {}),
+    });
+  }
   for (const variation of file.variations) {
     for (const lineId of variation.lines) {
       if (alternatives.has(lineId)) continue;

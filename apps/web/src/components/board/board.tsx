@@ -122,6 +122,7 @@ export function Board({
   // moves (shown until the learner steps or goes back to the line).
   const [ghost, setGhost] = useState<{ from: string; to: string } | null>(null);
   const [peek, setPeek] = useState<{ epd: string; lastMove?: { from: string; to: string } } | null>(null);
+  const [hovered, setHovered] = useState<{ epd: string; lastMove?: { from: string; to: string } } | null>(null);
   const target: BoardTarget = useMemo(
     () => ({
       show: (epd, lastMove) => {
@@ -132,11 +133,16 @@ export function Board({
         } else if (positions[index]?.epd !== epd) setPeek({ epd, lastMove });
       },
       light: setGhost,
+      preview: (epd, lastMove) => setHovered(epd ? { epd, lastMove } : null),
     }),
     [positions, index, onIndex],
   );
   const keys = usePageBoard(wantKeys, Boolean(onIndex && positions.length > 1) || flippable, target);
-  const position: (typeof positions)[number] = peek ? { epd: peek.epd, lastMove: peek.lastMove } : positions[index]!;
+  // A hovered move shows its position for as long as it is hovered; a clicked one stays until the learner steps back.
+  const shownPeek = hovered ?? peek;
+  const position: (typeof positions)[number] = shownPeek
+    ? { epd: shownPeek.epd, lastMove: shownPeek.lastMove }
+    : positions[index]!;
   const stepTo = onIndex
     ? (next: number) => {
         setPeek(null);
@@ -145,7 +151,9 @@ export function Board({
     : undefined;
 
   const drawn: SystemArrow[] = [
-    ...(shows.play && !peek && positions[index]!.next ? [{ ...positions[index]!.next!, kind: 'play' as const }] : []),
+    ...(shows.play && !shownPeek && positions[index]!.next
+      ? [{ ...positions[index]!.next!, kind: 'play' as const }]
+      : []),
     ...arrows,
     ...(ghost ? [{ ...ghost, kind: 'preview' as const }] : []),
   ];
@@ -167,7 +175,7 @@ export function Board({
           arrows={drawn}
           badge={badge}
           lit={lit}
-          interactive={interactive && !peek}
+          interactive={interactive && !shownPeek}
           onMove={onMove}
           onSquareMouseDown={onSquareMouseDown}
           onSquareMouseUp={onSquareMouseUp}

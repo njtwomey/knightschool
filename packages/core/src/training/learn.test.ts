@@ -79,8 +79,9 @@ describe('the opponent’s mistakes', () => {
   it('makes each mistake a follow-up of the step whose stretch reaches it, with the punishment as a card', () => {
     const found = followUps(opening, facts, { ...config, minShare: siteConfig.coverage.minShare });
     expect(found.map((f) => [f.mistake.san, f.step, f.index])).toEqual([
-      ['f5', opening.steps[0]!.id, 0],
-      ['h6', opening.steps[0]!.id, 1],
+      // The first step after the setup: its stretch reaches both positions.
+      ['f5', opening.steps[1]!.id, 0],
+      ['h6', opening.steps[1]!.id, 1],
     ]);
     expect(found[0]!.id).toBe(followUpId(start, 'f7f5'));
     expect(found[0]!.line).toEqual(['f7f5', 'd2d3', 'f5e4']);

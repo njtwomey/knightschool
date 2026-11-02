@@ -42,6 +42,8 @@ export const OpeningFile = z.object({
     )
     .min(1),
   steps: z.record(z.string(), z.object({ title: z.string().optional(), text: z.string().optional() })).default({}),
+  /** The setup step: how the opening comes about, from the first move to its start (steps.md, "The setup"). */
+  setup: z.object({ title: z.string().optional(), text: z.string().optional() }).optional(),
   alternatives: z.array(Slug).default([]),
 });
 export type OpeningFile = z.infer<typeof OpeningFile>;

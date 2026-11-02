@@ -50,9 +50,12 @@ export function MoveChip({
   const target = useBoardTarget();
   const squares = from && to ? { from, to } : undefined;
   const select = onSelect ?? (target && epd ? () => target.show(epd, squares) : undefined);
+  // With a board on the page, hovering shows the position there (no preview card); without one, the card opens.
   const hover = (on: boolean) => {
     onHover?.(on);
-    if (target && squares) target.light(on ? squares : null);
+    if (!target) return;
+    if (epd) target.preview(on ? epd : null, squares);
+    else if (squares) target.light(on ? squares : null);
   };
   const label =
     numbered === 'never' || (numbered === 'white' && ply % 2 === 1)
@@ -89,7 +92,7 @@ export function MoveChip({
       {symbol ? <span className={cn('font-bold', !current && grade && GRADE_TEXT[grade])}>{symbol}</span> : null}
     </a>
   );
-  if (!preview || !epd) return chip;
+  if (!preview || !epd || target) return chip;
   return (
     <PositionPreview
       position={{

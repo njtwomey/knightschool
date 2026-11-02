@@ -96,6 +96,7 @@ describe('building an opening', () => {
 
   it('cuts steps of about four learner moves, each starting with the move that leads in', () => {
     expect(built.steps.map((step) => [step.id, step.from, step.to])).toEqual([
+      ['setup', 0, 4],
       ['main:1', 5, 12],
       ['branch:1', 9, 12],
     ]);

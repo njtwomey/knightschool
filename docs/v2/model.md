@@ -34,6 +34,11 @@ four **stages**: Read, Watch, Try, Done (experience.md). _v1: units (`training/u
 cut automatically, with `units:` overrides in course.yaml._ v2 keeps the automatic cut as the default and lets an author
 name a step and write its text. **Rename: a v1 unit becomes a step.**
 
+The first step of every opening is its **setup**: the moves from the first move to the opening's start (1.e4 e5 2.Nf3
+Nc6 3.Bc4 for the Italian), taught like any step, so the learner sees how the opening comes about before its
+variations. Its title and text come from the opening file's `setup` (default "How the <opening> starts"); its id is
+`setup`.
+
 ## Beside the hierarchy
 
 **Follow-up.** One of the opponent's common mistakes in a step's stretch and how to punish it, taught after the step's
