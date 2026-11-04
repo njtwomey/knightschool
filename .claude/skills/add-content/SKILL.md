@@ -30,22 +30,37 @@ pipeline), `docs/v2/schemas/annotations.md` (comments, marks, refutations). This
 - **One comment per move** across all lines (keyed by position and move), **one answer per position** within an
   opening (a second is a line in `alternatives`). A line may simply stop where it **transposes** into a position another
   line already teaches; the position graph carries on.
+- **Transpositions count as the same move.** A note is keyed by position and move, so the same move reached by another
+  order must stay bare in the second line (the build refuses it otherwise; the first opening to comment on 1.e4 owns
+  that note). Put the "this is the main line by another order" remark on the move before it. And a band reply that only
+  walks into a known position is not an edge until a line plays it: a one-move stub line (`2. Nf3 d5 3. Nc3 *`, with
+  `[Start]`) closes the gap on the map and adds no step.
 
 ## Choosing the moves (the strategy)
 
 1. **State the opening's plan** before writing a move, in one sentence (the Italian: quiet c3 and d3, castle, Re1 and
    Bb3, the d4 break when ready). Every learner move either serves it or is the reason it changes; prefer a move that
    transposes back into a line already taught.
-2. **Engine first.** No learner move worse than an inaccuracy against the engine's best (`content:check` enforces). When
-   two moves are close, take the one that fits the plan and that the band itself plays; say in the note when a stronger
-   or sharper move exists ("4.Ng5 attacks f7 at once, but asks for a run of exact moves; 4.d3 needs none").
+2. **Engine first.** No learner move graded inaccuracy or worse against the engine's best (`content:check` flags them):
+   near equality that is a drop of about half a pawn (0.1 in winning chances). When two moves are close, take the one
+   that fits the plan and that the band itself plays; say in the note when a stronger or sharper move exists ("4.Ng5
+   attacks f7 at once, but asks for a run of exact moves; 4.d3 needs none").
 3. **Cover what the band plays.** Answer every reply played at least `coverage.minShare` (5%) of the time, to about
    move 10, most common first. A reply the data shows but the line does not answer is a gap: write a line, or list it
    as a known gap in your report.
 4. **Punish what the band gets wrong.** Every common reply that loses material or more is an authored refutation:
-   `( 5... Nxd4?? { why } 6. cxd4 exd4 7. Nxd4 { what is won } )`. It becomes a follow-up taught after the main line.
+   `( 5... Nxd4?? { why } 6. cxd4 exd4 7. Nxd4 { what is won } )`. It becomes a follow-up taught after the main line. A
+   `?` must cost at least an inaccuracy on the engine (`content:check` says so when it does not): a move that only
+   costs a little is a line, not a refutation. The band's mistakes you did not write still become follow-ups from the
+   engine's line; where that line wins no material, `content:check` asks for an authored refutation with a note.
 5. **Re-check every inherited choice against the data.** v1 met 4...d6 with 5.d3; the band plays 5.d4 61% of the time
    and the engine agrees, and after 5.d3 Black rarely transposes. Old content is a starting point, not an authority.
+6. **Keep the shape.** Every line with one new learner move is a step of its own, so a one-move line is a one-move step,
+   and five to eight variations of three to six steps is the budget. Prefer one longer line to several stubs; drop a
+   thin reply to the gaps in your report rather than add a stub. A line whose moves are all taught already makes no step:
+   list a transposition after the line that teaches its target, and it costs nothing.
+7. **Check how the band actually punishes you.** A low score for White at a move is a sign to look deeper: the London's
+   6.Qc2 Bf5 scores 36% because 7.Qxf5 walks into ...Qxb2. Such a trap is a `?`/`??` refutation of your own move.
 
 ## Where content comes from
 
@@ -79,7 +94,8 @@ pipeline), `docs/v2/schemas/annotations.md` (comments, marks, refutations). This
 
 `SCRATCH` is the session scratchpad. Copy the helpers once:
 `cp .claude/skills/add-content/templates/engine.mts.txt "$SCRATCH/engine.mts"` (and `replies.mts.txt` →
-`replies.mts`, `explore.mts.txt` → `explore.mts`). Moves in SAN or UCI; an illegal move list says where it fails.
+`replies.mts`, `explore.mts.txt` → `explore.mts`, `gaps.mts.txt` → `gaps.mts`, `precheck.mts.txt` → `precheck.mts`). Moves
+in SAN or UCI; an illegal move list says where it fails.
 
 **One engine and one explorer client at a time, machine-wide** (several agents may be authoring). Wrap every command
 that runs Stockfish (`engine.mts`, `pnpm analyse`) or asks the explorer (`explore.mts`, `make popularity`):
@@ -98,14 +114,22 @@ saves `analyse` and `popularity`, which resume where they left off.
 4. **Write the line(s)** in `content/lines/<first move>/`. PGN rules the build enforces: a bracketed variation comes
    **after the move it replaces** (Black's alternative after Black's move) and starts with a move marked `?` or `??`;
    numbering as in the game (`5... d6`); `[Start "giuoco-main 4.c3"]` names the parent and the move after which the
-   line begins.
+   line begins. A refutation shows `judge.refutationPlies` moves after the mistake, so end it within that on your own
+   move and put what is won there. One comment per move also holds across transpositions: the same move from the same
+   position in two lines carries a note in only one. A shared checkout builds every line file, so stage a large change
+   outside `content/` and copy it in at once. `gaps.mts` shows what the tree leaves unanswered; `precheck.mts` catches
+   weak moves before the long analysis.
 5. **List them** in the opening: a variation's `lines` (teaching order; most common first), a new variation with `id`,
    `name`, `intro` when it is a new decision for the learner, `steps` titles and texts for the new steps.
 6. **Data and checks**, in this order: `npx -y pnpm@12.11.2 content:build` (formats), `make popularity` (the new
    positions; needs `LICHESS_TOKEN` in `.env`, never print it), `npx -y pnpm@12.11.2 analyse` (depth 24, one engine,
    resumable; long: run it in the background and say so), `content:build` again, `npx -y pnpm@12.11.2 content:check`
    (the authors and the engine must agree; a disagreement is either the content's mistake or a note to add), `make
-puzzles` when puzzles should follow the new lines, `make check`.
+puzzles` when puzzles should follow the new lines, `make check`. Size the analysis before starting: every position
+   of the tree plus the band's replies at 3% or more comes to about four positions for every position in the opening,
+   searched at roughly 3 seconds each at depth 18 and 30 at depth 24. A wide opening of 100 lines is 2,600 positions,
+   so about 2 hours and about 22 hours: check with `--depth 18` first, then deepen, in chunks (`timeout -s INT`), so
+   other agents can take the lock.
 7. **Report**: what was added and why each choice, what the data and engine said, the gaps left (replies above the share
    with no answer), and what the user should look at in the browser. Do not run browser play-throughs: the user checks
    the browser. Do not commit or push unless asked.

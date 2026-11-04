@@ -1,0 +1,42 @@
+// A quick engine pass over an opening before the long `pnpm analyse`: every learner move at a low depth, printing those
+// graded inaccuracy or worse (cached beside the script, one engine, one thread).
+// Copy to the session scratchpad as precheck.mts and run from the repo root, under the engine lock:
+//   node --import tsx "$SCRATCH/precheck.mts" london-white 16
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+const root = process.cwd();
+const core = await import(`${root}/packages/core/src/index.ts`);
+const uci = await import(`${root}/scripts/analyse/uci.ts`);
+const { loadContent } = await import(`${root}/scripts/content/load.ts`);
+const id = process.argv[2] ?? 'london-white';
+const depth = Number(process.argv[3] ?? 16);
+const cachePath = new URL(`./precheck-cache.json`, import.meta.url);
+const cache: Record<string, any> = existsSync(cachePath) ? JSON.parse(readFileSync(cachePath, 'utf8')) : {};
+const content = loadContent();
+const opening = content.openings.find((o: any) => o.id === id);
+const grades = content.config.judge.grades;
+const engine = uci.startEngine(process.env.STOCKFISH ?? 'stockfish', { threads: 1, hash: 128, multipv: 4 });
+const san = (epd: string, line: any) => core.replay(epd, line.pv.slice(0, 5)).map((m: any) => m.san).join(' ');
+const score = (l: any) => (l.mate !== undefined ? { mate: l.mate } : { cp: l.cp ?? 0 });
+const get = async (epd: string) => {
+  if (cache[epd]?.depth >= depth) return cache[epd];
+  const r = await engine.analyse(epd, depth);
+  cache[epd] = r;
+  return r;
+};
+let n = 0;
+for (const [epd, position] of Object.entries<any>(opening.positions)) {
+  const mine = position.moves.filter((m: any) => m.mine);
+  if (!mine.length) continue;
+  const before = await get(epd);
+  for (const m of mine) {
+    const after = await get(m.to);
+    const cost = core.moveCost(score(before.lines[0]), score(after.lines[0]), core.sideToMove(epd));
+    const grade = core.gradeOf(cost, grades);
+    if (++n % 20 === 0) writeFileSync(cachePath, JSON.stringify(cache));
+    const line = opening.lines.find((l: any) => m.lines.includes(l.id));
+    if (['inaccuracy', 'mistake', 'blunder'].includes(grade)) console.log(`${grade.padEnd(10)} ${m.san.padEnd(6)} in ${line?.id} ${line?.sans.join(' ').slice(0, 70)} | best ${before.lines.map((l: any) => `${(l.cp ?? 0) / 100} ${san(epd, l)}`).join(' | ')} | after ${(after.lines[0].cp ?? 0) / 100}`);
+  }
+}
+writeFileSync(cachePath, JSON.stringify(cache));
+engine.quit();
+console.log('checked', n);

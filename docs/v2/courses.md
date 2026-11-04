@@ -12,11 +12,11 @@ to go wrong), plus traps:
 | -------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | First repertoire with 1.e4       | Italian Game (White); against the Sicilian, French, Caro-Kann, Scandinavian | `vs-e5-italian`, `vs-c5-alapin`, `vs-e6-french`, `vs-c6-caro-kann`, `vs-d5-scandinavian` |
 | First repertoire with 1.d4       | London System (White)                                                       | `london`                                                                                 |
-| Black against 1.e4               | 1...e5 (open games), with the Two Knights                                   | `e5-open-games`, `two-knights`                                                           |
+| Black against 1.e4               | Caro-Kann Defence; 1...e5 (open games), with the Two Knights                | `caro-kann`, `e5-open-games`, `two-knights`                                              |
 | Black against 1.d4               | Queen's Gambit Declined, against the London and other systems               | `qgd`, `vs-london`, `vs-d4-systems`                                                      |
 | Traps every beginner should know | the traps both sides fall for in these openings                             | traps spread over the v1 courses                                                         |
 
-v1's other courses (the Ruy Lopez, the Queen's Gambit, the Caro-Kann for Black, the gambits, flank openings) stay,
+v1's other courses (the Ruy Lopez, the Queen's Gambit, the gambits, flank openings) stay,
 marked as further study, until each is brought up to the bar as a v2 opening.
 
 ## The bar

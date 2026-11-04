@@ -1,0 +1,72 @@
+// Walks an opening's tree at the band and prints what it does not answer: GAP (a reply at least MIN% of the time with
+// no line), LEAF (the same at a line's end), REFUTED (already a follow-up), each with its reach: the share of games
+// from the opening's first move that get there. Asks the explorer about unknown positions (cached beside the script).
+// Copy to the session scratchpad as gaps.mts and run from the repo root, under the engine lock:
+//   MIN=5 MAX=10 REACH=0.2 node --env-file-if-exists=.env --import tsx "$SCRATCH/gaps.mts" london-white | sort -k2 -rn
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+const root = process.cwd();
+const core = await import(`${root}/packages/core/src/index.ts`);
+const files = await import(`${root}/scripts/data-files.ts`);
+const { loadContent } = await import(`${root}/scripts/content/load.ts`);
+const id = process.argv[2] ?? 'london-white';
+const MIN = Number(process.env.MIN ?? 5) / 100;
+const MAXMOVE = Number(process.env.MAX ?? 10);
+const MINREACH = Number(process.env.REACH ?? 0.1) / 100;
+const cachePath = new URL('./explorer-cache.json', import.meta.url);
+const cache: Record<string, any> = existsSync(cachePath) ? JSON.parse(readFileSync(cachePath, 'utf8')) : {};
+const pop = files.readPopularity().byEpd;
+const token = process.env.LICHESS_TOKEN;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+let asked = 0;
+async function ask(epd: string) {
+  if (pop[epd]) return pop[epd];
+  if (cache[epd]) return cache[epd];
+  const url = new URL('https://explorer.lichess.ovh/lichess');
+  url.searchParams.set('variant', 'standard');
+  url.searchParams.set('fen', `${epd} 0 1`);
+  url.searchParams.set('speeds', 'blitz,rapid');
+  url.searchParams.set('ratings', '1000,1200,1400,1600');
+  url.searchParams.set('topGames', '0');
+  url.searchParams.set('recentGames', '0');
+  for (;;) {
+    const r = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (r.status === 429) { console.log('429, pausing'); await sleep(60000); continue; }
+    if (!r.ok) throw new Error(`explorer ${r.status}`);
+    const b: any = await r.json();
+    cache[epd] = { white: b.white, draws: b.draws, black: b.black, moves: b.moves.map(({ uci, san, white, draws, black }: any) => ({ uci, san, white, draws, black })) };
+    if (++asked % 10 === 0) writeFileSync(cachePath, JSON.stringify(cache));
+    return cache[epd];
+  }
+}
+const opening = loadContent().openings.find((o: any) => o.id === id);
+if (!opening) throw new Error('no opening ' + id);
+const seen = new Set<string>();
+const num = (ply: number, san: string) => (ply % 2 ? `${(ply + 1) / 2}...${san}` : `${ply / 2 + 1}.${san}`);
+async function walk(epd: string, path: string[], ply: number, reach: number): Promise<void> {
+  if (seen.has(epd)) return;
+  seen.add(epd);
+  const position = opening.positions[epd];
+  const blackMoves = core.sideToMove(epd) === 'black';
+  if (!blackMoves) {
+    if (position) for (const m of position.moves) if (m.mine) await walk(m.to, [...path, num(ply, m.san)], ply + 1, reach);
+    return;
+  }
+  const e = await ask(epd);
+  const games = e.white + e.draws + e.black;
+  if (!games) return;
+  const refuted = new Set((position?.refutations ?? []).map((r: any) => r.uci));
+  for (const m0 of e.moves) {
+    const m = { ...m0, uci: m0.uci.replace(/^e8h8$/, 'e8g8').replace(/^e8a8$/, 'e8c8').replace(/^e1h1$/, 'e1g1').replace(/^e1a1$/, 'e1c1') };
+    const n = m.white + m.draws + m.black;
+    const share = n / games;
+    const book = position?.moves.find((b: any) => b.uci === m.uci);
+    if (book) { await walk(book.to, [...path, num(ply, m.san)], ply + 1, reach * share); continue; }
+    if (share < MIN || reach * share < MINREACH) continue;
+    if (Math.floor(ply / 2) + 1 > MAXMOVE) continue;
+    const tag = refuted.has(m.uci) ? 'REFUTED' : position ? 'GAP' : 'LEAF';
+    console.log(`${tag.padEnd(7)} ${(100 * reach * share).toFixed(2).padStart(5)}%  ${(100 * share).toFixed(0).padStart(3)}%  ${path.join(' ')} -> ${num(ply, m.san)}`);
+  }
+}
+await walk(core.START_EPD, [], 0, 1);
+writeFileSync(cachePath, JSON.stringify(cache));
+console.log('positions walked', seen.size, 'asked', asked);
