@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange-bb5 5...Bd7"]
+[Name "Exchange: 5.Bb5+ Bd7 6.Nc3"]
+
+6. Nc3 Bxb5 { Swaps the bishops. }
+7. Nxb5 e6 { Solid: the knight on b5 has nothing to hit, and ...a6 will send it back. } *

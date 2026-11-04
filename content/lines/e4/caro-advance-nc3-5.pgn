@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 4...e6"]
+[Name "Advance: 5.Nc3"]
+
+5. Nc3 { Develops, but the knight takes c3 from the pawn, so d4 will have no pawn to lean on. }
+5... c5 { Strikes at once, for that reason. }
+6. Bb5+ Nc6 { Blocks and develops. }
+7. O-O Bg4 { The bishop goes to work on the knight that guards d4 and e5. [%cal Gg4f3] } *

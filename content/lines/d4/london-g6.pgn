@@ -1,0 +1,19 @@
+[For "white"]
+[Kind "main"]
+[Start "london-main 1.d4"]
+[Name "1...Nf6 and the fianchetto"]
+
+1... Nf6 { Keeps Black's options open: White does not yet know whether ...d5 is coming. }
+2. Bf4 { The same bishop move against almost everything, and that is the point of a system. }
+2... g6 { Black puts the bishop on g7, on the long diagonal, as in the King's Indian. }
+3. e3 { Supports d4, so the g7 bishop's diagonal meets a solid wall. }
+3... Bg7
+4. Nf3 { Watches e5, the push Black wants. }
+4... O-O
+5. Be2 { Against a fianchetto the bishop belongs on e2: on d3 it would only bite on the g6 pawn. }
+5... d6
+6. h3 { Gives the f4 bishop a home on h2, so that ...Nh5 and ...e5 cannot chase it. [%cal Gf4h2] }
+6... Nbd7
+7. O-O { The king is safe before anything opens. [%idea castle-early] }
+7... Re8 { Prepares ...e5. }
+8. Nc3 { Fights for e4. With the knight on c3 rather than d2, White is ready for e4 and a real share of the centre. [%cal Gc3e4] } *

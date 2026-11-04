@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-hillbilly 5...Bg4"]
+[Name "Hillbilly: 5.d4 Bg4 6.Nf3"]
+
+6. Nf3 e6 { Now the bishop is out, ...e6 supports d5. [%csl Gd5] }
+7. O-O Nc6 { Develops and hits d4, which the pinned knight guards only in name. [%cal Gc6d4] } *

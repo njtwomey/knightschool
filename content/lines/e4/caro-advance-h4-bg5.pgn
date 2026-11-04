@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-h4 4...h5"]
+[Name "Advance: 4.h4 h5 5.Bg5"]
+
+5. Bg5 Qb6 { The bishop has left b2 without a guard, so the queen goes straight to it. [%cal Rb6b2] }
+6. b3 e6 { Saves nothing for White but b2. Black plays the usual ...e6 and ...c5, and the long diagonal has been loosened for free. } *

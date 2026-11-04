@@ -1,0 +1,12 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical 6...Nd7"]
+[Name "Classical: 7.Bc4"]
+
+7. Bc4 { Aims the bishop at f7 and e6. }
+7... e6 { Blunts the bishop at once: the pawn on e6 is well guarded. }
+8. O-O Ngf6 { Develops the last knight. }
+9. Qe2
+( 9. Ne5? { Hits the bishop and f7, but it swaps off too much of White's own play. }
+  9... Nxe5 10. dxe5 Qxd1 11. Rxd1 Nd7 { The queens are off, the pawn on e5 is weak, and Black is better without having won anything yet: the gain is the pawn structure. [%csl Ye5] } )
+9... Be7 { Black castles next. No weaknesses, and the bishop on g6 still has its diagonal. } *

@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-nc6 6.Bg3"]
+[Name "2...Nc6: Black trades on g3"]
+
+6... Bxg3
+7. hxg3 { The h-pawn, as always. }
+7... O-O
+8. Bd3 { Lines up with the rook on h7. Black's king has castled into an open file. [%cal Gd3h7,Gh1h7] } *

@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-main 3.e3"]
+[Name "The fianchetto with ...d5"]
+
+3... g6 { Black claims the centre with a pawn and adds the fianchetto. The g7 bishop's diagonal is half closed by Black's own d-pawn. }
+4. Nf3
+4... Bg7
+5. Be2 { Still the right square: the bishop is out of reach and covers the kingside. }
+5... O-O
+6. O-O { Castled, and h3 and c3 can come next, as usual. } *

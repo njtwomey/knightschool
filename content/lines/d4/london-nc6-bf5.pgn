@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "main"]
+[Start "london-nc6 4.Nf3"]
+[Name "2...Nc6: Black also plays ...Bf5"]
+
+4... Bf5 { The bishop gets out before ...e6. But two things have now left the queenside: the c-pawn is blocked and the c8 bishop has gone, so b7 and d5 are both softer. [%csl Yb7,Yd5] }
+5. c4 { Here the set-up changes, and this is the reason. Black has no ...c6 or ...c5 to hold d5 with a pawn, so White strikes at it. [%cal Gc4d5] }
+5... e6
+6. Nc3 { Adds a second attacker to d5 and develops. [%cal Gc3d5,Gc4d5] }
+6... Bb4 { Pins the knight to the king. }
+7. Rc1 { Backs up the knight, so that if the bishop takes on c3, a rook recaptures and the pawns stay straight. White keeps the pressure on d5 and the option of c5 or a3. [%cal Gc1c3] } *

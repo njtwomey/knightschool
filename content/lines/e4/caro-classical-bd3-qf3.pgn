@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical-bd3 5...Qxd4"]
+[Name "Classical: 5.Bd3 Qxd4 6.Qf3"]
+
+6. Qf3 Bxe4 { Takes the knight. White takes back, and the queens come off. }
+7. Qxe4 Qxe4+ { A check that forces the swap. }
+8. Bxe4 Nf6 { Hits the bishop. Black has the extra pawn in a position with no danger. } *

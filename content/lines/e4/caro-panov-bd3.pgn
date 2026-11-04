@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-panov 6...Be7"]
+[Name "Panov: 7.Bd3"]
+
+7. Bd3 { Develops, keeping the tension. }
+7... dxc4 { Takes on c4 now that the bishop has moved: White spends a second move on it and the d-pawn stands alone. }
+8. Bxc4 O-O 9. O-O Nc6 { The isolated pawn again, with the same plan: blockade on d5, swap pieces, aim at d4. [%cal Gc6d4] [%csl Yd4] } *

@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "gambit"]
+[Start "london-englund 2.dxe5"]
+[Name "The Englund: 2...Bc5"]
+
+2... Bc5 { Aims at f2 at once, and plans to win the pawn back with ...d6 or ...f6. }
+3. Nf3 { Develops and guards e5. }
+3... d6 { Black offers a second pawn to open lines. }
+4. Bf4 { The bishop defends e5 again from its usual square. Taking on d6 also works, but it gives Black's pieces the open lines they want. }
+4... Ne7
+5. e3 { Blocks the c5 bishop's diagonal and frees White's own bishop. White is a healthy pawn up. [%cal Ge3f2] } *

@@ -1,0 +1,14 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical 4...Bf5"]
+[Name "Classical: 5.Nc3"]
+
+5. Nc3 { Goes back where it came from: a move lost, though the knight is safe. }
+5... e6 { The usual ...e6. }
+6. Nf3 { Guards d4. }
+( 6. Bd3? { Offers the swap, but cuts the queen off from d4. [%csl Rd4] }
+  6... Qxd4 { Black wins a pawn. The bishop on f5 is guarded by the pawn on e6, so nothing hangs. [%idea blocked-guard] }
+  7. Nf3 Qd8 { Back home, a clean pawn up. } )
+6... Nd7 { Covers e5 and develops. }
+7. Bd3 Bxd3 { The usual swap. }
+8. Qxd3 Ngf6 { Develops. Black is safely level: ...Be7 and castling come next. } *

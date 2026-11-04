@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-e6-first 2.Bf4"]
+[Name "1...e6 and 2...c5"]
+
+2... c5
+3. e3 { Holds d4 with a pawn. }
+3... cxd4
+4. exd4 { Takes with the e-pawn. }
+4... Nc6
+5. Nf3 *

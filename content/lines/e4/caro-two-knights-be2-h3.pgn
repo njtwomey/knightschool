@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-be2 4...e6"]
+[Name "Two Knights: 4.Be2 e6 5.h3"]
+
+5. h3 Bxf3 { Takes the knight rather than retreat. }
+6. Bxf3 d4 { Hits the knight and shuts in the bishop on f3. }
+7. Ne2 c5 { Black has a firm grip on the dark squares. } *

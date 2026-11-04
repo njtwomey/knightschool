@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-hillbilly 4...Nf6"]
+[Name "Hillbilly: 5.Nf3"]
+
+5. Nf3 Bg4 { The pin that runs through all of this opening: the knight is tied to the queen. [%cal Gg4f3] }
+6. h3 Bxf3 { Take the knight rather than be pushed around. }
+7. Qxf3 { The queen and the bishop on b3 both hit d5. [%cal Rf3d5,Rb3d5] }
+7... e6 { Guards d5 with a pawn, and the bishop on b3 has nothing left to attack. }
+8. O-O Nc6 { Black is at least level and the plan is simple: ...Be7 or ...Bd6, and castle. } *

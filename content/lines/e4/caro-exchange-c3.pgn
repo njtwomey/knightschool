@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 4...Nf6"]
+[Name "Exchange: 5.c3"]
+
+5. c3 { Supports d4, and frees the queen to look at b7 from b3. }
+5... Nc6 { Develops first. If the queen comes to b3, the knight can hit it from a5. }
+6. Bd3 Bg4 { The rule again. This is the position of 5.Bd3 and 6.c3: White castles and Black plays ...e6. } *

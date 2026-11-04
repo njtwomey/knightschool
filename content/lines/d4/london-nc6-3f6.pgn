@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-nc6 3.e3"]
+[Name "2...Nc6 and 3...f6"]
+
+3... f6 { Prepares ...e5 to push the bishop around, but it weakens e6 and the diagonal to Black's king, and takes the best square from the g8 knight. [%cal Rf6e5] }
+4. Nf3 { Adds a third attacker on e5, so ...e5 is not as easy as it looks. }
+4... Bg4
+( 4... e5? { Black's most common move. It looks like the point of 3...f6, but e5 is attacked three times, by the pawn, the bishop and the knight, and guarded only twice. [%csl Ye5] }
+  5. dxe5 fxe5 6. Nxe5 { Takes first with the knight. }
+  6... Nxe5 7. Bxe5 { White has won a clean pawn, and the bishop stands in the middle of the board. [%csl Ge5] } )
+5. Be2 { Breaks the pin before it can cost anything. }
+5... Bxf3
+6. Bxf3 { White has the bishop pair, and Black has weakened the kingside for nothing. } *

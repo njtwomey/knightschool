@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-main 4.Nf3"]
+[Name "The set-up: ...Be7 before ...c5"]
+
+4... Be7 { Black gets ready to castle and leaves the bishops alone. }
+5. Bd3 { Develops with an eye on h7. Black's move order changes nothing about White's plan. }
+5... O-O
+6. Nbd2 { Holds back c3 until Black plays ...c5, since the pawn does not need to go there yet. }
+6... c5
+7. c3 { Now it is needed: d4 is hit, so it gets its pawn support. }
+7... Nc6
+8. Ne5 { Jumps into the centre. The d4 pawn supports the knight, and Black can only chase it with ...f6, which weakens e6. White can follow with Qf3 or f4. [%cal Gf3e5] [%csl Ge5] [%idea outpost] } *

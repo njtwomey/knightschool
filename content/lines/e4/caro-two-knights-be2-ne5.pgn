@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-be2 4...e6"]
+[Name "Two Knights: 4.Be2 e6 5.Ne5"]
+
+5. Ne5 Bxe2 { Swaps the bishop off before it can be hit. }
+6. Qxe2 d4 { Gains a move on the knight and gets space. }
+7. Nd1 Bd6 { Hits the knight on e5 and develops: Black has the better of it. [%cal Gd6e5] } *

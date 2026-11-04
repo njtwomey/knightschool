@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-c3 5...c5"]
+[Name "Advance: 5.c3 c5 6.Be3"]
+
+6. Be3 Qb6 { The bishop has left b2 without a guard, so the queen goes straight to it. [%cal Rb6b2] }
+7. Qb3 c4 { Gains space with a hit on the queen. Black has won the queenside and White must retreat. } *

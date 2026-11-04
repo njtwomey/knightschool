@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange-6h3 7...e6"]
+[Name "Exchange: 6.h3 Bxf3 7.Qxf3 e6 8.Bg5"]
+
+8. Bg5 { The position of 6.Bg5 e6 7.h3 Bxf3 8.Qxf3: ...Nc6 next. }
+8... Nc6
+9. O-O-O Be7 { Unpins and gets ready to castle. The rook on d1 guards d4, and the game is level. } *

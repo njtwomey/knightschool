@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights 5...e6"]
+[Name "Two Knights: 6.e5"]
+
+6. e5 { Takes space, but White has left the d-pawn at home and has no centre to support the pawn. }
+6... Qb6 { Looks down the diagonal at b2 and d4. The queen stands well here, and ...c5 and ...Nd7 come next. } *

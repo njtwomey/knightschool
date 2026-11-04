@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-be2 5...c5"]
+[Name "Advance: 5.Be2 c5 6.Be3"]
+
+6. Be3 cxd4 { Takes while the knight has to recapture. }
+7. Nxd4 Ne7 { If White takes on f5, the knight takes back, and Black's pawns stay in one piece: ...exf5 would double them. }
+8. O-O Nbc6 { Develops and challenges the knight on d4. Swaps suit Black, who is hitting e5 and has no weak pawn. } *

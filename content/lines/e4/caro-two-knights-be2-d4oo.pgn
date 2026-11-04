@@ -1,0 +1,14 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-be2 5...Nf6"]
+[Name "Two Knights: 4.Be2 e6 5.d4 Nf6 6.O-O"]
+
+6. O-O dxe4 { Takes the pawn, and the knight on f3 is hit. }
+7. Ne5 { The knight has to move, and here it also hits the bishop on g4. }
+( 7. Nxe4?? { Takes back on the natural square, and forgets that nothing guards the knight. }
+  7... Nxe4 { Black has won a knight for nothing, since White has no bishop on d3 to take back. [%csl Ge4] } )
+( 7. Ng5? { Hits the pawn on e4 from the far side, but the knight is out of play here. }
+  7... Bf5 { Steps back, keeping the extra pawn guarded. }
+  8. f3 exf3 9. Bxf3 Be7 { Black is a clean pawn up, and f7 is well guarded. } )
+7... Bxe2 { Swaps the bishops first. }
+8. Qxe2 Nbd7 { Develops and challenges the knight on e5. Black is a pawn up; 8...Qxd4 grabs a second one, but only hands White time. } *

@@ -1,0 +1,21 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-nf6-c5 3.e3"]
+[Name "1...Nf6, 2...c5 and the poisoned b2 pawn"]
+
+3... Qb6 { Hits b2. Without c3 played, 4.Qc1 is passive and 4.b3 weakens the queenside. }
+4. Nc3 { Offers the pawn. If the queen takes it, the knight jumps to b5 with two threats. [%cal Gc3b5] }
+4... Qxb2 { Takes the bait. Black's queen is now alone among White's pieces. [%idea poisoned-pawn] }
+5. Nb5 { Threatens Nc7+, forking the king and the rook on a8, and Rb1, trapping the queen. [%cal Gb5c7,Ra1b1] [%idea fork] }
+5... Nd5 { The only move that holds: the knight guards c7 and hits the bishop on f4. }
+( 5... Qb4+? { Runs for home with check, but it does nothing about c7. }
+  6. c3 Qa5 7. Nc7+ { The fork. The king has to move, and the rook on a8 is lost. [%cal Gc7a8] [%idea fork] } )
+( 5... cxd4? { Wins a third pawn for a moment, but the threats have not gone away. }
+  6. exd4 { Takes back. Nc7+ and Rb1 are both still in the air, and Black's queen is still out on b2. The engine has White more than two and a half pawns ahead. } )
+( 5... Na6? { Guards c7, which was the threat Black saw. It does nothing about the other one. }
+  6. a3 { Takes b4 away. Now Rb1 leaves the queen only a2, and White is close to winning her: the engine puts White about three pawns ahead. [%cal Ga3b4,Ra1b1] [%idea queen-trap] } )
+6. Rb1 { Hits the queen anyway. }
+6... Qxa2
+7. Ra1 { The rook chases her again; a repeat of the moves is the worst that can happen. }
+7... Qb2
+8. Nf3 { White is two pawns down but far ahead in development, and Black's queen is still short of squares. The engine calls it level or a little better for White, and Black has to keep finding the right moves. } *

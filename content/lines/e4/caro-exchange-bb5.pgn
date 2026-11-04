@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 4...Nf6"]
+[Name "Exchange: 5.Bb5+"]
+
+5. Bb5+ { A check that invites the swap of the light bishops. }
+5... Bd7 { Blocks with the bishop. Black's light bishop is the one that could be shut in, so swapping it for White's good bishop is a fair deal. }
+6. Bxd7+ Nbxd7 { Takes back with a piece that still needed developing, and leaves the c-file clear for a rook. }
+7. O-O e6 { Guards d5 and opens the bishop on f8. }
+8. Nc3 Bd6 { The bishop's best diagonal. Black castles and plays ...Rc8, and the game is level with the easier plan: the half-open c-file. } *

@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical 6...Nd7"]
+[Name "Classical: 7.h4"]
+
+7. h4 h6 { The same move as ever: keep h7 for the bishop. }
+( 7... Ngf6? { Natural, but it allows the same trick. }
+  8. h5 Be4 9. Nxe4 Nxe4 10. Bd3 { The bishop has gone, and White has the two bishops and easy play. Black has lost the piece the opening is built around. } )
+8. h5 { The main position of 6.h4, by another order: ...Bh7 and then 9.Bd3 Bxd3 10.Qxd3 e6. }
+8... Bh7 *

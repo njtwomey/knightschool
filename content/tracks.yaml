@@ -2,3 +2,9 @@
 - id: first-e4
   name: A first repertoire with 1.e4
   openings: [italian-white]
+- id: first-d4
+  name: A first repertoire with 1.d4
+  openings: [london-white]
+- id: black-e4
+  name: Black against 1.e4
+  openings: [caro-kann-black]

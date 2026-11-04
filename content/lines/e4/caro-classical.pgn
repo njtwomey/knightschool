@@ -1,0 +1,15 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-advance 2...d5"]
+[Name "Classical: the bishops come off"]
+
+3. Nc3 { Defends e4 with a piece and develops. }
+3... dxe4 { Takes the pawn, so that White has to spend a move winning it back and Black's bishop can come out with a gain of time. }
+4. Nxe4 Bf5 { The rule of the opening, and it hits the knight at once. [%cal Gf5e4] [%idea bishop-first] }
+5. Ng3 { The most common move: the knight steps away and hits the bishop. }
+5... Bg6 { Stays on the diagonal and out of the chain. }
+6. Nf3 Nd7 { Develops, and covers e5 so that the knight on f3 cannot settle there. }
+7. Bd3 Bxd3 { Swaps the light bishops, as in the Advance: this is the piece that would otherwise aim at Black's king. }
+8. Qxd3 e6 { With the bishop gone, ...e6 costs nothing. The structure is rock solid: no weak pawns, and ...Ngf6, ...Be7 and castling come next. }
+9. O-O Ngf6 { Develops the last knight. }
+10. Bf4 Be7 { Black castles next and is close to level. White has a little more space; Black has no targets to offer. } *

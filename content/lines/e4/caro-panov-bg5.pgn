@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-panov 5...e6"]
+[Name "Panov: 6.Bg5"]
+
+6. Bg5 { Pins the knight to the queen and takes one defender off d5. }
+6... Be7 { Breaks the pin and develops: the plan needs no change. }
+7. Nf3 O-O { The king is safe, and ...dxc4 and ...Nc6 follow, with play against d4. } *

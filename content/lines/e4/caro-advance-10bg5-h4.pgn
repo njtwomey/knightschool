@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-10bg5 10...h6"]
+[Name "Advance: 10.Bg5 h6 11.Bh4"]
+
+11. Bh4 g5 { Drives the bishop off first: the bishop is pinning the knight on e7 to the queen. }
+( 11... Nf5?? { The knight's usual move, but here it uncovers the queen. }
+  12. Bxd8 { White has won the queen for a bishop. Look at what stands behind a piece before moving it. [%csl Rd8] } )
+12. Bg3 Nf5 { Now the knight reaches f5, and the bishop on g3 is hit as well. [%cal Gf5g3,Gf5d4] } *

@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "gambit"]
+[Start "london-englund 6.Nc3"]
+[Name "The Englund: 6...Nb4"]
+
+6... Nb4 { Eyes c2, with a fork of the king and the rook. }
+7. Nd4 { The only strong reply. The knight guards c2, and Rb1 becomes a real threat, because the queen has almost no squares left. Every other move throws the advantage away. [%cal Gd4c2] }
+7... c6 { Takes b5 away from the knights, which gives the queen some air. }
+( 7... c5?? { Hits the knight, Black's most common move, and it loses the queen. Black has forgotten that she has no way back. }
+  8. Rb1 { The queen is nearly out of squares: a3 is her only flight, and Nb5 would chase her from there, so Black gives her up for the rook. }
+  8... Qxb1 9. Qxb1 cxd4 10. Nb5 { White has the queen for a rook and a knight, and c7 and the knight on b4 are both under fire. [%cal Gb5c7] [%idea queen-trap] } )
+( 7... Bc5? { Hits the knight too, but the same thing happens. }
+  8. Rb1 Qa3 9. Ndb5 { The queen is hit once more and is running out of squares. }
+  9... Qa5 10. a3 { Black's queen and the knight on b4 are both short of squares, and c7 is hanging. The engine has White about seven pawns ahead. } )
+8. Rb1 { The queen still has to run, and it gains White another move. }
+8... Qa3 9. Rb3 { Hits her again. }
+9... Qa5
+10. a3 { Hits the knight, which has to go back to a6. Then Ncb5 uncovers the d2 bishop against the queen, with Nd6+ to follow. Black's queen has been chased round the board, and White is winning. [%cal Ga3b4] } *

@@ -1,0 +1,17 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-advance 1...c6"]
+[Name "2.Nc3: the Two Knights"]
+2. Nc3 { Develops and guards e4. }
+2... d5 { The same move as always. }
+3. Nf3 { The Two Knights. }
+3... Bg4 { The bishop comes out before ...e6 and pins the knight to the queen. [%cal Gg4f3] [%idea bishop-first,pin] }
+4. h3 { Asks the bishop to decide. }
+4... Bxf3 { Takes rather than retreats: 4...Bh5 lets g4 drive the bishop back, and the queen is not as well placed on f3 as it looks. }
+5. Qxf3 e6 { Now ...e6 costs nothing: the bishop is gone, and d5 needs the support against the pawn on e4 and the knight. [%csl Gd5] }
+6. d4 Nf6 { Develops and hits e4. [%cal Gf6e4] }
+7. e5 { Gains space and drives the knight back. }
+7... Nfd7 { The usual retreat. Going to d7 keeps ...c5 in hand, and ...c5 hits d4, as in the Advance. }
+( 7... Ne4? { Looks active, but the square is not safe. }
+  8. Nxe4 dxe4 9. Qxe4 { The knight has gone, and with it the e4 pawn. White is a clean pawn up. [%csl Re4] } )
+8. Bd3 c5 { The Advance plan: hit d4, the base of the chain. White has the two bishops, but the centre is under fire and Black is already a little better. [%cal Gc5d4] [%idea attack-the-base] } *

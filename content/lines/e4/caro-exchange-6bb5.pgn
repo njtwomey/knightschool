@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 5...Bg4"]
+[Name "Exchange: 6.Bb5+"]
+
+6. Bb5+ { A check that develops the bishop. }
+6... Nc6 { Blocks with a developing move. The bishop on g4 stays where it is doing a job. [%cal Gc6d4] }
+7. h3 Bxf3 8. Qxf3 e6 { Guards d5. Black has a sound position with ...Bd6 and castling to come. } *

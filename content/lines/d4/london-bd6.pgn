@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "main"]
+[Start "london-main 4.Nf3"]
+[Name "Bishops: ...Bd6 at once"]
+
+4... Bd6 { Offers the trade before anything else, to challenge the bishop that started the opening. }
+5. Bg3 { The same reply as ever: step back along the diagonal and let Black decide. Black gets nothing from taking, and the h-file opens if it does. [%cal Gg3d6] }
+5... O-O
+6. Bd3 { Puts the bishop on its best square and prepares to castle. [%cal Gd3h7] }
+6... c5
+7. c3 { Backs up d4, as in the main line. }
+7... Nc6
+8. Nbd2 { The main line's position, reached in a different order. Everything learned there applies from here. } *

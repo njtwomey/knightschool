@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "main"]
+[Start "london-c5 5.Nf3"]
+[Name "...c5 and ...Qb6"]
+
+5... Qb6 { The test of the London: the queen hits b2, which the c1 bishop stopped guarding when it came out. White's score drops here more than anywhere else after 1...d5, so learn this one. [%cal Rb6b2] [%csl Yb2] }
+6. Qc2 { Guards b2 along the second rank. 6.Qb3 looks natural, but 6...c4 chases the queen and leaves White slightly worse. [%cal Bc2b2] }
+6... Bf5 { Black's most common move by far: the bishop hits the queen, and it looks as though she can simply take it. [%cal Rf5c2] }
+7. dxc5 { The only good move. The pawn takes with an attack on Black's queen, so the queens come off together and nothing is lost. [%cal Gd4c5,Gc5b6] }
+( 7. Qxf5?? { Wins a bishop, and loses the game. The queen has left b2, which was the only thing she was there to guard. }
+  7... Qxb2 { The rook on a1 is hit and cannot move, because its own knight on b1 is in the way. White loses a rook for the bishop, and Black's queen is now behind the lines. White scores badly here at this level: this is the trap Black is hoping for. [%csl Ra1] } )
+7... Bxc2
+8. cxb6 { Takes Black's queen in return. Black's bishop is now stranded on c2. }
+8... axb6
+9. Na3 { Hits the bishop with a developing move. The queens are off and the game is level, and Black's doubled b-pawns give White something to play against. [%cal Ga3c2] } *

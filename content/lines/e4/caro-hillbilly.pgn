@@ -1,0 +1,17 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-advance 1...c6"]
+[Name "Hillbilly Attack: 4.Bb3"]
+
+2. Bc4 { Very common at this level: the bishop aims at f7. But it is on a square that ...d5 hits at once. [%cal Rc4f7] }
+2... d5 { Hits the bishop and the pawn on e4 together. The c6 pawn guards d5, so the bishop cannot take it. [%cal Gd5c4,Gd5e4] }
+3. exd5 { White gives up the centre pawn to keep the bishop. }
+( 3. Bxd5?? { Grabs a pawn and forgets why Black played 1...c6: that pawn guards d5. }
+  3... cxd5 4. exd5 Qxd5 { Black has won a bishop for a pawn, and the queen stands in the middle of the board. [%csl Gd5] } )
+3... cxd5 { White's bishop is hit again. Black has a pawn in the centre and has lost no time. [%cal Gd5c4] }
+4. Bb3 { The most common move: the bishop stays on the diagonal towards f7. }
+4... Nf6 { The same plan as in the Exchange: guard d5, then bring out the bishop. }
+5. d4 Bg4 { The rule of the opening. With no knight on f3, the bishop attacks the queen. [%cal Gg4d1] }
+6. f3 { Blocks with a pawn, but it takes the knight's best square and weakens e3. }
+6... Bf5 { Stays outside the pawn chain. Black's bishop has its diagonal, and White's f3 pawn is in the way of its own pieces. }
+7. Ne2 e6 { With the bishop out, ...e6 is safe. Black is already the more comfortable side: White's bishop on b3 hits nothing, and d5 is firm. } *

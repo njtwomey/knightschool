@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "gambit"]
+[Start "caro-classical 3...dxe4"]
+[Name "Classical: 4.f3"]
+
+4. f3 { A gambit: White offers the pawn for quick development. }
+4... exf3 { Takes it. The engine says the pawn is worth having: White has nothing like enough for it. }
+5. Nxf3 Nf6 { Develops, and the knight stops e4. }
+6. Bd3 Bg4 { The rule of the opening: the bishop comes out and pins the knight. Black is a pawn up with no problems. } *

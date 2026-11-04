@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 9...Nge7"]
+[Name "Advance: 10.Bg5"]
+
+10. Bg5 h6 { Asks the bishop to decide before the knight goes to f5. }
+11. Bd2 Nf5 { The knight reaches its square, and the bishop on d2 does not guard d4. [%cal Gf5d4] } *

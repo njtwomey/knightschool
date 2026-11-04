@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights 6...Nf6"]
+[Name "Two Knights: 7.Bd3"]
+
+7. Bd3 dxe4 { Takes on e4, which White has to win back. }
+8. Nxe4 Nxe4 { Swaps a pair of knights, which eases Black's game. }
+9. Bxe4 Nd7 { Develops. Black is solid and level, with ...Nf6 hitting the bishop to come. } *

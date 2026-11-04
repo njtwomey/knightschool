@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-g6 2.Bf4"]
+[Name "1...Nf6 and 2...e6"]
+
+2... e6
+3. e3 { Nothing changes: the set-up is the same. }
+3... c5
+4. c3 { Holds d4. If Black follows with ...d5, the game is back in the main line. }
+4... Nc6
+5. Nf3
+5... d5
+6. Nbd2 *

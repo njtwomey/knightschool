@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange-bd3-early 4...Nf6"]
+[Name "Exchange: 5.Bf4"]
+
+5. Bf4 { The bishop goes out before c3. }
+5... Nc6 { Develops and hits d4, which has no defender: the bishop on d3 stands between it and the queen. [%cal Gc6d4] }
+6. c3 { Guards d4: the same position as after 5.c3 Nc6 6.Bf4, so ...Bg4 comes next, and on 7.Qb3 the answer is 7...Qd7. }
+6... Bg4 *

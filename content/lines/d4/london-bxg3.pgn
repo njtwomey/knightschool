@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-bd6 5.Bg3"]
+[Name "Bishops: Black trades on g3"]
+
+5... Bxg3 { Black gets the trade, but pulls a white pawn towards the centre and hands White an open file. }
+6. hxg3 { Always the h-pawn. White's kingside pawns stay together, and the rook on h1 stands on an open file without having moved. [%cal Gh1h7] }
+6... Nc6
+7. Nbd2 { Carries on with the set-up. With the h-file open, White need not hurry to castle; the rook is already working. } *

@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-hillbilly 4...Nf6"]
+[Name "Hillbilly: 5.Nc3"]
+
+5. Nc3 { Develops and hits d5. }
+5... Nc6 { Develops. The pawn on d5 is safe: the knight on f6 and the queen guard it, and the knight on c6 looks at d4. }
+6. d4 Bg4 { The rule of the opening. }
+7. f3 Bd7 { Steps back: on d7 the bishop covers b5 and stops the knight on c3 from jumping in. } *

@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-d4 4...e6"]
+[Name "Two Knights: 4.d4 e6 5.Be2"]
+
+5. Be2 { The position of 4.Be2 e6 5.d4: ...Nf6 next. }
+5... Nf6 *

@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights 2...d5"]
+[Name "2.Nc3: 3.exd5"]
+
+3. exd5 { The most common move here. }
+3... cxd5 { Takes back with the pawn, as ever. }
+4. d4 { The Exchange's 4.Nc3, by another order: ...Nf6 next. }
+4... Nf6 *

@@ -1,0 +1,25 @@
+[For "white"]
+[Kind "main"]
+[Start "london-main 3.e3"]
+[Name "...c5 before ...e6"]
+
+3... c5 { Hits d4 before playing ...e6, so that Black's c8 bishop stays free. This is the sharper way to play against the London. [%cal Rc5d4] }
+4. c3 { The pawn wedge comes first. Whatever Black does next, d4 is safe. [%cal Gc3d4] }
+4... Nc6
+5. Nf3 { Develops and guards d4 again. }
+5... Bg4 { Pins the knight to the queen, and takes the bishop away from guarding b7. [%icon pin@f3] [%idea pin] }
+( 5... Bf5? { Natural, but the c5 pawn has lost its protection: with the e-pawn still on e7, the f8 bishop cannot see it, and Black's queen is not yet on b6. [%csl Yc5] }
+  6. dxc5 { Takes the pawn. }
+  6... e6 7. b4 { Holds on to it. White is a clear pawn up with a pawn chain on b4 and c5, and Black has given up the centre tension for nothing. [%cal Gb4c5] } )
+6. Nbd2 { Gives the pinned knight a second defender, so ...Bxf3 can be met by a piece. }
+6... e6
+( 6... Ne4? { Offers to swap knights, but the pawn that takes back on e4 will be loose. }
+  7. Nxe4 dxe4 8. h3 Bh5 9. g4 { The bishop has to move or be taken, and the pawn on e4 is hit by the knight behind it. Nothing is won yet, but Black's pieces are being pushed about, and the engine has White about a pawn and a half ahead. } )
+7. Qb3 { With the bishop gone from c8, b7 has no defender. The queen hits it, and Black has to answer at once. [%cal Gb3b7] [%csl Yb7] }
+7... Qc8 { The queen goes back to guard b7, a square she did not want. }
+( 7... Na5? { Hits the queen, but the knight has gone to the edge with nothing guarding it: the c7 pawn blocks the queen's line to a5. [%csl Ya5] }
+  8. Qb5+ { Check, and the queen hits the knight too. }
+  8... Nd7 9. b4 { The knight on a5 is hit twice and has almost no squares, so White wins material. The engine has White more than three pawns ahead. [%cal Gb4a5,Gb5a5] } )
+8. h3 { Asks the bishop to make up its mind. [%cal Gh3g4] }
+8... Bh5
+9. Be2 { Takes the sting out of the pin and prepares to castle. White has the easier game: the queen is active on b3, and Black's has gone backwards. } *

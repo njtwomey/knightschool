@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 6...c5"]
+[Name "Advance: 7.dxc5"]
+
+7. dxc5 { Takes the pawn, but the pawn on d4 was what held up e5. }
+7... Bxc5 { Takes back and develops at the same time. Now e5 is the weak pawn. [%csl Ye5] }
+8. O-O Nc6 { Develops and hits e5. Black has an easy game: ...Nge7, castle, and ...Qc7 to win more squares. [%cal Gc6e5] } *

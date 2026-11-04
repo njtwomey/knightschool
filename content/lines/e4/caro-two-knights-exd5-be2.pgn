@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-exd5 4...cxd5"]
+[Name "Two Knights: 4.exd5 cxd5 5.Be2"]
+
+5. Be2 Nf6 { Develops. If 6.d4, the game is the Exchange main line. }
+6. O-O e6 { Solid: the bishop is out, and ...Nc6 and ...Bd6 come next. } *

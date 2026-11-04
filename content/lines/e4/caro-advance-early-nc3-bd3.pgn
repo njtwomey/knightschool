@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-early-nc3 4...e6"]
+[Name "Advance: 4.Nc3 e6 5.Bd3"]
+
+5. Bd3 Bxd3 { The usual swap. }
+6. Qxd3 c5 { Strikes at d4, with no pawn on c3 to hold it. }
+7. Nf3 { The position of 5.Nc3 c5 6.Bd3: ...Nc6 next. } *

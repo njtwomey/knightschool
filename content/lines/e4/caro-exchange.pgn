@@ -1,0 +1,19 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-advance 2...d5"]
+[Name "Exchange: the bishop goes to g4"]
+
+3. exd5 { White gives up the pawn on e4 and with it any claim to two pawns in the centre. The game turns quiet, with the pawns even. }
+3... cxd5 { Takes back with the c-pawn, which is what 1...c6 was for. Black keeps a pawn in the centre, and the half-open c-file is ready for a rook. [%cal Gc6d5] }
+4. Nf3 { Develops and guards d4. }
+4... Nf6 { Develops and guards d5. Black plays this same move against 4.Nf3, 4.Nc3, 4.Bd3 and 4.c4, so there is one plan to remember. }
+5. Nc3 { Develops and looks at d5, which now has two defenders and one attacker. }
+5... Bg4 { The rule of the Caro-Kann: the light bishop comes out before ...e6 shuts it in. On g4 it also pins the knight on f3 to the queen, and that knight guards d4. [%cal Gg4f3] [%idea bishop-first,pin] }
+6. Be2 { Unpins the knight, so that it can move again. }
+6... e6 { Now that the bishop is outside the pawn chain, ...e6 is safe: it adds a pawn to d5 and opens the way for the bishop on f8. [%csl Gd5] }
+7. O-O { White's king is safe; the position is level. }
+7... Nc6 { The last minor piece but one comes out, with a second look at d4. [%cal Gc6d4] }
+8. h3 { Asks the bishop to decide. }
+8... Bxf3 { Takes the knight that guards d4. White gets the two bishops, but Black's knights are happy in a closed centre, and Black has no weak pawns. }
+9. Bxf3
+9... Bd6 { The best diagonal for this bishop, aimed at h2. Black castles next and puts a rook on c8, and the game is level: no weak pawns, nothing to fear, and a plan on the c-file. [%cal Gd6h2] } *

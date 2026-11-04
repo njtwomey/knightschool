@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange-bd3-early 4...Nf6"]
+[Name "Exchange: 5.h3"]
+
+5. h3 { Takes g4 from the bishop before it can go there. }
+5... Nc6 { Develops anyway, and hits d4. With ...Bg4 ruled out, Black does not need to hurry the bishop. }
+6. c3 { Holds d4. }
+6... e6 { White has spent a move on h3, so Black can afford this. The bishop on c8 is shut in for now; it comes out by ...Bd7 and ...Rc8 later. }
+7. Nf3 Bd6 8. O-O O-O { Both kings are safe and the game is level. Black aims at the c-file, with ...Bd7 and ...Rc8. } *

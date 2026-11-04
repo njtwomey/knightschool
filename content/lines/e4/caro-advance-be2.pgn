@@ -1,0 +1,11 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 4...e6"]
+[Name "Advance: 5.Be2"]
+
+5. Be2 { Quiet development. White keeps the bishops on, and Black's bishop on f5 stays a good piece. }
+5... c5 { The same strike at the base of the chain. [%cal Gc5d4] }
+6. c3 Nc6 { A second attacker on d4. }
+7. O-O cxd4 { Opens the c-file. }
+8. cxd4 Nge7 { Develops. The bishop still stands on f5, so this knight will head for g6, from where it hits e5. }
+9. Nc3 Bg4 { Swaps a defender of d4: if the knight on f3 goes, d4 and e5 both lose a guard. [%cal Gg4f3] } *

@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical-bd3 6...Qd8"]
+[Name "Classical: 5.Bd3 Qxd4 6.Nf3 Qd8 7.Qe2"]
+
+7. Qe2 e6 { Guards the bishop on f5 and opens the way to castle. }
+8. O-O Bxe4 { Swaps off the piece that was tying the pawn down. }
+9. Bxe4 Nf6 { Develops with a hit on the bishop. Black has an extra pawn and only has to castle. } *

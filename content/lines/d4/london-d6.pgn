@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-g6 2.Bf4"]
+[Name "1...Nf6 and 2...d6"]
+
+2... d6 { Prepares ...e5 to hit the bishop. }
+3. e3 { Supports d4. If ...e5 comes, the bishop can drop back to g3, so nothing is lost. The set-up stands. }
+3... g6
+4. Nf3
+4... Bg7
+5. Be2
+5... O-O
+6. h3 *

@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-nf3-bb5 5...Nxd7"]
+[Name "2.Nf3: 4.Bb5+ Bd7 5.Bxd7+ Nxd7 6.Nc3"]
+
+6. Nc3 Ngf6 { The knight guards d5, which the knight on c3 looks at. }
+7. d4 e6 *

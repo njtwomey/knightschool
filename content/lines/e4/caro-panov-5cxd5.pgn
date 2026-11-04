@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-panov 4...Nf6"]
+[Name "Panov: 5.cxd5"]
+
+5. cxd5 { Takes at once. }
+5... Nxd5 { Takes back with the knight: it stands well on d5 and d4 is isolated. }
+6. Nf3 Nc6 { Develops and hits d4. }
+7. Nc3 e6 { Supports the knight on d5 and opens the bishop on f8. }
+8. Bd3 Be7 { The main line of the Panov, with the same plan: castle, swap pieces, aim at d4. } *

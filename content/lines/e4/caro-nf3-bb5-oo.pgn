@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-nf3-bb5 5...Nxd7"]
+[Name "2.Nf3: 4.Bb5+ Bd7 5.Bxd7+ Nxd7 6.O-O"]
+
+6. O-O Ngf6 { Develops: the same move whatever White plays here. }
+7. d4 { The position of the Exchange's 5.Bb5+: ...e6, ...Bd6, castle, ...Rc8. }
+7... e6 *

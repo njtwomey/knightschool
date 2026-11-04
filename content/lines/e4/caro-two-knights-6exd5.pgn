@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights 5...e6"]
+[Name "Two Knights: 6.exd5"]
+
+6. exd5 cxd5 { Takes back with the pawn: the c-file is half open, and the knight on c6 has a natural square. }
+7. Bb5+ Nc6 { Blocks with a developing move. }
+8. O-O Nf6 { Develops. Black has the solid structure of the Exchange, and the bishop on b5 is doing little. } *

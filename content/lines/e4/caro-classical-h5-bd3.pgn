@@ -1,0 +1,15 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical-h5 7...Bh7"]
+[Name "Classical: 7.h5 Bh7 8.Bd3"]
+
+8. Bd3 { Offers the swap, but the bishop has cut the queen off from d4. [%csl Rd4] }
+8... Qxd4 { Wins a pawn. The knight is not on f3 yet, so nothing else guards it. [%idea blocked-guard] }
+9. Nf3 Qd8 { Back home, in good order. The bishops are about to come off, and Black is a clean pawn up. }
+10. Bxh7
+( 10. Bf4? { Develops, but it leaves the bishop on d3 to be swapped with the queens. }
+  10... Bxd3 11. Qxd3 Qxd3 12. cxd3 Nf6 { The queens are off and White's pawns are doubled and isolated. Black is a clean pawn up with the far better ending. } )
+( 10. Be3? { The same mistake: the swaps come anyway. }
+  10... Bxd3 11. Qxd3 Qxd3 12. cxd3 Nd7 { The queens are off, and Black has an extra pawn and the better pawns too. } )
+10... Qxd1+ { Swaps the queens first, then takes back on h7. A pawn up with queens off is what Black wants. }
+11. Kxd1 Rxh7 { Black has the extra pawn and a safe king, and White's h-pawn is a weakness. } *

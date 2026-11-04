@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-c5-2 3.e3"]
+[Name "...c5 on move two: Black takes"]
+
+3... cxd4
+4. exd4 { Takes with the e-pawn. The queen stays safe at home, and the e-file opens. }
+4... Nc6
+5. c3 { Guards d4 and takes b4 away from the knight. White's pawns stand on c3 and d4, with the f4 bishop outside them. }
+5... Nf6
+6. Nf3 { Then Bd3, castling and Nbd2, the usual set-up with the e-pawn gone. } *

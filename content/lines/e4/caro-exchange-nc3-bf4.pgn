@@ -1,0 +1,11 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange-nc3 4...Nf6"]
+[Name "Exchange: 5.Bf4"]
+
+5. Bf4 { Develops outside the chain and looks at b8. }
+5... Bg4 { The rule again. }
+6. f3 Bd7 { Back to d7, and for a good reason: from here the bishop covers b5. }
+( 6... Bf5? { The square it would like, but it leaves b5 uncovered. }
+  7. Nb5 Na6 8. Qe2 { The knight has reached b5 with a threat on c7, and Black's pieces are tied up. White is clearly better without having won anything yet: the gain is the initiative. [%csl Rc7] } )
+7. Nb5 Bxb5 8. Bxb5+ Nc6 { Black has swapped the bishop for the knight that was causing trouble and is comfortable: the pawn on f3 has left e3 and the king's diagonal loose. } *

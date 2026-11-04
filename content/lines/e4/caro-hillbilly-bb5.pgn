@@ -1,0 +1,14 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-hillbilly 3...cxd5"]
+[Name "Hillbilly Attack: 4.Bb5+"]
+
+4. Bb5+ { The other way out for the bishop, with a check. }
+4... Bd7 { Blocks with the bishop. It offers the swap and gives White nothing to attack. }
+5. Bxd7+ { White's only active piece comes off. }
+( 5. Bd3? { Keeps the bishops, but the bishop has now moved four times and blocks the d-pawn. }
+  5... e5 { Black has the whole centre for nothing. White has given up a tempo and has no pawns in the middle. Nothing is won yet: the gain is the centre and the time. [%cal Gd5d4,Ge5e4] } )
+5... Nxd7 { Takes back with a developing move. }
+6. Nf3 Ngf6 { Develops; the knight guards d5 so that ...e6 is not forced. }
+7. O-O e6 { Solid. The bishop on f8 can now come out. }
+8. d4 Bd6 { The bishop's best diagonal. Black castles next, and is already a little better with the half-open c-file to use. } *

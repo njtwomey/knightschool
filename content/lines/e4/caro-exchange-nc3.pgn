@@ -1,0 +1,12 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-exchange 3...cxd5"]
+[Name "Exchange: 4.Nc3"]
+
+4. Nc3 { Develops and looks at d5. }
+4... Nf6 { The same move as ever. Against 5.Nf3, Black plays ...Bg4 and the game is the main line. }
+5. Bg5 { Develops and looks at f6: taking there would pull one of Black's pawns out of line. }
+5... Bg4 { The bishop comes out, and with no knight on f3 it attacks the queen straight away. [%cal Gg4d1] }
+6. f3 Bf5 { Stays on the diagonal. The pawn on f3 has taken the knight's best square and left e3 weak. }
+7. Bd3 Bxd3 { Swaps the light bishops. Black's has done its work, and White's was the piece that would have aimed at the king. }
+8. Qxd3 e6 { Guards d5 at last, and Black is safely level. } *

@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 6...c5"]
+[Name "Advance: 7.O-O"]
+
+7. O-O Nc6 { Develops and hits d4 again. If 8.c3 the game is the main line. [%cal Gc6d4] }
+8. c3 { The main line by another order: ...cxd4 comes next. }
+8... cxd4 *

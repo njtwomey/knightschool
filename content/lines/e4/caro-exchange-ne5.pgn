@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 6...e6"]
+[Name "Exchange: 7.Ne5"]
+
+7. Ne5 { Hits the bishop and clears the way for the bishop on e2 to challenge it. }
+7... Bxe2 { Swaps the bishop off before it gets into trouble. Pieces coming off suits Black, who has the better pawns. }
+8. Qxe2 Nc6 { Develops and challenges the knight on e5 at once. }
+9. Nxc6 bxc6 { Takes back towards the centre: the pawn on c6 joins the guard of d5, and the b-file opens for a rook. The swaps leave Black safely level. } *

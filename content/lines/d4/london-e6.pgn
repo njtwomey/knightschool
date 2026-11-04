@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-main 2.Bf4"]
+[Name "Bishops: Black starts with 2...e6"]
+
+2... e6 { Black shuts in the c8 bishop on move two, before even developing a knight. }
+3. e3 { The set-up does not change. The bishop is out, so e3 costs nothing. }
+3... Bd6 { The fastest way to challenge the f4 bishop. }
+4. Bg3 { Back along the diagonal. If the bishop stays, White has lost nothing, and if Black takes, the h-file opens. }
+4... Bxg3
+5. hxg3 { Towards the centre, with the h-file open for the rook. }
+5... Nf6
+6. Nf3 { The same position as after 4...Bd6 5.Bg3 Bxg3. } *

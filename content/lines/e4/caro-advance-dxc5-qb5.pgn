@@ -1,0 +1,16 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-dxc5 7...Bxc5"]
+[Name "Advance: 7.dxc5 Bxc5 8.Qb5+"]
+
+8. Qb5+ { A check that also attacks the bishop on c5. [%cal Rb5c5] }
+8... Nd7 { Blocks the check and guards the bishop. }
+( 8... Nc6?? { Blocks the check, but now nothing guards the bishop. }
+  9. Qxc5 { White has won a whole bishop. Remember what else a checking piece is attacking. [%csl Rc5] } )
+9. Qxb7 { Takes a pawn, and it is the most common move here. But it costs time: two more queen moves and no development. }
+( 9. b4? { Hits the bishop, and it has to stay where it is guarded. But the pawn on b4 and the queen are both loose. }
+  9... a6 { Hits the queen first. }
+  10. Qxb7 Ra7 11. Qc6 Bxb4+ 12. Bd2 { The pawns are level again, and White's queen is out on a limb with nothing to show for her moves. Black is clearly better: the gain is time. } )
+9... Ne7 { Develops and clears the way to castle. Black is a pawn down and yet stands better: the queen is alone on b7, and the rooks are ready for the b-file and the c-file. }
+10. O-O O-O { Black's lead in development is the reward for the pawn. }
+ *

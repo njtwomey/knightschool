@@ -1,0 +1,14 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-exchange 3...cxd5"]
+[Name "Panov Attack"]
+
+4. c4 { The Panov Attack. White attacks d5 at once and plays for a fight rather than a quiet game. If the pawns come off, White's d4 pawn will have no neighbours. [%cal Rc4d5] }
+4... Nf6 { Guards d5 and develops. The same move as in the rest of the Exchange. }
+5. Nc3 { Adds a second attacker to d5. }
+5... e6 { Guards d5 with a pawn. Here the bishop on c8 has to stay at home: with d5 under fire, Black needs the pawn now. This is the one line where the rule gives way. [%csl Gd5] }
+6. Nf3 Be7 { Develops and gets ready to castle. It keeps the choice of how to recapture on d5. }
+7. cxd5 { White resolves the tension. }
+7... Nxd5 { Takes back with the knight, and it stands exactly where it should: in front of the isolated pawn, on a square no White pawn can ever attack. [%csl Gd5,Yd4] [%idea isolated-queens-pawn] }
+8. Bd3 Nc6 { Adds an attacker to d4. The pawn has no neighbours, so only pieces can guard it. [%cal Gc6d4] }
+9. O-O O-O { Both kings are safe. Black's plan: keep the knight on d5, swap pieces, and turn d4 into a weak pawn in the endgame. } *

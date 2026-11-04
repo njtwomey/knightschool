@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 6...e6"]
+[Name "Exchange: 7.Bg5"]
+
+7. Bg5 { White pins the knight in turn, and the pawn on d4 is looked after by the queen for now. }
+7... Nc6 { Develops and hits d4: the usual plan needs no change. [%cal Gc6d4] }
+8. O-O Be7 { Unpins and develops. Black castles next. } *

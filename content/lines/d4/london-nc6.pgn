@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "main"]
+[Start "london-main 2.Bf4"]
+[Name "2...Nc6: the plain set-up"]
+
+2... Nc6 { The most common reply at this level. It develops a piece, but the knight blocks Black's c-pawn, so the usual ...c5 is gone for now. [%csl Yc7] }
+3. e3 { The set-up does not change. With the c-pawn blocked, d4 is under much less pressure. }
+3... Nf6
+4. Nf3 { Develops and watches e5, which Black is trying to push. }
+4... e6
+5. Nbd2 { White skips c3: there is no ...c5 to answer, so the move can be saved. }
+5... Bd6
+6. Bg3 { Back along the diagonal, as always. }
+6... O-O
+7. Bd3
+7... Re8 { Prepares ...e5, the only break Black has with the c-pawn blocked. [%cal Re6e5] }
+8. Ne5 { Sits on the very square Black wanted. The d4 pawn supports the knight, and if Black takes, dxe5 hits the f6 knight. [%cal Gf3e5,Gd4e5] [%csl Ge5] [%idea outpost] } *

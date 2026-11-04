@@ -1,0 +1,25 @@
+[For "white"]
+[Kind "main"]
+[Name "The London set-up: the main line"]
+
+1. d4 { Takes the centre and opens the diagonal for the c1 bishop, the piece the whole opening is built round. [%cal Gc1f4] }
+1... d5
+2. Bf4 { The bishop comes out first. Once a pawn stands on e3 it would be shut in behind it, so it goes outside the pawn chain now. This one move is what makes a London. [%idea bishop-first] }
+2... Nf6 { Develops and guards d5. }
+3. e3 { Supports d4 and opens the way for the f1 bishop. It costs nothing, because the c1 bishop is already outside. [%cal Ge3d4] }
+3... e6 { Holds d5 again, but shuts in Black's own c8 bishop: the very problem White avoided with 2.Bf4. [%csl Yc8] }
+( 3... Nh5? { Hits the bishop and hopes to win it. But nothing guards the knight, and 3.e3 has just opened the queen's diagonal all the way to h5. [%cal Rd1h5] }
+  4. Qxh5 { Black has given away a knight for nothing. Look along that diagonal whenever a knight lands on h5. [%idea hanging-piece] } )
+4. Nf3 { Develops, covers e5 and brings castling closer. }
+4... c5 { Black's usual plan: strike at d4 from the side, the one pawn break that troubles this set-up. [%cal Rc5d4] }
+5. c3 { Backs up d4, so that if Black takes, a pawn takes back. Pawns on c3, d4 and e3 make a wedge Black cannot easily shift. [%cal Gc3d4,Ge3d4] [%idea centre-pawns] }
+5... Nc6 { Develops and adds a second attacker to d4. }
+6. Nbd2 { The knight goes to d2 because c3 is taken by the pawn. From d2 it supports a later e4 and can follow the other knight towards e5. }
+6... Bd6 { Offers to trade the bishops. White's f4 bishop is its best piece, so Black wants it gone. }
+7. Bg3 { Steps back and keeps the bishop. It still holds the diagonal, and if Black takes on g3 the h-pawn recaptures and opens the h-file for the rook. [%cal Gg3d6] }
+7... O-O
+8. Bd3 { The last piece, on its best square: it aims at h7, beside Black's king, and clears the way for White to castle. [%cal Gd3h7] }
+8... b6 { Gives the c8 bishop a way out at last, through b7. }
+9. Qe2 { Gets ready for e4. The queen supports the push, and White can still castle next move. [%cal Ge3e4] }
+9... Bb7
+10. e4 { The break the whole set-up has been preparing: the knights, the bishop on d3 and the queen all stand behind it. White has more space in the centre, and Black's c8 bishop, which started the game shut in, has only just come out. } *

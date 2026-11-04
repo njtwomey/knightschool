@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "gambit"]
+[Start "caro-classical-f3-gambit 5...Nf6"]
+[Name "Classical: 4.f3 exf3 5.Nxf3 Nf6 6.Bc4"]
+
+6. Bc4 Bf5 { Out comes the bishop. }
+7. O-O e6 { Solid: the pawn blunts the bishop on c4. Black has an extra pawn and a safe king. } *

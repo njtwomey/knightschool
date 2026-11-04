@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 7...Nc6"]
+[Name "Advance: 8.Bg5"]
+
+8. Bg5 { Stops ...Nge7 for a moment and looks at the queen, but the bishop has left b2 without a guard. }
+8... Qb6 { Hits b2 and piles up on d4. [%cal Rb6b2,Gb6d4] }
+9. Qe2 { The queen guards b2 from the side. }
+9... cxd4 10. cxd4 Nge7 { Heads for f5, as ever, and d4 stands under fire from three pieces. } *

@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange-bd3 5...Bg4"]
+[Name "Exchange: 5.Bd3 Bg4 6.c3"]
+
+6. c3 { The position of 5.c3 Nc6 6.Bd3 Bg4 is one move away: ...Nc6 next. }
+6... Nc6 { Develops. If 7.O-O, then ...e6 as usual. }
+7. O-O { The main line of 5.Bd3: ...e6 next. } *

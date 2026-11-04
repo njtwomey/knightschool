@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-nf3-bb5 4...Bd7"]
+[Name "2.Nf3: 4.Bb5+ Bd7 5.Nc3"]
+
+5. Nc3 e6 { Guards d5 and opens the bishop. }
+6. O-O Bxb5 { Swaps the bishops now that White has castled. }
+7. Nxb5 a6 { Drives the knight back to c3 with a gain of time. } *

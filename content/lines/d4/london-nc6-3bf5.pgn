@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-nc6 3.e3"]
+[Name "2...Nc6 and 3...Bf5"]
+
+3... Bf5 { Black's second most common choice here. It leaves b7 and d5 short of help. }
+4. c4 { Hits d5 before Black can cover it. 4.Nf3 is natural, but then 4...Nb4 is annoying and White's edge has gone. [%cal Gc4d5] }
+4... e6
+( 4... Nb4? { Eyes c2, but the knight is loose on b4, and the queen can reach it with check. [%csl Yb4] }
+  5. Qa4+ { Hits the king and the knight together. }
+  5... Nc6 6. cxd5 Qxd5 7. Nc3 { Hits the queen with a developing move. Black has spent four moves on the knight and queen, and after 7...Qa5 8.Qxa5 Nxa5 9.Bxc7 White has won a pawn with a winning game. [%cal Gc3d5,Gf4c7] } )
+5. Nc3 { Develops and hits d5 a second time. }
+5... Nf6
+6. Nf3 { The same position as after 4...Bf5 5.c4 e6 6.Nc3 Nf6, with the move order changed. } *

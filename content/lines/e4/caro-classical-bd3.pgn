@@ -1,0 +1,15 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical 4...Bf5"]
+[Name "Classical: 5.Bd3"]
+
+5. Bd3 { Guards the knight, and it is natural. But the bishop now stands between the queen and d4. [%csl Rd4] }
+5... Qxd4 { Takes the pawn: nothing guards it. The queen can step back when it is attacked, and Black keeps the pawn. This is the Classical's recurring chance: 5...Bxe4 is playable too, but the pawn is free. [%idea blocked-guard] }
+6. Nf3
+( 6. f3? { Guards the knight with a pawn, but it takes f3 from the other knight, so nothing hits the queen. }
+  6... Qb6 { The queen steps clear of Be3 and looks at b2. }
+  7. Qe2 e6 { Black is a clean pawn up, and the pawn on f3 is in the way of White's pieces. } )
+6... Qd8 { Back home. Black is a clean pawn up and only has to finish developing. }
+7. O-O Bxe4 { Swaps the knight, so that the queens can come off too. }
+8. Bxe4 Qxd1 { When a pawn up, swap the queens: it takes the sting out of White's lead in development. }
+9. Rxd1 Nf6 { Develops with a hit on the bishop. Black is a pawn up with no problems at all. } *

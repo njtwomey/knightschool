@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-hillbilly-bb5 5...Nxd7"]
+[Name "Hillbilly: 6.d4"]
+
+6. d4 Ngf6 { Develops: the same move whatever White plays here. }
+7. Nf3 e6 { Guards d5 and opens the bishop. }
+8. O-O { The main line's position by another order: ...Bd6 comes next. }
+8... Bd6 *

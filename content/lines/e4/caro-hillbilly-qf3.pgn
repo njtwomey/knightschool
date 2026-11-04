@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-hillbilly 4...Nf6"]
+[Name "Hillbilly: 5.Qf3"]
+
+5. Qf3 { Brings the queen out early to hit d5. }
+5... Bg4 { Attacks the queen and develops at once: moves like this are how a queen brought out early costs time. [%cal Gg4f3] }
+6. Qg3 Nc6 { Develops again. Black has two pieces out to White's one, and is already clearly better. }
+7. f3 Bf5 { The bishop steps back and keeps its diagonal; the pawn on f3 has blocked White's own queen and knight. } *

@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "rare"]
+[Start "london-main 1.d4"]
+[Name "1...f5: the Dutch"]
+
+1... f5 { The Dutch: Black grabs e4 with a pawn, but weakens e5 and the king's cover. [%csl Ye5] }
+2. Bf4 { Aims straight at e5, the square the f-pawn has given up. }
+2... Nf6
+3. e3
+3... e6
+4. Nf3
+4... Be7
+5. Bd3 { Looks at the f5 pawn and the kingside behind it. }
+5... O-O
+6. h3 { Gives the bishop a retreat on h2. } *

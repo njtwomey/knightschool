@@ -1,0 +1,14 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 3...Bf5"]
+[Name "Advance: 4.h4"]
+
+4. h4 { White threatens h5 and g4, to take the bishop's squares away and trap it. }
+4... h5 { Stops the pawn. The bishop keeps g6 as a retreat, and it cannot be chased by a pawn on h5. The cost is a small hole on g5, which matters little while the centre is shut. [%csl Gh5] }
+5. Bd3 Bxd3 { The usual swap: White's most common fifth move here. }
+6. Qxd3 e6 { Supports d5 and opens the bishop on f8. }
+7. Nf3 { Develops. }
+( 7. f4? { Props up e5, but the bishop on c1 is shut in, and e3 and g4 are weak. }
+  7... Nh6 { The knight heads for f5 and g4, and White's pawns cannot chase it. }
+  8. Be3 Qb6 { Hits b2 and looks at e3 and d4. White is clearly worse with nothing lost yet: the gain is the squares. [%cal Rb6b2] } )
+7... c5 { The usual strike. [%cal Gc5d4] } *

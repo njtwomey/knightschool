@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-be2 4...e6"]
+[Name "Two Knights: 4.Be2 e6 5.O-O"]
+
+5. O-O Nf6 { Develops and hits e4. }
+6. h3 Bxf3 { Takes the knight. }
+7. Bxf3 d4 { Gains a move on the knight and shuts in the bishop on f3 with a pawn on e4 in the way. [%cal Gd5d4] } *

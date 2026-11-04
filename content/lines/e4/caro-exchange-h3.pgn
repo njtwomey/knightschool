@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 6...e6"]
+[Name "Exchange: 7.h3"]
+
+7. h3 { White asks the question a move early. }
+7... Bxf3 { The same answer: take the knight that guards d4 rather than be pushed around. }
+8. Bxf3 Nc6 { Develops with a second look at d4; the bishop on f3 cannot help guard that pawn. }
+9. O-O { The main line's position by another order: ...Bd6 comes next. } *

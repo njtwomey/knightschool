@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights 3...Bg4"]
+[Name "Two Knights: 4.d4"]
+
+4. d4 e6 { With the bishop out, ...e6 supports d5. }
+5. h3 Bxf3 { Takes the knight. }
+6. Qxf3 { The position of 4.h3 Bxf3 5.Qxf3 e6 6.d4: ...Nf6 next. }
+6... Nf6 *

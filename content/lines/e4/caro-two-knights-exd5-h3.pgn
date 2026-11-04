@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-exd5 4...cxd5"]
+[Name "Two Knights: 4.exd5 cxd5 5.h3"]
+
+5. h3 Bxf3 { Takes the knight, as against every h3 here. }
+6. Qxf3 e6 { Guards d5, which the queen and the knight both attack. }
+( 6... Nc6? { Develops, but d5 has only the queen to guard it, against the knight and White's queen. }
+  7. Nxd5 { White has won the d5 pawn, and the knight is guarded by the queen on f3. [%csl Rd5] } )
+7. Bb5+ { The position of 6.exd5 cxd5 7.Bb5+: ...Nc6 next. } *

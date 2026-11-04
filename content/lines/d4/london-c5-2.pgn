@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-main 2.Bf4"]
+[Name "...c5 on move two"]
+
+2... c5 { Hits d4 at once, before the knight has come out. }
+3. e3 { Supports d4. Note that the bishop came out before this move, so nothing is shut in. }
+3... Nc6
+4. c3 { The wedge again. Against ...c5, c3 comes before the knights. }
+4... Nf6
+5. Nf3 *

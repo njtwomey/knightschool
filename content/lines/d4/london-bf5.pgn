@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "main"]
+[Start "london-main 2.Bf4"]
+[Name "2...Bf5: the mirror"]
+
+2... Bf5 { Black copies White and gets the bishop outside before ...e6. It is a good move, but it has a price: nothing guards b7 now. [%csl Yb7] }
+3. e3 { The set-up, as ever. }
+3... e6
+4. Nf3 { Develops first. 4.c4 at once is fine too, but the knight was coming here anyway. }
+4... Nf6
+5. c4 { Hits d5 while Black's bishop cannot get back to help. Qb3 next would hit b7 and d5 together. [%cal Gc4d5,Gd1b3] }
+5... c6 { Holds d5 with a pawn. }
+6. Nc3 { Develops and adds to the pressure. }
+6... Bd6
+7. Bg3 { Same reply to the same offer. If Black takes, the h-file opens and White still has Qb3 to come. } *

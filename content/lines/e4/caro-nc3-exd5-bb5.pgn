@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-nc3-exd5 3...cxd5"]
+[Name "2.Nc3: 3.exd5 cxd5 4.Bb5+"]
+
+4. Bb5+ Bd7 { Blocks and offers the swap, as ever. }
+5. Bxd7+ Qxd7 { The queen must take: the knight on c3 is looking at d5. }
+( 5... Nxd7? { The usual recapture, but here the knight leaves d5 alone. }
+  6. Nxd5 { White has won the d5 pawn, and the queen on d8 cannot take back: the knight on d7 is in the way. [%csl Rd5] } )
+6. Nf3 Nc6 { Develops, with ...e6 and ...Nf6 to come. Black is comfortable: White has no pawn in the centre. } *

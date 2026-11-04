@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "rare"]
+[Start "london-main 1.d4"]
+[Name "1...c5: the Old Benoni"]
+
+1... c5 { The one first move the system does not meet in the usual way. }
+2. d5 { Against 1...c5 White does not need the bishop: the pawn pushes past with space, and Black's c-pawn no longer hits anything. }
+2... Nf6
+3. Nc3
+3... d6
+4. e4 { Builds the big centre. [%idea centre-pawns] }
+4... g6
+5. Nf3
+5... Bg7
+6. Be2
+6... O-O
+7. O-O { The pawns on d5 and e4 cramp Black's pieces, and the king is safe. } *

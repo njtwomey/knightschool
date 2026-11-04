@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-main 5.c3"]
+[Name "The set-up: Black takes on d4"]
+
+5... cxd4 { Trades in the centre and asks White which pawn to use. }
+6. exd4 { The e-pawn takes back. It opens the e-file for a rook and the diagonal for the queen, and the f4 bishop is still outside the chain. [%cal Gf4c7] }
+6... Bd6
+7. Bg3 { Keeps the bishop, as in every line of this opening. } *

@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights-d4 4...e6"]
+[Name "Two Knights: 4.d4 e6 5.exd5"]
+
+5. exd5 cxd5 { Takes back with the pawn. }
+6. h3 Bxf3 { Takes the knight. }
+7. Qxf3 Nc6 { Develops and hits d4. The pin has done its job: d4 has no guard left. [%cal Gc6d4] } *

@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-main 8.Bd3"]
+[Name "The set-up: Black closes with ...c4"]
+
+8... c4 { Hits the bishop and gains space on the queenside, but it takes all the pressure off d4. }
+9. Bc2 { Stays on the diagonal that points at h7. }
+9... b5
+10. e4 { With d4 safe and the queenside closed, White breaks in the centre, the same plan as ever. [%cal Ge3e4] } *

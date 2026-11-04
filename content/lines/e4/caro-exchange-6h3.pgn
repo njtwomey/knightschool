@@ -1,0 +1,12 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 5...Bg4"]
+[Name "Exchange: 6.h3"]
+
+6. h3 { Hits the bishop before White has developed further. }
+6... Bxf3 { Takes the knight. Black is happy to have the knights in a closed position, and the queen comes to f3, away from d4. }
+7. Qxf3 { Now the queen and the knight on c3 both look at d5. [%cal Rf3d5,Rc3d5] }
+7... e6 { Guards d5 with a pawn, so that nothing on the d-file has to stay at home to protect it. }
+( 7... Nbd7? { Develops, but the knight steps in front of the queen, and d5 loses its second defender. }
+  8. Nxd5 Nxd5 9. Qxd5 { White has simply won the d5 pawn. [%csl Rd5] } )
+8. Bd3 Nc6 { Develops with an attack on d4, which has no defender now that the queen and the knight have both left it. Black is level, with the easier game. [%cal Gc6d4] } *

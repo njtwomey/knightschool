@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 3...Bf5"]
+[Name "Advance: 4.Bd3"]
+
+4. Bd3 { Offers the same swap a move earlier. }
+4... Bxd3 { Takes: White's best minor piece comes off, and the queen is pulled forward. }
+5. Qxd3 e6 { Supports d5. The light squares in White's camp are short of a guard now. }
+6. Nf3 { The main line's position, by another order: ...c5 next. } *

@@ -1,0 +1,11 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-advance 1...c6"]
+[Name "2.Nf3: into the Exchange"]
+
+2. Nf3 { Nearly as common as 2.d4 at this level. White develops first and leaves the d-pawn at home for now. }
+2... d5 { The same move as always. The pawn on c6 is ready to recapture, so ...d5 needs no preparing. [%cal Gd5e4] }
+3. exd5 { By far the most common reply: White does not want to defend e4 and does not want to push past. }
+3... cxd5 { As in the Exchange. }
+4. d4 { And this is the Exchange, by another order: 4...Nf6 comes next, and everything learned there applies. }
+4... Nf6 *

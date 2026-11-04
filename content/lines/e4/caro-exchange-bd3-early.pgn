@@ -1,0 +1,18 @@
+[For "black"]
+[Kind "main"]
+[Start "caro-exchange 3...cxd5"]
+[Name "Exchange: 4.Bd3 and 5.c3"]
+
+4. Bd3 { The old Exchange set-up: the bishop aims at h7, c3 comes next to hold d4, and Qb3 and Bf4 can follow. }
+4... Nf6 { The same first move as always. It keeps ...Bg4 open and guards d5. }
+5. c3 { Holds d4 with a pawn, so that the queen is free to go to b3. }
+5... Nc6 { Develops before the bishop moves: on c6 the knight attacks d4 and answers a queen on b3 with ...Na5. }
+6. Bf4 { The bishop gets outside the pawn chain, as Black's did in other lines, and stops ...Qc7. }
+6... Bg4 { The bishop comes out before ...e6. With the knight still on g1, it attacks the queen as well: White has to answer it. [%cal Gg4d1] }
+7. Qb3 { The critical try: d5 and b7 are both attacked. [%cal Rb3b7,Rb3d5] }
+7... Qd7 { Guards both pawns at once. It looks awkward, but the queen is doing a real job, and ...e6 and ...Bd6 follow. }
+( 7... e6? { Natural, and it guards d5, but it forgets b7. }
+  8. Qxb7 { White wins the b7 pawn with an attack on the rook on a8. Black has ...Rc8 and some activity, but nowhere near enough for a clear pawn, and the c6 knight stays loose. [%csl Rb7] } )
+8. Nd2 e6 { Now ...e6 is safe, with d5 and b7 both looked after. }
+9. Ngf3 Bd6 { Offers a swap of the dark bishops. White's one on f4 is a good piece; the fewer of them left, the easier Black's game. }
+10. Bxd6 Qxd6 { The queen comes back to the centre with a good view of d4 and h2. Black castles next and is level. } *

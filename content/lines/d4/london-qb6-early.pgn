@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-c5 4.c3"]
+[Name "...Qb6 before ...Nc6"]
+
+4... Qb6 { The same idea one move sooner. }
+5. Qc2 { The same answer. Here it also sets a trap, because the knight has not yet come to c6. }
+5... Nc6
+( 5... Bf5?? { The move that is so good with a knight on c6 loses here. The b8 knight still blocks the rook on a8 from the back rank. }
+  6. Qxf5 { Takes the bishop. }
+  6... Qxb2 7. Qc8# { Mate: with the knight still on b8 the rook cannot get to c8. That is the difference one move makes. } )
+6. Nf3 *

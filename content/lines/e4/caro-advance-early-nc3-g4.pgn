@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-early-nc3 4...e6"]
+[Name "Advance: 4.Nc3 e6 5.g4"]
+
+5. g4 { Chases the bishop, at the cost of a loose kingside. }
+5... Bg6 { Stays on the diagonal and outside the chain. Do not take on c2 or e4: the bishop is worth more than a pawn. }
+6. Nge2 c5 { Strikes at d4 before White finishes building. [%cal Gc5d4] }
+7. h4 h5 { Stops h5, which would trap the bishop on g6. The pawn on g4 has been hit as well. [%csl Rh5] } *

@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "london-nc6 3.e3"]
+[Name "2...Nc6 and 3...e6"]
+
+3... e6 { Black shuts in the c8 bishop, so there is no ...Bf5 or ...Bg4 to worry about. }
+4. Nf3
+4... Bd6
+5. Bg3 { Keeps the bishop, whatever the move order. }
+5... Nf6
+6. Nbd2 { The same position as after 3...Nf6 4.Nf3 e6 5.Nbd2 Bd6 6.Bg3. } *

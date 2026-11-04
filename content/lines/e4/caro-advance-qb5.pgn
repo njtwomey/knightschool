@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 6...c5"]
+[Name "Advance: 7.Qb5+"]
+7. Qb5+ { Looks active and hits b7. }
+7... Qd7 { Blocks with the queen and offers a swap. Blocking with the knight would leave b7 to fall. }
+8. Qxd7+ Nxd7 { Queens are off, and Black still has the better pawns: with the light bishops gone, White's dark squares are the ones that need guarding, and ...cxd4 can open the c-file when wanted. }
+9. c3 Ne7 { Heads for f5 or c6. The chain still has its weak base, and Black is at least level. } *

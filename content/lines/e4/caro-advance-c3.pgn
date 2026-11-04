@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 4...e6"]
+[Name "Advance: 5.c3"]
+
+5. c3 { Holds d4 before Black has hit it. }
+5... c5 { Strikes at d4 all the same. }
+6. Bd3 Bxd3 { The same swap as ever. }
+7. Qxd3 { The main line's position: ...Nc6 next. } *

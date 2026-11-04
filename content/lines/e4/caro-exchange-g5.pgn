@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange 5...Bg4"]
+[Name "Exchange: 6.Bg5"]
+
+6. Bg5 { Puts the same question to Black: now the knight on f6 is pinned too. }
+6... e6 { Calm development: the pawn guards d5, which the pin on f6 has made a little less safe. }
+7. h3 Bxf3 8. Qxf3 Nc6 { Develops and hits d4 straight away, since the queen has left the d-file. [%cal Gc6d4] } *

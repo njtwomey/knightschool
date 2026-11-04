@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 3...Bf5"]
+[Name "Advance: 4.f4"]
+
+4. f4 { A popular way to prop up e5, but the pawns now take the squares White's pieces want. }
+4... e6 { The usual ...e6. }
+5. Nf3 c5 { Strikes at d4: f4 has done nothing to help that pawn. }
+6. c3 Nc6 { A second attacker on d4. }
+7. Be3 Qb6 { A third attacker, and b2 hangs too. [%cal Gb6d4,Rb6b2] } *

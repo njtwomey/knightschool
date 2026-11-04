@@ -1,0 +1,15 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical 4...Bf5"]
+[Name "Classical: 5.f3"]
+
+5. f3 { Guards the knight with a pawn, but weakens e3 and the diagonal from h4 to e1, which leads straight to White's king. [%cal Gd8h4] }
+5... e6 { The usual ...e6. It opens the queen's diagonal to h4: if the knight leaves e4, or the bishop takes it and the f-pawn takes back, ...Qh4+ comes with force. }
+6. Be3 { Holds d4. }
+( 6. Bd3? { The natural move, but it cuts the queen off from d4. [%csl Rd4] }
+  6... Qxd4 { Black has won a pawn, and White has nothing for it. Note that d4 falls for the same reason in every line of the Classical: a bishop on d3 stands in the queen's way. [%idea blocked-guard] }
+  7. c3 Qd5 { The queen stands safe in the centre, with a clear extra pawn. } )
+( 6. Bc4? { Develops, but it does not stop the idea of ...Bxe4 and ...Qh4+. }
+  6... Bxe4 7. fxe4 Qh4+ 8. Kf1 Qxe4 { The queen came with check and took e4, and now hits d4, c2 and g2. Black is a clean pawn up, and White's king has lost the right to castle. } )
+6... Nd7 { Develops, and the bishop on f5 stays where it is. }
+7. Bd3 Ngf6 { Develops the last knight. Black has an easy game, with White's pawn on f3 doing nothing but getting in the way. } *

@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 7...Nc6"]
+[Name "Advance: 8.Be3"]
+
+8. Be3 { Guards d4 with a piece. }
+8... cxd4 { The same plan: open the c-file before anything else. }
+9. cxd4 Nge7 { Heads for f5, where the knight also hits the bishop on e3. [%cal Ge7f5,Rf5e3] }
+10. Nc3 Nf5 { Hits d4 and e3 together. Black castles next and plays ...Rc8. } *

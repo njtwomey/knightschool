@@ -1,0 +1,6 @@
+[For "black"]
+[Kind "gambit"]
+[Start "caro-classical-f3-gambit 4...exf3"]
+[Name "Classical: 4.f3 exf3 5.Qxf3"]
+
+5. Qxf3 Qxd4 { The queen has left d4 without a guard, so Black takes a second pawn. Black is two pawns up and only has to develop. } *

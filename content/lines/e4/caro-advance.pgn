@@ -1,0 +1,28 @@
+[For "black"]
+[Kind "main"]
+[Name "Advance: the bishops come off"]
+
+1. e4
+1... c6 { Gets ready for ...d5 with a pawn behind it, so that Black can always recapture with a pawn. Unlike 1...e6, it leaves the diagonal of the c8 bishop open. [%cal Gc6d5] }
+2. d4 { Two pawns in the centre: the most common reply. }
+2... d5 { Challenges e4 straight away. The pawn on c6 stands behind it, so if White takes, Black takes back with a pawn and keeps a pawn in the centre. [%cal Gd5e4] }
+3. e5 { The Advance: White gains space and shuts the centre. But the pawn on e5 leans on d4, and d4 is where Black will hit. [%csl Yd4] }
+3... Bf5 { The point of the Caro-Kann: the light bishop gets out before ...e6 closes its diagonal. In the French, the same bishop stays locked behind its own pawns. [%cal Gc8f5] [%idea bishop-first] }
+4. Nf3 { Develops and supports d4 and e5. }
+4... e6 { With the bishop safely outside the chain, ...e6 costs nothing: it supports d5 and frees the bishop on f8. }
+5. Bd3 { By far the most common move at this level: White offers to swap the light bishops. }
+( 5. Bg5? { Develops, but the bishop has left the queenside, and b2 has lost its guard. }
+  5... Qb6 { Hits b2 and looks at d4 as well. White has to spend a move answering it. [%cal Rb6b2,Gb6d4] }
+  6. b3 c5 { Black hits d4 with a clear lead in the fight for the centre. Nothing is won yet: the gain is time, and the long dark diagonal White has just weakened. } )
+5... Bxd3 { Takes the swap gladly. This bishop could have become a problem piece, and White's was its best minor piece: all its central pawns stand on dark squares, so the light bishop had the open lines. }
+6. Qxd3 c5 { The plan of the whole Advance: strike at d4, the base of the chain. If d4 goes, the pawn on e5 has nothing to lean on. [%cal Gc5d4] [%csl Yd4] [%idea attack-the-base] }
+7. c3 { Gives d4 a pawn to lean on. }
+7... Nc6 { A second attacker on d4, and a natural developing move. [%cal Gc6d4] }
+8. O-O cxd4 { Opens the c-file for a rook. It also fixes White's d-pawn as a target: the pawn chain now has no pawn behind it. }
+9. cxd4 { Keeps the pawn chain, and the d-pawn is now the piece of it that Black will attack. }
+( 9. Nxd4? { Takes back with the knight, and forgets what the knight on f3 was doing. }
+  9... Nxe5 { The knight has left e5 without its guard, and Black takes a pawn with an attack on the queen. }
+  10. Qb5+ Qd7 11. Qe2 Bd6 { Black is a clean pawn up, and the knight stands in the middle of the board. [%csl Ge5] } )
+9... Nge7 { The knight is going to f5, the square the bishop has left. It cannot go by f6, where the pawn on e5 would chase it. [%cal Ge7f5] }
+10. Nc3 Nf5 { Hits d4 again. No pawn can easily chase this knight, and Black's plan is plain: ...Be7, castle, ...Rc8. [%cal Gf5d4,Gc6d4] }
+11. Be3 Be7 { Black castles next. White has a little more space; Black has the targets, and the rook comes to c8. } *

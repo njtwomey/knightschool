@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical 6...Nd7"]
+[Name "Classical: 7.c3"]
+
+7. c3 e6 { The usual ...e6 and ...Ngf6. }
+8. Bd3 Bxd3 { The same swap. }
+9. Qxd3 Ngf6 { The same plan: ...Be7, castle. } *

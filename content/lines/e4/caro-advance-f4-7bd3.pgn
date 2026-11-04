@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-f4 6...Nc6"]
+[Name "Advance: 4.f4 e6 5.Nf3 c5 6.c3 Nc6 7.Bd3"]
+
+7. Bd3 Bxd3 { The usual swap. }
+8. Qxd3 Nh6 { Heads for f5: with White's pawn on f4, the knight cannot be chased by g4 or Bxh6 without cost. [%cal Gh6f5] } *

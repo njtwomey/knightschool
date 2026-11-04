@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "gambit"]
+[Start "london-englund 2.dxe5"]
+[Name "The Englund: 2...d6"]
+
+2... d6 { Black gives the pawn for open lines. }
+3. exd6 { Takes. Black gets a bishop out in return, but a pawn is a pawn. }
+3... Bxd6
+4. Nc3 { Develops towards the centre, and heads for b5. }
+4... Nf6
+5. Nb5 { Hits the d6 bishop, the one piece Black has to show for the pawn. If it stays, White gets the two bishops on top of the extra pawn. [%cal Gb5d6] } *

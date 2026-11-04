@@ -1,0 +1,11 @@
+[For "black"]
+[Kind "trap"]
+[Start "caro-hillbilly 2...d5"]
+[Name "Hillbilly: 3.Bb3 and the queen raid"]
+
+3. Bb3 { Saves the bishop and leaves e4 to its fate. }
+3... dxe4 { Takes the pawn. Black is a pawn up and no worse for it. [%csl Ge4] }
+4. Qh5 { The queen and bishop line up on f7: White threatens mate. [%cal Rh5f7,Rb3f7] [%csl Rf7] }
+4... g6 { Blocks the queen's line to f7 and attacks the queen with a pawn. }
+5. Qe5 { Hits the rook on h8, and for a moment it looks clever. }
+5... Nf6 { Blocks the attack on the rook with a developing move. White's queen stands alone in the middle of the board, and Black is a pawn up with the easier game. [%csl Gf6] } *

@@ -1,0 +1,36 @@
+[For "white"]
+[Kind "gambit"]
+[Start "london-main 1.d4"]
+[Name "1...e5: the Englund Gambit"]
+
+1... e5 { The Englund Gambit: Black gives a pawn for quick play and a set of traps. It is unsound, but White scores badly against it at this level, because the traps work. }
+2. dxe5 { Take it. The pawn is safe as long as White answers the traps, and any other move lets Black off the hook. }
+2... Nc6 { Develops with an attack on e5. }
+3. Nf3 { Defends e5 and develops. }
+3... Qe7 { Black lines up on e5 again, and sets the trap. }
+4. Bf4 { The London bishop, doing the job it always does: defending e5 from outside the chain. }
+4... Qb4+ { The point of the gambit: a check that also hits f4 and b2 at once. Everything now depends on how White blocks it. [%cal Rb4f4,Rb4b2] }
+5. Bd2 { The only good block. It answers the check and moves the attacked bishop to safety in one go. [%cal Gf4d2] }
+( 5. Qd2? { Blocks the check, but b2 loses its only defender. }
+  5... Qxb2 { Hits the rook on a1 and the knight on b1 at once. White loses the rook. [%idea fork] } )
+( 5. Nbd2? { Develops and blocks the check, but forgets that the queen also sees f4. }
+  5... Qxf4 { A whole bishop gone for nothing. } )
+( 5. c3? { Hits the queen, which is simply happy to move. }
+  5... Qxf4 { The bishop goes again. Every block but the bishop's leaves the bishop to be taken. } )
+( 5. Nc3? { The most natural block of all, and it throws the win away. }
+  5... Qxf4 6. Nd5 Qe4 7. Nxc7+ Kd8 8. Nxa8 { White gets the rook, but the knight is stuck on a8 and the extra pawn has gone. The game is level, when a moment ago White was well on top. } )
+5... Qxb2 { Black's queen takes the pawn, and now hits the rook on a1. }
+6. Nc3 { Brings out a knight and makes the rook on a1 safe: with b1 clear, White's queen would take back if the rook is taken. [%cal Gd1a1] }
+( 6. Bc3?? { Hits the queen, and walks into the trap the whole gambit is built for. More than a quarter of players at this level go this way, and White wins few of those games. }
+  6... Bb4 { Pins the bishop to the king. The rook on a1 is lost. If 7.Qd2 Bxc3 8.Qxc3, then 8...Qc1 is mate. [%icon pin@c3] [%idea pin] }
+  7. Bd2 Qxa1 { White is a rook down. } )
+6... Bb4 { Pins the knight, so it looks as though Black is the one attacking. }
+7. Rb1 { Hits the queen. She cannot stay on b2, and with the rook gone from a1 there is nothing left for her to take. [%cal Ga1b1] }
+7... Qa3 { The only safe square. }
+( 7... Qxc3? { Tries to break out by giving the queen for two pieces. }
+  8. Bxc3 Bxc3+ 9. Nd2 { White has a queen against a knight and a bishop, a winning difference. } )
+8. Rb3 { Hits the queen again, gaining another move. }
+8... Qa5 { Black has to keep her on the a-file. }
+9. e4 { White takes the centre. A pawn up and nearly developed, White now has a winning game: Black's early queen has only wasted time. }
+9... Bxc3
+10. Bxc3 { Takes back with the bishop, which also hits the queen on a5. Next comes Bd3 and castling, with an extra pawn and the two bishops. [%cal Gc3a5] } *

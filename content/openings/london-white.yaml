@@ -1,0 +1,489 @@
+name: London System
+side: white
+start: 1. d4
+level: first
+style: [solid, system]
+summary: >-
+  One set-up against almost everything: the bishop to f4 first, then e3, Nf3, c3, Bd3 and Nbd2, with the same plans
+  from game to game.
+about:
+  idea: >-
+    Bring the c1 bishop out to f4 before e3 shuts it in, then build the same solid position whatever Black does: pawns
+    on d4, e3 and c3, knights on f3 and d2, the other bishop on d3, the king castled. Then play for Ne5 or the e4 break.
+  risks: >-
+    Slow if White only shuffles, and Black equalises with accurate play. The move to respect is ...c5 with ...Qb6,
+    which hits b2; White's score drops there more than anywhere else after 1...d5.
+  suits: >-
+    Beginners who want few lines to learn, plans that repeat from game to game, and a safe king. There is a little
+    more to know against the Englund Gambit, because its traps work.
+  origin: >-
+    Named after the London tournament of 1922, where several masters used it. It was a quiet backwater for decades
+    until Magnus Carlsen and other leading players took it up in the 2010s.
+ideas: [bishop-first, centre-pawns, outpost, castle-early, pin, poisoned-pawn, queen-trap, fork, hanging-piece]
+variations:
+  - id: set-up
+    name: The set-up
+    intro: >-
+      The position White aims for against almost everything. Learn this one and most of the opening is learned: the
+      bishop outside the chain, the pawn wedge on c3, d4 and e3, the knights on f3 and d2, the bishop on d3, then the
+      push e4 or the jump Ne5.
+    lines: [london-main, london-main-c4, london-be7, london-main-5cxd4]
+    plans:
+      - Bf4 first, then e3, Nf3, c3, Nbd2 and Bd3, in almost any order.
+      - Keep the bishop with Bg3 when Black offers a trade on d6.
+      - When everything is in place, break with e4 or jump to e5.
+    questions:
+      - id: why-bishop-first
+        at: 1. d4 d5 2. Bf4
+        ask: Why does White play Bf4 before e3?
+        answers: [[shut], [block], [behind], [bury], [stuck], [trapped], [outside]]
+        examples:
+          right:
+            - e3 would block in the bishop
+            - the bishop gets out before e3 shuts it in
+            - so it is outside the pawn chain
+          wrong: [to attack the queen, to castle, it controls the centre]
+        explain: >-
+          Once a pawn is on e3 the c1 bishop would be stuck behind it. Coming out first keeps it outside the pawn
+          chain, and then e3 costs nothing.
+      - id: why-not-nh5
+        at: 1. d4 d5 2. Bf4 Nf6 3. e3 Nh5
+        ask: Black's knight hits the bishop on f4. How does White punish 3...Nh5?
+        answers: [[Qxh5], [queen, h5], [queen, knight]]
+        examples:
+          right: [Qxh5, the queen takes the knight on h5, the queen wins the knight]
+          wrong: [move the bishop away, Bg3, take the bishop]
+        explain: >-
+          3.e3 opened the queen's diagonal to h5, and nothing guards the knight there, so 4.Qxh5 wins it for nothing.
+  - id: bishop-trade
+    name: When Black offers the bishops
+    intro: >-
+      Black's quickest way to challenge the London is ...Bd6, aiming to trade off White's best piece. White steps back
+      with Bg3, and if Black takes, the h-pawn recaptures and the rook gets an open file without having moved.
+    lines: [london-bd6, london-bxg3, london-e6, london-e6-nf6, london-tr-e6, london-e6-c5]
+    plans:
+      - Answer ...Bd6 with Bg3, and recapture on g3 with the h-pawn.
+    questions:
+      - id: which-pawn-g3
+        at: 1. d4 d5 2. Bf4 Nf6 3. e3 e6 4. Nf3 Bd6 5. Bg3 Bxg3
+        ask: Black has taken on g3. Which pawn takes back, and why?
+        answers: [[h-pawn], [h pawn], [hxg3], [h-file], [h file]]
+        examples:
+          right: [the h-pawn, hxg3 because it opens the h-file, h pawn towards the centre]
+          wrong: [the f-pawn, the knight takes]
+        explain: >-
+          The h-pawn. White's pawns stay together, the pawn moves towards the centre, and the rook on h1 gets an open
+          file without moving.
+  - id: c5-and-qb6
+    name: ...c5 and ...Qb6
+    intro: >-
+      The test of the London. Black keeps the c8 bishop free, hits d4 with ...c5, and then aims the queen at b2, which
+      the c1 bishop left behind. White holds d4 with c3 and guards b2 with Qc2, and has to know one tactic there.
+    lines: [london-c5, london-c5-e6, london-qb6, london-qb6-early, london-c5-2, london-c5-cxd4]
+    plans:
+      - Meet ...c5 with c3 before anything else.
+      - Meet ...Qb6 with Qc2. If ...Bf5 hits the queen, take on c5.
+      - If the bishop leaves c8 for g4, hit b7 with Qb3.
+    questions:
+      - id: why-not-qxf5
+        at: 1. d4 d5 2. Bf4 Nf6 3. e3 c5 4. c3 Nc6 5. Nf3 Qb6 6. Qc2 Bf5
+        ask: The bishop on f5 hits White's queen and looks free. Why must White not play 7.Qxf5?
+        answers: [[b2], [Qxb2], [rook]]
+        examples:
+          right:
+            - the queen must keep guarding b2
+            - after Qxb2 the rook on a1 is lost
+            - Black takes b2 and wins the rook
+          wrong: [the bishop is defended, the queen gets trapped on f5, it is a fork]
+        explain: >-
+          The queen is guarding b2. If she leaves, 7...Qxb2 hits the rook on a1, which cannot move because the knight on
+          b1 is in the way. The right move is 7.dxc5, hitting Black's queen, so the queens come off together.
+  - id: knight-c6
+    name: 2...Nc6
+    intro: >-
+      The most common reply to 2.Bf4 at this level. The knight blocks
+      Black's c-pawn, so the main source of counterplay is gone. White plays the same set-up and can leave out c3, and
+      Ne5 stops the only break Black has left.
+    lines:
+      [
+        london-nc6,
+        london-tr-nc6,
+        london-tr-main-nc6,
+        london-nc6-bxg3,
+        london-nc6-bg4,
+        london-nc6-3e6,
+        london-nc6-3e6-nf6,
+        london-e6-nc6,
+        london-nc6-3f6,
+        london-nc6-3a6,
+      ]
+    plans:
+      - Same set-up, without c3 until d4 needs it.
+      - Put a knight on e5 before Black gets ...e5 in.
+    questions:
+      - id: why-no-c3
+        at: 1. d4 d5 2. Bf4 Nc6 3. e3 Nf6 4. Nf3 e6 5. Nbd2
+        ask: In the main set-up White plays c3. Why can it wait here?
+        answers: [[c5], [c-pawn], [c pawn], [blocked]]
+        examples:
+          right: [Black cannot play ...c5, the knight blocks the c-pawn, the c pawn is blocked by the knight]
+          wrong: [White wants to castle, c3 is a bad move, to develop the bishop]
+        explain: >-
+          c3 is there to answer ...c5. With a knight on c6 the c-pawn cannot move, so d4 is under little pressure and
+          White can spend the move on something else.
+  - id: bishop-f5
+    name: 'The bishop on f5: strike with c4'
+    intro: >-
+      When Black's bishop goes to f5, b7 has lost its guard and d5 has lost a friend. Here White changes the plan: c4
+      hits d5 at once, and Qb3 is ready to hit b7 as well. This is the one place in the opening where White plays c4
+      rather than c3.
+    lines:
+      [
+        london-nc6-bf5,
+        london-nc6-3bf5,
+        london-nc6-3bf5-bb4,
+        london-nc6-3bf5-nf6,
+        london-nc6-3bf5-dxc4,
+        london-bf5,
+        london-bf5-bd6,
+        london-bf5-nf6,
+        london-bf5-nc6,
+        london-tr-bf5,
+      ]
+    plans:
+      - Against ...Bf5, play c4, Nc3 and aim Qb3 at b7 and d5.
+    questions:
+      - id: why-c4
+        at: 1. d4 d5 2. Bf4 Bf5 3. e3 e6 4. Nf3 Nf6 5. c4
+        ask: White usually plays c3. Why is c4 strong once Black's bishop has gone to f5?
+        answers: [[b7], [Qb3]]
+        examples:
+          right: [b7 has no defender, Qb3 hits b7 and d5, the bishop left b7 unguarded]
+          wrong: [it develops a piece, it stops ...e5, to protect d4]
+        explain: >-
+          The bishop left c8, so nothing guards b7. c4 hits d5, and Qb3 next hits d5 and b7 at once, so Black cannot
+          defend everything comfortably.
+  - id: nf6-set-ups
+    name: 1...Nf6
+    intro: >-
+      Black waits to show which set-up it wants. 2.Bf4 fits them all. Against ...g6 and ...d6 the bishop on f1 goes to
+      e2 and h3 gives the f4 bishop a home on h2; against ...e6 and ...d5 the game is back in the main line.
+    lines:
+      [
+        london-g6,
+        london-d6,
+        london-tr-g6d6,
+        london-nf6-d5-g6,
+        london-g6-4d5,
+        london-nf6-d5,
+        london-nf6-e6,
+        london-nf6-e6-d5,
+        london-nf6-c5,
+        london-nf6-qb6,
+      ]
+    plans:
+      - Against a fianchetto, play Be2, h3 and castle, then fight for e4.
+      - Keep the bishop away from ...Nh5 and ...e5 with h3.
+    questions:
+      - id: nb5-threats
+        at: 1. d4 Nf6 2. Bf4 c5 3. e3 Qb6 4. Nc3 Qxb2 5. Nb5
+        ask: Black took the pawn on b2. What are the two threats after 5.Nb5?
+        answers: [[Nc7], [fork], [Rb1], [trap]]
+        examples:
+          right: [Nc7 check forking king and rook, Rb1 traps the queen, a fork on c7 and Rb1]
+          wrong: [it attacks the bishop, take the queen, Nxd6]
+        explain: >-
+          Nc7+ would fork the king and the rook on a8, and Rb1 would trap the queen. Black has to find 5...Nd5, the one
+          move that deals with both.
+  - id: englund
+    name: The Englund Gambit
+    intro: >-
+      1...e5 gives a pawn for traps, and at this level the traps work: after 4...Qb4+ White scores well under half.
+      White takes the pawn, puts the bishop on f4 as usual, and has to know the one safe answer to the check. Then Black
+      has nothing and White is winning.
+    lines:
+      [
+        london-englund,
+        london-englund-nb4,
+        london-englund-bc5,
+        london-englund-d6,
+        london-englund-d6nc6,
+        london-englund-f6,
+      ]
+    plans:
+      - Take on e5, defend it with Nf3 and Bf4, and answer ...Qb4+ with Bd2.
+      - After ...Qxb2, play Nc3 and Rb1 and chase the queen.
+    questions:
+      - id: englund-block
+        at: 1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+
+        ask: Black's queen gives check and also hits the bishop on f4. Which piece blocks safely on d2?
+        answers: [[Bd2], [bishop]]
+        examples:
+          right: [Bd2, the bishop blocks on d2, bishop to d2]
+          wrong: [Nbd2, Qd2, the knight]
+        explain: >-
+          Bd2 blocks the check and moves the attacked bishop to safety in one go. Nbd2 leaves the bishop to be taken,
+          and Qd2 lets the queen take b2 and fork the rook and the knight.
+  - id: other-first-moves
+    name: Other first moves
+    intro: >-
+      1...e6 usually comes back to the main line. 1...f5 meets the same bishop move, aimed at the e5 square it has
+      weakened. 1...c5 is the one first move the system does not fit, so White takes space with 2.d5 instead.
+    lines: [london-e6-first, london-e6-first-nf6, london-e6-first-c5, london-c5-first, london-f5-first]
+    plans:
+      - Against nearly every first move, play 2.Bf4 and the set-up. Against 1...c5, play 2.d5.
+setup:
+  title: How the London System starts
+  text: >-
+    The London begins with 1.d4, taking the centre and opening the c1 bishop's diagonal. Then, against almost any reply,
+    the bishop goes to f4 on move two. It has to come out before e3, or it would be shut in behind its own pawn. Once it
+    is out, White can build the same quiet position in nearly every game, so there is far less to learn than in most
+    openings.
+steps:
+  london-main:1:
+    title: The bishop, then the wedge
+    text: >-
+      The first half of the set-up. The bishop is already outside, so e3 costs nothing, and the knight comes to f3. When
+      Black hits d4 with ...c5, the pawn goes to c3, and the centre stands on three pawns that support each other. Black,
+      with a pawn on e6, has shut in the bishop White took care to bring out.
+  london-main:2:
+    title: Keep the bishop, then play e4
+    text: >-
+      The second half. The knight goes to d2 because the pawn holds c3. When Black offers the bishops, Bg3 keeps yours,
+      and Bd3 aims at h7. All of it points to one move: e4, the break the pieces have been lining up behind.
+  london-main-c4:1:
+    title: When Black closes with ...c4
+    text: >-
+      8...c4 hits the bishop and gains space, but it lets go of d4. The bishop stays on its diagonal with Bc2, and White
+      breaks with e4 just the same.
+  london-be7:1:
+    title: When Black plays ...Be7
+    text: >-
+      With no bishop on d6, the f4 bishop has nothing to fear. The usual moves follow in whichever order Black allows,
+      with c3 held back until ...c5 makes it necessary. Then the knight jumps to e5.
+  london-main-5cxd4:1:
+    title: When Black takes on d4
+    text: >-
+      Take back with the e-pawn. It opens the e-file, and the f4 bishop is still outside the chain. Against ...Bd6, keep
+      the bishop as always.
+  london-bd6:1:
+    title: When Black plays ...Bd6 at once
+    text: >-
+      Bg3 is the reply to ...Bd6 in every line of this opening: the bishop stays on its diagonal and the question goes
+      back to Black. The rest is the set-up, which arrives at the main line's position in a different order.
+  london-bxg3:1:
+    title: When Black takes on g3
+    text: >-
+      Black has traded off White's good bishop, but it has cost time. The h-pawn takes back, so the pawns stay together
+      and the rook on h1 has an open file without moving. Castling short then puts Black's king at the end of that file,
+      and White scores very well when it does.
+  london-e6:1:
+    title: When Black starts with 2...e6
+    text: >-
+      Black shuts in the c8 bishop before doing anything else, and the set-up carries on regardless. After ...Bd6 and
+      Bg3, the game runs into the position with the open h-file.
+  london-e6-nf6:1:
+    title: When Black develops first
+    text: >-
+      If Black plays ...Nf6 instead of taking on g3, Nf3 follows, and the position is one you already know.
+  london-e6-c5:1:
+    title: 2...e6 and ...c5
+    text: >-
+      The same wedge, in a different order: c3 first, then the knights, and the game is back in the main line.
+  london-c5:1:
+    title: When Black keeps the bishop free
+    text: >-
+      Black plays ...c5 before ...e6, so the c8 bishop can get out. c3 holds d4, and Nbd2 guards against the pin. But a
+      bishop that leaves c8 leaves b7 behind, and Qb3 goes straight for it. Watch out for 5...Bf5 too: nothing guards c5
+      then, so White takes it, and that comes next as a follow-up.
+  london-c5:2:
+    title: Breaking the pin
+    text: >-
+      Black's queen has gone backwards to guard b7. h3 asks the bishop what it wants, Be2 ends the pin, and White castles
+      with the more active queen.
+  london-qb6:1:
+    title: The test of the London
+    text: >-
+      5...Qb6 is where White scores worst after 1...d5, so this is the step to know cold. Qc2 guards b2. When Black hits her with
+      ...Bf5, taking the bishop loses the rook on a1, because she has left b2. Instead dxc5 hits Black's queen, the queens
+      come off, and the game is level with Black's b-pawns doubled.
+  london-qb6-early:1:
+    title: ...Qb6 a move earlier
+    text: >-
+      The same answer, Qc2. Here 5...Bf5 is a blunder, not a trick: with the knight still on b8, the rook cannot reach
+      c8, and 6.Qxf5 Qxb2 7.Qc8 is mate. That comes next as a follow-up.
+  london-c5-2:1:
+    title: ...c5 on move two
+    text: >-
+      When Black hits d4 at once, the moves are the same with the knights left till last: e3, then c3. Black's usual
+      moves lead straight into the lines above.
+  london-c5-cxd4:1:
+    title: When Black takes early
+    text: >-
+      Take with the e-pawn, then c3 guards d4 and keeps the knight off b4. White has a slightly different pawn shape,
+      with the same pieces going to the same squares.
+  london-nc6:1:
+    title: The same set-up, with a move to spare
+    text: >-
+      2...Nc6 blocks Black's c-pawn, so there is no ...c5 to answer and White leaves out c3. Otherwise everything is
+      familiar: e3, Nf3, Nbd2, and Bg3 against ...Bd6.
+  london-nc6:2:
+    title: Get to e5 first
+    text: >-
+      With the c-pawn blocked, ...e5 is the only break Black has left, and ...Re8 prepares it. Ne5 takes the square first.
+      The d4 pawn supports the knight, and if Black takes, dxe5 gains space and hits the f6 knight.
+  london-nc6-bxg3:1:
+    title: When Black takes on g3
+    text: >-
+      The h-pawn takes, as always. If Black castles, Bd3 lines up with the rook on h7, and Black's king has gone to the
+      one place on the board where White is already attacking.
+  london-nc6-bg4:1:
+    title: When Black pins with ...Bg4
+    text: >-
+      The pin on the f3 knight costs nothing if you answer it calmly: Nbd2 gives the knight a second defender, h3 asks
+      the bishop to decide, and Be2 ends the pin for good.
+  london-nc6-3e6:1:
+    title: 2...Nc6 and 3...e6
+    text: >-
+      By playing ...e6 Black has shut in the c8 bishop, so the game is quieter still. The moves are the usual ones, and
+      Bg3 keeps the bishop as before.
+  london-nc6-3f6:1:
+    title: When Black prepares ...e5 with ...f6
+    text: >-
+      3...f6 aims at ...e5, but it loosens Black's position and e5 is not ready. If Black pushes at once, White wins a
+      pawn: that comes next as a follow-up. Otherwise Be2 ends any pin and White ends up with the two bishops.
+  london-nc6-3a6:1:
+    title: When Black plays a slow move
+    text: >-
+      3...a6 keeps White off b5 and does little else. White develops and gets on with the set-up: every quiet move Black
+      makes is a free one.
+  london-nc6-bf5:1:
+    title: The strike with c4
+    text: >-
+      With a knight blocking the c-pawn and the bishop gone to f5, Black cannot support d5 with a pawn and b7 has lost
+      its guard. So White changes plan: c4 hits d5, Nc3 adds to it, and Rc1 answers the pin on b4.
+  london-nc6-3bf5:1:
+    title: ...Bf5 a move earlier
+    text: >-
+      The same idea and the same strike: c4 at once. If the knight jumps to b4, Qa4+ picks it up with a gain of time, and
+      that comes next as a follow-up.
+  london-nc6-3bf5-bb4:1:
+    title: When Black pins first
+    text: >-
+      5...Bb4 changes nothing. Develop the knight, and Rc1 answers the pin as before.
+  london-nc6-3bf5-nf6:1:
+    title: When Black develops first
+    text: >-
+      4...Nf6 leads to the same place: Nf3 now, then Nc3 when Black plays ...e6.
+  london-nc6-3bf5-dxc4:1:
+    title: When Black takes on c4
+    text: >-
+      Black gives up the centre to win a move, but the bishop retakes on c4 in one go, so White has lost no time. The
+      knights then come to c3 and f3, and White has more of the centre.
+  london-bf5:1:
+    title: The mirror
+    text: >-
+      2...Bf5 copies White, and it is a good move, but nothing guards b7 any more. White plays e3 and Nf3 as usual, then
+      c4 hits d5. Bg3 keeps the bishop, and Qb3 is there to hit b7 and d5 together.
+  london-bf5-bd6:1:
+    title: When Black offers the bishops
+    text: >-
+      The same offer gets the same reply: Bg3. Then c4 strikes, as in the rest of this variation.
+  london-bf5-nf6:1:
+    title: When Black develops the knight
+    text: >-
+      3...Nf6 comes to the same place. Nf3 next, and after ...e6 the strike c4 is ready.
+  london-g6:1:
+    title: Against the fianchetto
+    text: >-
+      Black's bishop goes to g7 and looks along the long diagonal at d4. White builds the same wall with e3, and the f1
+      bishop goes to e2 rather than d3, since it would only bite on g6 from there.
+  london-g6:2:
+    title: A home for the bishop
+    text: >-
+      h3 is the move to remember here: it gives the f4 bishop a retreat on h2, so ...Nh5 and ...e5 cannot chase it. Then
+      White castles, and Nc3 fights for e4.
+  london-d6:1:
+    title: When Black plays 2...d6
+    text: >-
+      Black wants ...e5 to hit the bishop. White keeps calm with e3 and Nf3, and if Black fianchettoes, the game joins
+      the line above.
+  london-nf6-d5-g6:1:
+    title: The fianchetto with ...d5
+    text: >-
+      With a pawn on d5 rather than d6, the g7 bishop's diagonal is half closed. The answer is the same: Nf3 and Be2,
+      then castle, with h3 and c3 to come.
+  london-nf6-e6:1:
+    title: When Black plays 2...e6
+    text: >-
+      Black is heading for the main line by a different road. e3 and c3 hold d4, and ...d5 brings it back to positions
+      you know.
+  london-nf6-c5:1:
+    title: When Black hits d4 at once
+    text: >-
+      With no pawn on d5, ...c5 comes with more bite. e3 holds d4, the e-pawn takes back, and the knight comes to f3.
+  london-nf6-qb6:1:
+    title: The poisoned b2 pawn
+    text: >-
+      Without c3 played, White has no Qc2 here, so Nc3 offers the b2 pawn instead. If the queen takes, Nb5 threatens a
+      fork on c7 and Rb1 trapping her. Black has only 5...Nd5. White ends up two pawns down but well ahead in
+      development, and 5...Na6 loses at once: that comes next as a follow-up.
+  london-englund:1:
+    title: Take the pawn, know the block
+    text: >-
+      The Englund offers a pawn, and White takes it, defending with Nf3 and the usual bishop. Then 4...Qb4+ is the point:
+      a check that also hits f4 and b2. Bd2 is the only good block. Every other block gives away a piece or more, and the
+      follow-ups show how.
+  london-englund:2:
+    title: Chase the queen
+    text: >-
+      Black's queen has gone hunting, and now she pays for it. Nc3 makes the rook on a1 safe, Rb1 and Rb3 chase her
+      with a gain of time, and e4 takes the centre. White is a pawn up, nearly developed, and winning. 6.Bc3 is the trap to
+      avoid: it comes next as a follow-up.
+  london-englund-nb4:1:
+    title: When the knight comes to b4
+    text: >-
+      6...Nb4 threatens a fork on c2. Nd4 is the only strong answer: it guards c2 and makes Rb1 a real threat. Black's two
+      natural moves, 7...c5 and 7...Bc5, both lose heavily to Rb1, and the follow-ups show how.
+  london-englund-bc5:1:
+    title: When Black plays 2...Bc5
+    text: >-
+      The bishop aims at f2 and Black hopes to win the pawn back. Nf3 and Bf4 hold e5, e3 blocks the diagonal, and White
+      stays a healthy pawn up.
+  london-englund-d6:1:
+    title: When Black plays 2...d6
+    text: >-
+      Take, and Black has a bishop out for the pawn. Nc3 and Nb5 then go after that bishop, so White can have the extra
+      pawn and the two bishops as well.
+  london-englund-d6nc6:1:
+    title: 2...d6 and 4...Nc6
+    text: >-
+      The same jump to b5, going after the same bishop.
+  london-englund-f6:1:
+    title: When Black plays 2...f6
+    text: >-
+      Nf3 defends the pawn, and when Black takes on e5 the knight takes back, a clean pawn up and sitting in the middle
+      of the board.
+  london-e6-first:1:
+    title: 1...e6
+    text: >-
+      Black keeps its options open, and so does White: 2.Bf4 is still the move, and ...d5 next brings the main set-up.
+  london-e6-first-c5:1:
+    title: 1...e6 and 2...c5
+    text: >-
+      e3 holds d4, and if Black takes, the e-pawn recaptures. White then develops as usual.
+  london-c5-first:1:
+    title: 1...c5, the Old Benoni
+    text: >-
+      The bishop move is not the right answer to 1...c5, because d4 is hit at once. So White pushes past with 2.d5,
+      takes space, and builds a big centre with Nc3 and e4.
+  london-c5-first:2:
+    title: Castle behind the centre
+    text: >-
+      The pawns on d5 and e4 cramp Black's pieces. White finishes developing and castles, with a safe king and more of
+      the board.
+  london-f5-first:1:
+    title: 1...f5, the Dutch
+    text: >-
+      The same bishop move works especially well here, because the f-pawn has weakened e5. The set-up follows, with Bd3
+      looking at f5 and h3 giving the bishop a home.

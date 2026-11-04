@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance-h4 4...h5"]
+[Name "Advance: 4.h4 h5 5.Nf3"]
+
+5. Nf3 e6 { The usual ...e6. }
+6. Bd3 Bxd3 { The usual swap. }
+7. Qxd3 { The position of 5.Bd3: ...c5 next. } *

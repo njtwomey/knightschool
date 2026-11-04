@@ -1,0 +1,7 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-exchange-bd3-h3 5...Nc6"]
+[Name "Exchange: 5.h3 Nc6 6.Nf3"]
+
+6. Nf3 e6 { The same plan whichever move White chooses: ...Bd6 and castling. }
+7. O-O Bd6 8. c3 O-O *

@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-nf3 3...cxd5"]
+[Name "2.Nf3: 4.Bb5+"]
+
+4. Bb5+ { A check that invites the swap of the light bishops. }
+4... Bd7 { Black always blocks with this bishop. It gives White nothing to hit, and the piece that might have been shut in is swapped. }
+5. Bxd7+ Nxd7 { Takes back with the knight, on its way to developing. }
+6. d4 Ngf6 { The Exchange's position after 5.Bb5+, reached by another order. } *

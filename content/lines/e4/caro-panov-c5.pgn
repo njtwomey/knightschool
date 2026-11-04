@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-panov 6...Be7"]
+[Name "Panov: 7.c5"]
+
+7. c5 { Pushes past and takes space on the queenside. But it lets the tension go: nothing attacks d5 any more, and the new chain has a base to hit. }
+7... O-O { Gets the king safe first; the fight will be on the queenside. }
+8. Bd3 b6 { Hits the head of the chain at once, before White can support it. [%cal Gb6c5] }
+9. b4 a5 { Now b4, the base of the chain, comes under fire. Black's rooks will like the lines that open on the queenside. [%cal Ga5b4] [%idea attack-the-base] } *

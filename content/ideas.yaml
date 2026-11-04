@@ -22,3 +22,42 @@
   kind: tactic
   summary: A queen sacrifice against an early pin, ending with mate by the minor pieces.
   themes: [mate, sacrifice]
+- id: bishop-first
+  name: The bishop before the pawn
+  kind: principle
+  summary: Bring the bishop out before a pawn move shuts it in (White's Bf4 before e3, Black's ...Bf5 before ...e6); then the pawn move costs nothing.
+- id: attack-the-base
+  name: Attack the base of the chain
+  kind: plan
+  summary: A pawn chain is only as strong as its back pawn; hit that pawn and everything in front of it comes loose.
+- id: isolated-queens-pawn
+  name: The isolated d-pawn
+  kind: structure
+  summary: A d-pawn with no neighbours can only be guarded by pieces; put a piece on the square in front of it and swap the rest.
+- id: blocked-guard
+  name: The blocked guard
+  kind: tactic
+  summary: A piece that moves in front of a defender cuts it off, and what it was guarding falls.
+- id: outpost
+  name: Outpost
+  kind: structure
+  summary: A square near the enemy that no enemy pawn can easily attack, where a knight is strong for a long time.
+- id: poisoned-pawn
+  name: Poisoned pawn
+  kind: tactic
+  summary: A pawn that can be taken, but taking it costs more time or material than it wins.
+- id: queen-trap
+  name: Queen trap
+  kind: tactic
+  summary: A queen that goes pawn-hunting runs out of safe squares and is lost.
+  themes: [trappedPiece]
+- id: fork
+  name: Fork
+  kind: tactic
+  summary: One piece attacks two or more targets at once, and only one can be saved.
+  themes: [fork]
+- id: hanging-piece
+  name: Hanging piece
+  kind: tactic
+  summary: A piece that nobody defends, so it can simply be taken.
+  themes: [hangingPiece]

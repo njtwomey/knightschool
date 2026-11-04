@@ -1,0 +1,15 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-classical 5...Bg6"]
+[Name "Classical: 6.h4"]
+
+6. h4 { The sharp try: h5 would chase the bishop, and the only squares on its diagonal are h7 and f5. [%cal Rh4h5] }
+6... h6 { Makes h7 free for the bishop: after h5, it can step back and stay on the diagonal. }
+( 6... Nd7? { The natural developing move, and a blunder. }
+  7. h5 Bf5 8. Nxf5 Qa5+ 9. Bd2 Qxf5 10. Bd3 { The pawn drove the bishop off its diagonal, and the knight took it on f5. Black wins the piece back with a queen check, but only to have the queen chased, and White is far ahead in development. Nothing is won in material: the gain is time, and it is a lot of time. [%csl Rg6] } )
+7. Nf3 Nd7 { Develops and covers e5, where the knight would otherwise jump. }
+8. h5 Bh7 { The bishop steps back, still on its diagonal. The pawn on h5 has gone as far as it can, and it may become a target. }
+9. Bd3 Bxd3 { Swaps the bishops. }
+10. Qxd3 e6 { The same solid structure as in the main line. }
+11. Bd2 Ngf6 { Develops the last knight. }
+12. O-O-O Be7 { Black castles next. White's king and h-pawn look aggressive, but Black has no weak squares and ...c5 or ...Qc7 and ...O-O are coming. } *

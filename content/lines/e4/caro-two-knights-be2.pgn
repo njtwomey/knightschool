@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-two-knights 3...Bg4"]
+[Name "Two Knights: 4.Be2"]
+4. Be2 e6 { With the bishop out, ...e6 supports d5. [%csl Gd5] }
+5. d4 Nf6 { Develops and hits e4. }
+6. e5 Nfd7 { Goes to d7, keeping ...c5 in hand. }
+7. O-O c5 { Hits the base of the chain. } *
