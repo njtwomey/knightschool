@@ -378,6 +378,12 @@ variations:
         explain: >-
           4...g6 blocks the queen's line to f7 and attacks the queen with a pawn. After 5.Qe5 Nf6 Black develops with
           a gain of time and is a pawn up.
+  - id: fantasy
+    name: Fantasy Variation
+    intro: >-
+      3.f3 holds e4 with a pawn and asks Black to open the game on White's terms. Don't: 3...e6 keeps the tension, and the
+      pawn on f3 costs White the knight's best square. Watch for Bd3, which cuts the queen off from d4.
+    lines: [caro-fantasy, caro-fantasy-bd3, caro-fantasy-4bd3, caro-fantasy-e5]
 setup:
   title: How the Caro-Kann starts
   text: >-
@@ -385,6 +391,26 @@ setup:
     pawns meet in the middle Black can take back with a pawn. And unlike 1...e6 it leaves the c8 bishop's diagonal open:
     that bishop gets out before ...e6 is played, and that is the idea of the whole opening.
 steps:
+  caro-fantasy:1:
+    title: The Fantasy, with 3...e6
+    text: >-
+      White's f3 supports e4 but takes the knight's best square. Black answers with ...e6 and the pin ...Bb4, then
+      ...Ne7 and castling, breaking with ...c5 later. The bishop on b6 presses d4, which White's own pieces shield from
+      the queen.
+  caro-fantasy-bd3:1:
+    title: When Bd3 drops the d4 pawn
+    text: >-
+      The most natural developing move loses a pawn: with a bishop on d3, the queen no longer guards d4. Take on e4,
+      then on d4, and develop.
+  caro-fantasy-4bd3:1:
+    title: The same idea after 4.Bd3
+    text: >-
+      The same slip a move earlier, and the same answer: ...dxe4 and ...Qxd4. Bring the queen home before it is chased.
+  caro-fantasy-e5:1:
+    title: When White closes the centre with 4.e5
+    text: >-
+      An Advance with an extra move wasted on f3. Play the usual plan: ...c5 at the base of the chain, ...Nc6 and
+      ...Qb6, all aimed at d4.
   caro-advance:1:
     title: The bishop gets out first
     text: >-

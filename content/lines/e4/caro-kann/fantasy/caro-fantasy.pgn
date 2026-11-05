@@ -1,0 +1,15 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-advance 2...d5"]
+[Name "Fantasy: 3...e6 and the pin"]
+
+3. f3 { The Fantasy Variation: White props up e4 with a pawn, so that ...dxe4 can be met by fxe4 and a big centre. The price is the f3 square: the king's knight has lost its best home. [%csl Yf3] }
+3... e6 { Guards d5 and keeps the tension, so Black chooses when the centre opens. Taking on e4 at once is the most common move at this level, but White gets a big centre and an open f-file, and scores better there. }
+4. Nc3 { Defends e4 and adds to the pressure on d5. }
+4... Bb4 { Pins the knight to the king, so it no longer really guards e4. [%icon pin@c3] [%idea pin] }
+5. Bd2 { Breaks the pin, but the bishop now stands in front of the queen. }
+5... Ne7 { Develops and gets ready to castle. On e7 the knight cannot be chased by e5, as it could on f6, and it can come to g6 or f5. }
+6. a3 { Asks the bishop what it wants to do. }
+6... Ba5 { Stays on the diagonal and keeps an eye on c3. }
+7. Bd3 { Develops, but the d-file is now blocked twice. }
+7... Bb6 { Out of reach of b4, and aimed at d4, which the bishops on d2 and d3 have cut off from the queen. Black castles next and breaks with ...c5, with an easy game. [%cal Gb6d4] [%idea blocked-guard] } *

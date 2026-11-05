@@ -1,0 +1,11 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-fantasy 4...Bb4"]
+[Name "Fantasy: 5.Bd3 drops the d4 pawn"]
+
+5. Bd3 { Natural, but the bishop now stands between the queen and d4. [%cal Rd1d4] [%idea blocked-guard] }
+5... dxe4 { Opens the way: after White recaptures, nothing guards d4. }
+6. fxe4 Qxd4 { Takes a clean pawn, and the queen eyes c3 and the knight pinned there. }
+7. Bd2 { The only way to keep the knight: Nf3 would allow ...Bxc3+ and ...Qxc3+, winning more. }
+7... e5 { Gives the queen support and takes a share of the centre. }
+8. Nf3 Qd6 { Steps back out of the knight's attack. Black is a pawn up, and White's lead in development is roughly worth it: the game is about level. Develop with ...Nf6 and castle before anything else. } *

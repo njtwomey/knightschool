@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-fantasy 3...e6"]
+[Name "Fantasy: 4.e5 and a slow Advance"]
+
+4. e5 { Closes the centre: an Advance Variation in which f3 is a wasted move, because the knight wants that square. }
+4... c5 { Hits the base of White's chain at once, the Caro-Kann's plan in every Advance. [%cal Gc5d4] [%idea attack-the-base] }
+5. f4 { Gives the knight its square back, at the cost of a whole move. }
+5... Nc6 6. Nf3 Qb6 { Three pieces and pawns now press on d4. White's f-pawn has moved twice, and Black has a comfortable game. [%cal Gb6d4,Gc6d4,Gc5d4] } *

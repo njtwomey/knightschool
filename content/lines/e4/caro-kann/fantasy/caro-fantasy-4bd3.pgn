@@ -1,0 +1,12 @@
+[For "black"]
+[Kind "sideline"]
+[Start "caro-fantasy 3...e6"]
+[Name "Fantasy: 4.Bd3, the same idea a move sooner"]
+
+4. Bd3 { The same slip a move sooner: the bishop cuts the queen off from d4. [%cal Rd1d4] }
+4... dxe4 5. fxe4 Qxd4 { Black takes the pawn, and White has no way to win it back at once. }
+6. Nf3
+( 6. Ne2? { Also hits the queen, but the knight does less on e2 than on f3. }
+  6... Qc5 { Keeps the pawn, and the queen now covers g1, so White cannot castle short. Black is clearly better. [%cal Rc5g1] } )
+6... Qd8 { Goes home before the knight or a bishop can chase it. White's lead in development makes up for the pawn, so Black must not waste more time. }
+7. Nbd2 Nd7 { Heads for f6. The engine calls this about level: a pawn for White's development, which Black can keep by finishing development safely. } *
