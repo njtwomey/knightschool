@@ -75,7 +75,8 @@ export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   review: {
     name: 'Review',
     title: 'Set up a review',
-    blurb: 'Moves you know, asked again just before you would forget them.',
+    blurb:
+      'Moves you have learned come back on a spaced schedule. You play each one from its position, and your answer sets when it returns.',
     icon: Repeat,
     text: 'text-mode-review',
     soft: 'bg-mode-review/10',
@@ -83,7 +84,8 @@ export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   drill: {
     name: 'Drill',
     title: 'Set up a drill',
-    blurb: 'Play your lines against the computer, which answers the way you choose.',
+    blurb:
+      "Play an opening from the start while the computer picks the other side's replies, until every branch has been played once.",
     icon: Crosshair,
     text: 'text-mode-drill',
     soft: 'bg-mode-drill/10',
@@ -91,7 +93,8 @@ export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   puzzles: {
     name: 'Puzzles',
     title: 'Set up puzzles',
-    blurb: 'Lichess puzzles from games that went through your openings.',
+    blurb:
+      'Tactics puzzles from Lichess games that reached positions from your openings. Find the best moves for the side to play.',
     icon: Puzzle,
     text: 'text-mode-puzzle',
     soft: 'bg-mode-puzzle/10',
@@ -99,7 +102,8 @@ export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   'play-on': {
     name: 'Play on',
     title: 'Set up Play on',
-    blurb: 'Carry on past the end of a line against the engine and keep your advantage.',
+    blurb:
+      'Continue from the end of a line against the engine. Each move you play is judged, and the aim is to keep the advantage the line gave you.',
     icon: Swords,
     text: 'text-mode-play-on',
     soft: 'bg-mode-play-on/10',
@@ -107,7 +111,7 @@ export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   questions: {
     name: 'Questions',
     title: 'Questions',
-    blurb: 'Why a move is played, in your own words.',
+    blurb: 'Written questions about why moves are played. You type an answer, and it is checked for the key idea.',
     icon: MessageCircleQuestion,
     text: 'text-mode-review',
     soft: 'bg-mode-review/10',
@@ -115,7 +119,8 @@ export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   speed: {
     name: 'Speed',
     title: 'Set up a speed run',
-    blurb: 'Your lines from memory against the clock; the other side answers at once.',
+    blurb:
+      'Play a set of lines from memory as fast as you can. The other side replies instantly, and your time and mistakes are recorded.',
     icon: Timer,
     text: 'text-foreground',
     soft: 'bg-muted',
@@ -123,7 +128,8 @@ export const MODE_INFO: Record<PracticeMode | 'questions', ModeInfo> = {
   'name-it': {
     name: 'Name it',
     title: 'Set up Name it',
-    blurb: 'A position from your openings: type which opening and variation it is.',
+    blurb:
+      'You see a position from your openings and type which opening and variation it is. The variation earns full credit, the opening half.',
     icon: Tag,
     text: 'text-foreground',
     soft: 'bg-muted',

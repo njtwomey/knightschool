@@ -193,7 +193,10 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
                   'Checkpoints'
                 )}
               </CardTitle>
-              <CardDescription>The test at the end of a variation.</CardDescription>
+              <CardDescription>
+                A mixed test at the end of a variation: positions, the opponent&apos;s mistakes, a question and a
+                puzzle, with one try each.
+              </CardDescription>
             </CardHeader>
             <CardContent className={cn('grid justify-items-start gap-1 text-sm', ABOVE_ROW_LINK_GROUP)}>
               {checkpoints.length ? (
