@@ -9,4 +9,9 @@
 ( 7... h5? { Leaves the bishop to be taken, hoping that the open h-file brings Black's queen and rook against White's castled king. At this level it is simply a bishop given away. }
   8. hxg4 { Take it. The open h-file looks dangerous, but none of Black's pieces is ready to use it. }
   8... hxg4 9. Ng5 { The knight steps out of the pawn's attack with a threat of its own: f7, hit by the knight and the bishop, with the black king still in the middle. White is a bishop up for a pawn. [%cal Gg5f7,Gc4f7] [%csl Rf7] } )
-8. Nbd2 { Brings out the last minor piece and defends the knight on f3 a second time. } *
+8. Nbd2 { Brings out the last minor piece and defends the knight on f3 a second time. }
+8... O-O { Black castles and keeps the pin, the band's usual choice. }
+9. Re1 { Guards e4, which frees the knight on d2 to move on. }
+9... a6 { Makes room on a7 for the bishop, as in the main line. }
+10. Nf1 { The knight's usual route, and here it has a target. [%cal Gf1g3] }
+10... Ba7 11. Ng3 { Hits the bishop on h5. This is where the pin ends: the bishop has to step back or swap itself on f3, and White has given up nothing. [%cal Gg3h5] } *

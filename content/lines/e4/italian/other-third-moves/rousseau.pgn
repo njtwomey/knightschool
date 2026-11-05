@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "gambit"]
+[Start "giuoco-main 3.Bc4"]
+[Name "Rousseau Gambit: 3...f5"]
+
+3... f5 { The Rousseau Gambit: it hits e4, but it opens the diagonal from c4 to Black's king. [%csl Yg8] }
+4. d3 { Guards e4 and refuses the pawn: Black has weakened the king for nothing. [%cal Gd3e4] }
+( 4. exf5? { Takes the pawn, and it is the band's favourite: White scores 41%. }
+  4... e4 { The knight has no good square: 5.Ng5 Qxg5 loses it, and 5.Ng1 undoes White's only developing move. The free pawn has cost White the lead. } )
+4... Nf6 { Develops and adds to the pressure on e4. }
+5. O-O { Castles before any lines open. }
+5... Bc5 6. Nc3 { Develops and guards e4 again. White is well ahead: Black's king is the weaker of the two, and the f-pawn has nothing to do. } *

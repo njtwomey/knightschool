@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-d6 6.cxd4"]
+[Name "Giuoco Piano: the check on b4"]
+
+6... Bb4+? { Black's most common move here, about half the games at this level. The check looks active, but the knight blocks it with a developing move, and the bishop stands worse on b4 than on b6. }
+7. Nc3 { Develops and blocks the check. White is clearly better: the centre stays, and d5 next hits the c6 knight. [%cal Gd4d5] }
+7... Bg4 { Pins the knight on f3, the band's usual follow-up. [%icon pin@f3] }
+8. O-O { The king steps out of everything. The pawn on d4 looks loose, but 8...Nxd4 9.Qxd4 wins a piece: the queen takes the knight, and if 9...Bxf3 then 10.Bb5+ and 11.Qxb4 clears up. }
+8... Nf6 { Develops and hits e4. }
+( 8... Qf6? { Adds to the pressure on f3, but the queen stands where a knight can hit her. }
+  9. Nd5 { Hits the queen and the bishop on b4 at once. [%cal Gd5f6,Gd5b4] [%idea fork] }
+  9... Qd8 10. Nxb4 Nxb4 11. Qb3 { Now the knight on b4 and f7 are both hit. White wins a knight and a pawn, whatever Black does on f3. [%cal Gb3b4,Gb3f7] } )
+( 8... Nge7? { Develops, but the bishop on g4 has no defender, and that matters as soon as the knight on f3 can move with check. }
+  9. Bxf7+ { The point: the king has to take, and then the knight moves with check. }
+  9... Kxf7 10. Ng5+ Ke8 11. Qxg4 { The queen takes the undefended bishop. White has won the f7 pawn, and Black's king can no longer castle. } )
+9. Nd5 { Hits the bishop on b4 and the knight on f6 together. 9...Nxd5 10.exd5 hits the knight on c6, and Qa4+ will pick up the bishop; 9...Bxf3 10.gxf3 only delays it. Black is losing material. [%cal Gd5b4,Gd5f6] [%idea fork] } *

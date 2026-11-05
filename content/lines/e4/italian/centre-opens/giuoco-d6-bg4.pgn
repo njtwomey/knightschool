@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-d6 7.Nc3"]
+[Name "Giuoco Piano: the pin on the d4 pawn's guard"]
+
+7... Bg4 { The band's most common move here. It pins the knight on f3, and that knight is what guards d4 from the bishop on b6 and the knight on c6. [%icon pin@f3] [%csl Yd4] [%idea pin] }
+8. Be3 { Guards d4 with a piece, so the pin costs nothing. [%cal Ge3d4] }
+( 8. O-O? { Natural, and it loses a pawn: White scores 37% with it. }
+  8... Nxd4 { The pinned knight cannot take back, and the bishop on b6 guards d4 from the queen. Black has won the pawn, and ...Nxf3+ will wreck the pawns in front of White's king. } )
+8... Nf6
+( 8... Nge7? { Develops, but the bishop on g4 has no defender, and that matters as soon as the knight on f3 can move with check. }
+  9. Bxf7+ Kxf7 10. Ng5+ Ke8 11. Qxg4 { The queen takes the bishop. White has won the f7 pawn, Black's king can no longer castle, and Ne6 is coming. } )
+9. O-O { With d4 covered the king can castle. }
+9... O-O
+( 9... Qd7? { Lines the queen up behind the knight on c6. }
+  10. Bb5 { Pins the knight to the queen. [%icon pin@c6] }
+  10... a6 11. Ba4 d5 12. e5 { The knight on f6 has to go back. Nothing has been won yet: White's gain is space and a pin that does not go away. } )
+10. h3 { Asks the bishop to decide. After 10...Bxf3 11.gxf3 the pawns are doubled, but White keeps the centre and the two bishops. } *

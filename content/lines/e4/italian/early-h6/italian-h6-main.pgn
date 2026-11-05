@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 3.Bc4"]
+[Name "3...h6: Black rules out Ng5"]
+
+3... h6 { Stops Ng5 before it happens. About one game in six goes this way, and it is safe enough, but it costs Black a move of development. }
+4. c3 { The usual plan. 4.d4 is a little stronger on the engine, but it opens the game; 4.c3 keeps the same set-up as the Giuoco Piano, and Black is the one who spent a move. [%cal Gc3d4] }
+4... Nf6 { Develops with an attack on e4. }
+5. d3 { Guards e4 and keeps the game quiet. If 5...Bc5 follows, the position is the main line's with Black's h-pawn on h6. } *

@@ -1,0 +1,27 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 3.Bc4"]
+[Name "Blackburne Shilling: 3...Nd4"]
+
+3... Nd4 { The Blackburne Shilling Gambit. The knight moves a second time and leaves e5 hanging. It is a trap, and a bad move if White does not fall for it. [%csl Re5] }
+4. Nxd4 { Takes the knight, not the pawn. Black has to recapture with the e-pawn, and is behind in development with a weak pawn on d4. [%cal Gf3d4] }
+( 4. Nxe5?? { Takes the pawn that looks free. A quarter of the band plays it, and White scores 24%. }
+  4... Qg5 { Hits the knight and g2 at once. }
+  5. Nxf7 { Grabs a pawn and hits the queen and the rook, and it is the worst thing White can do. }
+  5... Qxg2 6. Rf1 Qxe4+ 7. Be2 { Forced, and now 7...Nf3 is mate: the bishop on e2 is pinned and the king has no squares. Even with the best defence White loses the knight, with only a lead in development for it. } )
+4... exd4 5. O-O { Castles. The pawn on d4 can wait, and White's lead in development is the point. }
+5... d6 { Opens the way for the bishop on c8. }
+( 5... Bc5? { Develops, and leaves the bishop loose. }
+  6. Bxf7+ { Gives the bishop for the pawn because the queen gets it back with a check. [%cal Gd1h5] }
+  6... Kxf7 7. Qh5+ g6 8. Qxc5 { The queen takes the bishop. White has won the f7 pawn, and d4 is next. } )
+6. c3 { Now the d4 pawn is hit. It cannot be guarded, and 6...dxc3 7.Nxc3 only brings out another white piece. [%cal Gc3d4] }
+6... Nf6
+( 6... dxc3? { The band's usual reply, and it gets rid of the weak pawn, but it brings White's last knight out for nothing. }
+  7. Nxc3 { No material has changed hands. White is far ahead in development, and the queen is ready for h5 or b3 against f7. [%cal Gd1b3,Gd1h5] } )
+( 6... c5? { Guards the pawn, and leaves f7 and b7 to the queen. }
+  7. cxd4 cxd4 8. Qb3 { Hits f7 and b7 together. 8...Be6 9.Bxe6 fxe6 10.Qxe6+ wins a pawn with check. [%cal Gb3f7,Gb3b7] } )
+7. cxd4 { White has won the pawn. 7...Nxe4 is no way back: 8.Re1 pins the knight to the king, and it falls. }
+7... Be7
+( 7... Ng4? { Hits nothing that matters, and takes the knight away from the centre. }
+  8. Qb3 { The queen and the bishop both hit f7, and b7 is hit too. White is already a pawn up, and h3 sends the knight back. [%cal Gb3f7,Gb3b7] } )
+8. d3 { Guards e4. White is a clean pawn up with two pawns in the centre. } *

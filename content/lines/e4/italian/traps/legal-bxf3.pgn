@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "trap"]
+[Start "legal-mate 5.h3"]
+[Name "3...d6: Black takes on f3"]
+
+5... Bxf3 { Nearly half the band takes at once, giving up the bishop. }
+6. Qxf3 { The queen recaptures and joins the bishop against f7. [%cal Gf3f7,Gc4f7] }
+6... Nf6 { Blocks the queen's line to f7. }
+( 6... Nd4?? { Hits the queen, and forgets f7. }
+  7. Qxf7# { Mate: the bishop on c4 guards the queen. } )
+( 6... f6? { Guards e5, but it takes f6 from the knight and weakens the squares round the king. }
+  7. Ne2 { Heads for g3 and leaves the c-pawn free. Nothing has been won: White's gain is the two bishops and a black position with no good squares. } )
+7. d3 { Guards e4 and opens the bishop on c1. White has the two bishops, and 7...Nd4 8.Qd1 only sends the queen home for a moment. } *

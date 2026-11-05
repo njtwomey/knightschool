@@ -1,8 +1,0 @@
-[For "white"]
-[Kind "sideline"]
-[Start "giuoco-main 5.d3"]
-[Name "Giuoco Piano: Black strikes with ...d5"]
-
-5... d5 { Strikes in the centre, but opens the position before Black has castled. }
-6. exd5 Nxd5
-7. Qb3 { Hits the knight on d5 and the pawn on f7 at once; Black has to give ground. [%cal Gb3d5,Gb3f7] [%csl Yf7] } *

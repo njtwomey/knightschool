@@ -1,0 +1,23 @@
+[For "white"]
+[Kind "sideline"]
+[Start "two-knights-d3 4.d3"]
+[Name "Two Knights: Black strikes with ...d5"]
+
+4... d5 { Black opens the centre at once, with a fair game. }
+5. exd5 Nxd5 6. O-O { Castles first. Re1 comes next and hits e5, a pawn that only the knight on c6 guards. [%cal Gf1e1,Ge1e5] }
+6... Bg4 { Pins the knight on f3, so it cannot take on e5 for the moment. [%icon pin@f3] }
+( 6... Bd6?? { Defends e5, but it stands in front of the queen, so she no longer guards the knight on d5. [%csl Rd5] }
+  7. Bxd5 { White is a knight up. [%idea blocked-guard] } )
+7. h3 { Asks the bishop to decide, as in every line of this opening. }
+7... Bh5
+( 7... Bxf3? { Gives up the bishop and brings White's queen out with a gain of time. }
+  8. Qxf3 { Hits the knight on d5 and f7 at once. [%cal Gf3d5,Gf3f7] }
+  8... Nf6 9. Re1 { Now e5 is hit too. No material has changed hands: White's gain is the two bishops and a lead in development. } )
+8. Re1 { Hits e5. The knight on f3 is still pinned, but the rook adds a second attacker for later. [%cal Ge1e5] }
+8... Be7 { Develops and gets ready to castle. }
+( 8... f6? { Defends e5, but it opens the line from d1 to h5. }
+  9. Nxe5 { The pin is not real: 9...Bxd1 10.Nxc6+ uncovers the rook's check and hits Black's queen. [%cal Ge1e8] }
+  9... Nxe5 10. Qxh5+ { The queen takes the bishop with check. White has won a pawn and the knights on e5 and d5 are both loose: Black cannot hold them. } )
+( 8... Bd6? { The same mistake again: the bishop blocks the queen. }
+  9. Bxd5 { White is a knight up. [%idea blocked-guard] } )
+9. g4 { Ends the pin for good: the bishop has to step back, and after 9...Bg6 10.Nxe5 Nxe5 11.Rxe5 White has won the e5 pawn. The pawns in front of the king are looser, but Black's pieces are too far back to use that. [%cal Gg4h5] } *

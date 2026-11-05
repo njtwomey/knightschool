@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 3.Bc4"]
+[Name "Hungarian Defence: 3...Be7"]
+
+3... Be7 { The Hungarian Defence: safe and passive. The bishop avoids everything, and it also stops doing anything. }
+4. d3 { The quiet road. 4.d4 is stronger on the engine, but it asks for more; after 4...Nf6 5.c3 this is the Two Knights' ...Be7 line, by another order. [%cal Gd3e4] }
+4... Nf6 *

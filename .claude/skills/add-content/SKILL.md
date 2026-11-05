@@ -134,7 +134,8 @@ saves `analyse` and `popularity`, which resume where they left off.
    move and put what is won there. One comment per move also holds across transpositions: the same move from the same
    position in two lines carries a note in only one. A shared checkout builds every line file, so stage a large change
    outside `content/` and copy it in at once. `gaps.mts` shows what the tree leaves unanswered; `precheck.mts` catches
-   weak moves before the long analysis.
+   weak moves before the long analysis. The build does not check a `#` or `+` you write, so a mate in a note or a
+   refutation must be proved first (`engine.mts` prints `#n`): a `Qf7#` that was only a check got through it.
 5. **List them** in the opening: a variation's `lines` (teaching order; most common first), a new variation with `id`,
    `name`, `intro` when it is a new decision for the learner, `steps` titles and texts for the new steps.
 6. **Data and checks**, in this order: `npx -y pnpm@12.11.2 content:build` (formats), `make popularity` (the new
@@ -146,6 +147,9 @@ puzzles` when puzzles should follow the new lines, `make check`. Size the analys
    searched at roughly 3 seconds each at depth 18 and 30 at depth 24. A wide opening of 100 lines is 2,600 positions,
    so about 2 hours and about 22 hours: stay at depth 18 unless asked to go deeper, and run long analysis in chunks (`timeout -s INT`), so
    other agents can take the lock.
+   `content:check` may end by saying a position or two lack analysis: a position that is already mate is never
+   searched, so those two are harmless. After a depth 18 pass it also names every engine follow-up that wins nothing
+   on the board: write those as refutations with a note, one by one (the Italian had ten).
 7. **Report**: what was added and why each choice, what the data and engine said, the gaps left (replies above the share
    with no answer), and what the user should look at in the browser. Do not run browser play-throughs: the user checks
    the browser. Do not commit or push unless asked.

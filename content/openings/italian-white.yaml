@@ -9,14 +9,15 @@ about:
   risks: Slow if White drifts; Black equalises with accurate play, so the plan matters more than the moves.
   suits: Beginners who want natural moves, a safe king and chances to spring traps.
   origin: One of the oldest openings, analysed by Italian players in the 1500s; Giuoco Piano means "the quiet game".
-ideas: [f7-weakness, centre-pawns, castle-early, pin, legal-mate]
+ideas: [f7-weakness, centre-pawns, castle-early, pin, fork, blocked-guard, legal-mate]
 variations:
   - id: giuoco-piano
     name: Giuoco Piano
     intro: >-
       Black copies White with 3...Bc5, and both bishops aim at the other side's weak f-pawn. White builds slowly: c3
-      and d3, castle, then Re1 and Bb3, keeping the d4 break for when the pieces are ready.
-    lines: [giuoco-main, giuoco-d6, giuoco-d5, giuoco-bg4]
+      and d3, castle, then Re1 and Bb3, keeping the d4 break for when the pieces are ready. Black's move order changes
+      from game to game, so the point of this variation is that the set-up does not.
+    lines: [giuoco-main, giuoco-castled, giuoco-castled-d6, giuoco-castled-be6, giuoco-h6, giuoco-h6-o, giuoco-d6-h6]
     plans:
       - Play c3 and d3, castle, then Re1, Bb3 and h3 before the d4 break.
     questions:
@@ -43,18 +44,142 @@ variations:
         explain: >-
           7...a6 gets ready for ...b5, which would chase the bishop and gain time. On b3 it is out of reach of the
           pawns and still points at f7. Black's ...Ba7 does the same for the other bishop.
+      - id: knight-route
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 a6 8. Bb3 Ba7 9. h3 h6 10. Nbd2 Re8
+        ask: Where is the knight on d2 going, and why not leave it there?
+        answers: [[g3], [f1]]
+        examples:
+          right:
+            - it goes to g3 through f1
+            - Nf1 and then Ng3
+            - to f1 so the bishop on c1 can come out
+          wrong: [it stays to guard e4, it goes to b3, it attacks the queen]
+        explain: >-
+          On d2 the knight blocks the bishop on c1 and the queen. It goes to f1 and on to g3, where it eyes f5 and h5,
+          and only then is White ready for d4.
+  - id: pins-and-swaps
+    name: Pins and swaps
+    intro: >-
+      Black's bishop on c8 comes out, to pin the knight on f3 or to offer a swap on c4, and the knight on f6 tries to
+      jump at f2. None of it changes the plan: h3 asks the bishop to decide, Bb3 keeps White's bishop on its diagonal,
+      and the knight's route through f1 to g3 ends the pin for good.
+    lines: [giuoco-bg4, giuoco-re1-bg4, giuoco-h6-bg4, giuoco-be6, giuoco-ng4]
+    plans:
+      - Against the pin, play h3, Nbd2, Re1, Nf1 and Ng3, and the bishop has to leave.
+    questions:
+      - id: why-not-h3
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d6 6. O-O O-O 7. Re1 Ng4
+        ask: White would like to chase the knight with 8.h3. Why does that lose?
+        answers: [[f2], [nxf2], [fork]]
+        examples:
+          right:
+            - Black takes on f2 and forks the queen
+            - Nxf2 hits the queen and h3
+            - f2 is only guarded by the king now the rook has gone
+          wrong: [the bishop takes h3, it weakens the king, the knight is protected]
+        explain: >-
+          With the rook on e1, f2 has only the king to guard it, and the king cannot take because the bishop on c5
+          supports the knight. 8...Nxf2 hits the queen, and Black goes on to win a rook. 8.Re2 guards f2 first.
+  - id: centre-opens
+    name: When the centre opens
+    intro: >-
+      Sometimes the game does not stay quiet. If Black spends a move on ...d6 or ...h6 instead of hitting e4, White can
+      break with d4 or b4 at once. If Black breaks with ...d5 first, the loose bishop on c5 and the pawns on b7 and e5
+      become targets. Each line here turns on one idea: what is hanging now that the position is open.
+    lines: [giuoco-d6, giuoco-d6-bb4, giuoco-d6-bg4, giuoco-h6-early, giuoco-d5, giuoco-oo-d5]
+    plans:
+      - After 4...d6, play d4 at once and recapture with the c-pawn.
+      - After ...d5 before castling, Qb3 hits d5 and f7, and the bishop on c5 is loose.
+    questions:
+      - id: why-be3
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 d6 5. d4 exd4 6. cxd4 Bb6 7. Nc3 Bg4
+        ask: Black has pinned the knight on f3. Why can White not just castle?
+        answers: [[d4], [pawn]]
+        examples:
+          right:
+            - the pawn on d4 falls
+            - Nxd4 wins a pawn
+            - the pinned knight no longer guards d4
+          wrong: [the king is in check, Bxf3 wins a piece, castling is illegal]
+        explain: >-
+          The knight on f3 is what guards d4, and the pin stops it taking back. 8.O-O Nxd4 wins the pawn, because the
+          bishop on b6 keeps the queen away too. 8.Be3 guards d4 first, and then the king can castle.
   - id: two-knights
     name: Two Knights Defence
     intro: >-
       Black develops the other knight first with 3...Nf6, hitting e4. White answers calmly with 4.d3 and, after
-      4...Bc5 5.c3, is back in the main line's position.
-    lines: [two-knights-d3]
+      4...Bc5 5.c3, is back in the main line's position. Against the other replies the plan is the same, with one
+      exception: 4...d6 makes Black's usual defence of f7 a move slower, so 5.Ng5 is worth playing at once.
+    lines: [two-knights-d3, two-knights-be7, two-knights-d5, two-knights-d6]
+    plans:
+      - Play d3 and c3, castle, Re1 and Bb3, as in the Giuoco Piano.
+      - After ...d5 and ...Nxd5, castle and hit e5 with Re1.
+    questions:
+      - id: why-ng5-now
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 d6
+        ask: White does not normally rush with Ng5 in this opening. Why is 5.Ng5 good here?
+        answers: [[f7], [d5, tempo], [d5, move]]
+        examples:
+          right:
+            - it attacks f7 with the bishop and the knight
+            - f7 is hit twice and ...d5 now costs a move
+            - it goes for f7 because ...d5 now costs a move
+          wrong: [it attacks the queen, it wins the e5 pawn, it stops castling]
+        explain: >-
+          The knight and the bishop both hit f7. Black's usual answer is ...d5, but the pawn has already gone to d6, so
+          it costs a whole move, and 5...Be6, the most common reply, simply loses a pawn to 6.Nxe6 fxe6 7.Bxe6.
+  - id: early-h6
+    name: Black plays 3...h6
+    intro: >-
+      About one game in six, Black stops Ng5 before it can happen. It is safe, but it develops nothing, so White plays
+      the usual plan with a move in hand. Most of these games reach the Giuoco Piano or the Two Knights by another
+      order, and ...d5 is met as it is there, by Qb3.
+    lines: [italian-h6-main, two-knights-h6, italian-h6-setup, italian-h6-bc5, italian-h6-d5, italian-h6-c3-bc5]
+    plans:
+      - Play c3 and d3, castle, Re1 and Bb3, and answer an early ...Bc5 with b4.
+    questions:
+      - id: what-h6-stops
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 h6
+        ask: What is Black's 3...h6 for, and what does it cost?
+        answers: [[ng5], [g5]]
+        examples:
+          right:
+            - it stops Ng5
+            - it keeps the knight off g5 so f7 stays safe
+            - it stops the knight going to g5 but costs a move
+          wrong: [it attacks the bishop, it prepares castling, it defends e5]
+        explain: >-
+          It keeps White's knight off g5, so there is no attack on f7. The cost is a move that develops nothing, and
+          White uses it for the normal plan.
+  - id: other-third-moves
+    name: Other third moves
+    intro: >-
+      Three more ways to leave the main road at move 3, and two of them are traps you will meet. The Blackburne
+      Shilling punishes the greedy 4.Nxe5, the Rousseau Gambit punishes the greedy 4.exf5, and in both the quiet move
+      leaves White better.
+    lines: [shilling, rousseau, hungarian]
+    plans:
+      - Do not take the pawn Black is offering. Take the knight on d4, or guard e4 with d3.
+    questions:
+      - id: why-not-nxe5
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4
+        ask: The pawn on e5 has lost its defender. Why does White not take it with 4.Nxe5?
+        answers: [[qg5], [queen, g2], [queen, knight]]
+        examples:
+          right:
+            - Qg5 hits the knight and g2
+            - the queen comes to g5 and forks the knight and the g2 pawn
+            - after Qg5 White loses the knight
+          wrong: [it is protected by the knight, it develops, the bishop hangs]
+        explain: >-
+          4...Qg5 hits the knight on e5 and the pawn on g2 at once. If White grabs more with 5.Nxf7, then 5...Qxg2
+          6.Rf1 Qxe4+ 7.Be2 Nf3 is mate. 4.Nxd4 takes the knight and leaves Black with a weak pawn.
   - id: traps
     name: Traps to know
     intro: >-
       Short traps from the same opening that win at once when Black goes wrong. Learn them so you see the chance when
-      it comes, not to play for them.
-    lines: [legal-mate]
+      it comes, not to play for them. All of them start from 3...d6 4.Nc3, the one time White puts the knight on c3.
+    lines: [legal-mate, legal-nxe5, legal-bxf3, italian-d6-nf6]
     questions:
       - id: why-nxe5-works
         at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. Nc3 Bg4 5. h3 Bh5
@@ -81,34 +206,165 @@ steps:
     title: The quiet bishop
     text: >-
       The plan of the Giuoco Piano, "the quiet game": the bishop on c4 points at f7, c3 prepares the d4 break, d3
-      keeps e4 safe, and the king castles before anything opens. Then Re1 and Bb3 put the last pieces where they are
-      safe and useful. Nothing here is forced; you are building a position, so learn why each move is played and the
-      moves follow.
+      keeps e4 safe, and the king castles before anything opens. Re1 then guards e4 a second time. Nothing here is
+      forced; you are building a position, so learn why each move is played and the moves follow.
+  giuoco-main:2:
+    title: The knight's route to g3
+    text: >-
+      Bb3 and h3 put the bishop and the king's side beyond reach, and then the last knight goes on its journey: d2, f1,
+      g3. On the way it clears the bishop on c1, and at the end of it every white piece has a job. This slow route is
+      the heart of the quiet Italian, and d4 only comes once it is finished.
+  giuoco-castled:1:
+    title: When Black castles first
+    text: >-
+      5...O-O is the band's most common move here, and it changes nothing: castle too, and 6...d6 is the main line by
+      another order. When Black adds ...h6, White answers with h3, so that neither side can pin a knight, and the game
+      still runs back into the main line.
+  giuoco-castled-be6:1:
+    title: When Black offers the swap here
+    text: >-
+      8...Be6 asks for the bishop on c4. Bb3 keeps it on the diagonal, and if Black swaps, the queen recaptures and hits
+      b7. White loses nothing, and Black has a pawn to look after.
+  giuoco-h6:1:
+    title: When Black plays ...h6 first
+    text: >-
+      5...h6 is a useful move, but a slow one. White castles and plays Re1 as usual, and the game soon joins the line
+      above. Pawn moves on the edge do not change a plan.
+  giuoco-bg4:1:
+    title: When Black pins with ...Bg4
+    text: >-
+      6...Bg4 pins the knight on f3 to the queen: the knight cannot move without exposing her. 7.h3 asks the bishop to
+      decide at once, and 8.Nbd2 gives f3 a second defender, so the pin never costs White anything. Then Re1, Nf1 and
+      Ng3 hit the bishop and the pin is over.
+  giuoco-re1-bg4:1:
+    title: The pin after castling
+    text: >-
+      7...Bg4 is the band's most common move after 7.Re1. The answer is the one you know: h3 and Nbd2, and the position
+      is the same as if Black had pinned a move earlier.
+  giuoco-h6-bg4:1:
+    title: The pin with ...h6 in
+    text: >-
+      With ...h6 and ...d6 played, 7...Bg4 is the usual try. Nothing about it is new: h3, Nbd2, and the knight heads for
+      f1 and g3 to chase the bishop.
+  giuoco-be6:1:
+    title: When Black offers to swap bishops
+    text: >-
+      7...Be6 wants to swap off the bishop that aims at f7. 8.Bb3 lets Black do it, but then the queen recaptures and
+      hits b7, so Black loses a move guarding the pawn while White's last piece comes out.
+  giuoco-ng4:1:
+    title: When the knight jumps to g4
+    text: >-
+      7.Re1 took a guard away from f2, and 7...Ng4 goes for it. The natural replies are the wrong ones: 8.h3 loses a
+      rook and 8.d4 loses a pawn, and both come as follow-ups. 8.Re2 guards f2 from the side, and then h3 sends the
+      knight home.
   giuoco-d6:1:
     title: When Black holds e5 with ...d6
     text: >-
       4...d6 guards e5 but leaves White free to play d4 at once. Take the centre, recapture with the c-pawn, then
-      develop and castle; h3 keeps Black's bishop off g4. Black's most common answer, the check 6...Bb4+, is a
-      mistake: it comes next as a follow-up.
+      develop and castle; h3 keeps Black's bishop off g4.
+  giuoco-d6-bb4:1:
+    title: The check on b4
+    text: >-
+      Black's most common answer is the check 6...Bb4+, and it is a mistake. The knight blocks it with a developing
+      move, White castles, and Nd5 next hits the bishop and whatever stands on f6. The follow-ups show what happens to
+      Black's natural tries.
+  giuoco-d6-bg4:1:
+    title: The pin that hits d4
+    text: >-
+      With the bishop on b6, 7...Bg4 is a real threat: the knight on f3 guards d4, and it is pinned. 8.O-O loses the
+      pawn, so 8.Be3 comes first. After that the king can castle, and h3 asks the bishop to decide.
+  giuoco-h6-early:1:
+    title: When Black wastes a move with ...h6
+    text: >-
+      4...h6 stops a threat that was not there, and White can punish it at once. b4 and b5 chase the bishop and the
+      knight away from e5, and the pawn falls, with f7 as well when the knight goes to a5.
+  giuoco-d5:1:
+    title: When Black strikes with ...d5
+    text: >-
+      Black opens the centre with 5...d5 before castling. After the pawns are swapped, Black's knight stands on d5 in
+      front of a king that has not castled, and 7.Qb3 hits the knight and f7 at once. Black's only good reply loses the
+      pawn on b7, and every other one loses a piece to Qb5+, which picks up the loose bishop on c5.
+  giuoco-oo-d5:1:
+    title: When Black strikes after castling
+    text: >-
+      With the king on g8, the rook guards f7 and Qb3 has lost its point. So White turns on e5 instead: Re1 hits it,
+      and the d4 break hits it again with the bishop on c5 as well. This is the break the whole plan was for, and
+      here it wins a pawn.
   two-knights-d3:1:
     title: When Black plays 3...Nf6
     text: >-
       The Two Knights. 4.d3 guards e4 without any fuss, and after 4...Bc5 5.c3 the position is the main line's, so
       the plan is the same: castle, Re1, Bb3, and the d4 break when the pieces are ready.
-  giuoco-d5:1:
+  two-knights-be7:1:
+    title: When Black plays ...Be7
+    text: >-
+      The bishop on e7 aims at nothing, so White has time for the whole plan: c3, castle, Re1. Against the pin the
+      answers are the ones from the Giuoco Piano, h3 and Nbd2.
+  two-knights-d5:1:
     title: When Black strikes with ...d5
     text: >-
-      Black opens the centre with 5...d5 before castling. After the pawns are swapped, Black's knight stands on d5 in
-      front of a king that has not castled, and 7.Qb3 hits the knight and f7 at once. Black has to spend a move
-      defending while White's pieces come out.
-  giuoco-bg4:1:
-    title: When Black pins with ...Bg4
+      4...d5 opens the game while Black's king is still on e8. White castles and then turns on e5, a pawn with one
+      defender. Watch the knight on d5: only the queen guards it, so ...Bd6, the natural way to hold e5, simply
+      loses it.
+  two-knights-d6:1:
+    title: When Black plays ...d6
     text: >-
-      6...Bg4 pins the knight on f3 to the queen: the knight cannot move without exposing her. 7.h3 asks the bishop
-      to decide at once, and 8.Nbd2 gives f3 a second defender, so the pin never costs White anything.
+      4...d6 looks solid, but it makes Black's usual defence of f7 a move slower, so White goes for f7 at once.
+      5...Be6, the band's favourite, loses a pawn. After 5...d5 Black has spent a move, and Qf3 leaves White with the
+      two bishops.
+  italian-h6-main:1:
+    title: When Black plays 3...h6
+    text: >-
+      3...h6 stops Ng5 at the cost of a move. White plays the usual c3 and d3, and from here the game usually joins a
+      line you already know.
+  two-knights-h6:1:
+    title: The same position from the Two Knights
+    text: >-
+      3...Nf6 4.d3 h6 is the same idea by another order, and 5.c3 reaches the position of the line above. Everything
+      in this variation applies to both.
+  italian-h6-setup:1:
+    title: Against ...d6 and ...Be7
+    text: >-
+      Black's quiet set-up gets a quiet answer: castle, Re1, Bb3. The bishop steps back before it can be hit, and h3
+      and Nbd2 come next, as in the main line.
+  italian-h6-d5:1:
+    title: When Black strikes with ...d5
+    text: >-
+      As in the Giuoco Piano, ...d5 before castling runs into Qb3. Without a bishop on c5 there is no Qb5+ fork, but
+      the pawn on b7 still falls, and the queen has a safe way out on a6.
+  shilling:1:
+    title: The Blackburne Shilling
+    text: >-
+      3...Nd4 is a trap with a bad move inside it. 4.Nxe5 loses to 4...Qg5, and that is the follow-up to learn.
+      4.Nxd4 exd4 leaves Black behind in development, and castling followed by c3 wins the pawn on d4.
+  rousseau:1:
+    title: The Rousseau Gambit
+    text: >-
+      3...f5 offers a pawn, and taking it hands Black the game: 4.exf5 e4 and the knight has no good square. 4.d3
+      keeps e4 guarded and leaves Black with a loose king and nothing to show for it.
+  hungarian:1:
+    title: The Hungarian Defence
+    text: >-
+      3...Be7 is safe and passive. 4.d3 is the quiet answer, and after 4...Nf6 5.c3 the game is the Two Knights' line
+      with ...Be7.
+  italian-d6-nf6:1:
+    title: When Black plays ...Nf6
+    text: >-
+      After 3...d6 4.Nc3 Nf6, f7 is short of help, as it is in the Two Knights with ...d6. 5.Ng5 goes for it, and
+      Black either loses a pawn or has to give one up.
   legal-mate:1:
     title: Légal's mate
     text: >-
       When Black pins the knight before developing, 6.Nxe5 offers the queen. Taking it walks into mate: 7.Bxf7+ Ke7
       8.Nd5, the bishop and both knights covering every square round the king. If Black declines, White has won the
       e5 pawn.
+  legal-nxe5:1:
+    title: When Black takes the knight
+    text: >-
+      Most players at this level answer 6.Nxe5 with 6...Nxe5, and that avoids the mate. White still wins a pawn: the
+      queen takes on h5, and Qb5+ picks up the knight if Black takes on c4.
+  legal-bxf3:1:
+    title: When Black takes on f3
+    text: >-
+      Nearly half the band takes on f3 at once. The queen recaptures aimed at f7, and 6...Nd4 is mate in one. After
+      6...Nf6 7.d3 White has the two bishops and a simple game.

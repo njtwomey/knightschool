@@ -1,0 +1,19 @@
+[For "white"]
+[Kind "sideline"]
+[Start "two-knights-d3 4.d3"]
+[Name "Two Knights: the slow ...d6"]
+
+4... d6 { Solid to look at, but it gives up the usual defence of f7: Black's answer to Ng5 is ...d5, and now that costs a move. }
+5. Ng5 { The one moment in this opening when White goes for f7 at once, because here it costs nothing. The band plays it and scores 61%; a quiet move lets Black off. [%cal Gg5f7,Gc4f7] [%idea f7-weakness] }
+5... d5 { Black has to give up the tempo. }
+( 5... Be6? { The most common reply, blocking the bishop. But e6 is hit twice and guarded once. }
+  6. Nxe6 fxe6 7. Bxe6 { White has won a pawn and has the two bishops. } )
+( 5... Be7? { Develops and ignores the threat. }
+  6. Nxf7 { The knight forks the queen and the rook, and the bishop on c4 guards it. [%idea fork] }
+  6... Qd7 7. Nxh8 { White has won a rook and a pawn. } )
+6. exd5 Nxd5
+( 6... Nd4? { Leaves the pawn on d5 alone, so it can keep going. }
+  7. d6 Ne6 8. dxc7 { The queen recaptures, but the pawn won on d5 stays won: White is a pawn up. } )
+7. Qf3 { Hits the knight and f7 together. Black cannot take on g5: White's d3 opened the bishop on c1, and it would recapture on g5 with the queen won. [%cal Gf3d5,Gf3f7] }
+7... Be6 { Covers both. }
+8. Nxe6 fxe6 9. O-O { The king goes to safety. White has the two bishops, and Black has doubled e-pawns. Nothing has been won yet: the gain is positional, and it lasts. } *

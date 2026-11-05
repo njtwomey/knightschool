@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 4.c3"]
+[Name "Giuoco Piano: the wasted ...h6"]
+
+4... h6? { A wasted move. It stops Ng5, which White was not threatening, and does nothing for e5 or for Black's development. White uses the time to chase away the pieces that guard e5. [%csl Re5] }
+5. b4 { Hits the bishop. The pawn is safe: 5...Bxb4 6.cxb4 Nxb4 gives Black only two pawns for the bishop. [%cal Gb4c5] }
+5... Bb6 6. b5 { Now the knight is hit, and the knight is the only piece guarding e5. Wherever it goes, e5 loses its defender: after 6...Nce7 7.Nxe5 White has simply won the pawn. [%cal Gb5c6] [%csl Re5] }
+6... Na5 { The band's usual square, and it hits the bishop on c4. }
+7. Bxf7+ { The bishop does not wait to be taken: it takes first, with check. 7...Kf8 8.Nxe5 is simply two pawns. }
+7... Kxf7 8. Nxe5+ { The knight takes with check, and the king has only bad squares: 8...Kf8 9.Ng6+ forks the king and the rook. [%cal Ge5g6] }
+8... Ke6 { The best of them, and the king walks out into the open. }
+( 8... Ke8? { The band's most common move, and it loses at once. }
+  9. Qh5+ g6 10. Qxg6+ Ke7 11. Ba3+ { The bishop joins in along the open diagonal, and Black is mated in a few moves. [%cal Ga3e7] } )
+( 8... Kf6? { Stays near the knight, and walks into the queen. }
+  9. Qh5 Ne7 10. Qf7+ Kxe5 11. d4+ { The king has been dragged into the middle of the board. Black gives everything back and is still mated or lost. } )
+9. Qh5 { The queen joins in with the king on e6. White has won two pawns for the bishop on the way to more, and d4 is next. That is what 4...h6 cost: a move spent on nothing, while White's pawns gained time. [%cal Gd2d4] } *

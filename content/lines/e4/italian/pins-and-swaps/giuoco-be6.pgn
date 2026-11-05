@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 7.Re1"]
+[Name "Giuoco Piano: Black offers to swap bishops"]
+
+7... Be6 { Offers to swap the bishop on c4, White's best piece and the one that aims at f7. [%cal Re6c4] }
+8. Bb3 { Keeps the bishop on its diagonal, and if Black takes, the queen recaptures with a move gained. 8.Bxe6 fxe6 is level too, but it hands Black the open f-file. }
+8... Bxb3 9. Qxb3 { The queen comes out with a hit on b7, so Black has to spend a move on it. [%cal Gb3b7] [%csl Yb7] }
+9... Rb8 10. Nbd2 { The last minor piece comes out, and the knight's route through f1 is open as usual. } *

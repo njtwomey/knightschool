@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 7.Re1"]
+[Name "Giuoco Piano: ...Ng4 once the rook has left f1"]
+
+7... Ng4 { Uses the rook's move: f2 now has only the king to guard it, and the knight and the bishop on c5 both hit it. [%cal Rg4f2,Rc5f2] [%csl Rf2] }
+8. Re2 { The rook guards f2 from the side, and the threat is over. Next h3 sends the knight back, and the rook returns to e1 when it likes. [%cal Ge2f2] }
+( 8. d4? { Blocks the bishop's line to f2, and it is the band's favourite here, but it drops a pawn. }
+  8... exd4 { Black takes, and f2 is still under attack, so White has to deal with the knight before recapturing. }
+  9. h3 Nge5 { The knight steps back to a good square and White is simply a pawn down. } )
+( 8. h3?? { Chases the knight and forgets what it was doing there. White scores 30% with this. }
+  8... Nxf2 { Takes the pawn and hits the queen and the pawn on h3. }
+  9. Qe2 Nxd3+ { The knight takes a second pawn with check, and the rook on e1 falls next: Black wins a rook and two pawns for the knight. } )
+8... Be6 { Develops and offers the bishops. }
+( 8... Nxf2? { Goes through with it, but the sums do not work. }
+  9. Rxf2 Bxf2+ 10. Kxf2 { Black has a rook and a pawn for two minor pieces. In the middlegame the two pieces are worth more, and White's king is safe enough. } )
+9. h3 { Now the knight has to go back. It has spent two moves and achieved nothing. [%cal Gh3g4] } *

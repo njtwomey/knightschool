@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-castled 6.O-O"]
+[Name "Giuoco Piano: ...d5 after castling"]
+
+6... d5 { With the king safe, Black breaks in the centre. }
+7. exd5 Nxd5 8. Re1 { Hits e5. Black has castled, so a rook now guards f7 and 8.Qb3 no longer works: this time the target is the pawn. [%cal Ge1e5] }
+8... Re8 { Defends e5, the band's most common move here. }
+( 8... f6? { Defends e5, but it opens the diagonal from c4 to the king, so the knight on d5 is pinned. }
+  9. d4 { Hits the bishop, and 9...exd4 walks into the next move. [%cal Gd4c5] }
+  9... exd4 10. Qb3 { A second attack on the pinned knight. [%cal Gb3d5] }
+  10... Ne7 11. cxd4 { The bishop on c5 has to move, and then Rxe7 and Bxd5+ win a piece. [%cal Gd4c5,Ge1e7] } )
+( 8... Bd6?? { Defends e5, but it stands in front of the queen, so she no longer guards the knight on d5. [%csl Rd5] }
+  9. Bxd5 { White is a knight up. [%idea blocked-guard] } )
+9. d4 { The d4 break, and it works because c3 and Re1 are both in place: the bishop on c5 and the pawn on e5 are hit together. [%cal Gd4c5,Gd4e5] }
+9... Bb6 { Saves the bishop, which leaves e5 to fall. }
+( 9... exd4?? { Takes, but it opens the file for the rook. }
+  10. Rxe8+ Qxe8 11. Bxd5 { The queen has left the d-file, so nothing guards the knight. White is a knight up. [%idea blocked-guard] } )
+10. dxe5 { White has won the pawn. }
+10... Be6 11. Bb3 { Steps out of any tricks on the diagonal. White is a clean pawn up with no weaknesses, and the d4 break has done its work. } *

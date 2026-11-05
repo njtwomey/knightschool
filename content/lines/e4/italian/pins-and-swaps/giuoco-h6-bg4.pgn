@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-h6 7.Re1"]
+[Name "Giuoco Piano: ...h6 and the pin"]
+
+7... Bg4 { The band's most common move here: the pin again, with Black's king still in the centre. [%icon pin@f3] [%idea pin] }
+8. h3 { Asks the bishop to decide, as ever. }
+8... Bh5 9. Nbd2 { Guards f3 a second time. }
+9... O-O 10. Nf1 { On the usual route: Ng3 next hits the bishop and ends the pin. [%cal Gf1g3,Gg3h5] } *

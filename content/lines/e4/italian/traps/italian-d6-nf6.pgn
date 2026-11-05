@@ -1,0 +1,21 @@
+[For "white"]
+[Kind "sideline"]
+[Start "legal-mate 4.Nc3"]
+[Name "3...d6: ...Nf6 leaves f7 short of help"]
+
+4... Nf6 { Develops, but with ...d6 played, ...d5 will cost a move, and that is Black's usual answer to Ng5. }
+5. Ng5 { Goes for f7 at once, for the same reason as in the Two Knights line with ...d6. [%cal Gg5f7,Gc4f7] [%idea f7-weakness] }
+5... d5 { Black has to spend the extra move. }
+( 5... Be6? { The band's most common reply. e6 is hit twice and guarded once. }
+  6. Nxe6 fxe6 7. Bxe6 { White has won a pawn and has the two bishops. } )
+( 5... Bg4? { Hits the queen, but f7 falls first. }
+  6. Bxf7+ Kd7 7. f3 Bh5 8. d4 { White is a pawn up, and Black's king is stuck in the centre. } )
+6. exd5 Na5 { Saves the pawn count by hitting the bishop instead of recapturing. }
+( 6... Nxd5? { The natural recapture, and the knight on d5 is the trouble. }
+  7. Nxf7 { The queen and rook are forked, and the king can only take with the knight on d5 hanging to a check. [%idea fork] }
+  7... Kxf7 8. Bxd5+ { The piece comes back with check. White is a pawn up, and Black's king can no longer castle. } )
+7. Bb5+ { Leaves with check, so Black has no time to take on d5. [%cal Gc4b5] }
+7... c6 8. dxc6 bxc6
+( 8... Nxc6? { Recaptures with the knight, and takes it off a5 for nothing. }
+  9. Bc4 { The bishop is back on the diagonal and f7 is hit twice again. White stays a pawn up. } )
+9. Ba4 { The bishop is safe. White is a pawn up, and Black has some activity for it, so White castles and plays d3 next. } *

@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "trap"]
+[Start "legal-mate 6.Nxe5"]
+[Name "Legal Mate: Black takes the knight"]
+
+6... Nxe5 { The band's most common answer, and the right idea: it takes the knight and hits the bishop on c4. }
+7. Qxh5 { The queen takes the bishop on h5. After 6...dxe5 this is the reply too, with the same pawn won. }
+7... Nxc4 8. Qb5+ { Check, and the queen also hits the knight on c4, so the piece comes back. [%cal Gb5c4] [%idea fork] }
+8... c6 9. Qxc4 { White has won the e5 pawn, and Black has nothing to show for it. This is what Légal's trap usually pays: a pawn, not a mate. } *

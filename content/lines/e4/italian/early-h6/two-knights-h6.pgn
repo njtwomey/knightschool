@@ -1,0 +1,7 @@
+[For "white"]
+[Kind "sideline"]
+[Start "two-knights-d3 4.d3"]
+[Name "Two Knights: ...h6 before ...Bc5"]
+
+4... h6 { The most common move after 4...Bc5: it rules out Ng5 and Bg5. }
+5. c3 { The position of 3...h6 4.c3 Nf6 5.d3, by another order. [%cal Gc3d4] } *

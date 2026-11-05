@@ -1,0 +1,10 @@
+[For "white"]
+[Kind "sideline"]
+[Start "italian-h6-main 5.d3"]
+[Name "3...h6: Black strikes with ...d5"]
+
+5... d5 { Opens the centre before castling, as in the Giuoco Piano. }
+6. exd5 Nxd5 7. Qb3 { The same blow as there: the queen hits the knight on d5 and f7 together, with c3 already played to keep her safe. [%cal Gb3d5,Gb3f7] [%csl Yf7] }
+7... Be6 8. Qxb7 { Takes the pawn, with the knight on c6 hit as well. [%cal Gb7c6] }
+8... Na5 { Hits the queen and the bishop. }
+9. Qa6 { The queen stays out of reach. After 9...Nxc4 10.Qc6+ Bd7 11.Qxd5 she takes the knight and hits c4 and e5, and White comes out two pawns up. [%cal Ga6c6] } *

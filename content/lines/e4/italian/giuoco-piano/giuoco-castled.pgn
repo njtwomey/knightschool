@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 5.d3"]
+[Name "Giuoco Piano: Black castles first"]
+
+5... O-O { The band's most common move here: Black gets the king safe first and leaves ...d6 for later. }
+6. O-O { White's king goes to safety too. If Black now plays 6...d6 the game is back in the main line. }
+6... h6 { Keeps White's bishop off g5, where it would pin the knight on f6 to the queen. }
+7. Re1 { Guards e4 a second time. The plan does not change for one pawn on h6. }
+7... d6 { Gives e5 a pawn to defend it. Both sides have castled, and Black has ...h6 in. }
+8. h3 { The same idea as ...h6: it keeps the bishop off g4, so neither side can pin the other's knight. The band's favourite here is 8.d4, and it scores worst, because White's pieces are not ready for it. [%cal Rc8g4] }
+8... a6 { Makes room on a7 for the bishop, ready for d4, and prepares ...b5. }
+9. Bb3 { Out of reach of ...b5 and still on the diagonal that points at f7. }
+9... Ba7 { This is the main line's position, reached by another order: Nbd2 and the knight's route to g3 come next. } *

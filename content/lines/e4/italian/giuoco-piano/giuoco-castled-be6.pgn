@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-castled 8.h3"]
+[Name "Giuoco Piano: ...Be6 with ...h6 and h3 in"]
+
+8... Be6 { The band's most common move here: an offer to swap the bishop that aims at f7. [%cal Re6c4] }
+9. Bb3 { Stays on the diagonal, as it does in every line of this opening. }
+9... Bxb3 10. Qxb3 { The queen comes out with a hit on b7, and Black has to spend a move on it. [%cal Gb3b7] [%csl Yb7] } *

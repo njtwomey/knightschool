@@ -1,0 +1,27 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 5.d3"]
+[Name "Giuoco Piano: Black strikes with ...d5"]
+
+5... d5 { Strikes in the centre, but opens the position before Black has castled. }
+6. exd5 Nxd5
+7. Qb3 { Hits the knight on d5 and the pawn on f7 at once; Black has to give ground. [%cal Gb3d5,Gb3f7] [%csl Yf7] }
+7... Be6 { Guards the knight and f7 with one move, the natural reply. It leaves b7 to the queen. }
+( 7... Na5? { Hits the queen and the bishop on c4 together. It looks like the answer, but the bishop on c5 has no defender. }
+  8. Qb5+ { The queen steps out of the attack with check, and on b5 she also hits the bishop on c5. [%cal Gb5c5] }
+  8... c6 9. Qxc5 { White is a bishop up. } )
+( 7... Nce7? { Guards the knight, but it takes the knight away from c6, and the bishop on c5 is still loose. }
+  8. Qb5+ { Check, and a second attack on the bishop on c5: a fork. [%cal Gb5c5] [%idea fork] }
+  8... c6 9. Qxc5 { White is a bishop up. } )
+8. Qxb7 { Takes the pawn, and the knight on c6 is hit as well. The queen looks far from home, but she has safe ways back. [%cal Gb7c6] }
+8... Nde7 { The one good answer: it guards the knight on c6 and blocks nothing. Every other move here loses a piece. }
+( 8... Na5? { Black's most common move, hitting the queen and the bishop on c4. }
+  9. Qb5+ { The same idea again: check, and the bishop on c5 falls. [%cal Gb5c5] [%idea fork] }
+  9... c6 10. Qxc5 { White is a bishop and a pawn up. } )
+( 8... Nce7? { Saves the knight on c6, but not the bishop on c5. }
+  9. Qb5+ c6 10. Qxc5 { The check picks up the loose bishop again. White is a bishop and a pawn up. } )
+( 8... Rb8?? { Hits the queen and forgets what she is attacking. }
+  9. Qxc6+ { Takes the knight with check. White is a knight and a pawn up, and the bishop on c5 is hit next. } )
+( 8... O-O?? { Castles and leaves the knight on c6 to its fate. }
+  9. Qxc6 { White is a knight and a pawn up. } )
+9. Bxe6 fxe6 10. Qa6 { The queen is out of danger and White is a clear pawn up, with Black's e-pawns doubled and split from their neighbours. } *

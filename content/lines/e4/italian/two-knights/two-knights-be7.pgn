@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "two-knights-d3 4.d3"]
+[Name "Two Knights: the modest ...Be7"]
+
+4... Be7 { A safe square, but a modest one: the bishop does not aim at f2, so White has time for everything. }
+5. c3 { The usual plan, with d4 in mind. [%cal Gc3d4] }
+5... O-O 6. O-O d6 7. Re1 { Guards e4 a second time and frees the knight on f3. }
+7... Bg4 { The pin again, the band's most common move here. [%icon pin@f3] }
+8. h3 { Asks the bishop to decide. }
+8... Bh5 9. Nbd2 { The same answer as in the Giuoco Piano: the knight guards f3 and heads for f1 and g3, where it will chase the bishop. [%cal Gd2f1,Gf1g3] } *

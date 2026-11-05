@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "giuoco-main 7.Re1"]
+[Name "Giuoco Piano: the pin after castling"]
+
+7... Bg4 { Black's most common move here: the same pin as 6...Bg4, with both kings already castled. [%icon pin@f3] [%idea pin] }
+8. h3 { Asks the bishop to decide, as before. If it takes on f3, the queen recaptures and White has the two bishops. }
+8... Bh5 9. Nbd2 { This is the position after 6...Bg4 by another order, so the plan is the same: Nf1 and Ng3 end the pin. } *
