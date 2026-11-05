@@ -8,7 +8,7 @@ import type { z } from 'zod';
 /** Every setting key and the type of its value (docs/v2/settings.md, "Keys"). */
 export interface SettingValues {
   preset: string;
-  /** The openings being learned (opening ids); set on onboarding and the repertoire page. */
+  /** What the learner has ticked to learn: picks, from a whole opening to one step (core `training/repertoire.ts`). */
   repertoire: string[];
   /** A rating band as `min-max`. */
   'level.band': string;

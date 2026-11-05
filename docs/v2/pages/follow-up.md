@@ -26,7 +26,7 @@ The follow-up rows under their step on [opening](opening.md) and [variation](var
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › Opening ▾ › Variation ▾ › Step n ▾ › 3a ▾ (the step's follow-ups),
+[breadcrumbs](../components/breadcrumbs.md): Openings › Opening ▾ › Variation ▾ › Step n ▾ › 3a ▾ (the step's follow-ups),
 then the heading ("3a. If 4...h6 is played") and the stages.
 
 - **Learn**: the story's introduction is **why it is worth knowing**, in words and numbers: the evaluation before the

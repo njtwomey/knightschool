@@ -42,7 +42,7 @@ rewritten.
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › Opening ▾ › Variation ▾ › Step n ▾ (the variation's steps with
+[breadcrumbs](../components/breadcrumbs.md): Openings › Opening ▾ › Variation ▾ › Step n ▾ (the variation's steps with
 their follow-ups under each, and their states), then the heading and the stages as tabs, done ones ticked.
 
 Two columns from lg; on a phone: board, controls, then the panel in the page's flow.

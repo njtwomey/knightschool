@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * A page with a board and a panel (docs/v2/patterns/layout.md, `.board-columns`): one column on a phone, side by side
- * from lg. The board column stays in view as the panel scrolls (sticky under the header, aligned to its own height so
+ * from lg. The board column stays in view as the panel scrolls (sticky under the header and the floating trail, aligned to its own height so
  * it has room to stick), so whatever the panel points at is always visible on the board.
  */
 export function BoardColumns({
@@ -39,7 +39,7 @@ export function BoardColumns({
     >
       <div
         className={cn(
-          'grid content-start gap-3 self-start lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto',
+          'grid content-start gap-3 self-start lg:sticky lg:top-28 lg:max-h-[calc(100dvh-7.5rem)] lg:overflow-y-auto',
           side === 'right' && 'lg:order-last',
         )}
       >

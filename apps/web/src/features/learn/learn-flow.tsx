@@ -430,7 +430,7 @@ function DoneStage({
 }) {
   const opening = data.one.opening;
   // The Try's answers are saved as it goes; loadProgress waits for every save still landing, so this is what they did.
-  const fresh = useLoad(() => loadProgress(), [item, record]);
+  const fresh = useLoad(() => loadProgress(undefined, opening.id), [item, record]);
   const now: OpeningData = fresh.data
     ? {
         ...data,

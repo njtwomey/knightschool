@@ -9,10 +9,11 @@ lines that pass through them.
   `matchesAll`, `matchesExactly`, `relevance(query, fields) → score`, and `matchReason` ("name", "a line's name", "an
   idea", with the matched words) for the "why it matched" line.
 - **Filters**: `filterOpenings(catalog, { side, level, style, repertoire })` and `searchLines(catalog, query, filters)`,
-  `inStudyOrder` (tracks' order), `allLines`.
-- **By position**: `searchAt(index, epd) → SearchResult[]`, every opening and line through a position, transpositions
-  included. The index is the shipped `lines_at` table plus an in-memory index for openings written in Create
-  (`buildSearchIndex(openings)`).
+  `inStudyOrder` (tracks' order), `allLines`. As built, in `components/finding/search.ts`: `passesWho`, `passesScope`,
+  `passesKind`, `openingRole`, `nearestName`, `quoteFrom`.
+- **By position**: every opening and line through a position, transpositions included. As built: `indexLines(lines)` in
+  memory over the openings' trees, `linesAt(index, epd, played, kind)`, `nextMoves(hits)`, `throughPosition(items, hits)`;
+  there is no `lines_at` table yet.
 - **Ideas**: ideas are searchable by name, summary and kind, and an idea's results list what links to it.
 - **`rankResults(results, query)`**: the SQLite full-text results (`knowledge.sqlite` `search`) re-ranked with
   `relevance` and `editDistance`, so a slip in spelling still finds the opening.
@@ -24,10 +25,11 @@ lines that pass through them.
 ## Rules
 
 - **Forgiving** (v1's rules): words run together ("carokann" finds "Caro-Kann"), and small slips (none for short words,
-  one from five letters, two from eight; a swap of neighbouring letters counts as one) still match; every query word
-  must match something.
-- **Ranked by relevance** (v1 `relevance`): the whole name, then a name that starts with the query, then one with every
-  word, then forgiven matches in the name, then matches only in the summary and other names; ties keep study order.
+  one from five letters, two from eight; a swap of neighbouring letters counts as one) still match in titles, never in
+  prose; every query word must match something, in one field or across them.
+- **Ranked by relevance** (`searchItems`, weights in `search.weights`): where it matched sets the tier (the name, a line
+  inside, the opening around it, a description, a comment), how well it matched moves it up to 40% within the tier, so a
+  slip in a name stays above an exact word in a description; ties keep the order given, which is study order.
 - **Every result says why it matched**, in words the search box shows under it.
 - **Transpositions match**: board search goes by EPD, so a position reached by another order finds the same lines.
 - **Authored openings** are searched in memory and merged with the shipped results (v1 left them out of board search;

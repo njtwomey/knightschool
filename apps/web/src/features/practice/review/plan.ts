@@ -14,7 +14,7 @@ import {
 } from '@knightschool/core';
 import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
 import { positionPlies } from '@knightschool/core/content';
-import type { PracticeConfig } from '@/components/practice/practice-config';
+import type { PracticeConfig, PracticeSourceId } from '@/components/practice/practice-config';
 import type { ShippedPuzzle } from '@/data/content';
 import { getSetting } from '@/data/settings';
 import { mergeFacts, mergeOpenings } from '../merge';
@@ -122,7 +122,10 @@ function questionOffers(openings: readonly OpeningProgress[]): Asked[] {
 
 /** The shipped puzzles of the learner's openings, by Lichess id. */
 export async function shippedPuzzles(progress: LearnerProgress): Promise<Map<string, ShippedPuzzle>> {
-  const lists = await Promise.all(practiceOpenings(progress).map((one) => puzzlesOf(one.opening.id).catch(() => [])));
+  // A due puzzle outside the repertoire is still asked by "Everything due".
+  const outside = progress.allDue.some((card) => card.id.startsWith('puzzle:'));
+  const openings = outside ? progress.openings : practiceOpenings(progress);
+  const lists = await Promise.all(openings.map((one) => puzzlesOf(one.opening.id).catch(() => [])));
   return new Map(lists.flat().map((puzzle) => [puzzle.id, puzzle]));
 }
 
@@ -131,12 +134,13 @@ export async function shippedPuzzles(progress: LearnerProgress): Promise<Map<str
  * `review.sessionSize` (a puzzle card only when its puzzle is shipped, a question card only while its opening has it),
  * then new cards up to what is left of `review.newPerDay`: moves in step order, taking turns between the learner's
  * openings, from steps that are open or being learned, then the questions of the variations begun. Each move card asks
- * `config.movesPerQuestion` moves; a later move of a run that is due itself is not asked twice.
+ * `config.movesPerQuestion` moves; a later move of a run that is due itself is not asked twice. With anything ticked,
+ * all of it is cut to the repertoire; `due-all` still asks every card due.
  */
 export function duePlan(
   progress: LearnerProgress,
   puzzles: ReadonlyMap<string, ShippedPuzzle>,
-  config: Pick<PracticeConfig, 'movesPerQuestion'>,
+  config: Pick<PracticeConfig, 'movesPerQuestion'> & { source?: PracticeSourceId },
 ): ReviewPlan {
   const openings = startedOpenings(progress);
   const size = getSetting('review.sessionSize');
@@ -146,7 +150,7 @@ export function duePlan(
   const puzzleCards: Exercise[] = [];
   const asked = new Set<string>();
   const count = () => moves.length + questions.length + puzzleCards.length;
-  for (const card of progress.due) {
+  for (const card of config.source === 'due-all' ? progress.allDue : progress.due) {
     if (count() >= size) break;
     if (asked.has(card.id)) continue;
     const move = parseMoveCardId(card.id);
@@ -186,7 +190,8 @@ export function duePlan(
 /**
  * Free practice of some material (`/practice/review/<opening>`, or any source but Due today): its move cards and
  * questions, those already in the learner's reviews when there are any, up to a session's worth, never saved. "My
- * repertoire" is every opening started (or every opening when none is), "Everything" every opening there is.
+ * repertoire" is what is ticked (with nothing ticked, every opening started, or every opening when none is),
+ * "Everything" every opening there is.
  */
 export function freePlan(progress: LearnerProgress, config: PracticeConfig, random = Math.random): ReviewPlan {
   const scope = scopeOf(config.source);
@@ -204,6 +209,7 @@ export function freePlan(progress: LearnerProgress, config: PracticeConfig, rand
   const size = getSetting('review.sessionSize');
   const allQuestions = openings.flatMap((one) =>
     (one.opening.questions ?? [])
+      .filter((question) => !one.scope || one.scope.variations.has(question.variation))
       .filter((question) => !scope?.variation || question.variation === scope.variation)
       .map((question) => askedOf(one.opening, question)),
   );

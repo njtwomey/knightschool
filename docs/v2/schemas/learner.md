@@ -19,7 +19,8 @@ first.
 
 One row per key. The learner layer of [../settings.md](../settings.md), plus:
 
-- `repertoire`: `{ "white": "italian-white", "vsE4": "e5-open", "vsD4": "qgd" }` (v1 kept `enrolled` openings here).
+- `repertoire`: a JSON list of picks, such as `["italian-white", "step:london-white/london-main:2"]`
+  ([../stores/repertoire.md](../stores/repertoire.md)); v1's `enrolled` openings read in as whole openings.
 - `opening:<id>:<key>`: a setting for one opening.
 - `preset`: the chosen preset.
 - `lichess.username`, `chessdotcom.username`: whose public games [your games](../pages/your-games.md) reads. Personal

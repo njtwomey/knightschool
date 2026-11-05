@@ -8,7 +8,8 @@ core habit; a few minutes a day for anyone with a repertoire.
 `/practice/review`: today's due session, started at once. `/practice/review/<opening>[/<variation>|/lines/<line>]`:
 free practice of that material, never saved to the schedule. No hash: a session is not rebuilt from the address; a
 refresh starts the due session again with what is still due ([../navigation/url-state.md](../navigation/url-state.md)).
-v1's `/quiz`, `/review` and `/quiz#start=due` land here.
+`/practice/review/repertoire`: free practice of what is ticked. `/practice/review/due-all`: every card due, ticked or
+not, saved like the due session. v1's `/quiz`, `/review` and `/quiz#start=due` land here.
 
 ## Reached from
 
@@ -55,6 +56,8 @@ reviews come first; the Review count in an opening's [mode-counts](../components
 - Nothing due: [empty-state](../components/empty-state.md) "Nothing due. Next review in 3 hours", with **Learn the
   next step** and **Practise anyway** (free practice of the repertoire).
 - Free practice says so on the bar ("not saved to your schedule").
+- With anything ticked, the due session and its new moves are cut to the repertoire
+  ([../stores/repertoire.md](../stores/repertoire.md)).
 
 ## Leads to
 

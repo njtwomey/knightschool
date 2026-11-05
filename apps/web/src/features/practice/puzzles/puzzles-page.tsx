@@ -62,7 +62,14 @@ export function PuzzlesPage({ opening, variation }: { opening?: string; variatio
   const crumbs = [{ label: 'Puzzles', href: opening ? puzzlesHref() : undefined }];
   if (data.error) return <Shell crumbs={crumbs}>{<p className="text-destructive">{data.error}</p>}</Shell>;
   if (!data.data) return <Shell crumbs={crumbs}>{<p className="text-muted-foreground">Loading…</p>}</Shell>;
-  const fixed = opening ? (variation ? variationSource(opening, variation) : openingSource(opening)) : undefined;
+  const fixed =
+    opening === 'repertoire'
+      ? opening
+      : opening
+        ? variation
+          ? variationSource(opening, variation)
+          : openingSource(opening)
+        : undefined;
   const name = opening ? data.data.openings.find((o) => o.id === opening)?.name : undefined;
   return (
     <Shell crumbs={name ? [...crumbs, { label: name }] : crumbs}>

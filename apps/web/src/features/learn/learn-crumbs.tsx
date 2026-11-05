@@ -107,7 +107,12 @@ export function LearnCrumbs({ data, at }: { data: OpeningData; at: LearnPlace })
 
   return (
     <>
-      <OpeningCrumbs catalog={progress.catalog} opening={opening} crumbs={crumbs} />
+      <OpeningCrumbs
+        catalog={progress.catalog}
+        opening={opening}
+        crumbs={crumbs}
+        {...(at.line ? { tab: 'lines' as const } : {})}
+      />
       <StartAnywayDialog
         open={asking !== null}
         onOpenChange={(next) => {

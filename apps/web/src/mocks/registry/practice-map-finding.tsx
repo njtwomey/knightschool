@@ -508,7 +508,6 @@ function MapPlayground() {
             setFocus(next);
             setNote(null);
           }}
-          onSubtree={setSubtree}
           onUnfold={(id) => setFolded((current) => new Set([...current].filter((f) => f !== id)))}
           onHover={setHover}
           onGap={(node, gap) =>

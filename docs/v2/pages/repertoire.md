@@ -16,7 +16,7 @@ Hash: `#side=white|black` for the side whose gaps are listed ([../navigation/url
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › Repertoire, with **All openings** beside it.
+[breadcrumbs](../components/breadcrumbs.md): Openings › Repertoire, with **All openings** beside it.
 
 1. [repertoire-slots](../components/repertoire-slots.md): White, against 1.e4, against 1.d4 (later 1.c4 and the rest,
    folded under **More slots**). Each filled slot is an [opening-card](../components/opening-card.md) with
@@ -44,12 +44,33 @@ Hash: `#side=white|black` for the side whose gaps are listed ([../navigation/url
 - **Remove** asks, then empties the slot; its cards stop being introduced but stay in the log.
 - Transpositions count: a reply answered by another opening in the repertoire is not a gap.
 - Per-opening settings ("only main lines here") are on each [opening](opening.md) page, not here.
+- A tick on [opening](opening.md) or [variation](variation.md) changes the page at once
+  ([choose-tick](../components/choose-tick.md)).
 
 ## Leads to
 
 - An opening card → [opening](opening.md); a mode count → that mode for the opening.
 - A gap → [step](step.md) that teaches it, or [map](map.md) at that move (`/explore/map#m=...`).
 - **Help me choose** → [onboarding](onboarding.md) at that question; **Browse** → [openings](openings.md).
+
+## As built
+
+Titled **My repertoire**, the same words as the practice source; **Repertoire** in the header. With nothing ticked, an
+[empty-state](../components/empty-state.md) says how to tick and links to Openings. Otherwise, in order:
+
+1. The title, with the openings, steps and steps known, and a [progress-ring](../components/progress-ring.md).
+2. [next-action](../components/next-action.md) beside **All of it at once**: [mode-counts](../components/mode-counts.md)
+   and **Review and new moves** (`/practice/review`), **Drill all of it** (`/practice/drill/repertoire`) and **Puzzles**
+   (`/practice/puzzles/repertoire`), each across everything ticked.
+3. A line when cards are due outside the repertoire ([../stores/repertoire.md](../stores/repertoire.md)).
+4. [repertoire-slots](../components/repertoire-slots.md), editable. A slot is worked out from the opening. Choosing
+   ticks a whole opening and Change replaces the slot's main opening, both with Undo. **Make main** is not built.
+5. **What you have ticked**, by opening: a [variation-list](../components/variation-list.md) of only the ticked steps,
+   with their ticks. The list follows a tick at once.
+6. The [coverage-meter](../components/coverage-meter.md) and the top gaps in
+   [gap-link](../components/gap-link.md)'s list form.
+
+Not built yet: **What you face most**, the side filter and `#side=` on the gaps, and `/learn`.
 
 ## From v1
 

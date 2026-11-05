@@ -60,9 +60,15 @@ export type VariationListProps = {
   createHref?: string;
   gates?: boolean;
   testOut?: boolean;
+  /** A step's tick (`ChooseTick`); its follow-ups come with it, so they have none. */
+  stepTick?: (step: StepData) => ReactNode;
+  /** A variation's tick, at the end of its header. */
+  variationTick?: (variation: VariationData) => ReactNode;
+  /** Leaves out the checkpoint rows: a list of only some of each variation's steps (the repertoire page). */
+  hideCheckpoints?: boolean;
 } & Pick<
   StepRowProps,
-  'onLearn' | 'onTry' | 'onTestOut' | 'onGoToStep' | 'skipAsk' | 'onSkipAsk' | 'stages' | 'onPreview'
+  'onLearn' | 'onTry' | 'onTestOut' | 'onGoToStep' | 'skipAsk' | 'onSkipAsk' | 'stages' | 'onPreview' | 'compact'
 >;
 
 const plural = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;
@@ -147,6 +153,9 @@ export function VariationList({
   createHref,
   gates = siteConfig.teach.gates,
   testOut = siteConfig.teach.testOut,
+  stepTick,
+  variationTick,
+  hideCheckpoints,
   ...stepActions
 }: VariationListProps) {
   const list = useRef<HTMLDivElement>(null);
@@ -236,6 +245,7 @@ export function VariationList({
                   cleared={variation.checkpoint.state === 'cleared'}
                   className="mr-2"
                 />
+                {variationTick?.(variation)}
               </div>
             ) : (
               <div className="flex items-center gap-2">
@@ -263,6 +273,7 @@ export function VariationList({
                   cleared={variation.checkpoint.state === 'cleared'}
                   className="mr-2"
                 />
+                {variationTick?.(variation)}
               </div>
             )}
             <CollapsibleContent className="grid gap-2 pl-2 sm:pl-9">
@@ -276,6 +287,7 @@ export function VariationList({
                   href={step.href}
                   gates={gates}
                   testOut={testOut}
+                  tick={stepTick?.(step)}
                   {...stepActions}
                 />,
                 ...(variation.followUps?.[step.id] ?? []).map((followUp) => (
@@ -296,15 +308,17 @@ export function VariationList({
                   <ExtrasList extras={variation.extras} note="Not needed to know the variation:" />
                 </div>
               ) : null}
-              <CheckpointRow
-                title="Checkpoint"
-                from="from these steps"
-                waits="every step above is known"
-                checkpoint={variation.checkpoint}
-                ready={ready}
-                testOut={testOut}
-                onTake={() => onCheckpoint?.(variation)}
-              />
+              {hideCheckpoints ? null : (
+                <CheckpointRow
+                  title="Checkpoint"
+                  from="from these steps"
+                  waits="every step above is known"
+                  checkpoint={variation.checkpoint}
+                  ready={ready}
+                  testOut={testOut}
+                  onTake={() => onCheckpoint?.(variation)}
+                />
+              )}
             </CollapsibleContent>
           </Collapsible>
         );

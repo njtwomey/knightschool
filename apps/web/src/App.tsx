@@ -1,6 +1,8 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
+import { TrailSlot } from '@/components/shared/trail-slot';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Header } from '@/app/header';
+import { SiteFooter } from '@/app/site-footer';
 import { StorageNotice } from '@/app/storage-notice';
 import { NotFoundPage } from '@/pages/not-found-page';
 import { usePath } from '@/router/location';
@@ -13,12 +15,18 @@ const OpeningsPage = lazy(() =>
 const OpeningPage = lazy(() =>
   import('@/features/learn/opening-page').then((module) => ({ default: module.OpeningPage })),
 );
+const RepertoirePage = lazy(() =>
+  import('@/features/learn/repertoire-page').then((module) => ({ default: module.RepertoirePage })),
+);
 const StepPage = lazy(() => import('@/features/learn/step-page').then((module) => ({ default: module.StepPage })));
 const VariationPage = lazy(() =>
   import('@/features/learn/variation-page').then((module) => ({ default: module.VariationPage })),
 );
 const FollowUpPage = lazy(() =>
   import('@/features/learn/follow-up-page').then((module) => ({ default: module.FollowUpPage })),
+);
+const CreditsPage = lazy(() =>
+  import('@/features/credits/credits-page').then((module) => ({ default: module.CreditsPage })),
 );
 const LinePage = lazy(() => import('@/features/learn/line-page').then((module) => ({ default: module.LinePage })));
 const OpeningMapPage = lazy(() =>
@@ -42,6 +50,7 @@ const SpeedPage = lazy(() =>
 const NameItPage = lazy(() =>
   import('@/features/practice/name-it/name-it-page').then((module) => ({ default: module.NameItPage })),
 );
+const HomePage = lazy(() => import('@/pages/home-page').then((module) => ({ default: module.HomePage })));
 const TodayPage = lazy(() =>
   import('@/features/practice/today/today-page').then((module) => ({ default: module.TodayPage })),
 );
@@ -57,6 +66,9 @@ const DrillPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('@/pages/settings/settings-page').then((module) => ({ default: module.SettingsPage })),
 );
+const SearchPage = lazy(() =>
+  import('@/features/search/search-page').then((module) => ({ default: module.SearchPage })),
+);
 const CheckpointPage = lazy(() =>
   import('@/features/practice/checkpoint/checkpoint-page').then((module) => ({ default: module.CheckpointPage })),
 );
@@ -66,7 +78,7 @@ const scoped = (match: RegExpExecArray) =>
   match[1] ? { opening: match[1], ...(match[2] ? { variation: match[2] } : {}) } : undefined;
 
 function Page({ path }: { path: string }) {
-  if (path === '/') return <TodayPage home />;
+  if (path === '/' || path === '/welcome') return <HomePage />;
   if (path === '/today') return <TodayPage />;
   if (path === '/practice') return <PracticePage />;
   const review = /^\/practice\/review(?:\/([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/.exec(path);
@@ -82,7 +94,11 @@ function Page({ path }: { path: string }) {
   const settings = /^\/(?:you\/|profile\/)?settings(?:\/([a-z]+))?$/.exec(path);
   if (settings) return <SettingsPage key={path} group={settings[1]} />;
   if (path === '/board') return <BoardPage />;
+  // v1's `/search` and `/browse` show the same page, keep their hash, and the page settles on its own address.
+  if (['/explore/search', '/search', '/browse'].includes(path)) return <SearchPage />;
   if (path === '/openings') return <OpeningsPage />;
+  if (path === '/repertoire') return <RepertoirePage />;
+  if (path === '/credits') return <CreditsPage />;
   const puzzles = /^\/practice\/puzzles(?:\/([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/.exec(path);
   if (puzzles) return <PuzzlesPage opening={puzzles[1]} variation={puzzles[2]} />;
   const puzzle = /^\/practice\/puzzle\/([A-Za-z0-9]+)$/.exec(path);
@@ -122,14 +138,26 @@ function Page({ path }: { path: string }) {
 
 export function App() {
   const path = usePath();
+  // The bar the page's breadcrumbs float in, under the header; empty, it takes no room. The mocks draw theirs in place.
+  const [trail, setTrail] = useState<HTMLElement | null>(null);
   return (
     <TooltipProvider delayDuration={300}>
       <div className="min-h-svh bg-background text-foreground">
         <Header />
         <StorageNotice />
-        <Suspense fallback={<div className="p-8 text-muted-foreground">Loading…</div>}>
-          <Page path={path} />
-        </Suspense>
+        <div
+          ref={setTrail}
+          className="sticky top-[3.5625rem] z-30 border-b bg-background/90 backdrop-blur empty:hidden"
+        />
+        {/* At least a full window, so the footer is always below the first screen. */}
+        <div className="min-h-[calc(100svh-3.5625rem)]">
+          <Suspense fallback={<div className="p-8 text-muted-foreground">Loading…</div>}>
+            <TrailSlot.Provider value={path === '/mocks' ? null : trail}>
+              <Page path={path} />
+            </TrailSlot.Provider>
+          </Suspense>
+        </div>
+        <SiteFooter />
       </div>
     </TooltipProvider>
   );

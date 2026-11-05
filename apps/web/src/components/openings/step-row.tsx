@@ -1,5 +1,5 @@
 import { BookOpen, Crosshair, HelpCircle, Puzzle, Target } from 'lucide-react';
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { StateBadge } from '@/components/progress/state-badge';
 import {
   AlertDialog,
@@ -46,6 +46,8 @@ export type StepRowProps = {
   /** The learner ticked "Don't ask again for this opening". */
   skipAsk?: boolean;
   onSkipAsk?: () => void;
+  /** Its tick for the learner's repertoire, at the end of the row (`ChooseTick`); it keeps its own click. */
+  tick?: ReactNode;
   className?: string;
 };
 
@@ -170,6 +172,7 @@ export function StepRow({
   stages = siteConfig.teach.stages,
   skipAsk,
   onSkipAsk,
+  tick,
   className,
 }: StepRowProps) {
   /** What the ask-once dialog will start when the learner says yes. */
@@ -204,6 +207,7 @@ export function StepRow({
           Test out
         </Button>
       ) : null}
+      {tick}
     </div>
   );
 

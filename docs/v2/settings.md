@@ -122,7 +122,7 @@ not listed here.
 | Key                         | Group         | Store   | Default                                                                  | Level    |
 | --------------------------- | ------------- | ------- | ------------------------------------------------------------------------ | -------- |
 | `preset`                    | (top of page) | learner | Club player (onboarding may pick Getting started)                        | basic    |
-| `repertoire`                | level         | learner | none; set on onboarding and the repertoire page (v1 `enrolled`)          | basic    |
+| `repertoire`                | level         | learner | none; set by ticks and the repertoire page (v1 `enrolled`)               | basic    |
 | `level.band`                | level         | learner | 1000–1600 (`coverage.band`), set by onboarding                           | basic    |
 | `level.coverageTarget`      | level         | learner | 1 game in 20 (`coverage.minShare`; v1 `minPopularityPercent`)            | advanced |
 | `level.includeRare`         | level         | learner | off (v1 `includeRareLines`)                                              | basic    |

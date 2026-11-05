@@ -6,7 +6,7 @@ as players at their level do. For proving a whole tree, not one card at a time.
 ## Address
 
 `/practice/drill` (the set-up card), `/practice/drill/<opening>`, `/practice/drill/<opening>/<variation>`,
-`/practice/drill/<opening>/lines/<line>` (start at once). Hash: `#m=<moves played>` for the game in progress, so a
+`/practice/drill/<opening>/lines/<line>`, `/practice/drill/repertoire` (what is ticked; all start at once). Hash: `#m=<moves played>` for the game in progress, so a
 refresh resumes the branch ([../navigation/url-state.md](../navigation/url-state.md)). v1's
 `/play/<course>/all/branches` and `/play/<course>/<line>/drill` land on the matching scope.
 
@@ -41,7 +41,7 @@ The Drill tile on [practice](practice.md); **Drill** on [opening](opening.md), [
   share of the band's games that take each branch (the product of each reply's share), so the caption's "played in
   41% of games" is the real frequency; **least known first**, the branches holding the most moves not yet known
   (then the most lapses) first; **the engine**, one run per opening with the engine replying, ending where the book
-  does. "My repertoire" and "Everything" drill every opening in scope in one session; "The hardest moves" is least
+  does. "My repertoire" drills what is ticked and "Everything" every opening, in one session; "The hardest moves" is least
   known first over the repertoire.
 - `#m=` holds the moves from the start of the game; a refresh finds the branch they lie on (`resumeBranch`) and
   resumes it from there, the other branches following. After each branch, "The last branch left you" in eval words

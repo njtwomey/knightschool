@@ -67,6 +67,7 @@ Short and concrete: what we want, not how to code it.
 | [opening-intro.md](opening-intro.md)       | An opening's introduction: idea, risks, who it suits, origin, sources                 |
 | [variation-list.md](variation-list.md)     | An opening's variations in order, each with its steps and checkpoint                  |
 | [step-row.md](step-row.md)                 | One step in a list: state, its moves, what opens it, Learn and Try                    |
+| [choose-tick.md](choose-tick.md)           | The tick that adds something to the learner's repertoire and takes it off             |
 | [line-row.md](line-row.md)                 | One line in a list: name, kind, moves, state                                          |
 | [line-story.md](line-story.md)             | A line told in words: its moves with comments, where it branches, what grows from it  |
 | [sources-list.md](sources-list.md)         | The videos, books and articles an opening credits                                     |

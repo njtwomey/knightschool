@@ -13,7 +13,6 @@ import { EmptyState } from '@/components/shared/empty-state';
 import { getSetting } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { useLoad } from '@/hooks/use-load';
-import { HomePage } from '@/pages/home-page';
 import { to } from '@/router/location';
 import {
   loadProgress,
@@ -24,6 +23,8 @@ import {
   whenWords,
   type LearnerProgress,
 } from '../progress';
+import { chosenPuzzles, coverageOpenings } from '../chosen';
+import { DueOutside } from '../due-outside';
 import { startedSummary } from '../opening-summary';
 import { modeHref } from '../sources';
 import { coverageOf } from './coverage';
@@ -59,22 +60,23 @@ async function loadToday() {
   const progress = await loadProgress();
   const have = new Set(progress.cards.map((card) => card.id));
   const opening = startedOpenings(progress)[0];
-  const puzzle = opening ? pickPuzzle(await puzzlesOf(opening.opening.id).catch(() => []), have) : undefined;
+  const puzzle = opening
+    ? pickPuzzle(chosenPuzzles(opening, await puzzlesOf(opening.opening.id).catch(() => [])), have)
+    : undefined;
   return { progress, puzzle, puzzleOpening: opening };
 }
 
 /**
  * Today (docs/v2/pages/today.md): the one thing to do now, what is due, a puzzle from the learner's openings, the
- * openings at a glance and the streak. `/` shows the first-visit home until the learner has any cards.
+ * openings at a glance and the streak.
  */
-export function TodayPage({ home = false }: { home?: boolean }) {
+export function TodayPage() {
   const data = useLoad(loadToday, []);
   if (data.error) return <main className="mx-auto max-w-7xl px-4 py-8 text-destructive">{data.error}</main>;
   if (!data.data) return <main className="mx-auto max-w-7xl px-4 py-8" aria-busy="true" />;
   const { progress } = data.data;
   const started = startedOpenings(progress);
   if (!started.length) {
-    if (home) return <HomePage />;
     return (
       <main className="mx-auto grid max-w-3xl gap-6 px-4 py-8">
         <h1 className="text-2xl font-semibold tracking-tight">Today</h1>
@@ -101,7 +103,7 @@ function TodayView({
   );
   const started = startedOpenings(progress);
   const due = progress.due.length;
-  const covered = useMemo(() => coverageOf(progress, startedOpenings(progress)), [progress]);
+  const covered = useMemo(() => coverageOf(progress, coverageOpenings(progress)), [progress]);
   const days = useMemo(() => calendarDays(progress), [progress]);
   const showStreak = getSetting('progress.showStreak');
   return (
@@ -147,6 +149,7 @@ function TodayView({
           <EmptyState kind="done" size="panel" text="No puzzle waiting from your openings." />
         )}
       </div>
+      <DueOutside progress={progress} />
       <section className="grid gap-3" aria-labelledby="your-openings">
         <h2 id="your-openings" className="text-lg font-semibold">
           Your openings

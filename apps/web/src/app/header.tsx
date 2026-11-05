@@ -1,48 +1,43 @@
-import { BookOpen, Dumbbell, Grid2x2, LayoutGrid, Moon, Settings, Sun, SunMedium } from 'lucide-react';
+import { BookMarked, BookOpen, Dumbbell, Moon, Search, Settings, Sun, SunMedium, type LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/lib/theme';
-import { to } from '@/router/location';
+import { useSearchKey } from '@/app/search-key';
+import { to, usePath } from '@/router/location';
+
+const under = (root: string) => (path: string) => path === root || path.startsWith(`${root}/`);
+
+/** The menu. The page you are on is marked, however deep: the first part of its address says which item it is under. */
+const NAV: { label: string; href: string; icon: LucideIcon; match: (path: string) => boolean }[] = [
+  { label: 'Today', href: '/today', icon: SunMedium, match: (path) => path === '/today' },
+  { label: 'Openings', href: '/openings', icon: BookOpen, match: under('/openings') },
+  { label: 'Repertoire', href: '/repertoire', icon: BookMarked, match: under('/repertoire') },
+  { label: 'Search', href: '/explore/search', icon: Search, match: under('/explore') },
+  { label: 'Practice', href: '/practice', icon: Dumbbell, match: under('/practice') },
+  { label: 'Settings', href: '/settings', icon: Settings, match: under('/settings') },
+];
 
 export function Header() {
   const [theme, setTheme] = useTheme();
+  const path = usePath();
+  useSearchKey();
   return (
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4">
+      <div className="flex h-14 items-center gap-4 px-4">
         <a href={to('/')} className="flex items-center gap-2.5" aria-label="Knight School home">
           <img src={to('/icon.svg')} alt="" className="size-8" />
           <span className="text-lg font-semibold">Knight School</span>
         </a>
         <nav className="ml-auto flex items-center gap-1">
-          <Button asChild variant="ghost" size="sm">
-            <a href={to('/today')}>
-              <SunMedium aria-hidden /> Today
-            </a>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <a href={to('/openings')}>
-              <BookOpen aria-hidden /> Openings
-            </a>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <a href={to('/practice')}>
-              <Dumbbell aria-hidden /> Practice
-            </a>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <a href={to('/board')}>
-              <Grid2x2 aria-hidden /> Board
-            </a>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <a href={to('/mocks')}>
-              <LayoutGrid aria-hidden /> Mocks
-            </a>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <a href={to('/settings')}>
-              <Settings aria-hidden /> Settings
-            </a>
-          </Button>
+          {NAV.map(({ label, href, icon: Icon, match }) => {
+            const here = match(path);
+            return (
+              <Button key={href} asChild variant={here ? 'secondary' : 'ghost'} size="sm">
+                <a href={to(href)} aria-current={here ? 'page' : undefined}>
+                  <Icon aria-hidden /> {label}
+                </a>
+              </Button>
+            );
+          })}
           <Button
             variant="ghost"
             size="icon"

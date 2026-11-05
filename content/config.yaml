@@ -34,6 +34,7 @@ timing: # app: base delays in milliseconds; the learner's speed setting multipli
   pieceMove: 250 # how long a piece takes to slide to its square
   correctBadge: 250
   wrongBadge: 900
+  homeMove: 1800 # one move of the board that plays by itself on the front page
   wrongHold: 1000 # a wrong move stays on the board, with its cross, this long before it slides back
   afterCorrect: 350
   opponent: 500
@@ -58,6 +59,14 @@ opponent:
   playOnMoves: 5 # app
   playOnTolerance: mistake # app: the worst grade allowed for a pass
   deviationJudgeAfter: 3 # app
+
+search:
+  # app: what a match counts for by where it is: a name, a line inside, the opening it is in, a description, a comment
+  weights: { name: 100, inside: 60, opening: 40, description: 20, comment: 10 }
+  rarePenalty: 15 # app: taken off a rare line's score, so it is found but ranked lower
+  lineOrder: [main, gambit, trap, sideline, rare] # app: line kinds among equal matches and in the list before typing
+  pageSize: 24 # app: results shown at a time, and how many Show more adds
+  browseSize: 12 # app: rows of each kind in the list before typing
 
 engine:
   liveDepth: 14 # app

@@ -11,11 +11,12 @@ to the results and authored openings to both searches.
 `/explore/search`. Hash, written only where it differs from the default
 ([../navigation/url-state.md](../navigation/url-state.md)):
 
-- `q=<text>`, `role=play|against` (who plays it), `side=all|white|black`, `scope=all|openings|lines|ideas`,
-  `kind=<line kind>`;
-- `bm=<moves>` and `bk=<kind>`, the board search's moves and its lines-or-traps filter, as in v1.
+- `q=<text>`, `role=play|against` (who plays it), `side=all|white|black`, `scope=all|openings|variations|lines|ideas`,
+  `kind=main|sideline|rare|gambit|trap`;
+- `bm=<moves>` and `bk=lines|traps`, the board search's moves and its lines-or-traps filter (v1's `bk=refutations` still
+  reads as `traps`).
 
-v1's `/search` and `/browse` land here with their hash carried over: `q`, `role`, `side`, `scope` (v1's `courses` read
+v1's `/search` and `/browse` show this page and settle on this address with their hash carried over: `q`, `role`, `side`, `scope` (v1's `courses` read
 as `openings`), `bm` and `bk` keep their meaning; only `tier` is dropped, as tiers are parked. v1's `/openings` (also
 Search in v1) now opens v2's [openings](openings.md) page.
 
@@ -24,7 +25,8 @@ Search in v1) now opens v2's [openings](openings.md) page.
 **Explore** › Search in the menu; the search key from anywhere
 ([../navigation/shortcuts.md](../navigation/shortcuts.md)); the map index's search box (**Search everything**); a gap on
 the [map](map.md) (**Find an opening that does**, with the position as a board search); [not found](not-found.md), with
-the address's words as the query.
+the address's words as the query. Built so far: the Search link in the header, the `/` key, and **Search lines and ideas**
+on the [openings](openings.md) page, which carries what is typed there.
 
 ## Layout
 
@@ -40,16 +42,29 @@ the address's words as the query.
    - a variation: its [opening-name](../components/opening-name.md) and the opening it belongs to;
    - a line: [line-row](../components/line-row.md) with a [board-thumb](../components/board-thumb.md) and
      [kind-badge](../components/kind-badge.md);
-   - an idea: [idea-badge](../components/idea-badge.md) with its summary.
+   - an idea: [idea-badge](../components/idea-badge.md) with its summary and the openings that teach it. There are no
+     idea pages yet, so an idea opens the first of those openings.
 4. **Search by position** opens [board-search](../components/board-search.md) in a dialog, as in v1: play the moves of
    an opening and see every opening and line through that position, transpositions included.
 
 ## Behaviour
 
 - Matching forgives words run together and small slips, and ranks names above comments.
-- Empty query: the openings in study order and every line, in one grid, as in v1, then the ideas by kind.
-- No result: [empty-state](../components/empty-state.md) "Nothing matches 'karo'. Did you mean Caro-Kann?", the nearest
-  name offered.
+- Empty query: not every line at once, as there are hundreds. Sections, each its first `search.browseSize` with Show
+  more: Openings in study order; Lines, main lines first (`search.lineOrder`); Variations; Ideas by kind. A scope or a
+  line kind turns that into one list of `search.pageSize` at a time.
+- Typed: one ranked list, `search.pageSize` at a time. Equal matches go by `search.lineOrder`, so "caro" lists the
+  opening, its variations, then its main lines before its sidelines.
+- Filters count what they would show, and a choice with nothing to show is disabled. A line kind narrows the list to
+  lines, so choosing one leaves a scope of openings, variations or ideas, and the other way round. Against it is
+  disabled while no opening plays against its named moves.
+- A comment counts for the line that first plays the move, not every line through it: a line's text is what is said from
+  where it branches, with its steps and follow-ups. Slips are forgiven in titles only, as in prose they find the wrong
+  word ("black" for "block"). Words spread across fields match too ("italian fried liver").
+- The moves search narrows the page behind it, as in v1: a card for the position (it opens on the board, with Clear the
+  position beside it), and the openings, variations and lines through it. A line opens at this position.
+- No result: [empty-state](../components/empty-state.md) "Nothing matches 'karo'. Did you mean Caro-Kann Defence?", the
+  nearest name offered; with filters on, Clear the filters instead.
 - Board search covers shipped lines and authored openings alike.
 
 ## Leads to

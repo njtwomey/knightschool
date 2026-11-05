@@ -7,7 +7,7 @@ in [navigation/trails.md](../navigation/trails.md).
 ## Shows
 
 - **Root**: the menu item the page belongs to (Learn, Practice, Explore, Ideas, Create, or You), as a link.
-- **Crumbs**, for example on a step: Learn › Italian Game (White) › Giuoco Piano › When Black pins with ...Bg4, and on a
+- **Crumbs**, for example on a step: Openings › Italian Game (White) › Giuoco Piano › When Black pins with ...Bg4, and on a
   follow-up … › When Black pins with ...Bg4 › If 7...h5 is played. A crumb with siblings is a menu: "Giuoco Piano" opens every variation of the opening, the current one ticked, each with its
   [state-badge](state-badge.md). A crumb without siblings is a plain link.
 - **The current page** last, not a link.
@@ -23,6 +23,9 @@ in [navigation/trails.md](../navigation/trails.md).
 - Built from the address helpers ([navigation/routes.md](../navigation/routes.md)); never a hand-written link.
 
 ## Behaviour
+
+- The trail floats: it sits in a bar under the header that stays on top as the page scrolls, so the tabs and menus are
+  always in reach (`TrailSlot`). The map's full-page template keeps it in the page instead.
 
 - Clicking anywhere on a crumb that has a menu opens the menu (its own page is the ticked item there); a crumb with no
   menu is a plain link. Crumbs and menu items are named by title alone ("The quiet bishop", "If 4...h6 is played"):

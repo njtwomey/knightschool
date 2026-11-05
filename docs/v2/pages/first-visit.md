@@ -5,8 +5,8 @@ The new player and the improver arrive from a search, a link or a friend, knowin
 
 ## Address
 
-`/`, when this browser has no repertoire and no answers logged. Once a repertoire exists, `/` is [Today](today.md).
-`/welcome` always shows this page (for a link in the README or a shared post). No hash state
+`/`, for everyone: the front door, a splash page. [Today](today.md) is its own page at `/today`; a returning learner
+sees a small line with what is due and **Carry on**. `/welcome` shows the same page (for a link in the README or a shared post). No hash state
 ([../navigation/routes.md](../navigation/routes.md)).
 
 ## Reached from
@@ -56,3 +56,9 @@ stays; the course lists go to [openings](openings.md), and the page splits into 
 
 - components/README.md has no hero component; this page composes it from a `thumb` board and rich text. If Today or
   the openings page want the same loop, it should become a component.
+
+## As built
+
+v1's front page brought up to date: the icon, "Learn chess openings, and actually keep them", a board playing the
+Italian's main line by itself with each move's own note (one move every `timing.homeMove`, still for anyone who prefers
+no motion), then four cards. Its line comes from the content, so it stays in step.

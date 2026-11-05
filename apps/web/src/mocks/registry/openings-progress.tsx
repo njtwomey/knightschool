@@ -1,4 +1,4 @@
-import { replay } from '@knightschool/core';
+import { replay, type TickState } from '@knightschool/core';
 import { useState } from 'react';
 import { Board } from '@/components/board/board';
 import type { Idea } from '@/components/chess/idea-badge';
@@ -7,6 +7,7 @@ import { LineRow, LineTable, type LineData } from '@/components/openings/line-ro
 import { LineStory, type StoryMove } from '@/components/openings/line-story';
 import { OpeningCard } from '@/components/openings/opening-card';
 import { OpeningIntro } from '@/components/openings/opening-intro';
+import { ChooseTick } from '@/components/openings/choose-tick';
 import { RepertoireSlots, type RepertoireSlot } from '@/components/openings/repertoire-slots';
 import { SourcesList } from '@/components/openings/sources-list';
 import { StepRow } from '@/components/openings/step-row';
@@ -645,6 +646,25 @@ function SelectableVariations(props: Omit<Parameters<typeof VariationList>[0], '
   return <VariationList {...props} selected={selected} onSelect={(step) => setSelected(step.id)} />;
 }
 
+/** The tick's three states, each a working toggle. */
+function TickStates() {
+  const [states, setStates] = useState<TickState[]>(['none', 'some', 'all']);
+  return (
+    <div className="flex items-center gap-2">
+      {states.map((state, i) => (
+        <ChooseTick
+          key={i}
+          state={state}
+          name="the Giuoco Piano"
+          onToggle={() =>
+            setStates((list) => list.map((one, at) => (at === i ? (one === 'all' ? 'none' : 'all') : one)))
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
 // ---------------------------------------------------------------- the mocks
 
 export const openingsProgressMocks: MockItem[] = [
@@ -796,6 +816,16 @@ export const openingsProgressMocks: MockItem[] = [
         render: () => (
           <VariationList variations={[{ ...variations[0]!, steps: [], extras: [] }]} createHref="/create/my-scotch" />
         ),
+      },
+    ],
+  },
+  {
+    id: 'choose-tick',
+    variants: [
+      {
+        name: 'Each state',
+        note: 'Nothing ticked, some of its steps, all of it. Click one to toggle it; the meaning shows on hover.',
+        render: () => <TickStates />,
       },
     ],
   },

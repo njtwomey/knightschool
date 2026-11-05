@@ -10,20 +10,23 @@ import { lineEarnsCards, moveCardId, moveCards } from '../training/cards';
  */
 export type DrillScope = { book: Record<string, string>; replies: Record<string, string[]> };
 
-export function drillScope(
-  opening: BuiltOpening,
-  variation?: string,
-  options: { includeRare?: boolean } = {},
-): DrillScope {
+/** `ends`: only these lines, each up to this ply (what the learner has ticked, `chosenScope`). */
+export type DrillScopeOptions = { includeRare?: boolean; ends?: ReadonlyMap<string, number> };
+
+export function drillScope(opening: BuiltOpening, variation?: string, options: DrillScopeOptions = {}): DrillScope {
   const cards = new Set(moveCards(opening, options).map((card) => card.id));
   const book: Record<string, string> = {};
   const replies: Record<string, string[]> = {};
   const lines = opening.lines.filter(
-    (line) => (!variation || line.variation === variation) && lineEarnsCards(line, options.includeRare),
+    (line) =>
+      (!variation || line.variation === variation) &&
+      lineEarnsCards(line, options.includeRare) &&
+      (!options.ends || options.ends.has(line.id)),
   );
   for (const line of lines) {
     let epd = opening.startEpd;
-    for (let ply = opening.startPly; ply < line.moves.length; ply++) {
+    const end = Math.min(line.moves.length - 1, options.ends?.get(line.id) ?? Infinity);
+    for (let ply = opening.startPly; ply <= end; ply++) {
       const uci = line.moves[ply]!;
       const move = opening.positions[epd]?.moves.find((candidate) => candidate.uci === uci);
       if (!move) break;

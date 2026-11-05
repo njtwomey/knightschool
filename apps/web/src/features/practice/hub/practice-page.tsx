@@ -13,6 +13,8 @@ import { checkpointHref, openingSummary } from '@/features/learn/views';
 import { useLoad } from '@/hooks/use-load';
 import { cn } from '@/lib/utils';
 import { navigate, to } from '@/router/location';
+import { chosenPuzzles, drillOptions } from '../chosen';
+import { DueOutside } from '../due-outside';
 import { startedSummary } from '../opening-summary';
 import {
   loadProgress,
@@ -24,12 +26,14 @@ import {
   type LearnerProgress,
 } from '../progress';
 import { readPracticeConfig, savePracticeConfig } from '../saved-config';
-import { modeHref, practiceSources, scopeOf } from '../sources';
+import { modeHref, practiceSources, sourceHref } from '../sources';
 import { ABOVE_ROW_LINK_GROUP, CardLink, LINKED_CARD } from '@/components/shared/card-link';
 
 async function loadHub() {
-  const progress = await loadProgress();
-  const puzzles = await Promise.all(practiceOpenings(progress).map((one) => puzzlesOf(one.opening.id).catch(() => [])));
+  const progress = await loadProgress(undefined, null);
+  const puzzles = await Promise.all(
+    practiceOpenings(progress).map(async (one) => chosenPuzzles(one, await puzzlesOf(one.opening.id).catch(() => []))),
+  );
   return { progress, puzzles: puzzles.reduce((sum, list) => sum + list.length, 0) };
 }
 
@@ -81,7 +85,10 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
       ),
     [progress],
   );
-  const positions = openings.reduce((sum, one) => sum + scopePositions(drillScope(one.opening)).length, 0);
+  const positions = openings.reduce(
+    (sum, one) => sum + scopePositions(drillScope(one.opening, undefined, drillOptions(one))).length,
+    0,
+  );
   const lines = openings.reduce((sum, one) => sum + one.opening.lines.length, 0);
   const questions = openings.reduce(
     (sum, one) => sum + ((one.opening as { questions?: unknown[] }).questions?.length ?? 0),
@@ -107,7 +114,7 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
   const firstCheckpoint = firstPick ? checkpointHref(firstPick.one.opening.id, firstPick.c.variation) : undefined;
   const start = (mode: PracticeMode, config: PracticeConfig) => {
     savePracticeConfig(mode, config);
-    navigate(modeHref(mode, scopeOf(config.source)).slice(to('').length));
+    navigate(sourceHref(mode, config.source).slice(to('').length));
   };
   const due = progress.due.length;
 
@@ -132,6 +139,7 @@ function HubView({ progress, puzzles }: { progress: LearnerProgress; puzzles: nu
         href={to('/practice/review')}
         {...(openings[0] ? { practiseHref: to(`/practice/review/${openings[0].opening.id}`) } : {})}
       />
+      <DueOutside progress={progress} />
 
       <section className="grid gap-3" aria-labelledby="modes">
         <h2 id="modes" className="text-lg font-semibold">

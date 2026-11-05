@@ -47,6 +47,7 @@ export const SiteConfig = z.object({
     correctBadge: z.number().int().nonnegative(),
     wrongBadge: z.number().int().nonnegative(),
     wrongHold: z.number().int().nonnegative(),
+    homeMove: z.number().int().nonnegative(),
     afterCorrect: z.number().int().nonnegative(),
     opponent: z.number().int().nonnegative(),
     nextCard: z.number().int().nonnegative(),
@@ -71,6 +72,22 @@ export const SiteConfig = z.object({
     playOnMoves: z.number().int().positive(),
     playOnTolerance: z.enum(['inaccuracy', 'mistake', 'blunder']),
     deviationJudgeAfter: z.number().int().positive(),
+  }),
+  /** How the search page ranks and pages what it finds (docs/v2/library/search.md). */
+  search: z.object({
+    /** What a match counts for by where it is; each must be over 1.4 times the next, so the tiers never overlap. */
+    weights: z.object({
+      name: z.number().positive(),
+      inside: z.number().positive(),
+      opening: z.number().positive(),
+      description: z.number().positive(),
+      comment: z.number().positive(),
+    }),
+    rarePenalty: z.number().nonnegative(),
+    /** The order of line kinds among equal matches, and in a list with nothing typed. */
+    lineOrder: z.array(z.enum(['main', 'gambit', 'trap', 'sideline', 'rare'])),
+    pageSize: z.number().int().positive(),
+    browseSize: z.number().int().positive(),
   }),
   engine: z.object({ liveDepth: z.number().int().positive(), bakedDepth: z.number().int().positive() }),
   lichess: z.object({ pauseAfter429Ms: z.number().int().positive(), cacheDays: z.number().positive() }),
@@ -112,5 +129,6 @@ export const SiteConfig = z.object({
   }),
 });
 export type SiteConfig = z.infer<typeof SiteConfig>;
+export type SearchConfig = SiteConfig['search'];
 export type GradeCutoffs = SiteConfig['judge']['grades'];
 export type EvalWordBands = SiteConfig['judge']['evalWords'];

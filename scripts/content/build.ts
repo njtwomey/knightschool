@@ -5,6 +5,7 @@
 import { mkdirSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { openingFacts, openingNames } from '../../packages/core/src/content/index.ts';
+import { followUps } from '../../packages/core/src/training/follow-ups.ts';
 import { readAnalysis, readPopularity, readSelection, selectionPath } from '../data-files.ts';
 import { loadContent, root } from './load.ts';
 import { lichessNames } from './names.ts';
@@ -47,7 +48,6 @@ if (names) writeFileSync(join(staging, 'names.json'), JSON.stringify(names.all))
 const analysis = readAnalysis().byEpd;
 const popularity = readPopularity().byEpd;
 for (const opening of content.openings) {
-  writeFileSync(join(staging, 'openings', `${opening.id}.json`), JSON.stringify(opening));
   const facts = openingFacts(
     opening,
     analysis,
@@ -56,6 +56,16 @@ for (const opening of content.openings) {
     content.config.judge.refutationPlies,
   );
   writeFileSync(join(staging, 'openings', `${opening.id}.facts.json`), JSON.stringify(facts));
+  // Follow-ups run the judge over the tree: too slow to do in a page, so they ship with the opening.
+  const shipped = {
+    ...opening,
+    followUps: followUps(opening, facts, {
+      ...content.config.judge,
+      ...content.config.coverage,
+      minShare: content.config.coverage.minShare,
+    }),
+  };
+  writeFileSync(join(staging, 'openings', `${opening.id}.json`), JSON.stringify(shipped));
   if (names) {
     const named = openingNames(opening, names.positions);
     writeFileSync(join(staging, 'openings', `${opening.id}.names.json`), JSON.stringify(named));

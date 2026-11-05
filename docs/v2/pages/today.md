@@ -50,6 +50,8 @@ glance and a light streak. Comes first in the menu; most visits start and end he
 - The calendar counts every graded answer in the attempts log (Watch is not an answer), tinted by the mode answered
   most that day; the streak above it stays the one streak line.
 - With the new-move limit reached, the button never offers a new step; the due card says when more open.
+- With anything ticked, the button, the due card, the puzzle and **Your openings** are cut to the repertoire, and a
+  line says how many cards are due outside it ([../stores/repertoire.md](../stores/repertoire.md)).
 - No repertoire at all: `/` shows [first visit](first-visit.md); `/today` shows an
   [empty-state](../components/empty-state.md) with **Choose a repertoire**.
 - Offline: puzzle and coverage come from shipped data and still show; the games line is hidden.

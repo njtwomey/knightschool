@@ -196,8 +196,10 @@ describe('logs are append-only', () => {
 });
 
 describe('export and import', () => {
+  /** What the learner has ticked: a settings row, so it goes out and comes back with everything else. */
+  const REPERTOIRE = '["italian-white","step:london-white/london-main:2"]';
   const fill = async () => {
-    await store.settings.set('repertoire', '{"white":"italian-white"}');
+    await store.settings.set('repertoire', REPERTOIRE);
     await store.cards.put(card('a'));
     await store.cards.put(card('b', { state: 'review' }));
     await store.reviews.add(review('r1', 'a', 1));
@@ -250,7 +252,7 @@ describe('export and import', () => {
       reviews: { added: 1, updated: 0, unchanged: 1 },
       attempts: { added: 0, updated: 0, unchanged: 1 },
     });
-    expect(await store.settings.get('repertoire')).toBe('{"white":"italian-white"}');
+    expect(await store.settings.get('repertoire')).toBe(REPERTOIRE);
     expect((await store.cards.get('a'))?.reps).toBe(9);
     expect((await store.cards.get('b'))?.reps).toBe(1);
     expect(await store.cards.get('c')).toEqual(card('c'));

@@ -1,4 +1,5 @@
 import { BookOpen, Eye, Target } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { BoardThumb } from '@/components/board/board-thumb';
 import { KIND_INFO, KindBadge, shownKind, type LineKind, type Risk } from '@/components/chess/kind-badge';
 import { MoveChip } from '@/components/chess/move-chip';
@@ -230,7 +231,21 @@ export function LineTable({
 }
 
 /** One line as a card with the board that names it (search results, "what grows from it"). */
-export function LineCard({ line, onShow, maxMoves = 6, className }: { line: LineData; className?: string } & Shared) {
+export function LineCard({
+  line,
+  onShow,
+  maxMoves = 6,
+  match,
+  showKnown = true,
+  className,
+}: {
+  line: LineData;
+  /** "Why it matched", from the search. */
+  match?: ReactNode;
+  /** Off where the learner's progress is not loaded (search). */
+  showKnown?: boolean;
+  className?: string;
+} & Shared) {
   return (
     <Card size="sm" className={cn('relative flex-row gap-3 px-3 transition-colors hover:bg-accent/40', className)}>
       <BoardThumb {...line.thumb} className="w-24 shrink-0 self-start" />
@@ -245,10 +260,13 @@ export function LineCard({ line, onShow, maxMoves = 6, className }: { line: Line
         <div className="text-sm">
           <Moves line={line} max={maxMoves} />
         </div>
-        <div className="flex items-center justify-between gap-2">
-          <KnownBar known={line.known} />
-          <Actions line={line} onShow={onShow} />
-        </div>
+        {match ? <div className="text-xs text-muted-foreground">{match}</div> : null}
+        {showKnown || line.learnHref || line.drillHref || onShow ? (
+          <div className="flex items-center justify-between gap-2">
+            {showKnown ? <KnownBar known={line.known} /> : <span />}
+            <Actions line={line} onShow={onShow} />
+          </div>
+        ) : null}
       </div>
     </Card>
   );

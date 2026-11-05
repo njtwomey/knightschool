@@ -22,7 +22,7 @@ v1's `/browse` and `/search` go to [search](search.md).
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › All openings.
+[breadcrumbs](../components/breadcrumbs.md): Openings › All openings.
 
 1. A line at the top: **No idea what to pick?** Three questions to a first repertoire.
 2. Filters in one row: [filter-toggle](../components/filter-toggle.md)s for side (Both, White, Black), against (for
@@ -61,3 +61,9 @@ v1's `/browse` and `/search` go to [search](search.md).
 `features/courses/courses-page.tsx` (one sortable table filtered by side) and the course cards of Search
 (`features/search/course-card.tsx`), with tracks from `content/curriculum.yaml`. Verdict: **repurpose**: the table
 stays as a view, cards with style tags and mode counts are new.
+
+## As built
+
+A [sortable-table](../components/sortable-table.md), one row per opening: a board, the name, the side, what it is about,
+then variations, steps and time, each sortable. A plain search above it matches the name and description only; the
+deeper search, with moves and filters, is [search](search.md). A click anywhere on a row opens the opening.

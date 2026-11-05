@@ -11,7 +11,7 @@ import { GRADE_FILL } from '@/components/chess/grade-style';
 const OVERLAY_NAME: Record<MapOverlay, string> = {
   progress: 'Progress',
   gaps: 'Gaps',
-  mistakes: 'Their mistakes',
+  mistakes: 'Mistakes and marks',
   coverage: 'Coverage',
   puzzles: 'Puzzles',
   lines: 'Lines',

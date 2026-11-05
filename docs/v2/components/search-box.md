@@ -20,6 +20,9 @@ A forgiving search over openings, variations, lines and ideas, ranked by relevan
 - `kinds`: which kinds to search (openings, variations, lines, ideas, positions by name).
 - `filters`: what [filter-toggle](filter-toggle.md)s sit beside it (who plays it, side, scope, line kind, as v1; level
   on the openings page).
+- `results`: results the page has ranked and filtered itself. The box counts them and Enter opens the first; the page
+  draws them (the search page, whose results are cards in sections).
+- `focusOnArrival`: focuses the box when it appears.
 - Reads `level.includeRare` (rare lines found but ranked lower) and nothing else.
 
 ## Behaviour

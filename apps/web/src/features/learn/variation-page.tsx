@@ -5,7 +5,9 @@ import { BoardNotes } from '@/components/board/board-notes';
 import { IdeaBadge } from '@/components/chess/idea-badge';
 import { RichText } from '@/components/chess/rich-text';
 import { LineTable } from '@/components/openings/line-row';
+import { ChooseTick } from '@/components/openings/choose-tick';
 import { StepRow } from '@/components/openings/step-row';
+import { stepLabel, stepTitle } from '@/components/openings/steps';
 import { CheckpointRow } from '@/components/openings/variation-list';
 import { PuzzleCard } from '@/components/practice/puzzle-card';
 import { ModeCounts } from '@/components/progress/mode-counts';
@@ -27,7 +29,9 @@ import {
 } from './opening-data';
 import { LearnCrumbs } from './learn-crumbs';
 import { OpeningFrame } from './opening-frame';
+import { useTicks } from './use-ticks';
 import { lineViews, openingHref, stepHref } from './views';
+import { useKeysBeatHover } from '@/components/board/key-owner';
 
 /** One variation of an opening: its decision, steps, checkpoint, lines, ideas and puzzles (docs/v2/pages/variation.md). */
 export function VariationPage({ id, variation }: { id: string; variation: string }) {
@@ -55,6 +59,7 @@ function VariationView({ data, variation: variationId }: { data: OpeningData; va
   const { one, progress } = data;
   const opening = one.opening;
   const actions = useStepActions(opening);
+  const ticks = useTicks(opening);
   const variations = useMemo(() => openingVariations(data), [data]);
   const view = variations.find((v) => v.id === variationId)!;
   const variation = opening.variations.find((v) => v.id === variationId)!;
@@ -109,9 +114,17 @@ function VariationView({ data, variation: variationId }: { data: OpeningData; va
     [shown, opening, one.facts],
   );
   const [resting, setIndex] = useState(0);
-  // A preview puts the board on where the hovered step starts.
-  // A step previews where it starts; a follow-up on the position after the punishment.
-  const index = previewing ? (followUp ? Math.min(2, positions.length - 1) : 0) : resting;
+  // A step previews where it ends, the most instructive position; a follow-up on the position after the punishment.
+  const index = previewing
+    ? followUp
+      ? Math.min(2, positions.length - 1)
+      : positions.length - 1
+    : Math.min(resting, positions.length - 1);
+  // An arrow key ends a row's preview and steps from where the board was resting.
+  useKeysBeatHover(Boolean(previewing), (step) => {
+    setPreviewing(null);
+    setIndex((at) => Math.max(0, at + step));
+  });
   const at = shown[index - 1];
   const ready = view.steps.every((s) => s.state === 'known' || s.state === 'mastered');
   const known = view.steps.filter((s) => s.state === 'known' || s.state === 'mastered').length;
@@ -130,6 +143,16 @@ function VariationView({ data, variation: variationId }: { data: OpeningData; va
           </p>
         </div>
         <ProgressRing counts={view.progress} label="long" size="md" cleared={view.checkpoint.state === 'cleared'} />
+        <ChooseTick
+          state={ticks.stateOf(view.steps.map((row) => row.id))}
+          name={`the ${view.name}`}
+          onToggle={() =>
+            ticks.toggle(
+              view.steps.map((row) => row.id),
+              `the ${view.name}`,
+            )
+          }
+        />
       </div>
       <ModeCounts
         counts={{ learn: { known, total: view.steps.length } }}
@@ -184,6 +207,13 @@ function VariationView({ data, variation: variationId }: { data: OpeningData; va
                 step={row}
                 onPreview={(hovered) => setPreviewing(hovered?.id ?? null)}
                 testOut={siteConfig.teach.testOut}
+                tick={
+                  <ChooseTick
+                    state={ticks.stateOf([row.id])}
+                    name={`step ${stepLabel(row)}, ${stepTitle(row)}`}
+                    onToggle={() => ticks.toggle([row.id], `step ${stepLabel(row)}, ${stepTitle(row)}`)}
+                  />
+                }
                 {...actions}
               />,
               // Its follow-ups under it: a click opens the follow-up.

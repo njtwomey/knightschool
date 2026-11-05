@@ -3,7 +3,6 @@ import {
   moveCardId,
   moveCards,
   moveState,
-  replay,
   START_EPD,
   stepState,
   testedOutSteps,
@@ -26,24 +25,37 @@ export type LineMove = {
   note?: Note;
 };
 
-/** A line's moves from the start, each with the note the opening's tree gives it. */
+const lineCache = new WeakMap<BuiltOpening, Map<string, LineMove[]>>();
+
+/**
+ * A line's moves from the start, each with the note the opening's tree gives it. Read from the tree, which already holds
+ * every move with its position, so it needs no chess library, and kept for the visit: pages ask for this constantly.
+ */
 export function lineMoves(opening: BuiltOpening, lineId: string): LineMove[] {
+  let cache = lineCache.get(opening);
+  if (!cache) lineCache.set(opening, (cache = new Map()));
+  const known = cache.get(lineId);
+  if (known) return known;
   const line = opening.lines.find((candidate) => candidate.id === lineId);
   if (!line) throw new Error(`no line "${lineId}" in ${opening.id}`);
-  const played = replay(START_EPD, line.moves);
-  return played.map((move, ply) => {
-    const before = ply === 0 ? START_EPD : played[ply - 1]!.epd;
-    const edge = opening.positions[before]?.moves.find((candidate) => candidate.uci === move.uci);
-    return {
+  let before = START_EPD;
+  const moves = line.moves.map((uci, ply): LineMove => {
+    const edge = opening.positions[before]?.moves.find((candidate) => candidate.uci === uci);
+    if (!edge) throw new Error(`${opening.id}: line "${lineId}" leaves the tree at ply ${ply}`);
+    const move: LineMove = {
       ply,
-      san: move.san,
-      uci: move.uci,
+      san: edge.san,
+      uci,
       before,
-      after: move.epd,
+      after: edge.to,
       mine: (ply % 2 === 0) === (opening.side === 'white'),
-      ...(edge?.note ? { note: edge.note } : {}),
+      ...(edge.note ? { note: edge.note } : {}),
     };
+    before = edge.to;
+    return move;
   });
+  cache.set(lineId, moves);
+  return moves;
 }
 
 /** A step's moves (from the lead-in opponent move to its last learner move) and the moves before it. */
@@ -73,7 +85,13 @@ export function stepStates(
 ) {
   const testedOut = testedOutSteps(opening, attempts);
   const byId = new Map(cards.map((card) => [card.id, card]));
-  const ratingsOf = (id: string) => reviews.filter((review) => review.cardId === id).map((review) => review.rating);
+  const ratings = new Map<string, ReviewRow['rating'][]>();
+  for (const review of reviews) {
+    const list = ratings.get(review.cardId);
+    if (list) list.push(review.rating);
+    else ratings.set(review.cardId, [review.rating]);
+  }
+  const ratingsOf = (id: string) => ratings.get(id) ?? [];
   const defs = moveCards(opening);
   const states = new Map<string, ItemState>();
   const counts = new Map<string, { mine: number; known: number; inReviews: number }>();

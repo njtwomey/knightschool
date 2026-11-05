@@ -13,6 +13,7 @@ import {
   type Card,
   type ItemState,
   type MoveCardDefinition,
+  type ChosenScope,
   type StreakFacts,
 } from '@knightschool/core';
 import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
@@ -22,6 +23,7 @@ import type { AttemptRow, LearnerStore, ReviewRow } from '@/data/learner-store';
 import { getSetting, whenSettingsReady } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { stepStates } from '@/features/learn/model';
+import { withRepertoire } from './chosen';
 
 /*
  * The learner's progress, worked out from the log on arrival (docs/v2/hooks/use-progress.md): what is due, what is
@@ -57,6 +59,8 @@ export type OpeningProgress = {
    * answered when there are several. `index` counts from 0 in the opening's steps.
    */
   inProgress?: { index: number; at: string };
+  /** On a repertoire view of the opening (`LearnerProgress.chosen`): what is ticked; everything above is cut to it. */
+  scope?: ChosenScope;
 };
 
 export type LearnerProgress = {
@@ -66,10 +70,16 @@ export type LearnerProgress = {
   cards: Card[];
   reviews: ReviewRow[];
   attempts: AttemptRow[];
-  /** Every card due now, the most overdue first. */
+  /** The openings with something ticked, each cut to what is ticked (features/practice/chosen.ts); empty when none. */
+  chosen: OpeningProgress[];
+  /** Every card due now, the most overdue first, whatever is ticked. */
+  allDue: Card[];
+  /** The opening and line of each due puzzle card, by card id: what tells whether it is in the repertoire. */
+  duePuzzles: ReadonlyMap<string, { opening: string; line?: string | null }>;
+  /** Every card due now in the repertoire (all of them when nothing is ticked), the most overdue first. */
   due: Card[];
   dueByKind: { moves: number; puzzles: number; questions: number };
-  /** The soonest card not yet due. */
+  /** The soonest card of the repertoire not yet due. */
   nextDue?: Date;
   /** New moves and questions met today, from any mode (a step's Try as well as Review). */
   introducedToday: number;
@@ -81,9 +91,11 @@ export type LearnerProgress = {
   msPerAnswer: number;
 };
 
-export const startedOpenings = (progress: LearnerProgress) => progress.openings.filter((one) => one.started);
+/** The openings the learner is on: what they have ticked, or, with nothing ticked, the ones started. */
+export const startedOpenings = (progress: LearnerProgress) =>
+  progress.chosen.length ? progress.chosen : progress.openings.filter((one) => one.started);
 
-/** The openings practice draws from: the ones started, or every opening when none is. */
+/** The openings practice draws from: the repertoire, or every opening when nothing is ticked or started. */
 export const practiceOpenings = (progress: LearnerProgress) =>
   startedOpenings(progress).length ? startedOpenings(progress) : progress.openings;
 
@@ -123,7 +135,7 @@ export function checkpointsOf(
 }
 
 /** The step whose Try is begun and not finished, the latest answered first (see `OpeningProgress.inProgress`). */
-function inProgressOf(
+export function inProgressOf(
   opening: BuiltOpening,
   cards: readonly MoveCardDefinition[],
   counts: ReadonlyMap<string, { mine: number; inReviews: number }>,
@@ -144,7 +156,14 @@ function inProgressOf(
   return found ? { inProgress: found } : {};
 }
 
-export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
+/**
+ * The learner's progress across every opening. `factsFor` says whose facts (the engine's evaluations and the band's
+ * counts, an opening's largest file) to load: every opening, one, or none; the rest have `facts` undefined.
+ */
+export async function loadProgress(
+  now = new Date(),
+  factsFor: 'all' | string | null = 'all',
+): Promise<LearnerProgress> {
   // Answers still being saved are part of the picture: read once they have landed.
   await whenWritesSettled();
   const [catalog, store] = await Promise.all([loadCatalog(), learnerStore(), whenSettingsReady()]);
@@ -156,7 +175,11 @@ export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
   const latest = latestCheckpoints(attempts);
   const openings = await Promise.all(
     catalog.openings.map(async (entry): Promise<OpeningProgress> => {
-      const [opening, facts] = await Promise.all([loadOpening(entry.id), loadFacts(entry.id).catch(() => undefined)]);
+      const wanted = factsFor === 'all' || factsFor === entry.id;
+      const [opening, facts] = await Promise.all([
+        loadOpening(entry.id),
+        wanted ? loadFacts(entry.id).catch(() => undefined) : undefined,
+      ]);
       const progress = stepStates(opening, cards, reviews, attempts);
       return {
         entry,
@@ -178,9 +201,12 @@ export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
     .sort((a, b) => a.getTime() - b.getTime())[0];
   const introducedToday = introducedOn(reviews, dayKey(now));
   const answered = attempts.filter((attempt) => attempt.ms > 0).slice(0, 200);
-  return {
+  const whole: LearnerProgress = {
     catalog,
     openings,
+    chosen: [],
+    allDue: due,
+    duePuzzles: await duePuzzlesOf(due, catalog),
     store,
     cards,
     reviews,
@@ -201,6 +227,21 @@ export async function loadProgress(now = new Date()): Promise<LearnerProgress> {
     ),
     msPerAnswer: answered.length ? answered.reduce((sum, one) => sum + one.ms, 0) / answered.length : 10_000,
   };
+  return withRepertoire(whole, getSetting('repertoire'), now);
+}
+
+/** Who each due puzzle card belongs to; the puzzle files are read only when one is due and something is ticked. */
+async function duePuzzlesOf(due: readonly Card[], catalog: Catalog): Promise<LearnerProgress['duePuzzles']> {
+  const owners = new Map<string, { opening: string; line?: string | null }>();
+  if (!due.some((card) => card.id.startsWith('puzzle:')) || !getSetting('repertoire').length) return owners;
+  const lists = await Promise.all(catalog.openings.map((entry) => puzzlesOf(entry.id).catch(() => [])));
+  lists.forEach((list, i) => {
+    for (const puzzle of list) {
+      const id = puzzleCardId(puzzle.id);
+      if (!owners.has(id)) owners.set(id, { opening: catalog.openings[i]!.id, line: puzzle.line });
+    }
+  });
+  return owners;
 }
 
 /** About how many minutes `count` answers take. */

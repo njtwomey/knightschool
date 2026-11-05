@@ -7,6 +7,8 @@ The set-up card for any practice mode: what to practise, how to weight it, the m
 - A card with the mode's icon and colour, a title ("Set up a drill") and one sentence on what the mode does.
 - **From** (every mode): Due today (your schedule; Review only, its default), My repertoire, Everything, one opening,
   one variation, or the hardest moves (the ones missed most). Speed adds an opening rush for one opening.
+  "My repertoire" is what is ticked ([../stores/repertoire.md](../stores/repertoire.md)); with nothing ticked, the
+  openings started, or every opening when none is.
 - **Weighting** (every mode except Due today): At random, or Favour popular, with its hint "Positions players at your
   level reach more often come up more often".
 - **The mode's own fields**, drawn from the settings registry so they read the same here as on the settings page:

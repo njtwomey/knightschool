@@ -14,15 +14,20 @@ export const normalise = (text: string): string =>
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 
-/** The number of single-letter edits that turn one word into another. */
+/** The number of single-letter edits that turn one word into another; a swap of neighbouring letters counts as one. */
 export function editDistance(a: string, b: string): number {
   if (a === b) return 0;
+  let older: number[] = [];
   let previous = Array.from({ length: b.length + 1 }, (_, i) => i);
   for (let i = 1; i <= a.length; i++) {
     const row = [i];
     for (let j = 1; j <= b.length; j++) {
       row[j] = Math.min(row[j - 1]! + 1, previous[j]! + 1, previous[j - 1]! + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+        row[j] = Math.min(row[j]!, older[j - 2]! + 1);
+      }
     }
+    older = previous;
     previous = row;
   }
   return previous[b.length]!;
@@ -32,21 +37,24 @@ const allowedSlips = (word: string) => (word.length >= 8 ? 2 : word.length >= 5 
 
 export type WordMatch = { kind: 'exact' | 'prefix' | 'inside' | 'joined' | 'close'; near?: string };
 
-/** How one query word matches a text: as a word start, inside it, with the words run together, or with a slip. */
-export function matchWord(word: string, text: string): WordMatch | null {
+/**
+ * How one query word matches a text: as a word start, inside it, with the words run together, or with a slip. `slips`
+ * off is for prose, where a slip finds the wrong word ("black" is one letter from "block", "white" from "while").
+ */
+export function matchWord(word: string, text: string, slips = true): WordMatch | null {
   const words = text.split(' ').filter(Boolean);
   if (words.includes(word)) return { kind: 'exact' };
   if (words.some((w) => w.startsWith(word))) return { kind: 'prefix' };
   if (text.includes(word)) return { kind: 'inside' };
   const joined = words.join('');
   if (joined.includes(word)) return { kind: 'joined' };
-  const slips = allowedSlips(word);
-  if (slips === 0) return null;
+  const allowed = slips ? allowedSlips(word) : 0;
+  if (allowed === 0) return null;
   for (let i = 0; i < words.length; i++) {
     for (let span = 1; span <= 2 && i + span <= words.length; span++) {
       const candidate = words.slice(i, i + span).join('');
-      const head = candidate.slice(0, Math.max(word.length, Math.min(candidate.length, word.length + slips)));
-      if (editDistance(word, candidate) <= slips || editDistance(word, head) <= slips) {
+      const head = candidate.slice(0, Math.max(word.length, Math.min(candidate.length, word.length + allowed)));
+      if (editDistance(word, candidate) <= allowed || editDistance(word, head) <= allowed) {
         return { kind: 'close', near: words.slice(i, i + span).join(' ') };
       }
     }
@@ -54,13 +62,18 @@ export function matchWord(word: string, text: string): WordMatch | null {
   return null;
 }
 
-const KIND_SCORE: Record<WordMatch['kind'], number> = { exact: 4, prefix: 3, joined: 2.5, inside: 2, close: 1 };
+/** How good a match of one word is. */
+export const KIND_SCORE: Record<WordMatch['kind'], number> = { exact: 4, prefix: 3, joined: 2.5, inside: 2, close: 1 };
 
 /**
  * Whether every word of the query matches the text, and how well (higher is better); `near` names the word a slip was
  * forgiven against, for "Close to 'Caro-Kann'".
  */
-export function forgivingMatch(query: string, text: string): { score: number; near?: string } | null {
+export function forgivingMatch(
+  query: string,
+  text: string,
+  { slips = true }: { slips?: boolean } = {},
+): { score: number; near?: string } | null {
   const q = normalise(query);
   if (!q) return null;
   const t = normalise(text);
@@ -70,7 +83,7 @@ export function forgivingMatch(query: string, text: string): { score: number; ne
   let score = 0;
   let near: string | undefined;
   for (const word of queryWords) {
-    const match = matchWord(word, t);
+    const match = matchWord(word, t, slips);
     if (!match) {
       if (queryWords.length > 1 && t.split(' ').join('').includes(joinedQuery)) return { score: 2 * queryWords.length };
       return null;

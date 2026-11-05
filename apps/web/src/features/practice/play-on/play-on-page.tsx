@@ -1,6 +1,7 @@
 import {
   judgeDeviation,
   numberedMove,
+  pickedOpenings,
   replay,
   START_FEN,
   winningChances,
@@ -25,6 +26,7 @@ import { BoardColumns } from '@/components/shared/board-columns';
 import { Button } from '@/components/ui/button';
 import { loadCatalog, loadFacts, loadOpening, type Catalog } from '@/data/content';
 import { learnerStore } from '@/data/learner';
+import { getSetting } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { useLoad } from '@/hooks/use-load';
 import { writeBoardHash } from '@/pages/board/board-hash';
@@ -69,9 +71,12 @@ function Shell({ crumbs, children }: { crumbs: { label: string; href?: string }[
 const sourcesOf = (catalog: Catalog): PracticeSource[] =>
   catalog.openings.map((o) => ({ id: `opening:${o.id}`, name: o.name, group: 'opening' as const, count: o.lines }));
 
-/** The opening a set-up plays on from: the one chosen, else the first in the catalogue. */
-const openingOf = (config: PracticeConfig, catalog: Catalog) =>
-  config.source.startsWith('opening:') ? config.source.slice(8) : catalog.openings[0]?.id;
+/** The opening a set-up plays on from: the one chosen, else the first ticked, else the first in the catalogue. */
+const openingOf = (config: PracticeConfig, catalog: Catalog) => {
+  if (config.source.startsWith('opening:')) return config.source.slice(8);
+  const ticked = pickedOpenings(getSetting('repertoire'));
+  return ticked.find((id) => catalog.openings.some((one) => one.id === id)) ?? catalog.openings[0]?.id;
+};
 
 /**
  * Play on (docs/v2/pages/play-on.md): `/practice/play-on` is the set-up card; `/practice/play-on/<opening>` and

@@ -39,6 +39,8 @@ with no model.
   first board on the page is primary; `keys` makes a board primary and `keys={false}` keeps it out
   ([use-move-interaction](../hooks/use-move-interaction.md), "As built").
 - **size**: `main` (capped at 36rem) or `aside` (22rem); never taller than the screen less the header and controls.
+- `targetRef`: hands the board's target to a panel beside it that is not in its caption, so moves there preview on this
+  board (the board search's results, in `BoardTargetContext`).
 - Settings read by the parts, not by the frame: the `board.*` keys (look), `engine.*`, `feedback.*`, `display.*` and
   `level.band` (every key is in ../settings.md, "Keys"). Each part's file names the ones it reads.
 

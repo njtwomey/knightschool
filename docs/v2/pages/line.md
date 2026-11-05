@@ -23,7 +23,7 @@ name on the [map](map.md) and in [search](search.md); "grows from" and "branches
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › Opening ▾ › Line ▾ (lines of the opening), or on its own
+[breadcrumbs](../components/breadcrumbs.md): Openings › Opening ▾ › Line ▾ (lines of the opening), or on its own
 Explore › (line, a menu of the lines it branches from and that grow from it).
 
 1. Heading: the line's name with its [kind-badge](../components/kind-badge.md) (main, sideline, rare, gambit, trap to

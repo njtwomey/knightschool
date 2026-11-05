@@ -8,7 +8,7 @@ A row of joined buttons, one of them chosen: every one-of-several choice and fil
   optionally, an icon or a count ("Gambit 4").
 - An optional label before the row for sighted users ("Side"); the group is always named for screen readers.
 - Shared option sets so the same choice reads the same everywhere: side (Both, White, Black), level (Beginner,
-  Improver), kind (main, sideline, rare, gambit, traps), scope (All, Openings, Lines, Ideas), weighting (At random,
+  Improver), kind (main, sideline, rare, gambit, traps), scope (All, Openings, Variations, Lines, Ideas), who plays it (Any, Play it, Against it), weighting (At random,
   Favour popular), and the per-mode fields of the practice card.
 
 ## Configuration

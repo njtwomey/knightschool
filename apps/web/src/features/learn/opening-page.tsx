@@ -6,8 +6,10 @@ import { BoardNotes } from '@/components/board/board-notes';
 import { FilterToggle } from '@/components/finding/filter-toggle';
 import { KIND_OPTIONS } from '@/components/finding/filter-options';
 import { SortableTable } from '@/components/finding/sortable-table';
+import { ChooseTick } from '@/components/openings/choose-tick';
 import { LineActions, lineColumns, type LineData } from '@/components/openings/line-row';
 import { OpeningIntro } from '@/components/openings/opening-intro';
+import { stepLabel, stepTitle } from '@/components/openings/steps';
 import type { Source } from '@/components/openings/types';
 import { VariationList } from '@/components/openings/variation-list';
 import { PuzzleCard } from '@/components/practice/puzzle-card';
@@ -29,7 +31,10 @@ import {
 } from './opening-data';
 import { OpeningCrumbs, OpeningFrame } from './opening-frame';
 import { nextStepNumber, openingModeCounts, openingModeHrefs, openingNextState } from './opening-progress';
+import { TickUndo } from './tick-undo';
+import { useTicks } from './use-ticks';
 import { finalTestHref, lineViews } from './views';
+import { useKeysBeatHover } from '@/components/board/key-owner';
 
 /** One opening: its introduction, what to do next, its variations with their steps, and a board for the step picked. */
 export function OpeningPage({ id, tab = 'overview' }: { id: string; tab?: 'overview' | 'lines' }) {
@@ -44,6 +49,7 @@ function Overview({ data }: { data: OpeningData }) {
   const { one, progress, puzzles } = data;
   const opening = one.opening;
   const actions = useStepActions(opening);
+  const ticks = useTicks(opening);
   const variations = useMemo(() => openingVariations(data), [data]);
   const counts = useMemo(() => openingModeCounts(one, progress, puzzles), [one, progress, puzzles]);
   const next = useMemo(() => openingNextState(one, progress, puzzles), [one, progress, puzzles]);
@@ -80,7 +86,16 @@ function Overview({ data }: { data: OpeningData }) {
   // The board shows the step's stretch at its end, to step back through; a preview shows where the row's step ends.
   const [resting, setIndex] = useState(positions.length - 1);
   // A step previews at the end of its stretch; a follow-up on the position after the punishment.
-  const index = previewing ? (followUp ? Math.min(2, positions.length - 1) : positions.length - 1) : resting;
+  const index = previewing
+    ? followUp
+      ? Math.min(2, positions.length - 1)
+      : positions.length - 1
+    : Math.min(resting, positions.length - 1);
+  // An arrow key ends a row's preview and steps from where the board was resting.
+  useKeysBeatHover(Boolean(previewing), (step) => {
+    setPreviewing(null);
+    setIndex((at) => Math.max(0, at + step));
+  });
   const at = shown?.moves[index - 1];
   const known = counts.learn?.known ?? 0;
   const moves = [...one.stepCounts.values()].reduce(
@@ -105,6 +120,16 @@ function Overview({ data }: { data: OpeningData }) {
           </p>
         </div>
         <ProgressRing counts={{ ...moves, mastered: 0 }} label="long" size="md" />
+        <ChooseTick
+          state={ticks.stateOf(opening.steps.map((step) => step.id))}
+          name={`the ${opening.name}`}
+          onToggle={() =>
+            ticks.toggle(
+              opening.steps.map((step) => step.id),
+              `the ${opening.name}`,
+            )
+          }
+        />
       </div>
       <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
         <NextAction state={next} />
@@ -138,6 +163,7 @@ function Overview({ data }: { data: OpeningData }) {
         }
       >
         <div className="grid content-start gap-6">
+          <TickUndo />
           <OpeningIntro
             summary={opening.summary}
             about={opening.about}
@@ -151,6 +177,17 @@ function Overview({ data }: { data: OpeningData }) {
             selected={home}
             onPreview={(row) => setPreviewing(row?.id ?? null)}
             testOut={siteConfig.teach.testOut}
+            stepTick={(row) => {
+              const name = `step ${stepLabel(row)}, ${stepTitle(row)}`;
+              return (
+                <ChooseTick state={ticks.stateOf([row.id])} name={name} onToggle={() => ticks.toggle([row.id], name)} />
+              );
+            }}
+            variationTick={(row) => {
+              const ids = row.steps.map((step) => step.id);
+              const name = `the ${row.name}`;
+              return <ChooseTick state={ticks.stateOf(ids)} name={name} onToggle={() => ticks.toggle(ids, name)} />;
+            }}
             {...actions}
           />
         </div>
@@ -197,6 +234,14 @@ function LinesTab({ data }: { data: OpeningData }) {
   const opening = one.opening;
   const lines = useMemo(() => lineViews(opening, cardStates(progress.cards, progress.reviews)), [opening, progress]);
   const [kind, setKind] = useState<KindFilter>('all');
+  const ticks = useTicks(opening);
+  /** A line's tick is its steps' (a step belongs to one line); a line that earns no cards has none. */
+  const lineTick = (line: LineData) => {
+    const ids = opening.steps.filter((step) => step.line === line.id).map((step) => step.id);
+    if (!ids.length || !line.known.total) return null;
+    const name = `the ${line.name} line`;
+    return <ChooseTick state={ticks.stateOf(ids)} name={name} onToggle={() => ticks.toggle(ids, name)} />;
+  };
   const options = KIND_OPTIONS.map((option) => ({
     ...option,
     count: lines.filter((line) => matchesKind(line, option.value)).length,
@@ -205,6 +250,7 @@ function LinesTab({ data }: { data: OpeningData }) {
   return (
     <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
       <OpeningCrumbs catalog={progress.catalog} opening={opening} tab="lines" />
+      <TickUndo />
       <div className="grid gap-1">
         <h1 className="text-2xl font-semibold tracking-tight">Lines of the {opening.name}</h1>
         <p className="text-muted-foreground">
@@ -218,7 +264,12 @@ function LinesTab({ data }: { data: OpeningData }) {
         rowKey={(line) => line.id}
         rowHref={(line) => line.href}
         titleColumn="name"
-        actions={(line) => <LineActions line={line} />}
+        actions={(line) => (
+          <>
+            <LineActions line={line} />
+            {lineTick(line)}
+          </>
+        )}
         empty="No lines of this kind."
         filters={
           <FilterToggle label="Kind" value={kind} options={options} allValue="all" onChange={setKind} size="sm" />

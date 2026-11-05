@@ -1,4 +1,4 @@
-import { followUps, playMove, stepState, type FollowUp, type ItemState } from '@knightschool/core';
+import { playMove, stepState, type FollowUp, type ItemState } from '@knightschool/core';
 import type { BuiltOpening } from '@knightschool/core/content';
 import type { Idea } from '@/components/chess/idea-badge';
 import { stepTitle, type StepData } from '@/components/openings/steps';
@@ -31,7 +31,7 @@ export type OpeningData = {
 
 /** One opening's progress, from the same log Today reads, with its shipped puzzles. */
 export async function loadOpeningData(id: string): Promise<OpeningData | null> {
-  const progress = await loadProgress();
+  const progress = await loadProgress(undefined, id);
   const one = progress.openings.find((candidate) => candidate.opening.id === id);
   if (!one) return null;
   const puzzles = await puzzlesOf(id).catch(() => []);
@@ -40,14 +40,8 @@ export async function loadOpeningData(id: string): Promise<OpeningData | null> {
 
 const isKnown = (state: string | undefined) => state === 'known' || state === 'mastered';
 
-/** An opening's follow-ups (core `followUps`), from its tree and shipped facts, with the config's judge settings. */
-export function openingFollowUps(data: OpeningData): FollowUp[] {
-  return followUps(data.one.opening, data.one.facts, {
-    ...siteConfig.judge,
-    ...siteConfig.coverage,
-    minShare: siteConfig.coverage.minShare,
-  });
-}
+/** An opening's follow-ups, worked out at build time and shipped with it (scripts/content/build.ts). */
+export const openingFollowUps = (data: OpeningData): FollowUp[] => data.one.opening.followUps ?? [];
 
 /**
  * Each follow-up's state: from its moves' cards, locked until the step it hangs off is known (`teach.gates`), and known
@@ -71,9 +65,14 @@ export function followUpStates(data: OpeningData, list: readonly FollowUp[]): Ma
   );
 }
 
-/** The moves of a follow-up from the mistake on, as move runs show them. */
-export function followUpMoves(followUp: FollowUp) {
-  const out: { san: string; uci: string; before: string; after: string; ply: number; mine: boolean }[] = [];
+type FollowUpMove = { san: string; uci: string; before: string; after: string; ply: number; mine: boolean };
+const followUpCache = new WeakMap<FollowUp, FollowUpMove[]>();
+
+/** The moves of a follow-up from the mistake on, as move runs show them (worked out once for the visit). */
+export function followUpMoves(followUp: FollowUp): FollowUpMove[] {
+  const known = followUpCache.get(followUp);
+  if (known) return known;
+  const out: FollowUpMove[] = [];
   let epd = followUp.mistake.epd;
   followUp.line.forEach((uci, i) => {
     const played = playMove(epd, uci);
@@ -81,6 +80,7 @@ export function followUpMoves(followUp: FollowUp) {
     out.push({ san: played.san, uci, before: epd, after: played.epd, ply: followUp.ply + i, mine: i % 2 === 1 });
     epd = played.epd;
   });
+  followUpCache.set(followUp, out);
   return out;
 }
 

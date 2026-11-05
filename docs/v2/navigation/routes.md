@@ -19,7 +19,7 @@ id is a new slug of its name, unique within its opening. Step numbers count alon
 | `/welcome`                                   | [first-visit](../pages/first-visit.md) always (for a link in the README or a shared post)             | Today   |
 | `/start`                                     | [onboarding](../pages/onboarding.md): three questions to a first repertoire                           | Today   |
 | `/learn`                                     | redirects to `/repertoire` when there is a repertoire, else to `/openings`                            | Learn   |
-| `/repertoire`                                | [repertoire](../pages/repertoire.md): slots, coverage, biggest gaps                                   | Learn   |
+| `/repertoire`                                | [repertoire](../pages/repertoire.md): what is ticked, slots, coverage, biggest gaps                   | Learn   |
 | `/openings`                                  | [openings](../pages/openings.md): every opening, filtered                                             | Learn   |
 | `/openings/<opening>`                        | [opening](../pages/opening.md), Overview tab: introduction, path, board                               | Learn   |
 | `/openings/<opening>/lines`                  | [opening](../pages/opening.md), Lines tab: every line, openable freely                                | Learn   |

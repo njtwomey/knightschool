@@ -6,7 +6,7 @@ common mistakes drawn on it. For seeing the whole ground at once and going strai
 ## Address
 
 `/explore/map` (every line), `/openings/<opening>/map` (one opening, its Map tab). Hash:
-`#line=<line>&m=<uci.uci...>&focus=<move prefix>&layers=progress,gaps,mistakes&zoom=<n>`: the picked line, the board's
+`#line=<line>&m=<uci.uci...>&focus=<move prefix>&layers=gaps,mistakes&zoom=<n>`: the picked line, the board's
 move, the subtree drawn alone, the overlays shown, the zoom ([../navigation/url-state.md](../navigation/url-state.md)).
 v1's `/tree` and `/course/<id>/tree` land here.
 
@@ -18,35 +18,44 @@ v1's `/tree` and `/course/<id>/tree` land here.
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Explore › Map, or Learn › opening › Map.
+[breadcrumbs](../components/breadcrumbs.md): Explore › Map, or Openings › opening › Map.
 
-Three columns, full width from xl; on a phone the tree first, the board in a sheet that opens on a click.
+A computer page: the whole screen under the header, edge to edge, each column scrolling on its own
+([FullPage](../patterns/layout.md)). There is no phone layout.
 
-1. Left: [map-index](../components/map-index.md), shaped like the tree: openings grouped by first two moves, a line
-   under the line it grows out of; a [search-box](../components/search-box.md) at its top.
-2. Middle: [map-tree](../components/map-tree.md): one column per move, one lane per line, main line across the top;
-   move pills coloured by state (open, learning, known, mastered, [state-badge](../components/state-badge.md)
-   colours); gaps as short dashed stubs with their share of games; the opponent's common mistakes marked where they
-   happen. Zoom buttons and pinch. [map-legend](../components/map-legend.md) under it, with a
-   [filter-toggle](../components/filter-toggle.md) per overlay.
-3. Right: a [board](../components/board.md) in the `study` preset with [board-controls](../components/board-controls.md)
-   along the picked line from the start, [move-explanation](../components/move-explanation.md) for the move (comment,
-   verdict, how often played), [board-explorer](../components/board-explorer.md) and
-   [mark-key](../components/mark-key.md). Under it, actions for the line through the move: **Learn**, **Try**,
-   **Review**.
+1. Left: Main lines or All, the opening's ideas (a click goes to the first move showing it), and
+   [map-index](../components/map-index.md): the variations as headings, each with its colour and its number of lines,
+   with its main lines under it. A heading opens the rest of its lines, in the index and on the map; a search finds any
+   line.
+2. Middle: [map-tree](../components/map-tree.md), the full height: one column per move, one compact lane per line, the
+   main line across the top. The selected move is solid in its line's colour. A line's name sits just left of its first own move, in its colour, so a name never adds a
+   row. A line takes its variation's colour, the same as its dot in the index. Pills show the band's share on the reply that starts a branch, the author's marks (!!, !, !?, ?!, ?, ??), and the
+   opponent's common mistakes and blunders as a badge on the move before them.
+3. Right: a [board](../components/board.md) along the picked line with the arrow keys, then the move's description (its
+   comment, the mistake that follows it, what is not covered), **Learn**, **Review**, **Open line**, then
+   [map-legend](../components/map-legend.md).
+
+Main lines by default: lines of kind main and each variation's first line, plus whatever the picked line grows from.
+Replies nothing answers (gaps) are in a pill's hover and the description; the Gaps switch draws them as stubs.
+
+Marks sit inside the pills, the classic symbols in their grades' colours: the author's where written, else the engine's:
+`?!`, `?`, `??` on the opponent's moves by what they cost against the best move (a learner's own move is what the opening
+teaches, so it is never marked down), and `!` on any move that is the only good one (the engine's first choice with its
+second a mistake or worse). Each follow-up is drawn as its own short branch off its line: the mistake with its mark and
+how often it is played, then the punishment, with its notes; **Learn** opens the follow-up. The Mistakes and marks
+switch hides both.
 
 ## Behaviour
 
 - Only a click changes anything; hovering a pill previews its position
   ([../hooks/use-move-interaction.md](../hooks/use-move-interaction.md)). A click on a pill picks its line and moves the
-  board there; a click on a line's name picks the line; the crosshair or a group's name draws only that subtree. Arrow
+  board there; a click on a line's name, here or in the index, picks the line and brings the map to it (also
+  `#line=<id>` from **See it on the map** on a line's page); the crosshair draws only that subtree. Arrow
   keys step along the picked line ([../navigation/shortcuts.md](../navigation/shortcuts.md)).
-- Progress colours come from [../hooks/use-progress.md](../hooks/use-progress.md); gaps from the shipped popularity at
+- The map shows lines, not progress: that is on the opening page. Gaps come from the shipped popularity at
   the learner's band, against the repertoire (not every line on the site: a gap is a hole in what _you_ answer).
 - Clicking a gap stub shows the position with "played in 7% of games; nothing in your repertoire answers it", and
   **Find an opening that does** when another opening covers it.
-- With no repertoire, the progress overlay is greyed and the gaps overlay is off, with a [hint](../components/hint.md)
-  saying why.
 
 ## Leads to
 

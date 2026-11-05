@@ -1,5 +1,6 @@
 import { ArrowLeft, Check, ChevronDown, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
-import { Fragment, useCallback, type ReactNode } from 'react';
+import { Fragment, useCallback, useContext, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,6 +18,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { TrailSlot } from './trail-slot';
 import { cn } from '@/lib/utils';
 import { Hint } from './hint';
 import { IconAction } from './icon-action';
@@ -219,8 +221,9 @@ export function Breadcrumbs({ root, crumbs = [], tabs, previous, next, trailing,
   const above = [root, ...crumbs.slice(0, -1)].filter(
     (crumb): crumb is { label: string; href: string } => !!crumb.href,
   );
-  return (
-    <div className={cn('@container grid gap-2', className)}>
+  const slot = useContext(TrailSlot);
+  const trail = (
+    <div className={cn('@container grid gap-2', slot && 'mx-auto w-full max-w-7xl px-4 py-2', className)}>
       {/* Wide screens: the whole trail on one line. */}
       <Breadcrumb className="hidden @xl:block">
         <BreadcrumbList>
@@ -283,4 +286,6 @@ export function Breadcrumbs({ root, crumbs = [], tabs, previous, next, trailing,
       </nav>
     </div>
   );
+  // Floats in the bar under the header when the app has one, so it stays on top as the page scrolls.
+  return slot ? createPortal(trail, slot) : trail;
 }

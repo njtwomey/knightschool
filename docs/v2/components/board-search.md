@@ -8,9 +8,10 @@ that position, transpositions included. v1's board search, kept as it is.
 - A [board](board.md), starting from the initial position (or the position the learner was looking at), with the
   moves played so far as a [move-run](move-run.md) above it and step buttons, as v1's modal has.
 - A [filter-toggle](filter-toggle.md) for what to find: Lines and traps, Lines, Traps (v1's kind filter, hash `bk`).
-- Results under the board as it changes: "4 lines pass through this position", each as a small
-  [line-row](line-row.md) card naming its opening. A line reached by another move order matches too, because positions
-  are keyed by EPD.
+- Results beside the board as it changes: the position's name, the moves the lines play next with how many lines play
+  each (and as arrows on the board, as in v1), then "4 lines pass through this position", each as a small card naming
+  its opening and what it continues to. A line reached by another move order matches too, because positions are keyed by
+  EPD. In the dialog the board stays put and the results scroll on their own.
 
 ## Configuration
 
@@ -22,6 +23,8 @@ that position, transpositions included. v1's board search, kept as it is.
 
 - Play moves on the board; results update after each move. Step back with the step buttons or arrow keys and results
   follow the cursor.
+- Hover a result: the board shows where the line leads. Hover a move of what it continues to: that exact position; click
+  it to play the line up to there. Leaving goes back to the searched position, and stepping beats a hover.
 - Click a result: opens that line at this position (the line page, its board at this ply).
 - No line passes through: [empty-state](empty-state.md) "No line here", with "Open on the board"
   ([board](../pages/board.md)).

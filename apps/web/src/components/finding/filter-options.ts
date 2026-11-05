@@ -25,9 +25,16 @@ export const KIND_OPTIONS: FilterOption<'all' | 'main' | 'sideline' | 'rare' | '
   { value: 'trap', label: 'Traps', hint: 'A trap to spring, or one to avoid' },
 ];
 
-export const SCOPE_OPTIONS: FilterOption<'all' | 'openings' | 'lines' | 'ideas'>[] = [
+export const ROLE_OPTIONS: FilterOption<'all' | 'play' | 'against'>[] = [
+  { value: 'all', label: 'Any', hint: 'Whether you play the opening or meet it' },
+  { value: 'play', label: 'Play it', hint: 'Openings that make the moves they are named for' },
+  { value: 'against', label: 'Against it', hint: 'Openings that answer the moves they are named for' },
+];
+
+export const SCOPE_OPTIONS: FilterOption<'all' | 'openings' | 'variations' | 'lines' | 'ideas'>[] = [
   { value: 'all', label: 'All' },
   { value: 'openings', label: 'Openings' },
+  { value: 'variations', label: 'Variations' },
   { value: 'lines', label: 'Lines' },
   { value: 'ideas', label: 'Ideas' },
 ];

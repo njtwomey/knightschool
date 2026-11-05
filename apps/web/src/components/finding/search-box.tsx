@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/shared/empty-state';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
 import { Kbd } from '@/components/ui/kbd';
+import { siteConfig } from '@/data/site-config';
 import { cn } from '@/lib/utils';
 import { KIND_NAME, searchItems, type SearchItem, type SearchKind, type SearchResult } from './search';
 import { RowLink } from './sortable-table';
@@ -14,6 +15,8 @@ export type SearchBoxProps = {
   form?: 'page' | 'compact' | 'filter';
   items: readonly SearchItem[];
   kinds?: readonly SearchKind[];
+  /** Results the page has ranked and filtered itself: the box counts them and Enter opens the first; the page draws them. */
+  results?: readonly SearchResult[];
   /** Filter toggles beside the box. */
   filters?: ReactNode;
   query?: string;
@@ -25,6 +28,8 @@ export type SearchBoxProps = {
   placeholder?: string;
   /** `/` focuses the box from anywhere on the page. */
   slashKey?: boolean;
+  /** Focuses the box when it appears (the search page). */
+  focusOnArrival?: boolean;
   className?: string;
 };
 
@@ -50,6 +55,7 @@ function ResultRow({ result, active, id }: { result: SearchResult; active?: bool
       <p className="text-xs text-muted-foreground">
         <span className="sr-only">Why it matched: </span>
         {why}
+        {result.quote ? <span className="italic">: {result.quote}</span> : null}
       </p>
     </li>
   );
@@ -63,6 +69,7 @@ export function SearchBox({
   form = 'page',
   items,
   kinds,
+  results: ranked,
   filters,
   query: controlled,
   onQuery,
@@ -70,6 +77,7 @@ export function SearchBox({
   onSearchByPosition,
   placeholder = 'Search openings, lines, ideas: caro, fried liver, fork',
   slashKey = true,
+  focusOnArrival,
   className,
 }: SearchBoxProps) {
   const [own, setOwn] = useState('');
@@ -83,10 +91,16 @@ export function SearchBox({
   const input = useRef<HTMLInputElement>(null);
   const listId = useId();
   const results = useMemo(
-    () => searchItems(kinds ? items.filter((item) => kinds.includes(item.kind)) : items, query),
-    [items, kinds, query],
+    () =>
+      ranked ??
+      searchItems(kinds ? items.filter((item) => kinds.includes(item.kind)) : items, query, siteConfig.search),
+    [ranked, items, kinds, query],
   );
   const shown = form === 'compact' ? results.slice(0, 8) : results;
+
+  useEffect(() => {
+    if (focusOnArrival) input.current?.focus();
+  }, [focusOnArrival]);
 
   useEffect(() => {
     if (!slashKey) return;
@@ -207,7 +221,7 @@ export function SearchBox({
           </Button>
         </p>
       ) : null}
-      {form === 'page' && query ? (
+      {form === 'page' && query && !ranked ? (
         results.length === 0 ? (
           nothing
         ) : (

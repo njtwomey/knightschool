@@ -27,8 +27,8 @@ export const PILL_FILL: Record<MoveState, string> = {
 /** A reply players at the band make that no line answers, off the learner's move it follows. */
 export type MapGap = { san: string; share: number };
 
-/** A common mistake by the opponent, on their move. */
-export type MapMistake = { share: number; practised: boolean };
+/** A common mistake by the opponent, on the move before it, with its symbol's grade. */
+export type MapMistake = { share: number; practised: boolean; grade?: 'mistake' | 'blunder'; san?: string };
 
 /** Everything the overlays draw, keyed by a move's key (the UCIs up to it). */
 export type MapOverlayData = {
@@ -38,4 +38,8 @@ export type MapOverlayData = {
   /** Games at the band reaching the position after the move. */
   games?: Record<string, number>;
   puzzles?: Record<string, number>;
+  /** How often the band plays the move where it is played, 0 to 1, for a reply that starts a branch. */
+  shares?: Record<string, number>;
+  /** The author's mark on a move: !, !!, !?, ?!, ?, ??. */
+  marks?: Record<string, string>;
 };

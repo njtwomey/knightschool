@@ -1,5 +1,5 @@
 import type { Side } from '@knightschool/core';
-import { Flag, TriangleAlert, type LucideIcon } from 'lucide-react';
+import { ArrowUp, CornerUpRight, Flag, MoveUpRight, TriangleAlert, Zap, type LucideIcon } from 'lucide-react';
 import { useState } from 'react';
 import type { Reveal } from '@/components/board/board';
 import { Badge } from '@/components/ui/badge';
@@ -18,21 +18,25 @@ export const KIND_INFO: Record<ShownKind, { name: string; hint: string; tone: st
     name: 'Main line',
     hint: 'Main line: the most important way the opening goes; learn it first.',
     tone: 'border-foreground/30 text-foreground',
+    icon: ArrowUp,
   },
   sideline: {
     name: 'Sideline',
     hint: 'Sideline: a less common choice that still comes up in games at your level.',
     tone: 'border-border text-muted-foreground',
+    icon: CornerUpRight,
   },
   rare: {
     name: 'Rare',
     hint: 'Rare: seldom played; worth knowing once the main lines are safe.',
     tone: 'border-dotted border-muted-foreground/50 text-muted-foreground',
+    icon: MoveUpRight,
   },
   gambit: {
     name: 'Gambit',
     hint: 'Gambit: a pawn or more given for quick development and attack.',
     tone: 'border-kind-gambit/40 bg-kind-gambit/10 text-kind-gambit',
+    icon: Zap,
   },
   'trap-spring': {
     name: 'Trap to spring',
@@ -93,11 +97,16 @@ function Tag({
       <TooltipTrigger asChild>
         <Badge
           variant="outline"
-          className={cn('cursor-default', small && 'h-4 px-1.5 text-[0.65rem] [&>svg]:size-2.5', tone)}
+          className={cn(
+            'cursor-default',
+            small && (Icon ? 'size-5 justify-center p-0 [&>svg]:size-3' : 'h-4 px-1.5 text-[0.65rem]'),
+            tone,
+          )}
           tabIndex={0}
+          aria-label={small && Icon ? name : undefined}
         >
           {Icon ? <Icon aria-hidden /> : null}
-          {name}
+          {small && Icon ? null : name}
         </Badge>
       </TooltipTrigger>
       <TooltipContent className="max-w-64">{hint}</TooltipContent>
@@ -128,7 +137,7 @@ export function KindBadge({
   tags?: { name: string; hint: string }[];
   show?: 'kind' | 'kind and risk' | 'all';
   reveal?: Reveal;
-  /** `sm` in a dense list (the map's index). */
+  /** `sm` in a dense list (the map's index): the icon alone, the word on hover: an arrow up for a main line, a turn for a sideline. */
   size?: 'default' | 'sm';
 }) {
   const small = size === 'sm';

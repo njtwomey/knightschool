@@ -37,6 +37,7 @@ import { QuestionRun } from '../questions/question-run';
 import { openTry } from '../try-position';
 import { useExerciseSession, type ExerciseResult } from '../use-exercise-session';
 import { BookPrompt } from '../book-prompt';
+import { openingTabs } from '@/features/learn/opening-frame';
 
 const percent = (share: number) => `${Math.round(share * 100)}%`;
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
@@ -51,7 +52,7 @@ const KNOWN = ['known', 'mastered'];
  */
 export function CheckpointPage({ opening, variation }: { opening: string; variation?: string }) {
   const data = useLoad(async () => {
-    const progress = await loadProgress();
+    const progress = await loadProgress(undefined, opening);
     return { progress, puzzles: await puzzlesOf(opening).catch((): ShippedPuzzle[] => []) };
   }, [opening, variation]);
   const one = data.data?.progress.openings.find((candidate) => candidate.opening.id === opening);
@@ -59,11 +60,12 @@ export function CheckpointPage({ opening, variation }: { opening: string; variat
   return (
     <main className="mx-auto grid max-w-7xl gap-5 px-4 py-6">
       <Breadcrumbs
-        root={{ label: 'Learn', href: to('/openings') }}
+        root={{ label: 'Openings', href: to('/openings') }}
         crumbs={[
           { label: one?.opening.name ?? opening, href: openingHref(opening) },
           ...(name ? [{ label: name }, { label: 'Checkpoint' }] : [{ label: 'Final test' }]),
         ]}
+        tabs={openingTabs(opening)}
       />
       {data.error ? (
         <p className="text-destructive">{data.error}</p>

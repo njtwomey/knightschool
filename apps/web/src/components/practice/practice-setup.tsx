@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils';
 import {
   cannotStart,
   FIXED_SOURCES,
+  isDueSource,
   MODE_INFO,
   type PracticeConfig,
   type PracticeMode,
@@ -141,7 +142,7 @@ export function PracticeSetup({
   const info = MODE_INFO[mode];
   const Icon = info.icon;
   const fields = MODE_FIELDS[mode].filter(
-    (field) => (!only || only.includes(field)) && !(field === 'weighting' && draft.source === 'due'),
+    (field) => (!only || only.includes(field)) && !(field === 'weighting' && isDueSource(draft.source)),
   );
   const shows = (field: SetupField) => fields.includes(field);
   const blocked = cannotStart(draft, sources, due);
@@ -208,6 +209,9 @@ export function PracticeSetup({
                           {FIXED_SOURCES.due}
                           {count(due)}
                         </SelectItem>
+                      ) : null}
+                      {initial.source === 'due-all' ? (
+                        <SelectItem value="due-all">{FIXED_SOURCES['due-all']}</SelectItem>
                       ) : null}
                       <SelectItem value="repertoire">{FIXED_SOURCES.repertoire}</SelectItem>
                       <SelectItem value="everything">{FIXED_SOURCES.everything}</SelectItem>

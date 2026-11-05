@@ -10,23 +10,27 @@ import { cn } from '@/lib/utils';
 import { keyOf, layoutLines, type MapLine, type MapNode } from './lane-layout';
 import { laneColour } from './lane-colours';
 import { PILL_FILL, STATE_NAME, type MapGap, type MapOverlay, type MapOverlayData, type MoveState } from './map-types';
-import { GRADE_FILL } from '@/components/chess/grade-style';
+import { GRADE_FILL, GRADE_TEXT } from '@/components/chess/grade-style';
 
-const COL = 64;
-const TRIGGER_W = 256;
+const COL = 70;
+/** A lane: compact, because a line's name sits beside it, not above it. */
+const LANE = 32;
 const HEADER = 30;
+/** Room for the first line's name beside the moves every line shares. */
+const LABEL_W = 190;
 const MIN_ZOOM = 0.4;
 const MAX_ZOOM = 1.6;
 
 const clamp = (zoom: number) => Math.round(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom)) * 100) / 100;
-const colX = (column: number) => (column === 0 ? TRIGGER_W / 2 : TRIGGER_W + (column - 1) * COL + COL / 2);
-const colLeft = (column: number) => (column === 0 ? 0 : TRIGGER_W + (column - 1) * COL);
 
-const OUTLINE: Record<MoveState, string> = {
-  open: 'border-state-open',
-  learning: 'border-state-learning',
-  known: 'border-state-known',
-  mastered: 'border-state-mastered',
+/** The author's marks, in the colours of the grades they stand for. */
+const MARK_GRADE: Record<string, keyof typeof GRADE_TEXT> = {
+  '!!': 'best',
+  '!': 'excellent',
+  '!?': 'good',
+  '?!': 'inaccuracy',
+  '?': 'mistake',
+  '??': 'blunder',
 };
 
 export type MapFocus = { line: string; ply: number };
@@ -48,7 +52,6 @@ export type MapTreeProps = {
   subtree?: string | null;
   folded?: ReadonlySet<string>;
   onPick?: (focus: MapFocus) => void;
-  onSubtree?: (line: string) => void;
   onUnfold?: (line: string) => void;
   onHover?: (node: MapNode | null) => void;
   onGap?: (node: MapNode, gap: MapGap) => void;
@@ -62,6 +65,10 @@ export type MapTreeProps = {
   /** Pills in this state pulse (a legend sample hovered); with `isolate`, the rest dim. */
   pulse?: MoveState | null;
   isolate?: MoveState | null;
+  /** Fill the box it is in, rather than a fixed height (the map page). */
+  fill?: boolean;
+  /** Change it to move keyboard focus to the map, so the arrow keys drive it after a pick elsewhere. */
+  focusRequest?: number;
   className?: string;
 };
 
@@ -81,7 +88,6 @@ export function MapTree({
   subtree,
   folded,
   onPick,
-  onSubtree,
   onUnfold,
   onHover,
   onGap,
@@ -92,6 +98,8 @@ export function MapTree({
   loading,
   pulse,
   isolate,
+  fill,
+  focusRequest,
   className,
 }: MapTreeProps) {
   const layout = useMemo(() => layoutLines(lines, { trigger, folded, subtree }), [lines, trigger, folded, subtree]);
@@ -105,21 +113,31 @@ export function MapTree({
     onZoom?.(zoom);
   }, [zoom, onZoom]);
   const on = (overlay: MapOverlay) => overlays.has(overlay);
-  const laneH = on('gaps') ? 64 : 54;
+  const laneH = on('gaps') ? LANE + 14 : LANE;
+  // The moves every line shares, as one pill, with room after it for the first line's name.
+  const triggerPill = layout.trigger.reduce((n, move) => n + move.san.length + 4, 0) * 8 + 24;
+  const triggerW = layout.trigger.length > 0 ? triggerPill + LABEL_W : LABEL_W;
+  const colX = (column: number) => (column === 0 ? triggerPill / 2 : triggerW + (column - 1) * COL + COL / 2);
+  const colLeft = (column: number) => (column === 0 ? 0 : triggerW + (column - 1) * COL);
   // Room at the end for a folded line's +N and for the zoom buttons over the move numbers.
   const width = colLeft(layout.columns) + COL * 1.5 + 72;
   const height = layout.lanes.length * laneH + 8;
-  const pillY = (lane: number) => lane * laneH + 30;
+  const pillY = (lane: number) => lane * laneH + laneH / 2 + 2;
+  /** A lane's colour: its line's, so a line here and its dot in the index read together. */
+  const colourOfLane = (lane: number) => laneColour(layout.lanes[lane]?.line.colour ?? lane);
   const linesThrough = useMemo(() => {
     const map = new Map<string, string[]>();
-    for (const node of layout.nodes) {
-      map.set(
-        node.key,
-        lines.filter((line) => keyOf(line.moves, node.ply + 1) === node.key).map((line) => line.id),
-      );
+    for (const line of lines) {
+      let key = '';
+      for (const move of line.moves) {
+        key = key ? `${key} ${move.uci}` : move.uci;
+        const through = map.get(key);
+        if (through) through.push(line.id);
+        else map.set(key, [line.id]);
+      }
     }
     return map;
-  }, [layout, lines]);
+  }, [lines]);
   const fit = () => {
     const box = scroller.current;
     if (box) setZoom(box.clientWidth / width);
@@ -145,6 +163,34 @@ export function MapTree({
   }, []);
 
   const focusKey = focus ? keyOf(lines.find((line) => line.id === focus.line)?.moves ?? [], focus.ply + 1) : null;
+
+  useEffect(() => {
+    if (focusRequest) scroller.current?.focus({ preventScroll: true });
+  }, [focusRequest]);
+
+  // The move shown on the board is always in view: picking a line in the index brings the map to it.
+  useEffect(() => {
+    const box = scroller.current;
+    const node = focusKey ? layout.byKey.get(focusKey) : undefined;
+    if (!box || !node) return;
+    const x = colX(node.column) * zoom;
+    const y = (pillY(node.lane) + HEADER) * zoom;
+    const margin = 90;
+    const seen =
+      x > box.scrollLeft + margin &&
+      x < box.scrollLeft + box.clientWidth - margin &&
+      y > box.scrollTop + margin &&
+      y < box.scrollTop + box.clientHeight - margin;
+    if (seen) return;
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    box.scrollTo({
+      left: x - box.clientWidth / 2,
+      top: y - box.clientHeight / 2,
+      behavior: still ? 'auto' : 'smooth',
+    });
+    // Positions follow from the layout and the zoom.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusKey, layout, zoom]);
 
   const onKey = (event: React.KeyboardEvent) => {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
@@ -196,7 +242,7 @@ export function MapTree({
     : 1;
   const strokeFor = (key: string) =>
     on('coverage') && data.games ? 1.5 + 9 * Math.sqrt((data.games[key] ?? 0) / maxGames) : 2;
-  const laneStroke = (lane: number) => (on('lines') ? laneColour(lane) : 'var(--muted-foreground)');
+  const laneStroke = colourOfLane;
 
   // The learner's answer after an opponent's move, for its outline under Progress.
   const answerState = (node: MapNode): MoveState | undefined => {
@@ -204,6 +250,13 @@ export function MapTree({
     const next = line?.moves[node.ply + 1];
     return next ? data.states?.[`${node.key} ${next.uci}`] : undefined;
   };
+
+  const firstOfLane = new Map<number, string>();
+  for (const node of layout.nodes) if (!firstOfLane.has(node.lane)) firstOfLane.set(node.lane, node.key);
+  /** A line's name sits just left of its first own move, not over it, so the lanes stay compact. */
+  const labelRight = (column: number) => colX(column) - COL / 2 + 2;
+  const labelRoom = (lane: number, column: number) =>
+    Math.min(240, labelRight(column) - (lane === 0 ? triggerPill + 10 : 4));
 
   const pill = (node: MapNode) => {
     const learner = learnerAt(node.ply);
@@ -213,11 +266,18 @@ export function MapTree({
     const shownState = learner ? state : answerState(node);
     const isolated = isolate && on('progress') ? shownState !== isolate : false;
     const style: CSSProperties = {};
-    let tone = 'border-border bg-background';
-    if (on('progress')) {
-      tone = learner ? PILL_FILL[state ?? 'open'] : cn('bg-background', OUTLINE[answerState(node) ?? 'open']);
-    } else if (on('lines')) {
-      const colour = laneColour(node.lane);
+    let tone = '';
+    const selected = focusKey === node.key;
+    const colour = colourOfLane(node.lane);
+    if (selected) {
+      // The move on the board: solid in its line's colour, with the page's background as its ink.
+      style.borderColor = colour;
+      style.backgroundColor = colour;
+      style.color = 'var(--background)';
+      tone = '[&_a]:text-inherit [&_a]:hover:bg-transparent [&_a]:focus-visible:ring-0';
+    } else if (on('progress') && learner && state && state !== 'open') {
+      tone = PILL_FILL[state];
+    } else {
       style.borderColor = colour;
       style.backgroundColor = `color-mix(in oklch, ${colour} 16%, var(--background))`;
     }
@@ -225,10 +285,17 @@ export function MapTree({
     const mistake = on('mistakes') ? data.mistakes?.[node.key] : undefined;
     const puzzles = on('puzzles') ? data.puzzles?.[node.key] : undefined;
     const games = data.games?.[node.key];
+    const unanswered = data.gaps?.[node.key] ?? [];
+    const mark = on('mistakes') ? data.marks?.[node.key] : undefined;
+    // How often the band plays it, on the reply that starts a branch.
+    const share = !learner && node.key === firstOfLane.get(node.lane) ? data.shares?.[node.key] : undefined;
     const hint = [
       `${moveNumber(node.ply)}${node.ply % 2 === 0 ? '.' : '...'}${node.move.san}`,
       learner && state ? STATE_NAME[state] : null,
       games !== undefined && data.games ? `${Math.round((games / maxGames) * 100)}% of games here` : null,
+      unanswered.length
+        ? `not covered: ${unanswered.map((gap) => `${gap.san} ${Math.round(gap.share * 100)}%`).join(', ')}`
+        : null,
     ]
       .filter(Boolean)
       .join(', ');
@@ -238,7 +305,6 @@ export function MapTree({
         className={cn(
           'relative inline-flex h-6 items-center rounded-full border-2 px-0.5 transition-opacity',
           tone,
-          focusKey === node.key && 'ring-2 ring-ring ring-offset-1 ring-offset-background',
           (dim || isolated) && 'opacity-30',
           pulse && shownState === pulse && 'motion-safe:animate-pulse',
         )}
@@ -257,21 +323,49 @@ export function MapTree({
           onHover={onHover ? (hovering) => onHover(hovering ? node : null) : undefined}
           onSelect={onPick ? () => onPick({ line: through[0] ?? node.line, ply: node.ply }) : undefined}
         />
+        {mark ? (
+          <span
+            className={cn('pr-1 text-xs leading-none font-bold', !selected && GRADE_TEXT[MARK_GRADE[mark] ?? 'good'])}
+          >
+            {mark}
+          </span>
+        ) : null}
+        {share !== undefined ? (
+          <span
+            className={cn(
+              'pr-1 text-[0.6rem] leading-none tabular-nums',
+              selected ? 'opacity-70' : 'text-muted-foreground',
+            )}
+          >
+            {Math.round(share * 100)}%
+          </span>
+        ) : null}
         {mistake ? (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon-xs"
-                aria-label={`A common mistake, played in ${Math.round(mistake.share * 100)}% of games`}
+                aria-label={`${mistake.san ?? 'A common mistake'}, played in ${Math.round(mistake.share * 100)}% of games`}
                 onClick={() => onMistake?.(node)}
-                className={`absolute -top-2.5 -right-2.5 size-4 rounded-full p-0 text-[0.65rem] font-bold text-background hover:opacity-80 ${GRADE_FILL.mistake}`}
+                className={cn(
+                  'absolute -top-2 -right-2 h-4 min-w-4 rounded-full px-0.5 text-[0.6rem] font-bold text-background hover:opacity-80',
+                  GRADE_FILL[mistake.grade ?? 'mistake'],
+                )}
               >
-                {mistake.practised ? <Check className="size-2.5" strokeWidth={4} aria-hidden /> : '?'}
+                {mistake.practised ? (
+                  <Check className="size-2.5" strokeWidth={4} aria-hidden />
+                ) : mistake.grade === 'blunder' ? (
+                  '??'
+                ) : (
+                  '?'
+                )}
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              A common mistake: played in {Math.round(mistake.share * 100)}% of games at your level.{' '}
+              {mistake.san ? `${mistake.san} is a ` : 'A '}
+              {mistake.grade === 'blunder' ? 'blunder' : 'mistake'}: played in {Math.round(mistake.share * 100)}% of
+              games at your level.{' '}
               {mistake.practised ? 'You have practised the punishment.' : 'Practise the punishment.'}
             </TooltipContent>
           </Tooltip>
@@ -332,13 +426,18 @@ export function MapTree({
 
   return (
     // Inline-size containment: the drawing never widens the column it sits in; it scrolls instead.
-    <div className={cn('@container relative w-full min-w-0 rounded-lg border bg-background', className)}>
+    <div
+      className={cn('@container relative w-full min-w-0 rounded-lg border bg-background', fill && 'h-full', className)}
+    >
       <div
         ref={scroller}
         tabIndex={0}
         onKeyDown={onKey}
         aria-label="The map of lines. Arrow keys move along and between lines; plus and minus zoom; F fits."
-        className="max-h-[32rem] overflow-auto rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className={cn(
+          'overflow-auto rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          fill ? 'h-full' : 'max-h-[32rem]',
+        )}
       >
         <div style={{ zoom, width }}>
           {/* Move numbers stay along the top while the drawing scrolls. */}
@@ -364,7 +463,7 @@ export function MapTree({
                 const first = nodes[0]!;
                 const y = pillY(lane.lane);
                 const origin = lane.from ? layout.byKey.get(lane.from) : null;
-                const ox = origin ? colX(origin.column) : lane.lane === 0 ? colX(0) : TRIGGER_W * 0.8;
+                const ox = origin ? colX(origin.column) : lane.lane === 0 ? colX(0) : triggerPill;
                 const oy = origin ? pillY(origin.lane) : pillY(0);
                 const cx = colX(first.column);
                 const segments = nodes
@@ -377,7 +476,7 @@ export function MapTree({
                       y1={y}
                       y2={y}
                       stroke={laneStroke(lane.lane)}
-                      strokeOpacity={on('lines') ? 0.85 : 0.35}
+                      strokeOpacity={0.85}
                       strokeWidth={strokeFor(node.key)}
                       strokeLinecap="round"
                     />
@@ -389,7 +488,7 @@ export function MapTree({
                       d={oy === y ? `M${ox},${oy} L${cx},${y}` : `M${ox},${oy} C${midX},${oy} ${midX},${y} ${cx},${y}`}
                       fill="none"
                       stroke={laneStroke(lane.lane)}
-                      strokeOpacity={on('lines') ? 0.85 : 0.35}
+                      strokeOpacity={0.85}
                       strokeWidth={strokeFor(first.key)}
                       strokeLinecap="round"
                     />
@@ -400,7 +499,7 @@ export function MapTree({
             </svg>
 
             {layout.trigger.length > 0 ? (
-              <div className="absolute -translate-y-1/2" style={{ left: 6, top: pillY(0), width: TRIGGER_W - 12 }}>
+              <div className="absolute -translate-y-1/2" style={{ left: 6, top: pillY(0), width: triggerPill }}>
                 <span className="inline-flex h-7 items-center rounded-full border-2 border-border bg-muted px-1.5 text-sm whitespace-nowrap [&>span]:flex-nowrap">
                   <MoveRun
                     moves={layout.trigger.map((move) => ({ san: move.san, uci: move.uci, after: move.after }))}
@@ -419,20 +518,24 @@ export function MapTree({
               if (!first || !last) return null;
               return (
                 <div key={lane.line.id}>
-                  <Button
-                    variant="link"
-                    size="xs"
-                    onClick={() => onSubtree?.(lane.line.id)}
-                    className="absolute h-4 max-w-80 justify-start truncate px-1 text-xs font-medium"
-                    style={{
-                      left: colLeft(first.column),
-                      top: lane.lane * laneH + 4,
-                      color: on('lines') ? laneColour(lane.lane) : undefined,
-                    }}
-                    title={`Draw only ${lane.line.name} and what grows from it`}
-                  >
-                    {lane.line.name}
-                  </Button>
+                  {labelRoom(lane.lane, first.column) >= 36 ? (
+                    <Button
+                      variant="link"
+                      size="xs"
+                      onClick={() => onPick?.({ line: lane.line.id, ply: first.ply })}
+                      // A halo round the letters, not a box: a branch passing behind a name is not cut.
+                      className="absolute h-4 -translate-y-1/2 justify-end px-1 text-xs font-medium [text-shadow:0_0_3px_var(--background),0_0_3px_var(--background),0_0_3px_var(--background)]"
+                      style={{
+                        left: labelRight(first.column) - labelRoom(lane.lane, first.column),
+                        width: labelRoom(lane.lane, first.column),
+                        top: pillY(lane.lane),
+                        color: colourOfLane(lane.lane),
+                      }}
+                      title={lane.line.name}
+                    >
+                      <span className="truncate">{lane.line.name}</span>
+                    </Button>
+                  ) : null}
                   {lane.folded > 0 ? (
                     <Button
                       variant="outline"

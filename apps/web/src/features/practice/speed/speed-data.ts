@@ -3,9 +3,10 @@ import type { BuiltOpening, OpeningFacts } from '@knightschool/core/content';
 import type { PracticeConfig } from '@/components/practice/practice-config';
 import { loadCatalog, loadFacts, loadOpening } from '@/data/content';
 import { learnerStore } from '@/data/learner';
+import { whenSettingsReady } from '@/data/settings';
 import type { ReviewRow } from '@/data/learner-store';
 import { stepStates } from '@/features/learn/model';
-import { scopeOf } from '../sources';
+import { scopeOf, tickedLines } from '../sources';
 
 export type SpeedData = {
   openings: BuiltOpening[];
@@ -24,6 +25,7 @@ export async function loadSpeedData(): Promise<SpeedData> {
     ),
   );
   const store = await learnerStore();
+  await whenSettingsReady();
   const cards = await store.cards.all();
   const reviews = await store.reviews.forCards(cards.map((card) => card.id));
   return { openings, facts, cards, reviews };
@@ -72,17 +74,20 @@ export function poolOf(data: SpeedData, config: PracticeConfig): RunLine[] {
   }
   const scope = scopeOf(config.source);
   const openings = scope ? data.openings.filter((o) => o.id === scope.opening) : data.openings;
-  return openings.flatMap((opening) =>
-    speedLines(opening, data.facts[opening.id]?.counts, scope?.variation).map((line) => {
-      const built = opening.lines.find((l) => l.id === line.line)!;
-      return {
-        ...line,
-        name: opening.name,
-        variation: built.name ?? opening.variations.find((v) => v.id === built.variation)?.name,
-        script: cutToDepth(line.moves, line.side, config.depth),
-      };
-    }),
-  );
+  return openings.flatMap((opening) => {
+    const ticked = tickedLines(opening, config.source);
+    return speedLines(opening, data.facts[opening.id]?.counts, scope?.variation)
+      .filter((line) => !ticked || ticked.has(line.line))
+      .map((line) => {
+        const built = opening.lines.find((l) => l.id === line.line)!;
+        return {
+          ...line,
+          name: opening.name,
+          variation: built.name ?? opening.variations.find((v) => v.id === built.variation)?.name,
+          script: cutToDepth(line.moves, line.side, config.depth),
+        };
+      });
+  });
 }
 
 /** The position a step's stretch begins at, by walking its line. */

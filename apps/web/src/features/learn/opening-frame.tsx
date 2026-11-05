@@ -8,7 +8,21 @@ import { to } from '@/router/location';
 import { loadOpeningData, type OpeningData } from './opening-data';
 import { linesHref, openingHref } from './views';
 
-/** The opening's crumbs and its tabs, Overview, Lines and Map (docs/v2/pages/opening.md). */
+/** An opening's tabs; `tab` marks the one this page is, if it is one. */
+export const openingTabs = (id: string, tab?: 'overview' | 'lines' | 'map') => ({
+  label: 'Opening pages',
+  value: tab ?? '',
+  items: [
+    { value: 'overview', label: 'Overview', href: openingHref(id) },
+    { value: 'lines', label: 'Lines', href: linesHref(id) },
+    { value: 'map', label: 'Map', href: to(`/openings/${id}/map`) },
+  ],
+});
+
+/**
+ * The opening's crumbs and its tabs, Overview, Lines and Map (docs/v2/pages/opening.md). The tabs are on every page under
+ * an opening, a step or a line as much as the overview; `tab` marks the one this page is.
+ */
 export function OpeningCrumbs({
   catalog,
   opening,
@@ -22,7 +36,7 @@ export function OpeningCrumbs({
 }) {
   return (
     <Breadcrumbs
-      root={{ label: 'Learn', href: to('/openings') }}
+      root={{ label: 'Openings', href: to('/openings') }}
       crumbs={[
         {
           label: opening.name,
@@ -39,19 +53,7 @@ export function OpeningCrumbs({
         },
         ...crumbs,
       ]}
-      {...(tab
-        ? {
-            tabs: {
-              label: 'Opening pages',
-              value: tab,
-              items: [
-                { value: 'overview', label: 'Overview', href: openingHref(opening.id) },
-                { value: 'lines', label: 'Lines', href: linesHref(opening.id) },
-                { value: 'map', label: 'Map', href: to(`/openings/${opening.id}/map`) },
-              ],
-            },
-          }
-        : {})}
+      tabs={openingTabs(opening.id, tab)}
     />
   );
 }

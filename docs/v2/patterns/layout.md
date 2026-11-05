@@ -6,7 +6,8 @@ answer to what just happened is always next to the board.
 ## The rule
 
 - **One width for every page**: the page column is at most `max-w-6xl` with a 16px gutter on a phone; moving between
-  pages never changes the width ([page-shell](../components/page-shell.md)). The map alone uses the full screen.
+  pages never changes the width ([page-shell](../components/page-shell.md)). The map alone uses the full screen, through `FullPage`
+  (`components/shared/full-page.tsx`): edge to edge, as tall as the window, its panels scrolling inside, computers only.
 - **One board size rule**, `--board-size`: as wide as its column, never wider than its cap, never taller than the screen
   less the header and controls (`--board-chrome`), never smaller than 12rem. A move never needs a scroll.
 

@@ -1,29 +1,29 @@
-import { numberedLine, numberedMove, playMove, START_EPD, type Played } from '@knightschool/core';
+import { numberedMove, playMove, START_EPD, type Played } from '@knightschool/core';
 import { Search } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Board, type BoardPosition } from '@/components/board/board';
+import { BoardTargetContext, useBoardTarget, type BoardTarget } from '@/components/board/key-owner';
+import { KindBadge } from '@/components/chess/kind-badge';
+import { MoveChip } from '@/components/chess/move-chip';
 import { MoveRun } from '@/components/chess/move-run';
-import { KindBadge, type LineKind } from '@/components/chess/kind-badge';
+import { OpeningName } from '@/components/chess/opening-name';
+import { ABOVE_ROW_LINK_GROUP } from '@/components/shared/card-link';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 import { FilterToggle } from './filter-toggle';
+import { indexLines, linesAt, nextMoves, type FindKind, type PositionHit, type PositionLine } from './search';
 import { RowLink } from './sortable-table';
 
-/** A line the board search can find: its moves with the position before and after each. */
-export type PositionLine = {
-  id: string;
-  name: string;
-  opening: string;
-  kind: LineKind;
-  /** The side the line is written for. */
-  writtenFor?: 'white' | 'black';
-  moves: { san: string; uci: string; before: string; after: string }[];
-  /** The line's address at a ply (its board at that move). */
-  href: (ply: number) => string;
-};
-
-export type FindKind = 'all' | 'lines' | 'traps';
+export type { FindKind, PositionLine } from './search';
 
 const KIND_FILTER = [
   { value: 'all' as const, label: 'Lines and traps' },
@@ -31,28 +31,75 @@ const KIND_FILTER = [
   { value: 'traps' as const, label: 'Traps' },
 ];
 
-const isTrap = (kind: LineKind) => kind === 'for-us' || kind === 'against-us';
+/** Moves of a line shown after the searched position. */
+const CONTINUATION_MOVES = 10;
 
-type Hit = { line: PositionLine; ply: number; transposed: boolean };
+const squares = (uci: string) => ({ from: uci.slice(0, 2), to: uci.slice(2, 4) });
 
-/** Every position of every line, to the lines through it: positions are keyed by EPD, so transpositions match. */
-function indexLines(lines: readonly PositionLine[]) {
-  const index = new Map<string, { line: PositionLine; ply: number }[]>();
-  for (const line of lines) {
-    line.moves.forEach((move, i) => {
-      for (const [epd, ply] of i === 0
-        ? ([
-            [move.before, 0],
-            [move.after, 1],
-          ] as const)
-        : ([[move.after, i + 1]] as const)) {
-        const hits = index.get(epd) ?? [];
-        if (!hits.some((hit) => hit.line.id === line.id)) hits.push({ line, ply });
-        index.set(epd, hits);
-      }
-    });
-  }
-  return index;
+/**
+ * One line through the position. Hovering it shows on the board where the line leads; hovering a move of what it
+ * continues to shows that position, and leaving the move goes back to where the line leads.
+ */
+function HitRow({
+  hit: { line, ply, transposed },
+  onFollow,
+}: {
+  hit: PositionHit;
+  /** A move of what it continues to was clicked: play the line up to it. */
+  onFollow: (moves: PositionLine['moves']) => void;
+}) {
+  const target = useBoardTarget();
+  const end = line.moves.at(-1);
+  const showEnd = useCallback(() => {
+    if (target && end) target.preview(end.after, squares(end.uci));
+  }, [target, end]);
+  const clear = () => target?.preview(null);
+  const rowTarget = useMemo<BoardTarget | null>(
+    () => target && { ...target, preview: (epd, lastMove) => (epd ? target.preview(epd, lastMove) : showEnd()) },
+    [target, showEnd],
+  );
+  const left = line.moves.length - ply;
+  const ahead = line.moves.slice(ply, ply + CONTINUATION_MOVES);
+  return (
+    <li
+      className="relative grid gap-1 rounded-lg border p-3 transition-colors hover:bg-muted/50"
+      onMouseEnter={showEnd}
+      onMouseLeave={clear}
+    >
+      <BoardTargetContext.Provider value={rowTarget}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span onFocus={showEnd} onBlur={clear}>
+            <RowLink href={line.href(ply)}>{line.name}</RowLink>
+          </span>
+          <KindBadge kind={line.kind} writtenFor={line.writtenFor} />
+        </div>
+        <p className="text-sm text-muted-foreground">
+          {line.opening}
+          {ply > 0 ? `, at ${numberedMove(ply - 1, line.moves[ply - 1]!.san)}` : ', from the start'}
+          {left > 0 ? `; ${left} moves to go` : '; where the line ends'}
+        </p>
+        {ahead.length > 0 ? (
+          <p className={cn('text-sm text-muted-foreground', ABOVE_ROW_LINK_GROUP)}>
+            <MoveRun
+              moves={ahead}
+              firstPly={ply}
+              side={line.writtenFor}
+              onSelect={(i) => onFollow(ahead.slice(0, i + 1))}
+            />
+            {left > ahead.length ? <span className="ml-1 text-xs">and {left - ahead.length} more</span> : null}
+          </p>
+        ) : null}
+        {transposed && ply > 0 ? (
+          <p className="text-xs text-muted-foreground">
+            Reached by another move order: the line plays{' '}
+            <span className={ABOVE_ROW_LINK_GROUP}>
+              <MoveRun moves={line.moves.slice(0, ply)} />
+            </span>
+          </p>
+        ) : null}
+      </BoardTargetContext.Provider>
+    </li>
+  );
 }
 
 export type BoardSearchProps = {
@@ -65,13 +112,27 @@ export type BoardSearchProps = {
   start?: readonly string[];
   kind?: FindKind;
   onKind?: (kind: FindKind) => void;
-  /** Called after each change of moves, for the address hash (`bm`). */
-  onMoves?: (sans: string[]) => void;
+  /** Called after each change of the moves up to the position shown, for the address hash (`bm`). */
+  onMoves?: (sans: string[], ucis: string[]) => void;
   /** "Open on the board", when no line passes through. */
-  boardHref?: (sans: string[]) => string;
+  boardHref?: (sans: string[], ucis: string[]) => string;
+  /** The opening's name at a position, shown over the results. */
+  positionName?: (epd: string) => string | undefined;
+  /** Lines listed before "Show more"; all of them without it. */
+  pageSize?: number;
 };
 
-function BoardSearchBody({ lines, start = [], kind: controlledKind, onKind, onMoves, boardHref }: BoardSearchProps) {
+function BoardSearchBody({
+  lines,
+  start = [],
+  kind: controlledKind,
+  onKind,
+  onMoves,
+  boardHref,
+  positionName,
+  pageSize,
+  bounded,
+}: BoardSearchProps & { bounded?: boolean }) {
   const index = useMemo(() => indexLines(lines), [lines]);
   const [moves, setMoves] = useState<Played[]>(() => {
     const played: Played[] = [];
@@ -82,38 +143,80 @@ function BoardSearchBody({ lines, start = [], kind: controlledKind, onKind, onMo
     }
     return played;
   });
-  const [cursor, setCursor] = useState(moves.length);
+  const [cursor, setCursorState] = useState(moves.length);
   const [ownKind, setOwnKind] = useState<FindKind>('all');
+  const [more, setMore] = useState(0);
+  // The results sit beside the board, not in its caption, so they reach it through this.
+  const boardTarget = useRef<BoardTarget | null>(null);
+  const [previewing, setPreviewing] = useState(false);
+  const nearBoard = useMemo<BoardTarget>(
+    () => ({
+      show: (...args) => boardTarget.current?.show(...args),
+      light: (move) => boardTarget.current?.light(move),
+      preview: (position, lastMove) => {
+        setPreviewing(Boolean(position));
+        boardTarget.current?.preview(position, lastMove);
+      },
+    }),
+    [],
+  );
+  // Stepping beats a hover: a row under the pointer may be gone, and the position it showed goes with it.
+  useEffect(() => nearBoard.preview(null), [nearBoard, cursor]);
   const kind = controlledKind ?? ownKind;
   const epd = cursor === 0 ? START_EPD : moves[cursor - 1]!.epd;
-  const sansTo = (n: number) => moves.slice(0, n).map((move) => move.san);
+  const report = (played: readonly Played[]) =>
+    onMoves?.(
+      played.map((move) => move.san),
+      played.map((move) => move.uci),
+    );
+
+  const setCursor = (next: number) => {
+    setCursorState(next);
+    setMore(0);
+    report(moves.slice(0, next));
+  };
 
   const positions: BoardPosition[] = [
     { epd: START_EPD },
     ...moves.map((move) => ({ epd: move.epd, lastMove: { from: move.from, to: move.to } })),
   ];
 
-  const hits: Hit[] = (index.get(epd) ?? [])
-    .filter(({ line }) => kind === 'all' || (kind === 'traps') === isTrap(line.kind))
-    .map(({ line, ply }) => ({
-      line,
-      ply,
-      transposed: ply !== cursor || line.moves.slice(0, ply).some((move, i) => move.uci !== moves[i]?.uci),
-    }));
+  const hits = linesAt(index, epd, moves.slice(0, cursor), kind);
+  const next = nextMoves(hits);
+  const name = cursor > 0 ? positionName?.(epd) : undefined;
+  const shown = pageSize === undefined ? hits : hits.slice(0, pageSize + more);
 
-  const onMove = (from: string, to: string) => {
-    const next = playMove(epd, from + to) ?? playMove(epd, `${from}${to}q`);
-    if (!next) return false;
-    const kept = [...moves.slice(0, cursor), next];
+  const play = (move: string) => {
+    const played = playMove(epd, move);
+    if (!played) return false;
+    const kept = moves[cursor]?.uci === played.uci ? moves : [...moves.slice(0, cursor), played];
     setMoves(kept);
-    setCursor(kept.length);
-    onMoves?.(kept.map((move) => move.san));
+    setCursorState(cursor + 1);
+    setMore(0);
+    report(kept.slice(0, cursor + 1));
     return true;
+  };
+  const onMove = (from: string, to: string) => play(from + to) || play(`${from}${to}q`);
+  const follow = (run: PositionLine['moves']) => {
+    const kept = [
+      ...moves.slice(0, cursor),
+      ...run.map(({ san, uci, after }) => ({ san, uci, ...squares(uci), epd: after })),
+    ];
+    setMoves(kept);
+    setCursorState(kept.length);
+    setMore(0);
+    report(kept);
   };
 
   return (
-    <div className="grid gap-4 md:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
-      <div className="grid content-start gap-2">
+    <div
+      className={cn(
+        'grid gap-4 md:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]',
+        // In the dialog the row is bounded, so the results scroll on their own beside a board that stays put.
+        bounded && 'min-h-0 overflow-y-auto md:grid-rows-[minmax(0,1fr)] md:overflow-hidden',
+      )}
+    >
+      <div className={cn('grid content-start gap-2', bounded && 'min-h-0 md:overflow-y-auto')}>
         <div className="min-h-6 text-sm">
           {moves.length === 0 ? (
             <span className="text-muted-foreground">Play the moves on the board.</span>
@@ -133,6 +236,10 @@ function BoardSearchBody({ lines, start = [], kind: controlledKind, onKind, onMo
           onMove={onMove}
           reveal="test"
           keys
+          targetRef={boardTarget}
+          arrows={
+            previewing ? [] : next.slice(0, 4).map((move) => ({ ...squares(move.uci), kind: 'preview' as const }))
+          }
           actions={
             moves.length > 0 ? (
               <Button
@@ -141,7 +248,6 @@ function BoardSearchBody({ lines, start = [], kind: controlledKind, onKind, onMo
                 onClick={() => {
                   setMoves([]);
                   setCursor(0);
-                  onMoves?.([]);
                 }}
               >
                 Clear
@@ -150,65 +256,84 @@ function BoardSearchBody({ lines, start = [], kind: controlledKind, onKind, onMo
           }
         />
       </div>
-      <div className="grid content-start gap-3">
-        <FilterToggle
-          label="Find"
-          value={kind}
-          options={KIND_FILTER}
-          allValue="all"
-          size="sm"
-          onChange={(next) => {
-            setOwnKind(next);
-            onKind?.(next);
-          }}
-        />
-        {hits.length === 0 ? (
-          <EmptyState
-            kind={cursor === 0 ? 'new' : 'not-covered'}
-            text={
-              cursor === 0
-                ? 'Play a move to start.'
-                : 'No line here: none of the openings passes through this position.'
-            }
-            action={
-              boardHref && cursor > 0 ? { label: 'Open on the board', href: boardHref(sansTo(cursor)) } : undefined
-            }
+      <BoardTargetContext.Provider value={nearBoard}>
+        <div className={cn('grid content-start gap-3', bounded && 'min-h-0 md:overflow-y-auto md:pr-2')}>
+          <FilterToggle
+            label="Find"
+            value={kind}
+            options={KIND_FILTER}
+            allValue="all"
+            size="sm"
+            onChange={(next) => {
+              setOwnKind(next);
+              onKind?.(next);
+            }}
           />
-        ) : (
-          <>
-            <p className="text-sm text-muted-foreground" aria-live="polite">
-              {hits.length} {hits.length === 1 ? 'line passes' : 'lines pass'} through this position
-            </p>
-            <ul className="grid gap-2">
-              {hits.map(({ line, ply, transposed }) => (
-                <li
-                  key={line.id}
-                  className="relative grid gap-1 rounded-lg border p-3 transition-colors hover:bg-muted/50"
+          {name ? <OpeningName name={name} className="text-base" /> : null}
+          {next.length > 0 ? (
+            <div className="grid gap-1.5">
+              <p className="text-sm text-muted-foreground">Moves in the lines</p>
+              <ul className="flex flex-wrap gap-x-3 gap-y-1">
+                {next.map((move) => (
+                  <li key={move.uci} className="inline-flex items-baseline gap-1">
+                    <MoveChip
+                      ply={cursor}
+                      san={move.san}
+                      epd={move.after}
+                      from={move.uci.slice(0, 2)}
+                      to={move.uci.slice(2, 4)}
+                      onSelect={() => play(move.uci)}
+                    />
+                    <span className="text-xs text-muted-foreground tabular-nums">
+                      {move.lines} {move.lines === 1 ? 'line' : 'lines'}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {cursor === 0 ? (
+            <p className="text-sm text-muted-foreground">Play a move to start.</p>
+          ) : hits.length === 0 ? (
+            <EmptyState
+              kind="not-covered"
+              text="No line here: none of the openings passes through this position."
+              action={
+                boardHref
+                  ? {
+                      label: 'Open on the board',
+                      href: boardHref(
+                        moves.slice(0, cursor).map((move) => move.san),
+                        moves.slice(0, cursor).map((move) => move.uci),
+                      ),
+                    }
+                  : undefined
+              }
+            />
+          ) : (
+            <>
+              <p className="text-sm text-muted-foreground" aria-live="polite">
+                {hits.length} {hits.length === 1 ? 'line passes' : 'lines pass'} through this position
+              </p>
+              <ul className="grid gap-2">
+                {shown.map((hit) => (
+                  <HitRow key={hit.line.id} hit={hit} onFollow={follow} />
+                ))}
+              </ul>
+              {shown.length < hits.length ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-self-start"
+                  onClick={() => setMore(more + (pageSize ?? 0))}
                 >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <RowLink href={line.href(ply)}>{line.name}</RowLink>
-                    <KindBadge kind={line.kind} writtenFor={line.writtenFor} />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {line.opening}
-                    {ply > 0 ? `, at ${numberedMove(ply - 1, line.moves[ply - 1]!.san)}` : ', from the start'}
-                    {ply < line.moves.length ? `; ${line.moves.length - ply} moves to go` : '; where the line ends'}
-                  </p>
-                  {transposed && ply > 0 ? (
-                    <p className="text-xs text-muted-foreground">
-                      Reached by another move order: the line plays{' '}
-                      <span className="font-mono">
-                        {numberedLine(line.moves.slice(0, ply).map((move) => move.san))}
-                      </span>
-                      .
-                    </p>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div>
+                  Show {Math.min(pageSize ?? 0, hits.length - shown.length)} more
+                </Button>
+              ) : null}
+            </>
+          )}
+        </div>
+      </BoardTargetContext.Provider>
     </div>
   );
 }
@@ -221,7 +346,7 @@ export function BoardSearch(props: BoardSearchProps) {
   if (props.form !== 'dialog') return <BoardSearchBody {...props} />;
   return (
     <Dialog open={props.open} onOpenChange={props.onOpenChange}>
-      <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-4xl">
+      <DialogContent className="h-[min(calc(100dvh-2rem),54rem)] grid-rows-[auto_minmax(0,1fr)_auto] sm:max-w-5xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Search className="size-4" aria-hidden />
@@ -229,7 +354,10 @@ export function BoardSearch(props: BoardSearchProps) {
           </DialogTitle>
           <DialogDescription>Play the moves; every line through the position is listed as you go.</DialogDescription>
         </DialogHeader>
-        <BoardSearchBody {...props} />
+        <BoardSearchBody {...props} bounded />
+        <DialogFooter>
+          <Button onClick={() => props.onOpenChange?.(false)}>Show the results</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

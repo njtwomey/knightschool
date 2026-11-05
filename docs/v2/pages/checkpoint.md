@@ -21,7 +21,7 @@ the final test row on [opening](opening.md).
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › opening › variation › Checkpoint.
+[breadcrumbs](../components/breadcrumbs.md): Openings › opening › variation › Checkpoint.
 
 1. A start card: what it asks ("10 exercises from the Two Knights: 6 positions, 2 of Black's mistakes, a question, a
    puzzle"), the mark needed to clear it, **Start**. For testing out: "Clear this and the variation's steps count as

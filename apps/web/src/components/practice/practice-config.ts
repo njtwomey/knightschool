@@ -135,6 +135,7 @@ export const FIXED_SOURCES = {
   repertoire: 'My repertoire',
   everything: 'Everything',
   hardest: 'The hardest moves',
+  'due-all': 'Everything due, ticked or not',
 } as const;
 
 export function sourceName(id: PracticeSourceId, sources: readonly PracticeSource[]): string {
@@ -166,9 +167,10 @@ export const TOLERANCE_NAME = { inaccuracy: 'an inaccuracy', mistake: 'a mistake
 
 /** The session's set-up in words, for the practice bar. */
 export function describeConfig(mode: PracticeMode, config: PracticeConfig, sources: readonly PracticeSource[]): string {
-  const from = config.source === 'due' ? FIXED_SOURCES.due : `From ${sourceName(config.source, sources)}`;
+  const scheduled = isDueSource(config.source);
+  const from = scheduled ? FIXED_SOURCES[config.source as 'due'] : `From ${sourceName(config.source, sources)}`;
   const parts = [from];
-  if (config.source !== 'due' && config.weighting === 'popular') parts.push('favouring popular');
+  if (!scheduled && config.weighting === 'popular') parts.push('favouring popular');
   if (mode === 'review') {
     parts.push(
       config.movesPerQuestion === 0
@@ -187,6 +189,9 @@ export function describeConfig(mode: PracticeMode, config: PracticeConfig, sourc
   if (mode === 'name-it') parts.push(`${config.positions} positions`);
   return parts.join(', ');
 }
+
+/** The sources that are the schedule, so answers are saved: what is due, in the repertoire or all of it. */
+export const isDueSource = (id: PracticeSourceId) => id === 'due' || id === 'due-all';
 
 /** Why Start cannot go ahead with this choice, or null. */
 export function cannotStart(config: PracticeConfig, sources: readonly PracticeSource[], due: number): string | null {

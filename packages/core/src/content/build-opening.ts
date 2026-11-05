@@ -5,6 +5,7 @@ import { buildQuestions, type BuiltQuestion } from '../questions/questions';
 import type { Note } from './note';
 import type { OpeningFile } from './schema';
 import { isLearnerMove, type ResolvedLine, type TreeMove } from './theory';
+import type { FollowUp } from '../training/follow-ups';
 
 export type BuiltMove = { uci: string; san: string; to: string; mine: boolean; lines: string[]; note?: Note };
 /** A wrong move written as a PGN variation (`?`/`??`): its note, and the punishing line after it with each move's note. */
@@ -45,6 +46,8 @@ export type BuiltOpening = {
   ideas: string[];
   startEpd: string;
   startPly: number;
+  /** The opening's follow-ups, worked out once by `content:build` from the opening and its facts (scripts/content/build.ts). */
+  followUps?: FollowUp[];
   positions: Record<string, { moves: BuiltMove[]; refutations?: BuiltRefutation[] }>;
   lines: BuiltLine[];
   variations: { id: string; name?: string; intro?: string; plans: string[]; lines: string[] }[];

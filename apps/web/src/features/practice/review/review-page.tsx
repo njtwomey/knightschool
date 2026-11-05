@@ -4,7 +4,7 @@ import { Square } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Try } from '@/components/chess/tries-table';
 import { PracticeBar } from '@/components/practice/practice-bar';
-import type { PracticeConfig } from '@/components/practice/practice-config';
+import { isDueSource, type PracticeConfig } from '@/components/practice/practice-config';
 import { SessionSummary } from '@/components/practice/session-summary';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Button } from '@/components/ui/button';
@@ -57,7 +57,7 @@ function planFor(
   puzzles: Awaited<ReturnType<typeof shippedPuzzles>>,
   config: PracticeConfig,
 ) {
-  return config.source === 'due' ? duePlan(progress, puzzles, config) : freePlan(progress, config);
+  return isDueSource(config.source) ? duePlan(progress, puzzles, config) : freePlan(progress, config);
 }
 
 function ReviewView({
@@ -134,10 +134,9 @@ function ReviewSession({
   ).filter((part) => part.list.length);
   const total = plan.moves.length + plan.questions.length + plan.puzzles.length;
   const doneCount = phases.reduce((sum, phase) => sum + phase.results.length, 0);
-  const summary =
-    config.source === 'due'
-      ? `Due today: ${total} ${total === 1 ? 'card' : 'cards'}${plan.introduced ? `, ${plan.introduced} new` : ''}, moves ${perQuestion(config.movesPerQuestion)}`
-      : undefined;
+  const summary = isDueSource(config.source)
+    ? `Due today: ${total} ${total === 1 ? 'card' : 'cards'}${plan.introduced ? `, ${plan.introduced} new` : ''}, moves ${perQuestion(config.movesPerQuestion)}`
+    : undefined;
   const bar = (
     <PracticeBar
       mode="review"
@@ -157,7 +156,7 @@ function ReviewSession({
     return (
       <SessionSummary
         mode="review"
-        headline={config.source === 'due' ? 'Nothing due' : 'Nothing to practise here yet'}
+        headline={isDueSource(config.source) ? 'Nothing due' : 'Nothing to practise here yet'}
         empty={{
           reason: next.nextReview ? `Next review ${next.nextReview}.` : 'Learn a step and its moves come back here.',
           ...(next.nextOpenStep ? { action: { label: 'Learn the next step', href: next.nextOpenStep.href } } : {}),

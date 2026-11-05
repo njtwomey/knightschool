@@ -11,6 +11,9 @@ steps in order, a board to study from, and every line, openable freely. The page
 ([../navigation/url-state.md](../navigation/url-state.md)). Reserved words under an opening: `step`, `lines`, `map`,
 `test`; no variation may use them ([../navigation/routes.md](../navigation/routes.md)).
 
+The tabs (Overview, Lines, Map) are on every page under an opening: a step, a follow-up, a variation, a line, a
+checkpoint.
+
 ## Reached from
 
 [opening-card](../components/opening-card.md)s on [Today](today.md), [repertoire](repertoire.md),
@@ -19,7 +22,7 @@ steps in order, a board to study from, and every line, openable freely. The page
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › (opening, a menu of every opening) › tabs Overview, Lines, Map.
+[breadcrumbs](../components/breadcrumbs.md): Openings › (opening, a menu of every opening) › tabs Overview, Lines, Map.
 
 1. Heading: [opening-name](../components/opening-name.md) with ECO and Lichess link, side, style tags,
    [progress-ring](../components/progress-ring.md), and **Add to repertoire** or "In your repertoire".
@@ -35,7 +38,7 @@ steps in order, a board to study from, and every line, openable freely. The page
    - Right: a [board](../components/board.md) in the `study` preset with
      [board-controls](../components/board-controls.md), [board-eval](../components/board-eval.md) (strip),
      [board-notes](../components/board-notes.md) and [mark-key](../components/mark-key.md); hovering a step row shows
-     where it starts.
+     where it ends, the most instructive position.
 4. **Puzzles from this opening**: three [puzzle-card](../components/puzzle-card.md)s (family and named-variation level).
 5. **Settings for this opening**: [setting-inline](../components/setting-inline.md) rows on the "this opening" layer
    (only main lines here, include rare lines), each saying where its value came from.
@@ -44,6 +47,10 @@ steps in order, a board to study from, and every line, openable freely. The page
 **Lines tab**: a [sortable-table](../components/sortable-table.md) of [line-row](../components/line-row.md)s (name,
 [kind-badge](../components/kind-badge.md), variation, moves as a [move-run](../components/move-run.md), state), filtered
 by kind with a [filter-toggle](../components/filter-toggle.md); a row opens the line.
+
+A [choose-tick](../components/choose-tick.md) sits beside the opening's name and at the end of each variation, step and
+Lines row: it adds that to the learner's [repertoire](repertoire.md) or takes it off. A line's tick is the steps cut
+from it; a line that earns no cards has none.
 
 ## Behaviour
 

@@ -54,6 +54,9 @@ larger target for the same thing.
 | Right-drag, right-click      | Draws a mark in draw mode (author, analysis), with Shift, Alt and both for the colours ([marks-editor](../components/marks-editor.md)). |
 | Arrow keys, Home, End        | Step through the moves; one owner per page, never while typing or with a modifier ([use-shortcuts](../hooks/use-shortcuts.md)).         |
 
+**The keys win over a hover.** A hovered move or row previews on the board; an arrow key ends the preview and steps from
+where the board was resting, with the pointer still there, until something new is hovered (`useKeysBeatHover`).
+
 **Never**: double-click for anything; hover as the only way to reach something; a change of state from hover alone
 (only a click changes what is selected, as on v1's tree); a preview of a move the learner is being asked
 ([reveal](reveal.md)): during a test, chips for moves not yet played are not drawn at all.

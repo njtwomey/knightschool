@@ -175,16 +175,19 @@ export function settingsRegistry(config: SiteConfig): SettingsRegistry {
       key: 'repertoire',
       group: 'level',
       label: 'Your repertoire',
-      hint: 'The openings you are learning.',
+      hint: 'What you have ticked to learn: openings, variations, lines and steps.',
       synonyms: ['openings', 'enrolled'],
       schema: z.array(z.string().min(1)),
       default: [],
       level: 'basic',
       scopes: YOU,
       store: 'learner',
-      control: { kind: 'elsewhere', href: '/openings', text: 'Choose openings' },
-      explain: (ids) => (ids.length === 0 ? 'No openings chosen yet.' : `${plural(ids.length, 'opening')} chosen.`),
-      valueLabel: (ids) => plural(ids.length, 'opening'),
+      control: { kind: 'elsewhere', href: '/repertoire', text: 'See your repertoire' },
+      explain: (ids) =>
+        ids.length === 0
+          ? 'Nothing ticked yet: practice draws on the openings you have started.'
+          : `${ids.length} ticked: Today, Review, Drill and Puzzles draw on these alone.`,
+      valueLabel: (ids) => `${ids.length} ticked`,
       aliases: { enrolled: (raw) => raw },
     }),
     defineSetting({

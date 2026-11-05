@@ -1,5 +1,5 @@
 import type { Marks, Score } from '@knightschool/core';
-import { useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode, type RefObject } from 'react';
 import { MarkKey } from '@/components/chess/mark-key';
 import { cn } from '@/lib/utils';
 import { BoardControls, type ControlsExercise } from './board-controls';
@@ -74,6 +74,8 @@ export type BoardProps = {
    * never takes them, and by default the first board on the page has them (key-owner.ts).
    */
   keys?: boolean;
+  /** Handed this board's target, for a panel beside it that is not in its caption (the board search's results). */
+  targetRef?: RefObject<BoardTarget | null>;
   className?: string;
 };
 
@@ -111,6 +113,7 @@ export function Board({
   caption,
   actions,
   keys: wantKeys,
+  targetRef,
   className,
 }: BoardProps) {
   const [flipped, setFlipped] = useState(false);
@@ -122,7 +125,12 @@ export function Board({
   // moves (shown until the learner steps or goes back to the line).
   const [ghost, setGhost] = useState<{ from: string; to: string } | null>(null);
   const [peek, setPeek] = useState<{ epd: string; lastMove?: { from: string; to: string } } | null>(null);
-  const [hovered, setHovered] = useState<{ epd: string; lastMove?: { from: string; to: string } } | null>(null);
+  // Kept with the cursor it was hovered at: stepping takes over from a hover, with the pointer still on the move.
+  const [hovered, setHovered] = useState<{
+    epd: string;
+    lastMove?: { from: string; to: string };
+    at: number;
+  } | null>(null);
   const target: BoardTarget = useMemo(
     () => ({
       show: (epd, lastMove) => {
@@ -133,13 +141,16 @@ export function Board({
         } else if (positions[index]?.epd !== epd) setPeek({ epd, lastMove });
       },
       light: setGhost,
-      preview: (epd, lastMove) => setHovered(epd ? { epd, lastMove } : null),
+      preview: (epd, lastMove) => setHovered(epd ? { epd, lastMove, at: index } : null),
     }),
     [positions, index, onIndex],
   );
   const keys = usePageBoard(wantKeys, Boolean(onIndex && positions.length > 1) || flippable, target);
+  useEffect(() => {
+    if (targetRef) targetRef.current = target;
+  }, [targetRef, target]);
   // A hovered move shows its position for as long as it is hovered; a clicked one stays until the learner steps back.
-  const shownPeek = hovered ?? peek;
+  const shownPeek = (hovered?.at === index ? hovered : null) ?? peek;
   const position: (typeof positions)[number] = shownPeek
     ? { epd: shownPeek.epd, lastMove: shownPeek.lastMove }
     : positions[index]!;

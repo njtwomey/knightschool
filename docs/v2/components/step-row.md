@@ -28,6 +28,8 @@ One step in a list: its state, its title, its moves, what opens it, and the ways
 - Reads the config keys `teach.gates` (wording of the locked line), `teach.testOut` and `teach.stages` (which stage
   dots show), and the learner setting `learning.gatesRelaxed`.
 
+- `tick`: a [choose-tick](choose-tick.md) at the end of the row, after the buttons.
+
 ## Behaviour
 
 - Hover or focus the row: the page's board previews the step (where it starts or ends, as the page says) and goes back

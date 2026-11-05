@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { keyTaken } from './key-owner';
 
 export type StepButtonsProps = {
   /** The position shown. */
@@ -28,16 +29,6 @@ const HOLD_DELAY = 400;
 const HOLD_REPEAT = 110;
 
 /** Did something else already want this key: typing, a modifier, a menu or radio group that took it. */
-function keyTaken(event: KeyboardEvent) {
-  if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return true;
-  const target = event.target as HTMLElement | null;
-  return Boolean(
-    target?.closest(
-      'input, textarea, select, [contenteditable=""], [contenteditable="true"], [role="menu"], [role="radiogroup"], [role="listbox"], [role="slider"], [role="tablist"]',
-    ),
-  );
-}
-
 function StepButton({
   label,
   disabled,

@@ -6,3 +6,4 @@ export * from './mistakes';
 export * from './test-out';
 export * from './coverage';
 export * from './follow-ups';
+export * from './repertoire';

@@ -11,7 +11,7 @@ What kind of line this is and how risky it is to play, as one or two small colou
 - Optionally the line's character (solid, positional, sharp, tactical), an early mate, or a trick that comes up, in the
   compact list with "…" to open the rest in place.
 
-Each kind and risk has one colour from [colours](../patterns/colours.md), and the word is always there, so colour is
+Each kind and risk has one colour from [colours](../patterns/colours.md), and the word is always there (on hover and to a screen reader in the small form, an icon alone: an arrow up for a main line, a turning arrow for a sideline), so colour is
 never the only signal.
 
 ## Configuration

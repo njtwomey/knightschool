@@ -31,6 +31,7 @@ import { to } from '@/router/location';
 import { ExerciseBoard } from '../exercise-board';
 import { mergeFacts, mergeOpenings } from '../merge';
 import { playOnHref } from '../play-on/play-on-data';
+import { drillOptions } from '../chosen';
 import { loadProgress, practiceOpenings, type LearnerProgress, type OpeningProgress } from '../progress';
 import { readPracticeConfig, savePracticeConfig } from '../saved-config';
 import { practiceSources, scopeOf, sourceOfScope, type PracticeScope } from '../sources';
@@ -162,7 +163,7 @@ function planDrill(
   const startMoves = (opening: BuiltOpening) => opening.lines[0]?.moves.slice(0, opening.startPly) ?? ([] as string[]);
   if (config.computerPlays === 'engine') {
     return scopes.flatMap(({ one, variation }) => {
-      const scope = drillScope(one.opening, variation);
+      const scope = drillScope(one.opening, variation, drillOptions(one));
       if (!Object.keys(scope.book).length) return [];
       const [run] = drillExercises(one.opening, scope, 1, variation);
       return [
@@ -171,7 +172,7 @@ function planDrill(
     });
   }
   const all = scopes.flatMap(({ one, variation }) => {
-    const scope = drillScope(one.opening, variation);
+    const scope = drillScope(one.opening, variation, drillOptions(one));
     return drillBranches(one.opening, scope, one.facts?.counts).map((branch) => ({ one, scope, branch }));
   });
   const weakness = (branch: DrillBranch) =>

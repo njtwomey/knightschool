@@ -18,7 +18,7 @@ deciding where to go inside an opening, or coming back to one part of it.
 
 ## Layout
 
-[breadcrumbs](../components/breadcrumbs.md): Learn › opening › (variation, a menu of the opening's variations).
+[breadcrumbs](../components/breadcrumbs.md): Openings › opening › (variation, a menu of the opening's variations).
 
 1. Heading: [opening-name](../components/opening-name.md) with ECO, [state-badge](../components/state-badge.md) (locked,
    open, learning, known once its checkpoint is cleared, mastered) and [progress-ring](../components/progress-ring.md).

@@ -1,4 +1,5 @@
 import {
+  chosenScope,
   drawPuzzles,
   fenToEpd,
   moveCards,
@@ -14,7 +15,7 @@ import type { Idea } from '@/components/chess/idea-badge';
 import type { PracticeConfig, PracticeSource } from '@/components/practice/practice-config';
 import { loadCatalog, loadOpening, loadPuzzles, type Catalog, type ShippedPuzzle } from '@/data/content';
 import { learnerStore } from '@/data/learner';
-import { whenSettingsReady } from '@/data/settings';
+import { getSetting, whenSettingsReady } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { writeBoardHash } from '@/pages/board/board-hash';
 import { to } from '@/router/location';
@@ -35,6 +36,8 @@ export type PuzzleData = {
   cards: Card[];
   /** Our ideas by the Lichess theme they match (content/ideas.yaml `themes`). */
   ideas: Record<string, Idea>;
+  /** What is ticked: the lines of each opening with anything ticked. Empty when nothing is. */
+  chosen: ReadonlyMap<string, ReadonlySet<string>>;
 };
 
 /** Every opening's shipped puzzles (each kept once, for the first opening that ships it) and the learner's cards. */
@@ -62,7 +65,14 @@ export async function loadPuzzleData(): Promise<PuzzleData> {
     for (const theme of idea.themes)
       ideas[theme] ??= { id: idea.id, name: idea.name, kind: idea.kind, summary: idea.summary };
   }
-  return { catalog, openings, puzzles, cards: await store.cards.all(), ideas };
+  const picks = getSetting('repertoire');
+  const chosen = new Map(
+    openings.flatMap((opening) => {
+      const { lines } = chosenScope(opening, picks);
+      return lines.size ? [[opening.id, lines] as const] : [];
+    }),
+  );
+  return { catalog, openings, puzzles, cards: await store.cards.all(), ideas, chosen };
 }
 
 export const openingSource = (id: string) => `opening:${id}`;
@@ -82,6 +92,13 @@ export function puzzlesFrom(data: PuzzleData, source: string): SessionPuzzle[] {
     return data.puzzles
       .filter((puzzle) => (met.get(puzzleCardId(puzzle.id))?.lapses ?? 0) > 0)
       .sort((a, b) => met.get(puzzleCardId(b.id))!.difficulty - met.get(puzzleCardId(a.id))!.difficulty);
+  }
+  if (source === 'repertoire' && data.chosen.size) {
+    // A puzzle matched to no one line comes with its opening.
+    return data.puzzles.filter((puzzle) => {
+      const lines = data.chosen.get(puzzle.opening);
+      return lines && (!puzzle.line || lines.has(puzzle.line));
+    });
   }
   if (source === 'repertoire') {
     const learning = new Set(data.cards.map((card) => card.id));

@@ -25,12 +25,12 @@ import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { EmptyState } from '@/components/shared/empty-state';
 import { loadCatalog, loadFacts, loadNameList, loadNames, loadOpening } from '@/data/content';
 import { learnerStore } from '@/data/learner';
-import { feedbackDelay } from '@/data/settings';
+import { feedbackDelay, whenSettingsReady } from '@/data/settings';
 import { siteConfig } from '@/data/site-config';
 import { useLoad } from '@/hooks/use-load';
 import { to } from '@/router/location';
 import { readPracticeConfig, savePracticeConfig } from '../saved-config';
-import { openingSource, practiceSources, scopeOf } from '../sources';
+import { openingSource, practiceSources, scopeOf, tickedLines } from '../sources';
 
 const newId = () => crypto.randomUUID();
 const nameItHref = (opening?: string) => to(`/practice/name-it${opening ? `/${opening}` : ''}`);
@@ -45,6 +45,7 @@ type NameItData = {
 
 async function loadNameItData(): Promise<NameItData> {
   const catalog = await loadCatalog();
+  await whenSettingsReady();
   const openings = await Promise.all(catalog.openings.map((opening) => loadOpening(opening.id)));
   const loaded = await Promise.all(
     openings.map(async (opening) => {
@@ -60,18 +61,30 @@ async function loadNameItData(): Promise<NameItData> {
   };
 }
 
-/** The positions a source holds: one opening's, one variation's (on its lines), or every opening's. */
+/** The positions on some of an opening's lines. */
+function onLines(data: NameItData, opening: BuiltOpening, ids: ReadonlySet<string>): NameItPosition[] {
+  const names = data.names[opening.id];
+  if (!names || !ids.size) return [];
+  const lines = opening.lines.filter((line) => ids.has(line.id));
+  const epds = new Set(nameItPositions({ ...opening, lines }, names, undefined).map((position) => position.epd));
+  return (data.positions[opening.id] ?? []).filter((position) => epds.has(position.epd));
+}
+
+/** The positions a source holds: one opening's, one variation's (on its lines), what is ticked, or every opening's. */
 function poolOf(data: NameItData, source: string): NameItPosition[] {
   const scope = scopeOf(source);
-  if (!scope) return Object.values(data.positions).flat();
+  if (!scope) {
+    return data.openings.flatMap((opening) => {
+      const ticked = tickedLines(opening, source);
+      return ticked ? onLines(data, opening, ticked) : (data.positions[opening.id] ?? []);
+    });
+  }
   const all = data.positions[scope.opening] ?? [];
   if (!scope.variation) return all;
   const opening = data.openings.find((o) => o.id === scope.opening);
-  const names = data.names[scope.opening];
-  if (!opening || !names) return [];
-  const lines = opening.lines.filter((line) => line.variation === scope.variation);
-  const epds = new Set(nameItPositions({ ...opening, lines }, names, undefined).map((position) => position.epd));
-  return all.filter((position) => epds.has(position.epd));
+  if (!opening) return [];
+  const lines = opening.lines.filter((line) => line.variation === scope.variation).map((line) => line.id);
+  return onLines(data, opening, new Set(lines));
 }
 
 /**

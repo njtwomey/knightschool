@@ -122,3 +122,10 @@ Small and simple stays JSON: the catalogue, each opening, config.
 | `evals`                | `content/analysis/`                                          | `pnpm analyse`                  |
 | `puzzles`, `puzzle_at` | `.cache/puzzles/`, the committed selection                   | the puzzle jobs (../puzzles.md) |
 | `lines_at`, `search`   | the built openings                                           | `content:build`                 |
+
+## What is worked out at build, not in the page
+
+Anything slow ships with the opening rather than being worked out in a page. `followUps` run the judge over the tree, so
+`content:build` writes them into `openings/<id>.json`. A line's moves are read from the tree (`positions` already holds
+each move's SAN and the position after it), with no chess library. `loadProgress` loads an opening's facts, its largest
+file, only for the pages that use them (`factsFor`).

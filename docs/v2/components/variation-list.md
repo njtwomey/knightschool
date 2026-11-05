@@ -28,6 +28,11 @@ An opening's variations in study order, each with its steps and its checkpoint: 
   later") and `teach.testOut` (whether Test out is offered), the learner settings `learning.gatesRelaxed` (relaxed reads
   as advise) and `level.includeRare` (whether steps from rare lines appear).
 
+- `stepTick`, `variationTick`: a [choose-tick](choose-tick.md) for a step row and a variation's header; follow-ups have
+  none, as they come with their step.
+- `hideCheckpoints`: for a list of only some of each variation's steps ([repertoire](../pages/repertoire.md)).
+- `compact`: passed to the [step-row](step-row.md)s.
+
 ## Behaviour
 
 - Click a variation header: open the variation's page (its `href`); the chevron folds or unfolds it. Without an

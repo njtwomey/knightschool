@@ -19,6 +19,8 @@ One line in a list: its name, kind, moves and what the learner knows of it, with
   "what grows from it").
 - `opening`: the opening it is opened in; links are built for that opening.
 - `columns` in `row` form: which of kind, opponent, moves, known appear.
+- `match` and `showKnown` in `card` form: "why it matched" under the moves, and the known bar, off in search, which does
+  not load the learner's progress.
 - Reads `board.notation` (letters or figurines, through the move chips).
 
 ## Behaviour

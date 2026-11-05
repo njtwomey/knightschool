@@ -10,6 +10,41 @@ import { createContext, useContext, useEffect, useId, useRef, useSyncExternalSto
  * before the page's main board.
  */
 
+/** Whether a key press belongs to something else: a modifier, a field being typed in, a menu. */
+export function keyTaken(event: KeyboardEvent) {
+  if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return true;
+  const target = event.target as HTMLElement | null;
+  return Boolean(
+    target?.closest(
+      'input, textarea, select, [contenteditable=""], [contenteditable="true"], [role="menu"], [role="radiogroup"], [role="listbox"], [role="slider"], [role="tablist"]',
+    ),
+  );
+}
+
+/**
+ * The arrow keys win over a hover: while a hovered row previews on the board, an arrow key ends the preview and steps
+ * from where the board was resting, even with the pointer still on the row. Hovering something new previews again.
+ */
+export function useKeysBeatHover(hovering: boolean, onStep: (step: -1 | 1) => void) {
+  const latest = useRef(onStep);
+  useEffect(() => {
+    latest.current = onStep;
+  });
+  useEffect(() => {
+    if (!hovering) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (keyTaken(event)) return;
+      const step = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+      if (!step) return;
+      // Handled here, before the step buttons see it: the preview's own position is not where stepping starts.
+      event.preventDefault();
+      latest.current(step);
+    };
+    window.addEventListener('keydown', onKey, { capture: true });
+    return () => window.removeEventListener('keydown', onKey, { capture: true });
+  }, [hovering]);
+}
+
 /** What a move elsewhere on the page can ask of a board. */
 export type BoardTarget = {
   /** Go to the position after a move: the board's cursor if it holds it, else shown until the learner steps back. */

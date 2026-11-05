@@ -6,8 +6,23 @@
  * one.
  */
 
-export type MapMove = { san: string; uci: string; before: string; after: string };
-export type MapLine = { id: string; name: string; kind: string; moves: MapMove[] };
+import type { Note } from '@knightschool/core/content';
+export type MapMove = {
+  san: string;
+  uci: string;
+  before: string;
+  after: string;
+  /** Its comment, for a move that is not in the opening's tree (a follow-up's). */
+  note?: Note;
+};
+export type MapLine = {
+  id: string;
+  name: string;
+  kind: string;
+  moves: MapMove[];
+  /** The colour it is drawn in (a slot in the line palette), shared with its dot in the index; its lane by default. */
+  colour?: number;
+};
 
 export type MapNode = {
   /** The UCIs up to and including this move, joined by spaces. */

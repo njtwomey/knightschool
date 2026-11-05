@@ -19,7 +19,7 @@ export function nextStateOf(progress: LearnerProgress, now = new Date()): NextSt
   const candidates = openings
     .map((one) => {
       const index = one.opening.steps.findIndex((step) => one.stepStates.get(step.id) === 'open');
-      const started = one.opening.steps.filter((step) => one.stepStates.get(step.id) !== 'open').length;
+      const started = [...one.stepStates.values()].filter((state) => state !== 'open').length;
       return { one, index, started };
     })
     .filter((candidate) => candidate.index >= 0)

@@ -97,7 +97,13 @@ function LineView({ data, lineId }: { data: OpeningData; lineId: string }) {
         <p className="max-w-prose">
           {mine.length
             ? `${mine.length} ${mine.length === 1 ? 'move' : 'moves'} of yours, from ${numberedMove(mine[0]!.ply, mine[0]!.san)}. Step through the line with the reason for each move, then play your moves without help.`
-            : 'Step through the line with the reason for each move.'}
+            : 'Step through the line with the reason for each move.'}{' '}
+          <a
+            href={to(`/openings/${opening.id}/map#line=${lineId}`)}
+            className="whitespace-nowrap text-muted-foreground underline underline-offset-4 hover:text-foreground"
+          >
+            See it on the map
+          </a>
           {earns ? null : ' This line is shown, never drilled: playing it saves nothing to your reviews.'}
         </p>
       }

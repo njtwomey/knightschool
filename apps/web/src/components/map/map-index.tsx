@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronRight, Crosshair, ListTree, SearchIcon } from 'lucide-react';
-import { useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { KIND_INFO, KindBadge, shownKind, type LineKind } from '@/components/chess/kind-badge';
 import { MoveRun, type RunMove } from '@/components/chess/move-run';
 import { EmptyState } from '@/components/shared/empty-state';
@@ -11,6 +11,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { forgivingMatch } from '@/components/finding/text-match';
 import { cn } from '@/lib/utils';
 import { laneColour } from './lane-colours';
+
+/** How far each level of a line's branching is drawn in, and the deepest it goes, so names stay readable. */
+const INDENT = 18;
+const MAX_DEPTH = 6;
 
 export type MapIndexLine = {
   id: string;
@@ -35,8 +39,16 @@ export type MapIndexLine = {
 
 export type MapIndexProps = {
   lines: readonly MapIndexLine[];
-  /** Group headings, in order; one opening shows none. */
-  groups?: readonly { id: string; name: string }[];
+  /** Group headings, in order; one opening shows none. `colour` is the line palette slot of its lines. */
+  groups?: readonly { id: string; name: string; colour?: number }[];
+  /**
+   * The lines in view: the list is flat under each group, each group's heading opens the rest of its lines, and a
+   * search still finds every line. Without it, lines nest under the line they grow from.
+   */
+  visible?: ReadonlySet<string>;
+  /** The groups opened, and the heading's click. */
+  expanded?: ReadonlySet<string>;
+  onGroup?: (id: string) => void;
   picked?: string | null;
   subtree?: string | null;
   folded?: ReadonlySet<string>;
@@ -61,6 +73,9 @@ export type MapIndexProps = {
 export function MapIndex({
   lines,
   groups,
+  visible,
+  expanded,
+  onGroup,
   picked,
   subtree,
   folded = new Set<string>(),
@@ -77,6 +92,10 @@ export function MapIndex({
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(true);
   const list = useRef<HTMLUListElement>(null);
+  // The picked line stays in view in a long list.
+  useEffect(() => {
+    list.current?.querySelector(`[data-entry="${picked}"]`)?.scrollIntoView({ block: 'nearest' });
+  }, [picked]);
   const shown = lines.filter((line) => !(rare === 'hide' && line.rare));
   const byId = new Map(shown.map((line) => [line.id, line]));
   // A line whose parent is in another group starts its own branch there.
@@ -105,6 +124,8 @@ export function MapIndex({
     const line = byId.get(id);
     if (event.key === 'ArrowDown') entries[Math.min(entries.length - 1, at + 1)]?.focus();
     else if (event.key === 'ArrowUp') entries[Math.max(0, at - 1)]?.focus();
+    // In the flat list nothing folds: left and right belong to the board.
+    else if (visible) return;
     else if (event.key === 'ArrowRight' && folded.has(id)) onFold?.(id, false);
     else if (event.key === 'ArrowLeft') {
       if (!folded.has(id) && children(id).length > 0) onFold?.(id, true);
@@ -114,7 +135,7 @@ export function MapIndex({
   };
 
   const entry = (line: MapIndexLine, depth: number, groupName?: string) => {
-    const kids = matches ? [] : children(line.id);
+    const kids = matches || visible ? [] : children(line.id);
     const isFolded = folded.has(line.id);
     return (
       <li
@@ -130,7 +151,7 @@ export function MapIndex({
             subtree === line.id && 'ring-1 ring-ring',
             line.rare && 'opacity-60',
           )}
-          style={{ paddingLeft: depth * 14 }}
+          style={{ paddingLeft: depth * INDENT }}
         >
           {kids.length > 0 ? (
             <Button
@@ -141,7 +162,7 @@ export function MapIndex({
             >
               {isFolded ? <ChevronRight aria-hidden /> : <ChevronDown aria-hidden />}
             </Button>
-          ) : (
+          ) : visible ? null : (
             <span className="size-6 shrink-0" />
           )}
           <span
@@ -250,6 +271,44 @@ export function MapIndex({
           ) : (
             matches.map((line) => entry(line, 0, groups && groups.length > 1 ? groupName(line.group) : undefined))
           )
+        ) : visible && groups ? (
+          groups.map((group) => {
+            const all = shown.filter((line) => line.group === group.id);
+            if (all.length === 0) return null;
+            const open = expanded?.has(group.id);
+            const inView = all.filter((line) => visible.has(line.id));
+            // Each line right under the one it grows from, indented by how deep it sits in this variation.
+            const here = new Set(inView.map((line) => line.id));
+            const tree: { line: MapIndexLine; depth: number }[] = [];
+            const walk = (line: MapIndexLine, depth: number) => {
+              tree.push({ line, depth });
+              for (const child of inView) if (child.parent === line.id) walk(child, depth + 1);
+            };
+            for (const line of inView) if (!line.parent || !here.has(line.parent)) walk(line, 1);
+            return (
+              <li key={group.id} role="none" className="grid grid-cols-[minmax(0,1fr)] gap-px pt-1">
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  aria-expanded={Boolean(open)}
+                  onClick={() => onGroup?.(group.id)}
+                  className="h-7 justify-start gap-1.5 px-1 font-medium"
+                >
+                  {open ? <ChevronDown aria-hidden /> : <ChevronRight aria-hidden />}
+                  <span
+                    className="size-2.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: laneColour(group.colour ?? 0) }}
+                    aria-hidden
+                  />
+                  <span className="truncate">{group.name}</span>
+                  <span className="ml-auto font-normal text-muted-foreground tabular-nums">{all.length}</span>
+                </Button>
+                <ul role="group" className="grid grid-cols-[minmax(0,1fr)]">
+                  {tree.map(({ line, depth }) => entry(line, Math.min(depth, MAX_DEPTH)))}
+                </ul>
+              </li>
+            );
+          })
         ) : groups && groups.length > 1 ? (
           groups.map((group) => {
             const roots = children(null, group.id);
@@ -276,14 +335,16 @@ export function MapIndex({
           children(null, shown[0]?.group).map((root) => entry(root, 0))
         )}
       </ul>
-      <div className="flex gap-1 border-t pt-2">
-        <Button variant="ghost" size="xs" disabled={!subtree} onClick={() => onSubtree?.(null)}>
-          Show all
-        </Button>
-        <Button variant="ghost" size="xs" disabled={folded.size === 0} onClick={onOpenAll}>
-          Open all
-        </Button>
-      </div>
+      {visible ? null : (
+        <div className="flex gap-1 border-t pt-2">
+          <Button variant="ghost" size="xs" disabled={!subtree} onClick={() => onSubtree?.(null)}>
+            Show all
+          </Button>
+          <Button variant="ghost" size="xs" disabled={folded.size === 0} onClick={onOpenAll}>
+            Open all
+          </Button>
+        </div>
+      )}
     </div>
   );
 
