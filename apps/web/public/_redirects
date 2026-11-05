@@ -1,0 +1,2 @@
+# Netlify and Cloudflare Pages: serve the app for any path, so /openings/italian-white works on a refresh or a shared link.
+/*  /index.html  200

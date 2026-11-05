@@ -1,3 +1,4 @@
+import { copyFileSync } from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
@@ -13,10 +14,23 @@ const yaml = (): Plugin => ({
   },
 });
 
+/**
+ * Paths like /openings/italian-white have no file behind them. GitHub Pages serves 404.html for those, so it gets the
+ * app; Netlify and Cloudflare use public/_redirects, and the dev and preview servers already fall back to index.html.
+ */
+const spaFallback = (): Plugin => ({
+  name: 'knightschool-spa-fallback',
+  apply: 'build',
+  closeBundle() {
+    const dist = fileURLToPath(new URL('./dist', import.meta.url));
+    copyFileSync(`${dist}/index.html`, `${dist}/404.html`);
+  },
+});
+
 // A project site on GitHub Pages is served under /<repo>/; the deploy workflow sets BASE_PATH.
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
-  plugins: [yaml(), react(), tailwindcss()],
+  plugins: [yaml(), react(), tailwindcss(), spaFallback()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
