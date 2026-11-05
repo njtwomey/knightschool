@@ -8,7 +8,7 @@ content/
   ideas.yaml                   every idea
   tracks.yaml                  suggested orders of openings
   openings/<opening>.yaml      one opening for one side
-  lines/<first move>/<line>.pgn  one line each, shared by any opening
+  lines/<first move>/<opening>/<variation>/<line>.pgn  one line each, shared by any opening
 ```
 
 Why lines are separate from openings (as in v1): a line can belong to several openings (the Two Knights is in the

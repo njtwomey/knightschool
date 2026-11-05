@@ -70,7 +70,7 @@ search:
 
 engine:
   liveDepth: 14 # app
-  bakedDepth: 24 # build
+  bakedDepth: 18 # build
 
 lichess:
   pauseAfter429Ms: 60000 # both

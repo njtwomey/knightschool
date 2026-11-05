@@ -19,7 +19,7 @@ pipeline), `docs/v2/schemas/annotations.md` (comments, marks, refutations). This
   first step, the moves up to `start`), `about`, `ideas`, `variations` (each lists **lines** in teaching order, with an
   `intro` and optional `questions`), `steps` (titles and texts by step id `<line>:<n>`), `alternatives` (shown, never
   drilled), `sources`.
-- `content/lines/<first move>/<line>.pgn`: one line, shared by any opening. Headers `For`, `Kind` (`main`, `sideline`,
+- `content/lines/<first move>/<opening>/<variation>/<line>.pgn`: one line, shared by any opening. Headers `For`, `Kind` (`main`, `sideline`,
   `rare`, `gambit`, `trap` you spring, `danger` against you), `Start "<line> <N.move>"` (where it branches off another
   line; the file holds only the moves after it), `Name` (display name). The file name is the id: never rename casually,
   learner history is keyed by position and move, but steps and links use it.
@@ -38,6 +38,15 @@ pipeline), `docs/v2/schemas/annotations.md` (comments, marks, refutations). This
   that note). Put the "this is the main line by another order" remark on the move before it. And a band reply that only
   walks into a known position is not an edge until a line plays it: a one-move stub line (`2. Nf3 d5 3. Nc3 *`, with
   `[Start]`) closes the gap on the map and adds no step.
+
+## How much to write
+
+The learner is building general knowledge of the top openings from zero, so the first pass is **the main lines, weighted
+by popularity**, not comprehensive coverage: **10 to 20 lines per opening** (the Italian, the flagship, about 30), the
+named variations people really reach first. More can follow later. Prefer the line that most games at the band reach
+over the line that is theoretically richest. Analysis is `engine.bakedDepth` (18), one engine, one thread: enough, and
+far kinder to the machine than going deep on everything. Don't chase every reply above the share to move 10 on a first
+pass; list what is left as gaps.
 
 ## Choosing the moves (the strategy)
 
@@ -73,6 +82,9 @@ pipeline), `docs/v2/schemas/annotations.md` (comments, marks, refutations). This
   `EarlyMate`, `Tricks`, `Themes`, `Opponent`, `ECO`, `Variation` headers. A v1 `( ... )` variation that is not a
   mistake becomes a line file of its own with `[Start]`; a mistake keeps its bracket, first move marked `?`/`??`. Rewrite
   every comment in the voice below and verify it; v1 text was written fast.
+- **A video or transcript that becomes an opening.** Expect heavy overlap with what exists: reuse a line that already
+  teaches the same moves (one comment per move; merge the new point into it) rather than writing a second copy, and a new
+  opening can list existing lines. Credit the source.
 - **A source (video transcript, book, article).** Ideas, never text: rebuild the moves on a board (transcripts garble
   them: "night takes c6"), verify every claim with the engine (a "winning" trick may only win a pawn), write the notes
   fresh, credit it in the opening's `sources:` (title, url, author, what was taken). Where a move already has a comment,
@@ -114,7 +126,8 @@ saves `analyse` and `popularity`, which resume where they left off.
    find the comment a shared move already has.
 3. **Engine-check the candidates** before writing: `node --import tsx "$SCRATCH/engine.mts" 20 "name:<uci moves>" ...`
    (one engine, one thread; never two at once).
-4. **Write the line(s)** in `content/lines/<first move>/`. PGN rules the build enforces: a bracketed variation comes
+4. **Write the line(s)** in `content/lines/<first move>/<opening>/<variation>/` (folders are only for finding things; the id is
+   the file name; a line shared by two openings stays with the first that lists it). PGN rules the build enforces: a bracketed variation comes
    **after the move it replaces** (Black's alternative after Black's move) and starts with a move marked `?` or `??`;
    numbering as in the game (`5... d6`); `[Start "giuoco-main 4.c3"]` names the parent and the move after which the
    line begins. A refutation shows `judge.refutationPlies` moves after the mistake, so end it within that on your own
@@ -125,12 +138,12 @@ saves `analyse` and `popularity`, which resume where they left off.
 5. **List them** in the opening: a variation's `lines` (teaching order; most common first), a new variation with `id`,
    `name`, `intro` when it is a new decision for the learner, `steps` titles and texts for the new steps.
 6. **Data and checks**, in this order: `npx -y pnpm@12.11.2 content:build` (formats), `make popularity` (the new
-   positions; needs `LICHESS_TOKEN` in `.env`, never print it), `npx -y pnpm@12.11.2 analyse` (depth 24, one engine,
+   positions; needs `LICHESS_TOKEN` in `.env`, never print it), `npx -y pnpm@12.11.2 analyse` (depth 18, one engine,
    resumable; long: run it in the background and say so), `content:build` again, `npx -y pnpm@12.11.2 content:check`
    (the authors and the engine must agree; a disagreement is either the content's mistake or a note to add), `make
 puzzles` when puzzles should follow the new lines, `make check`. Size the analysis before starting: every position
    of the tree plus the band's replies at 3% or more comes to about four positions for every position in the opening,
-   searched at roughly 3 seconds each at depth 18 and 30 at depth 24. A wide opening of 100 lines is 2,600 positions,
+   searched at roughly 3 seconds each at depth 18 and 30 at depth 18. A wide opening of 100 lines is 2,600 positions,
    so about 2 hours and about 22 hours: check with `--depth 18` first, then deepen, in chunks (`timeout -s INT`), so
    other agents can take the lock.
 7. **Report**: what was added and why each choice, what the data and engine said, the gaps left (replies above the share
