@@ -1,0 +1,16 @@
+[For "white"]
+[Kind "main"]
+[Start "qg-slav-main 3.Nc3"]
+[Name "The Semi-Slav: the Meran"]
+
+3... e6 { The Semi-Slav. Pawns on c6 and e6 make d5 very solid, at the cost of shutting in the c8 bishop after all. [%csl Yc8] }
+4. Nf3 Nf6
+5. e3 { Quiet and solid. 5.Bg5 is the sharp move here and leads to long forcing lines; e3 simply develops. [%cal Gf1d3] }
+5... Nbd7
+6. Bd3 { Aims at h7 and gets ready to castle. }
+6... dxc4 { The Meran. Black has waited for the bishop to move, so that it has to move again. }
+7. Bxc4 b5 { Gains another move on the bishop, and makes room for ...Bb7. }
+8. Bd3 { Back to its best diagonal, aimed at h7. [%cal Gd3h7] }
+8... Bb7 { The c8 bishop gets a diagonal at last. }
+9. O-O a6 { Prepares ...c5, the break that frees Black's game. }
+10. e4 { White's own break comes first. Black has to hurry with ...c5, and the game opens up with White's king already safe. White scores a little under half at this level, so it pays to know this one. [%cal Ge3e4] [%idea centre-pawns] } *

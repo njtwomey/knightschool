@@ -1,0 +1,21 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-d6 5.Nc3"]
+[Name "2...d6 and ...Bg4: the bishop check"]
+
+5... Nc6 { Adds to the pressure on d4. }
+6. Nf3 { Guards d4 and develops. }
+6... Bg4 { The pin. Black is hoping to take on f3 and then win d4. [%icon pin@f3] }
+7. d5 { Nothing covers d5, so the knight is pushed away and can no longer hit d4. [%cal Gd5c6] }
+7... Ne5
+8. Nxe5 { Looks impossible, because the knight is pinned, but if Black takes the queen a check wins her back with interest. }
+8... dxe5 { The right way to take. The pin has gone, and Black has doubled pawns. }
+( 8... Bxd1? { Black takes the queen, and it costs a piece. }
+  9. Bb5+ { The c6 knight has left the diagonal, so the bishop checks. [%cal Gb5e8] }
+  9... Nd7 10. Bxd7+ Qxd7 11. Nxd7 { The queens are gone, and after ...Kxd7 and Kxd1 White is a clear knight ahead. } )
+9. Qb3 { Black's bishop has left c8, so b7 has lost its guard. [%cal Gb3b7] [%csl Yb7] }
+9... Bd7 { Back again to guard it. }
+( 9... Qb6? { Offers to swap queens, but it leaves the bishop on g4 and the pawn on b7 to fend for themselves. }
+  10. Bb5+ { Check first. }
+  10... Bd7 11. Be3 { The queen has to leave b6, and once the bishops come off b7 falls: no piece is won, but the engine has White about four pawns ahead. [%cal Ge3b6] } )
+10. Be3 { Develops. White has more space, the better pawns and the easier game: the engine has White about two pawns ahead. } *

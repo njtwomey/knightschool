@@ -1,0 +1,23 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-accepted-main 3.e3"]
+[Name "The Accepted: 3...e5"]
+
+3... e5 { Hits d4 at once, while the f1 bishop is still at home. Black wants to swap off White's centre. [%cal Re5d4] }
+4. Bxc4 { First the pawn comes back. The bishop now aims at f7, and the centre can wait a move. }
+4... exd4
+5. exd4 { Takes with the pawn, which keeps the queen out of the way of ...Nc6. White has an isolated d-pawn, but also open lines and easy development. [%csl Yd4] [%idea isolated-queens-pawn] }
+5... Nf6
+6. Nf3 { Guards d4 and gets ready to castle. }
+6... Bb4+
+7. Nc3 { The same block as in the main line. 7.Bd2 swaps a pair of bishops, and every swap helps Black against an isolated pawn. }
+7... O-O
+( 7... Ne4? { Hits the pinned knight, and it forgets f7. }
+  8. Bxf7+ { Takes with check. If 8...Kxf7, 9.Qb3+ picks up the bishop on b4. [%cal Gd1b3,Gb3b4] }
+  8... Kf8
+  9. Bc4 { The bishop goes home. Black has lost the right to castle, and the king is caught in the open. The engine has White about four pawns ahead. } )
+8. O-O
+8... Bg4 { Pins the knight that guards d4. }
+9. h3 { Asks the bishop at once. If it takes on f3, the queen retakes and looks straight at b7. [%cal Gh3g4] }
+9... Bh5
+10. Re1 { The rook takes the open file. Active pieces are what White gets in return for the isolated pawn, so keep them on the board and keep them moving. [%cal Ge1e8] } *

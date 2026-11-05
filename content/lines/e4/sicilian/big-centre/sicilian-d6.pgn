@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 2.c3"]
+[Name "2...d6: the big centre"]
+
+2... d6 { A modest move, and the second most common. It stops e5 for now, but it lets White have the centre. }
+3. d4 { Takes it. }
+3... cxd4 4. cxd4 Nf6 { Hits e4. }
+5. Nc3 { Guards e4 with a developing move. White has a classical centre and every piece has a natural square. [%cal Gc3e4] }
+( 5. e5? { The push that works against 2...Nf6 does not work here: the pawn on d6 is already hitting e5. [%cal Rd6e5] }
+  5... dxe5 6. dxe5 Qxd1+ 7. Kxd1 Ng4 { The queens are off, White cannot castle, and the e5 pawn is about to fall. [%csl Re5] } )
+5... g6 { Black plans a bishop on the long diagonal. }
+6. Nf3 { Develops and guards d4, which that bishop is about to look at. }
+6... Bg7
+7. Be2 { The bishop goes to e2, not d3, because Black's c8 bishop is free: if it comes to g4, there is no pin to worry about. Against ...e6 it goes to d3. }
+7... O-O
+8. O-O Nc6 { The most common move, and it hits d4. }
+9. d5 { Black has not played ...e6, so nothing covers d5, and the pawn pushes the knight away with a gain of time. White has more space. [%cal Gd5c6] } *

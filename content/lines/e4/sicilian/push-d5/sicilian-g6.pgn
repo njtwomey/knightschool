@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 4.cxd4"]
+[Name "...g6: push past the knight"]
+
+4... g6 { Black wants the bishop on g7, but this leaves d5 uncovered. }
+5. d5 { The knight is pushed off c6, and it has only bad squares to go to. [%cal Gd5c6] }
+5... Nb8 { The only safe retreat, back to where it started. }
+( 5... Ne5?? { The most common move, and it loses the knight. }
+  6. f4 { The knight has nowhere to go. Black's own pawns take d7 and g6, and every other square is covered. [%icon trap@e5] [%idea trapped-piece] }
+  6... Bg7 7. fxe5 Bxe5 { White has won a knight for a pawn. } )
+6. Qd4 { With the bishop not yet on g7, the queen looks straight down the diagonal at the rook on h8. [%cal Gd4h8] }
+6... Nf6 { Blocks the diagonal. }
+7. e5 { The blocker is hit at once. [%cal Ge5f6] }
+7... Ng8 { Back home again. Both of Black's knights have now gone back to where they started. }
+( 7... Nh5? { Stays forward, but on the edge of the board the knight has no good squares left. [%csl Yh5] }
+  8. Nc3 { Develops. No material is won, but the knight on h5 is out of play, and the engine has White more than three pawns ahead. } )
+8. Nf3 { Develops and guards e5. }
+8... Bg7
+9. Nc3 { White has all the space and a big lead in development: the engine has White about two pawns ahead. } *

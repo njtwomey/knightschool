@@ -1,0 +1,27 @@
+[For "white"]
+[Kind "main"]
+[Start "qg-accepted-main 2.c4"]
+[Name "Queen's Gambit Declined: the main line"]
+
+2... e6 { The Queen's Gambit Declined. Black holds d5 with a pawn, the most solid reply there is, but it shuts in the c8 bishop, and that stays a problem for a long time. [%csl Yc8] }
+3. Nc3 { A second attacker on d5, on the knight's natural square. Black has to keep guarding it. [%cal Gc3d5] }
+3... Nf6 { Guards d5 again and develops. }
+4. Bg5 { Pins the knight to the queen: if it moves, Bxd8 takes her. A pinned knight does not really guard d5, so the pressure goes up at no cost. [%cal Gg5d8] [%idea pin] }
+4... Be7 { Breaks the pin quietly. With the bishop in between, the knight is free to move again. }
+( 4... h6? { Asks the bishop what it wants, and it looks like a free move. But the queen has to guard too much if White takes. }
+  5. Bxf6 { Takes at once. Black's best is ...gxf6, which saves the pawn and wrecks the kingside. }
+  5... Qxf6 { The natural recapture, and it pulls the queen away from d5. [%csl Yd5] }
+  6. cxd5 exd5 7. Nxd5 { White is a clean pawn up, and the knight hits the queen, so Black has no time to look for compensation. [%cal Gd5f6] [%idea hanging-piece] } )
+5. e3 { Backs up d4 and opens the way for the f1 bishop. The c1 bishop is already outside the chain, so this shuts nothing in. [%cal Ge3d4] [%idea bishop-first] }
+5... O-O
+6. Nf3 { Develops and covers e5, which holds up Black's freeing ...e5. }
+6... Nbd7 { Develops and supports both ...c5 and ...e5. It also stands in front of the c8 bishop, which is still shut in. }
+7. Rc1 { Goes to the c-file before it opens. When the c-pawns come off, the rook is already looking at c7. [%cal Gc1c7] [%idea open-file] }
+7... c6 { Holds d5 and blocks the file. }
+8. Bd3 { The last piece comes out, looking at h7. Black will probably take on c4 now, so the bishop moves twice, but to do it Black gives up the strong point on d5. [%cal Gd3h7] }
+8... dxc4
+9. Bxc4 { Back on the fine diagonal. Black has given up the centre and still has to find a role for the c8 bishop. }
+9... b5 { Gains a move on the bishop and makes room for ...Bb7. }
+10. Bd3
+10... Bb7 { The c8 bishop is out at last. }
+11. O-O { The king is safe, White has more room in the centre and a rook already on the c-file, and the pawn on c6 is a target. Next comes e4. [%csl Yc6] [%idea castle-early] } *

@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "sicilian-2e6 3.d4"]
+[Name "2...e6 and 3...d5: the French by another road"]
+
+3... d5 { This is the French Defence, Advance Variation, reached by another order of moves. }
+4. e5 { Takes space, as always when the c8 bishop is shut in. The pawn on c3 is still there, so d4 is well supported. [%cal Gc3d4] }
+4... Nc6
+5. Nf3 Qb6 { Black's usual plan: the pieces pile up on d4. [%cal Rb6d4,Rc6d4] }
+6. a3 { Gets ready for b4 to gain space, and once the c-pawns come off it keeps Black's pieces off b4. [%csl Gb4] }
+6... cxd4
+7. cxd4 { The c-pawn takes back, and c3 is free for the knight again. }
+7... Nge7
+8. Nc3 { The same set-up as the main line, and the a3 pawn means there is no pin on this knight. If Black's queen stays on b6, Na4 can hit her. [%cal Gc3a4,Ga4b6] } *

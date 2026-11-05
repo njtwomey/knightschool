@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-marshall 3.cxd5"]
+[Name "The Marshall: 3...Qxd5"]
+
+3... Qxd5 { Takes with the queen, who comes out early and can be chased. }
+4. Nc3 { Develops with a gain of time. [%cal Gc3d5] }
+4... Qd8 { The most common retreat. Black has spent three moves to put the queen back where she started. }
+5. Nf3 { Covers e5 first. 5.e4 at once lets Black strike back with ...e5, and with the knight on f3 that break is not there. [%cal Gf3e5] }
+5... e6 { Shuts in the c8 bishop, so nothing stands in the way of e4. }
+6. e4 { Takes the whole centre. This is the main line by another order. [%idea centre-pawns] } *

@@ -1,0 +1,19 @@
+[For "white"]
+[Kind "sideline"]
+[Start "sicilian-main 2.c3"]
+[Name "2...e5: a quiet Italian"]
+
+2... e5 { Stops d4 for now, but leaves a hole on d5 that no black pawn can ever cover. [%csl Yd5] }
+3. Nf3 { Develops and hits e5. }
+3... Nc6
+4. Bc4 { Aims at f7 and at d5. This is an Italian Game in which White already has c3 and Black has ...c5. [%cal Gc4f7] [%idea f7-weakness] }
+4... Nf6
+5. d3 { Guards e4 in the quiet way. 5.Ng5 hits f7 at once, but it asks for a run of exact moves, and 5.d3 needs none. [%cal Gd3e4] }
+5... Be7
+( 5... d6? { Solid-looking, but with no bishop on e7 nothing stops the knight jumping to g5. [%cal Gf3g5] }
+  6. Ng5 { Now the jump works: f7 is hit twice, and only the king guards it. [%idea f7-weakness] }
+  6... d5 7. exd5 Nxd5 8. Qf3 { The queen hits f7 and d5 at once. Black has spent an extra move on the d-pawn, and the engine has White more than two pawns ahead. [%cal Gf3f7] } )
+6. O-O O-O
+7. Re1 { Backs up e4 and prepares d4 for later. }
+7... d6
+8. h3 { Keeps ...Bg4 and ...Ng4 away. White can then bring the b1 knight round to the king's side by d2 and f1, with d4 to come when everything is ready. [%cal Gh3g4] } *

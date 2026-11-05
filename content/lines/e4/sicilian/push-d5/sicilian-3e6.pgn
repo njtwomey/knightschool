@@ -1,0 +1,26 @@
+[For "white"]
+[Kind "sideline"]
+[Start "sicilian-main 3.d4"]
+[Name "3...e6: push before Black takes"]
+
+3... e6 { Black waits, hoping to get ...d5 in, and has not yet taken on d4. }
+4. d5 { The pawn goes past before Black can take it, and hits the knight. [%cal Gd5c6] }
+4... exd5
+( 4... Ne5? { Looks active, but f4 pushes it straight back. }
+  5. f4 Ng6 6. d6 { The pawn on d6 walls in the f8 bishop. No material is won yet, but Black's pieces can hardly move, and the engine has White more than two pawns ahead. [%csl Yf8] } )
+5. exd5 Ne5 { The knight heads for the centre. }
+( 5... Nce7? { Goes back, and it blocks the f8 bishop. [%csl Ye7] }
+  6. d6 { The knight on e7 is hit and has to go. }
+  6... Nf5 7. Qe2+ Be7 8. dxe7 { White has won a bishop for a pawn. } )
+( 5... Nb8? { Back to where it started, which costs Black two moves. }
+  6. d6 { The pawn walls in the f8 bishop, so Black cannot finish developing in the normal way. No material is won, but the engine has White about two pawns ahead. [%csl Yf8] } )
+6. Nf3 { Offers to swap the knight off, and develops. }
+6... Nxf3+
+7. Qxf3 { The queen comes out to a good square. }
+7... d6
+8. Bf4 { Develops, and keeps an eye on d6, which has lost its neighbours. [%cal Gf4d6] [%csl Yd6] }
+8... Nf6
+9. Bd3 Be7
+( 9... Qb6? { Goes after b2 and leaves the king in the centre. [%cal Rb6b2] }
+  10. O-O { Ignores the pawn and castles. No material is won, but White is well ahead in development, and the engine has White more than two pawns ahead. } )
+10. h3 { Keeps ...Bg4 from hitting the queen. White has space, easy development and a target on d6, and castles next. [%cal Gh3g4] } *

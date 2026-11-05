@@ -1,0 +1,37 @@
+[For "white"]
+[Kind "main"]
+[Start "qg-accepted-main 2.c4"]
+[Name "The Slav Defence: ...Bf5 and Qb3"]
+
+2... c6 { The Slav Defence. Like ...e6 it holds d5 with a pawn, but it keeps the c8 bishop's diagonal open. [%cal Gc8f5] }
+3. Nc3 { The same move as against ...e6: a second attacker on d5, on the knight's natural square. [%cal Gc3d5] }
+3... Nf6
+4. Nf3 { Develops and covers e5. The e-pawn waits, to see where the c8 bishop goes. }
+4... Bf5 { The point of the Slav: the bishop gets out before ...e6 shuts it in. But it has left b7 without a guard. [%csl Yb7] }
+5. cxd5 { The swap comes first. Once ...cxd5 is played, d5 has no pawn behind it, and Qb3 will hit two things at once. }
+5... cxd5
+6. Qb3 { Hits b7 and d5 together. The bishop has gone from c8, so b7 has no guard, and d5 no longer has a pawn behind it. Remember this one: it is the answer to an early bishop move all through the Slav. [%cal Gb3b7,Gb3d5] [%csl Yb7,Yd5] }
+6... Qb6 { Black's best. It guards b7 and offers the queens. }
+( 6... e6? { Guards d5 and lets b7 go, which is worse than it looks. }
+  7. Qxb7 Nbd7
+  8. Bf4 { A clean pawn up. The bishop covers b8, so ...Rb8, which would chase the queen and win b2 back, now loses the rook for a bishop. [%cal Gf4b8] [%idea hanging-piece] } )
+( 6... b6? { The most common move here, guarding b7 with a pawn. But it loosens the light squares round c6, and the bishop on f5 is short of room. }
+  7. Ne5 { Heads for c6 and gets ready for e4. }
+  7... e6
+  8. e4 { Hits the bishop, and the d-pawn cannot take comfortably. }
+  8... dxe4
+  9. Bb5+ { Black has to block on d7 and leave the knight pinned, and g4 is next, chasing the f5 bishop until it runs out of squares. The engine has White about five pawns ahead. [%idea pin] } )
+( 6... Qd7? { Guards both pawns, but the queen is exposed on d7 and gets in the way of her own knight. }
+  7. Ne5 Qc8
+  8. e4 { Hits the bishop, and ...dxe4 would lose to Bb5+. }
+  8... Nxe4
+  9. g4 { The bishop is chased away from the knight, and d5 and f7 are both weak. The engine has White about three pawns ahead. } )
+( 6... Qc7? { Guards b7, but the queen has left the d-file. }
+  7. Nxd5 Nxd5
+  8. Qxd5 { A clean pawn up, and the queen hits the bishop on f5 as well, so White gains a move. [%csl Rf5] [%idea hanging-piece] } )
+7. Qxb6 axb6 { Black's pawns are doubled, though the a-file is open for the rook. }
+8. e3 { Opens the f1 bishop. }
+8... e6
+9. Bb5+ { Comes out with check, so Black has no time for ...Nc6. }
+9... Nfd7
+10. Ne5 { A second attacker on the pinned knight. White has the better pawns and the more active pieces, and the b-pawns will be a target for the rest of the game. [%cal Ge5d7,Gb5d7] [%idea pin] } *

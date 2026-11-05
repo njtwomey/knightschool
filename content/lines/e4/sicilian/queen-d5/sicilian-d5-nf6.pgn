@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-d5 6.Nf3"]
+[Name "...Nf6: push past the knight"]
+
+6... Nf6
+7. Nc3 { Hits the queen and gains a move. This is why White wanted the c3 square free. [%cal Gc3d5] }
+7... Qd8 { The most common retreat. }
+8. d5 { Now the d-pawn can go, because the knight on c3 and the queen both guard it. The c6 knight has to move, and White takes a lot of space. [%cal Gd5c6] }
+8... Nb8
+( 8... Nb4? { The most common move. It looks active, but nothing guards the knight there. [%csl Yb4] }
+  9. Qa4+ { Check, and the queen hits the knight on b4 as well. [%cal Ga4b4,Ga4e8] [%idea fork] }
+  9... Bd7 10. Qxb4 { White has won a knight for nothing. } )
+9. Bc4 { Develops to an open diagonal and backs up the d5 pawn. [%cal Gc4d5] }
+9... g6
+( 9... Bg4? { Pins the knight, but it leaves b7 without a guard. [%csl Yb7] }
+  10. O-O { No material is won yet, but if Black takes on f3, Qxf3 hits b7, and the d-pawn is ready to move on: the engine has White more than four pawns ahead. } )
+10. O-O { White is well ahead in development, and the d5 pawn cramps Black: the engine has White about two pawns ahead. } *

@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-declined-main 3.Nc3"]
+[Name "The Ragozin: 3...Bb4"]
+
+3... Bb4 { Pins the knight to the king straight away. Black is ready to double White's pawns if that suits. [%cal Rb4e1] }
+4. Nf3 { Just develops. If Black takes on c3, bxc3 gives White the centre and the two bishops. }
+4... Nf6
+5. Bg5 { The same pin as ever, this time on Black's knight, and here too it adds to the pressure on d5. [%cal Gg5d8] [%idea pin] }
+5... h6
+6. Bxf6 { Takes at once. Most players drop back with 6.Bh4, but then 6...dxc4 leaves Black slightly better. }
+6... Qxf6
+7. e3 { Finishes the development. The knight on c3 is pinned, so taking on d5 with it, as after 4...h6 in the main line, is not on here. [%cal Ge3d4] }
+7... O-O
+8. Rc1 { The rook leaves a1 for the c-file, and it guards the knight on c3, so ...Bxc3 no longer doubles the pawns. [%cal Bc1c3] [%idea open-file] } *

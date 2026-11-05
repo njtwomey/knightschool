@@ -1,0 +1,329 @@
+name: Queen's Gambit
+side: white
+start: 1. d4 d5 2. c4
+level: next
+style: [classical, positional]
+summary: >-
+  White offers the c-pawn to pull Black's d-pawn off the centre, wins it back simply if Black takes, and otherwise
+  develops, pins on g5 and presses d5 and the c-file.
+about:
+  idea: >-
+    Attack d5 with a pawn from the side. If Black takes on c4, e3 and Bxc4 win the pawn back with a developing move and
+    White keeps the extra centre pawn. If Black holds d5, White adds to the pressure with Nc3, pins with Bg5, finishes
+    developing with e3 and Nf3, and puts a rook on the c-file before it opens. When the bishop leaves c8 early, Qb3 hits
+    b7 and d5 together.
+  risks: >-
+    Few, for a gambit: the pawn cannot really be held, and the traps mostly work for White. The ones to respect are the
+    Elephant Trap (6.Nxd5?? after ...Nbd7) and the Lasker Trap in the Albin (4.e3?). Against the most solid set-ups, the
+    Tartakower and the Meran, White scores a little under half at this level, so expect a long game from them.
+  suits: >-
+    Players who like a real fight for the centre and clear plans, and who want to know why the pieces go where they go.
+    It asks for more moves than the London, and it teaches more about pawn structure.
+  origin: >-
+    One of the oldest openings there is: it appears in the Göttingen manuscript of about 1490. It became the main
+    battleground of master chess in the early twentieth century, and nearly every game of the 1927 world championship
+    between Capablanca and Alekhine was a Queen's Gambit Declined.
+ideas:
+  [centre-pawns, pin, open-file, castle-early, bishop-first, isolated-queens-pawn, minority-attack, fork, hanging-piece]
+variations:
+  - id: accepted
+    name: The Queen's Gambit Accepted
+    intro: >-
+      2...dxc4 is the most common reply at this level. Black cannot keep the pawn, so White does not hurry and does not
+      chase it with pawns: e3 clears the bishop's path, Bxc4 wins the pawn back with a developing move, and White has
+      the extra centre pawn. If Black tries to hold on with ...b5, it can lose a piece on the spot.
+    lines: [qg-accepted-main, qg-accepted-e6, qg-accepted-b5, qg-accepted-e5]
+    plans:
+      - Play e3 and win the pawn back with Bxc4. Do not chase it with pawns.
+      - Against ...b5, play a4. If Black ends up taking on b5 with the c-pawn, Qf3 wins a piece.
+      - Then Nf3, Nc3, castle, and push e4 when it is ready.
+    questions:
+      - id: why-qf3
+        at: 1. d4 d5 2. c4 dxc4 3. e3 b5 4. a4 c6 5. axb5 cxb5
+        ask: Black has just taken back on b5. Which queen move wins a piece, and why?
+        answers: [[Qf3], [f3], [a8], [rook], [diagonal]]
+        examples:
+          right: [Qf3 hits the rook on a8, the queen goes to f3 and attacks a8, the long diagonal is open to the rook]
+          wrong: [Qa4, take on b5, Qb3]
+        explain: >-
+          Qf3 attacks the rook on a8 along the long diagonal, which the c-pawn has just left. The rook cannot move, and
+          whatever Black puts on the diagonal is taken.
+  - id: declined
+    name: The Queen's Gambit Declined
+    intro: >-
+      2...e6 keeps a pawn on d5 and shuts in the c8 bishop. White adds to the pressure with Nc3, pins with Bg5, then
+      plays e3 and Nf3 and puts a rook on c1 before the c-file opens. There is one trap to remember: the knight on f6
+      only looks pinned once a black bishop can reach b4.
+    lines: [qg-declined-main, qg-declined-h6, qg-elephant]
+    plans:
+      - Nc3, Bg5, e3 and Nf3, in that order.
+      - Rc1 before the c-file opens.
+      - After ...Nbd7, play cxd5 and e3. Never take on d5 with the knight.
+      - With the pawns on d5 and c6, push b4 and b5 against c6.
+    questions:
+      - id: why-not-nxd5
+        at: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Nbd7 5. cxd5 exd5
+        ask: The knight on f6 looks pinned, so d5 looks free. Why must White not play 6.Nxd5?
+        answers: [[Bb4], [check], [queen, knight], [Nxd5], [trap]]
+        examples:
+          right:
+            - 6...Nxd5 7.Bxd8 Bb4+ wins the queen back with check
+            - the knight takes anyway and Bb4+ follows
+            - after Bxd8 there is a check on b4
+          wrong: [d5 is guarded by a pawn, the bishop is hanging, White loses castling]
+        explain: >-
+          6...Nxd5 takes the knight and offers the queen. After 7.Bxd8 Bb4+ 8.Qd2 Bxd2+ 9.Kxd2 Kxd8 the queens have gone
+          and Black has won a knight and a bishop for a pawn. This is the Elephant Trap.
+      - id: why-rc1
+        at: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1
+        ask: The c-file is still closed. Why does the rook go there already?
+        answers: [[c-file], [c file], [open], [c7], [c6]]
+        examples:
+          right: [the c-file will open when the pawns come off, it is ready for when the c-file opens, it looks at c7]
+          wrong: [to castle, to guard a2, to attack the king]
+        explain: >-
+          The pawns on c4 and d5 are likely to come off. When they do, the c-file is the open line in the position, and
+          the rook is already on it, looking at c7 or c6.
+  - id: other-third-moves
+    name: Other third moves
+    intro: >-
+      After 2...e6 3.Nc3, Black does not have to play ...Nf6. The Ragozin pins at once, 3...dxc4 takes the pawn a move
+      late, and the Tarrasch strikes at d4. The plan bends a little for each: take on f6 in the Ragozin, win the pawn
+      back with e3 and Bxc4 as usual, and against the Tarrasch aim the f1 bishop at d5 from g2.
+    lines: [qg-ragozin, qg-declined-dxc4, qg-tarrasch]
+    plans:
+      - Against ...Bb4, play Nf3 and Bg5, and take on f6 when ...h6 comes.
+      - Against ...dxc4, the same e3 and Bxc4 as in the Accepted.
+      - Against ...c5, play cxd5, Nf3, g3 and Bg2, and press d5.
+  - id: slav
+    name: The Slav Defence
+    intro: >-
+      2...c6 holds d5 with a pawn and keeps the c8 bishop's diagonal open. So the plan is about that bishop. If it comes
+      out early, b7 has no guard: cxd5 takes the pawn away from behind d5, and Qb3 hits b7 and d5 at once. If Black
+      plays ...e6 instead, the bishop is shut in after all, and that is the Semi-Slav.
+    lines: [qg-slav-main, qg-slav-3bf5, qg-slav-e6, qg-slav-tr-e6]
+    plans:
+      - When the bishop leaves c8 early, play cxd5, and after ...cxd5 hit b7 and d5 with Qb3.
+      - If it leaves before ...Nf6, play Qb3 at once.
+      - Against the Semi-Slav, play e3 and Bd3, castle, and break with e4.
+    questions:
+      - id: why-qb3
+        at: 1. d4 d5 2. c4 c6 3. Nc3 Nf6 4. Nf3 Bf5 5. cxd5 cxd5 6. Qb3
+        ask: What are the two things the queen attacks on b3, and why are they weak?
+        answers: [[b7, d5]]
+        examples:
+          right:
+            - b7 and d5
+            - the pawns on b7 and d5, because the bishop left c8
+            - d5 and b7 have lost their guards
+          wrong: [only b7, the king, the knight on f6]
+        explain: >-
+          b7 lost its guard when the bishop left c8, and d5 lost its pawn support when the c-pawn left c6. Black cannot
+          comfortably guard both.
+  - id: nf6
+    name: 2...Nf6
+    intro: >-
+      The Marshall Defence is one of the most common replies at this level, and one of the weakest. It leaves d5
+      attacked and unguarded by a pawn, so White takes at once. Black has to recapture with a piece, e4 chases it, and
+      White gets the full centre for nothing.
+    lines: [qg-marshall, qg-marshall-nb6, qg-marshall-qxd5]
+    plans:
+      - Take on d5 at once.
+      - Build the centre with e4, then Nc3, Nf3 and Bd3.
+      - When Black castles short, push e5 and look at h7.
+    questions:
+      - id: why-not-nb4
+        at: 1. d4 d5 2. c4 Nf6 3. cxd5 Nxd5 4. e4 Nb4
+        ask: How does White punish 4...Nb4?
+        answers: [[Qa4], [check], [d5]]
+        examples:
+          right: [Qa4+ then d5, a queen check on a4 that hits the knight, Qa4 and d5 wins a piece]
+          wrong: [a3, take the knight, Nc3]
+        explain: >-
+          5.Qa4+ gives check and hits the knight on b4. Black blocks with 5...N8c6, and 6.d5 attacks the pinned knight.
+          Black loses one of the two.
+  - id: counter-attacks
+    name: Counter-attacks
+    intro: >-
+      Three less common replies, each with its own idea. The Albin gives a pawn for a wedge on d4 and has a nasty trap
+      in it. The Chigorin gives up the c-pawn's support of d5 for quick development. The Baltic gets the bishop out
+      early and pays for it. In each one, the same simple moves give White the better game.
+    lines: [qg-albin, qg-chigorin, qg-baltic]
+    plans:
+      - Against the Albin, take on e5 and play Nf3, Nbd2 and a3. Do not play e3.
+      - Against the Chigorin, play Nf3, and after ...dxc4 the usual e3 and Bxc4.
+      - Against the Baltic, take on d5 and chase the queen and the bishop.
+    questions:
+      - id: why-not-e3-albin
+        at: 1. d4 d5 2. c4 e5 3. dxe5 d4
+        ask: Why does White play 4.Nf3 and not 4.e3, which attacks the pawn on d4?
+        answers: [[Lasker], [trap], [Bb4], [promote], [fxg1]]
+        examples:
+          right: [the Lasker Trap, 4.e3 Bb4+ 5.Bd2 dxe3 is a trap, Black gets ...Bb4+ and the pawn runs to promote]
+          wrong: [e3 loses a pawn, Nf3 attacks d4, e3 blocks the bishop]
+        explain: >-
+          After 4.e3 Bb4+ 5.Bd2 dxe3 the natural 6.Bxb4 loses to 6...exf2+ 7.Ke2 fxg1=N+, and the queen falls to
+          ...Bg4+. 4.Nf3 keeps everything closed and keeps the extra pawn.
+setup:
+  title: How the Queen's Gambit starts
+  text: >-
+    After 1.d4 d5 White pushes the c-pawn two squares and offers it. The idea is to pull Black's d-pawn away from the
+    centre, or else make Black spend time holding it. It is not a real sacrifice: if Black takes, the pawn comes back
+    soon, usually with a developing move. Black has four main ways to answer, and each has its own plan below.
+steps:
+  qg-accepted-main:1:
+    title: Win the pawn back
+    text: >-
+      Black takes on c4, and White does not chase it. e3 clears the f1 bishop's path, Bxc4 wins the pawn back with a
+      developing move, and White has an extra centre pawn to show for it. Then the knights come out, and a check on b4
+      is met by another developing move.
+  qg-accepted-main:2:
+    title: Castle, then ask the bishop
+    text: >-
+      White castles before the centre opens, and a3 asks the bishop on b4 what it wants. If it takes on c3, the doubled
+      pawns back up d4 and White has the two bishops. Everything then points to e4.
+  qg-accepted-e6:1:
+    title: When Black plays ...e6 first
+    text: >-
+      3...e6 makes no effort to hold the pawn, so Bxc4 comes at once, and after ...Nf6 you are back in the main line.
+  qg-accepted-b5:1:
+    title: The trap on the long diagonal
+    text: >-
+      ...b5 is the natural way to hold the pawn, and most players at this level play it. a4 hits the pawn, and if Black
+      ends up taking on b5 with the c-pawn, the long diagonal is open. Qf3 hits the rook on a8, which cannot move, and
+      whatever Black blocks with is lost. Learn this one well: it wins a piece again and again.
+  qg-accepted-e5:1:
+    title: When Black hits d4 with ...e5
+    text: >-
+      Take the pawn on c4 first, then take back on d4 with the e-pawn. White has an isolated d-pawn, but also open lines
+      and quick development. The pieces go to the same squares as before.
+  qg-accepted-e5:2:
+    title: Playing with the isolated pawn
+    text: >-
+      An isolated pawn is a weakness in an ending and a strength while the pieces are on. So White avoids swaps, asks
+      the g4 bishop to decide with h3, and takes the open e-file.
+  qg-declined-main:1:
+    title: Attack d5, pin the knight
+    text: >-
+      Black holds d5 with a pawn, so White builds up against it. Nc3 adds an attacker, Bg5 pins the knight that guards
+      it, and e3 and Nf3 finish the job with the bishop already outside the chain. If Black answers the pin with ...h6
+      too soon, Bxf6 wins a pawn, and that comes next as a follow-up.
+  qg-declined-main:2:
+    title: The rook goes to c1
+    text: >-
+      Rc1 puts the rook on the c-file before it opens. Bd3 is the last piece out, and Black usually takes on c4 once it
+      has moved, giving up the point on d5. After ...b5 and ...Bb7 Black's bishop is out at last, but the pawn on c6 is
+      a target for the rest of the game.
+  qg-declined-h6:1:
+    title: The Tartakower
+    text: >-
+      ...h6 and ...b6 is Black's best way to solve the c8 bishop. White clears the position before the bishop gets to
+      b7: cxd5, and then two pairs of pieces come off. This is the most testing line of the Declined at this level.
+  qg-declined-h6:2:
+    title: Play down the c-file
+    text: >-
+      With the knights and dark bishops gone, the c-file is what is left. Rc1 goes straight there, the pawn on c7 is
+      backward, and Black needs ...c5 to get rid of it. White's plan is the easier one to play.
+  qg-elephant:1:
+    title: The Elephant Trap
+    text: >-
+      4...Nbd7 sets the most famous trap in the opening. d5 looks free, because the knight on f6 seems pinned, but after
+      Nxd5 Black takes anyway and a check on b4 wins everything back and more. That comes next as a follow-up. White
+      plays cxd5 and e3 instead, Black holds d5 with ...c6, and White develops as usual.
+  qg-elephant:2:
+    title: The queenside push
+    text: >-
+      Qc2 lines up on h7, White castles, and then comes the classic plan for this pawn structure: Rb1, b4 and b5 against
+      the pawn on c6. Two pawns push against three, and whatever happens Black is left with a weak pawn.
+  qg-ragozin:1:
+    title: When Black pins with ...Bb4
+    text: >-
+      The Ragozin pins the c3 knight straight away. White develops and pins back with Bg5. When ...h6 comes, take on f6:
+      the retreat Bh4 is what most people play, and it is worse. Then e3 and Rc1 guard everything, and ...Bxc3 no longer
+      doubles the pawns.
+  qg-declined-dxc4:1:
+    title: When Black takes a move late
+    text: >-
+      3...dxc4 is the Accepted with the c8 bishop already shut in. The same e3 and Bxc4 win the pawn back. If Black
+      gives up the bishop on c3, White has the two bishops and the centre, and is more than a pawn ahead on the engine.
+  qg-tarrasch:1:
+    title: The Tarrasch
+    text: >-
+      Black hits d4 at once and accepts a weak d-pawn in return for free pieces. Swap on d5, develop the knight, and
+      take the f1 bishop to g2, where it bears down on the pawn. This is the one bishop move that differs from the usual
+      plan, and it is worth it.
+  qg-tarrasch:2:
+    title: Castle and pin
+    text: >-
+      White castles and returns to the familiar pin. Bg5 hits the knight on f6, one of the few pieces guarding d5. Black
+      has to spend the middlegame looking after that pawn.
+  qg-slav-main:1:
+    title: Qb3 against the early bishop
+    text: >-
+      The Slav keeps the c8 bishop's diagonal open, and ...Bf5 uses it. But the bishop has left b7 without a guard.
+      White swaps on d5 first, so that d5 has no pawn behind it, and then Qb3 hits b7 and d5 at once. This is the idea
+      to take from the whole variation.
+  qg-slav-main:2:
+    title: The better ending
+    text: >-
+      Black's best is ...Qb6, and the queens come off. Black's b-pawns are doubled, and Bb5+ and Ne5 pile up on the
+      pinned knight. White has an easy game with no risk. If Black guards with ...e6 or ...b6 instead, things go worse,
+      and those come next as follow-ups.
+  qg-slav-3bf5:1:
+    title: ...Bf5 before ...Nf6
+    text: >-
+      With no knight on f6 there is no need to swap first: Qb3 comes at once, and b7 and d5 are both in trouble. Black's
+      best is ...Qb6, and after the queens come off White wins a pawn. The other ways of guarding b7 go wrong, and those
+      come next as follow-ups.
+  qg-slav-e6:1:
+    title: The Semi-Slav
+    text: >-
+      Pawns on c6 and e6 make d5 very solid, and shut the c8 bishop in after all. White keeps it simple with e3 and Bd3.
+      Black takes on c4 only when the bishop has moved, to win a move, and this is the Meran.
+  qg-slav-e6:2:
+    title: The break with e4
+    text: >-
+      After ...b5 the bishop goes back to d3, White castles, and e4 strikes before Black gets ...c5 in. The game opens
+      up with White's king already safe. It is a real fight, and one of the few places where Black scores well at this
+      level.
+  qg-marshall:1:
+    title: Punish 2...Nf6
+    text: >-
+      2...Nf6 leaves d5 without a pawn to guard it, so White takes at once. Black has to recapture with a piece, e4
+      chases it, and White has the full centre at no cost. Nc3 and Nf3 follow as a matter of course. If the knight jumps
+      to b4 it is lost, and that comes next as a follow-up.
+  qg-marshall:2:
+    title: Bd3, then e5
+    text: >-
+      ...Bb4 pins the knight that guards e4, so Bd3 guards it again. When Black castles, e5 hits the knight, and the
+      bishop on d3 is pointing straight at the king.
+  qg-marshall-nb6:1:
+    title: When the knight goes to b6
+    text: >-
+      The knight stays out of the way of e4 but does little on b6. The moves are the same as before: Nc3, Nf3, Bd3, and
+      e5 when Black castles.
+  qg-marshall-qxd5:1:
+    title: When the queen takes
+    text: >-
+      Nc3 gains a move on the queen, and after she goes home Nf3 covers e5 before e4 builds the same centre as in the main
+      line. The moves that follow are the ones you know.
+  qg-albin:1:
+    title: Take the pawn and leave e3 alone
+    text: >-
+      The Albin gives a pawn for a wedge on d4. Take on e5, and then Nf3, not e3: the natural push walks into the Lasker
+      Trap, and that comes next as a follow-up. Nbd2 keeps the c1 bishop free, and a3 takes b4 away from Black's pieces.
+  qg-albin:2:
+    title: The two bishops
+    text: >-
+      h3 makes the bishop decide, and if it takes on f3 White has the two bishops. Black can win back e5, but the f1
+      bishop then gets the long diagonal and the wedge on d4 is weak.
+  qg-chigorin:1:
+    title: The Chigorin
+    text: >-
+      The knight on c6 blocks the c-pawn, so Black can never hold d5 with ...c6. Nf3 guards d4, and when Black takes on
+      c4 the plan is the one you know: e3, Bxc4, Nc3, castle. Then h3 asks the bishop to decide, and e4 comes.
+  qg-baltic:1:
+    title: The Baltic
+    text: >-
+      The bishop comes out early, and White makes it pay. Take on d5, chase the queen with Nc3, take the centre with e4
+      and a gain of time on the bishop, then Qb3 hits b7. White has a big lead and no risk at all.

@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-marshall 4.e4"]
+[Name "The Marshall: 4...Nb6"]
+
+4... Nb6 { Drops back without touching e4. The knight blocks the b-pawn and does little on b6, but it does hit c4 and d5 if White gets careless. }
+5. Nc3 { The same developing move as against ...Nf6. }
+5... e6
+6. Nf3 Bb4
+7. Bd3 { The same set-up. The knight on c3 is pinned, so the bishop guards e4 once and for all. [%cal Bd3e4] }
+7... O-O
+8. e5 { Takes more room and takes f6 away from the b8 knight, so nothing can come back to guard h7. Bxh7+ followed by Ng5+ is now in the air, and White is well on top. [%cal Gd3h7] } *

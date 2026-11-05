@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 2.c3"]
+[Name "2...d5: the Barmen Defence"]
+
+2... d5 { The Barmen Defence: Black hits e4 at once, before d4 comes. [%cal Rd5e4] }
+3. exd5 { Takes the pawn. Black has to take back, and the queen comes out early. }
+3... Qxd5
+4. d4 { The plan goes on. Nc3 cannot hit the queen yet, because the pawn is on c3, so White takes the centre first. [%idea centre-pawns] }
+4... cxd4 { The most common move. Once the pawns come off, c3 is free for the knight. }
+5. cxd4 { Now the knight can come to c3 with a gain of time. }
+5... Nc6
+6. Nf3 *

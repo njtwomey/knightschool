@@ -1,0 +1,19 @@
+[For "white"]
+[Kind "trap"]
+[Start "sicilian-main 5.Nf3"]
+[Name "...Nf6 and ...Bb4: the Greek gift"]
+
+5... Nf6 { Develops and hits e4. }
+6. Nc3 { Guards e4 with a developing move. }
+6... Bb4 { Pins the knight, which adds to the pressure on e4. [%icon pin@c3] }
+7. Bd3 { Guards e4 again and aims at h7. Now White threatens to push e5. [%cal Gd3h7] }
+7... O-O { The natural move, but White scores over 60% from here. }
+8. e5 { The knight has to leave f6, and that was the one piece guarding h7. [%cal Ge5f6] }
+8... Nd5
+9. Bxh7+ { The Greek gift: a bishop for a pawn, to drag the king out. It works because Black's knight has been driven away and White's queen and knight are both ready. [%idea greek-gift] }
+9... Kxh7
+10. Ng5+ { Check, with the c1 bishop behind the knight. [%cal Gc1g5] }
+10... Kg8
+11. Qh5 { Threatens mate on h7, with the knight on g5 backing up the queen. [%cal Gd1h5,Gh5h7] }
+11... Qxg5 { The only way to stop mate, and it costs the queen. }
+12. Bxg5 { White has a queen and a pawn for two minor pieces, and the attack goes on. } *

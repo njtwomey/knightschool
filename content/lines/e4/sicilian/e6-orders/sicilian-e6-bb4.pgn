@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "sicilian-main 5.Nf3"]
+[Name "...Bb4+ first"]
+
+5... Bb4+
+6. Nc3 { Blocks with a developing move, and it adds a guard to e4. }
+6... Nf6 *

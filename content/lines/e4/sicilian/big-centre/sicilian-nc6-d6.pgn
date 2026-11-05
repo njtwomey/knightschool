@@ -1,0 +1,16 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 4.cxd4"]
+[Name "2...Nc6 and ...d6"]
+
+4... d6 { Black covers e5 and keeps the c8 bishop free. }
+5. Nf3 { Develops and guards d4, as in the main line. }
+5... Nf6 { Hits e4. }
+6. Nc3 { Guards it. This is the same position as 2...d6 with ...Nc6, by another order. }
+6... g6 { The fianchetto, the most common move here. }
+7. d5 { No ...e6 means no cover for d5, so the knight is pushed away. [%cal Gd5c6] }
+7... Ne5
+8. Nxe5 dxe5
+9. Bd3 { Guards e4 and develops. [%cal Gd3e4] }
+9... Bg7
+10. O-O { White has more space and Black's doubled e-pawns block the bishop on g7. [%csl Ye5] } *

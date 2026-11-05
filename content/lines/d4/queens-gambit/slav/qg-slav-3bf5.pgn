@@ -1,0 +1,29 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-slav-main 3.Nc3"]
+[Name "The Slav: 3...Bf5"]
+
+3... Bf5 { Gets the bishop out even sooner, before ...Nf6. It leaves b7 just as bare, and d5 has no knight to help guard it. [%csl Yb7,Yd5] }
+4. Qb3 { The same queen move as in the main line, a move sooner. With no knight on f6 there is no need to swap first: b7 is hit, and the c-pawn and the knight are already on d5. [%cal Gb3b7] [%csl Yb7] }
+4... Qb6 { Black's best: it guards b7 and offers the queens. }
+( 4... b6? { Guards b7, but it takes the pawn on c6 for granted, and d5 is about to fall. }
+  5. cxd5 cxd5
+  6. Qxd5 Qxd5
+  7. Nxd5 { A pawn up, and Nc7+ is next, forking the king and the rook. Black has to give up castling or send a knight to a6 to stop it. [%cal Gd5c7] [%idea fork] } )
+( 4... Qc7? { Guards b7, and takes the queen off the d-file, so d5 loses its last guard. }
+  5. cxd5 cxd5
+  6. Nxd5 { A pawn up, and the knight hits the queen, so White gains a move as well. [%cal Gd5c7] [%idea hanging-piece] } )
+( 4... Qd7? { Guards b7 and d5 together, and puts the queen on the same diagonal as the king. }
+  5. cxd5 cxd5
+  6. e4 { The pawn hits the bishop, and it opens the way for the f1 bishop. }
+  6... dxe4
+  7. Bb5 { The queen is pinned to the king. The only block is ...Nc6, and then d5 wins the pinned knight. White wins a piece for a pawn or two. [%cal Rb5e8] [%idea pin] } )
+5. Qxb6 axb6
+6. cxd5 { Wins a pawn for now. If Black takes back, the knight takes on d5 next. }
+6... Nf6 { Black's best try: it holds off taking and goes after d5 with a piece. }
+( 6... c5? { Hits d4 and leaves the pawn on d5 alone, so White simply stays a pawn up. }
+  7. e4 { Gains a move on the bishop. White has an extra passed d-pawn and the whole centre, and the engine has White more than four pawns ahead. [%idea centre-pawns] } )
+( 6... cxd5? { The natural recapture, and it costs a pawn. }
+  7. Nxd5 { A clean pawn up. The knight hits b6 and c7, so a second pawn or the Nc7+ fork comes next. [%cal Gd5b6,Gd5c7] [%idea fork] } )
+7. dxc6 bxc6
+8. Nf3 { White is a pawn up with a simple game. Black's pawns are split into two groups, and with the queens off there is no attack to fear. } *

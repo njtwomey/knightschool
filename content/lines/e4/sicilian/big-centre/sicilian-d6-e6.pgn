@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-d6 5.Nc3"]
+[Name "2...d6 and ...e6"]
+
+5... e6 { Solid. The bishop on f8 can now come out, but the c8 bishop is shut in. [%csl Yc8] }
+6. Nf3 Be7
+7. Bd3 { With the c8 bishop shut in there is no pin to fear, so the bishop takes its best diagonal, aimed at h7. [%cal Gd3h7] }
+7... O-O
+8. O-O Nc6
+9. Re1 { The rook stands behind the e-pawn. White has every piece out, and e5 is the push to look for. [%cal Ge1e5] } *

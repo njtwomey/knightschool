@@ -1,0 +1,356 @@
+name: Sicilian Defence
+side: white
+start: 1. e4 c5
+level: first
+style: [solid, system]
+summary: >-
+  Meet 1...c5 with the Alapin, 2.c3: d4 comes next, a pawn takes back, and White keeps the centre and the same simple
+  plan in every line.
+about:
+  idea: >-
+    Play c3 and d4, take back on d4 with the c-pawn, and bring the knights to f3 and c3. Then one question decides the
+    game: is the c8 bishop shut in? If Black has played ...e6, meet ...d5 with e5. If not, take on d5, or push d5 when it
+    is uncovered and a knight stands on c6.
+  risks: >-
+    This is not the Open Sicilian, so you will not meet the Najdorf, the Dragon or the Sveshnikov from this side. In
+    return you skip a great deal of theory. Black equalises with accurate play against ...d5, and you will often have an
+    isolated d-pawn to look after there.
+  suits: >-
+    Beginners who want one plan against the most popular defence to 1.e4, and who like a centre and quick development.
+    Black's natural moves walk into traps here, and players at this level score better with 2.c3 than with any other
+    common second move.
+  origin: >-
+    Named after the Russian master Semyon Alapin, who played it in the late 1800s. It became a serious weapon from the
+    1970s, when grandmasters such as Evgeny Sveshnikov took it up as a way round the Open Sicilian.
+ideas:
+  [
+    centre-pawns,
+    pin,
+    greek-gift,
+    discovered-attack,
+    trapped-piece,
+    poisoned-pawn,
+    fork,
+    isolated-queens-pawn,
+    castle-early,
+  ]
+variations:
+  - id: push-e5
+    name: ...e6 and ...d5
+    intro: >-
+      The most common way the game goes. Black's c8 bishop is shut in behind e6, so when ...d5 comes White pushes e5 and
+      keeps it shut in. Black then lines up on d4, and each piece that joins in needs its own answer. Castling on the
+      wrong move here costs Black the game, because of a sacrifice on h7.
+    lines: [sicilian-main, sicilian-nge7, sicilian-qb6]
+    plans:
+      - Take on d4 with the c-pawn, and play Nf3 and Nc3.
+      - When ...e6 has shut in the c8 bishop, answer ...d5 with e5.
+      - Bd3 aims at h7. If Black castles with no knight on f6, take on h7.
+    questions:
+      - id: why-e5
+        at: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 e6 5. Nf3 d5
+        ask: White could take on d5. Why does White push e5 instead?
+        answers: [[c8], [shut], [locked], [stuck], [trapped]]
+        examples:
+          right:
+            - the c8 bishop is shut in
+            - keep the bishop on c8 locked behind e6
+            - the bishop stays stuck behind the pawn
+          wrong: [to attack the queen, it wins a pawn, to castle]
+        explain: >-
+          Black's c8 bishop is shut in behind the pawn on e6, so White keeps the position closed. Taking on d5 would let
+          ...exd5 open the bishop's diagonal. The pawn on e5 also takes f6 away from Black's knight.
+      - id: bd3-trick
+        at: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 e6 5. Nf3 d5 6. e5 Qb6 7. Nc3 Bb4 8. Bd3
+        ask: The bishop on d3 has blocked the queen's guard of d4. What happens if Black takes it with 8...Nxd4?
+        answers: [[Bb5], [queen], [check], [discovered]]
+        examples:
+          right:
+            - Nxd4 Qxd4 Bb5+ wins the queen
+            - the bishop gives check and uncovers the queen
+            - a discovered attack on the queen
+          wrong: [White loses a pawn, nothing happens, the knight is pinned]
+        explain: >-
+          9.Nxd4 Qxd4 10.Bb5+ gives check, and the bishop has moved off the d-file. Black has to deal with the check, and
+          White's queen takes the queen on d4.
+  - id: e6-orders
+    name: Other orders with ...e6
+    intro: >-
+      Black can play ...e6 before ...Nc6, or put the knight on f6 instead of playing ...d5 at once. The first comes back
+      to what you know. The second leaves White a chance to push e5 and use the same sacrifice on h7 with the bishop.
+    lines: [sicilian-2e6, sicilian-2e6-d5, sicilian-e6-nf6, sicilian-e6-bb4]
+    plans:
+      - Against ...e6 and ...d5, push e5 in every order.
+      - With a knight on f6, play Nc3 and Bd3, and push e5 when Black castles.
+    questions:
+      - id: why-e5-first
+        at: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 e6 5. Nf3 Nf6 6. Nc3 Bb4 7. Bd3 O-O
+        ask: White plays 8.e5 before sacrificing on h7. Why does the sacrifice need the pawn push first?
+        answers: [[f6], [guard], [defend], [knight]]
+        examples:
+          right:
+            - the knight on f6 guards h7
+            - it drives the knight away from f6
+            - the knight defends h7 and has to go
+          wrong: [to open the bishop, to attack the queen, it wins a pawn]
+        explain: >-
+          The knight on f6 guards h7. Once e5 drives it away, nothing stops the bishop taking on h7, and Ng5+ and the
+          queen follow it in.
+  - id: queen-d5
+    name: ...d5 and the queen on d5
+    intro: >-
+      With no pawn on e6, the c8 bishop is free, so White takes on d5 rather than pushing past. Black's queen has to
+      recapture and comes out early, and the knight on c3 hits her with a gain of time. It often leaves White with an
+      isolated d-pawn, which is a fair price for quick development. This is where Black's best moves are hardest to meet.
+    lines: [sicilian-d5, sicilian-d5-nf6, sicilian-barmen, sicilian-barmen-bg4]
+    plans:
+      - With the c8 bishop free, take on d5.
+      - Keep the c-pawn at home until Black takes on d4, then take back and hit the queen with Nc3.
+      - Do not hit the queen with c4, and keep the bishop on f1 until the knight is on f3. Each mistake drops a pawn.
+    questions:
+      - id: why-nc3-pin
+        at: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 d5 5. exd5 Qxd5 6. Nf3 Bg4
+        ask: The knight on f3 is pinned. Which move does White play anyway, and what does it hit?
+        answers: [[Nc3], [knight, c3], [queen]]
+        examples:
+          right: [Nc3 hits the queen, the other knight to c3, attack the queen]
+          wrong: [h3, Be2 to break the pin, take the bishop]
+        explain: >-
+          7.Nc3 hits the queen. It has to deal with that at once, and most of Black's replies then lose something to d5.
+      - id: why-not-c4
+        at: 1. e4 c5 2. c3 d5 3. exd5 Qxd5 4. d4 Nf6
+        ask: 5.c4 hits Black's queen. Why does it lose a pawn?
+        answers: [[d4], [guard], [defend]]
+        examples:
+          right: [the c3 pawn guards d4, d4 is left undefended, it stops guarding d4]
+          wrong: [it blocks the bishop, the queen is safe, c4 is a bad square]
+        explain: >-
+          The pawn on c3 was guarding d4. Once it moves to c4, the queen simply takes d4 and White has nothing for the
+          pawn.
+  - id: big-centre
+    name: ...d6 and the big centre
+    intro: >-
+      Black plays modestly and lets White keep pawns on d4 and e4. White develops, with the knights on f3 and c3, and
+      castles. The one decision is the f1 bishop: on e2 when Black's c8 bishop is free to pin, on d3 when ...e6 has shut
+      it in.
+    lines: [sicilian-d6, sicilian-d6-e6, sicilian-d6-nc6, sicilian-nc6-d6]
+    plans:
+      - Guard e4 with Nc3, then play Nf3 and castle.
+      - Bishop to e2 if the c8 bishop is free, to d3 if ...e6 has shut it in.
+      - A knight on c6 with no ...e6 played can be pushed away with d5.
+    questions:
+      - id: be2-or-bd3
+        at: 1. e4 c5 2. c3 d6 3. d4 cxd4 4. cxd4 Nf6 5. Nc3 g6 6. Nf3 Bg7
+        ask: Black's c8 bishop is free here. Where does White's f1 bishop go, and why?
+        answers: [[e2], [Be2]]
+        examples:
+          right: [Be2, to e2 so ...Bg4 does not pin, the bishop goes to e2]
+          wrong: [Bd3, Bc4, to attack f7]
+        explain: >-
+          With the c8 bishop free, ...Bg4 could pin the knight, so the bishop goes to e2, where the pin has no bite.
+          Against ...e6 the c8 bishop is shut in, and it goes to d3 instead.
+  - id: push-d5
+    name: Push past the knight with d5
+    intro: >-
+      A knight on c6 with nothing covering d5 is a target. Against ...g6, ...d6 with ...Bg4, or an early ...e6, the d-pawn
+      goes past and the knight has to run, often into trouble. These are the lines with the biggest rewards at this
+      level, because Black's most natural replies lose a piece.
+    lines: [sicilian-g6, sicilian-3e6, sicilian-d6-bg4]
+    plans:
+      - If nothing covers d5, push d5 and hit the knight.
+      - After ...Ne5, look for f4, or for Nxe5 even when that knight is pinned.
+    questions:
+      - id: trap-the-knight
+        at: 1. e4 c5 2. c3 Nc6 3. d4 cxd4 4. cxd4 g6 5. d5 Ne5
+        ask: How does White win the knight on e5?
+        answers: [[f4]]
+        examples:
+          right: [f4, push the f-pawn to f4, f4 and it has nowhere to go]
+          wrong: [Nf3, Bd2, Qd4]
+        explain: >-
+          6.f4 hits the knight, and it has no safe square. Black's own pawns stand on d7 and g6, and every other square is
+          covered.
+  - id: others
+    name: 2...Nf6 and 2...e5
+    intro: >-
+      Two replies that ask a different question. 2...Nf6 is met by pushing e5 at once, because no pawn on d6 hits it yet,
+      and the knight gets chased around. 2...e5 stops d4 for now, so White turns to a quiet Italian, with Black's d5
+      square weak for good.
+    lines: [sicilian-nf6, sicilian-e5]
+    plans:
+      - Against 2...Nf6, push e5, then d4, and hit the d5 knight with Bc4.
+      - Against 2...e5, play Nf3, Bc4 and d3, and castle.
+    questions:
+      - id: why-d5-nb6
+        at: 1. e4 c5 2. c3 Nf6 3. e5 Nd5 4. d4 cxd4 5. cxd4 Nc6 6. Nf3 Nb6
+        ask: Black's knight went back to b6 without playing ...d6. Which pawn move punishes it?
+        answers: [[d5]]
+        examples:
+          right: [d5, play d5, push the pawn to d5]
+          wrong: [take on b6, castle, Bb5]
+        explain: >-
+          7.d5 hits the knight on c6. It cannot take on e5, because Nxe5 wins it, so it has to run and Black's position
+          comes apart.
+setup:
+  title: How the Alapin starts
+  text: >-
+    1...c5 is the most popular reply to 1.e4. The c-pawn hits d4 from the side, so that if White plays d4 at once, Black
+    swaps a wing pawn for a centre pawn. 2.c3 answers that: d4 comes next move, and if Black takes, the c-pawn takes back
+    and White keeps two pawns in the centre.
+steps:
+  sicilian-main:1:
+    title: Build the centre
+    text: >-
+      d4 comes straight away, and the c-pawn takes back, so White has two pawns side by side and c3 is free for a
+      knight. Black's ...e6 prepares ...d5, but it shuts in the c8 bishop. Against 4...Nf6 the d-pawn pushes on at once:
+      that comes next as a follow-up.
+  sicilian-main:2:
+    title: Push e5, then castle
+    text: >-
+      Black hits e4 with ...d5. With the c8 bishop shut in, White pushes e5 and keeps it that way. Nc3 blocks the check,
+      Bd3 aims at h7, and White castles. If Black castles first, the bishop sacrifice on h7 wins: that comes next as a
+      follow-up.
+  sicilian-nge7:1:
+    title: When the knights hit d4
+    text: >-
+      Black's knight comes to f5 and d4 is hit twice. The usual Bd3 would block the queen and drop the pawn, so here the
+      bishop goes to b5. The pin on c6 takes one attacker away, and then White castles.
+  sicilian-qb6:1:
+    title: The poisoned d4 pawn
+    text: >-
+      Black's queen joins in, and Bd3 seems to leave d4 hanging. It is a trap: if Black takes, Bb5+ uncovers White's queen
+      and wins Black's. Once ...Bd7 stops that, Be3 gives d4 a real guard. The trap comes next as a follow-up.
+  sicilian-2e6:1:
+    title: 2...e6, the same plan
+    text: >-
+      Black plays ...e6 first, and nothing changes. White takes the centre, the c-pawn takes back, and ...d5 is met by e5.
+      Then Nf3 brings the game back to the main line.
+  sicilian-2e6-d5:1:
+    title: When Black keeps the pawns on
+    text: >-
+      If Black plays ...d5 before taking on d4, the pawn on c3 stays and the game is a French Advance. White pushes e5 as
+      usual, and a3 gets ready for b4. When the pawns do come off, the knight comes to c3 and no pin is possible.
+  sicilian-e6-nf6:1:
+    title: The sacrifice on h7
+    text: >-
+      Black brings the knight to f6 and pins on c3, all aimed at e4. Nc3 and Bd3 guard it, and the bishop now looks at
+      h7. When Black castles, e5 drives away the knight that guards h7, and the bishop takes it with check. This is the
+      Greek gift.
+  sicilian-e6-nf6:2:
+    title: Mate on h7
+    text: >-
+      Ng5+ brings the knight in behind the bishop, and Qh5 threatens mate on h7. Black has to give up the queen for the
+      knight to stop it.
+  sicilian-e6-bb4:1:
+    title: ...Bb4+ first
+    text: >-
+      The check is blocked with Nc3, and after ...Nf6 the position is the same as the one you have just learned.
+  sicilian-d5:1:
+    title: Take on d5, hit the queen
+    text: >-
+      This time Black has not played ...e6, so the c8 bishop is free and White takes on d5. The queen has to recapture.
+      When the bishop pins on g4, Nc3 hits the queen anyway, and most of Black's replies lose something. One that does
+      not is 7...Bxf3, and White takes back with the g-pawn.
+  sicilian-d5:2:
+    title: The fork on b5
+    text: >-
+      Black's best is to take on d4 and swap queens. Then Nb5 hits the knight and threatens Nc7+. Black is a pawn up for
+      now, but White has two bishops and open lines, and the engine slightly prefers White.
+  sicilian-d5-nf6:1:
+    title: When Black develops first
+    text: >-
+      Nc3 hits the queen, and once she has gone home d5 pushes the c6 knight away. White takes a lot of space. If the
+      knight goes to b4, Qa4+ picks it up: that comes next as a follow-up.
+  sicilian-barmen:1:
+    title: 2...d5, the Barmen Defence
+    text: >-
+      Black hits e4 at once. White takes, the queen recaptures, and d4 follows. Here the knight cannot yet hit the queen,
+      because the pawn stands on c3. Once Black takes on d4 the pawn takes back, c3 is free, and the game is in the line
+      you know.
+  sicilian-barmen-bg4:1:
+    title: When Black holds the tension
+    text: >-
+      Black leaves the pawn on c5, so White cannot yet use c3. Nf3 guards d4 and blocks the way to g2, Be2 answers the
+      pin, White castles, and Be3 adds a guard to d4. The tempting 5.c4 and 5.Bd3 each lose a pawn.
+  sicilian-barmen-bg4:2:
+    title: Nc3 with a gain of time
+    text: >-
+      When Black takes at last, the c-pawn recaptures, and Nc3 comes out hitting the queen. White has an isolated pawn
+      and active pieces, and the game is about level.
+  sicilian-d6:1:
+    title: The big centre
+    text: >-
+      2...d6 lets White have the centre, and the c-pawn takes back as usual. Nc3 guards e4, which is hit by the knight.
+      Pushing e5 here is a mistake: the pawn on d6 is already hitting that square.
+  sicilian-d6:2:
+    title: Be2, castle, then d5
+    text: >-
+      The bishop goes to e2, because Black's c8 bishop is free to pin. White castles, and when the knight comes to c6
+      with no pawn on e6, d5 pushes it away and White has more space.
+  sicilian-d6-e6:1:
+    title: When Black plays ...e6
+    text: >-
+      With the c8 bishop shut in, there is no pin to worry about, so the f1 bishop takes its best diagonal, on d3. White
+      castles, the rook comes to e1, and e5 is the push to look for.
+  sicilian-d6-nc6:1:
+    title: Push past the pin
+    text: >-
+      When Black pins with ...Bg4, d5 hits the knight, and Nxe5 follows even though the f3 knight is pinned. If Black takes
+      the queen, Bb5+ wins a piece: that comes next as a follow-up. If not, Qb3 hits b7, and White has the easier game.
+  sicilian-nc6-d6:1:
+    title: 2...Nc6 and ...d6
+    text: >-
+      Black reaches the same position by another road. Nf3 and Nc3 are the moves, and against the fianchetto d5 pushes
+      the knight away. When it lands on e5, White swaps it off.
+  sicilian-nc6-d6:2:
+    title: Doubled pawns
+    text: >-
+      After the swap on e5, Black's doubled pawns block the bishop on g7. Bd3 guards e4, and White castles with more
+      space and the easier game.
+  sicilian-g6:1:
+    title: Against ...g6
+    text: >-
+      ...g6 leaves d5 uncovered and the h8 rook without a bishop in front of it. d5 pushes the knight off, and if it goes
+      to e5, f4 wins it: that comes next as a follow-up. Otherwise Qd4 hits h8, and e5 pushes the knight back home.
+  sicilian-3e6:1:
+    title: Before Black takes on d4
+    text: >-
+      3...e6 has not taken on d4, so the pawn can go past with a hit on the knight. If the knight goes back to e7, d6
+      wins a bishop, and if it goes to e5 too early, f4 hits it: both come next as follow-ups. After ...Ne5 and the swap
+      on f3, the queen comes out with no time lost.
+  sicilian-3e6:2:
+    title: A target on d6
+    text: >-
+      Black's d-pawn has no neighbours, so Bf4 looks at it. Bd3 develops, and h3 keeps ...Bg4 from hitting the queen
+      before White castles.
+  sicilian-d6-bg4:1:
+    title: When the pin backfires
+    text: >-
+      Black pins before the knight has come to f6, and d5 shows why that is a mistake. The natural ...Ne5 loses at once,
+      because the pinned knight can take it: that comes next as a follow-up. The safe ...Bxf3 gives White the two bishops.
+  sicilian-nf6:1:
+    title: Chase the knight
+    text: >-
+      e5 hits the knight, and there is no pawn on d6 yet to take it. White then plays d4, takes back with the c-pawn and
+      brings the knight to f3. If Black's knight goes back to b6 too early, d5 is strong: that comes next as a follow-up.
+  sicilian-nf6:2:
+    title: Bc4 and the pin on c6
+    text: >-
+      ...d6 cuts Black's queen off from d5, so Bc4 makes the knight move again. Then Bb5 pins the c6 knight, and White
+      recaptures on e5 safely. If Black plays ...e6 now, the pin wins material: that comes next as a follow-up. Against
+      ...Bd7, Nxd7 takes off the piece that would break the pin.
+  sicilian-nf6:3:
+    title: A safe, level game
+    text: >-
+      White brings out the last knight and castles. The d-pawn is isolated, so it wants pieces around it, but White's
+      moves are easy to find.
+  sicilian-e5:1:
+    title: 2...e5, a quiet Italian
+    text: >-
+      Black stops d4 for now, but leaves d5 weak for good. White plays the Italian set-up instead: Nf3, Bc4, and d3
+      rather than the sharp Ng5, and then castles.
+  sicilian-e5:2:
+    title: Wait for d4
+    text: >-
+      The rook goes to e1 and h3 keeps Black's pieces off g4. The b1 knight can then go round by d2 and f1, and d4 comes
+      when everything is ready.

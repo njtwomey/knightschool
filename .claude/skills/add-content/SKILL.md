@@ -115,7 +115,7 @@ in SAN or UCI; an illegal move list says where it fails.
 **One engine and one explorer client at a time, machine-wide** (several agents may be authoring). Wrap every command
 that runs Stockfish (`engine.mts`, `pnpm analyse`) or asks the explorer (`explore.mts`, `make popularity`):
 `until mkdir /private/tmp/claude-501/ks-engine.lock 2>/dev/null; do sleep 15; done; <command>; rmdir
-/private/tmp/claude-501/ks-engine.lock`, and wait while `pgrep -x stockfish` finds one. Stopping: Ctrl-C (`kill -INT`)
+/private/tmp/claude-501/ks-engine.lock`, and wait while `pgrep -x stockfish` finds one. Remove the lock only in the same command that took it, never by hand or while cleaning up: another agent may hold it. Stopping: Ctrl-C (`kill -INT`)
 saves `analyse` and `popularity`, which resume where they left off.
 
 1. **Scope.** Which opening, which replies. Look at the gaps (Map tab, or `node --import tsx "$SCRATCH/replies.mts"

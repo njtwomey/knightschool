@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "trap"]
+[Start "sicilian-nc6-d6 5.Nf3"]
+[Name "...d6 and ...Bg4: the queen for a piece"]
+
+5... Bg4 { The pin, before the knight has come to f6. [%icon pin@f3] }
+6. d5 { Push past the knight, as before. It cannot stay on c6, and the pinned knight on f3 is about to show why that matters. [%cal Gd5c6] }
+6... Bxf3 { The safe way out: Black gives up the bishop. }
+( 6... Ne5?? { The most common move, and it loses at once. }
+  7. Nxe5 { The pinned knight moves anyway. If Black takes it, Qxg4 wins the bishop, because nothing on f6 guards g4. }
+  7... Bxd1 8. Bb5+ { Black's queen is the only piece that can block. [%cal Gb5e8] }
+  8... Qd7 9. Bxd7+ { The queen is won back. After the king moves, Kxd1 takes the bishop too, and White is two pieces ahead. } )
+7. gxf3 { The pawn takes back. It looks ugly, but White gets the two bishops, and the pawn on f3 covers e4. [%cal Gf3e4] }
+7... Ne5
+8. f4 { The knight has to move again. }
+8... Nd7
+9. Nc3 { White has the two bishops, a big centre and an easy lead in development: the engine has White more than two pawns ahead. } *

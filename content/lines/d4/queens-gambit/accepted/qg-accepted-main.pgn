@@ -1,0 +1,25 @@
+[For "white"]
+[Kind "main"]
+[Name "Queen's Gambit Accepted: the main line"]
+
+1. d4 d5
+2. c4 { Offers a pawn to pull Black's d-pawn away from the centre. It is a gambit in name only: if Black takes, White wins the pawn back with an easy developing move, and if Black does not, d5 is under fire. [%cal Gc4d5] }
+2... dxc4 { The Queen's Gambit Accepted, the most common reply at this level. Black gives up the centre for a pawn that cannot be held for long. }
+3. e3 { Clears the f1 bishop's path to c4, so the pawn will fall to a developing move. 3.e4 is a little more ambitious, but e3 asks for no exact moves. [%cal Gf1c4] [%csl Yc4] }
+3... Nf6 { Develops and keeps an eye on e4. }
+4. Bxc4 { The pawn is back, and the bishop has come out on a fine diagonal towards f7 as it did so. Material is level and White has the extra centre pawn. [%cal Gc4f7] }
+4... e6 { Opens the way for the f8 bishop, at the price of shutting in the one on c8. [%csl Yc8] }
+5. Nf3 { Develops and covers d4 and e5. The plan from here is simple: Nf3, Nc3 and castle, then the pawn goes to e4. }
+5... Bb4+ { The most common move. It brings the bishop out and asks White how to block. }
+6. Nc3 { Blocks with a developing move. 6.Bd2 is fine too, but the knight was going to c3 anyway. }
+6... O-O
+7. O-O { The king is safe before the centre opens. Everything is now ready for e4. [%idea castle-early] }
+7... Nc6
+8. a3 { Asks the bishop to decide. If it drops back, e4 comes at once with a big centre. [%cal Ga3b4] }
+8... Bxc3 { Black's usual answer: it gives up the bishop to double White's pawns. }
+( 8... Be7? { Drops back, which hands White two free moves. }
+  9. e4 { The gain is positional: White has the full centre and all the pieces out, and Black has nothing to hit it with. The engine has White about two pawns ahead. [%idea centre-pawns] } )
+( 8... Ba5? { Keeps the pin, but the bishop has no room on a5. }
+  9. b4 Bb6
+  10. Qc2 { White has gained two moves on the bishop and a lot of room on the queenside, with e4 to come. The gain is positional, and the engine has White more than a pawn and a half ahead. } )
+9. bxc3 { Towards the centre. The new c-pawn backs up d4, White has the two bishops, and e4 is coming. The doubled pawns are a fair price for all that. [%cal Gc3d4,Ge3e4] [%idea centre-pawns] } *

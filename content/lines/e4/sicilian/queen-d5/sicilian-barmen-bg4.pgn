@@ -1,0 +1,23 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-barmen 4.d4"]
+[Name "Barmen: ...Nf6 and ...Bg4"]
+
+4... Nf6 { Black keeps the tension on d4, so the pawn on c3 stays where it is for now. }
+5. Nf3 { Guards d4 and shuts off the queen's view of g2. }
+( 5. c4? { Hits the queen and looks like a free move, but the pawn on c3 was what guarded d4. [%csl Yd4] }
+  5... Qxd4 { Black wins a pawn. If the queens come off, ...cxd4 leaves Black a healthy pawn ahead. [%csl Rd4] } )
+( 5. Bd3? { Develops, but the bishop has left f1, where it guarded g2, and Black's queen is looking straight at that pawn. [%cal Rd5g2] }
+  5... Qxg2 { Wins a pawn and hits the rook on h1. [%csl Rg2,Rh1] } )
+5... Bg4 { The most common move: the pin. [%icon pin@f3] }
+6. Be2 { Unpins with a developing move. If Black takes on f3, the bishop takes back and hits the queen. [%cal Ge2f3] }
+6... e6
+7. O-O { The king gets safe first. }
+7... Nc6
+( 7... Bd6? { Develops, but the bishop shuts off the queen's way back down the d-file, so c4 becomes a real threat. [%csl Yd5] }
+  8. h3 { Asks the bishop what it wants before c4 comes. No material is won, but Black's queen is short of squares, and the engine has White about a pawn and a half ahead. [%cal Gh3g4] } )
+8. Be3 { Develops the last minor piece and adds a guard to d4. [%cal Ge3d4] }
+8... cxd4
+9. cxd4 { Takes back with the pawn, and now c3 is free. [%cal Gb1c3] }
+9... Be7
+10. Nc3 { Comes out with a gain of time on the queen. White has an isolated d-pawn to look after and active pieces in return, and the game is about level. [%cal Gc3d5] [%idea isolated-queens-pawn] } *

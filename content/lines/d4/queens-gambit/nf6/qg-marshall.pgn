@@ -1,0 +1,28 @@
+[For "white"]
+[Kind "main"]
+[Start "qg-accepted-main 2.c4"]
+[Name "The Marshall Defence: 2...Nf6"]
+
+2... Nf6 { The Marshall Defence. It develops and ignores the attack on d5, which makes it popular at this level, and it is not a very good move. }
+3. cxd5 { Takes at once. Black has to recapture with a piece, and a piece on d5 can be chased by White's pawns. 3.Nc3 is fine, but it lets Black back into a normal game. [%cal Gc4d5] }
+3... Nxd5
+4. e4 { Hits the knight and builds the centre every White player wants: pawns on d4 and e4, with no black pawn to challenge them. [%cal Ge4d5] [%idea centre-pawns] }
+4... Nf6 { Goes back and hits e4. }
+( 4... Nb4? { Jumps forward, looking at c2 and d3. But the knight has no way back. [%csl Rb4] }
+  5. Qa4+ { A check that also attacks the knight on b4. }
+  5... N8c6 { Blocks, and guards the knight. }
+  6. d5 { The pawn hits the pinned knight on c6. Black loses a knight: 6...Nxd5 7.exd5 Qxd5 gets two pawns for it, and that is the most on offer. [%idea pin] } )
+5. Nc3 { Guards e4 with a developing move. }
+5... e6 { Opens the f8 bishop. }
+( 5... Nc6? { Develops and hits d4, but the pawn simply goes past. }
+  6. d5 Nb8
+  7. e5 { The knights are chased back to where they started. The gain is positional: White has a huge lead in development and all the space, and the engine has White about two and a half pawns ahead. [%cal Ge5f6] [%idea centre-pawns] } )
+( 5... Bg4? { Hits the queen, but the bishop has left b7 without a guard. }
+  6. Qb3 { Steps away and hits b7. }
+  6... Bc8
+  7. e5 { The bishop has had to go home, and now the knight is chased as well. The gain is positional, a lead of several moves, and the engine has White about two and a half pawns ahead. [%cal Ge5f6] } )
+6. Nf3 { Develops and gets ready to castle. }
+6... Bb4 { Pins the knight that guards e4, so the pawn is under attack. [%cal Rf6e4] }
+7. Bd3 { Guards e4 with the last minor piece. White is well ahead in development, with the whole centre as well. [%cal Bd3e4] }
+7... O-O
+8. e5 { The knight has to leave f6, the piece that guards h7. 8...Nd5 and 8...Nfd7 both run into the classic sacrifice Bxh7+ and Ng5+, and after 8...Ng4 h3 the knight has only h6 to go to. The engine has White more than four pawns ahead. [%cal Gd3h7] } *

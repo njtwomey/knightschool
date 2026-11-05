@@ -1,0 +1,21 @@
+[For "white"]
+[Kind "danger"]
+[Start "qg-declined-main 4.Bg5"]
+[Name "The Elephant Trap: 4...Nbd7"]
+
+4... Nbd7 { Develops, and sets the most famous trap in the opening. The knight on f6 still looks pinned, so d5 looks as if it is falling. [%tag trap] }
+5. cxd5 { Fixes the pawns, and it makes the trap easy to see and avoid. It also skips the sharper lines after 5.e3 c6 and ...Qa5. [%cal Gc4d5] }
+5... exd5
+6. e3 { The right move: back up d4 and develop. The pawn on d5 is not going anywhere, and it is guarded better than it looks. [%cal Ge3d4] }
+( 6. Nxd5?? { Wins a pawn, it seems, because the pinned knight cannot take. But the pin is not what it looks like. A third of players at this level still take, and they score about a third from here. [%tag trap] }
+  6... Nxd5 { Takes anyway, and offers the queen. }
+  7. Bxd8 Bb4+ { The point. White has the queen, but this check cannot be answered well. }
+  8. Qd2 { The only block. }
+  8... Bxd2+ 9. Kxd2 { Now ...Kxd8 takes the bishop. The queens have gone, and White has given a knight and a bishop for one pawn. } )
+6... c6 { Holds d5 for good. }
+7. Bd3 { Aims at h7 and gets ready to castle. [%cal Gd3h7] }
+7... Be7
+8. Nf3 O-O
+9. Qc2 { Queen and bishop line up on h7, which forces Black to think about the kingside, and the queen also looks down the c-file. [%cal Gc2h7] }
+9... Re8
+10. O-O { Castled, with the pieces where they belong. The plan from here is well known: Rb1, then b4 and b5 against the pawn on c6. [%cal Gb2b4,Gb4b5] [%csl Yc6] [%idea minority-attack] } *

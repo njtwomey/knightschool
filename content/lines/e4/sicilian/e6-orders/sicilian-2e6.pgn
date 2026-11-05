@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 2.c3"]
+[Name "2...e6: the main line by another order"]
+
+2... e6 { Black shuts in the c8 bishop first, and keeps ...d5 ready. }
+3. d4 { The same reply as to everything else: take the centre. }
+3... cxd4 4. cxd4 d5 { Hits e4 at once. }
+5. e5 { The same rule: with the c8 bishop shut in by e6, push past and keep the position closed. [%csl Yc8] }
+5... Nc6
+6. Nf3 { Develops, guards d4 and e5, and the game is in the main line. } *

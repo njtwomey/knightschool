@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "main"]
+[Start "qg-declined-main 6.Nf3"]
+[Name "The Declined: the Tartakower, ...h6 and ...b6"]
+
+6... h6 { The most common move here. It asks the bishop to decide, and gives Black's king a little air for later. }
+7. Bh4 { Keeps the pin. 7.Bxf6 is just as good, but the bishop has more to do here. }
+7... b6 { The Tartakower. The c8 bishop will come out on the long diagonal, which solves Black's usual problem. White scores a little under half here, so this is the line to know. }
+8. cxd5 { Settles the centre before the bishop gets to b7. If Black retakes with the e-pawn, the diagonal to b7 is blocked by Black's own pawn on d5. }
+8... Nxd5 { Offers trades to ease the cramp. }
+9. Bxe7 Qxe7
+10. Nxd5 exd5
+11. Rc1 { With two pairs of pieces gone, the c-file is what is left to play for. The pawn on c7 is backward and the rook is on it at once. [%cal Gc1c7] [%csl Yc7] [%idea open-file] }
+11... Be6 { Holds d5, so that Black can push ...c5 and get rid of the weakness. }
+12. Bd3 { Develops, and White castles next. The position is level, but only White has an easy plan: keep the pressure on the c-file and make ...c5 cost something. } *

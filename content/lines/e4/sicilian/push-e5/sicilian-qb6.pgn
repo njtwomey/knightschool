@@ -1,0 +1,16 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 6.e5"]
+[Name "...Qb6: the d4 pawn is poisoned"]
+
+6... Qb6 { Adds the queen to the attack on d4. [%cal Rb6d4] }
+7. Nc3 { Develops. The c1 bishop still guards b2, so nothing hangs. [%cal Bc1b2] }
+7... Bb4
+8. Bd3 { Develops, and blocks the queen's guard of d4, so the pawn looks free. There is a trick behind it. [%cal Gd3b5] }
+8... Bd7 { Covers b5. Now the trick is off, and d4 really is under threat. }
+( 8... Nxd4?? { Takes the pawn, which is what White wants. }
+  9. Nxd4 Qxd4 10. Bb5+ { The bishop moves away with check and uncovers White's queen against Black's. Black has to answer the check. [%cal Gd1d4,Gb5e8] [%idea discovered-attack] }
+  10... Kf8 11. Qxd4 { White has won the queen for a pawn. [%idea poisoned-pawn] } )
+9. Be3 { With no check on b5 any more, d4 needs a real guard. The bishop gives it one. [%cal Ge3d4] }
+9... Nge7
+10. O-O { Castled, with the same pawns as the main line and d4 firmly held. } *

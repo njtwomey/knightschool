@@ -1,0 +1,30 @@
+[For "white"]
+[Kind "main"]
+[Name "2...Nc6 and ...e6: the main line"]
+
+1. e4
+1... c5 { The Sicilian. The c-pawn hits d4 from the side, so that if White plays d4, Black can swap a wing pawn for a centre pawn. [%cal Rc5d4] }
+2. c3 { The Alapin. The pawn gets ready to back up d4: if Black takes there, a pawn takes back and White keeps two pawns in the centre. It also steers round the long theory of the Open Sicilian. [%cal Gc3d4] [%idea centre-pawns] }
+2... Nc6 { The most common reply at this level: a developing move that watches d4. }
+3. d4 { The point of 2.c3. White takes the centre straight away, and Black has not had time to stop it. }
+3... cxd4 { Four players in five take here. }
+4. cxd4 { The c-pawn takes back. White has two pawns side by side in the centre, and the c3 square is free again for the knight. [%cal Gb1c3] [%csl Gd4,Ge4] }
+4... e6 { Covers d5, so that ...d5 can follow, and opens the f8 bishop. The price is that the c8 bishop is now shut in behind the pawn. [%csl Yc8] }
+( 4... Nf6? { Develops and hits e4, but nothing covers d5, so the c6 knight can be pushed around at once. [%csl Yd5] }
+  5. d5 { Hits the knight. If it takes e4 instead, dxc6 wins a knight for a pawn. [%cal Gd5c6] }
+  5... Ne5 6. f4 { The knight has to move again. }
+  6... Ng6 7. e5 { Now the other knight is hit as well. }
+  7... Ng8 { Nothing is won yet, but one knight is back at home, the other is stranded, and White owns the centre: the engine has White more than four pawns ahead. } )
+5. Nf3 { Develops, guards d4 and clears the way to castle. [%cal Gf3d4] }
+5... d5 { Black strikes at e4 before White has finished developing. [%cal Rd5e4] }
+6. e5 { The rule of this variation: Black's c8 bishop is shut in behind e6, so keep the position closed. The pawn gains space and takes f6 away from Black's knight. [%csl Yc8] }
+6... Bb4+ { The most common move here: the bishop comes out with a check. }
+7. Nc3 { Blocks the check with a developing move. The knight is pinned for now, but White is about to castle out of the pin. [%icon pin@c3] }
+7... Nge7 { With f6 taken away, the knight has to come out by e7. It is heading for f5, where it will hit d4. [%cal Re7f5,Rf5d4] }
+8. Bd3 { The bishop's best diagonal: it covers f5 and aims straight at h7, and White can castle next. [%cal Gd3h7] }
+8... Bd7 { A quiet developing move, and the right one, because of what happens if Black castles. }
+( 8... O-O? { The most common move, and a serious mistake. With the e5 pawn keeping a knight off f6, nothing can help defend h7. [%cal Gd3h7] [%csl Yh7] }
+  9. Bxh7+ { The Greek gift. The bishop gives itself up to drag the king into the open. [%idea greek-gift] }
+  9... Kxh7 10. Ng5+ { The knight comes in with check, and the c1 bishop stands behind it. [%cal Gc1g5] }
+  10... Kg8 11. Qh5 { Threatens Qh7 mate. Black can only run with ...Re8, and then Qh7+ and Qh8+ close in. White has given a bishop for a pawn, and the engine has White more than seven pawns ahead. [%cal Gd1h5,Gh5h7] } )
+9. O-O { White has finished the job: the king is safe, the e5 pawn gives the pieces more room, and they all point at Black's king. The task now is to keep d4 and e5 firm. [%idea castle-early] } *

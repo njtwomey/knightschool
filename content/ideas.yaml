@@ -61,3 +61,26 @@
   kind: tactic
   summary: A piece that nobody defends, so it can simply be taken.
   themes: [hangingPiece]
+- id: open-file
+  name: The open file
+  kind: plan
+  summary: A rook belongs on a file with no pawns on it, or on one about to open, where it can reach deep into the position.
+- id: minority-attack
+  name: The minority attack
+  kind: plan
+  summary: Push two pawns against three on the queenside, so that the trade leaves the bigger group with a weak, backward pawn.
+- id: greek-gift
+  name: The Greek gift
+  kind: tactic
+  summary: A bishop takes on h7 with check to drag the castled king out, and a knight on g5 and the queen come in behind it.
+  themes: [sacrifice, kingsideAttack]
+- id: discovered-attack
+  name: Discovered attack
+  kind: tactic
+  summary: A piece moves out of the way with a threat of its own and uncovers an attack by the piece behind it.
+  themes: [discoveredAttack]
+- id: trapped-piece
+  name: Trapped piece
+  kind: tactic
+  summary: A piece with no safe square left can be attacked and won.
+  themes: [trappedPiece]

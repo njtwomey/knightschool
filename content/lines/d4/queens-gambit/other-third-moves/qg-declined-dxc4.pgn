@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-declined-main 3.Nc3"]
+[Name "The Declined: 3...dxc4"]
+
+3... dxc4 { Takes the pawn after all, a move later than in the Accepted, with the c8 bishop already shut in. }
+4. e3 { The same simple answer as in the Accepted. 4.e4 is a little stronger, but e3 keeps the same plan: Bxc4, Nf3, castle. [%cal Gf1c4] }
+4... Bb4 { The most common move: the knight is pinned before the bishop can retake. }
+5. Bxc4 { The pawn is back. }
+5... Bxc3+ { Gives up a bishop to double White's pawns, which is too high a price here. }
+6. bxc3 { Towards the centre again. White has the two bishops, the d4 pawn is well guarded, and the engine has White more than a pawn ahead. [%idea centre-pawns] }
+6... Nf6
+7. Nf3 O-O
+8. O-O { Castled, and e4 is next. Black has no bishop to fight on the dark squares. [%cal Ge3e4] [%idea castle-early] } *

@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-accepted-main 2.c4"]
+[Name "The Baltic Defence: 2...Bf5"]
+
+2... Bf5 { The Baltic Defence. The bishop comes out before ...e6, but only the queen guards d5, and b7 has lost its guard. [%csl Yd5,Yb7] }
+3. cxd5 { Simply takes. Black's queen has to come out to win the pawn back, and then she can be chased. }
+3... Qxd5
+4. Nc3 { Develops with a gain of time. [%cal Gc3d5] }
+4... Qd8 { Back home, two moves down. }
+5. e4 { Takes the centre, and gains another move on the bishop. [%cal Ge4f5] [%idea centre-pawns] }
+5... Bg6
+6. Nf3 e6
+7. Qb3 { Hits b7, the pawn the bishop left behind. White has the centre and a big lead in development, and the engine has White more than two pawns ahead. [%cal Gb3b7] [%csl Yb7] } *

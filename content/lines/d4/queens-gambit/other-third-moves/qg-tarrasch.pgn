@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-declined-main 3.Nc3"]
+[Name "The Tarrasch Defence: 3...c5"]
+
+3... c5 { The Tarrasch Defence. Black strikes at d4 at once and plays for activity, and will probably end up with an isolated d-pawn. [%cal Rc5d4] }
+4. cxd5 exd5 { Black's c8 bishop is free, which is the good side of this pawn structure. }
+5. Nf3 Nf6
+( 5... c4? { Gains room on the queenside, but it takes the pressure off d4, and that gives White the break in the centre. }
+  6. e4 { Strikes at once, and d5 cannot hold the centre on its own. The gain is positional: the centre opens while Black's king is at home and the c4 pawn is cut off. The engine has White more than two pawns ahead. [%idea centre-pawns] } )
+6. g3 { The f1 bishop goes to g2, where it bears down on d5. No pawn can ever guard that pawn again once the c-pawn has gone. [%cal Gg2d5] [%csl Yd5] [%idea isolated-queens-pawn] }
+6... Nc6
+7. Bg2 Be7
+8. O-O O-O
+9. Bg5 { The familiar pin, and here it matters more: the knight on f6 is one of the few pieces guarding d5. [%cal Gg5f6,Gf6d5] [%idea pin] } *

@@ -1,0 +1,25 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 4.cxd4"]
+[Name "...d5: take, and hit the queen"]
+
+4... d5 { Hits e4 with the c8 bishop still free. That one difference changes White's plan. [%cal Rd5e4] }
+5. exd5 { The other half of the rule. The c8 bishop is free, so a push to e5 would let it out to f5 with an easy game. Taking brings Black's queen out early, where a knight can hit her. }
+5... Qxd5
+6. Nf3 { Develops and guards d4. It also blocks the queen's way to g2. [%cal Gf3d4] }
+6... Bg4 { The most common move: it pins the knight to the queen. [%icon pin@f3] }
+7. Nc3 { Ignores the pin and hits the queen, which is the point of having c3 free. Most of Black's replies now lose something. [%cal Gc3d5] }
+7... Bxf3 { The best answer: Black takes the knight and hits White's queen. }
+( 7... Qe6+? { A check that looks useful, but it puts the queen on the same line of attack as the knight. [%csl Ye6,Yc6] }
+  8. Be3 { Blocks the check with a developing move, and d5 is now a threat to the queen and the knight together. [%cal Gd4d5] }
+  8... Qf5 9. d5 { The knight has to move, and then Nd4 hits the queen and uncovers the attack on g4: the engine has White more than five pawns ahead. } )
+( 7... Qh5? { The queen keeps the pin, but she has left the centre. }
+  8. d5 Ne5 9. Bb5+ { Black's best is 9...Kd8. No material is won yet, but the king is stuck in the centre, and the engine has White more than three pawns ahead. [%cal Gb5e8] } )
+( 7... Qd8? { The queen goes home, and that gives White time to push the pawn. [%cal Gd4d5] }
+  8. d5 { Hits the c6 knight. }
+  8... Ne5 9. Nxe5 { The pinned knight moves anyway, because of what comes next. }
+  9... Bxd1 10. Bb5+ { Black can only block with the queen, so she is lost: 10...Qd7 11.Bxd7+. White also picks up the bishop on d1 and ends up a piece ahead. [%cal Gb5e8] } )
+8. gxf3 { The pawn takes, and Black's queen is still under attack. 8.Nxd5 Bxd1 9.Nc7+ looks stronger and wins the rook on a8, but the knight is then stuck in the corner and the engine has the game level. [%cal Gc3d5] }
+8... Qxd4 { The only good square. Any other queen move lets d5 hit the knight. }
+9. Qxd4 Nxd4
+10. Nb5 { Hits the knight and threatens Nc7+, which would win the rook on a8. Black is a pawn up for now, but White has two bishops and open files, and the engine slightly prefers White. [%cal Gb5d4,Gb5c7] [%idea fork] } *

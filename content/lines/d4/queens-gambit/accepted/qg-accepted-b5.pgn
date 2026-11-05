@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "trap"]
+[Start "qg-accepted-main 3.e3"]
+[Name "The Accepted: holding the pawn with ...b5"]
+
+3... b5 { The natural way to try to keep the extra pawn, and the most common reply here. It looks solid, and it is exactly what White is hoping for. [%cal Gb5c4] }
+4. a4 { Hits the pawn that holds c4. If it goes, c4 goes too. [%cal Ga4b5] }
+4... c6 { Backs up b5 with a pawn, the obvious way to hold everything. }
+( 4... Ba6? { Guards b5 with the bishop, which is exposed there. }
+  5. axb5 Bxb5
+  6. Nc3 { Gains a move on the bishop. The pawn on c4 will not last, and White is well ahead in development. The gain is positional for now, and the engine has White about two pawns ahead. } )
+5. axb5 { Takes, because Black's natural reply is the one that loses. The a-file is now open for the rook. }
+5... cxb5 { Nearly everyone at this level takes back, and it loses a piece at once. The c-pawn has left c6, so the long diagonal down to a8 is wide open. [%csl Ra8] }
+6. Qf3 { The queen hits the rook on a8. The rook cannot move, boxed in by its own knight and a-pawn, so Black has to block the diagonal, and whatever blocks is taken. Anything else and Qxa8 wins the rook. [%cal Rf3a8] [%csl Ra8] }
+6... Nc6 { The usual block. Nothing guards the knight. }
+7. Qxc6+ { Takes with check, so Black has no time to do anything about it. [%idea hanging-piece] }
+7... Bd7
+8. Qa6 { Steps away from the bishop and stays active, with the queen and the rook both on a7. White is a knight up for a pawn, and the pawns on b5 and c4 are still loose. [%cal Ga6a7,Ga1a7] } *

@@ -1,0 +1,36 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 2.c3"]
+[Name "2...Nf6: chase the knight"]
+
+2... Nf6 { Hits e4, and tries to take advantage of the fact that 2.c3 took the knight's best square. [%cal Rf6e4] }
+3. e5 { Pushes the knight away with a gain of time. There is no pawn on d6 yet, so e5 is safe. [%cal Ge5f6] }
+3... Nd5
+4. d4 { The plan as usual: take the centre now the knight has moved. }
+4... cxd4
+5. cxd4 { The c-pawn takes back, and White has pawns on d4 and e5. }
+5... Nc6
+6. Nf3 { Develops and guards both centre pawns. }
+6... d6 { The right way to hit the centre. }
+( 6... Nb6? { Goes back before hitting the centre, and now nothing stops the d-pawn. }
+  7. d5 { Hits the c6 knight, and it cannot take e5, because Nxe5 would win it. [%cal Gd5c6] }
+  7... Nb4 8. Nc3 e6 9. d6 { Black's pieces are tangled and the pawn on d6 cuts the board in two: the engine has White about five pawns ahead. [%csl Gd6] } )
+7. Bc4 { Hits the d5 knight. The pawn on d6 has cut the queen off from it, so it has to move again. [%cal Gc4d5] [%csl Yd5] }
+7... Nb6
+8. Bb5 { Pins the c6 knight, the piece that guards e5 and hits d4. [%cal Gb5e8] [%icon pin@c6] [%idea pin] }
+8... dxe5
+9. Nxe5 { Takes back. The pinned knight on c6 cannot take. }
+9... Bd7 { Gets ready to break the pin. }
+( 9... Qc7? { Hits the knight on e5, but it leaves the queen on the same line as White's bishop. [%cal Gc1f4] }
+  10. Bf4 { Guards the knight and lines up on the queen, so the pin on c6 keeps biting. No material is won yet, but the engine has White nearly three pawns ahead. [%cal Gf4c7] } )
+( 9... e6? { A natural move, but it leaves the pinned knight short of a defender. }
+  10. Nxc6 bxc6 11. Bxc6+ { The pawn that took back has opened the way: check, and the bishop hits the rook on a8 as well. [%cal Gc6a8] [%idea fork] }
+  11... Bd7 12. Bxa8 { After ...Qxa8 White has won a rook and a pawn for a bishop. } )
+10. Nxd7 { Removes the piece that would unpin. }
+10... Qxd7
+( 10... Nxd7? { Takes with the wrong piece: the queen stays at home and the c6 knight stays pinned. [%icon pin@c6] }
+  11. d5 { The pawn hits the pinned knight. }
+  11... Nce5 12. Bf4 { Black's knights are tied up in the middle of the board. No material is won yet, but the engine has White nearly two pawns ahead. } )
+11. Nc3 { Brings out the last piece. }
+11... e6
+12. O-O { The game is level, but White's pieces are easy to play: the plan is Be3, then Rc1 and pressure on the c-file. The d-pawn is isolated, so it wants piece support. [%idea isolated-queens-pawn] } *

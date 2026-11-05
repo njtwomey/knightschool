@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "qg-accepted-main 2.c4"]
+[Name "The Chigorin Defence: 2...Nc6"]
+
+2... Nc6 { The Chigorin Defence. It develops and adds to the pressure on d4, but the knight blocks the c-pawn, so Black can never hold d5 with ...c6. }
+3. Nf3 { Guards d4 and stops ...e5 for now. }
+3... dxc4 { The most common move. It is an Accepted with the knight on c6, and the same simple answer works. }
+( 3... Bf5? { Gets the bishop out, but it does nothing for d5, which only the queen guards, and she will be chased when she takes back. }
+  4. cxd5 Qxd5
+  5. Nc3 Qd6
+  6. e4 { The queen has been chased twice, and now the bishop is hit as well. White has the whole centre, and the engine has White more than three pawns ahead. [%cal Ge4f5] [%idea centre-pawns] } )
+4. e3 { Clears the way for Bxc4. 4.Nc3 is a little stronger, but this keeps the plan you already know. [%cal Gf1c4] }
+4... Bg4 { Pins the knight and adds to the pressure on d4. }
+5. Bxc4 e6
+6. Nc3 Nf6
+7. O-O { Castled, with the pawn back and the centre safe. Next h3 asks the bishop to decide, and then e4 comes. [%idea castle-early] } *

@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "main"]
+[Start "sicilian-main 6.e5"]
+[Name "...Nge7 and ...Nf5: the pressure on d4"]
+
+6... Nge7 { With f6 taken away, the knight heads for f5 at once. [%cal Re7f5] }
+7. Nc3 { Develops the last knight, so that White's pieces are out before the pressure on d4 builds. }
+7... Nf5 { Now both knights hit d4, and only the f3 knight and the queen guard it. [%cal Rf5d4,Rc6d4] }
+( 7... Ng6? { On g6 the knight no longer heads for f5, and the h-pawn can chase it. }
+  8. h4 { Threatens h5. Taking the pawn fails: 8...Nxh4 9.Nxh4 Qxh4 10.Rxh4 wins the queen. [%cal Gh4h5] }
+  8... Nge7 9. Bd3 { The knight has gone back to e7, so Black has lost two moves and nothing is left on f5. No material is won, but the engine has White more than a pawn and a half ahead. [%cal Gd3h7] } )
+( 7... g6? { Prepares ...Bg7, but the bishop would only bite on the e5 pawn, and the dark squares round the king are weakened. [%csl Yf6,Yh6] }
+  8. Bd3 a6 9. Bg5 { White takes the chance to develop freely, and the bishop settles on those dark squares. No material is won, but the engine has White about a pawn and a half ahead. [%cal Gg5f6] } )
+8. Bb5 { Pins the c6 knight to the king. A pinned knight cannot take on d4, so the pawn is safe, and White can castle next. [%cal Gb5e8] [%icon pin@c6] [%idea pin] }
+( 8. Bd3? { The move that worked in the main line loses a pawn here. It blocks the queen's guard of d4, and the knight is already on f5. }
+  8... Nfxd4 9. Nxd4 Nxd4 { Black has won the d-pawn, which held White's centre together, and the engine prefers Black. [%csl Rd4] } )
+8... Bd7 { Gets ready to unpin. }
+9. O-O { Castles out of the way. If a knight takes on d4 now, Bxd7+ and Qxd4 win a piece. } *
