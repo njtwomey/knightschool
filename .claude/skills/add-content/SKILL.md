@@ -27,6 +27,9 @@ pipeline), `docs/v2/schemas/annotations.md` (comments, marks, refutations). This
   derived, never written: every `?`/`??` variation (an authored refutation) and every reply the band plays at least
   `coverage.minShare` that the engine grades a mistake becomes one, hung off the step whose stretch reaches it. A
   follow-up's "why it is worth knowing" is its notes plus the evaluations, so **say what is won** in the notes.
+- **Names:** a line's id is its file name, unique across every opening whatever folder it is in. A name that starts
+  with a move carries its opening's name (`caro-nf3-e6`, not `nf3-e6`), even if a little redundant. `make doctor` checks
+  this, name clashes, and lines no opening lists.
 - **One comment per move** across all lines (keyed by position and move), **one answer per position** within an
   opening (a second is a line in `alternatives`). A line may simply stop where it **transposes** into a position another
   line already teaches; the position graph carries on.

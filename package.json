@@ -25,7 +25,8 @@
     "engine:copy": "node --import tsx scripts/copy-engine.ts",
     "analyse": "node --import tsx scripts/analyse/analyse.ts",
     "popularity": "node --env-file-if-exists=.env --import tsx scripts/popularity/run.ts",
-    "content:check": "node --import tsx scripts/content/check.ts"
+    "content:check": "node --import tsx scripts/content/check.ts",
+    "content:doctor": "node --import tsx scripts/content/doctor.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

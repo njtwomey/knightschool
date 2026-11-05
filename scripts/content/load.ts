@@ -27,6 +27,9 @@ function filesIn(dir: string, ext: string): string[] {
   });
 }
 
+/** Every line file, in whatever folders they are kept. */
+export const lineFiles = () => filesIn(join(contentDir, 'lines'), '.pgn');
+
 /** Parses a file with a schema, naming the file and the field when it fails. */
 function checked<T>(
   path: string,
@@ -55,9 +58,16 @@ export function loadContent(): Content {
   const config = checked(join(contentDir, 'config.yaml'), SiteConfig, yaml(join(contentDir, 'config.yaml')));
   const ideas = checked(join(contentDir, 'ideas.yaml'), IdeasFile, yaml(join(contentDir, 'ideas.yaml')));
   const tracks = checked(join(contentDir, 'tracks.yaml'), TracksFile, yaml(join(contentDir, 'tracks.yaml')));
-  const sources = filesIn(join(contentDir, 'lines'), '.pgn').map((path) =>
-    readLine(basename(path, '.pgn'), readFileSync(path, 'utf8')),
-  );
+  const files = lineFiles();
+  // A line's id is its file name, wherever it lives, so one name in two folders would silently be one line.
+  const named = new Map<string, string>();
+  for (const path of files) {
+    const name = basename(path, '.pgn');
+    const other = named.get(name);
+    if (other) throw new Error(`two lines are called "${name}": ${rel(other)} and ${rel(path)}`);
+    named.set(name, path);
+  }
+  const sources = files.map((path) => readLine(basename(path, '.pgn'), readFileSync(path, 'utf8')));
   const resolved = resolveLines(sources);
   const ideaIds = new Set(ideas.map((idea) => idea.id));
   for (const line of resolved.values()) {
