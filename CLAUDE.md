@@ -3,8 +3,9 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 Knight School (`knightschool` everywhere): a browser-only chess opening trainer for beginners. No backend; everything
-runs and persists in the browser. This branch (`v2`) is a fresh build from the plan in `docs/v2/`; v1 lives on `main`
-(tag `v1`) and stays live until v2 replaces it. Do not copy v1 code: build each piece to the plan.
+runs and persists in the browser. It is live at https://www.nialltwomey.com/knightschool/. v2 is a fresh build from the
+plan in `docs/v2/`, and is what `main` now holds; v1 is kept under the tag `v1`. Do not copy v1 code: build each piece to
+the plan.
 
 `docs/v2/README.md` is the plan's index: the model (Repertoire → Opening → Variation → Line → Step, plus Idea),
 experience, board, capabilities, config vs settings, schemas, and one file per component, page, hook, store and library
