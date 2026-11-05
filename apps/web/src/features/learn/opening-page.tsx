@@ -35,6 +35,7 @@ import { TickUndo } from './tick-undo';
 import { useTicks } from './use-ticks';
 import { finalTestHref, lineViews } from './views';
 import { useKeysBeatHover } from '@/components/board/key-owner';
+import { alphabetical } from '@/components/finding/sort';
 
 /** One opening: its introduction, what to do next, its variations with their steps, and a board for the step picked. */
 export function OpeningPage({ id, tab = 'overview' }: { id: string; tab?: 'overview' | 'lines' }) {
@@ -260,7 +261,7 @@ function LinesTab({ data }: { data: OpeningData }) {
       <SortableTable
         label={`Lines of the ${opening.name}`}
         columns={lineColumns()}
-        rows={lines.filter((line) => matchesKind(line, kind))}
+        rows={lines.filter((line) => matchesKind(line, kind)).sort((a, b) => alphabetical(a.name, b.name))}
         rowKey={(line) => line.id}
         rowHref={(line) => line.href}
         titleColumn="name"

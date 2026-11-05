@@ -18,6 +18,7 @@ import { OpeningCrumbs, OpeningFrame } from '@/features/learn/opening-frame';
 import { followUpHref, lineHref, stepHref } from '@/features/learn/views';
 import { to } from '@/router/location';
 import { openingMap } from './map-data';
+import { alphabetical } from '@/components/finding/sort';
 
 /**
  * An opening's Map tab (docs/v2/pages/map.md), for computers: the whole screen, with the lines on the left, every line
@@ -144,7 +145,8 @@ function MapView({ data }: { data: OpeningData }) {
     setFocus(next);
     setNote(null);
   };
-  const ideas = openingIdeas(progress.catalog, [...map.ideas.keys()]);
+  const ideas = openingIdeas(progress.catalog, [...map.ideas.keys()]).sort((a, b) => alphabetical(a.name, b.name));
+  const groups = useMemo(() => [...map.groups].sort((a, b) => alphabetical(a.name, b.name)), [map]);
   // Mistakes are branches with their marks in the pills now; the description still reads them from `map.data`.
   const treeData = useMemo(() => {
     const { mistakes: _drawn, ...rest } = map.data;
@@ -187,7 +189,7 @@ function MapView({ data }: { data: OpeningData }) {
           </div>
           <MapIndex
             lines={map.index}
-            groups={map.groups}
+            groups={groups}
             visible={visible}
             expanded={opened}
             onGroup={(id) => {

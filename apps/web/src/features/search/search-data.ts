@@ -14,6 +14,7 @@ import { loadCatalog, loadNames, loadOpening, type Catalog } from '@/data/conten
 import { siteConfig } from '@/data/site-config';
 import { branchPly, lineMoves } from '@/features/learn/model';
 import { lineHref, lineViews, openingHref, openingSummary, variationHref } from '@/features/learn/views';
+import { alphabetical } from '@/components/finding/sort';
 
 /** What a result draws, beside what the search ranks it by. */
 export type ResultView =
@@ -23,7 +24,7 @@ export type ResultView =
   | { kind: 'idea'; idea: Idea; openings: { name: string; href: string }[] };
 
 export type SearchData = {
-  /** Everything searchable: openings in study order, variations, lines by kind, then ideas by kind. */
+  /** Everything searchable: openings alphabetically, variations, lines by kind, then ideas by kind. */
   items: SearchItem[];
   /** Every line for the board search, in the same order. */
   lines: PositionLine[];
@@ -38,12 +39,8 @@ const plain = (texts: readonly (string | undefined)[]) =>
 
 const lineKindOf = (kind: BuiltOpening['lines'][number]['kind']): SearchLineKind => (kind === 'danger' ? 'trap' : kind);
 
-/** The openings in the order to study them: the tracks' order, then any no track lists. */
-function inStudyOrder(catalog: Catalog) {
-  const ids = [...new Set(catalog.tracks.flatMap((track) => track.openings))];
-  const rank = (id: string) => (ids.includes(id) ? ids.indexOf(id) : ids.length);
-  return [...catalog.openings].sort((a, b) => rank(a.id) - rank(b.id));
-}
+/** The openings in the order to scan them: alphabetical, as the catalogue already is. */
+const alphabeticalOpenings = (catalog: Catalog) => [...catalog.openings].sort((a, b) => alphabetical(a.name, b.name));
 
 /**
  * The text of a line: what is said about the moves that are its own (from where it branches, so a comment on a shared
@@ -171,13 +168,17 @@ export function buildSearchData(catalog: Catalog, openings: readonly BuiltOpenin
     }
   }
 
-  // Sorted without changing the study order inside a kind; a kind the config leaves out comes last.
+  // By kind, then alphabetically; a kind the config leaves out comes last.
   const { lineOrder } = siteConfig.search;
   const rank = (kind: SearchLineKind) => (lineOrder.includes(kind) ? lineOrder.indexOf(kind) : lineOrder.length);
-  const sorted = [...lineItems].sort((a, b) => rank(a.lineKind) - rank(b.lineKind));
+  const sorted = [...lineItems].sort(
+    (a, b) => rank(a.lineKind) - rank(b.lineKind) || alphabetical(a.item.name, b.item.name),
+  );
 
   const kinds = Object.keys(IDEA_KINDS);
-  const ideas = [...catalog.ideas].sort((a, b) => kinds.indexOf(a.kind) - kinds.indexOf(b.kind));
+  const ideas = [...catalog.ideas].sort(
+    (a, b) => kinds.indexOf(a.kind) - kinds.indexOf(b.kind) || alphabetical(a.name, b.name),
+  );
   const ideaItems = ideas.flatMap((idea): SearchItem[] => {
     const teaching = openings.filter((opening) => opening.ideas.includes(idea.id));
     const first = teaching[0];
@@ -204,7 +205,12 @@ export function buildSearchData(catalog: Catalog, openings: readonly BuiltOpenin
   });
 
   return {
-    items: [...openingItems, ...variationItems, ...sorted.map((line) => line.item), ...ideaItems],
+    items: [
+      ...openingItems,
+      ...[...variationItems].sort((a, b) => alphabetical(a.name, b.name)),
+      ...sorted.map((line) => line.item),
+      ...ideaItems,
+    ],
     lines: sorted.map((line) => line.position),
     views,
   };
@@ -216,7 +222,7 @@ let built: Promise<SearchData> | undefined;
 export function loadSearchData(): Promise<SearchData> {
   built ??= (async () => {
     const catalog = await loadCatalog();
-    const openings = await Promise.all(inStudyOrder(catalog).map((entry) => loadOpening(entry.id)));
+    const openings = await Promise.all(alphabeticalOpenings(catalog).map((entry) => loadOpening(entry.id)));
     return buildSearchData(catalog, openings);
   })();
   built.catch(() => {

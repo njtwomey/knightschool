@@ -23,22 +23,25 @@ const staging = join(root, '.cache/content-staging');
 rmSync(staging, { recursive: true, force: true });
 mkdirSync(join(staging, 'openings'), { recursive: true });
 const catalog = {
-  openings: content.openings.map((opening) => ({
-    id: opening.id,
-    name: opening.name,
-    side: opening.side,
-    level: opening.level,
-    style: opening.style,
-    summary: opening.summary,
-    startEpd: opening.startEpd,
-    variations: opening.variations.map((variation) => variation.id),
-    lines: opening.lines.length,
-    steps: opening.steps.length,
-    moves: Object.values(opening.positions).reduce(
-      (sum, position) => sum + position.moves.filter((move) => move.mine).length,
-      0,
-    ),
-  })),
+  // Alphabetical: the order every list of openings starts from. Tracks hold any order to study them in.
+  openings: [...content.openings]
+    .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
+    .map((opening) => ({
+      id: opening.id,
+      name: opening.name,
+      side: opening.side,
+      level: opening.level,
+      style: opening.style,
+      summary: opening.summary,
+      startEpd: opening.startEpd,
+      variations: opening.variations.map((variation) => variation.id),
+      lines: opening.lines.length,
+      steps: opening.steps.length,
+      moves: Object.values(opening.positions).reduce(
+        (sum, position) => sum + position.moves.filter((move) => move.mine).length,
+        0,
+      ),
+    })),
   ideas: content.ideas,
   tracks: content.tracks,
 };

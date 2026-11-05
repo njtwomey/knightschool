@@ -7,3 +7,6 @@ export function nextSort<K extends string>(current: SortState<K>, key: K, ownOrd
   if (current.direction === 'asc') return { key, direction: 'desc' };
   return key === ownOrder ? { key, direction: 'asc' } : null;
 }
+
+/** The order every list reads in by default: alphabetical, ignoring case, with numbers in number order ("9.Nf3" before "10.Be3"). */
+export const alphabetical = (a: string, b: string) => a.localeCompare(b, 'en', { numeric: true, sensitivity: 'base' });

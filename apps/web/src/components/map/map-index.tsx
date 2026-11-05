@@ -11,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { forgivingMatch } from '@/components/finding/text-match';
 import { cn } from '@/lib/utils';
 import { laneColour } from './lane-colours';
+import { alphabetical } from '@/components/finding/sort';
 
 /** How far each level of a line's branching is drawn in, and the deepest it goes, so names stay readable. */
 const INDENT = 18;
@@ -276,7 +277,7 @@ export function MapIndex({
             const all = shown.filter((line) => line.group === group.id);
             if (all.length === 0) return null;
             const open = expanded?.has(group.id);
-            const inView = all.filter((line) => visible.has(line.id));
+            const inView = all.filter((line) => visible.has(line.id)).sort((a, b) => alphabetical(a.name, b.name));
             // Each line right under the one it grows from, indented by how deep it sits in this variation.
             const here = new Set(inView.map((line) => line.id));
             const tree: { line: MapIndexLine; depth: number }[] = [];
