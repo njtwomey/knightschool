@@ -304,6 +304,8 @@ export function MapTree({
       <span
         className={cn(
           'relative inline-flex h-6 items-center rounded-full border-2 px-0.5 transition-opacity',
+          // The move's link covers the whole pill: its mark, its share and its edges click and hover as the move does.
+          "[&_a]:static [&_a]:after:absolute [&_a]:after:inset-0 [&_a]:after:rounded-full [&_a]:after:content-['']",
           tone,
           (dim || isolated) && 'opacity-30',
           pulse && shownState === pulse && 'motion-safe:animate-pulse',
