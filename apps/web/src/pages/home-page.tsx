@@ -46,9 +46,7 @@ function HeroBoard() {
       </div>
       <p className="flex min-h-14 items-baseline gap-3 text-sm" aria-live="off">
         <span className="w-16 shrink-0 font-mono font-medium">{move ? numberedMove(move.ply, move.san) : 'Start'}</span>
-        <span className="text-muted-foreground">
-          {move?.note?.text ? firstSentence(move.note.text) : move ? '' : 'Every move comes with the reason for it.'}
-        </span>
+        <span className="text-muted-foreground">{move?.note?.text ? firstSentence(move.note.text) : ''}</span>
       </p>
       <div className="flex justify-end text-sm">
         <a
@@ -103,7 +101,7 @@ function WhereYouAre() {
       </p>
       <Button asChild size="sm">
         <a href={to('/today')}>
-          Carry on <ArrowRight aria-hidden />
+          Continue <ArrowRight aria-hidden />
         </a>
       </Button>
     </section>
@@ -123,11 +121,11 @@ export function HomePage() {
           />
           <div className="grid gap-2">
             <h1 className="text-5xl font-semibold tracking-tight">Knight School</h1>
-            <p className="text-xl text-muted-foreground">Learn chess openings, and actually keep them.</p>
+            <p className="text-xl text-muted-foreground">Learn chess openings and remember them.</p>
           </div>
           <p className="max-w-lg text-muted-foreground">
-            Every move comes with the reason for it. You learn the main line first, then how to punish the mistakes
-            players at your level really make, and reviews bring it all back just before you would forget.
+            Every move comes with the reason for it. Learn the main line, then how to punish common mistakes. Reviews
+            bring moves back before you forget them.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
@@ -141,26 +139,23 @@ export function HomePage() {
               </a>
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground">
-            No account. It all runs in your browser and stays on this device.
-          </p>
+          <p className="text-sm text-muted-foreground">No account needed. Your progress stays on this device.</p>
         </div>
         <HeroBoard />
       </section>
       <WhereYouAre />
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" aria-label="What you can do">
         <Feature href={to('/openings')} icon={BookOpen} title="Learn an opening">
-          Step through each line with the reason for every move, then play it yourself. Follow-ups teach the mistakes to
-          punish.
+          Go through each line move by move, with the reason for each one. Then play it yourself.
         </Feature>
-        <Feature href={to('/practice')} icon={Dumbbell} title="Keep it">
-          Spaced review, drills against the moves people really play, puzzles, checkpoints and quick games.
+        <Feature href={to('/practice')} icon={Dumbbell} title="Practise">
+          Review what you have learned, drill your lines, and solve puzzles.
         </Feature>
-        <Feature href={to('/openings/italian-white/map')} icon={Route} title="See the whole map">
-          Every line as one tree, with the common mistakes marked, and a board beside it.
+        <Feature href={to('/openings/italian-white/map')} icon={Route} title="See the map">
+          See every line of an opening as a tree, with common mistakes marked.
         </Feature>
-        <Feature href={to('/explore/search')} icon={Search} title="Find anything">
-          Search by name, or play the moves on a board and see every line through that position.
+        <Feature href={to('/explore/search')} icon={Search} title="Search">
+          Find an opening by name, or play moves on a board to find it.
         </Feature>
       </section>
     </main>
