@@ -1,5 +1,5 @@
-import { fenToEpd, firstPlyOf, playMove, replay, type Played } from '@knightschool/core';
-import { Eraser } from 'lucide-react';
+import { epdToFen, evalWords, fenToEpd, firstPlyOf, playMove, replay, type Played } from '@knightschool/core';
+import { Eraser, PencilRuler } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Board, type BoardPosition } from '@/components/board/board';
 import { BoardEval } from '@/components/board/board-eval';
@@ -15,6 +15,9 @@ import { useAnalysis } from '@/data/engine/use-analysis';
 import { EMPTY_VIEW, readBoardHash, writeBoardHash, type BoardView } from './board-hash';
 import { CopyMenu } from './copy-menu';
 import { PasteDialog } from './paste-dialog';
+import { ENGINE_ARROW_STRENGTH } from '@/components/board/colours';
+import { SetupBoard } from '@/components/board/setup-board';
+import { siteConfig } from '@/data/site-config';
 
 /**
  * The view, kept in the address as it changes (replacing, so Back leaves the page), and read again when the hash is
@@ -42,10 +45,11 @@ function useBoardView(onEdited: () => void) {
 /**
  * The raw board (docs/v2/pages/board.md): play any moves, step through them, paste a FEN or a PGN, copy the position,
  * and see what the engine thinks as it searches deeper. Playing a different move from an earlier point replaces the
- * moves after it. Placing pieces by hand (Set up) comes later.
+ * moves after it. Set up swaps the page for a board to place pieces on, with a card of trays and options.
  */
 export function BoardPage() {
   const [problem, setProblem] = useState<string | null>(null);
+  const [settingUp, setSettingUp] = useState(false);
   // A link opened in this tab (the hash edited) is a new board: what went wrong with the last paste no longer applies.
   const [view, setView] = useBoardView(useCallback(() => setProblem(null), []));
   const settings = useBoardSettings();
@@ -57,7 +61,7 @@ export function BoardPage() {
   const firstPly = firstPlyOf(view.fen);
   const analysis = useAnalysis(epd, {
     lines: settings.engineLines,
-    enabled: settings.engineOn,
+    enabled: settings.engineOn && !settingUp,
     maxDepth: settings.engineDepth,
   });
   const score = analysis.lines[0]?.score ?? null;
@@ -67,8 +71,22 @@ export function BoardPage() {
     [startEpd, played],
   );
   const shown = positions.map((position, i) => (i === ply ? { ...position, score } : position));
-  const best = settings.engineOn ? analysis.lines[0]?.pv[0] : undefined;
-  const arrows: SystemArrow[] = best ? [{ from: best.slice(0, 2), to: best.slice(2, 4), kind: 'engine' }] : [];
+  // Each line the engine shows as an arrow: the best solid, the rest fainter, each with its value on its square.
+  const arrows: SystemArrow[] = settings.engineOn
+    ? analysis.lines.slice(0, settings.engineLines).flatMap((line, i) => {
+        const move = line.pv[0];
+        if (!move) return [];
+        return [
+          {
+            from: move.slice(0, 2),
+            to: move.slice(2, 4),
+            kind: 'engine' as const,
+            strength: ENGINE_ARROW_STRENGTH[i] ?? ENGINE_ARROW_STRENGTH.at(-1)!,
+            label: evalWords(line.score, siteConfig.judge.evalWords).number,
+          },
+        ];
+      })
+    : [];
 
   /** Plays moves from the position shown: the next move already played only steps forward; another replaces the rest. */
   const playLine = useCallback(
@@ -97,6 +115,10 @@ export function BoardPage() {
 
   const actions = (
     <>
+      <Button variant="outline" size="sm" className="h-11 sm:h-8" onClick={() => setSettingUp(true)}>
+        <PencilRuler aria-hidden />
+        Set up
+      </Button>
       <PasteDialog
         onLoad={(game) => {
           setView((current) => ({
@@ -129,6 +151,23 @@ export function BoardPage() {
       </Tooltip>
     </>
   );
+
+  if (settingUp) {
+    return (
+      <PageShell title="Board" showTitle>
+        <SetupBoard
+          fen={epdToFen(epd)}
+          orientation={view.side}
+          onCancel={() => setSettingUp(false)}
+          onDone={(fen) => {
+            setView((current) => ({ ...current, fen, moves: [], ply: 0 }));
+            setProblem(null);
+            setSettingUp(false);
+          }}
+        />
+      </PageShell>
+    );
+  }
 
   return (
     <PageShell title="Board" showTitle>

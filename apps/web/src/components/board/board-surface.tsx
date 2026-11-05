@@ -20,7 +20,15 @@ import { GRADE_FILL } from '@/components/chess/grade-style';
 import { BOARD_COLOUR, MARK_COLOUR, SYSTEM_COLOUR, tint } from './colours';
 import { SquareIconGlyph } from './square-icon';
 
-export type SystemArrow = { from: string; to: string; kind: keyof typeof SYSTEM_COLOUR };
+export type SystemArrow = {
+  from: string;
+  to: string;
+  kind: keyof typeof SYSTEM_COLOUR;
+  /** How strongly it is drawn, 0 to 100 (the engine's second and third choices fade). */
+  strength?: number;
+  /** A word on the square it points to: an engine move's value. */
+  label?: string;
+};
 export type BoardBadge = { square: string } & ({ kind: 'right' | 'wrong' } | { kind: 'grade'; grade: Grade });
 
 export type BoardSurfaceProps = {
@@ -179,7 +187,11 @@ export function BoardSurface({
       const arrow = parseArrow(text);
       return arrow ? [{ startSquare: arrow.from, endSquare: arrow.to, color: MARK_COLOUR[arrow.colour] }] : [];
     }),
-    ...arrows.map((arrow) => ({ startSquare: arrow.from, endSquare: arrow.to, color: SYSTEM_COLOUR[arrow.kind] })),
+    ...arrows.map((arrow) => ({
+      startSquare: arrow.from,
+      endSquare: arrow.to,
+      color: arrow.strength ? tint(SYSTEM_COLOUR[arrow.kind], arrow.strength) : SYSTEM_COLOUR[arrow.kind],
+    })),
   ];
   return (
     <div className={cn('relative aspect-square h-auto w-full min-w-0 shrink overflow-hidden shadow-sm', className)}>
@@ -226,6 +238,19 @@ export function BoardSurface({
       })}
       {selected && canMove ? <Selection square={selected} orientation={orientation} /> : null}
       {badge ? <Badge badge={badge} orientation={orientation} /> : null}
+      {arrows
+        .filter((arrow, i) => arrow.label && arrows.findIndex((other) => other.to === arrow.to) === i)
+        .map((arrow) => (
+          <span
+            key={`${arrow.to}-${arrow.label}`}
+            className="pointer-events-none absolute z-10 flex size-[12.5%] items-end justify-center pb-[0.5%]"
+            style={squareBox(arrow.to, orientation)}
+          >
+            <span className="rounded-sm bg-background/85 px-1 font-mono text-[0.65rem] leading-tight font-semibold text-foreground tabular-nums">
+              {arrow.label}
+            </span>
+          </span>
+        ))}
     </div>
   );
 }

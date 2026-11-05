@@ -36,8 +36,12 @@ The board and one panel (`.board-columns`; stacked on a phone).
 - The engine starts as soon as a position is shown and keeps searching deeper, updating the bar and the lines as it
   goes; a new position stops it and starts again (the engine's continuous analysis,
   [../library/engine.md](../library/engine.md)). One search at a time, single-threaded Stockfish in a worker, as in v1.
-- **Set up**: drag pieces on and off from two trays, choose the side to move and castling rights; an illegal position
-  says why and keeps the engine off until it is fixed.
+- **Set up**: the page swaps to a board to place pieces on and a card beside it, instead of the moves and the engine: two
+  trays to drag from, a piece dragged off or clicked is removed, Clear the board, Starting position, the side to move and
+  castling. Rights follow from the pieces (only a king and rook on their home squares can be ticked), and a side in
+  check must be the side to move, so this works itself out. An illegal position says why and cannot be used.
+- **Engine arrows**: one per engine line shown, the best solid and the others fainter, each with its value on the square
+  it points to, so the choice can be read off the board.
 - **Paste**: a FEN or a PGN. A PGN that breaks says where ("move 12: Nf3 is not legal here") and keeps the moves before.
 - **Copy**: the FEN, the PGN, or the link.
 - Arrow keys step through the moves; right-drag draws arrows and rings for this view only, never saved.

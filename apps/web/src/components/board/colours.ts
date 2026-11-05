@@ -27,3 +27,6 @@ export const BOARD_COLOUR = {
 
 /** A colour token made see-through, for tints over a square. */
 export const tint = (colour: string, percent: number) => `color-mix(in srgb, ${colour} ${percent}%, transparent)`;
+
+/** How strongly the engine's first, second and third choices are drawn. */
+export const ENGINE_ARROW_STRENGTH = [100, 60, 35];
