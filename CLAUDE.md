@@ -37,8 +37,10 @@ exact versions.
 
 ## Content
 
-- `content/openings/<id>.yaml` (one opening for one side) and `content/lines/<first move>/<opening>/<variation>/<line>.pgn` (one line
-  each, shared by openings; a line's id is its file name, so folders are only for finding things; `make doctor` checks), with `ideas.yaml`, `tracks.yaml` and `config.yaml`. Committed data, as JSON Lines:
+- `content/openings/<id>.yaml` (one opening for one side) and
+  `content/lines/<first move>/<opening>/<variation>/<line>.pgn` (one line each, shared by openings; a line's id is its
+  file name, so folders are only for finding things; `make doctor` checks), with `ideas.yaml`, `tracks.yaml` and
+  `config.yaml`. Committed data, as JSON Lines:
   `content/analysis/` (engine), `content/popularity/` (the explorer's counts at the band), `content/puzzles/`.
 - Adding or migrating content (from v1's `.content/` snapshot, a transcript, a book, or the map's gaps): follow the
   `add-content` skill (`.claude/skills/add-content`). The pipeline: `content:build`, `make popularity` (needs

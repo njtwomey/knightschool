@@ -143,8 +143,8 @@ saves `analyse` and `popularity`, which resume where they left off.
    (the authors and the engine must agree; a disagreement is either the content's mistake or a note to add), `make
 puzzles` when puzzles should follow the new lines, `make check`. Size the analysis before starting: every position
    of the tree plus the band's replies at 3% or more comes to about four positions for every position in the opening,
-   searched at roughly 3 seconds each at depth 18 and 30 at depth 18. A wide opening of 100 lines is 2,600 positions,
-   so about 2 hours and about 22 hours: check with `--depth 18` first, then deepen, in chunks (`timeout -s INT`), so
+   searched at roughly 3 seconds each at depth 18 and 30 at depth 24. A wide opening of 100 lines is 2,600 positions,
+   so about 2 hours and about 22 hours: stay at depth 18 unless asked to go deeper, and run long analysis in chunks (`timeout -s INT`), so
    other agents can take the lock.
 7. **Report**: what was added and why each choice, what the data and engine said, the gaps left (replies above the share
    with no answer), and what the user should look at in the browser. Do not run browser play-throughs: the user checks
