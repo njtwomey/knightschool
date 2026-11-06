@@ -25,6 +25,9 @@ const VariationPage = lazy(() =>
 const FollowUpPage = lazy(() =>
   import('@/features/learn/follow-up-page').then((module) => ({ default: module.FollowUpPage })),
 );
+const ContributePage = lazy(() =>
+  import('@/features/contribute/contribute-page').then((module) => ({ default: module.ContributePage })),
+);
 const CreditsPage = lazy(() =>
   import('@/features/credits/credits-page').then((module) => ({ default: module.CreditsPage })),
 );
@@ -99,6 +102,7 @@ function Page({ path }: { path: string }) {
   if (path === '/openings') return <OpeningsPage />;
   if (path === '/repertoire') return <RepertoirePage />;
   if (path === '/credits') return <CreditsPage />;
+  if (path === '/contribute') return <ContributePage />;
   const puzzles = /^\/practice\/puzzles(?:\/([a-z0-9-]+)(?:\/([a-z0-9-]+))?)?$/.exec(path);
   if (puzzles) return <PuzzlesPage opening={puzzles[1]} variation={puzzles[2]} />;
   const puzzle = /^\/practice\/puzzle\/([A-Za-z0-9]+)$/.exec(path);

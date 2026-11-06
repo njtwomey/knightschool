@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+import { ExternalLink, PageSection } from '@/components/shared/page-section';
 import { to } from '@/router/location';
 
 /** Every library the site ships or is built with, with its licence as declared by the installed package. */
@@ -35,23 +35,6 @@ const LIBRARIES: { name: string; use: string; licence: string; href: string }[] 
   { name: 'YAML', use: 'Reading content', licence: 'ISC', href: 'https://github.com/eemeli/yaml' },
 ];
 
-function Link({ href, children }: { href: string; children: ReactNode }) {
-  return (
-    <a href={href} target="_blank" rel="noreferrer" className="underline underline-offset-4 hover:text-foreground">
-      {children}
-    </a>
-  );
-}
-
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="grid gap-2">
-      <h2 className="text-lg font-semibold">{title}</h2>
-      <div className="grid gap-2 text-sm text-muted-foreground">{children}</div>
-    </section>
-  );
-}
-
 /** Who and what the site is built on, and the licences (docs/v2/pages/credits.md). */
 export function CreditsPage() {
   return (
@@ -63,43 +46,48 @@ export function CreditsPage() {
           Knight School is free and open source, runs entirely in your browser, and stands on the work below.
         </p>
       </div>
-      <Section title="Stockfish">
+      <PageSection title="Stockfish">
         <p>
-          The engine is <Link href="https://stockfishchess.org">Stockfish</Link>, built for the browser by the{' '}
-          <Link href="https://github.com/nmrugg/stockfish.js">stockfish.js</Link> project. It runs as a separate program
-          and the site speaks to it over UCI. Stockfish is licensed under the{' '}
-          <Link href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License v3.0</Link>; its source is
-          at <Link href="https://github.com/official-stockfish/Stockfish">official-stockfish/Stockfish</Link>.
+          The engine is <ExternalLink href="https://stockfishchess.org">Stockfish</ExternalLink>, built for the browser
+          by the <ExternalLink href="https://github.com/nmrugg/stockfish.js">stockfish.js</ExternalLink> project. It
+          runs as a separate program and the site speaks to it over UCI. Stockfish is licensed under the{' '}
+          <ExternalLink href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License v3.0</ExternalLink>;
+          its source is at{' '}
+          <ExternalLink href="https://github.com/official-stockfish/Stockfish">
+            official-stockfish/Stockfish
+          </ExternalLink>
+          .
         </p>
-      </Section>
-      <Section title="Lichess">
+      </PageSection>
+      <PageSection title="Lichess">
         <p>
           What players at your level play comes from the{' '}
-          <Link href="https://lichess.org/api#tag/Opening-Explorer">Lichess opening explorer</Link>, and the names of
-          positions from the <Link href="https://github.com/lichess-org/chess-openings">chess-openings</Link> list
-          (CC0). The puzzles come from the{' '}
-          <Link href="https://database.lichess.org/#puzzles">Lichess puzzle database</Link> (CC0); the ones matching
-          your openings ship with the site.
+          <ExternalLink href="https://lichess.org/api#tag/Opening-Explorer">Lichess opening explorer</ExternalLink>, and
+          the names of positions from the{' '}
+          <ExternalLink href="https://github.com/lichess-org/chess-openings">chess-openings</ExternalLink> list (CC0).
+          The puzzles come from the{' '}
+          <ExternalLink href="https://database.lichess.org/#puzzles">Lichess puzzle database</ExternalLink> (CC0); the
+          ones matching your openings ship with the site.
         </p>
-      </Section>
-      <Section title="Libraries">
+      </PageSection>
+      <PageSection title="Libraries">
         <ul className="grid gap-1">
           {LIBRARIES.map((library) => (
             <li key={library.name} className="flex flex-wrap items-baseline justify-between gap-x-4">
               <span>
-                <Link href={library.href}>{library.name}</Link>: {library.use.toLowerCase()}
+                <ExternalLink href={library.href}>{library.name}</ExternalLink>: {library.use.toLowerCase()}
               </span>
               <span className="tabular-nums">{library.licence}</span>
             </li>
           ))}
         </ul>
-      </Section>
-      <Section title="Licence">
+      </PageSection>
+      <PageSection title="Licence">
         <p>
           Knight School&apos;s own code is MIT licensed, © 2026 Niall Twomey. The source is on{' '}
-          <Link href="https://github.com/njtwomey/knightschool">GitHub</Link>.
+          <ExternalLink href="https://github.com/njtwomey/knightschool">GitHub</ExternalLink>.
         </p>
-      </Section>
+      </PageSection>
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { to } from '@/router/location';
 const LINKS = [
   { href: to('/board'), label: 'Board' },
   { href: to('/mocks'), label: 'Mocks' },
+  { href: to('/contribute'), label: 'Add an opening' },
   { href: to('/credits'), label: 'Credits and licences' },
   { href: 'https://github.com/njtwomey/knightschool', label: 'Source' },
 ];
