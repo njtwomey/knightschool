@@ -33,7 +33,7 @@ step.
 - A stretch that would leave a learner move in no step, or put a step before the step it builds on, is refused with
   the reason under the handle.
 - Every change saves as one undoable action ("rename step 3", "move the end of step 2 to 6.c3").
-- A step's text missing on Publish is a problem only when the opening claims to meet the bar (courses.md).
+- A step's text missing on Publish is a problem only when the opening claims to meet the bar (making-openings.md).
 
 ## Composed of
 

@@ -30,7 +30,7 @@ board in the line editor and edits the move the board is on.
   note on 4...Nf6"; see [undo-button](undo-button.md). No Save button.
 - A comment that clashes with a shipped one for the same move shows in [problems-list](problems-list.md) rather than
   being lost.
-- Empty is allowed while writing; the opening's bar (courses.md: a comment on every learner move) shows as a problem
+- Empty is allowed while writing; the opening's bar (making-openings.md: a comment on every learner move) shows as a problem
   on Publish, not as a nag here.
 - Keyboard: Tab from comment to symbol to ideas to tags; the arrow keys do not step the board while typing.
 

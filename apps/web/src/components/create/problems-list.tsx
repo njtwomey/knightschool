@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 
 /**
  * `blocking`: the item does not build and is left out; `bar`: it builds but falls short of what a published opening
- * needs (courses.md); `warning`: something the build noticed that may be meant.
+ * needs (making-openings.md); `warning`: something the build noticed that may be meant.
  */
 export type ProblemLevel = 'blocking' | 'bar' | 'warning';
 

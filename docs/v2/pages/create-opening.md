@@ -36,7 +36,7 @@ Puzzles, Publish; **View as learner** and [undo-button](../components/undo-butto
   step's stretch.
 - **Puzzles**: per step, a [puzzle-picker](../components/puzzle-picker.md): matches through the step's last position
   first, then wider levels, each with its rating and themes; tick to include.
-- **Publish**: the opening against the bar ([../courses.md](../courses.md)), each check passed or not; then **Propose
+- **Publish**: the opening against the bar ([making-openings](../making-openings.md)), each check passed or not; then **Propose
   for the site**, which writes one YAML contribution and opens GitHub's contribution form.
 
 ## Behaviour

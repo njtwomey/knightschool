@@ -64,7 +64,7 @@ _Reuses:_ the browser engine, popularity data and the explorer cache, Every bran
 
 ## Stage 7: the catalogue
 
-Bring the first catalogue (courses.md) up to the bar, opening by opening, with the pipeline. Other openings follow.
+Bring the first catalogue (making-openings.md) up to the bar, opening by opening, with the pipeline. Other openings follow.
 
 ## Moving pieces
 

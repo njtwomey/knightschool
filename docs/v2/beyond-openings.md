@@ -50,7 +50,7 @@ Here: `make gaps` already lists popular replies no course answers. Add the engin
 where the opponent moves, take the replies played in at least about 10% of explorer games (`popularity.json` holds
 them) that the engine says lose 1.5 pawns or more, and rank them by games times swing. That ranked list is the to-do
 list of traps worth writing, found from data rather than memory. It needs the positions after those replies analysed
-(`pnpm analyse`, one engine at a time). The add-course skill would gain a step: run it after writing a course.
+(`pnpm analyse`, one engine at a time). The add-content skill would gain a step: run it after writing a course.
 
 **Decide:** a trap to spring (`for-us`) is a quiz today, never a card. A blunder that a large share of opponents make
 is something the learner should _play_, not only read about. Should those (above some share of games) be drilled like

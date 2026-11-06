@@ -198,7 +198,7 @@ settings registry's `slider` control), `Checkbox` ([pgn-import](components/pgn-i
 | `popularity.ts`                                                           | keep      | the band's moves: coverage, responder, puzzle ranking        |
 | `analyse.ts`                                                              | keep      | gains popular replies                                        |
 | `gaps.ts`                                                                 | repurpose | its logic into core for the app's coverage; the report stays |
-| `course-eval.ts`, `doctor.ts`                                             | keep      | the bar's checks (courses.md)                                |
+| `course-eval.ts`, `doctor.ts`                                             | keep      | the bar's checks (making-openings.md)                        |
 | `copy-engine.ts`, `db-bundle.ts`, `fen.ts`                                | keep      |                                                              |
 | new: puzzles index, names, expand, select, look-up                        | —         | puzzles.md                                                   |
 

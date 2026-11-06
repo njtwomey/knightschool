@@ -1,5 +1,5 @@
 /**
- * pnpm analyse [--depth N] [--replies 0.03] [--force]
+ * pnpm analyse [--opening id] [--minutes N] [--depth N] [--replies 0.03] [--force]
  *
  * Runs the native Stockfish (env STOCKFISH, else `stockfish` on the PATH) over every position of every opening, and
  * the positions after the moves players at the band play there (each played in at least --replies of the games, from
@@ -25,6 +25,12 @@ const content = loadContent();
 const depth = Number(flag('depth') ?? content.config.engine.bakedDepth);
 const minShare = Number(flag('replies') ?? content.config.coverage.analyseShare);
 const force = args.includes('--force');
+// One opening's positions, and a time limit: long analysis runs in chunks, so others can take their turn with the engine.
+const only = flag('opening');
+const openings = only ? content.openings.filter((opening) => opening.id === only) : content.openings;
+if (only && !openings.length) throw new Error(`No opening called "${only}"`);
+const minutes = flag('minutes');
+const deadline = minutes === undefined ? Infinity : Date.now() + Number(minutes) * 60000;
 
 type Entry = AnalysisEntry;
 const read = readAnalysis();
@@ -41,7 +47,7 @@ const popularity = readPopularity().byEpd;
 const targets = new Set<string>();
 /** Positions after a common reply the opening does not play, with where it was played from and how often. */
 const replies = new Map<string, { parent: string; share: number }>();
-for (const opening of content.openings) {
+for (const opening of openings) {
   for (const [epd, position] of Object.entries(opening.positions)) {
     targets.add(epd);
     for (const move of position.moves) targets.add(move.to);
@@ -131,9 +137,11 @@ process.on('SIGINT', async () => {
 const started = Date.now();
 // The punishing lines need the replies searched first; positions already deep enough are walked now.
 todo.push(...lineTargets(content.config.judge.refutationPlies).filter((epd) => !todo.includes(epd)));
-for (let i = 0; i < todo.length; i++) {
+let searched = 0;
+for (let i = 0; i < todo.length && Date.now() < deadline; i++) {
   const epd = todo[i]!;
   stored.positions[epd] = await engine.analyse(epd, depth);
+  searched++;
   // A reply just searched adds its best line.
   if (replies.has(epd))
     for (const more of lineTargets(content.config.judge.refutationPlies)) if (!todo.includes(more)) todo.push(more);
@@ -147,4 +155,7 @@ for (let i = 0; i < todo.length; i++) {
 }
 await save();
 engine.quit();
-console.log(`analyse: done in ${Math.round((Date.now() - started) / 1000)} s`);
+const left = todo.length - searched;
+console.log(
+  `analyse: ${left ? `stopped with ${left} left` : 'done'} in ${Math.round((Date.now() - started) / 1000)} s`,
+);

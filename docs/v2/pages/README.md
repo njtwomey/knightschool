@@ -80,7 +80,8 @@ One sentence: what the page is for, and who comes to it.
 
 ## Other
 
-| File                         | What it is                                             |
-| ---------------------------- | ------------------------------------------------------ |
-| [credits.md](credits.md)     | Stockfish, Lichess data and puzzles, sources, licences |
-| [not-found.md](not-found.md) | An address that leads nowhere                          |
+| File                           | What it is                                             |
+| ------------------------------ | ------------------------------------------------------ |
+| [contribute.md](contribute.md) | How to suggest or add an opening                       |
+| [credits.md](credits.md)       | Stockfish, Lichess data and puzzles, sources, licences |
+| [not-found.md](not-found.md)   | An address that leads nowhere                          |

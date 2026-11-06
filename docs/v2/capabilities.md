@@ -126,7 +126,7 @@ Create stays the place to write openings in the browser, and its output is the s
   authoring tables, Undo, export reminders, marks drawn on the board.
 - v2 adds: steps (name, text, stretch) and variations (title, intro), ideas on moves and steps, refutations (play a
   wrong move, write why), symbols on moves, picking puzzles for an opening, Play on positions with an aim, and the
-  in-browser engine checking a line as it is written. The add-course skill (`.claude/skills/add-course`) stays the guide
+  in-browser engine checking a line as it is written. The add-content skill (`.claude/skills/add-content`) stays the guide
   for content in the repo.
 
 ## 8. Storage

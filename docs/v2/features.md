@@ -8,16 +8,16 @@ other documents.
 
 ## Learning
 
-| #   | Seen on                       | Feature                                                                | Decision | Our version                                                                                         | Where               |
-| --- | ----------------------------- | ---------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------- | ------------------- |
-| L1  | Chessly, Chess.com, Chessable | Course → chapter → lesson structure                                    | adopt    | Opening → variation → step; steps cut automatically by default, named and written by the author     | model.md            |
-| L2  | Chessreps, Chessly            | A short note with a voice on every learner move                        | adopt    | One comment per move, plain and friendly; the bar requires it on every learner move                 | courses.md (bar 6)  |
-| L3  | Chessreps                     | A written guide per course (overview, variations, plans, history, FAQ) | adapt    | Opening introduction (exists) plus variation introductions and step text                            | experience.md       |
-| L4  | Chessly, Chessable            | Video per chapter                                                      | skip     | No video; written steps with boards inline instead                                                  | experience.md       |
-| L5  | Listudy                       | Hints that fade after two right answers, return after two misses       | adopt    | The arrow in Learn                                                                                  | experience.md, step |
-| L6  | Lichess Studies               | Interactive lesson: find the moves, with hints                         | adopt    | The step's Try stage (v1 Drill for a unit)                                                          | experience.md       |
-| L7  | Chessreps                     | Learn focuses on your weakest lines first                              | adapt    | Review and Drill weight misses (FSRS does this for review; Drill picks the least-known branch next) | capabilities.md 3   |
-| L8  | Chessable                     | Study from move 1 or from the branch point                             | adopt    | v1 already starts a unit part-way along (`firstIndex`); a setting for "from the start"              | exists              |
+| #   | Seen on                       | Feature                                                                | Decision | Our version                                                                                         | Where                      |
+| --- | ----------------------------- | ---------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------- | -------------------------- |
+| L1  | Chessly, Chess.com, Chessable | Course → chapter → lesson structure                                    | adopt    | Opening → variation → step; steps cut automatically by default, named and written by the author     | model.md                   |
+| L2  | Chessreps, Chessly            | A short note with a voice on every learner move                        | adopt    | One comment per move, plain and friendly; the bar requires it on every learner move                 | making-openings.md (bar 6) |
+| L3  | Chessreps                     | A written guide per course (overview, variations, plans, history, FAQ) | adapt    | Opening introduction (exists) plus variation introductions and step text                            | experience.md              |
+| L4  | Chessly, Chessable            | Video per chapter                                                      | skip     | No video; written steps with boards inline instead                                                  | experience.md              |
+| L5  | Listudy                       | Hints that fade after two right answers, return after two misses       | adopt    | The arrow in Learn                                                                                  | experience.md, step        |
+| L6  | Lichess Studies               | Interactive lesson: find the moves, with hints                         | adopt    | The step's Try stage (v1 Drill for a unit)                                                          | experience.md              |
+| L7  | Chessreps                     | Learn focuses on your weakest lines first                              | adapt    | Review and Drill weight misses (FSRS does this for review; Drill picks the least-known branch next) | capabilities.md 3          |
+| L8  | Chessable                     | Study from move 1 or from the branch point                             | adopt    | v1 already starts a unit part-way along (`firstIndex`); a setting for "from the start"              | exists                     |
 
 ## Testing
 
@@ -42,7 +42,7 @@ other documents.
 | F3  | Chessly review (complaint)     | The note of a right move vanishes in half a second | avoid    | The note stays until your next move                                                              | experience.md           |
 | F4  | Chessly review (complaint)     | No evaluation in drills                            | adapt    | No bar while answering; where you stand shown after, and at every line's end                     | board.md (reveal)       |
 | F5  | Chess.com coach                | Arrows drawn when a phrase is hovered              | adapt    | Board marks exist; step text can name squares and moves that light up on the board               | experience.md           |
-| F6  | Chessly review                 | The opponent's common mistakes are missing         | adopt    | The bar requires them; a stage of each step to punish them; the finder (`make punish`)           | courses.md              |
+| F6  | Chessly review                 | The opponent's common mistakes are missing         | adopt    | The bar requires them; a stage of each step to punish them; the finder (`make punish`)           | making-openings.md      |
 | F7  | ours (from the quiz miss list) | Every guess collected in a table with its cost     | adopt    | `Board.Tries`: live during Learn, Try, Drill, Review and Play on; the session summary at the end | board.md, experience.md |
 
 ## Progress

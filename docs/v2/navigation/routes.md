@@ -79,6 +79,7 @@ and every non-due source are.
 | `/create/<opening>`                        | [create-opening](../pages/create-opening.md), Details tab                               |
 | `/create/<opening>/<tab>`                  | the same, tab `lines`, `steps`, `puzzles` or `publish` (variations are edited in Steps) |
 | `/create/<opening>/<line>`                 | [line-editor](../pages/line-editor.md)                                                  |
+| `/contribute`                              | [contribute](../pages/contribute.md)                                                    |
 | `/credits`                                 | [credits](../pages/credits.md)                                                          |
 | anything else                              | [not-found](../pages/not-found.md) (v1 shows Home instead)                              |
 

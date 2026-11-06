@@ -14,7 +14,7 @@ content/
 Why lines are separate from openings (as in v1): a line can belong to several openings (the Two Knights is in the
 Italian for White and in 1...e5 for Black), and its notes are written once.
 
-## A line: `lines/e4/giuoco-piano-main.pgn`
+## A line: `lines/e4/italian/giuoco-piano/giuoco-main.pgn`
 
 Standard PGN, so any chess tool can open it. Few headers:
 

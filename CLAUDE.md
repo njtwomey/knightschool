@@ -29,25 +29,64 @@ exact versions.
 
 - `packages/core`: pure TypeScript (chess, eval, judge, annotations, config schema). No React, DOM or node imports
   (ESLint enforces it; tests and `src/testing/` may use node). Core changes ship with Vitest tests.
+- `packages/engine`: Stockfish in the browser. `packages/storage`: the learner's database (sqlite-wasm on OPFS).
 - `apps/web`: React 19, Vite, Tailwind 4, shadcn (radix, Nova preset), lucide icons, react-chessboard, echarts for
   charts. `src/router` (a small History router: plain `<a href={to('/path')}>` links navigate without a reload),
-  `src/app` (header), `src/pages`, `src/data` (config and data loading), `src/mocks` (the `/mocks` gallery).
+  `src/app` (header and footer), `src/features` (learn, map, practice, search, credits), `src/components` (the reusable
+  pieces), `src/pages`, `src/data` (config and data loading), `src/mocks` (the `/mocks` gallery).
 - `content/config.yaml`: the site's config (how it teaches, judges, schedules and times things, for everyone). Library
   functions take config values as arguments; no thresholds or defaults are hard-coded. Learner choices are settings,
   not config (`docs/v2/config.md`).
 
 ## Content
 
+This is how we add openings, from now on. Each fact below has one home, so change it there rather than repeating it.
+
+The learner is a beginner (about 1000 to 1600) starting from zero, who must learn why each move is played and then meet
+it in their own games. "The band" is those players, on the Lichess explorer.
+
+**How we decide**
+
+- Every choice passes three tests, in order: **sound** (the engine), **what the band plays** (the explorer's counts),
+  **one plan** (the opening's own). When options compete, show the numbers: how often it is played, how it scores, what
+  the engine says.
+- **Breadth first.** A new opening is its main lines by popularity. A reply left out is a listed gap, not a failure;
+  depth comes later, where it earns the work.
+- **Old content is a starting point, never an authority.** v1, books and videos give ideas; the engine and the data decide.
+- **Text is ours and honest.** Plain English, verified, never copied. Say what a move does and why, say when a line is only
+  level or scores badly, and check every claim of advantage against the evaluation.
+
+**How it fits together**
+
+- Repertoire → Opening → Variation → Line → Step, plus Idea. Follow-ups (the opponent's mistake and its punishment) are
+  derived, never written: from a line's `?` and `??` variations and from the engine and the band.
+- An opening is for one side, with one `start`, so 1.c4 and 1.Nf3 are two openings.
+- **Positions are what is shared.** A note belongs to a position and a move, across every opening, whichever side reads
+  it; an opening gives one answer per position. So reuse a line rather than copy it, and let a line stop where it
+  transposes.
+
+**Where it is written down**
+
+| What                                             | Where                                                          |
+| ------------------------------------------------ | -------------------------------------------------------------- |
+| What an opening must be, and how much to write   | `docs/v2/making-openings.md`                                   |
+| How to do it, step by step, alone or with agents | the `add-content` skill (`.claude/skills/add-content`)         |
+| File formats                                     | `docs/v2/schemas/content.md`, `docs/v2/schemas/annotations.md` |
+| The numbers                                      | `content/config.yaml`                                          |
+| The catalogue, and what is next                  | `content/tracks.yaml`, `docs/progress-v2/`                     |
+
+**The files**
+
 - `content/openings/<id>.yaml` (one opening for one side) and
   `content/lines/<first move>/<opening>/<variation>/<line>.pgn` (one line each, shared by openings; a line's id is its
-  file name, so folders are only for finding things; `make doctor` checks), with `ideas.yaml`, `tracks.yaml` and
-  `config.yaml`. Committed data, as JSON Lines:
-  `content/analysis/` (engine), `content/popularity/` (the explorer's counts at the band), `content/puzzles/`.
-- Adding or migrating content (from v1's `.content/` snapshot, a transcript, a book, or the map's gaps): follow the
-  `add-content` skill (`.claude/skills/add-content`). The pipeline: `content:build`, `make popularity` (needs
-  `LICHESS_TOKEN` in `.env`), `pnpm analyse` (long; run in the background), `content:check` (authors and engine must
-  agree), `make puzzles`.
+  file name, so folders are only for finding things). With `ideas.yaml`, `tracks.yaml` and `config.yaml`. Committed data,
+  as JSON Lines: `content/analysis/` (engine), `content/popularity/` (the explorer's counts at the band),
+  `content/puzzles/`.
+- The pipeline: `content:build`, `make popularity` (needs `LICHESS_TOKEN` in `.env`), `pnpm analyse` (long; run it in the
+  background), `content:build` again, `content:check` (authors and engine must agree), `make doctor`, `make puzzles`,
+  `make check`.
 - One Stockfish at a time, one thread. `.content/` is reference only, never built.
+- Nothing unfinished is committed: a commit on `v2` reaches the site with the next push.
 
 ## Conventions
 
@@ -62,4 +101,5 @@ exact versions.
 - Secrets go in `.env` (git-ignored, mode 600); never read, print or commit it.
 - No temporary files in the repo; use the session scratchpad.
 - Git: `origin` is `git@github-njtwomey:njtwomey/knightschool.git`. Do not push without being asked. Deploy
-  (`.github/workflows/deploy.yml`) runs on pushes to `main` only.
+  (`.github/workflows/deploy.yml`) runs on pushes to `main` only. Work is on `v2`, and `git push origin v2:main v2`
+  ships it, without leaving the branch.

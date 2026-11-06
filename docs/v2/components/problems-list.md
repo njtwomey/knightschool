@@ -12,7 +12,7 @@ move, on the step. Each problem says what is wrong, where, and how to fix it.
   - blocking: "Line Fried Liver: `[Start]` names a line that does not exist. Pick where it branches from again.";
     "4...Nf6 has two comments, one here and one in the shipped line Two Knights. Keep one.";
     "The opening gives two answers at the position after 3...Nf6. Mark one line as an alternative."
-  - the bar (courses.md): "5 of your moves have no comment.", "No refutation for 4...Nxe4, played in 18% of games."
+  - the bar (making-openings.md): "5 of your moves have no comment.", "No refutation for 4...Nxe4, played in 18% of games."
   - warnings from the build: "Your White opening and your Black opening disagree after 1.e4 e5 2.Nf3."
 - **Filtered views**: given item ids, only their problems (a line page shows only that line's).
 

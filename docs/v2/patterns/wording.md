@@ -66,7 +66,7 @@ level".
 
 ## Where it applies
 
-Every string in the interface, every authored comment and step text (the add-course skill holds the content side), and
+Every string in the interface, every authored comment and step text (the add-content skill holds the content side), and
 the settings registry's labels, hints and `explain` lines.
 
 ## From v1

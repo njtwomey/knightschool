@@ -7,7 +7,7 @@ The videos, books and articles an opening credits, as a short list of links.
 - A heading, "Sources", and one row per source: its kind as a small icon (video, book, article, study, database), its
   title, its author or channel, and what the opening took from it ("the plan with c3 and d4") in muted text.
 - A line under the list: "Ideas taken from these sources and written in our own words; every claim checked with the
-  engine." (The authoring rule in [courses](../courses.md), said once to the learner.)
+  engine." (The authoring rule in [making-openings](../making-openings.md), said once to the learner.)
 - Lichess data and puzzles are not listed here; they are credited once on [credits](../pages/credits.md).
 
 ## Configuration

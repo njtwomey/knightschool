@@ -46,8 +46,7 @@ Uncommitted files that belong to them: `content/openings/{kings-indian-black,rar
 3. Later, if wanted: the Danish and Vienna gambits, and Black's gambit lines. The Blackmar-Diemer, Torre and Veresov are
    gaps in `qgd-black`, to add there rather than as openings.
 
-The way of working is in the `add-content` skill: 10 to 20 main lines by popularity, depth 18, one Stockfish at a time
-and one thread, line ids that don't start like a move.
+The standard is in [making-openings.md](../v2/making-openings.md) and the steps are in the `add-content` skill.
 
 ## Decisions for the owner
 
