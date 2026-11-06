@@ -28,6 +28,30 @@ export const lineHref = (id: string, line: string, stage?: Stage) =>
 export const finalTestHref = (id: string) => to(`/openings/${id}/test`);
 export const mapHref = (id: string) => to(`/openings/${id}/map`);
 
+/**
+ * The step or follow-up either side of one, for walking an opening in order without its menus. Steps go from step to
+ * step, across variations, so the main line stays unbroken. A step's follow-ups run from it and rejoin at the next step:
+ * the first goes back to the step, the last goes on to the step after.
+ */
+export function stepNeighbours(
+  variations: readonly Pick<VariationData, 'steps' | 'followUps'>[],
+  at: { step: number; followUp?: number },
+): { previous?: StepData; next?: StepData } {
+  const steps = variations.flatMap((variation) => variation.steps);
+  const index = steps.findIndex((row) => row.number === at.step);
+  const step = steps[index];
+  if (!step) return {};
+  const before = steps[index - 1];
+  const after = steps[index + 1];
+  const place = (previous?: StepData, next?: StepData) => ({
+    ...(previous ? { previous } : {}),
+    ...(next ? { next } : {}),
+  });
+  if (at.followUp === undefined) return place(before, after);
+  const followUps = variations.flatMap((variation) => variation.followUps?.[step.id] ?? []);
+  return place(at.followUp > 1 ? followUps[at.followUp - 2] : step, followUps[at.followUp] ?? after);
+}
+
 /** A catalogue entry as an opening card. */
 export function openingSummary(entry: Catalog['openings'][number]): OpeningSummary {
   return {

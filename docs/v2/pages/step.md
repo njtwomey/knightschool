@@ -45,6 +45,8 @@ rewritten.
 [breadcrumbs](../components/breadcrumbs.md): Openings › Opening ▾ › Variation ▾ › Step n ▾ (the variation's steps with
 their follow-ups under each, and their states), then the heading and the stages as tabs, done ones ticked.
 
+[pager](../components/pager.md) beside the stages: previous and next, by name, step to step across the opening.
+
 Two columns from lg; on a phone: board, controls, then the panel in the page's flow.
 
 - **Learn**: the board in `learn` (marks, the evaluation, the arrow for the move to come). The story's introduction is

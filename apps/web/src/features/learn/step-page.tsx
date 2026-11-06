@@ -14,6 +14,7 @@ import { LearnFlow, type DoneContext } from './learn-flow';
 import { stepMoves, type LineMove } from './model';
 import { openingVariations, topPuzzles, useStepActions, type OpeningData } from './opening-data';
 import { LearnCrumbs } from './learn-crumbs';
+import { LearnPager } from './learn-pager';
 import { OpeningFrame } from './opening-frame';
 import { useGates } from './use-learn';
 import { checkpointHref, openingHref, stepHref } from './views';
@@ -75,6 +76,7 @@ function StepView({
   const { one } = data;
   const opening = one.opening;
   const gates = useGates(opening.id);
+  const place = useMemo(() => ({ step: n }), [n]);
   const moves = useMemo(() => stretchOf(data, step, range), [data, step, range]);
   const all = useMemo(() => stepMoves(opening, step).all, [opening, step]);
   // The move that leads into the stretch, with its marks: the position the story starts from.
@@ -108,6 +110,7 @@ function StepView({
         </>
       }
       subtitle={`${opening.name}, ${variation?.name ?? step.variation}`}
+      pager={<LearnPager data={data} at={place} />}
       notice={(hash) =>
         state === 'locked' && gates && !hash.test ? (
           <Notice

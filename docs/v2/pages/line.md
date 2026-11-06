@@ -27,7 +27,8 @@ name on the [map](map.md) and in [search](search.md); "grows from" and "branches
 Explore › (line, a menu of the lines it branches from and that grow from it).
 
 1. Heading: the line's name with its [kind-badge](../components/kind-badge.md) (main, sideline, rare, gambit, trap to
-   spring, trap to avoid), then the stages as tabs.
+   spring, trap to avoid), then the stages as tabs, with a [pager](../components/pager.md) to the opening's lines either
+   side.
 2. **Learn**: the [line-story](../components/line-story.md) beside a [board](../components/board.md) in `learn`: the
    introduction (how many of the learner's moves, and whether the line is drilled), "branches off the Giuoco Piano
    after 4.c3", the moves from the branch with every note, refutations folded under the move they follow, where it ends

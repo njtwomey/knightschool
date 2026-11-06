@@ -29,6 +29,8 @@ The follow-up rows under their step on [opening](opening.md) and [variation](var
 [breadcrumbs](../components/breadcrumbs.md): Openings › Opening ▾ › Variation ▾ › Step n ▾ › 3a ▾ (the step's follow-ups),
 then the heading ("3a. If 4...h6 is played") and the stages.
 
+[pager](../components/pager.md) beside the stages: through the step's follow-ups, from the step and on to the next step.
+
 - **Learn**: the story's introduction is **why it is worth knowing**, in words and numbers: the evaluation before the
   mistake, after it and after the punishment ([eval-words](../components/eval-words.md); a missing evaluation says so,
   never a number carried over), and what the punishing line wins, from the board (core `followUpGain`, `gainWords`:

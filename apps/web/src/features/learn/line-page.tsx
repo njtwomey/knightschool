@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { KindBadge } from '@/components/chess/kind-badge';
 import { StepRow } from '@/components/openings/step-row';
 import { EmptyState } from '@/components/shared/empty-state';
+import { Pager, type PagerLink } from '@/components/shared/pager';
 import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/data/site-config';
 import { modeHref } from '@/features/practice/sources';
@@ -54,6 +55,11 @@ function LineView({ data, lineId }: { data: OpeningData; lineId: string }) {
   const own = useMemo(() => all.slice(branch), [all, branch]);
   const lead = all[branch - 1];
   const earns = lineEarnsCards(line);
+  // Either side of it in the order the crumb's menu lists them.
+  const lineLink = (other?: (typeof opening.lines)[number]): PagerLink | undefined =>
+    other ? { name: other.name ?? other.id, href: lineHref(opening.id, other.id) } : undefined;
+  const previous = lineLink(opening.lines[opening.lines.indexOf(line) - 1]);
+  const next = lineLink(opening.lines[opening.lines.indexOf(line) + 1]);
   // The parent: the earlier line it shares the most moves with.
   const parent = opening.lines
     .slice(0, opening.lines.indexOf(line))
@@ -91,6 +97,7 @@ function LineView({ data, lineId }: { data: OpeningData; lineId: string }) {
         </>
       }
       subtitle={`In the ${variation?.name ?? line.variation} of the ${opening.name}`}
+      pager={<Pager label="Lines of this opening" {...(previous ? { previous } : {})} {...(next ? { next } : {})} />}
       moves={own}
       {...(lead ? { lead: { uci: lead.uci, ...(lead.note ? { note: lead.note } : {}) } } : {})}
       intro={

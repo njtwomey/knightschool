@@ -51,6 +51,8 @@ export type LearnFlowProps = {
   crumbs: ReactNode;
   title: ReactNode;
   subtitle?: ReactNode;
+  /** Beside the stages: previous and next, to walk the opening in order. */
+  pager?: ReactNode;
   /** Above the stage: a locked step's or follow-up's notice. */
   notice?: (hash: FlowHash) => ReactNode;
   /** The moves the story tells and Try asks, in order; the learner's are `mine`. */
@@ -86,7 +88,7 @@ export type LearnFlowProps = {
 const squares = (uci: string) => ({ from: uci.slice(0, 2), to: uci.slice(2, 4) });
 
 export function LearnFlow(props: LearnFlowProps) {
-  const { data, item, remember, crumbs, title, subtitle, notice, testOut, footer } = props;
+  const { data, item, remember, crumbs, title, subtitle, pager, notice, testOut, footer } = props;
   const opening = data.one.opening;
   const { hash, setHash, nextAfter, version } = useLearnFlow({ opening: opening.id, item, remember });
   // A finished Try's guesses, kept for Done's record.
@@ -102,16 +104,19 @@ export function LearnFlow(props: LearnFlowProps) {
           <h1 className="flex flex-wrap items-center gap-3 text-2xl font-semibold tracking-tight">{title}</h1>
           {subtitle ? <p className="text-sm text-muted-foreground">{subtitle}</p> : null}
         </div>
-        <Tabs value={hash.stage} onValueChange={(value) => setHash({ stage: value as Stage, m: 0, test: false })}>
-          <TabsList aria-label="Stages">
-            {STAGES.map((stage, i) => (
-              <TabsTrigger key={stage} value={stage}>
-                {i < stageIndex ? <Check aria-hidden className="text-state-known" /> : null}
-                {STAGE_NAMES[stage]}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <div className="flex flex-wrap items-center gap-3">
+          <Tabs value={hash.stage} onValueChange={(value) => setHash({ stage: value as Stage, m: 0, test: false })}>
+            <TabsList aria-label="Stages">
+              {STAGES.map((stage, i) => (
+                <TabsTrigger key={stage} value={stage}>
+                  {i < stageIndex ? <Check aria-hidden className="text-state-known" /> : null}
+                  {STAGE_NAMES[stage]}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+          {pager}
+        </div>
       </div>
       {notice?.(hash)}
       {hash.stage === 'learn' ? (

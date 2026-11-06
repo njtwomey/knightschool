@@ -11,6 +11,7 @@ import { LearnFlow } from './learn-flow';
 import { bakedScore, lineMoves, type LineMove } from './model';
 import { followUpMoves, openingFollowUps, openingVariations, type OpeningData } from './opening-data';
 import { LearnCrumbs } from './learn-crumbs';
+import { LearnPager } from './learn-pager';
 import { OpeningFrame } from './opening-frame';
 import { useGates } from './use-learn';
 import { followUpHref, openingHref, stepHref } from './views';
@@ -70,6 +71,7 @@ function FollowUpView({ data, followUp, n, k }: { data: OpeningData; followUp: F
   const { one } = data;
   const opening = one.opening;
   const gates = useGates(opening.id);
+  const place = useMemo(() => ({ step: n, followUp: k }), [n, k]);
   const variations = useMemo(() => openingVariations(data), [data]);
   const variation = variations.find((v) => v.steps.some((row) => row.number === n))!;
   const parent = variation.steps.find((row) => row.number === n)!;
@@ -108,6 +110,7 @@ function FollowUpView({ data, followUp, n, k }: { data: OpeningData; followUp: F
       crumbs={<LearnCrumbs data={data} at={{ step: n, followUp: k }} />}
       title={`${label}. ${title}`}
       subtitle={`A follow-up of step ${n}, ${stepTitle(parent)}: the mistake, then how to punish it.`}
+      pager={<LearnPager data={data} at={place} />}
       notice={() =>
         row?.state === 'locked' && gates ? (
           <Notice

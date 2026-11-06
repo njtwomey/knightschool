@@ -147,3 +147,4 @@ Short and concrete: what we want, not how to code it.
 | [icon-action.md](icon-action.md) | A small icon button with its label as a hint                              |
 | [empty-state.md](empty-state.md) | What a list or panel says when there is nothing in it, and what to do     |
 | [notice.md](notice.md)           | Messages: saved, problems, offline, the tab taken by another tab          |
+| [pager.md](pager.md)             | Previous and next through a sequence, each saying what it goes to         |

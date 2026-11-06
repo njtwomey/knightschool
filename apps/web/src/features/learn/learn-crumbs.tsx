@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { StateBadge } from '@/components/progress/state-badge';
-import { StartAnywayDialog } from '@/components/openings/step-row';
-import { stepLabel, stepTitle, type StepData } from '@/components/openings/steps';
+import { stepTitle, type StepData } from '@/components/openings/steps';
 import type { Crumb, CrumbSibling } from '@/components/shared/breadcrumbs';
-import { go, openingVariations, useStepActions, type OpeningData } from './opening-data';
+import { openingVariations, type OpeningData } from './opening-data';
 import { OpeningCrumbs } from './opening-frame';
-import { followUpHref, lineHref, stepHref, variationHref } from './views';
+import { useOpenLocked } from './use-open-locked';
+import { lineHref, stepHref, variationHref } from './views';
 
 /** Where a Learn page sits in its opening: the variation, the step, the step's follow-up, or a line. */
 export type LearnPlace = { variation?: string; step?: number; followUp?: number; line?: string };
@@ -19,9 +19,8 @@ export type LearnPlace = { variation?: string; step?: number; followUp?: number;
 export function LearnCrumbs({ data, at }: { data: OpeningData; at: LearnPlace }) {
   const { one, progress } = data;
   const opening = one.opening;
-  const actions = useStepActions(opening);
+  const { gates, hrefOf, locked, opener, dialog } = useOpenLocked(opening);
   const variations = useMemo(() => openingVariations(data), [data]);
-  const [asking, setAsking] = useState<StepData | null>(null);
   const variation =
     variations.find((v) => v.id === at.variation) ??
     (at.step !== undefined ? variations.find((v) => v.steps.some((row) => row.number === at.step)) : undefined);
@@ -29,24 +28,22 @@ export function LearnCrumbs({ data, at }: { data: OpeningData; at: LearnPlace })
   const followUps = stepRow ? (variation?.followUps?.[stepRow.id] ?? []) : [];
   const followUpRow = at.followUp !== undefined ? followUps[at.followUp - 1] : undefined;
 
-  const hrefOf = (row: StepData) =>
-    row.followUp ? followUpHref(opening.id, row.number, row.followUp.index + 1) : stepHref(opening.id, row.number);
   // A step or follow-up in a menu: its state as a dot; locked ones say what opens them and ask once before opening.
   const item = (row: StepData, label: string): CrumbSibling => {
-    const locked = row.state === 'locked' && actions.gates;
+    const onSelect = opener(row);
     return {
       id: row.id,
       label,
       href: hrefOf(row),
-      badge: <StateBadge state={row.state} of="step" size="dot" gates={actions.gates} />,
+      badge: <StateBadge state={row.state} of="step" size="dot" gates={gates} />,
       ...(row.followUp ? { indent: true } : {}),
-      ...(locked
+      ...(locked(row)
         ? {
             locked: row.opensWhen
               ? `Opens when step ${row.opensWhen.number} (${row.opensWhen.name}) is known`
               : 'Opens once the step before is known',
             opens: true,
-            ...(actions.skipAsk ? {} : { onSelect: () => setAsking(row) }),
+            ...(onSelect ? { onSelect } : {}),
           }
         : {}),
     };
@@ -64,7 +61,7 @@ export function LearnCrumbs({ data, at }: { data: OpeningData; at: LearnPlace })
           id: v.id,
           label: v.name,
           href: variationHref(opening.id, v.id),
-          badge: <StateBadge state={v.state} of="variation" size="dot" gates={actions.gates} />,
+          badge: <StateBadge state={v.state} of="variation" size="dot" gates={gates} />,
         })),
       },
     });
@@ -113,25 +110,7 @@ export function LearnCrumbs({ data, at }: { data: OpeningData; at: LearnPlace })
         crumbs={crumbs}
         {...(at.line ? { tab: 'lines' as const } : {})}
       />
-      <StartAnywayDialog
-        open={asking !== null}
-        onOpenChange={(next) => {
-          if (!next) setAsking(null);
-        }}
-        label={asking ? stepLabel(asking) : ''}
-        buildsOn={{
-          number: asking?.opensWhen?.number ?? (asking ? asking.number - 1 : 0),
-          ...(asking?.opensWhen ? { name: asking.opensWhen.name } : {}),
-        }}
-        onStart={(dontAsk) => {
-          if (dontAsk) actions.onSkipAsk();
-          if (asking) go(hrefOf(asking));
-        }}
-        onGoToStep={(dontAsk) => {
-          if (dontAsk) actions.onSkipAsk();
-          if (asking) actions.onGoToStep(asking.opensWhen?.number ?? asking.number - 1);
-        }}
-      />
+      {dialog}
     </>
   );
 }
