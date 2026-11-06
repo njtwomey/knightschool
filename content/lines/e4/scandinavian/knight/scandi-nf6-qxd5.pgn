@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "scandi-nf6 3.d4"]
+[Name "3...Qxd5: the queen after all"]
+
+3... Qxd5 { Black takes with the queen after all. }
+4. Nc3 { Hits her. After 4...Qd8 or 4...Qd6 as well, play Nf3, and you are in the lines you know. [%cal Gc3d5] }
+4... Qa5 { The most common retreat. Nf3 next, and the game is in the 3...Qa5 lines. } *

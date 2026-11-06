@@ -1,0 +1,28 @@
+[For "white"]
+[Kind "sideline"]
+[Start "scandi-nf6 3.d4"]
+[Name "3...Bg4: the Portuguese"]
+
+3... Bg4 { The Portuguese. Black brings out the bishop instead of taking the pawn back at once. }
+4. Be2 { Offers a swap, and keeps the game simple. The engine prefers 4.f3, but after 4...Bf5 Black has quick play and White scores 47%, against 51% for this. }
+4... Bxe2
+( 4... Bf5? { Keeps the bishops on, but gives White a move to guard d5. }
+  5. c4 { Guards d5. White keeps the extra pawn and has a big centre, and the engine gives about two pawns. } )
+5. Qxe2 { Most players take with the knight and score 49%. With the queen White scores 52%, and the engine calls both about level. }
+5... Qxd5
+6. Nf3 Nc6 { The most common move, four players in five. }
+7. c4 { Hits the queen and gets ready for d5. White scores 57% with this, the best of the common moves. }
+7... Qh5 { The most common retreat. }
+( 7... Qd7? { The queen is safe here, but d5 comes with a gain of time. }
+  8. d5 Nb4
+  9. a3 Na6
+  10. Nc3 { No material is won, but the knight on a6 is out of the game, and the engine has White more than a pawn and a half ahead. } )
+( 7... Qa5+? { A check that helps White. }
+  8. Nc3 { Blocks with a developing move. }
+  8... e6
+  9. d5 { The knight is hit, and the e-file is about to open with Black's king still on it. No material is won, but the engine has White more than two pawns ahead. } )
+8. d5 { Hits the knight. }
+8... Nb4
+9. a3 { Hits the knight again. The queen on e2 covers c2, so Black has no fork there. }
+9... Na6
+10. Nc3 { White is ahead in development and has space, and the knight on a6 is doing little. The engine gives about two and a half pawns. } *

@@ -1,0 +1,24 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-qa5-c6 5.Nf3"]
+[Name "5...Nf6: Bc4 and the same chase"]
+
+5... Nf6 { The same position comes from 4...Nf6 5.Nf3 c6. }
+6. Bc4 { Develops and gets ready to castle. 6.Bd2 is more common, and just as good. }
+6... Bg4 { The most common move here. }
+7. h3 { The same question. 7.O-O is a little more common, but it scores 46%, against 50% for 7.h3, and the engine prefers 7.h3 by half a pawn. [%cal Gh3g4] }
+7... Bh5
+8. g4 { Breaks the pin and hits the bishop. }
+8... Bg6
+9. Bd2 { Ends the pin on the c3 knight. Now, if that knight moves, the bishop hits the queen. 9.Ne5 is more common, but it lets Black equalise with 9...Nbd7. [%cal Gd2a5] [%idea discovered-attack] }
+9... e6
+10. Qe2 { Gets ready to castle long. [%cal Ge1c1] }
+10... Nbd7
+( 10... Be7? { Develops, but it gives the knight time to jump in. }
+  11. Ne5 Nbd7
+  12. h4 { Threatens h5, and the bishop on g6 has nowhere good to go. No material is won yet, but the engine has White nearly three pawns ahead. [%cal Gh4h5] [%idea trapped-piece] } )
+( 10... Bxc2? { Wins a pawn: the bishop on d2 blocks the queen's guard of c2. But it costs Black a lot of time. }
+  11. Rc1 { Hits the bishop with a rook on the open file. }
+  11... Bg6
+  12. d5 { Black is a pawn up, but the game opens with Black's king still in the middle, and the engine has White about five pawns ahead. The gain is in time and attack, not material. } )
+11. O-O-O { The king is safe and the rook stands behind the d4 pawn. The engine gives about a pawn. [%idea castle-early] } *

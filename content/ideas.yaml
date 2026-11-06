@@ -88,3 +88,7 @@
   name: Remove the guard
   kind: tactic
   summary: Swap off or chase away the piece that guards something, and what it guarded falls.
+- id: chase-the-queen
+  name: Chase the early queen
+  kind: principle
+  summary: A queen that comes out early can be hit by developing moves, and every hit is a free move for the side doing the hitting.

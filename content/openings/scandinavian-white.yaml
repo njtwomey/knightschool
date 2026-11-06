@@ -1,0 +1,300 @@
+name: Scandinavian Defence
+side: white
+start: 1. e4 d5
+level: next
+style: [classical, system]
+summary: >-
+  Take on d5 and hit whatever takes back. Nc3 chases the queen, d4 takes the centre, and White's pieces come out with a
+  gain of time.
+about:
+  idea: >-
+    After 2.exd5 Black has to take back, and whatever takes back stands on d5, where it can be hit. Against the queen, Nc3
+    wins a free move. Against the knight, c4 does the same. After that White has one plan in every line: d4, Nf3, a bishop
+    out, and castle. If a bishop comes to g4, ask it what it wants with h3. If the queen checks on e5 or e6, block with
+    Be2 and keep hitting her.
+  risks: >-
+    Black's position is sound. After 3...Qa5 with ...c6 there is no quick win: the engine gives up to a pawn, and White
+    scores 50% at this level. The pawn offer 2...c6 is hard too, because a pawn up is not always easy to use. In the
+    lines with h3 and g4 White's kingside pawns are far forward, so the king usually goes to the queenside.
+  suits: >-
+    Players who want one simple plan, and who like punishing a queen that comes out too early. 1...d5 is the third most
+    common reply to 1.e4 at this level. Nearly three players in ten then check on e5 or e6 after 3.Nc3, which only costs
+    them time, and many natural moves lose material.
+  origin: >-
+    One of the oldest recorded openings: it was played in Valencia in 1475. It takes its name from Scandinavian players
+    who studied it in the 1800s. Bent Larsen brought it back to the top level, and beat Anatoly Karpov with it in 1979.
+ideas:
+  [chase-the-queen, centre-pawns, pin, fork, poisoned-pawn, queen-trap, discovered-attack, trapped-piece, castle-early]
+variations:
+  - id: queen-back
+    name: 3...Qd8 and 3...Qd6
+    intro: >-
+      The queen steps back, and Black has nothing to show for it. White takes the centre with d4, brings out the knight
+      and bishop, and castles. The game is calm and White has more space. The one thing to learn here is what to do about
+      the pin with ...Bg4: ask the bishop with h3. If it stays on the h5 to d1 line, g4 sends it back and it starts to run
+      out of squares.
+    lines: [scandi-main, scandi-qd8-e6, scandi-qd8-bg4, scandi-qd6]
+    plans:
+      - Play d4 and Nf3, then Bd3, and castle.
+      - Answer ...Bg4 with h3. If ...Bh5, play g4 and Ne5.
+      - If Black takes on f3, take back with the queen and hit b7.
+    questions:
+      - id: why-nc3
+        at: 1. e4 d5 2. exd5 Qxd5
+        ask: White plays 3.Nc3. Apart from bringing out a piece, what does the move do?
+        answers: [[queen], [tempo], [time]]
+        examples:
+          right: [it hits the queen, it gains a tempo, it wins time because she has to move]
+          wrong: [it guards e4, it wins a pawn, it gets ready to castle]
+        explain: >-
+          The knight hits the queen, so she has to move again. White has brought out a piece for free, and that is the
+          idea of the whole opening.
+      - id: what-hangs-b7
+        at: 1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6 5. Nf3 Bg4 6. h3 Bxf3 7. Qxf3 e6
+        ask: Black's last move was ...e6. What can White take?
+        answers: [[b7], [Qxb7]]
+        examples:
+          right: [the pawn on b7, Qxb7, b7]
+          wrong: [the knight on f6, nothing, d4]
+        explain: >-
+          The bishop that guarded b7 has gone, and ...e6 does nothing to block the diagonal. Qxb7 wins a clean pawn. That
+          is why 7...c6 is the right move.
+  - id: queen-a5
+    name: 3...Qa5
+    intro: >-
+      The queen stays out on a5, where the knights can't easily reach her and where she pins the knight on c3. This is
+      Black's soundest way to play, and it is where the game is most level. White scores about 50%. Nothing in these lines
+      forces a win, so the aim is a good position: h3 against the pin, Bd2 to end the pin on c3, and the king on the
+      queenside.
+    lines: [scandi-qa5, scandi-qa5-c6, scandi-qa5-bc4]
+    plans:
+      - Play d4 and Nf3 as usual.
+      - Answer ...Bg4 with h3 straight away, not Be2.
+      - When the bishop stands on g6, Ne5 and Nc4 hit the queen.
+      - With g4 played, castle long.
+    questions:
+      - id: trap-the-queen
+        at: >-
+          1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bg4 6. h3 Bh5 7. g4 Bg6 8. Ne5 Nbd7 9. Nc4 Qb4
+        ask: Black's queen has gone to b4. Which pawn move wins her?
+        answers: [[a3]]
+        examples:
+          right: [a3, the pawn to a3, a3 traps her]
+          wrong: [h4, c3, d5]
+        explain: >-
+          10.a3 hits the queen, and she has no safe square left. Her way back along the diagonal is shut by the pawn on e7.
+          The best she can do is take the knight on c4, and that loses her for a knight.
+      - id: why-bd2
+        at: >-
+          1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 c6 5. Nf3 Nf6 6. Bc4 Bg4 7. h3 Bh5 8. g4 Bg6 9. Bd2
+        ask: White has played Bd2. What happens to Black's queen if the knight on c3 moves?
+        answers: [[bishop], [discovered], [attacked], [hit]]
+        examples:
+          right: [the bishop hits her, a discovered attack, she is attacked by the bishop]
+          wrong: [nothing, White gets mated, she wins the knight]
+        explain: >-
+          The knight stands between the bishop on d2 and the queen on a5. When it moves, the bishop hits her, so any knight
+          move comes with a second threat.
+  - id: checks
+    name: The checks, 3...Qe6+ and 3...Qe5+
+    intro: >-
+      Nearly three players in ten give a check with the queen here, and it costs Black a lot of time. Be2 blocks it and
+      develops. Watch one thing: while the queen stays on the e-file, the bishop on e2 is pinned to the king and can't
+      move. Once you know that, you can see Black's one trick, and these lines give White the best scores in the opening.
+    lines: [scandi-qe6, scandi-qe6-qg6, scandi-qe5]
+    plans:
+      - Block the check with Be2.
+      - Remember that the bishop on e2 is pinned while the queen is on the e-file.
+      - Let g2 go. Hit the queen with Rg1 and develop.
+      - Answer ...Bg4 with d4, not Nf3.
+    questions:
+      - id: what-does-d4-threaten
+        at: 1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe6+ 4. Be2 Nc6 5. d4
+        ask: What is White threatening?
+        answers: [[d5], [fork]]
+        examples:
+          right: [d5, the pawn to d5, a fork of the queen and the knight]
+          wrong: [Bf4, to castle, Nb5]
+        explain: >-
+          6.d5 would hit the queen on e6 and the knight on c6 together. Black can only save one of them.
+      - id: why-not-nf3
+        at: 1. e4 d5 2. exd5 Qxd5 3. Nc3 Qe5+ 4. Be2 Bg4
+        ask: 5.Nf3 would hit the queen, and a quarter of players choose it. What is wrong with it?
+        answers: [[pinned], [pin], [gxf3], [g-pawn]]
+        examples:
+          right:
+            - the bishop on e2 is pinned
+            - it is pinned to the king, so it can't take back on f3
+            - White has to play gxf3
+          wrong: [the queen is lost, it hangs a rook, nothing]
+        explain: >-
+          After 5...Bxf3 the bishop on e2 can't take back, because the queen on e5 pins it to the king. White has to take
+          with the g-pawn, and those pawns stay weak for the rest of the game.
+  - id: knight
+    name: 2...Nf6, the knight takes back
+    intro: >-
+      Black keeps the queen at home and takes back with the knight. The idea is the same: c4 hits the piece on d5 and
+      White gets two pawns in the centre. The game is slower than the queen lines, and Black has no weaknesses, but White
+      has more space. Black can also play 3...Bg4, the Portuguese, and there White keeps things simple with Be2.
+    lines: [scandi-nf6, scandi-nf6-nb6, scandi-nf6-qxd5, scandi-portuguese]
+    plans:
+      - Play d4, and hit the knight on d5 with c4.
+      - Then Nf3, Be2 and castle, with Nc3 next.
+      - Against ...Bg4 before the pawn is back, swap bishops with Be2.
+    questions:
+      - id: why-c4
+        at: 1. e4 d5 2. exd5 Nf6 3. d4 Nxd5
+        ask: White plays 4.c4. What does the move do?
+        answers: [[knight], [centre], [tempo], [time]]
+        examples:
+          right: [it hits the knight, it gains a tempo, it builds a centre with two pawns]
+          wrong: [it pins the bishop, it wins a pawn, it stops ...e6]
+        explain: >-
+          The pawn hits the knight, so Black has to move it again. White gets a free move and two pawns side by side in the
+          centre, the same gain of time as Nc3 against the queen.
+  - id: gambit
+    name: 2...c6, the pawn offer
+    intro: >-
+      Black gives up a pawn to get the pieces out fast. White should take it, and then stop grabbing. Players at this level
+      score only 50%, and the most common way to go wrong is to take a second pawn. Develop, castle, and be happy with one extra pawn.
+    lines: [scandi-c6]
+    plans:
+      - Take on c6, then Nf3 and Bb5.
+      - Swap on c6 to spoil Black's pawns.
+      - Castle, play Re1 and d3. Do not take on e5.
+    questions:
+      - id: why-not-nxe5
+        at: 1. e4 d5 2. exd5 c6 3. dxc6 Nxc6 4. Nf3 e5 5. Bb5 Bd6 6. Bxc6+ bxc6 7. O-O Nf6 8. Re1 O-O
+        ask: Seven players in ten take on e5 here. What goes wrong after 9.Nxe5 Bxe5 10.Rxe5?
+        answers: [[Ng4], [Qh4], [f2], [h2]]
+        examples:
+          right: [Ng4 hits the rook, Ng4 and Qh4, the queen comes to h4 and hits f2 and h2]
+          wrong: [the rook is trapped, nothing, Black wins the queen]
+        explain: >-
+          10...Ng4 hits the rook, and after 11.Re4 Qh4 Black's queen and knight are hitting f2 and h2. White has to give up
+          the rook for the knight, and Black's pieces are all coming at the king.
+setup:
+  title: How the Scandinavian starts
+  text: >-
+    After 1.e4 Black hits the pawn at once with 1...d5, before any piece has come out. White takes it, and Black has to
+    spend time getting it back. The rest of the opening follows from what takes back on d5.
+steps:
+  scandi-main:1:
+    title: Nc3 and the free move
+    text: >-
+      Three players in four take back with the queen, and Nc3 hits her with a developing move. After she goes home, White
+      has a piece out and takes the centre with d4 while Black has nothing to show. Nf3 guards the pawn.
+  scandi-main:2:
+    title: Bd3, castle, Bf4
+    text: >-
+      Black plays solidly with ...e6, and the c8 bishop stays shut in. White brings out the bishops and castles. Nothing is
+      forced here. White simply has more space and the easier game.
+  scandi-qd8-e6:1:
+    title: 4...e6, the same set-up
+    text: >-
+      Black plays the pawn before the knight. White plays Nf3 all the same, and after 5...Nf6 the position is the one you
+      have just learned.
+  scandi-qd8-bg4:1:
+    title: h3 against the pin
+    text: >-
+      When the bishop pins the knight, h3 asks what it wants. If it keeps the pin with ...Bh5, g4 and Ne5 send it back and
+      give White the game. If it takes on f3, White gets the two bishops and hits b7. Black has only one good reply there,
+      and every other move loses something. Then Be3, Bd3 and castling long finish the plan.
+  scandi-qd6:1:
+    title: 3...Qd6, the same plan
+    text: >-
+      The queen stops on d6, and White plays exactly as before: d4, Nf3 and h3 against the pin. After g4 and Ne5 White has
+      space and a strong knight, and has to remember to develop before pushing any more pawns.
+  scandi-qa5:1:
+    title: d4, Nf3 and h3 at once
+    text: >-
+      On a5 the queen pins the knight on c3, but nothing is attacking it, so White carries on with d4 and Nf3. When the
+      bishop comes to g4, h3 is much better than the usual Be2, and g4 breaks the pin.
+  scandi-qa5:2:
+    title: Ne5 and Nc4
+    text: >-
+      The knight goes to e5 and on to c4, and the queen is hit again. She has to go to a6, because b4 loses her to a3. Bf4
+      then brings out the last piece and hits c7.
+  scandi-qa5-c6:1:
+    title: 4...c6, and the two bishops
+    text: >-
+      Black plays ...c6 before the knight, so the queen has a way home. If the bishop drops back to h5 it gets into even
+      worse trouble than before, so the good move is ...Bxf3. White takes with the queen, ends the pin with Bd2, and castles
+      long with the two bishops.
+  scandi-qa5-bc4:1:
+    title: 5...Nf6, Bc4 and the same chase
+    text: >-
+      Black brings out the knight. White develops the bishop, and when ...Bg4 comes, h3 and g4 send it back. Bd2 then ends
+      the pin on the knight, and from now on any knight move hits the queen.
+  scandi-qa5-bc4:2:
+    title: Qe2 and castle long
+    text: >-
+      With the g-pawn on g4, the king does not want to go to the kingside. Qe2 clears the way, and castling long puts the
+      rook behind the d4 pawn.
+  scandi-qe6:1:
+    title: Be2, d4 and Nb5
+    text: >-
+      The check is blocked with a developing move. d4 then threatens d5, a fork of the queen and the knight. The queen runs
+      to g6 and hits g2, and White ignores that: Nb5 threatens a fork on c7. The king has to guard it, so Black can no
+      longer castle, and Bf4 hits c7 again.
+  scandi-qe6:2:
+    title: Bf3 and the pawn on c7
+    text: >-
+      Black takes g2, and Bf3 saves the rook with a hit on the queen. Then c7 falls with check. Material is level, but
+      Black's king is stuck in the middle of the board, and White is close to winning.
+  scandi-qe6-qg6:1:
+    title: 4...Qg6, a pawn for four pieces
+    text: >-
+      The queen goes straight for g2, and White lets her have it. Rg1 and Rg3 hit her with the rook, Nf3 and d4 come next,
+      and for one pawn White has four pieces in play against Black's queen on her own.
+  scandi-qe5:1:
+    title: The pin on e2
+    text: >-
+      This check has a trick in it. The bishop on e2 is pinned, so 5.Nf3 fails to ...Bxf3. The right move is d4, which hits
+      the queen with a pawn. After the bishops come off on e2, the knight takes back, the queen has to move again, and
+      White castles.
+  scandi-qe5:2:
+    title: d5 and Bd2
+    text: >-
+      d5 hits the knight, and Black's best answer is to castle long and pin the pawn to the queen. Do not take on c6. Bd2
+      ends the pin on c3, and White stands much better.
+  scandi-nf6:1:
+    title: d4, c4, and the knight goes back
+    text: >-
+      Black takes back with the knight, and c4 hits it just as Nc3 hit the queen. White has two pawns in the centre. Nf3
+      guards d4, and against the pin Be2 is the simple answer here.
+  scandi-nf6:2:
+    title: Castle and Nc3
+    text: >-
+      White castles and brings out the other knight. The position is calm, and White has more space. h3 asks the bishop
+      what it wants, and Black's only break is ...c5.
+  scandi-nf6-nb6:1:
+    title: 4...Nb6, the knight goes wide
+    text: >-
+      The knight goes to b6, away from the king, and hits c4. White plays the same moves, and with the bishop on g4 asked
+      to leave, Be3 guards the centre.
+  scandi-nf6-qxd5:1:
+    title: 3...Qxd5, back to the queen lines
+    text: >-
+      Black takes with the queen after all. Nc3 hits her, and after Nf3 next you are back in lines you have already
+      learned.
+  scandi-portuguese:1:
+    title: The Portuguese, 3...Bg4
+    text: >-
+      Black brings out the bishop before taking the pawn back. The engine's move is 4.f3, but it asks a lot, and White
+      scores badly with it. Be2 swaps the bishops, and Black's queen comes to d5, where c4 hits her.
+  scandi-portuguese:2:
+    title: d5 and a3
+    text: >-
+      The queen goes to h5, and d5 hits the knight. It runs to b4, a3 sends it to the edge of the board, and Nc3 finishes
+      White's development with a clear lead.
+  scandi-c6:1:
+    title: Take the pawn, then develop
+    text: >-
+      Black offers a pawn. White takes it, plays Nf3 and Bb5, and swaps on c6 to spoil Black's pawns. Black gets the two
+      bishops and quick play for it.
+  scandi-c6:2:
+    title: Castle, Re1, d3
+    text: >-
+      The bad move in this stretch is the second pawn. Most players take on e5 and get attacked. White castles, puts a rook
+      on e1, and plays d3 to free the last bishop.

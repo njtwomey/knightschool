@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "scandi-main 3.Nc3"]
+[Name "3...Qd6: the same plan"]
+
+3... Qd6 { One player in sixteen. The queen stays in the middle of the board, where Nb5 or Bf4 can hit her later. }
+4. d4 { The same plan as against 3...Qd8: the centre first, then the knight, then the bishops. }
+4... Nf6
+5. Nf3 Bg4 { The most common move here, and the same pin as before. [%cal Rg4d1] }
+6. h3 { The same question. [%cal Gh3g4] }
+6... Bh5 { Keeps the pin. About six players in ten choose it. }
+7. g4 { Breaks the pin and hits the bishop. [%cal Gg4h5] }
+7... Bg6
+8. Ne5 { The knight is safe on e5, guarded by the d4 pawn, and it hits the bishop. White's kingside pawns are far forward, so bring out the bishops next and castle soon. The engine gives nearly a pawn. } *

@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "main"]
+[Name "3...Qd8: the queen goes home"]
+
+1. e4 d5 { The Scandinavian. Black hits e4 on the first move, before any piece has come out. [%cal Gd5e4] }
+2. exd5 { Takes the pawn. Black has to spend a move getting it back, and whatever takes back on d5 can be hit by a White piece or pawn. }
+2... Qxd5 { Three players in four take back with the queen. Black has the pawn back, but the queen has come out very early. }
+3. Nc3 { Develops a piece and hits the queen, so White gets a free move. This is the idea of the whole opening: Black's queen keeps moving while White's pieces come out. [%cal Gc3d5] [%idea chase-the-queen] }
+3... Qd8 { The most common retreat, played by a third of players. The queen is safe, but she has made two moves and is back where she started. }
+4. d4 { Takes the centre. White now has a pawn in the middle and a piece out, and Black has neither. [%idea centre-pawns] }
+4... Nf6
+5. Nf3 { Guards d4 and gets ready to castle. }
+5... e6 { The most common move here. It is solid, but it shuts in the c8 bishop. }
+6. Bd3 { The bishop's best square: it aims at h7 and leaves room for the knight. White scores 55% with it, and 53% with 6.Bg5, the move most players choose. }
+6... Be7
+7. O-O { The king is safe, and the rook can come to the centre next. [%idea castle-early] }
+7... O-O
+8. Bf4 { The last minor piece comes out. Black's position is sound, so nothing is forced. White has more space and easier moves, and the engine gives about half a pawn. Next come Qe2 and a rook to e1 or d1. } *

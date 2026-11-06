@@ -1,0 +1,32 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-main 5.Nf3"]
+[Name "5...Bg4: the pin"]
+
+5... Bg4 { Pins the knight on f3 to the queen on d1. [%cal Rg4d1] [%idea pin] }
+6. h3 { Asks the bishop what it wants. White scores 55% with this, and 52% with the more common 6.Be2. [%cal Gh3g4] }
+6... Bxf3 { The engine's choice. Black gives up a bishop for a knight, so White will have the two bishops, but the bishop on c8 stays out of trouble. }
+( 6... Bh5? { The most common move. It keeps the pin, but the bishop runs out of squares. }
+  7. g4 { Breaks the pin and hits the bishop again. [%cal Gg4h5] }
+  7... Bg6
+  8. Ne5 { The knight is free to move now. It sits safely on e5, guarded by the d4 pawn, and the bishop can come to g2 next. }
+  8... e6
+  9. Bg2 { The bishop comes to the long diagonal and hits b7. Nothing is won yet, but Black has trouble guarding b7 and getting castled, and the engine has White more than two pawns ahead. [%cal Gg2b7] } )
+7. Qxf3 { Takes back and hits b7, which has lost the bishop that guarded it. [%cal Gf3b7] }
+7... c6 { The right move: it blocks the queen's way to b7. }
+( 7... Nc6? { Develops and blocks the diagonal too, but the knight can be pinned. }
+  8. Bb5 { Pins the knight to the king, and d5 is coming. [%cal Gb5e8] [%idea pin] }
+  8... Qd7
+  9. d5 { The pinned knight can't move, and a pawn is hitting it. After 9...Nxd5 10.Qxd5 Qxd5 11.Nxd5 White is a knight up for a pawn. } )
+( 7... e6? { A natural move, but it leaves b7 with no guard. }
+  8. Qxb7 Nbd7
+  9. Bb5 { White is a clean pawn up and pins the knight on d7. The queen is in no danger, and the engine has White more than two and a half pawns ahead. } )
+( 7... Qxd4?? { Takes a pawn, but the queen has left the back rank. }
+  8. Qxb7 { Hits the rook on a8, and the queen is too far away to guard it. }
+  8... Qe5+
+  9. Be3 { Blocks the check. Qxa8 comes next, and White wins a whole rook. } )
+8. Be3 { The queen has left d1, so d4 needs a guard. The bishop gives it one and develops at the same time. [%cal Ge3d4] }
+8... e6
+9. Bd3 { Clears the back rank, so White can castle. }
+9... Nbd7
+10. O-O-O { Castles long, and the rook now stands behind the d4 pawn. White scores 58% with this, and 50% with 10.O-O. The two bishops give White a small lasting edge: the engine says more than half a pawn. [%idea castle-early] } *

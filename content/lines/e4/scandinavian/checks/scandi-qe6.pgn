@@ -1,0 +1,31 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-main 3.Nc3"]
+[Name "3...Qe6+: a check that costs time"]
+
+3... Qe6+ { One player in six. It looks active, but the queen blocks her own e-pawn and shuts in the c8 bishop. [%csl Ye7,Yc8] }
+4. Be2 { Blocks the check and develops. The bishop is pinned to the king for as long as the queen stays on the e-file. The engine gives a full pawn. }
+4... Nc6 { The most common move. }
+5. d4 { Threatens d5, which would hit the queen and the knight together. 5.Nf3 is what most players choose, but this is stronger. [%cal Gd4d5] [%idea fork] }
+5... Qg6 { Steps away from the fork and hits g2. }
+( 5... Nf6? { Develops and ignores the threat. }
+  6. d5 { Hits the queen and the knight together. }
+  6... Nxd5
+  7. Nxd5 { White is a knight up for a pawn, because Black can't take back: the queen on d1 guards the knight. } )
+( 5... Bd7? { Gives the queen a way out, but does not save the knight. }
+  6. d5 Qg6
+  7. dxc6 { White wins a knight, and 7...Bxc6 only gets a pawn back. } )
+6. Nb5 { Threatens Nxc7+, a fork of the king and the rook on a8. The pawn on g2 can wait. Few players find this, but it scores 83%, against 45% for 6.Bf3, the most common move. [%cal Gb5c7] [%idea fork] }
+6... Kd8 { The most common reply. The king guards c7, but Black can no longer castle. }
+( 6... Qxg2? { Takes the pawn and hits the rook, but leaves c7 to fall. }
+  7. Bf3 { Saves the rook and hits the queen. }
+  7... Qg6
+  8. Nxc7+ Kd8
+  9. Nxa8 { White wins a rook. The knight may be lost on a8 in the end, but White stays well ahead: the engine gives about six pawns. } )
+( 6... Kd7? { Guards c7 too, but the king shuts in the c8 bishop. }
+  7. Nf3 { Threatens d5, which chases away the knight that guards e5, and then Ne5+ forks the king and the queen. Nothing is won yet, but the engine has White about seven pawns ahead. [%cal Gf3e5] } )
+7. Bf4 { Hits c7 a second time, and the king can't hold it alone. [%cal Gf4c7] }
+7... Qxg2 { Takes the pawn and hits the rook. }
+8. Bf3 { Saves the rook and hits the queen. }
+8... Qg6
+9. Bxc7+ { Takes the pawn with check. Material is level, but Black's king is stuck in the middle and can't castle, and the engine has White more than four pawns ahead. } *

@@ -1,7 +1,7 @@
 # Suggested orders of openings. Onboarding suggests from these.
 - id: first-e4
   name: A first repertoire with 1.e4
-  openings: [italian-white, sicilian-white, ruy-lopez-white, french-white, caro-kann-white]
+  openings: [italian-white, sicilian-white, ruy-lopez-white, french-white, caro-kann-white, scandinavian-white]
 - id: first-d4
   name: A first repertoire with 1.d4
   openings: [london-white, queens-gambit-white]

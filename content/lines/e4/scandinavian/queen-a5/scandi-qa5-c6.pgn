@@ -1,0 +1,19 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-qa5 4.d4"]
+[Name "4...c6: the same pin, no knight on f6"]
+
+4... c6 { As common as 4...Nf6. Black gives the queen a way home to c7 or d8, and covers b5 and d5, so White's knights can't jump there. [%csl Yb5,Yd5] }
+5. Nf3 { Guards d4 and gets ready to castle. }
+5... Bg4 { The same pin. }
+6. h3 { Asks the bishop what it wants. [%cal Gh3g4] }
+6... Bxf3 { The engine's choice. It gives White the two bishops, but it keeps Black out of trouble. }
+( 6... Bh5? { Two players in three choose this. With no knight on f6, the bishop is in even more danger. }
+  7. g4 Bg6
+  8. Ne5 Nf6
+  9. h4 { Threatens h5, and the bishop can only run to e4. Nothing is won yet, but the engine has White about two and a half pawns ahead. [%cal Gh4h5] [%idea trapped-piece] } )
+7. Qxf3 { Takes back. White has the two bishops, and they will count for more as the game opens. }
+7... Nf6
+8. Bd2 { Ends the pin on the c3 knight. [%cal Gd2a5] }
+8... Nbd7
+9. O-O-O { The king is safe and the rook guards d4. The engine gives more than a pawn, and White scores 58%. [%idea castle-early] } *

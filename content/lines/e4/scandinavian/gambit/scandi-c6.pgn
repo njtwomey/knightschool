@@ -1,0 +1,36 @@
+[For "white"]
+[Kind "gambit"]
+[Start "scandi-main 2.exd5"]
+[Name "2...c6: the pawn offer"]
+
+2... c6 { A gambit. Black offers a pawn for quick development, about one game in twenty-five. }
+3. dxc6 { Takes it. This is the engine's choice, and the most common move, but it is not easy: White scores 50%. 3.d4 is a quiet way out that scores 54%, though the engine says it gives almost nothing. }
+3... Nxc6
+( 3... e5? { Offers a second pawn. }
+  4. cxb7 Bxb7
+  5. Nf3 { White is two pawns up, and the engine gives nearly two pawns, but it is not easy. Black's pieces are very active and White scores only 45% here, so get castled before anything else. } )
+( 3... Nf6? { Offers a second pawn too. }
+  4. cxb7 Bxb7
+  5. Nf3 { White is two pawns up, and the engine gives more than two pawns. White scores 47%, so develop quickly, and give a pawn back if it helps. } )
+4. Nf3 { Develops. White is a pawn up, so the job now is to get castled. }
+4... e5 { The most common move. Black takes the centre. }
+5. Bb5 { Pins the knight, so e5 is short of a guard. [%cal Gb5e8] [%idea pin] }
+5... Bd6
+( 5... e4? { Pushes past the knight, but the pawn is left on its own. }
+  6. Qe2 { Pins the pawn to the king and hits it. }
+  6... Nf6
+  7. d3 { Black can't hold e4, so White will be two pawns up. The engine gives about two pawns. } )
+6. Bxc6+ { Gives up the bishop to spoil Black's pawns. Black gets the two bishops in return. }
+6... bxc6
+7. O-O Nf6
+8. Re1 { Hits e5. [%cal Ge1e5] }
+8... O-O
+( 8... Qe7? { Guards e5, but the queen stands in the way on the e-file. }
+  9. d4 e4
+  10. Nc3 O-O
+  11. Bg5 { Pins the knight on f6 to the queen. That knight guards e4, so the pawn falls next, and the engine has White nearly two pawns ahead. } )
+9. d3 { Keeps it plain. The c1 bishop can now come out, and the e-file stays open. White keeps the extra pawn, and the engine gives nearly a pawn. }
+( 9. Nxe5? { Seven players in ten grab the second pawn, and they score 46%. }
+  9... Bxe5
+  10. Rxe5 Ng4 { Hits the rook, which has to leave its post on the fifth rank. }
+  11. Re4 Qh4 { Hits f2 and h2. White has to give up the rook for the knight to stop it, and the engine has Black two pawns ahead. } ) *

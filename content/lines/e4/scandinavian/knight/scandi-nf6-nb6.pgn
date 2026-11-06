@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "sideline"]
+[Start "scandi-nf6 4.c4"]
+[Name "4...Nb6: the knight goes wide"]
+
+4... Nb6 { One player in five. The knight hits c4, but it stands away from the king. }
+5. Nf3 { The engine prefers this to 5.Nc3, which runs into ...e5. }
+5... Bg4 { The most common move. }
+6. Be2 e6
+7. Nc3 Be7
+8. h3 { Asks the bishop what it wants. }
+8... Bh5
+9. Be3 { The last minor piece comes out and guards d4 and c5. White has the centre and more space. The engine gives nearly a pawn. [%cal Ge3d4] } *

@@ -1,0 +1,23 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-main 2.exd5"]
+[Name "2...Nf6: the knight takes back"]
+
+2... Nf6 { One player in six. The queen stays at home, and the knight will take on d5. }
+3. d4 { Takes the centre. 3.Nc3 is the most common move, and it scores 48%. This scores 53%. }
+3... Nxd5
+4. c4 { The same idea as Nc3 against the queen: the piece on d5 is hit, and White gets a free move and two pawns in the centre. [%cal Gc4d5] [%idea centre-pawns] }
+4... Nf6 { Two players in three retreat here. }
+( 4... Nb4? { Aims at c2, but there is nothing to support the knight. }
+  5. a3 { Sends it back. 5.Qa4+ is played about as often, but it scores 42%, and this scores 60%. }
+  5... N4c6
+  6. d5 { Hits the knight again. No material is won, but that knight has made four moves and has to make another, and the engine gives more than a pawn. The gain is in time and space. [%cal Gd5c6] } )
+5. Nf3 { Guards d4 and gets ready to castle. }
+5... Bg4 { The most common move, the pin again. [%cal Rg4d1] }
+6. Be2 { Ends the pin and gets ready to castle. }
+6... e6
+7. O-O { The king is safe. [%idea castle-early] }
+7... Be7
+8. Nc3 { Every White piece but the c1 bishop is out. }
+8... O-O
+9. h3 { Asks the bishop what it wants. White has more space, and the engine gives a pawn. Black's break is ...c5, so keep d4 well guarded. [%cal Gh3g4] } *

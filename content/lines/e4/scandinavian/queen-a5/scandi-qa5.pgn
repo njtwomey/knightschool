@@ -1,0 +1,33 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-main 3.Nc3"]
+[Name "3...Qa5: the queen stays out"]
+
+3... Qa5 { The serious move, played by a quarter of players. The queen is out of reach of White's knights for now, and once d2 has moved she pins the knight on c3 to the king. }
+4. d4 { Takes the centre. The knight on c3 is now pinned, but nothing is attacking it. [%cal Ra5e1] }
+4... Nf6
+( 4... Nc6? { Develops, but the knight can be pushed around. }
+  5. d5 { Hits the knight. The pawn is safe, because the queen on d1 guards it. }
+  5... Nb4
+  6. a3 { Hits it again. }
+  6... Na6
+  7. Bb5+ { The check spoils everything for Black. After 7...Bd7 8.Bxd7+ Kxd7 no piece has been won, but Black's king is stuck in the open, and the engine has White about six pawns ahead. } )
+5. Nf3 { Guards d4 and gets ready to castle. }
+5... Bg4 { The most common move here, played by nearly half of players. [%cal Rg4d1] }
+6. h3 { Asks the bishop what it wants. Most players choose 6.Be2 and score 47%. With 6.h3 White scores 53%, and the engine likes it more by over half a pawn. [%cal Gh3g4] }
+6... Bh5 { Keeps the pin. }
+7. g4 { Breaks the pin and hits the bishop. [%cal Gg4h5] }
+7... Bg6
+8. Ne5 { The knight heads for c4, where it will hit the queen. [%cal Ge5c4] }
+8... Nbd7 { Challenges the knight. }
+( 8... Ne4? { Hits the knight on c3, which is pinned, and hopes to win it. }
+  9. Qf3 { Hits the knight on e4 and f7 together. }
+  9... Nd6
+  10. Bd2 { Ends the pin. No material is won, but Black's pieces are in a tangle, h4 and h5 will hit the bishop, and the engine has White about four pawns ahead. [%cal Gd2a5] } )
+9. Nc4 { Hits the queen. Leave the swaps on d7 and g6 alone: the point is to keep her moving. [%idea chase-the-queen] }
+9... Qa6 { The only safe square. }
+( 9... Qb4?? { About three players in ten choose this, and it loses the queen. The knight on d7 and the pawn on e7 have taken away her way home. }
+  10. a3 { The queen has no safe square left. [%idea queen-trap] }
+  10... Qxc4
+  11. Bxc4 { White wins the queen for a knight. } )
+10. Bf4 { The last minor piece comes out and hits c7. The queen is offside on a6, and all of White's pieces are in play. The engine gives about a pawn and a half. [%cal Gf4c7] } *

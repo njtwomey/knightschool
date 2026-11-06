@@ -1,0 +1,29 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-main 3.Nc3"]
+[Name "3...Qe5+: the pin on e2"]
+
+3... Qe5+ { About one player in eight. The queen sits in the middle of the board, where d4 or Nf3 can hit her. }
+4. Be2 { Blocks the check and develops. The bishop is pinned to the king for now, and that matters below. }
+4... Bg4 { Nearly half of players choose this. It hits the pinned bishop. [%cal Rg4e2] }
+5. d4 { Hits the queen with a pawn, and scores 60%. If she leaves the e-file, the pin is over and Bxg4 wins the bishop, so Black has to do something about it. [%cal Gd4e5] }
+( 5. Nf3? { Hits the queen and looks natural, and a quarter of players choose it. But the bishop on e2 is pinned, so it can't take on f3. [%cal Re5e1] }
+  5... Bxf3 { White has to take with the g-pawn, or lose the queen. Black has spoiled White's pawns, the engine has Black half a pawn ahead, and White scores 47%. } )
+5... Bxe2
+( 5... Qe6? { Stays on the e-file, so the bishop on e2 is still pinned. But the bishop on g4 is the one in danger. }
+  6. f3 { Blocks the bishop's way to e2 and hits it, so it has to run. }
+  6... Bf5
+  7. g4 Bg6
+  8. f4 { Threatens f5, which would hit the queen and the bishop together. Black has to block with 8...f5. Nothing is won yet, but Black's pieces have no room, and the engine has White more than two and a half pawns ahead. [%cal Gf4f5] [%idea fork] } )
+6. Ngxe2 { Takes with the knight, so the queen is still under attack. 6.Qxe2 would let Black swap queens, and the engine calls that level. }
+6... Qa5 { The most common retreat. }
+7. O-O { The king is safe. }
+7... Nc6
+8. d5 { Hits the knight. Most players choose 8.Bd2, which scores 50%. This scores 55%, and the engine gives more than two pawns. }
+8... O-O-O { Black pins the d5 pawn to the queen. Do not take the knight: 9.dxc6 Rxd1 costs the queen for a rook and a knight. [%cal Rd8d1] }
+( 8... Ne5? { The knight steps to the centre, but it has no pawn to back it up. }
+  9. Nd4 { The knight comes to the centre, and it is heading for b3 to hit the queen. [%cal Gd4b3] }
+  9... Nf6
+  10. Qe2 Ng6
+  11. Nb3 { The queen has to move again, and Nb5 will hit c7 next. No material is won, but the engine has White about four pawns ahead. [%idea chase-the-queen] } )
+9. Bd2 { Ends the pin on the c3 knight, so the queen on a5 is in danger if it moves. The knight on c6 is still attacked. If 9...Rxd5 10.Nxd5 Qxd5, White has a rook for a knight and a pawn. [%cal Gd2a5] [%idea discovered-attack] } *

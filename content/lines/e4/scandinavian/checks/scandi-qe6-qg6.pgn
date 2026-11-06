@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "main"]
+[Start "scandi-qe6 4.Be2"]
+[Name "4...Qg6: the g2 pawn"]
+
+4... Qg6 { Steps away at once and hits g2. }
+5. Nf3 { The same idea: let g2 go and develop. 5.Bf3 is the most common move, but it takes f3 from the knight, and the engine prefers 5.Nf3 by a pawn. [%idea poisoned-pawn] }
+5... Qxg2 { Two players in three take. }
+( 5... Nc6? { A natural move, but it does nothing about c7. Most players castle here and score 47%. }
+  6. Nb5 { Threatens Nxc7+, the fork you already know. [%cal Gb5c7] [%idea fork] }
+  6... Kd8
+  7. d4 { No material is won, but Black's king can't castle now, and d5 is coming. The engine has White nearly four pawns ahead. } )
+6. Rg1 { Hits the queen, and the rook has an open file. }
+6... Qh3
+7. Rg3 { Hits the queen again. [%cal Gg3h3] [%idea chase-the-queen] }
+7... Qe6 { The most common retreat. }
+8. d4 { White is a pawn down, but has a big centre and four pieces in play. Black has one, and it is the queen. The engine gives more than two and a half pawns. Next come Bc4 or Ne5, and another hit on the queen. } *
