@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-w-main 7.Qb3"]
+[Name "7...Qb6: the queens face each other"]
+
+7... Qb6 { The most common reply. The queen guards b7 and offers a swap. }
+8. Nd2 { Keeps to the plan, and it is the engine's first choice. 8.Qxb6 axb6 opens the a-file for Black's rook, so White lets Black make the swap. }
+8... e6
+9. Ngf3 { The same set-up as against 7...Qd7. With the queen on b6, Ne5 would hit only the bishop. }
+9... Be7
+10. O-O { Castles. If the queens come off now, the a-pawn takes back. [%idea castle-early] }
+10... O-O
+11. Rfe1 { The rook takes the open file. White has a small edge and an easy plan: h3, then Ne5. [%idea open-file] } *

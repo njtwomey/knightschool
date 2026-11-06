@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-main 5.c3"]
+[Name "5...e6: the bishop stays in"]
+
+5... e6 { Black shuts in the bishop on c8. }
+6. Bf4 { So White's bishop gets out first, as ever. }
+6... Bd6
+7. Bxd6 Qxd6
+8. Nd2 { The usual knight. After 8...Nf6 the game is in the line with 6...e6. }
+8... Nf6 *

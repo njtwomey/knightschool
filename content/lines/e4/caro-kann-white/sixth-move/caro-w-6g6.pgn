@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-main 6.Bf4"]
+[Name "6...g6: the bishop goes to g7"]
+
+6... g6 { The bishop goes to g7, where it backs up ...e5. }
+7. Nf3 { Against ...g6, the king's knight comes out first, to keep an eye on e5. [%cal Gf3e5] }
+7... Bg7
+8. Nbd2 { Then the other knight. The set-up is the same as ever, with the knights on d2 and f3. }
+8... O-O
+9. O-O { Black's position is sound, and the scores here are about even. White plays Re1 and Ne5, and has a small edge on the engine. [%idea castle-early] } *

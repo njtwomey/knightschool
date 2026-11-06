@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-nf6-qc7 6.Qb3"]
+[Name "4...Nf6 5.c3 Bg4: 6...Qb6"]
+
+6... Qb6 { Guards b7 and offers a swap. }
+7. Bf4 { The bishop comes out as usual, and White lets Black make the swap. }
+7... Qxb3
+8. axb3 { Takes towards the centre. After ...Nc6 and Nd2 the game is in the line with 7...Qb6 and the swap. }
+8... Nc6
+9. Nd2 *

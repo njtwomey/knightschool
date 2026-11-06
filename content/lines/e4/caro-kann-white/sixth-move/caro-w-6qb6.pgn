@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-main 6.Bf4"]
+[Name "6...Qb6: hits b2"]
+
+6... Qb6 { Hits b2, which lost its guard when the bishop left c1. [%cal Rb6b2] }
+7. Qb3 { Guards b2 and offers a swap. If the queens come off, the a-pawn takes back and the rook gets the a-file. }
+( 7. Nd2? { The usual move, but here it leaves b2 hanging. Players score 34%. }
+  7... Qxb2 { Black is a pawn up. White has some development for it, but the engine prefers Black. } )
+7... Qxb3
+8. axb3 Bg4
+9. Nd2 { This is the position after 7...Qb6 8.Nd2 Qxb3 9.axb3, by another order. } *

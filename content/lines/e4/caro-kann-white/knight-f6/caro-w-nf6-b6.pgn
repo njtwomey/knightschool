@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-nf6-qc7 6.Qb3"]
+[Name "4...Nf6 5.c3 Bg4: 6...b6"]
+
+6... b6 { Keeps the pawn safe from the queen, and leaves c6 weak. }
+7. Bf4 { The bishop comes out as usual. }
+7... e6
+8. Nd2 { The usual knight. If 8...Nc6, Bb5 wins a piece, as in the line with 7...b6. }
+8... Bd6
+( 8... Nc6? { A natural move, but this is the position of the line with 7...b6, and the knight has walked into the pin. }
+  9. Bb5 { Pins the knight to the king, and the pawn on e6 stops the bishop on g4 from getting back to d7. [%idea pin] }
+  9... Rc8
+  10. Qa4 Qd7
+  11. Ngf3 { Ne5 comes next, and three attackers against two guards win the knight on c6. } )
+9. Bxd6 Qxd6
+10. Ngf3 { Develops. White has a small edge: the pawn on b6 has left c6 and the light squares weak. White castles next. } *

@@ -1,0 +1,27 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-exchange-bd3-early 4.Bd3"]
+[Name "4...Nc6: the main line"]
+
+4... Nc6 { The most common reply. The knight hits d4, and the bishop on d3 has just cut the queen's guard of that pawn. [%cal Gc6d4] }
+5. c3 { Gives d4 a pawn to lean on, and clears the way for the queen to go to b3. The structure is the one White gets in the London. [%cal Gc3d4] }
+5... Nf6 { Develops and guards d5. Seven players in ten play this. }
+6. Bf4
+6... Bg4
+7. Qb3
+7... Qd7
+8. Nd2 { The knight goes to d2 so that the other one can come to f3. If Black takes there, a knight takes back, and White's pawns stay whole. [%cal Gd2f3] }
+8... e6
+9. Ngf3 { The last knight comes out, with a threat: Ne5 would hit the queen on d7 and the bishop on g4 together. [%cal Gf3e5] }
+9... Be7 { The most common move here, and it does nothing about Ne5. 9...Bd6, which covers e5, is better. }
+10. Ne5 { Hits the queen and the bishop at once. Players who find it score 82%, against 61% for 10.O-O, because the natural reply loses a piece. [%cal Ge5d7,Ge5g4] [%idea fork] }
+10... Qc8 { The best reply. The queen moves and keeps b7 guarded, and Black gives up the bishop on g4. }
+( 10... Nxe5?? { The natural way to save the queen, and seven players in ten choose it. }
+  11. dxe5 { Takes back with the pawn, and the knight on f6 is attacked. If it moves, Bb5 pins the queen to the king. [%cal Gd3b5] [%idea pin] }
+  11... Nh5
+  12. Bb5 { The queen is pinned. If she takes the bishop, the queen on b3 takes back with check. [%cal Gb5d7] [%idea pin] }
+  12... O-O
+  13. Bxd7 { White has won the queen for a bishop, because ...Nxf4 takes the bishop on f4 next. If Black castles on move 11 instead, exf6 wins a knight for a pawn. } )
+11. Nxg4 { White takes the bishop, and has two bishops against a bishop and a knight. }
+11... Nxg4
+12. O-O { Nothing has been won on the board. White has the two bishops, and the knight on g4 has to spend a move going back. The engine has White clearly better, and the gain is positional. [%idea castle-early] } *

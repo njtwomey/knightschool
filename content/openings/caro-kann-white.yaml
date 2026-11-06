@@ -1,0 +1,273 @@
+name: Caro-Kann Defence
+side: white
+start: 1. e4 c6
+level: next
+style: [solid, system]
+summary: >-
+  Meet the Caro-Kann with the Exchange Variation and 4.Bd3: a set-up close to the London, an easy plan, and the best
+  scores of White's main systems at this level.
+about:
+  idea: >-
+    After 1.e4 c6 2.d4 d5 White takes on d5 and plays 4.Bd3. The pawn on d4 gets a pawn behind it with c3, the bishop
+    goes to f4 outside the pawn chain, and the queen goes to b3, where she hits b7 and d5 together. The knights come to d2
+    and f3, White castles, a rook goes to e1 and a knight goes to e5. It is nearly the same set-up against every reply.
+  risks: >-
+    This is the quietest of White's main systems. Good play by Black leads to a game close to level, as in the line with
+    9...Bd6. Black's early ...e5 gives a lone pawn on d5 but two bishops as well. The queen trips are the danger: 7.Bf4
+    drops a bishop once ...Qc7 is in, 7.Nd2 drops b2 once ...Qb6 is in, and 8.Qb5+ after ...Na5 loses the queen.
+  suits: >-
+    Players who know the London or who want one plan and few surprises. The engine likes 3.e5 best, by a small margin, but
+    White scores 50% with it, and 47% against 3...c5. 3.Nc3 scores 53% and asks for a lot of theory. After 3.exd5 cxd5
+    the fourth move matters: 4.Nf3 scores 50% and 4.Nc3 47%, while 4.Bd3 scores 55%, and 5.c3 and 6.Bf4 keep it there.
+  origin: >-
+    The Exchange Variation is old, and is still known for Bobby Fischer's win over Tigran Petrosian in 1970. The defence
+    itself is named after Horatio Caro and Marcus Kann, who analysed it in the 1880s.
+ideas: [pin, fork, open-file, castle-early, queen-trap, outpost, minority-attack, isolated-queens-pawn]
+variations:
+  - id: main
+    name: The main line, 6...Bg4 and 7.Qb3
+    intro: >-
+      Black brings out the knights, and the light bishop comes to g4. White answers with Qb3, which hits b7 and d5
+      together, and players score 59% with it. After 7...Qd7 the knights come to d2 and f3. If Black then plays the natural
+      9...Be7, Ne5 hits the queen and the bishop. Against 9...Bd6 the game is close to level, and White plays for Re1 and
+      Ne5. The Advance and 4.Nf3 are shown here too, as the other ways to play: they are not drilled.
+    lines: [caro-w-main, caro-w-bd6, caro-advance, caro-exchange]
+    plans:
+      - Take on d5, then Bd3, c3 and Bf4.
+      - Answer ...Bg4 with Qb3, and hit b7 and d5.
+      - Nd2 first, then Ngf3, so that a knight can take back on f3.
+      - Castle, put a rook on e1 and bring a knight to e5.
+    questions:
+      - id: fork-on-e5
+        at: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 Qd7 8. Nd2 e6 9. Ngf3 Be7
+        ask: Which knight move hits the queen and the bishop together?
+        answers: [[Ne5], [e5], [fork]]
+        examples:
+          right: [Ne5, the knight goes to e5, Ne5 forks the queen and the bishop]
+          wrong: [O-O, Ng5, Nh4]
+        explain: >-
+          From e5 the knight hits the queen on d7 and the bishop on g4. Black has to give up the bishop, and the natural
+          10...Nxe5 is worse: 11.dxe5 leaves the knight on f6 with no good square.
+      - id: bb5-wins-queen
+        at: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 Qd7 8. Nd2 e6 9. Ngf3 Be7 10. Ne5 Nxe5 11. dxe5 Nh5
+        ask: The knight has moved away from f6. Which move wins the queen?
+        answers: [[Bb5], [b5], [pin]]
+        examples:
+          right: [Bb5, the bishop goes to b5, Bb5 pins the queen]
+          wrong: [Bg3, Be3, h3]
+        explain: >-
+          The queen on d7 stands in front of the king, so Bb5 pins her. If she takes the bishop, the queen on b3 takes back
+          with check.
+  - id: queen-moves
+    name: The other answers to 7.Qb3
+    intro: >-
+      Black has to do something about b7, and there are several ways. 7...Qb6 is the most common, and White simply goes on
+      with Nd2 and lets Black make the swap. 7...Qc8 is quiet and sound. The other two give White a chance. After 7...b6
+      8.Nd2, the natural 8...e6 loses a piece, and eight players in ten play it. 7...Na5 has a trap of its own, which catches
+      White's queen if she goes to b5.
+    lines: [caro-w-qb6, caro-w-qb6-swap, caro-w-qc8, caro-w-b6, caro-w-na5]
+    plans:
+      - Keep to Nd2 and Ngf3 whatever the queen does.
+      - If the queens come off, take back with the a-pawn, and push b4 and b5.
+      - After ...b6 and ...e6, play Bb5 and pile up on c6.
+      - After ...Na5, the queen goes to c2 and never to b5.
+    questions:
+      - id: bb5-wins-piece
+        at: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 b6 8. Nd2 e6
+        ask: Which bishop move starts the attack that wins a piece?
+        answers: [[Bb5], [b5], [pin]]
+        examples:
+          right: [Bb5, the bishop goes to b5, Bb5 pins the knight]
+          wrong: [Bg3, Be2, Bc2]
+        explain: >-
+          The knight on c6 is pinned to the king and has lost the b7 pawn's guard. The pawn on e6 cuts the bishop off from
+          d7, so nothing can block. Qa4 and Ne5 add two more attackers, and Black can only find two guards.
+      - id: no-qb5
+        at: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Bg4 7. Qb3 Na5
+        ask: The knight hits the queen. What goes wrong after 8.Qb5+ Bd7?
+        answers: [[trapped], [no square], [nowhere]]
+        examples:
+          right: [the queen is trapped, she has no square to go to, she has nowhere to go]
+          wrong: [the knight on a5 falls, White loses a pawn, the bishop on d3 is pinned]
+        explain: >-
+          The queen is hit and her way back is blocked by White's own bishop on d3. The knight on a5 is guarded by the
+          queen on d8. After Na3 a6 Qb4 e5 the bishop on f8 hits her too, and Black wins her for a bishop.
+  - id: sixth-move
+    name: 6...e6, 6...g6 and 6...Qb6
+    intro: >-
+      These are the moves that leave the bishop at home or go after b2. After 6...e6 the bishop on c8 is shut in, and White
+      scores 59%. White swaps the dark bishops and is left with the better one. Against 6...g6 the scores are about even.
+      6...Qb6 has a point: the bishop has left c1, so b2 needs a guard, and Qb3 gives it one.
+    lines: [caro-w-6e6, caro-w-6e6-be7, caro-w-6g6, caro-w-6qb6]
+    plans:
+      - After ...e6, Nd2 and Ngf3, and swap on d6 if Black offers it.
+      - After ...g6, Nf3 first to watch e5, then Nbd2.
+      - After ...Qb6, Qb3 guards b2.
+      - Castle, then Re1 and Ne5.
+    questions:
+      - id: guard-b2
+        at: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 Nf6 6. Bf4 Qb6
+        ask: Black's queen has come to b6. Which pawn does she hit?
+        answers: [[b2]]
+        examples:
+          right: [b2, the pawn on b2, she attacks b2]
+          wrong: [d4, c3, a2]
+        explain: >-
+          The bishop left c1, so b2 has no guard. The usual 7.Nd2 drops it, and players score 34% there. 7.Qb3 guards it.
+  - id: knight-f6
+    name: 4...Nf6 and 5...Bg4
+    intro: >-
+      Nearly four players in ten play the knight to f6 first. If the other knight goes to c6 next, the game is back in the
+      main line. Black's most common move is 5...Bg4 before the knight comes out. Qb3 is the answer again. Black's reply
+      6...Qc7 is the one to watch, because it stops the usual Bf4 for a move. Against 5...e6 the bishop still comes to f4.
+    lines: [caro-exchange-bd3-early, caro-w-nf6-qc7, caro-w-nf6-qb6, caro-w-nf6-b6, caro-w-nf6-e6]
+    plans:
+      - Play c3 whichever knight comes first.
+      - Answer ...Bg4 with Qb3.
+      - Check what the queen on c7 looks at before Bf4. If she looks at f4, play Ne2 first.
+    questions:
+      - id: why-ne2
+        at: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nf6 5. c3 Bg4 6. Qb3 Qc7
+        ask: Why does White play 7.Ne2 before Bf4?
+        answers: [[f4]]
+        examples:
+          right: [it guards f4, so the bishop on f4 is guarded, the knight covers f4]
+          wrong: [it attacks the bishop on g4, it guards d4, it gets ready to castle long]
+        explain: >-
+          The queen on c7 looks along the diagonal to f4, so 7.Bf4 just loses the bishop. From e2 the knight guards f4, and
+          Bf4 then comes with a gain of time.
+  - id: early
+    name: 5...e5, 5...e6 and 5...g6
+    intro: >-
+      Black can leave the f6 square empty for a move. 5...e5 is the sharpest: White takes, and Qe2 pins the knight. One
+      player in four then guards it with the bishop, and f4 wins it. The right reply, ...Qe7, leaves White a little better,
+      with a lone Black pawn on d5 against Black's two bishops. 5...e6 and 5...g6 lead back to lines you know.
+    lines: [caro-w-5e5, caro-w-5e6, caro-w-5g6]
+    plans:
+      - After ...e5, take on e5 and pin with Qe2.
+      - If the knight is guarded by the bishop, f4 wins it.
+      - Play against the lone pawn, with a knight on d4.
+    questions:
+      - id: f4-wins-knight
+        at: 1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nc6 5. c3 e5 6. dxe5 Nxe5 7. Qe2 Bd6
+        ask: Which pawn move wins the pinned knight?
+        answers: [[f4]]
+        examples:
+          right: [f4, the f-pawn goes to f4, f4 hits the knight]
+          wrong: [h4, g4, b4]
+        explain: >-
+          The knight on e5 is pinned to the king by the queen on e2, so it can't move. A pawn on f4 attacks it, and Black
+          ends up a knight down for a pawn.
+alternatives: [caro-advance, caro-exchange]
+setup:
+  title: How the Caro-Kann starts
+  text: >-
+    After 1.e4 c6 Black gets ready for ...d5 with a pawn behind it, so that a pawn can take back on d5. Unlike the French,
+    it leaves the c8 bishop free to come out. White's first job is the same as ever: take the centre with d4.
+steps:
+  caro-w-main:1:
+    title: Take on d5, then Bd3 and c3
+    text: >-
+      White takes on d5, so the game turns quiet and Black's pawn can't take on e4. The bishop comes to d3, and c3 backs
+      up d4. The pawns now stand as they do in the London, and the same plan follows.
+  caro-w-main:2:
+    title: Bf4, Qb3 and the knights
+    text: >-
+      The bishop goes outside the pawn chain. When Black's bishop comes to g4, the queen steps to b3 and hits b7 and d5
+      together. Then the knights come to d2 and f3, in that order, so that a knight can take back on f3.
+  caro-w-main:3:
+    title: Ne5 hits two pieces
+    text: >-
+      After 9...Be7 the knight jumps to e5, and it hits the queen and the bishop. If Black takes it, dxe5 wins a piece or
+      the queen, and that comes next as a follow-up. After 10...Qc8 White takes the bishop and castles with the two bishops.
+  caro-w-bd6:1:
+    title: 9...Bd6, the level line
+    text: >-
+      This is Black's best. The dark bishops come off, and White castles and puts a rook on e1. The knight still gets to
+      e5, but the engine calls the game close to level, and White has only the easier plan.
+  caro-w-qb6:1:
+    title: 7...Qb6, the plan goes on
+    text: >-
+      The queens face each other, and White does not hurry to swap. Nd2 and Ngf3 are the same as ever, then White castles
+      and puts a rook on e1. If Black swaps, the a-pawn takes back.
+  caro-w-qb6-swap:1:
+    title: The swap, and the a-file
+    text: >-
+      When the queens come off, axb3 opens the a-file for the rook. With the queens gone White plays b4 and b5, against the
+      knight on c6. The engine has White about a pawn ahead, though nothing is won on the board.
+  caro-w-qc8:1:
+    title: 7...Qc8, no fork on e5
+    text: >-
+      The queen goes back and guards b7. There is no fork on e5 now, so White finishes development in the usual way. The
+      game is about level, with a small edge for White.
+  caro-w-b6:1:
+    title: 7...b6 and the pin
+    text: >-
+      The pawn leaves b7, and the knight on c6 loses a guard. After 8...e6 the bishop on g4 can't get back to d7, so Bb5 pins
+      the knight for good. Qa4 adds a second attacker, and the knight on f3 is on its way.
+  caro-w-b6:2:
+    title: A third attacker wins the knight
+    text: >-
+      Black swaps pieces to slow White down, but Ne5 can't be stopped. Three pieces hit the knight on c6, only two guard it,
+      and White wins it.
+  caro-w-na5:1:
+    title: 7...Na5, and not Qb5+
+    text: >-
+      The knight hits the queen, and she goes to c2. Qb5+ looks better but is a real mistake: ...Bd7 traps her behind her own
+      bishop. White then plays the usual moves, and the knight on a5 is out of play.
+  caro-w-6e6:1:
+    title: 6...e6, and the better bishop
+    text: >-
+      The bishop on c8 is shut in. White plays Nd2 and swaps the dark bishops when Black offers, which leaves Black with its
+      poor bishop. Both sides castle, and White has a small, lasting edge.
+  caro-w-6e6-be7:1:
+    title: 7...Be7, the same set-up
+    text: >-
+      Black keeps the bishops on and castles. Nothing changes for White: Ngf3, castle, then Re1 and Ne5.
+  caro-w-6g6:1:
+    title: Nf3 first against ...g6
+    text: >-
+      Black's bishop on g7 backs up ...e5, so the king's knight comes out first to watch that square. Then Nbd2 and castling.
+      The scores here are about even.
+  caro-w-6qb6:1:
+    title: Qb3 guards b2
+    text: >-
+      The bishop has left c1, so b2 has no guard, and 7.Nd2 would drop it. 7.Qb3 guards the pawn, and if the queens come off
+      the a-pawn takes back. The game then joins the line with 7...Qb6 and the swap.
+  caro-exchange-bd3-early:1:
+    title: 4...Nf6, the same plan
+    text: >-
+      The knights come out in the other order. White still plays c3, and after 5...Nc6 the game is in the main line.
+  caro-w-nf6-qc7:1:
+    title: 5...Bg4, and Ne2 before Bf4
+    text: >-
+      Qb3 answers the bishop, as in the main line. After 6...Qc7 the queen looks at f4, so 7.Bf4 drops the bishop. 7.Ne2
+      guards f4 first, and then Bf4 hits the queen and gains a move.
+  caro-w-nf6-qb6:1:
+    title: 6...Qb6, let Black swap
+    text: >-
+      The bishop comes to f4 as usual, and White lets Black swap queens. The a-pawn takes back, and the game joins a line you
+      know.
+  caro-w-nf6-b6:1:
+    title: 6...b6, a weak c6
+    text: >-
+      The bishop comes out and the knights follow, as ever. Black's pawn on b6 leaves the light squares weak. If the knight
+      ever comes to c6 with ...e6 played, Bb5 wins it.
+  caro-w-nf6-e6:1:
+    title: 5...e6, the same bishop swap
+    text: >-
+      Black shuts in the bishop on c8. White's bishop goes to f4, the dark bishops come off, and the knights go to d2 and f3.
+      After ...Nc6 and castling the game is in the line with 6...e6.
+  caro-w-5e5:1:
+    title: 5...e5, pin it with Qe2
+    text: >-
+      Black breaks at once. White takes, and Qe2 pins the knight to the king. After the good reply ...Qe7, White develops
+      and plays against the lone pawn on d5. Black has the two bishops, and White is a little better.
+  caro-w-5e6:1:
+    title: 5...e6 leads back
+    text: >-
+      The bishop goes to f4, the dark bishops come off, and Nd2 follows. After ...Nf6 the game is in the line with 6...e6.
+  caro-w-5g6:1:
+    title: 5...g6 leads back
+    text: >-
+      The bishop goes to f4 and the knight to f3, to watch e5. After ...Nf6 the game is in the line with 6...g6.

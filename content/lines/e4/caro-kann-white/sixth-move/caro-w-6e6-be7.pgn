@@ -1,0 +1,8 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-6e6 7.Nd2"]
+[Name "6...e6 and 7...Be7: no swap"]
+
+7... Be7 { Keeps the bishops on, and gets ready to castle. }
+8. Ngf3 O-O
+9. O-O { White's bishops have the better squares, and the plan is the same: Re1 and Ne5. The engine has White a little better. [%idea castle-early] } *

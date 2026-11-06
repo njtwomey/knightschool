@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-w-qb6 8.Nd2"]
+[Name "7...Qb6 and 8...Qxb3: the swap"]
+
+8... Qxb3 { Black swaps queens at once. One player in four does. }
+9. axb3 { Takes towards the centre, and the rook on a1 now looks at a7. Players score 60% with this and 50% with 9.Nxb3. [%cal Ga1a7] }
+9... e6
+10. Ngf3 { Develops. The plan needs no queens. }
+10... Be7
+11. b4 { The pawn heads for b5, where it will hit the knight on c6 and leave Black with a weak pawn. The engine has White about a pawn ahead, and the gain is positional: more room on the queenside and the a-file. [%cal Gb4b5,Yb5c6] [%idea minority-attack] } *

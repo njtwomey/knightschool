@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-w-main 9.Ngf3"]
+[Name "9...Bd6: the bishops come off"]
+
+9... Bd6
+10. Bxd6 { Takes, and the queen has to leave d7 to take back, so b7 loses its guard. 10.Ne5 looks natural, but the engine has that level. }
+10... Qxd6
+11. O-O { Castles first. 11.Qxb7 Rb8 wins a pawn for now, but Black gets the b-file and a lead in development, and the engine has it close to level. [%idea castle-early] }
+11... O-O
+12. Rfe1 { The rook takes the open file. In this opening White nearly always wants a rook on e1 and a knight on e5. [%idea open-file] }
+12... Bh5
+13. Ne5 { The knight reaches the square it was aiming for, and Black has no pawn to chase it. The game is close to level, and White scores about 54% from here, but White's plan is the easier one. [%cal Gf3e5] [%idea outpost] } *

@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-exchange-bd3-early 5.c3"]
+[Name "4...Nf6 5.c3 Bg4: 6...Qc7"]
+
+5... Bg4 { The most common reply. The bishop gets out before ...e6, and it hits the queen. }
+6. Qb3 { Steps out of the attack, and hits b7 and d5 at once. Players score 58% with this, against 48% for 6.f3. [%cal Rb3b7,Rb3d5] }
+6... Qc7 { The most common reply. It guards b7, and it looks at f4. [%cal Gc7f4] }
+7. Ne2 { The knight guards f4, so Bf4 will now work. It goes to e2 and not f3, where the bishop would take it and spoil the pawns. If the bishop takes on e2, the bishop on d3 takes back. [%cal Ge2f4] }
+( 7. Bf4?? { The usual move, but the queen on c7 is looking at f4, and nothing guards it yet. }
+  7... Qxf4 { Black is a bishop up. } )
+7... e6
+8. Bf4 { The bishop comes out with a gain of time, because it hits the queen. White plays Nd2 next, and the engine has White a little better. [%cal Gf4c7] } *

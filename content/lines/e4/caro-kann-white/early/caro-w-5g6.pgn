@@ -1,0 +1,10 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-main 5.c3"]
+[Name "5...g6: the bishop goes to g7"]
+
+5... g6 { The bishop goes to g7, to back up ...e5. }
+6. Bf4 { Takes the h2-b8 diagonal first. [%cal Gf4b8] }
+6... Bg7
+7. Nf3 { Keeps an eye on e5. After 7...Nf6 the game is in the line with 6...g6. [%cal Gf3e5] }
+7... Nf6 *

@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-w-main 6.Bf4"]
+[Name "6...e6: the bishop stays in"]
+
+6... e6 { Solid, but the bishop on c8 is now shut in. Getting that bishop out is the idea of the Caro-Kann, and Bf4 has made White's own bishop safe first. [%csl Yc8] }
+7. Nd2 { The same knight move, and the engine likes it a little more than 7.Nf3. The other knight goes to f3 next. }
+7... Bd6 { Offers to swap the dark bishops. }
+8. Bxd6 { Takes. After this swap Black's last bishop is the poor one on c8. }
+8... Qxd6
+9. Ngf3 O-O
+10. O-O { Both kings are safe, and White has the better bishop. Next come Re1, then Ne5 or Qe2. The engine gives White a small edge, and players score 57% here. [%idea castle-early] } *

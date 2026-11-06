@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-w-main 5.c3"]
+[Name "5...e5: the pawn break"]
+
+5... e5 { Hits d4 at once and frees Black's game. The price is a lone pawn on d5. [%cal Ge5d4] }
+6. dxe5 Nxe5
+7. Qe2 { Pins the knight to the king, and it is the engine's first choice. [%cal Ge2e5] [%idea pin] }
+7... Qe7 { The one good reply: it guards the knight. }
+( 7... Bd6?? { Guards the knight, but the pin stays. One player in four does this, and scores 28%. }
+  8. f4 { The pinned knight is attacked by a pawn, and it can't move. [%cal Gf4e5] [%idea pin] }
+  8... f6
+  9. fxe5 fxe5
+  10. Qh5+ { White is a knight up for a pawn, and Black's king has to step out. } )
+8. Be3 { Develops and gets out of the way of the rook on a1. If the knight takes on d3, the queen takes back. }
+8... Nxd3+
+9. Qxd3 Nf6
+10. Nf3 { Black has the two bishops and a lone pawn on d5. The square in front of the pawn, d4, is a good home for a White knight. The engine has White a little better. [%csl Yd5,Gd4] [%idea isolated-queens-pawn] } *

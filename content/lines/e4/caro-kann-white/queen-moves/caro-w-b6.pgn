@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "trap"]
+[Start "caro-w-main 7.Qb3"]
+[Name "7...b6: the pin on c6"]
+
+7... b6 { Keeps the pawn from being taken on b7, but the knight on c6 has lost the pawn that guarded it. [%csl Yc6] }
+8. Nd2 { The plan goes on, and it has a new target. }
+8... e6 { The natural move, and eight players in ten make it. It loses a piece: the pawn on e6 cuts the bishop on g4 off from d7, so nothing can block the pin that is coming. [%csl Yd7] }
+9. Bb5 { Pins the knight to the king. Players who find it score 82%, against 64% for 9.Ngf3. [%cal Gb5c6,Gb5e8] [%idea pin] }
+9... Rc8 { The most common reply. The rook guards the knight. }
+10. Qa4 { A second attacker on the pinned knight. [%cal Ga4c6] }
+10... Qd7 { A second guard. }
+11. Ngf3 { The third attacker is on its way: from e5 this knight hits c6. [%cal Gf3e5,Ge5c6] }
+11... Bxf3 { Takes, but the other knight takes back and goes to e5 all the same. }
+12. Nxf3 Bd6
+13. Bxd6 { Swaps off the bishop that could take on e5. }
+13... Qxd6
+14. Ne5 { Three attackers against two guards. [%idea pin] }
+14... O-O { Black gets the king out of the pin, but it is too late for the knight. }
+15. Bxc6 { White is a knight up. If the rook takes, ...Rxc6 Nxc6 leaves White with a whole rook more. } *

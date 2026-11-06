@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "main"]
+[Start "caro-w-main 7.Qb3"]
+[Name "7...Qc8: the quiet guard"]
+
+7... Qc8 { Guards b7 and keeps the queen away from Ne5. It is passive, but sound. }
+8. Nd2 { The same plan: the knight gets out of the way so that the other can go to f3. }
+8... e6
+9. Ngf3 Be7
+10. O-O { With the queen on c8 there is no fork on e5, so White simply castles. [%idea castle-early] }
+10... O-O
+11. Rfe1 { The rook takes the open file, and the game is about level with a small edge for White. [%idea open-file] } *

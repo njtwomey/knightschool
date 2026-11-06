@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "caro-w-main 7.Qb3"]
+[Name "7...Na5: the queen moves"]
+
+7... Na5 { Hits the queen, but the knight leaves the centre to do it. }
+8. Qc2 { A safe square. The queen stands behind the bishop on d3, and the knight on a5 is out of play. }
+( 8. Qb5+?? { A check, and it looks active. One player in five plays it, and they score 39%. }
+  8... Bd7 { The queen is hit, and she can't go back: her own bishop on d3 stands in the way. The queen on d8 guards the knight on a5. [%csl Rb5] [%idea queen-trap] }
+  9. Na3 a6
+  10. Qb4 e5 { Now the bishop on f8 hits her too. [%cal Rf8b4] }
+  11. Qxf8+ Kxf8 { Black has won the queen for a bishop. } )
+8... e6
+9. Nd2 { The same plan. The bishop on g4 has no job, because White's queen has gone. }
+9... Bd6
+10. Bxd6 Qxd6
+11. Ngf3 { White castles next. The game is about level, but the knight on a5 has a long way back to the centre. } *
