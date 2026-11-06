@@ -1,0 +1,26 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-open 6.Bb5+"]
+[Name "6...Bd7: bishops off"]
+
+6... Bd7 { Black blocks with the bishop and offers to swap it. }
+7. Bxd7+ { Takes it. Black has lost the bishop that was free, and d5 has one guard fewer. }
+7... Nbxd7
+8. O-O Be7
+( 8... cxd4? { Goes for a pawn, with the f8 bishop still at home and the king on the open file. }
+  9. Re1+ Be7
+  10. Qe2 { The bishop on e7 is pinned, and hit twice. }
+  10... Nc5
+  11. Nxd4 { The pawn comes back and Black still can't castle. The engine has White more than a pawn ahead: the gain is positional. } )
+( 8... c4? { Closes the queenside, and it lets the pressure off d4. The king is still in the middle. }
+  9. Re1+ Be7
+  10. Qe2 { The bishop is pinned, and Black can't castle until it is guarded a second time. }
+  10... Nf8
+  11. Ne5 { The knight comes to a great square, and Black's pieces are tied up. No material is won, but the engine has White about a pawn and a half ahead: the gain is positional. } )
+9. dxc5 { The same idea as in the main line: the d5 pawn is left alone. }
+9... Nxc5
+( 9... Bxc5? { Looks natural, but after Re1+ Black has no comfortable way to block the check. }
+  10. Re1+ Kf8 { The engine's choice: every block costs something, but the king can no longer castle. }
+  11. Nb3 Bb6
+  12. a4 { The pawn gains space on the queenside. Nothing is won, but Black's king is stuck on f8, and the engine has White more than a pawn ahead: the gain is positional. } )
+10. Nb3 { Hits the knight on c5, and the knight on f3 is ready to go to d4. Material is level and so is the game. Black has free pieces and White has the safer pawns, so this is a slow game in which only White can play for a win. [%cal Gb3c5,Gf3d4] [%idea isolated-queens-pawn] } *

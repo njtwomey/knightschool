@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-rubinstein-nf6 4.Nxe4"]
+[Name "4...Bd7: the Fort Knox Variation"]
+
+4... Bd7 { The Fort Knox Variation, named for how hard it is to break. Black's problem piece, the c8 bishop, heads for c6, where it can swap itself off. }
+5. Nf3 Bc6
+6. Bd3 { Guards the knight, so the bishop on c6 does not win anything. [%cal Gd3e4] }
+6... Nd7
+7. O-O Ngf6
+8. Ng3 { Keeps the knights on, because the side with more room wants pieces on the board. Swapping on f6 is common, and it scores only 46%. White is a little better, and it is a slow game. } *

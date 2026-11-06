@@ -1,0 +1,39 @@
+[For "white"]
+[Kind "main"]
+[Start "french-open 3.Nd2"]
+[Name "3...dxe4: the queen trap"]
+
+3... dxe4 { Black gives up the fight for the centre, and hopes to develop freely. White keeps a pawn in the centre and has more room. }
+4. Nxe4 { Takes back with a developing move. }
+4... Nf6 { The most common reply. Black offers to swap the good knight. }
+( 4... f5? { Hits the knight, but it leaves a hole on e5 and a backward pawn on e6. [%csl Ye5,Ye6] }
+  5. Ng3 { Steps back and keeps the knight on the board, ready to go to f3 and e5 next. Nothing is won, but White has the better pieces and pawns, and the engine has White about a pawn and a half ahead: the gain is positional. } )
+5. Nxf6+ { Takes first, so Black has to decide how to take back. }
+5... Qxf6 { Nearly everyone takes with the queen, and it brings her out early. }
+6. Nf3 { Develops and guards d4. }
+6... Nc6 { A natural move, and it hits d4 twice. It leaves the queen with few squares. }
+7. Bd3 { Quiet, and the trap of this opening. It takes f5 and g6 away from the queen, so Bg5 next would win her. The engine's top move is 7.Bg5, but that lets the queen go to g6 or f5: players score 56% there and 81% here. [%cal Gd3f5,Gd3g6] [%csl Yf6] [%idea queen-trap] }
+7... h6 { The only good reply: g5 is taken away from the bishop. Only one player in ten finds it. [%cal Gh6g5] }
+( 7... Bd6?? { Develops a piece and walks straight into it. }
+  8. Bg5 { The queen has no square left. [%cal Gg5f6] [%idea queen-trap] }
+  8... Qxf3 9. Qxf3 Nxd4 { Black gets what it can. }
+  10. Qd1 { White has won the queen for a knight and a pawn. } )
+( 7... Bd7?? { The same mistake with the other bishop. }
+  8. Bg5 { Again the queen is trapped. It can run to f5 or g6 only to be taken by the bishop on d3. }
+  8... Qxf3 9. Qxf3 Nxd4
+  10. Qxb7 { White has won the queen for a knight and a pawn, and b7 falls too. } )
+( 7... Nxd4?? { Takes the pawn the knight was hitting. It looks free, because the queen backs the knight up. }
+  8. Nxd4 Qxd4 { Most take back. }
+  9. Bb5+ { The bishop moves with check, and that uncovers the queen on the d-file. [%cal Gd1d4] [%idea discovered-attack] }
+  9... c6
+  10. Qxd4 { White has won the queen for a bishop and a pawn. If Black does not take on d4, White is a knight up for a pawn. } )
+8. O-O { Castles. The trap is over, but the bishop on d3 is well placed and White's position is easy. Bg5 is still ruled out, so White plays on the rest of the board. [%idea castle-early] }
+8... Bd6
+( 8... Nxd4?? { The same grab, and it fails to the same trick. One player in seven tries it. }
+  9. Nxd4 Qxd4
+  10. Bb5+ { The bishop moves with check, and the queen on d1 takes on d4 next. [%cal Gd1d4] [%idea discovered-attack] }
+  10... c6
+  11. Qxd4 { White has won the queen for a bishop and a pawn. } )
+9. Re1 { The rook takes the file with Black's pawn on e6. }
+9... O-O
+10. c4 { Takes d5 away from Black's pieces and gives White more of the centre. The d4 pawn is safe for now: if Black takes it, the bishop on d3 moves with check and uncovers the queen again. White is a little better. The big scores in this line come from the trap, not the game that follows. [%csl Gd5] } *

@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-open 5.Ngf3"]
+[Name "5...Nc6: the knight first"]
+
+5... Nc6
+6. Bb5 { The same bishop move, this time a pin rather than a check. If Black plays ...Nf6 next, the game is in the main line. }
+6... Bd7 { Breaks the pin, but it leaves the king in the centre for another move or two. }
+7. O-O { Players who castle here score 66%. Black has three pieces out of place and the e-file is about to open. [%idea castle-early] }
+7... Nf6
+( 7... Qb6? { Hits the bishop on b5, and leaves the king in the centre. }
+  8. Qe2+ { Check first, and the queen guards the bishop. [%cal Ge2b5] }
+  8... Nge7
+  9. dxc5 Qxc5
+  10. Nb3 { Hits the queen again. Material is level, but Black's king can't castle and the d5 pawn is alone. The engine has White about three pawns ahead: the gain is positional. } )
+8. Re1+ { The rook takes the open file with check. }
+8... Be7
+9. dxc5 { Takes the pawn, and d5 stands alone. The bishop on e7 is pinned to the king by the rook, so it can't take back. [%csl Ye7] [%idea isolated-queens-pawn] }
+9... O-O { Ends the pin. }
+10. Nb3 { Guards the pawn on c5, so White stays a pawn up, and the knight is heading for d4 as well. [%cal Gb3c5] } *

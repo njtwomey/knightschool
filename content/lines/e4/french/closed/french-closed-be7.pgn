@@ -1,0 +1,22 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-closed 8.Nf3"]
+[Name "8...Be7: Nf4 and the d-file trick"]
+
+8... Be7
+9. O-O O-O
+( 9... f6? { Hits the chain, but it leaves e6 short of guards while the king is still on e8. [%csl Ye6] }
+  10. Nf4 { The knight hits e6, and Black has to go back with ...Nd8 to hold it. Nothing is won, but the engine has White more than three pawns ahead: the gain is positional. [%cal Gf4e6] } )
+10. Nf4 { The knight leaves e2 for the kingside, with its eye on e6, d5 and h5. Players who play this score 70%. It also sets a trap, because d4 now looks loose. [%cal Gf4h5,Gf4e6] }
+10... cxd4
+( 10... h6? { Takes g5 from a knight, but it weakens g6, and White's pieces are already pointing there. [%csl Yg6] }
+  11. Bc2 { Steps away from ...c4 and ...Nb4. Qd3 comes next, and the queen and bishop will aim at h7 and g6. The engine has White more than three pawns ahead: the gain is positional. [%cal Gc2g6] } )
+11. cxd4 Kh8
+( 11... h6? { The same weakening of g6, with the c-pawns off. [%csl Yg6] }
+  12. Bc2 { The bishop keeps out of reach of ...Nb4, and Qd3 follows. Nothing is won yet, but the engine has White more than three pawns ahead: the gain is positional. [%cal Gc2g6] } )
+( 11... Nxd4? { One player in four takes the pawn, because it seems to have only one guard left. }
+  12. Nxd4 Qxd4 { Most take back. 12...Nxe5 is better, but it leaves Black a knight down for two pawns. }
+  13. Bxh7+ { The bishop moves with check, and that uncovers the queen on the d-file. [%cal Gd1d4] [%idea discovered-attack] }
+  13... Kxh7
+  14. Qxd4 { White has won the queen for a knight and a bishop, with a pawn on top of that. } )
+12. a3 { Takes b4 from Black's knight and bishop, and keeps the c1 bishop at home for now, where it guards b2. Nothing has been won yet, but White has more space and a knight ready for h5, and the engine has White more than two pawns ahead. [%csl Gb4] } *

@@ -1,0 +1,21 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-2c5 3.d5"]
+[Name "3...Nf6: e5 against ...exd5"]
+
+3... Nf6 { Hits e4, and d5 will be hit a second time if the e-pawn takes. }
+4. Nc3 { Guards e4. White also has a trick ready. [%cal Gc3e4] }
+4... d6
+( 4... Qa5? { Brings the queen out to pin the knight, but only for a moment. }
+  5. Bd2 { Develops, and any knight move now uncovers an attack on the queen. Black has lost a move, and the engine has White nearly two pawns ahead: the gain is positional. [%cal Gd2a5] } )
+( 4... a6? { A quiet move, and it gives White time for the pawn push. }
+  5. d6 { The pawn walls in the f8 bishop, and Black's pieces can hardly get out. No material is won, but the engine has White more than two pawns ahead: the gain is positional. [%csl Yf8] } )
+( 4... Be7? { Develops the bishop to the one square where a pawn can hit it. }
+  5. d6 { Hits the bishop, and it has no good square. The queen takes it if it goes to d6, and on f8 it stays shut in. The engine has White a winning lead. [%cal Gd6e7] } )
+( 4... exd5? { The most common move, and it loses the pawn back with interest. }
+  5. e5 { The pawn hits the knight instead of taking back. [%cal Ge5f6] }
+  5... Ne4 { The most common retreat. The knight on c3 can't take it for free, as ...dxe4 keeps Black a pawn up. }
+  6. Nxd5 { The pawn comes back, and now the knight on e4 is in trouble: its only safe square is g5. Material is level, but Black has lost time and the engine has White more than four pawns ahead: the gain is positional. } )
+5. dxe6 { Takes before Black can take on d5, which leaves Black with a backward d-pawn. [%csl Yd6] }
+5... Bxe6
+6. Nge2 { The knight heads for f4, where it hits the bishop on e6. The more usual 6.Nf3 lets Black equalise. White has the better pawns and a small edge. [%cal Ge2f4,Gf4e6] } *

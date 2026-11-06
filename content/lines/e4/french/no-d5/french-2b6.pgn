@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-open 2.d4"]
+[Name "2...b6: the Owen"]
+
+2... b6 { Owen's Defence. The bishop goes to b7 to hit e4 from the side. [%cal Rc8b7] }
+3. Bd3 { The same bishop move, and here it is what e4 needs. [%cal Gd3e4] }
+3... Bb7
+4. Nf3 Nf6
+5. Qe2 { e4 is hit twice, so the queen guards it, and White stays free to push e5 when the time is right. The engine rates this highest, and the band scores 57%. [%cal Ge2e4] }
+5... Be7
+( 5... Bb4+? { Gives a check that only helps White. }
+  6. c3 { Blocks with a pawn move White wanted anyway, and it hits the bishop, which has to go back. The engine has White more than two pawns ahead: the gain is positional. } )
+6. e5 { Pushes the knight away from f6, as in the Closed Tarrasch. The band castles here more often, but the engine has White nearly two pawns ahead after e5 and about one after castling. [%cal Ge5f6] } *

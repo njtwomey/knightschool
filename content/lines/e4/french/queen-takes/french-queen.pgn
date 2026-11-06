@@ -1,0 +1,24 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-open 4.exd5"]
+[Name "4...Qxd5: the queen takes back"]
+
+4... Qxd5 { Black keeps the pawns healthy, at the cost of a queen out early, where a developing move can hit her. }
+5. Ngf3 { Develops first. The d4 pawn is hit twice, but White does not need to guard it. }
+5... cxd4 { Takes the pawn, the choice of three players in four. }
+6. Bc4 { The point of 5.Ngf3: the bishop comes out with a gain of time, and White gets d4 back in a moment. [%cal Gc4d5] }
+6... Qd8 { The most common retreat, and the safest. }
+7. O-O { Castles first. The pawn on d4 is not going anywhere, because nothing can guard it for long. [%idea castle-early] }
+7... Nc6
+8. Nb3 { The knight has done its job on d2, and now it hits the pawn. }
+8... Nf6
+( 8... e5? { The most common move here. It holds the pawn on d4, but it opens the e-file with Black's king still on it. }
+  9. Nxe5 { Takes the pawn, because if the knight takes back it will be pinned. }
+  9... Nxe5
+  10. Re1 { The knight on e5 is pinned to the king, so White wins it back. [%cal Ge1e8] [%idea pin] }
+  10... Bd6
+  11. f4 { The pinned knight falls next. Material ends up level, but the d4 pawn is weak and Black's king is stuck in the middle: the engine has White about two pawns ahead. } )
+9. Nbxd4 { Back comes the pawn, and material is level. }
+9... Nxd4
+10. Nxd4 Bc5
+11. c3 { Guards the knight, so that it can stay on d4. Material is level and the engine calls it close to equal, but White is ahead in development and has the easier game. } *

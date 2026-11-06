@@ -1,0 +1,23 @@
+[For "white"]
+[Kind "main"]
+[Start "french-open 3.Nd2"]
+[Name "3...Nf6: the Closed Tarrasch"]
+
+3... Nf6 { Hits e4 with a piece. }
+4. e5 { Pushes the knight away and gains space. With the c8 bishop shut in behind e6, White wants the centre closed. [%cal Ge5f6] [%csl Yc8] }
+4... Nfd7 { Nine players in ten go back here. From d7 the knight joins the attack on e5. }
+5. Bd3 { The bishop aims at h7 and stands where it will stay. Players score 57% with this move, more than with any other here. [%cal Gd3h7] }
+5... c5 { The usual break: Black goes for the base of the chain. [%cal Rc5d4] [%idea attack-the-base] }
+6. c3 { This is why the knight went to d2 and not c3: the pawn is free to back up d4. If Black takes, a pawn takes back. [%cal Gc3d4] }
+6... Nc6
+7. Ne2 { Not Ngf3, because the knight on d2 wants that square. From e2 the knight guards d4 and leaves the f-pawn free. [%cal Ge2d4,Gd2f3] }
+7... Qb6 { The most common move. The queen adds to the pressure on d4 and looks at b2. [%cal Rb6d4,Rb6b2] }
+8. Nf3 { The second knight guards d4 too, and it frees the c1 bishop, which guards b2. Everything White has developed points at the same few squares. [%cal Gf3d4,Gc1b2] }
+8... cxd4
+9. cxd4 { Takes back with the pawn, so White keeps two pawns in the centre. }
+9... Bb4+ { The most common reply. Black checks, and hopes to swap off a piece. }
+10. Bd2 { Blocks with a piece that was doing little, and the swap helps White. If Black castles first, castle too. }
+10... Bxd2+
+11. Qxd2 { The queen comes out with no move lost. }
+11... O-O
+12. O-O { Both sides have finished developing, and White has more space and a clear edge, close to a pawn on the engine. Knights can come to f4 and c3, and ...f6 is Black's only way to fight back. [%idea castle-early] } *

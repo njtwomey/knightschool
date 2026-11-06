@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-closed 7.Ne2"]
+[Name "7...Be7: development first"]
+
+7... Be7
+8. O-O { Castles while the centre is closed. With the bishop on d3 and more room, White's king is safer than Black's. [%idea castle-early] }
+8... O-O
+( 8... f6? { Hits e5 with the king still on e8, and e6 loses a guard. [%csl Ye6] }
+  9. Nf4 { Hits e6. Black's knight has to go back to guard it. }
+  9... Nf8
+  10. Qh5+ { The queen comes in with check, and the king can only walk forward. }
+  10... Kd7
+  11. exf6 { Black's king stands on d7 in the middle of an open board. No material is won yet, but the engine has White more than three pawns ahead: the gain is positional. } )
+9. Nf3 { The usual knight move, with d4 now guarded twice. If Black plays ...Qb6, the game is in the line with Nf4. } *

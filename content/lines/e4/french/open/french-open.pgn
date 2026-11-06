@@ -1,0 +1,43 @@
+[For "white"]
+[Kind "main"]
+[Name "3...c5: the Open Tarrasch"]
+
+1. e4
+1... e6 { The French Defence. Black gets ready to hit e4 with ...d5, at the price of shutting in the c8 bishop. [%csl Yc8] }
+2. d4 { White takes the centre while Black's pawn is only on e6. Every line in this opening starts from these two pawns. [%idea centre-pawns] }
+2... d5 { The usual reply, and the point of 1...e6: e4 is under attack. [%cal Rd5e4] }
+3. Nd2 { The Tarrasch Variation. The knight guards e4, and it leaves the c-pawn free to back up d4. On c3 it could be pinned by ...Bb4, and here it can't. It blocks the c1 bishop for a while, which is the small price. [%cal Gd2e4,Gc2c3] }
+3... c5 { The most common reply. Black hits d4 at once, before White can play c3 and set up the pawns. [%cal Rc5d4] }
+4. exd5 { Makes Black decide how to take back. A pawn on d5 will end up alone, and the queen will be chased. }
+4... exd5 { Nearly three players in four take with the pawn. It frees the c8 bishop, but the d-pawn can soon lose its neighbours. }
+( 4... cxd4? { Takes a pawn of its own, and leaves White's pawn on d5 standing. }
+  5. Bb5+ { Check first, so Black has to block before thinking about d5. }
+  5... Bd7 6. dxe6 fxe6
+  7. Bc4 { Material is level, but the pawn on e6 is weak and Black's king is open, and d4 will fall. The engine has White about a pawn and a half ahead: the gain is positional. [%csl Ye6] } )
+5. Ngf3 { Develops and guards d4, so the knight on d2 is free to go to b3 later. }
+5... Nf6
+6. Bb5+ { Comes out with a check, so Black has to spend the next move on it. The bishop has more to do here than on d3. [%cal Gb5e8] }
+6... Nc6 { Blocks with a piece that wants to be on c6 anyway. }
+7. O-O { Puts the king away before opening anything. The knight on c6 is pinned for now, but the king is safe in one move. [%idea castle-early] }
+7... Be7
+8. dxc5 { Takes the c-pawn, and the d5 pawn has no neighbours left. An isolated pawn can only be guarded by pieces, and the square in front of it, d4, is White's for good. [%csl Yd5,Gd4] [%idea isolated-queens-pawn] }
+8... Bxc5
+9. Re1+ { The e-file is open, so the rook goes there with check. Black's king still hasn't castled. [%idea open-file] }
+9... Be6 { Blocks the check, and guards d5. The bishop is pinned to the king for as long as Black stays uncastled. }
+10. Nb3 { Hits the bishop on c5, and heads for d4. [%cal Gb3d4] }
+10... Bb6
+11. Nbd4 { The knight lands in front of the isolated pawn, where no pawn can chase it. It also hits c6 and e6 together. [%cal Gd4c6,Gd4e6] [%idea outpost] }
+11... O-O { The most common reply, and a natural one. But the knight on c6 now has only one guard. }
+( 11... Qd6? { Guards c6 and e6, but the queen stands where a knight can hit her. }
+  12. Nf5 { Takes the chance at once. The bishop on e6 can't take, because it is pinned to the king. [%cal Gf5d6] }
+  12... Qf8
+  13. Be3 { The queen has gone back to f8, where she shuts in the rook, and Black can no longer castle short. Nothing is won yet, but the engine has White more than three pawns ahead: the gain is positional. } )
+( 11... Bxd4? { Swaps off the knight on d4, and gives up Black's good bishop to do it. }
+  12. Nxd4 { The other knight takes its place, and it hits c6 and e6. }
+  12... Qc8
+  13. Bxc6+ bxc6
+  14. Bg5 { White has the better bishop, and Black has a weak pawn on c6 to go with the one on d5. The engine has White about two pawns ahead: the gain is positional. } )
+12. Bxc6 bxc6
+13. Nxc6 { Wins a pawn, and the knight hits the queen. [%cal Gc6d8] }
+13... Qc7
+14. Ncd4 { The knight goes back to its good square, and White is a clean pawn up. Black's pieces are active, so the engine has White only about three quarters of a pawn ahead. } *

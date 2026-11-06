@@ -1,0 +1,345 @@
+name: French Defence
+side: white
+start: 1. e4 e6
+level: next
+style: [classical, system]
+summary: >-
+  Meet the French with the Tarrasch, 3.Nd2: the knight guards e4, the c-pawn stays free to back up d4, and players at
+  this level score better with it than with any other third move.
+about:
+  idea: >-
+    Black plays ...e6 and ...d5 and hits e4. White answers with 3.Nd2, the Tarrasch Variation. The knight guards e4 and
+    leaves the c-pawn free, so c3 can back up d4. The plan then depends on what Black does about the centre. If the knight
+    comes to f6, push e5, close the centre and put the pieces behind the pawns. If Black plays ...c5, open the game and
+    play against the d5 pawn when it stands alone. If Black takes on e4, develop quickly, and watch for the queen trap.
+  risks: >-
+    The bishop on c1 stays shut in for a few moves, and this is a game of plans more than tricks. Against 6...Bd7 in the
+    Open Tarrasch and against the Rubinstein the engine calls it close to equal. Black's best line in the closed game, an
+    early ...f6, scores 52% for Black at this level. The Advance, the Winawer and the Classical do not come up from this
+    side: Black can't reach them after 3.Nd2.
+  suits: >-
+    Players who want one set-up against the French, and who like a safe king and a small lasting edge. 3.e5 is the most
+    common move at this level, and White scores 47% with it. With 3.Nd2 White scores 54%, the best of the four main
+    moves, partly because so many natural moves lose Black the queen.
+  origin: >-
+    Named after Siegbert Tarrasch, the German master and teacher who played it and wrote about it around 1900. Mikhail
+    Botvinnik and Anatoly Karpov both used it at the top level.
+ideas:
+  [centre-pawns, isolated-queens-pawn, queen-trap, discovered-attack, attack-the-base, castle-early, outpost, open-file]
+variations:
+  - id: open
+    name: The Open Tarrasch, 3...c5
+    intro: >-
+      The most common reply. Black hits d4, White swaps on d5, and nearly three players in four take back with the pawn.
+      White castles, swaps on c5 and gets what this variation is about: a d5 pawn with no neighbours, and the d4 square in
+      front of it for a knight. The engine calls the main lines close to equal. At this level White scores 58% to 66%,
+      because Black's king often stays in the centre too long.
+    lines: [french-open, french-open-bd7, french-open-nc6]
+    plans:
+      - Swap on d5, and bring the g1 knight to f3.
+      - Check on b5, then castle.
+      - Take on c5 to leave the d5 pawn alone.
+      - Put a rook on e1 and a knight on d4.
+    questions:
+      - id: why-dxc5
+        at: 1. e4 e6 2. d4 d5 3. Nd2 c5 4. exd5 exd5 5. Ngf3 Nf6 6. Bb5+ Nc6 7. O-O Be7
+        ask: White takes on c5 here. What does that do to the pawn on d5?
+        answers: [[alone], [isolated], [neighbours], [no pawn], [weak]]
+        examples:
+          right: [it leaves the pawn isolated, the d5 pawn is alone, it has no neighbours left]
+          wrong: [it wins the pawn, it pins the pawn, it blocks the pawn from moving forward]
+        explain: >-
+          With the c-pawn gone, the d5 pawn has no pawn beside it, so only pieces can guard it. And the square in front of
+          it, d4, can never be hit by a pawn, so a White knight can stay there.
+      - id: pinned-be7
+        at: 1. e4 e6 2. d4 d5 3. Nd2 c5 4. exd5 exd5 5. Ngf3 Nc6 6. Bb5 Bd7 7. O-O Nf6 8. Re1+ Be7 9. dxc5
+        ask: White has taken on c5. Why can't Black take back with the bishop?
+        answers: [[pin], [pinned], [rook], [king]]
+        examples:
+          right: [the bishop is pinned, the rook on e1 pins it to the king, the bishop blocks the check from the rook]
+          wrong: [the pawn is guarded, the queen is in the way, it would lose the knight]
+        explain: >-
+          The bishop on e7 blocks the check from the rook on e1, so it can't move off the file. By the time Black has
+          castled, Nb3 guards the pawn, and White stays a pawn up.
+  - id: queen-takes
+    name: 3...c5 and 4...Qxd5
+    intro: >-
+      One player in five takes back with the queen. The pawns stay healthy, but the queen is out early. White gives up d4
+      for a moment, hits the queen with Bc4, castles and wins the pawn back with Nb3. The game is close to equal, and White
+      has the easier moves.
+    lines: [french-queen]
+    plans:
+      - Develop, and let Black take on d4.
+      - Bc4 hits the queen, then castle.
+      - Nb3 wins the pawn on d4 back.
+  - id: closed
+    name: The Closed Tarrasch, 3...Nf6
+    intro: >-
+      Black hits e4 with the knight, and e5 drives it back. Now the game is about the chain d4 and e5. Black attacks d4 with
+      ...c5, ...Nc6 and ...Qb6, and White guards it with c3 and both knights. The f1 bishop goes to d3 and aims at h7. White
+      scores 57% here, and the engine has White a clear edge.
+    lines: [french-closed, french-closed-be7, french-closed-cxd4, french-closed-f6, french-closed-7be7]
+    plans:
+      - Push e5, and Bd3.
+      - Answer ...c5 with c3, and take back on d4 with the c-pawn.
+      - Ne2, then the d2 knight comes to f3.
+      - Castle, and bring the e2 knight to f4 when Black has castled short.
+    questions:
+      - id: why-ne2
+        at: 1. e4 e6 2. d4 d5 3. Nd2 Nf6 4. e5 Nfd7 5. Bd3 c5 6. c3 Nc6
+        ask: White plays 7.Ne2 and not 7.Ngf3. Which piece wants the f3 square?
+        answers: [[d2], [other knight], [second knight]]
+        examples:
+          right: [the knight on d2, the other knight goes to f3, the second knight]
+          wrong: [the queen, the bishop on d3, the f-pawn]
+        explain: >-
+          The knight on d2 has only one good square to go to, and that is f3. From e2 the first knight guards d4 as well, so
+          d4 ends up guarded by both knights.
+      - id: d4-trick
+        at: 1. e4 e6 2. d4 d5 3. Nd2 Nf6 4. e5 Nfd7 5. Bd3 c5 6. c3 Nc6 7. Ne2 Qb6 8. Nf3 Be7 9. O-O O-O 10. Nf4 cxd4 11. cxd4 Nxd4 12. Nxd4 Qxd4
+        ask: Black's queen has taken on d4. Which move wins her?
+        answers: [[Bxh7], [h7], [discovered]]
+        examples:
+          right: [Bxh7+, the bishop takes h7 with check, a discovered attack on the queen]
+          wrong: [Qxd4, Nxd5, Be3]
+        explain: >-
+          13.Bxh7+ gives check and clears the d-file. Black has to answer the check, and then 14.Qxd4 takes the queen.
+  - id: queen-trap
+    name: 3...dxe4 and the queen trap
+    intro: >-
+      Black takes on e4 and swaps knights. When the queen takes back on f6 she has few squares, and this is the chance of
+      the opening. 7.Bd3 takes f5 and g6 away from her, and Bg5 next wins her. Nine players in ten at this level do not see
+      it, and White scores 81%.
+    lines: [french-rubinstein-nf6, french-rubinstein-bd6, french-rubinstein-nc6]
+    plans:
+      - After ...Qxf6, play Nf3 and Bd3.
+      - If Black has not played ...h6, Bg5 wins the queen.
+      - If Black takes on d4 with the knight, take back, then check on b5.
+      - After ...h6, castle and play Re1.
+    questions:
+      - id: which-move-wins
+        at: 1. e4 e6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Nf6 5. Nxf6+ Qxf6 6. Nf3 Nc6 7. Bd3 Bd6
+        ask: Black has developed a bishop. Which move wins the queen?
+        answers: [[Bg5], [g5]]
+        examples:
+          right: [Bg5, the bishop goes to g5, Bg5 traps the queen]
+          wrong: [O-O, Be3, c3]
+        explain: >-
+          8.Bg5 hits the queen, and she has no good square. The bishop on d3 covers f5 and g6, and the knight on f3 guards
+          the bishop on g5. The best Black can do is give her up for the knight.
+      - id: bb5-trick
+        at: 1. e4 e6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Nf6 5. Nxf6+ Qxf6 6. Nf3 Nc6 7. Bd3 Nxd4 8. Nxd4 Qxd4
+        ask: Black's queen has taken on d4. Which move wins her?
+        answers: [[Bb5], [b5], [discovered]]
+        examples:
+          right: [Bb5+, the bishop checks on b5, a discovered attack on the queen]
+          wrong: [Qe2, Be3, O-O]
+        explain: >-
+          9.Bb5+ gives check and clears the d-file. Black has to answer the check, and 10.Qxd4 takes the queen.
+  - id: rubinstein
+    name: The Rubinstein and the Fort Knox
+    intro: >-
+      These are the sound ways to play 3...dxe4, and there is no trap here. Black's queen stays at home and the pieces come
+      out quietly. Masters play the Rubinstein, and at this level the two sides score about the same. White has a little
+      more room and an easy plan, and that is all.
+    lines: [french-rubinstein, french-rubinstein-ne5, french-fort-knox]
+    plans:
+      - Nf3, Bd3 and castle.
+      - Swap knights on f6 in the Rubinstein.
+      - After ...Be7 and castling, play Ne5, not c3.
+      - Keep the knights on against the Fort Knox.
+    questions:
+      - id: why-ne5
+        at: 1. e4 e6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Nd7 5. Nf3 Ngf6 6. Nxf6+ Nxf6 7. Bd3 Be7 8. O-O O-O 9. Ne5 b6
+        ask: Black has played the usual ...b6. Which knight move hits the queen and the bishop together?
+        answers: [[Nc6], [c6], [fork]]
+        examples:
+          right: [Nc6, the knight goes to c6, Nc6 forks the queen and the bishop]
+          wrong: [Nf3, Ng4, Nd7]
+        explain: >-
+          10.Nc6 lands on the hole left by ...b6. It hits the queen on d8 and the bishop on e7, so White gets the two bishops.
+          Players who do this score 75%.
+  - id: franco-sicilian
+    name: The Franco-Sicilian, 2...c5
+    intro: >-
+      Black hits d4 straight away. White pushes past with d5 and keeps a pawn on d5 that cramps Black's game. The engine
+      likes this a good deal more than taking on c5 or playing Nf3. Then White develops as usual, and watches for one
+      trick: if the e-pawn takes on d5 after ...Nf6 and Nc3, e5 hits the knight.
+    lines: [french-2c5, french-2c5-nf6]
+    plans:
+      - Push d5, and take back with the e-pawn.
+      - Nc3 guards d5 and e4.
+      - Bd3, Nf3 and castle.
+    questions:
+      - id: why-e5-not-exd5
+        at: 1. e4 e6 2. d4 c5 3. d5 Nf6 4. Nc3 exd5
+        ask: Black has taken on d5, and the natural move is to take back. What is stronger?
+        answers: [[e5]]
+        examples:
+          right: [e5, push e5 and hit the knight, e5 hits the knight on f6]
+          wrong: [exd5, Nxd5, Bg5]
+        explain: >-
+          5.e5 hits the knight, and it has no good square. After 5...Ne4 6.Nxd5 the pawn is back and the knight on e4 is
+          nearly trapped. After 5...Ng8 6.Qxd5 White has a huge lead in development.
+  - id: no-d5
+    name: 2...d6, 2...b6 and 2...c6
+    intro: >-
+      When Black leaves ...d5 out, White already has what the opening is about: two pawns in the centre. No single reply is
+      common here, so White needs a rule and not a list of moves. Bd3 guards e4 first, then Nf3, castle and c3. If Black
+      plays ...d5 later, the knight goes to d2, as in the rest of the opening.
+    lines: [french-2d6, french-2b6, french-2c6]
+    plans:
+      - Bd3 first, to guard e4.
+      - Nf3 and castle, then c3.
+      - Against ...Bb7 and ...Nf6, Qe2 guards e4 again.
+      - If Black plays ...d5, Nd2.
+setup:
+  title: How the French starts
+  text: >-
+    After 1.e4 e6 Black has not fought for the centre yet. The pawn on e6 gets ready for ...d5, which will hit e4, but it
+    shuts in the c8 bishop, and that bishop stays a problem for Black for the whole game. White's first job is to take
+    the centre with d4.
+steps:
+  french-open:1:
+    title: d4, Nd2 and the swap on d5
+    text: >-
+      White takes the centre, and 3.Nd2 guards e4 without blocking the c-pawn. Black hits d4 with ...c5, and White swaps
+      on d5 to make Black decide how to take back. If the pawn takes, the knight comes to f3 and the game opens up.
+  french-open:2:
+    title: Check, castle, and the lone pawn
+    text: >-
+      Bb5+ brings the bishop out with a gain of time, and White castles. Then dxc5 leaves the d5 pawn with no neighbours,
+      and the rook takes the open e-file with check.
+  french-open:3:
+    title: A knight on d4
+    text: >-
+      The other knight heads for d4, the square in front of the lone pawn. If Black castles there, the knight on c6 is
+      short of a guard, and Bxc6 and Nxc6 win a pawn. Black keeps active pieces, so the game goes on.
+  french-open-bd7:1:
+    title: 6...Bd7, the bishops come off
+    text: >-
+      Black offers to swap bishops, and White takes. The plan is the same: castle, take on c5, and bring a knight towards
+      d4. This is the most level line in the opening.
+  french-open-nc6:1:
+    title: 5...Nc6, and a pawn up
+    text: >-
+      The knight comes out first, and Bb5 is a pin and not a check. If Black plays ...Bd7 and ...Nf6, Re1+ forces the
+      bishop to e7, where it is pinned to the king. That is why dxc5 wins a pawn here: the bishop can't take back.
+  french-queen:1:
+    title: Let d4 go, and hit the queen
+    text: >-
+      The queen takes on d5, and the d4 pawn falls. White does not mind, because Bc4 gains a move on the queen. White
+      castles and the knight on d2 goes to b3, where it hits d4.
+  french-queen:2:
+    title: The pawn comes back
+    text: >-
+      Nb3 wins the pawn back, and the knights come off on d4. Black's game is sound, and c3 keeps the last knight in the
+      centre. The position is close to equal, with White a little ahead in development.
+  french-closed:1:
+    title: e5, Bd3, c3 and Ne2
+    text: >-
+      The knight is pushed back to d7. Black strikes with ...c5 and brings the knight to c6, and c3 and Ne2 keep d4 solid.
+      The g1 knight goes to e2 so that the d2 knight can use f3.
+  french-closed:2:
+    title: Both knights on d4
+    text: >-
+      The queen comes to b6, and Nf3 frees the c1 bishop to guard b2. After the swap on d4 White has two pawns in the
+      centre. If Black checks on b4, Bd2 swaps off a piece that was doing nothing. White castles with a clear edge.
+  french-closed-be7:1:
+    title: Nf4 and a trick on the d-file
+    text: >-
+      Black develops quietly and castles. The knight on e2 leaves for f4, and it looks as if d4 has dropped its guard. It
+      has not: if the queen ends up on d4, Bxh7+ uncovers the queen on d1. That comes next as a follow-up.
+  french-closed-cxd4:1:
+    title: 7...cxd4, the same position
+    text: >-
+      Black swaps on d4 before bringing the queen out. The c-pawn takes back as usual. After ...Qb6 and Nf3 the game is
+      in the line you know.
+  french-closed-f6:1:
+    title: 8...f6, Black's best plan
+    text: >-
+      Black hits the head of the chain straight away and gets free play. White takes on f6, develops and castles, then
+      swaps the dark-squared bishops with Bf4. Black scores slightly better here at this level, and the engine has White
+      only a little ahead, with the pawn on e6 as the target.
+  french-closed-7be7:1:
+    title: 7...Be7, castle first
+    text: >-
+      Black develops, so White castles. Nf3 comes next, and if the queen goes to b6 the game is in the line with Nf4.
+  french-rubinstein-nf6:1:
+    title: Swap, then Bd3
+    text: >-
+      Black takes on e4 and offers to swap knights. White swaps, the queen comes to f6, and Nf3 develops. Then 7.Bd3 sets
+      the trap: Bg5 is coming, and the queen has nowhere to go. 7...Bd6, 7...Bd7 and 7...Nxd4 all lose the queen, and they
+      come next as follow-ups.
+  french-rubinstein-nf6:2:
+    title: After ...h6, a small edge
+    text: >-
+      7...h6 is the one good reply. White castles, puts a rook on e1 and plays c4 to take d5 from Black's pieces. The trick
+      on the d-file still works, so 8...Nxd4 loses the queen as well. Without the trap the game is only a little better for
+      White.
+  french-rubinstein-bd6:1:
+    title: 6...Bd6, the same trap
+    text: >-
+      The bishop comes out before the knight, and Bd3 is the same reply. If Black castles, Bg5 wins the queen: that comes
+      next as a follow-up. After ...h6 and castling the game joins the line you know.
+  french-rubinstein-nc6:1:
+    title: 4...Nc6, the same position
+    text: >-
+      Black brings the knight out first. Nf3 guards d4, and after the swap on f6 the game is back in the queen trap, with
+      Bd3 to come.
+  french-rubinstein:1:
+    title: Swap, Bd3 and castle
+    text: >-
+      The Rubinstein proper. The knight on d7 takes back on f6, so the queen stays at home and there is no trap. White
+      plays Bd3 and castles. Black's ...c5 is the right plan.
+  french-rubinstein:2:
+    title: Take back, and hit the bishop
+    text: >-
+      Black swaps on d4, and the knight takes back. ...Bc5 hits it, and Nb3 hits the bishop in return. The game is about
+      equal, with open files and few pawns.
+  french-rubinstein-ne5:1:
+    title: Ne5, and not c3
+    text: >-
+      Black develops quietly and castles. Ne5 is much better here than the usual c3, which scores only 47%. If Black plays
+      the usual ...b6, Nc6 forks the queen and the bishop: that comes next as a follow-up. Against ...c5 White takes, and
+      the rook goes to e1.
+  french-fort-knox:1:
+    title: The bishop to c6
+    text: >-
+      Black's weak bishop goes to c6 to swap itself for a knight. Bd3 guards e4 and White castles. Then Ng3 keeps the
+      knights on, because the side with more room wants pieces on the board.
+  french-2c5:1:
+    title: Push past with d5
+    text: >-
+      White pushes past the c-pawn instead of taking it. After the swap on d5 White has a pawn that cramps Black. Nc3
+      guards it, and Bd3 is the usual square for the bishop.
+  french-2c5:2:
+    title: Develop and castle
+    text: >-
+      Black has to play round the pawn on d5. Nf3 and castling finish the first job, and the game is a slow one with more
+      space for White.
+  french-2c5-nf6:1:
+    title: 3...Nf6, and the trick with e5
+    text: >-
+      Nc3 guards e4. If Black then takes on d5, e5 is much stronger than taking back: that comes next as a follow-up. After
+      4...d6 White takes on e6 and develops, with a small edge.
+  french-2d6:1:
+    title: Bd3 first
+    text: >-
+      Black gives up the fight for the centre, and many moves are possible. Bd3 guards e4, so the plan does not depend on
+      Black's reply: Nf3, castle and c3.
+  french-2b6:1:
+    title: Against ...Bb7, Qe2
+    text: >-
+      The bishop on b7 hits e4 from the side, and ...Nf6 hits it again. Bd3 and Qe2 guard it. White castles and plays c3,
+      and has the whole centre.
+  french-2c6:1:
+    title: ...d5, one move late
+    text: >-
+      Black plays ...d5 with the pawn on c6. The knight goes to d2, and e5 pushes the knight on f6 away, as in the Closed
+      Tarrasch. Ne2 keeps the same set-up.
+  french-2c6:2:
+    title: A whole move ahead
+    text: >-
+      Black's c-pawn has taken two moves to reach c5. The position is the Closed Tarrasch with an extra move for White,
+      which goes on castling.

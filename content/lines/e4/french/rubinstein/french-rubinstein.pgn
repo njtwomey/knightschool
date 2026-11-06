@@ -1,0 +1,16 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-rubinstein-nf6 4.Nxe4"]
+[Name "4...Nd7: the Rubinstein Variation"]
+
+4... Nd7 { The Rubinstein Variation, the way masters play it. The knight gets ready to swap without bringing the queen out, so there is no trap here. It is solid, and at this level the two sides score about the same. }
+5. Nf3 Ngf6
+6. Nxf6+ { Swaps, as ever. White keeps the pawn on d4 and more room. }
+6... Nxf6
+7. Bd3 { The same bishop move, and the same plan: castle, and put the pieces where they point at the kingside. }
+7... c5 { The most common move, and the right plan: Black hits the one centre pawn that is left. [%cal Rc5d4] }
+8. O-O { Castles and leaves the pawn to be taken. [%idea castle-early] }
+8... cxd4
+9. Nxd4 { The knight takes back on a good central square. }
+9... Bc5
+10. Nb3 { Hits the bishop with a gain of time. The game is about equal, with fewer pawns and open files, and White's lead in development is all there is. } *

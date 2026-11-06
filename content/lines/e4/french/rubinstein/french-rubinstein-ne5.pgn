@@ -1,0 +1,16 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-rubinstein 7.Bd3"]
+[Name "7...Be7: Ne5, not c3"]
+
+7... Be7
+8. O-O O-O
+9. Ne5 { The knight jumps forward while Black's queenside is still at home. It watches d7, and it can go to c6. Most players play 9.c3 here and score 47%. This move scores 63%, and the engine likes it best. [%cal Ge5c6] [%csl Gc6] }
+9... c5 { The most common reply, and the right idea: Black hits d4 at once. }
+( 9... b6? { The usual plan in this line, but with a knight on e5 it leaves a hole on c6. [%csl Yc6] }
+  10. Nc6 { Hits the queen and the bishop on e7 together. [%cal Gc6d8,Gc6e7] [%idea fork] }
+  10... Qd6
+  11. Nxe7+ { Takes the bishop, and White has the two bishops against bishop and knight. No material is won, but the engine has White about a pawn and a half ahead: the gain is positional. } )
+10. dxc5 { Takes the pawn, and Black has to spend a move taking back. }
+10... Bxc5
+11. Re1 { The rook takes the e-file, with Bg5 to come. White has an edge, and Black's c8 bishop is still at home. [%idea open-file] } *

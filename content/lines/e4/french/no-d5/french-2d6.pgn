@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-open 2.d4"]
+[Name "2...d6: no fight for the centre"]
+
+2... d6 { Black gives White the centre. No reply stands out after this, so White needs a plan and not a list of moves. }
+3. Bd3 { The bishop guards e4, so the knights are free to go where they like. Against every move that isn't ...d5, White starts with this one. [%cal Gd3e4] [%idea centre-pawns] }
+3... Nf6
+4. Nf3 Be7
+5. O-O O-O
+6. c3 { White has two centre pawns, and c3 gives the bishop a way back to c2 and keeps d4 safe. Nbd2 comes next. The engine has White about three quarters of a pawn ahead. } *

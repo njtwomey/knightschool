@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-open 2.d4"]
+[Name "2...c6: ...d5 one move late"]
+
+2... c6 { Black has played the c-pawn to c6 and will want ...c5 later, so this costs a move. }
+3. Bd3 { Guards e4, as against every other second move. }
+3... d5 { Now it is a French with the pawn on c6. }
+4. Nd2 { The same knight move, the same plan. }
+4... Nf6
+5. e5 Nfd7
+6. Ne2 { The same set-up as in the Closed Tarrasch. }
+6... c5
+7. c3 Nc6
+8. O-O { The position of the Closed Tarrasch, but with White a whole move ahead, because Black's c-pawn took two moves to get here. White scores over 60%. [%idea castle-early] } *

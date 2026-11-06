@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-closed-cxd4 8.cxd4"]
+[Name "8...f6: Black breaks at once"]
+
+8... f6 { Black's best plan. It hits the head of the chain, and it frees the game. This is the one line where Black scores better than White: 52% at this level. [%cal Rf6e5] }
+9. exf6 { Takes, rather than let the pawn on e5 be pressed. }
+9... Nxf6
+10. Nf3 { The knight goes to its usual square, and it watches e5, the square Black wants. [%cal Gf3e5] }
+10... Bd6
+11. O-O O-O
+12. Bf4 { Swaps Black's good bishop. Black's weak pawn on e6 is left behind, and the e5 square stays White's. The engine has White a little better, and the game is a long one. [%csl Ye6,Ge5] } *

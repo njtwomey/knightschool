@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-rubinstein-nf6 4.Nxe4"]
+[Name "4...Nc6: the knight first"]
+
+4... Nc6
+5. Nf3 { Guards d4, which the knight has just hit. [%cal Gf3d4] }
+5... Nf6
+( 5... e5? { Opens the game with the king still in the centre. The knight on c6 can now be pinned. }
+  6. Bb5 { Pins the knight, and e5 has lost its guard. [%cal Gb5e8] }
+  6... Ne7
+  7. O-O { Castles while Black can't. Material is level, but the e5 pawn is loose and Black is well behind in development. The engine has White more than two pawns ahead: the gain is positional. } )
+6. Nxf6+ { The same swap, so the queen comes to f6. }
+6... Qxf6 { And the position is the one from the queen trap, with White to move: Bd3 is the move. }
+7. Bd3 * 

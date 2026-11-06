@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-closed 7.Ne2"]
+[Name "7...cxd4: the swap first"]
+
+7... cxd4
+8. cxd4 { The same reply: keep two pawns in the centre. The c3 square is free for a knight now. }
+8... Qb6
+( 8... Bb4? { Pins the knight, but there is nothing behind the pin to win, and the bishop is soon in the way. }
+  9. O-O Be7 { The bishop has to go back, or it gets hit by a3. }
+  10. Nf3 { White has developed two pieces while the bishop went there and back. The engine has White more than a pawn and a half ahead: the gain is positional. } )
+9. Nf3 { The same move, and the same position as the main line by another order. } *

@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-rubinstein-nf6 6.Nf3"]
+[Name "6...Bd6: the same trap"]
+
+6... Bd6 { Develops, and the same trap is open. }
+7. Bd3 { The same quiet move. The engine prefers 7.Bg5, by more than half a pawn, but that gives Black no chance to go wrong. The band scores 57% with 7.Bg5 and 77% with this. [%idea queen-trap] }
+7... h6 { Again the one move that stops it, and one player in five finds it. }
+( 7... O-O?? { Nearly half of all players castle, and it costs the queen. }
+  8. Bg5 { The queen has no square: f5 and g6 are taken, and the bishop on g5 cannot be taken by the queen for free. [%cal Gg5f6] [%idea queen-trap] }
+  8... Qf5 9. Bxf5 exf5 { Black has to give the queen for the bishop. Taking on f3 would give her for a knight. }
+  10. O-O { White has won the queen for a bishop. } )
+8. O-O O-O
+( 8... b6? { Gets ready for ...Bb7, but it leaves the long diagonal open for a moment. }
+  9. Be4 { Hits the rook on a8, so Black has to block. [%cal Ge4a8] }
+  9... c6
+  10. Ne5 { The pawn on c6 is hit twice, and Black has no easy way to guard it. The engine has White more than two pawns ahead: the gain is positional. [%csl Yc6] } )
+9. Re1
+9... Nc6 { Now c4 brings the game into the main line by another order. }
+10. c4 *

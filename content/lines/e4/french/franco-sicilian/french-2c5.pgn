@@ -1,0 +1,16 @@
+[For "white"]
+[Kind "sideline"]
+[Start "french-open 2.d4"]
+[Name "2...c5: the Franco-Sicilian"]
+
+2... c5 { Black hits d4 at once and hopes for an Open Sicilian with ...e6 already played. }
+3. d5 { White takes the chance to push past. The engine much prefers this to 3.Nf3 or 3.c3, because White gains space and Black's pieces have nowhere good to go. [%cal Gd5e6] }
+3... exd5 { The most common reply. }
+4. exd5 { Takes back with the pawn, so White keeps a pawn on d5 that cramps Black. }
+4... d6 { Guards c5 and opens the way for the c8 bishop. }
+5. Nc3 { Guards d5. If Black plays ...Nf6 first, the same move does the same job. [%cal Gc3d5] }
+5... Nf6
+6. Bd3 { The usual bishop move, and from d3 it covers the squares Black's knight would like. }
+6... Be7
+7. Nf3 O-O
+8. O-O { White has more space and easy development. The engine has White about half a pawn ahead, and at this level the score is close to even: this structure needs a plan, and neither side has a quick trick. [%idea castle-early] } *
