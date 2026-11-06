@@ -1,0 +1,23 @@
+[For "black"]
+[Kind "sideline"]
+[Start "giuoco-main 1...e5"]
+[Name "The King's Gambit: 2...d5"]
+
+2. f4 { The King's Gambit. White offers a pawn to open the f-file and pull Black's e-pawn away from the centre. [%cal Rf4e5] }
+2... d5 { Hits back in the centre, the same answer as to every gambit here. Taking on f4 at once is the engine's first choice by a little, but White scores 56% after it, and Black then has to know a lot of theory. [%cal Gd5e4] }
+3. exd5 { The most common move. }
+( 3. fxe5?? { One player in ten takes this pawn, and it opens the line from d8 to h4 for the queen. [%cal Rd8h4] }
+  3... Qh4+ { Check. White scores 15% from here, and only g3 stops it. }
+  4. g3 Qxe4+ { Takes the pawn with check, and now the rook on h1 is hit. [%cal Re4h1] }
+  5. Qe2 Qxh1 { Black has won a rook, and the knight on g1 is next. } )
+3... exf4 { Now Black takes. White's f-pawn is gone, and the pawn on d5 is the one that is weak. 3...e4 is a famous gambit of Black's own, but the engine does not trust it. }
+4. Nf3 { Guards against ...Qh4+ and gets ready to take on f4. }
+( 4. Nc3? { Develops, but it does nothing about the check on h4. [%cal Rd8h4] }
+  4... Qh4+ { White can't block with g3, because the pawn on f4 takes it, so the king has to move. }
+  5. Ke2 Bg4+ { A second check, and it brings another piece out. }
+  6. Nf3 Bd6 { Guards f4. White's king is stuck on e2, in front of its own pieces, and it can't castle. Nothing has been won on the board, so the gain is the king's safety, and the engine has Black about two pawns ahead. } )
+4... Nf6 { Develops and hits d5. Most players take with the queen here, 4...Qxd5, and then White scores 61%, because Nc3 gains time on the queen. [%cal Rf6d5] }
+5. c4 { The most common move. It holds on to the pawn on d5. }
+5... c6 { Hits the pawn again. Black wants to take with a pawn, so that a pawn stands in the centre. [%cal Gc6d5] }
+6. d4 Bb4+ { The check gets the bishop out and asks White how to block. [%cal Rb4e1] }
+7. Nc3 cxd5 { Black takes the pawn. White will win f4 back, and the game is about level, with Black's pieces free and White's king still in the centre. } *

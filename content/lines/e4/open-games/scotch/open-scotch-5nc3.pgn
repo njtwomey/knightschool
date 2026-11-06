@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "open-scotch 4...Nf6"]
+[Name "The Scotch: 5.Nc3"]
+
+5. Nc3 { Guards e4 and keeps the knights on. }
+5... Bb4 { The same pin as in the last line. White scores 47% after it. [%cal Rb4e1,Rf6e4] }
+6. Nxc6 { The most common move, and it leads to a position you know. }
+6... bxc6 { Takes towards the centre. After 7.Bd3 the game is back in the line with 6.Nc3. }
+7. Bd3 *

@@ -1,0 +1,20 @@
+[For "black"]
+[Kind "main"]
+[Start "giuoco-main 4...Nf6"]
+[Name "Italian: 5.d4 and the check on b4"]
+
+5. d4 { White's most common move here. The pawn hits e5 and the bishop on c5 at the same time. [%cal Rd4e5,Rd4c5] }
+5... exd4 { Black takes, the choice of nine players in ten. If Black leaves the pawn, White takes on e5 or c5 next. }
+6. cxd4 { White has two pawns in the centre, and the bishop on c5 is attacked. [%cal Rd4c5] }
+6... Bb4+ { The check gains a move: White has to block before doing anything else, and e4 is still hanging. 6...Bb6 lets 7.e5 hit the knight, and White scores 57% after it. [%cal Rb4e1] }
+7. Nc3 { The most common block. White develops and leaves the pawn on e4 to its fate, hoping for a lead in development. }
+7... Nxe4 { Takes the pawn. Black has to be ready for a few sharp moves, but White has nothing ready yet. [%cal Ge4c3] }
+8. O-O { White castles and gives up the knight on c3 for the moment, so the rook can come to e1. }
+( 8. Qe2? { Pins the knight to the king and seems to win the pawn back. It does not, because the pawn can guard the knight. [%cal Re2e4] }
+  8... d5 { Guards the knight and hits the bishop on c4 as well. [%cal Gd5c4,Gd5e4] }
+  9. O-O Bxc3 10. bxc3 O-O { Black's king has left the pin behind, and Black is a clean pawn up with a safe position. } )
+8... Bxc3 { Takes the knight first. The band's favourite is 8...Nxc3, and White scores 63% after it, because after 9.bxc3 the pawn hits the bishop on b4 and Black's pieces get in each other's way. }
+9. bxc3 { The most common recapture. The sharper 9.d5 is met by 9...Bf6, and it is one for later. }
+9... d5 { Puts a pawn in the middle, guards the knight on e4 and hits the bishop on c4. White scores 38% from here. [%cal Gd5c4,Gd5e4] }
+10. Bd3 { The bishop keeps its diagonal and aims at the knight. }
+10... O-O { Black is a pawn up, and now the king is safe too. White has the two bishops and an open e-file, so ...Bf5 and ...Re8 come next. The engine has Black about half a pawn ahead. [%idea castle-early] } *

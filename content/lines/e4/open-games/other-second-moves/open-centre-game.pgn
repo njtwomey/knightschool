@@ -1,0 +1,29 @@
+[For "black"]
+[Kind "sideline"]
+[Start "giuoco-main 1...e5"]
+[Name "The Centre Game: 3.Qxd4"]
+
+2. d4 { White opens the centre on the second move. [%cal Rd4e5] }
+2... exd4 { Black takes. The pawn can't be guarded with a piece, and it is free. }
+3. Qxd4 { The Centre Game. White gets the pawn back, but the queen is out in the open. }
+3... Nc6 { Develops with a hit on the queen. Black gains time from the first moment. White scores 47%. [%cal Rc6d4] }
+4. Qe3 { Stays on the e-file and looks at e5. It blocks the c1 bishop, but it does not retreat all the way. }
+4... Nf6 { Develops and hits e4. [%cal Rf6e4] }
+5. Nc3 { Guards e4. }
+( 5. e5? { Hits the knight, but this pawn has no help, and Black's next move hits it twice. [%cal Re5f6] }
+  5... Ng4 { Hits the queen, and e5 as well. [%cal Rg4e3,Rg4e5] }
+  6. Qe4 Ngxe5 { Black takes the pawn. }
+  7. f4 d5 { The pawn hits the queen, so that if White takes the knight, 8...dxe4 takes the queen. Black is a clean pawn up. [%cal Rd5e4] } )
+5... Bb4 { Pins the knight, so that e4 has lost its guard. [%cal Rb4c3,Rf6e4] [%idea pin] }
+6. Bd2 O-O { Black castles, and now the rook comes to e8 with a hit on the e-file. [%idea castle-early] }
+7. O-O-O { White castles the other way. The most common move. }
+( 7. Bd3? { Guards e4, but it blocks the queen's way back, and now the e-file is dangerous for White. }
+  7... d5 { Hits e4, with the rook coming to e8 next. [%cal Gd5e4] }
+  8. exd5 Re8 { The rook pins the queen to the king, so that it can't move off the e-file. [%cal Re8e3] }
+  9. dxc6 Rxe3+ { Black wins the queen for a rook and a knight, and the engine has Black over three pawns ahead. } )
+7... Re8 { The rook lines up on White's queen. [%cal Re8e3] [%idea open-file] }
+8. f3 { Guards e4 with a pawn, the most common move. }
+( 8. Bd3? { Guards e4, but the bishop can be hit once the centre opens. }
+  8... d5 { Hits e4, and the queen is awkward on the e-file. [%cal Gd5e4] }
+  9. Qg5 h6 10. Qh4 dxe4 { The pawn hits the bishop, and Black has won a pawn. The engine has Black about two pawns ahead. } )
+8... d5 { Black opens the game with the rook already on the file, and White's king and queen stand badly. The engine has Black better by about three quarters of a pawn. [%cal Gd5e4] } *

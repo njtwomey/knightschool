@@ -1,0 +1,13 @@
+[For "black"]
+[Kind "sideline"]
+[Start "giuoco-main 3...Bc5"]
+[Name "Italian: 4.Nc3 and the pin on g5"]
+
+4. Nc3 { Develops, but the knight takes the c3 square from the pawn, so White has given up on c3 and d4 for now. }
+4... Nf6 { The same set-up again. }
+5. d3 { Guards e4. } 5... d6 { Guards e5 and opens the c8 bishop, just as in the other lines. [%cal Gd6e5] }
+6. Bg5 { The most common move: the bishop pins the f6 knight to the queen. [%cal Rg5d8] [%idea pin] }
+6... h6 { Asks the bishop straight away. Black does not want a pin to last. [%cal Gh6g5] }
+7. Bh4 { Keeps the pin. If White takes on f6 instead, 7...Qxf6 8.Nd5 Qd8 and Black has the two bishops. }
+7... g5 { Breaks the pin for good. It looks loose, but White has not castled and has no pieces ready to use the gaps round Black's king. [%cal Gg5h4] }
+8. Bg3 a6 { Makes a safe square on a7 for the bishop and stops Bb5. Black has more room on the kingside, and the engine prefers Black slightly. Black castles queenside or keeps the king where it is, not on the kingside. [%cal Gc5a7] } *

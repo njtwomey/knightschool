@@ -1,0 +1,13 @@
+[For "black"]
+[Kind "sideline"]
+[Start "open-italian-d4 6...Bb4+"]
+[Name "Italian: 7.Bd2, the quiet block"]
+
+7. Bd2 { The other block. White offers to swap the bishops and keeps e4 guarded for the moment. }
+7... Bxd2+ { Swaps the bishops. Black has less room, so a swap helps, and White has to take back. }
+8. Nbxd2 { The usual recapture, and it guards e4. }
+8... d5 { Strikes at once. It hits e4 and c4, and it stops White having the whole centre. If Black waits, e5 will push the knight away. [%cal Gd5e4,Gd5c4] }
+9. exd5 Nxd5 { Takes back with the knight, which stands on a fine square in front of White's lone pawn. [%csl Yd4] [%idea isolated-queens-pawn] }
+10. O-O O-O { Both kings are safe, and material is level. }
+11. Re1 { The most common move. The rook takes the open file. [%idea open-file] }
+11... Nb6 { Hits the bishop. If it goes back to b3, ...Nxd4 takes the pawn, though White gets some play on the e-file for it. The game is level, and Black can play against the pawn on d4 for a long time. [%cal Rb6c4] [%csl Yd4] } *

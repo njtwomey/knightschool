@@ -1,0 +1,34 @@
+[For "black"]
+[Kind "trap"]
+[Name "2.Qh5, the queen comes out early"]
+
+1. e4 e5 { Black takes an equal share of the centre and opens lines for the queen and the f8 bishop. Black's pawn on e5 stops White from having the whole centre to itself. [%cal Ge5d4,Ge5f4] }
+2. Qh5 { The queen hits e5 and looks at f7. It is not a good move, but it comes up often at this level, and it sets a trap. [%cal Rh5e5,Rh5f7] }
+2... Nc6 { Guards e5 with a piece. Do not hit the queen with ...Nf6 yet, because e5 is hanging: after 2...Nf6 3.Qxe5+ White wins a pawn with check. [%cal Gc6e5] }
+3. Bc4 { Now the queen and bishop both aim at f7, and Qxf7 would be mate. [%cal Rc4f7,Rh5f7] [%idea f7-weakness] }
+3... g6 { Hits the queen and shuts its line to f7. }
+( 3... Nf6?? { Hits the queen, and it is the natural move, but it does nothing about f7. }
+  4. Qxf7# { Mate. This is Scholar's Mate. } )
+4. Qf3 { Keeps looking at f7. [%cal Rf3f7,Rc4f7] }
+4... Nf6 { Blocks the queen's line, and develops. It is now safe. [%cal Gf6f3] }
+5. c3 { The most common move. It keeps Black's knight off d4, and gets ready for d4 later. [%cal Gc3d4] }
+( 5. d3? { Looks sensible, but it gives Black a free move on the queen. }
+  5... Nd4 { Hits the queen, and c2 as well. [%cal Rd4f3,Rd4c2] }
+  6. Qd1 d5 { Now the centre opens with White's pieces back on their first rank. [%cal Gd5e4,Gd5c4] }
+  7. exd5 b5 { The bishop is chased off, and Black takes on d5 next. Material comes out level, so the gain is positional: Black has the centre, and a big lead in development. The engine has Black about a pawn ahead. } )
+( 5. Nh3? { The knight goes to the edge, and it does nothing to stop what comes next. White scores 36%. }
+  5... Nd4 { Hits the queen, and c2. [%cal Rd4f3,Rd4c2] }
+  6. Qd1 d5 { Opens the line for the c8 bishop, which is aimed at h3. [%cal Gc8h3] }
+  7. exd5 Bg4 { Hits the queen. After 8.f3 Bxh3 9.gxh3 White's kingside is in pieces. Material is level for now, but the gain is White's king, which has no safe place left. The engine has Black over four pawns ahead. } )
+5... Bg7 { The bishop goes to the square that the pawn on g6 made for it. Now Black can castle. [%cal Gg7e5] }
+6. d3 { Opens the way for the c1 bishop. }
+( 6. b4? { Grabs space on the wrong side of the board while the centre is about to open. }
+  6... d5 { Strikes while White's pieces are at home. [%cal Gd5e4,Gd5c4] }
+  7. exd5 e4 { Hits the queen and gains more time. [%cal Re4f3] }
+  8. Qe2 Ne5 { Hits the bishop. White has a pawn for now, but it falls soon, and the gain is the lead in development. The engine has Black over two pawns ahead. [%cal Re5c4] } )
+6... O-O { The king is safe, and White's queen has gone for nothing. [%idea castle-early] }
+7. Bg5 { Pins the knight to the queen. [%cal Rg5d8] }
+( 7. Nh3? { Out to the edge again. The knight can't move from h3 once g5 is covered. }
+  7... h6 { Takes g5 away from the knight, and from the bishop. [%cal Gh6g5] }
+  8. Bb3 d5 { Black has the centre, and the knight on h3 has no good square. Nothing is won on the board, so the gain is positional, and the engine has Black nearly two pawns ahead. } )
+7... h6 { Asks the bishop what it wants. If it takes on f6, Black takes back with the bishop and has the two bishops. Black is a little better, about half a pawn. [%cal Gh6g5] } *

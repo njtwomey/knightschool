@@ -1,0 +1,14 @@
+[For "black"]
+[Kind "main"]
+[Start "giuoco-main 3...Bc5"]
+[Name "Italian: 4.d3, the slow game"]
+
+4. d3 { Guards e4 and keeps the game closed. White threatens nothing in the centre, so Black has time to bring everything out. [%cal Gd3e4] }
+4... Nf6 { Develops and gets ready to castle. The plan is the same whatever White does: ...Nf6, ...d6, ...O-O. }
+5. O-O { White gets the king safe. }
+( 5. Ng5? { One in five players do this. The knight and bishop hit f7, but the same knight has now moved twice, and castling answers the threat in one move. [%cal Rg5f7,Rc4f7] [%idea f7-weakness] }
+  5... O-O { The rook now guards f7. If White takes there, Black gets a knight and a bishop for a rook and a pawn, which is good for Black. [%cal Gf8f7] }
+  6. O-O h6 7. Nf3 Re8 { The knight has gone back where it came from. Nothing has been won on the board, so the gain is time: White has lost two moves, and the engine prefers Black a little. } )
+5... d6 { Gives e5 a pawn to guard it and opens the way for the c8 bishop. [%cal Gd6e5] }
+6. c3 { This is the Italian main line by another order: after 6...O-O the position is the one that comes from 4.c3 Nf6 5.d3. [%cal Gc3d4] }
+6... O-O *

@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "giuoco-main 1...e5"]
+[Name "The Bishop's Opening: 2.Bc4 Nc6 3.Nf3"]
+
+2. Bc4 { The Bishop's Opening. The bishop looks at f7 before anything else has moved. [%cal Gc4f7] }
+2... Nc6 { The same move again. It guards e5, so White's queen has nothing to hit if it comes out. }
+3. Nf3 { The most common move, and this is the Italian Game by another order. After 3...Bc5 you are at home. } *

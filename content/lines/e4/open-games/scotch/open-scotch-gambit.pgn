@@ -1,0 +1,30 @@
+[For "black"]
+[Kind "gambit"]
+[Start "open-scotch 3...exd4"]
+[Name "The Scotch Gambit: 4.Bc4"]
+
+4. Bc4 { White leaves the pawn on d4 and aims at f7. The Scotch Gambit. [%cal Gc4f7] [%idea f7-weakness] }
+4... Nf6 { Develops with an attack on e4, and it keeps watch on g4 and d5. [%cal Rf6e4] }
+5. e5 { Pushes at the knight, the most common move. }
+( 5. Nxd4? { Takes the pawn back, but it leaves e4 hanging. }
+  5... Nxe4 { Black takes e4 and is a pawn up. }
+  6. Nxc6 bxc6 7. Qe2 Qe7 8. O-O Nd6 { The knight hits the bishop and is safe. Black is a pawn up, though the pawns on c6 and c7 are doubled. } )
+5... d5 { Do not move the knight yet. The pawn hits the bishop, so White has to think about that first. The same idea works in the Italian. [%cal Gd5c4] }
+6. Bb5 { The bishop moves with a pin on the knight on c6. [%cal Rb5c6] }
+( 6. exf6? { Takes the knight, but the bishop on c4 goes too, and Black ends up ahead. }
+  6... dxc4 { Now the pawns are the story: Black has two on the fourth rank. }
+  7. Qe2+ Be6 8. fxg7 Bxg7 { Black is a pawn up, with the two bishops. The pawns on c4 and d4 keep White's pieces out, and the engine has Black well ahead. } )
+( 6. exd6? { Takes the pawn in passing, and opens the game while the pawn on d4 is still Black's. }
+  6... Bxd6 { Takes back and develops. [%cal Gd6e7] }
+  7. O-O O-O { Black is a pawn up, and White can't easily get the pawn on d4 back. } )
+( 6. Bb3? { Saves the bishop, but with no pin on c6 the knight moves with no worries, and the pawn on d4 is still safe. }
+  6... Ne4 { The knight stands well in the centre. }
+  7. O-O Bg4 { Pins the knight on f3, the piece that needs to win d4 back. Black keeps the extra pawn, and the engine has Black over a pawn ahead. [%cal Rg4f3] } )
+6... Ne4 { Now the knight moves, and it stands well in the centre. [%csl Ge4] }
+7. Nxd4 { White wins the pawn back. }
+( 7. Qxd4? { Takes the pawn with the queen, but on d4 it can be hit, and f2 has only the king to guard it. [%csl Yf2] }
+  7... Bc5 { Hits the queen, with the knight on e4 and the bishop both aimed at f2. [%cal Rc5d4,Rc5f2,Re4f2] }
+  8. Qa4 Bxf2+ 9. Ke2 O-O { Black has taken f2, and White's king is stuck in the middle of the board with no way to castle. Black is a pawn up, and the engine has Black over three pawns ahead. } )
+7... Bd7 { Unpins the knight. Material is level now, and Black's pieces are ready to come out. }
+8. Bxc6 bxc6 { Takes towards the centre again. }
+9. O-O Bc5 { The bishop reaches its best square, and hits the knight. The game is level. [%cal Rc5d4] } *

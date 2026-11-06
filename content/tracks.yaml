@@ -7,7 +7,7 @@
   openings: [london-white, queens-gambit-white]
 - id: black-e4
   name: Black against 1.e4
-  openings: [caro-kann-black]
+  openings: [caro-kann-black, e5-black]
 - id: black-d4
   name: Black against 1.d4
   openings: [qgd-black]

@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "sideline"]
+[Start "ruy-main 7...O-O"]
+[Name "Ruy Lopez: 8.c3, the order most players use"]
+
+8. c3 { Three players in four play this here, not h3. White wants d4 at once. [%cal Gc3d4] }
+8... d6 { Guards e5, and the game goes back to the main line. There is a sharper way, 8...d5, the Marshall Attack, where Black gives a pawn. It is good, but it takes a lot of learning, and this needs none. After 9.h3 the game is back in the main line. [%cal Gd6e5] }
+9. h3 *

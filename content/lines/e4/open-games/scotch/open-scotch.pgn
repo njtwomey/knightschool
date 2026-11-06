@@ -1,0 +1,27 @@
+[For "black"]
+[Kind "main"]
+[Start "giuoco-main 2...Nc6"]
+[Name "The Scotch: 5.Nxc6 and 6.e5"]
+
+3. d4 { The Scotch Game. White opens the centre at once and hits e5 a second time. [%cal Rd4e5] }
+3... exd4 { Black takes, the move played nearly three times in four. Nothing guards the pawn on d4 but the knight on f3. }
+4. Nxd4 { The most common move. White has a knight in the centre, and the pawn on e4 is now unguarded. [%csl Ye4] }
+( 4. Ng5? { Aims at f7 and leaves the pawn on d4 where it is, so the knight has moved twice and White is still a pawn down. [%cal Rg5f7] }
+  4... Be7 { Hits the knight with the bishop, and the queen is behind it. [%cal Re7g5] }
+  5. Nf3 Nf6 { The knight has gone back, and Black has the extra pawn and an easy game. The engine has Black about two pawns ahead. } )
+4... Nf6 { Develops with an attack on e4. Half the band swap on d4 instead, which only brings White's queen to the middle of the board, and White scores 56% after it. [%cal Rf6e4] }
+5. Nxc6 { Swaps knights before guarding e4, the most common choice. }
+5... bxc6 { Takes towards the centre. The pawn on c6 will back up ...d5, and Black's bishops have open lines. [%cal Gc6d5] }
+6. e5 { Hits the knight. This is the sharpest try, and the plan is to chase the knight round the board. [%cal Re5f6] }
+6... Qe7 { The strongest reply, and the one that needs knowing. The queen pins the e-pawn to the king, so White has to deal with that before going on. After 6...Nd5 White has a free hand. [%cal Re7e5] [%idea pin] }
+7. Qe2 { Guards the pawn and unpins it. }
+( 7. Bf4? { Guards the pawn with the bishop, but the bishop can be hit and b2 is left alone. }
+  7... Nd5 { Hits the bishop, so that it has to move again. [%cal Rd5f4] }
+  8. Bg3 Qb4+ { The check also hits b2. [%cal Rb4b2] }
+  9. Nd2 Qxb2 { Black has won a pawn, and White has no easy way to get it back. } )
+7... Nd5 { Now the knight can move. On d5 it stands well, and c4 only sends it to b6. }
+8. c4 { Hits the knight. The most common move. }
+8... Nb6 { Stands back, where it hits the pawn on c4. [%cal Rb6c4] }
+9. b3 { Guards c4. }
+9... Qe6 { Steps off the line of White's queen, so that the f8 bishop can move, and piles up on e5. [%cal Re6e5] }
+10. Bb2 a5 { The rook's pawn gets ready to run at b3, and it gives the rook a way into the game. The game is level: Black has a broken queenside and quick development. [%cal Ga5a4] } *

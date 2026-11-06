@@ -1,0 +1,28 @@
+[For "black"]
+[Kind "main"]
+[Start "giuoco-main 2...Nc6"]
+[Name "The Four Knights: 4.Bc4 and the fork trick"]
+
+3. Nc3 { Guards e4 and develops. The game is quiet, and White has no plan of d4 yet. }
+3... Nf6 { The fourth knight comes out. Both sides now have the same set-up. [%cal Rf6e4] }
+4. Bc4 { The most common move, and it copies the Italian. But with the knights on, Black has a trick. }
+4... Nxe4 { The fork trick. Black gives the knight for a moment, because a pawn fork gets it back. White scores 41%. [%cal Gf6e4] [%idea fork] }
+5. Nxe4 { Takes the knight, as three in four players do. }
+( 5. Bxf7+? { Takes a pawn and pulls the king out, but it gives up the bishop for it. [%cal Rc4f7] }
+  5... Kxf7 { Takes the bishop. }
+  6. Nxe4 d5 { Hits the knight, and Black's two centre pawns are moving. [%cal Gd5e4] }
+  7. Ng3 e4 { The knight on f3 has to go home. Material is level, so the gain is on the board: a big centre, two bishops and a lead in development. The king stands well enough behind the pawns, and the engine gives Black about a pawn and a half. } )
+5... d5 { The fork: the pawn hits the bishop and the knight. One of them is lost, and Black gets the piece back. [%cal Gd5c4,Gd5e4] [%idea fork] }
+6. Bd3 { The best move, and only one player in eight finds it. The bishop guards the knight. }
+( 6. Bxd5? { Half the band play this, and they score 39%. It takes a pawn, but it gives up a good bishop for it. }
+  6... Qxd5 { Takes back, and the queen hits the knight on e4. [%cal Rd5e4] }
+  7. Nc3 Qd6 { The queen steps back to a safe square. }
+  8. O-O Bg4 { Material is level, so the gain is positional. Black has the two bishops and the only pawn on the central squares, and the pin on the f3 knight keeps White tied down. The engine has Black about a pawn and a half ahead. [%cal Rg4d1] } )
+( 6. Bb5? { Moves the bishop with a pin, but White's knight on e4 is left to its fate. }
+  6... dxe4 { Black takes the knight, and the pin matters less than it looks. }
+  7. Nxe5 Qg5 { Hits the knight, and g2 behind it. [%cal Rg5e5,Rg5g2] }
+  8. d4 Qxg2 { The queen takes the pawn and hits the rook. Black is a pawn up, and White will not be able to castle kingside. } )
+6... dxe4 { Black has the piece back. Material is level. }
+7. Bxe4 { White wins the pawn back, and the bishop stands on the middle of the board. }
+7... Bd6 { Guards e5 and gets ready to castle. }
+8. O-O O-O { The position is level, with the pieces traded and no weaknesses. Black has the pawn on e5, and ...f5 will gain time on the bishop. [%cal Gf7f5] } *

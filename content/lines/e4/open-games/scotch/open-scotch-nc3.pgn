@@ -1,0 +1,18 @@
+[For "black"]
+[Kind "sideline"]
+[Start "open-scotch 5...bxc6"]
+[Name "The Scotch: 6.Nc3, with the pawn on c6"]
+
+6. Nc3 { The most common sixth move. White guards e4 with a piece. }
+6... Bb4 { Pins the knight to the king, so that e4 has lost its guard after all. [%cal Rb4e1,Rf6e4] [%idea pin] }
+7. Bd3 { Guards e4 again. }
+7... d5 { Hits e4 at once, using the pawn on c6 as a base. This is why Black took towards the centre. [%cal Gd5e4] }
+8. exd5 { The most common move. }
+( 8. e5? { Hits the knight, but the pawn is now a target, and the knight has a good square. [%cal Re5f6] }
+  8... Ng4 { Hits e5 a second time. [%cal Rg4e5] }
+  9. Bf4 f6 { Hits the pawn a third time. }
+  10. e6 Bxe6 { The pawn is gone, and Black is a clean pawn up. } )
+8... cxd5 { Takes back with the pawn, so that Black has a pawn in the centre. [%csl Gd5] }
+9. O-O O-O { Both kings are safe. }
+10. Bg5 { Pins the knight on f6 to the queen. [%cal Rg5d8] }
+10... c6 { Guards d5 again, so that a swap on f6 would not cost a pawn, and makes room for the queen. The game is level. [%cal Gc6d5] } *

@@ -1,0 +1,313 @@
+name: Open Games
+side: black
+start: 1. e4 e5
+level: first
+style: [classical]
+summary: >-
+  Meet 1.e4 with 1...e5 and bring the same pieces out against almost everything: ...Nc6, ...Nf6, ...Bc5, ...d6 and
+  castling, with ...d5 as the answer when White pushes or gambits in the centre.
+about:
+  idea: >-
+    One plan. Black guards e5 with the knight on c6, then brings the other knight to f6 and the bishop to c5 or b4, with
+    ...d6 and castling to finish. When White plays quietly that is all there is to it. When White plays c3 and d4, or
+    pushes the e-pawn at the knight, Black answers with ...d5: the pawn in the middle gives the pieces room, and hits
+    whatever is on c4 or e4.
+  risks: >-
+    The open games are open, so a slip can cost a piece early. Three moves need knowing: ...Bb4+ in the Italian when
+    White takes on d4, ...Qe7 in the Scotch when e5 hits the knight, and ...g6 when White's queen and bishop aim at f7.
+    The Ruy Lopez gives White a small lasting edge, and the Danish and the King's Gambit are kept short here, so the
+    lines there stop earlier than the Italian's.
+  suits: >-
+    Beginners who want to learn classical chess: develop, castle, fight for the centre. The same ideas come up in every
+    line, and many of the traps at this level work for Black.
+  origin: >-
+    1...e5 is the oldest reply to 1.e4, and the openings that come from it, the Italian, the Ruy Lopez and the Scotch,
+    have been played for hundreds of years.
+ideas: [f7-weakness, fork, centre-pawns, castle-early, pin, remove-the-guard, isolated-queens-pawn, open-file]
+variations:
+  - id: italian-centre
+    name: 'The Italian: White plays c3'
+    intro: >-
+      3.Bc4 is the most common move at this level, and 3...Bc5 copies it: the bishop looks at f2 and Black is ready to
+      castle. Most players then push c3 and d4. Black takes, gives a check on b4, and hits back with ...d5. If White
+      plays d3 instead, Black has an easy game, and that is the slow main line.
+    lines: [open-italian-d4, open-italian-bd2, giuoco-main]
+    plans:
+      - Answer 4.c3 with ...Nf6, so that e4 needs guarding.
+      - If 5.d4, take, give the check on b4 and strike with ...d5.
+      - If 5.d3, play ...d6, castle, then ...a6 and ...Ba7.
+    questions:
+      - id: why-bb4
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4
+        ask: White has hit the bishop on c5. Which move gains a tempo instead of stepping back?
+        answers: [[Bb4], [check], [b4]]
+        examples:
+          right: [Bb4+, the bishop checks on b4, give a check]
+          wrong: [Bb6, Bd6, take on e4]
+        explain: >-
+          6...Bb4+ makes White block before doing anything else, and e4 is still hanging. After 6...Bb6 White plays 7.e5
+          and the knight is the one that has to move.
+  - id: italian-quiet
+    name: 'The Italian: quiet fourth moves'
+    intro: >-
+      Against 4.d3, 4.O-O and 4.Nc3 nothing is happening in the centre, and Black plays the same moves in nearly the same
+      order: ...Nf6, ...d6 and castling. These are three of the most common positions at this level, and they ask for
+      little memory.
+    lines: [open-italian-d3, open-italian-oo, open-italian-nc3]
+    plans:
+      - Play ...Nf6 and ...d6, then castle.
+      - If 5.Ng5 hits f7, castle. The rook guards it, and the knight has to go back.
+      - If Bg5 pins the knight, ask with ...h6, and break the pin with ...g5 if the bishop stays.
+  - id: ruy-lopez
+    name: 'The Ruy Lopez: 3...a6 and the closed game'
+    intro: >-
+      3.Bb5 is the second most common move. 3...a6 asks the bishop to decide. Half of all players take on c6, and then
+      Black takes towards the centre and has the two bishops. If the bishop steps back, Black plays ...Nf6, ...Be7, ...b5
+      and castles. White keeps a small edge here, as it does at every level, and the job is to develop calmly.
+    lines: [ruy-main, open-ruy-c3, ruy-exchange]
+    plans:
+      - Ask the bishop with ...a6, and take towards the centre with the d-pawn if it swaps.
+      - Against Ba4, play ...Nf6, ...Be7, ...b5 and castle.
+      - Then ...d6 and ...Na5, with ...c5 to follow.
+    questions:
+      - id: exchange-qd4
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. Nxe5
+        ask: White has taken e5. Which queen move wins the pawn back?
+        answers: [[Qd4], [d4]]
+        examples:
+          right: [Qd4, the queen to d4, Qd4 forks the knight and e4]
+          wrong: [Bd6, Nf6, Bc5]
+        explain: >-
+          5...Qd4 hits the knight on e5 and the pawn on e4 at once. After 6.Nf3 Qxe4+ 7.Qe2 Qxe2+ 8.Kxe2 the pawns are
+          level, White has lost the right to castle and Black has the two bishops.
+  - id: scotch
+    name: 'The Scotch: 3.d4'
+    intro: >-
+      White opens the centre at once. Black takes, and answers the knight on d4 with ...Nf6, which hits e4. If the knights
+      come off, Black takes towards the centre with the b-pawn and uses ...d5 to free the pieces. The one surprise is
+      6.e5, met by ...Qe7. The Scotch Gambit, 4.Bc4, is answered with ...Nf6 and the same ...d5.
+    lines: [open-scotch, open-scotch-nc3, open-scotch-5nc3, open-scotch-gambit]
+    plans:
+      - Take on d4, then hit e4 with ...Nf6.
+      - After Nxc6, take with the b-pawn, and play ...Bb4 and ...d5.
+      - When e5 hits the knight on f6 with no bishop on c4, play ...Qe7.
+      - With the bishop on c4, answer e5 with ...d5.
+    questions:
+      - id: why-qe7
+        at: 1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Nf6 5. Nxc6 bxc6 6. e5
+        ask: The pawn hits the knight on f6. Which move means the pawn can't take it?
+        answers: [[Qe7], [queen, e7], [pin]]
+        examples:
+          right: [Qe7, the queen to e7, Qe7 pins the pawn]
+          wrong: [Nd5, Ng8, Ne4]
+        explain: >-
+          6...Qe7 pins the pawn to White's king: if it takes on f6, the queen gives check and White has lost time. White
+          has to guard e5 with 7.Qe2, and that blocks the f1 bishop.
+  - id: four-knights
+    name: The Four Knights, and two roads back
+    intro: >-
+      3.Nc3 Nf6 is the Four Knights. The most common move then is 4.Bc4, and it runs into a pawn fork: 4...Nxe4 5.Nxe4
+      d5. Black gets the piece back with the better centre, and White scores 41%. The Vienna, 2.Nc3, and the Bishop's
+      Opening, 2.Bc4, usually come back to the Four Knights or the Italian after ...Nc6 and Nf3.
+    lines: [open-four-knights, open-vienna, open-bishops]
+    plans:
+      - After 4.Bc4, take on e4 and fork with ...d5.
+      - After 6.Bd3, take the knight, then play ...Bd6 and castle.
+      - Against 2.Nc3 and 2.Bc4, play ...Nc6 and wait for Nf3.
+    questions:
+      - id: fork-trick
+        at: 1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. Bc4 Nxe4 5. Nxe4
+        ask: White has taken the knight. Which pawn move wins a piece back?
+        answers: [[d5]]
+        examples:
+          right: [d5, push d5, d5 forks the bishop and the knight]
+          wrong: [Bc5, Be7, d6]
+        explain: >-
+          5...d5 hits the bishop on c4 and the knight on e4. White can only save one, so Black gets the piece back and
+          keeps the pawn on e5.
+  - id: other-second-moves
+    name: White's other second moves
+    intro: >-
+      2.Qh5 is not a good move, but it is common and it sets a trap: ...g6 stops it. The Centre Game gives Black free
+      moves on the queen. The Danish Gambit and the King's Gambit are both met by the same move, ...d5, which hits back in
+      the centre and asks for far less theory than taking the pawns.
+    lines: [open-wayward, open-centre-game, open-danish, open-kings-gambit]
+    plans:
+      - Guard e5 with ...Nc6 first, and only then hit the queen.
+      - When the queen and bishop aim at f7, play ...g6 and ...Nf6.
+      - Against the Danish and the King's Gambit, hit back with ...d5.
+      - If 2.f4 d5 3.fxe5, ...Qh4+ wins a rook.
+    questions:
+      - id: scholars-mate
+        at: 1. e4 e5 2. Qh5 Nc6 3. Bc4
+        ask: The queen and bishop both aim at f7. Why is 3...Nf6 a blunder, even though it hits the queen?
+        answers: [[mate], [Qxf7], [f7]]
+        examples:
+          right: [Qxf7 is mate, White mates on f7, it allows Scholar's Mate]
+          wrong: [it loses a pawn, the knight is pinned, nothing happens]
+        explain: >-
+          4.Qxf7 is mate, because the bishop on c4 guards the queen and the king has nowhere to go. 3...g6 hits the queen
+          and shuts its line to f7.
+setup:
+  title: How the Open Games start
+  text: >-
+    1...e5 puts a pawn in the middle of the board, stops White taking the whole centre, and opens lines for the queen and
+    the f8 bishop. From here Black has one plan for most of what White tries: guard e5 with ...Nc6, bring out the other
+    pieces, and castle.
+steps:
+  open-italian-d4:1:
+    title: Copy the bishop, then take on d4
+    text: >-
+      Black guards e5, copies the bishop to c5 and brings the other knight to f6, which hits e4. White's plan is c3 and
+      d4, the push that hits the bishop and the e-pawn together. Black simply takes.
+  open-italian-d4:2:
+    title: The check and the pawn on e4
+    text: >-
+      When the bishop on c5 is hit, it goes forward with a check, not back. After 7.Nc3 Black takes e4. The bishop then
+      swaps itself for the knight, ...d5 puts a pawn behind the knight on e4, and Black castles a pawn up. White gets the
+      two bishops for it. 8.Qe2 is a mistake that comes next as a follow-up.
+  open-italian-bd2:1:
+    title: Swap the bishops, then ...d5
+    text: >-
+      White blocks with the bishop this time. Black swaps it off and plays ...d5 straight away, because otherwise e5 will
+      push the knight back. After the swap on d5 White is left with one pawn on d4 that no other pawn can guard, and both
+      sides castle. ...Nb6 then hits the bishop, and the game is level.
+  giuoco-main:1:
+    title: 5.d3, the slow line
+    text: >-
+      If White plays d3 and not d4, there is no fight in the centre yet. Black guards e5 with ...d6 and castles. ...a6 and
+      ...Ba7 keep the bishop safe from a pawn on d4. 5...Ng4 looks active, but it costs time, and it is shown as a mistake.
+  giuoco-main:2:
+    title: Mirror White's moves
+    text: >-
+      ...h6 keeps a bishop off g5, as h3 does for White. The rook goes behind the e-pawn, and ...Be6 offers to swap White's
+      best bishop. Both sides are ready, and the game is level.
+  open-italian-d3:1:
+    title: The same set-up against 4.d3
+    text: >-
+      4.d3 is as common as 4.c3, and it asks nothing new. ...Nf6 and ...d6 come out as before, and castling comes next.
+      5.Ng5 hits f7 but it wastes time, and that comes next as a follow-up.
+  open-italian-oo:1:
+    title: 4.O-O, the same reply
+    text: >-
+      White castles early. ...Nf6 is the same answer, and after 5.d3 d6 the game is the 4.d3 line by another order.
+  open-italian-nc3:1:
+    title: Ask the bishop on g5
+    text: >-
+      4.Nc3 takes c3 from the pawn, so there is no d4 push coming. Black plays ...Nf6 and ...d6, and when Bg5 pins the
+      knight, ...h6 asks the question. If the bishop stays on the pin, ...g5 ends it, and ...a6 gives the bishop on c5 a
+      safe square. Black now keeps the king out of the kingside.
+  ruy-main:1:
+    title: Ask, then develop
+    text: >-
+      3...a6 asks the bishop to decide. It steps back, and Black develops with ...Nf6 and ...Be7 without worrying about e4.
+      When Re1 makes Bxc6 and Nxe5 a real threat, ...b5 drives the bishop away.
+  ruy-main:2:
+    title: Castle, ...d6 and ...Na5
+    text: >-
+      Black castles and plays ...d6, which guards e5. ...Na5 hits the bishop, and it clears the way for ...c5, the pawn
+      that fights for d4. ...Qc7 adds a guard to e5. White keeps a little more room, and Black's position is solid.
+  open-ruy-c3:1:
+    title: 8.c3, the usual order
+    text: >-
+      Three players in four play 8.c3 here. Black replies with ...d6 and is back in the main line after 9.h3. The Marshall
+      Attack, 8...d5, is a good idea for later.
+  ruy-exchange:1:
+    title: The Exchange, 4.Bxc6
+    text: >-
+      Half the band take on c6. Black takes with the d-pawn, which opens the line for the queen and the c8 bishop, and has
+      the two bishops. 5.Nxe5 does not win a pawn, because ...Qd4 gets it back: that comes next as a follow-up. After
+      5.O-O Black guards e5 with ...Bd6, then ...f6 and ...Ne7 finish the set-up.
+  open-scotch:1:
+    title: Hit e4, take towards the centre
+    text: >-
+      Black takes on d4 and answers the knight with ...Nf6, a hit on e4. After the knights come off, the b-pawn takes
+      towards the centre, ready for ...d5. When 6.e5 hits the knight, ...Qe7 pins the pawn to White's king. 7.Bf4 drops a
+      pawn, and that comes next as a follow-up.
+  open-scotch:2:
+    title: Chase and be chased
+    text: >-
+      White guards e5 with the queen, which shuts in the f1 bishop. The knight goes to d5 and then b6. ...Qe6 lets the f8
+      bishop out, and ...a5 starts play on the queenside. The game is level and sharp, and both sides have something to
+      show for it.
+  open-scotch-nc3:1:
+    title: Pin and ...d5
+    text: >-
+      6.Nc3 guards e4 with a piece, and ...Bb4 pins it. Black then plays ...d5, and takes back on d5 with the pawn, so that
+      a pawn stands in the centre. Both sides castle, and ...c6 keeps d5 safe. 8.e5 is a mistake here: it comes next as a
+      follow-up.
+  open-scotch-5nc3:1:
+    title: 5.Nc3, the same pin
+    text: >-
+      The knights stay on for a move. ...Bb4 is the same pin, and after 6.Nxc6 bxc6 7.Bd3 the position is the one you have
+      just learned.
+  open-scotch-gambit:1:
+    title: Answer e5 with ...d5
+    text: >-
+      4.Bc4 leaves the pawn on d4 and aims at f7. Black develops with ...Nf6, and answers 5.e5 by hitting the bishop with
+      ...d5. Only then does the knight move, to e4. White's two tempting captures, 6.exf6 and 6.exd6, both cost a pawn, and
+      they come next as follow-ups.
+  open-scotch-gambit:2:
+    title: Level, and developed
+    text: >-
+      White gets the pawn back. Black takes towards the centre on c6 and puts the bishop on c5, and the game is level with
+      Black's pieces in good places.
+  open-four-knights:1:
+    title: The fork trick
+    text: >-
+      4.Bc4 looks natural, but Black can take on e4, because ...d5 forks the bishop and the knight and wins the piece back.
+      Black ends with a pawn on e5 and White with nothing in the centre. 6.Bxd5, the most common move, is a mistake, and so
+      are 5.Bxf7+ and 6.Bb5: they come next as follow-ups.
+  open-four-knights:2:
+    title: Bishop and castle
+    text: >-
+      White takes back on e4. ...Bd6 guards e5 and clears the way to castle. The game is level, and ...f5 is coming with a
+      gain of time on the bishop.
+  open-vienna:1:
+    title: 2.Nc3, the same knight
+    text: >-
+      The Vienna changes nothing for Black. ...Nc6 is the reply, and after 3.Nf3 Nf6 the game is the Four Knights.
+  open-bishops:1:
+    title: 2.Bc4, the same knight
+    text: >-
+      The Bishop's Opening looks at f7 early. ...Nc6 guards e5, and after 3.Nf3 Bc5 the game is the Italian.
+  open-wayward:1:
+    title: Stop Scholar's Mate
+    text: >-
+      2.Qh5 and 3.Bc4 aim at f7. Guard e5 first with ...Nc6, then hit the queen with ...g6. Do not play ...Nf6 on move
+      three, because Qxf7 is mate. After 4.Qf3 the knight blocks the line, and ...Bg7 gets the bishop out.
+  open-wayward:2:
+    title: Castle, and White's queen has done nothing
+    text: >-
+      Black castles and the king is safe. White's queen has moved twice and has nothing to do on f3. The engine has Black
+      about half a pawn better.
+  open-centre-game:1:
+    title: Free moves on the queen
+    text: >-
+      White takes back on d4 with the queen, and ...Nc6 hits it at once. ...Nf6 hits e4, and ...Bb4 pins the guard. White
+      has spent three moves on the queen and scores under half. 5.e5 drops a pawn: that comes next as a follow-up.
+  open-centre-game:2:
+    title: The rook to e8, then ...d5
+    text: >-
+      Black castles and puts a rook on the e-file, in line with White's queen. ...d5 then opens the centre while White's
+      pieces are still on their first rank.
+  open-danish:1:
+    title: 3...d5, not more pawns
+    text: >-
+      White offers another pawn. Black hits back with ...d5 and takes on d5 with the queen. ...Nc6 and ...Bg4 then go after
+      d4 and the knight that guards it. 4.cxd4 and 4.e5 both leave Black a pawn up, and they come next as follow-ups.
+  open-danish:2:
+    title: Take off the guard
+    text: >-
+      The check on b4 brings out the last bishop. ...Bxf3 takes the knight, and ...Qc4 steps away from the bishop on f3
+      with its eye on d4. The game is level.
+  open-kings-gambit:1:
+    title: Hit back with ...d5
+    text: >-
+      Black answers the gambit with ...d5, the same strike as elsewhere, and only then takes on f4. If White grabs e5 at
+      once, ...Qh4+ wins a rook: that comes next as a follow-up. ...Nf6 and ...c6 then go after the pawn on d5.
+  open-kings-gambit:2:
+    title: Check, then take on d5
+    text: >-
+      The check on b4 gets the bishop out, and Black takes on d5 with the c-pawn, so that a pawn stands in the centre. White
+      wins f4 back, and the game is about level.
