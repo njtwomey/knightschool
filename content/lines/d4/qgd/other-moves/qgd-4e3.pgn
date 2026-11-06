@@ -1,0 +1,16 @@
+[For "black"]
+[Kind "main"]
+[Start "qg-declined-main 3...Nf6"]
+[Name "The Declined: 4.e3, no pin at all"]
+
+4. e3 { A quiet move that shuts in White's own c1 bishop. Black has an easy game after it. [%csl Yc1] }
+4... Be7
+5. Nf3 O-O
+6. Bd3 { The moment Black waits for. }
+6... dxc4 { The same idea as in the main line: White's bishop has just moved, and it must move again to take back. White scores 45% after this. }
+7. Bxc4
+7... c5 { The same break. With the c1 bishop shut in, it is even easier for Black than in the main line, and White scores about 41% here. [%cal Gc5d4] }
+8. O-O
+8... cxd4 { Asks White how to take back. }
+9. exd4 { White has an isolated pawn on d4: no pawn can ever guard it. It gives White free piece play, but it is a target in the long run. Black develops with ...Nc6 to hit it, keeps a piece on d5 in front of it, and swaps pieces. The engine calls it level. [%csl Yd4,Gd5] [%idea isolated-queens-pawn] }
+9... Nc6 *

@@ -1,0 +1,266 @@
+name: Queen's Gambit Declined
+side: black
+start: 1. d4 d5
+level: first
+style: [classical, solid]
+summary: >-
+  Black meets 1.d4 with ...d5, ...e6 and ...Nf6, castles quickly, and frees the game with ...c5. The same set-up answers
+  the Queen's Gambit, the London and the quiet systems.
+about:
+  idea: >-
+    Keep a pawn on d5, back it with ...e6, and develop in the same order against almost everything: ...Nf6, a bishop to
+    e7 or d6, and castle. Then strike at d4 with ...c5. Against 2.c4 Black waits for White's f1 bishop to move, takes on
+    c4 so that it has to move again, and plays ...c5 with no time lost. Against the London Black plays ...c5, ...Nc6 and
+    ...Bd6 at once, and offers to trade White's best bishop.
+  risks: >-
+    The c8 bishop is shut in behind e6, and it is the piece Black has to solve in nearly every line. Black has a little
+    less room, and the engine usually gives White a small edge in the main lines. The one set-up that scores really
+    well against Black at this level is the Stonewall, with f4 and Ne5: the engine likes Black, but White scores about
+    60% because the attack on the king plays itself.
+  suits: >-
+    Players who want one set-up they can play against every first few moves White tries, with few early tactics, and
+    who do not mind being a little passive for a while before hitting back.
+  origin: >-
+    The defence is as old as the Queen's Gambit itself, and it was the main battleground of the 1927 world championship
+    between Capablanca and Alekhine. The London and the Colle came later, as simple ways for White to avoid it.
+ideas:
+  [centre-pawns, attack-the-base, castle-early, pin, isolated-queens-pawn, minority-attack, open-file, hanging-piece]
+variations:
+  - id: declined
+    name: The Declined main line
+    intro: >-
+      Against 2.c4 Black plays 2...e6 and keeps the pawn on d5. After 3.Nc3 Nf6 4.Bg5 the bishop goes to e7 to end the
+      pin, and Black castles. Then comes the waiting move of the whole opening: Black takes on c4 only when White's f1
+      bishop has already moved, so it has to move twice. After that, ...c5 frees the game. If White exchanges on d5,
+      Black takes back with the e-pawn, which gives the c8 bishop its diagonal.
+    lines: [qgd-bd3, qg-declined-main, qgd-exchange, qg-elephant]
+    plans:
+      - ...e6, ...Nf6, ...Be7 and castle, in that order.
+      - Wait for Bd3, then ...dxc4, and hit d4 with ...c5.
+      - If White takes on d5, take back with the e-pawn. Then ...c6, ...Nbd7, ...Re8 and ...Nf8.
+    questions:
+      - id: why-wait-for-bd3
+        at: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Bd3 dxc4
+        ask: Black could have taken on c4 a few moves earlier. Why wait until White has played Bd3?
+        answers: [[twice], [two moves], [second time], [again], [tempo], [time]]
+        examples:
+          right:
+            - the bishop has to move twice
+            - White loses a move because the bishop moves again
+            - it gains a tempo
+          wrong: [to win a pawn, to open the e-file, to attack the king]
+        explain: >-
+          Had Black taken earlier, the f1 bishop would have reached c4 in one move. Now it has spent a move on d3 and has
+          to spend another to take back, so giving up the centre costs Black no time.
+      - id: why-exd5
+        at: 1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5
+        ask: Why does Black take back with the e-pawn?
+        answers: [[c8], [bishop], [diagonal], [centre], [d5]]
+        examples:
+          right:
+            - it opens the diagonal for the c8 bishop
+            - it keeps a pawn on d5 in the centre
+            - the bishop on c8 is free now
+          wrong: [to open the a-file, to attack the knight on c3, to castle]
+        explain: >-
+          The pawn on e6 was shutting in the c8 bishop. Taking back with it keeps a pawn on d5 and opens the bishop's
+          diagonal, which is Black's main problem solved at a stroke.
+  - id: other-moves
+    name: Other moves against 2.c4
+    intro: >-
+      Whatever White plays next, Black's moves hardly change. Without a pin Black has even less to worry about: ...Be7,
+      castle, and ...c5 comes sooner. Most of these lines lead straight back into the positions already learned, so what
+      matters here is seeing that they are the same positions.
+    lines: [qgd-4nf3, qgd-5nf3, qgd-4e3, qgd-bf4, qgd-3nf3, qgd-3e3, qgd-3cxd5]
+    plans:
+      - ...Nf6, ...Be7 and castle against every order.
+      - Against e3 and Bd3, take on c4 and play ...c5. If White takes back on d4 with the e-pawn, the pawn is isolated.
+      - Against Bf4 there is no pin, so play ...c5 at once.
+  - id: london
+    name: Against the London
+    intro: >-
+      2.Bf4 is the second most common move at this level. Black plays ...Nf6 and ...e6, then ...c5 and ...Nc6, and offers
+      to trade White's best bishop with ...Bd6. White usually keeps it with Bg3. The position is level, and there is one
+      thing to know: if the white knight jumps to e5 early, ...Qc7 puts it under real pressure.
+    lines: [london-main, qgd-london-nf3, qgd-london-bd3, qgd-london-ne5]
+    plans:
+      - ...Nf6, ...e6, ...c5, ...Nc6 and ...Bd6.
+      - When the knight comes to e5, play ...Qc7 and count the attackers on e5.
+      - ...b6 and ...Bb7 solve the c8 bishop.
+    questions:
+      - id: why-qc7
+        at: 1. d4 d5 2. Bf4 Nf6 3. e3 e6 4. Nf3 c5 5. c3 Nc6 6. Bd3 Bd6 7. Ne5 Qc7
+        ask: What does the queen add on c7, and what does Black threaten?
+        answers: [[e5]]
+        examples:
+          right:
+            - a third attacker on e5
+            - Black threatens to win the pawn on e5 after the swaps
+            - the knight on e5 is attacked three times
+          wrong: [mate on h2, the pawn on b2, the bishop on d3]
+        explain: >-
+          The c6 knight, the d6 bishop and the queen all aim at e5. If White plays on with 8.Nd2, then 8...Nxe5 9.dxe5 Bxe5
+          10.Bxe5 Qxe5 wins a clean pawn.
+  - id: jobava
+    name: The Jobava London
+    intro: >-
+      White plays Nc3 and Bf4 and blocks the c-pawn. The knight can jump to b5 and hit c7, so that threat has to be
+      answered. Otherwise White has made a mistake of sorts: with no pawn to come to c3, ...Bb4 and ...c5 are strong.
+    lines: [qgd-jobava, qgd-jobava-nb5, qgd-jobava-nc3]
+    plans:
+      - ...Nf6, ...e6, then ...Bb4 and ...c5.
+      - Meet Nb5 with ...Na6, and kick the knight with ...c6.
+  - id: quiet
+    name: The Colle and the Stonewall
+    intro: >-
+      2.Nf3 and 2.e3 usually lead to set-ups where White keeps the c1 bishop at home and aims for e4 or a kingside attack.
+      Black develops in the same way, with ...Nf6, ...e6, ...c5, ...Nc6 and ...Bd6. These two set-ups score best for
+      White at this level, even though the engine prefers Black or calls it level, so they are worth knowing.
+    lines: [qgd-colle, qgd-nf3-bf4, qgd-stonewall, qgd-e3-nf3]
+    plans:
+      - The same five moves, then castle.
+      - In the Colle, play ...e5 before White gets e4 in.
+      - In the Stonewall, put a knight on e4 as soon as White's lands on e5, and back it with ...f5.
+alternatives: [qg-elephant]
+setup:
+  title: Meet 1.d4 with 1...d5
+  text: >-
+    1.d4 takes the centre, and 1...d5 stops the pawn going further and takes a share of the centre for Black. The pawn on
+    d5 is guarded by the queen, and the plan is to back it with ...e6 so that it stays there. What White does next varies
+    a good deal at this level, and only about a third of games go 2.c4, so Black's set-up has to work against everything.
+steps:
+  qgd-bd3:1:
+    title: Hold d5, end the pin, castle
+    text: >-
+      2...e6 holds d5 with a pawn and declines the gambit. ...Nf6 guards d5 again, and when Bg5 pins the knight, ...Be7
+      ends the pin quietly. After ...O-O the king is safe and Black can think about the centre.
+  qgd-bd3:2:
+    title: Wait for Bd3, then free the game
+    text: >-
+      Black develops the last knight and waits. When the f1 bishop goes to d3, ...dxc4 makes it move again, so Black loses
+      no time. Then ...c5 hits d4 and ...cxd4 clears the way for Black's pieces.
+  qgd-bd3:3:
+    title: A knight on d5
+    text: >-
+      The d7 knight goes to b6 with a gain of time on the bishop and then lands on d5. Black has less room, so swaps help,
+      and the c8 bishop now has d7 to go to.
+  qg-declined-main:1:
+    title: Against Rc1, ...c6 first
+    text: >-
+      7.Rc1 is the classical move, though few players at this level choose it. Black plays ...c6 to hold d5 and waits for
+      Bd3 in the same way. Here ...b5 gains a move on the bishop and makes room for ...Bb7, which solves the c8 bishop.
+      White has more space, but ...c5 is still to come.
+  qgd-exchange:1:
+    title: The Exchange
+    text: >-
+      When White takes on d5 Black takes back with the e-pawn. The structure is now fixed: the c8 bishop has its diagonal,
+      and d5 will be guarded by ...c6. Black ends the pin with ...Be7 and castles as usual.
+  qgd-exchange:2:
+    title: The rook to e8, the knight to f8
+    text: >-
+      The knight on d7 has no future there, so the rook moves to e8 to make room for it on f8. From there it guards h7 and
+      can go to g6 or e6. White usually pushes b4 and b5 on the queenside, while Black looks to the e4 square and the
+      kingside.
+  qgd-4nf3:1:
+    title: Same moves, other order
+    text: >-
+      4.Nf3 lets Black choose between several plans, but one is enough: ...Be7 and castle. If the bishop comes to g5 next,
+      the main line is back. Black must simply see that it is the same position.
+  qgd-4e3:1:
+    title: No pin at all
+    text: >-
+      4.e3 shuts in White's c1 bishop, so Black has an easy game. The moves are the same as ever: ...Be7, castle, wait for
+      Bd3, take on c4 and play ...c5.
+  qgd-4e3:2:
+    title: The isolated pawn
+    text: >-
+      After ...cxd4 and exd4 White has a pawn on d4 that no other pawn can guard. It gives White active pieces, so Black
+      answers by developing with ...Nc6, keeping a piece on d5 and swapping pieces when possible. Against 9.Nxd4 Black is
+      at least level.
+  qgd-bf4:1:
+    title: No pin, so ...c5 at once
+    text: >-
+      The bishop on f4 pins nothing and does not guard d4. So Black castles and plays ...c5 straight away. After cxd5 the
+      knight takes back and offers a swap.
+  qgd-bf4:2:
+    title: Keep the queens on
+    text: >-
+      After the swap on d5 Black's queen stands well in the centre. When White takes on c5, Black takes back with the
+      queen and does not swap. The game is level, and the c8 bishop can come out with ...b6 and ...Bb7.
+  qgd-3nf3:1:
+    title: 'The move 3.Nf3'
+    text: Black plays the same move, ...Nf6, and after 4.Nc3 the game is back in the position after 3.Nc3 Nf6 4.Nf3.
+  qgd-3e3:1:
+    title: 'The move 3.e3'
+    text: Again ...Nf6. After 4.Nc3 the game is in the 4.e3 line, and White's c1 bishop is shut in.
+  qgd-3cxd5:1:
+    title: 'The move 3.cxd5'
+    text: >-
+      Take back with the e-pawn, and develop with ...Nf6. After 4.Nc3 Nf6 the game is the Exchange Variation.
+  london-main:1:
+    title: The London, and ...c5
+    text: >-
+      The bishop comes to f4 before e3 can shut it in. Black develops with ...Nf6 and ...e6, and strikes at d4 with ...c5.
+      White builds the wedge c3, d4 and e3, and ...Nc6 adds a second attacker to d4.
+  london-main:2:
+    title: Offer to trade the bishop
+    text: >-
+      ...Bd6 offers to trade White's best piece, and White usually steps back to g3. Black castles and solves the c8 bishop
+      with ...b6 and ...Bb7. When White gets e4 in, Black takes on e4 and the game stays level.
+  qgd-london-nf3:1:
+    title: 'The move 3.Nf3'
+    text: The same move, ...e6, against either order. After 4.e3 the game is back in the main line.
+  qgd-london-bd3:1:
+    title: 'The move 6.Bd3'
+    text: >-
+      White develops the bishop before the knight. Black makes the same offer with ...Bd6, and after Bg3 and castling the
+      main line is back with 8.Nbd2.
+  qgd-london-ne5:1:
+    title: ...Qc7 against Ne5
+    text: >-
+      The knight on e5 looks strong, but it is the pawn behind it that matters. ...Qc7 makes three attackers on e5. If
+      White plays on carelessly, the swaps on e5 win a pawn. If White trades on c6, Black takes the f4 bishop first and
+      recaptures afterwards.
+  qgd-jobava:1:
+    title: Pin the knight
+    text: >-
+      With the knight on c3 White cannot play c3, so d4 has less support. ...e6 opens the f8 bishop, ...Bb4 pins the knight,
+      and ...c5 strikes while it cannot move. If White takes on c5, the d7 knight will win the pawn back.
+  qgd-jobava:2:
+    title: Win the pawn back
+    text: >-
+      ...Bxc3+ doubles White's pawns, and ...Nxc5 regains the pawn with a gain of time on the d3 bishop. Material is level,
+      and White's queenside pawns are weak.
+  qgd-jobava-nb5:1:
+    title: Answer the threat on c7
+    text: >-
+      4.Nb5 threatens Nxc7+ with a fork. ...Na6 guards c7, and ...c6 sends the knight home. Black's knight is not well
+      placed on a6, but White has spent three moves on the knight, so the game is level.
+  qgd-jobava-nc3:1:
+    title: 'The move 2.Nc3'
+    text: Black plays ...Nf6 as usual, and after 3.Bf4 the Jobava London is on the board by another order.
+  qgd-colle:1:
+    title: The Colle set-up
+    text: >-
+      2.Nf3 leaves all White's choices open, and ...Nf6 keeps all of Black's. Once White plays e3 and Bd3, Black answers
+      with ...e6, ...c5 and ...Nc6, which is the same set-up as against the London.
+  qgd-colle:2:
+    title: Get ...e5 in first
+    text: >-
+      White's whole plan is e4, so Black castles and plays ...e5 first. If White pushes e4 anyway, Black wins a pawn on d4.
+      After 9.dxe5 Nxe5 the knights begin to come off.
+  qgd-colle:3:
+    title: Line up on h2
+    text: >-
+      After the swaps Black's pieces are active and the c8 bishop has its diagonal open. If White pushes e4 now, ...Qc7
+      lines up queen and bishop on h2. This is one of the best-scoring positions in the opening for Black at this level.
+  qgd-stonewall:1:
+    title: The Stonewall
+    text: >-
+      White plays e3, Bd3 and f4, which leaves the c1 bishop shut in and the e4 square weak. Black develops as usual with
+      ...Nf6, ...e6, ...c5 and ...Nc6. White scores about 60% here at this level, so the next step matters.
+  qgd-stonewall:2:
+    title: A knight on e4
+    text: >-
+      White's attack starts with a knight on e5. Black answers with a knight on e4, which blocks the d3 bishop, and backs
+      it with ...f5. This is the best-scoring reply at this level, and the engine gives Black a small edge.

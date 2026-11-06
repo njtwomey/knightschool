@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "main"]
+[Start "london-main 5...Nc6"]
+[Name "The London: 6.Bd3"]
+
+6. Bd3 { As common as 6.Nbd2. The bishop goes to its best square first. }
+6... Bd6 { The same offer as ever: White's bishop on f4 is its best piece, so Black offers to trade it. [%cal Gd6f4] }
+7. Bg3
+7... O-O
+8. Nbd2 *

@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "main"]
+[Start "qg-declined-main 3...Nf6"]
+[Name "The Declined: 4.Nf3"]
+
+4. Nf3 { Develops, and White has not yet said where the c1 bishop goes. }
+4... Be7 { Black's set-up does not depend on what White does: the bishop goes to e7 and the king castles. Many players pin with 4...Bb4 instead, but that is a different plan to learn. }
+5. Bg5 { The pin, one move later than in the main line. }
+5... O-O { The bishop is already on e7, so there is no pin to worry about, and Black can castle. }
+6. e3 { The main line again, with a different move order. Black plays 6...Nbd7 as before. } *

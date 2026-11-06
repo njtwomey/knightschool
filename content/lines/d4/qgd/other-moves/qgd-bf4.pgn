@@ -1,0 +1,19 @@
+[For "black"]
+[Kind "main"]
+[Start "qg-declined-main 3...Nf6"]
+[Name "The Declined: 4.Bf4"]
+
+4. Bf4 { The London's bishop in a Queen's Gambit. There is no pin, so Black can get on with the centre sooner. }
+4... Be7
+5. e3 O-O
+6. Nf3
+6... c5 { With no pin to break, Black strikes at once. The bishop on f4 does not guard d4. [%cal Gc5d4] }
+7. cxd5
+7... Nxd5 { The knight takes back, not the pawn. It offers a swap, and it looks at the bishop on f4. If 8.Bxb8, then 8...Nxc3 9.bxc3 Rxb8 damages White's pawns and leaves Black with the two bishops. [%cal Gd5f4,Gd5c3] }
+8. Nxd5
+8... Qxd5 { The queen takes back on a good central square. }
+9. dxc5
+( 9. b3? { A quiet move, played by nearly one player in five, but it does nothing about the tension on d4. }
+  9... cxd4 { Takes the pawn, and White has no good way to take back. 10.Nxd4 loses a piece to 10...Qa5+ 11.Ke2 e5, and 10.exd4 allows 10...Qe4+ with an attack on the king and the bishop. }
+  10. Bc4 Qa5+ { The bishop hit the queen, so she moves away with check. Black is a clean pawn up: after 11.Nd2 dxe3 12.Bxe3 the extra pawn stays and White's king is still in the centre. The engine gives Black more than two pawns. } )
+9... Qxc5 { Keep the queens on. 9...Qxd1+ looks natural, but Black scores only 41% after it at this level. After ...Qxc5 the game is level and Black is ready to develop the queenside. [%csl Gc5] } *

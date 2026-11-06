@@ -8,3 +8,6 @@
 - id: black-e4
   name: Black against 1.e4
   openings: [caro-kann-black]
+- id: black-d4
+  name: Black against 1.d4
+  openings: [qgd-black]

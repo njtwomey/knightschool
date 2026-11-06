@@ -1,0 +1,18 @@
+[For "black"]
+[Kind "main"]
+[Start "qg-declined-main 3...Nf6"]
+[Name "The Exchange Variation: 4.cxd5"]
+
+4. cxd5 { White settles the centre early. The pawns on c4 and d5 are gone and the structure will not change for a long time. }
+4... exd5 { Takes back towards the centre and keeps a pawn on d5. It also opens the diagonal for the c8 bishop, which is the good side of the exchange for Black. [%cal Gc8h3] }
+5. Bg5
+5... Be7 { The same answer as ever: the bishop steps in front of the queen and ends the pin. }
+6. e3 O-O
+7. Bd3
+7... c6 { Puts a pawn behind d5, so it is safe for good, and keeps a white knight off b5. [%csl Gd5] }
+8. Nf3
+8... Nbd7 { Develops, and heads for f8 once the rook has moved. }
+9. O-O
+9... Re8 { The rook goes to the half-open e-file and clears f8 for the knight. [%cal Ge8e3] [%idea open-file] }
+10. Qc2
+10... Nf8 { The knight guards h7, and it can go on to g6 or e6. White's usual plan is to push b4 and b5 against c6, the minority attack. Black's is ...Ne4 and play on the kingside. White has a small edge on the engine and scores 49% from here. [%cal Gf8g6,Gf6e4] [%idea minority-attack] } *

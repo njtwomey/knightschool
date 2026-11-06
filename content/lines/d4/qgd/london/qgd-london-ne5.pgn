@@ -1,0 +1,14 @@
+[For "black"]
+[Kind "sideline"]
+[Start "qgd-london-bd3 6...Bd6"]
+[Name "The London: 6.Bd3 and 7.Ne5"]
+
+7. Ne5 { Jumps in before Black can castle. It is a quarter of the games here, and it looks strong. }
+7... Qc7 { Black adds to the pressure on e5: the knight on c6, the bishop on d6 and now the queen all look at it. If White is careless, the pawn on e5 falls after the swaps. White scores only 41% against this. [%cal Gc7e5,Gd6e5,Gc6e5] }
+8. Nxc6 { The safe way out. It trades the knight before it can be won. }
+( 8. Nd2? { The natural developing move, played in nearly a third of games, but it does nothing about e5. }
+  8... Nxe5 9. dxe5 Bxe5 { Takes the pawn. The bishop on e5 and the bishop on f4 now face each other, and the queen stands behind Black's. }
+  10. Bxe5 Qxe5 { Black is a clean pawn up, with the queen in the centre. White scores 37% once the knight has taken on e5. [%idea hanging-piece] } )
+8... Bxf4 { The in-between move: take the bishop first, and the knight on c6 is still hanging. [%cal Gc7c6] }
+9. exf4
+9... bxc6 { Black has traded the d6 bishop for White's best piece, and the b-file is open for a rook. Both sides have doubled pawns, but Black's stand next to d5 and support it, while the pawns on f2 and f4 do little. The engine gives Black a small edge, and White scores 40%. If 9.Nxa7 instead of 9.exf4, then 9...Rxa7 10.exf4 c4 11.Bc2 Qxf4 wins the pawn back and the game is level. [%csl Yf4] } *

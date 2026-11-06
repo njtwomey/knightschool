@@ -1,0 +1,20 @@
+[For "black"]
+[Kind "main"]
+[Start "london-main 2...Nf6"]
+[Name "The Jobava London: 3.Nc3"]
+
+3. Nc3 { The Jobava London. The knight blocks White's c-pawn, but it can jump to b5, where it and the f4 bishop both aim at c7. [%cal Rc3b5,Rf4c7] [%csl Yc7] }
+3... e6 { Black keeps to the plan. With the c-pawn blocked White cannot play c3, so ...c5 and ...Bb4 are both stronger here. }
+4. e3
+4... Bb4 { Pins the knight to the king, which also stops it going to b5 for the moment. The engine prefers Black slightly. [%cal Gb4e1] [%idea pin] }
+5. Bd3
+5... c5 { Strikes at d4 while the knight is pinned. White scores only 43% from here. [%cal Gc5d4] }
+6. dxc5
+( 6. Nf3? { Natural, but it lets the c-pawn come on with a gain of time. }
+  6... c4 { Hits the bishop, which must leave the d3 square. }
+  7. Be2 Ne4 { The knight on c3 is now attacked twice and guarded only by the b-pawn. After 8.O-O Nxc3 9.bxc3 Bxc3 Black has won a pawn and the bishop hits the rook on a1. The engine puts Black well over a pawn ahead. } )
+6... Nbd7 { Black does not hurry. The pawn on c5 cannot be held, and the knight takes it back with a developing move. Most players take at once with 6...Bxc5 and score about 48%. After 6...Nbd7 Black scores far better than that. }
+7. Nf3
+7... Bxc3+ { Now the bishop takes, while the knight can recapture on c5 next. White's pawns are doubled on the c-file. }
+8. bxc3
+8... Nxc5 { The pawn is back and the knight hits the bishop on d3. White's queenside pawns are split, and Black has a comfortable game. The gain is positional: material is level. [%cal Gc5d3] [%csl Yc3] } *

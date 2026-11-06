@@ -1,0 +1,10 @@
+[For "black"]
+[Kind "sideline"]
+[Start "qgd-jobava 3...e6"]
+[Name "The Jobava London: 4.Nb5"]
+
+4. Nb5 { The threat is 5.Nxc7+, which forks the king and rook. If the queen takes the knight, the f4 bishop takes the queen. [%cal Rb5c7,Rf4c7] }
+4... Na6 { Guards c7. The knight looks odd on the rim, but it does the job, and White has now moved the same knight twice. [%cal Ga6c7] }
+5. e3
+5... c6 { Kicks the knight, which has to go back. }
+6. Nc3 { White has used three moves to put the knight back where it was. In return, Black's knight is on a6 rather than a better square. } *

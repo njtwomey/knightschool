@@ -1,0 +1,15 @@
+[For "black"]
+[Kind "main"]
+[Start "qg-declined-main 6...Nbd7"]
+[Name "The Declined: 7.Bd3 and the swap on c4"]
+
+7. Bd3 { The most common move here. It develops the bishop, but Black has been waiting for it. }
+7... dxc4 { Black gives up the pawn on d5 at the moment it costs nothing. White's bishop has just moved, and now it has to move again to take back, so Black is not behind in development. [%cal Gd3c4] }
+8. Bxc4
+8... c5 { The break that frees Black's game. It hits d4 and makes room for the pieces. White scores only 45% from here at this level. [%cal Gc5d4] }
+9. O-O
+9... cxd4 { Clears the c-file and takes the last pressure off Black's centre. }
+10. Nxd4 { The most common recapture. }
+10... Nb6 { Hits the bishop and opens the way for the c8 bishop through d7. [%cal Gb6c4,Gc8d7] }
+11. Bb3
+11... Nbd5 { The knight lands on the square Black has been fighting for. Black has less room, so swapping pieces helps, and this offers a swap on c3. The game is level. [%csl Gd5] } *

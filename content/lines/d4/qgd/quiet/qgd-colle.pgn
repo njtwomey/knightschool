@@ -1,0 +1,30 @@
+[For "black"]
+[Kind "main"]
+[Start "london-main 1...d5"]
+[Name "The Colle: 2.Nf3 and 3.e3"]
+
+2. Nf3 { Develops and waits. White may still go for the London, the Queen's Gambit or the Colle. }
+2... Nf6 { Black waits too. This move fits every set-up that White can choose. }
+3. e3 { The Colle. The c1 bishop stays at home and White aims for e4. }
+3... e6
+4. Bd3
+4... c5 { The same break as everywhere. White does not have the pawn on c3 yet, so d4 feels it at once. [%cal Gc5d4] }
+5. c3
+5... Nc6 { Develops and adds a second attacker to d4. }
+6. Nbd2 { Everything here points at e4. White scores 57% in this position at this level, though the engine calls it level, because the attack comes easily once e4 is played. [%cal Ge3e4] }
+6... Bd6 { Black's bishop faces White's on the same diagonal and also looks at e5. }
+7. O-O O-O
+8. Qe2 { Gets ready for e4. 8.Re1 has the same idea, and the answer is the same. }
+8... e5 { Black gets in first. This is the key move of the line: if Black waits, White plays e4 with a strong centre. After ...e5 Black has the extra central space. [%cal Ge6e5] }
+9. dxe5
+( 9. e4? { Plays the planned move anyway. It is nearly as common as 9.dxe5, but it leaves d4 short of guards. }
+  9... exd4 { Takes the pawn, and d4 now falls. }
+  10. cxd4 cxd4 { Black has won a pawn on d4: two white pawns have gone for one black one. If 11.exd5, then 11...Nxd5 keeps the pawn, and it cramps White's position from d4. } )
+9... Nxe5
+10. Nxe5
+( 10. Bc2? { Saves the bishop from a swap, but it leaves the knight on f3 to be pinned. }
+  10... Bg4 { Pins the knight on f3 to the queen, and the e5 knight attacks it too. [%cal Gg4e2,Ge5f3] [%idea pin] }
+  11. h3 Bh5 { The pin stays. No material is won, so the gain is positional: White's pieces are tied to f3, and after 12.Qe1 Nxf3+ 13.Nxf3 Black has the freer game. The engine gives Black more than a pawn and a half. } )
+10... Bxe5
+11. e4 { The most common move. White gets the push in after all, but now it opens the game for Black's pieces. }
+11... Qc7 { Queen and bishop line up on h2, so ...Bxh2+ is a threat. White scores only 31% from here, and the engine gives Black more than half a pawn. Against 11.Nf3 instead, 11...Bc7 keeps the same diagonal. [%cal Gc7h2,Ge5h2] } *

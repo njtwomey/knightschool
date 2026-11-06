@@ -1,0 +1,20 @@
+[For "black"]
+[Kind "main"]
+[Start "london-main 1...d5"]
+[Name "The Stonewall: 2.e3 and f4"]
+
+2. e3 { A quiet move that shuts in the c1 bishop for now. }
+2... Nf6
+3. Bd3 { The bishop aims at h7, which is the start of White's most dangerous plan at this level. [%cal Gd3h7] }
+3... e6
+4. f4 { The Stonewall. White gives up e4 as a square and leaves the c1 bishop shut in, so the engine prefers Black. But it scores about 60% for White here, because Ne5 and a kingside attack come so easily. [%csl Ye4] [%cal Gf1e5] }
+4... c5 { Black's usual strike at d4. The bishop on c1 cannot help to guard it. [%cal Gc5d4] }
+5. c3
+5... Nc6
+6. Nf3
+6... Bd6 { Looks at f4 and keeps an eye on e5. }
+7. O-O O-O
+8. Ne5 { The plan: the knight sits on e5, and the queen and rook will swing to the kingside. }
+8... Ne4 { Black copies the idea. The knight on e4 is as well placed as White's on e5, and it blocks the d3 bishop. Of Black's common moves this one scores best: White makes 52% against it, and about 60% against the others. [%csl Ge4] }
+9. Nd2
+9... f5 { Holds the knight on e4, so that if White takes it, the pawn takes back and Black's game stays solid. The engine gives Black a small edge. [%cal Gf5e4] } *
