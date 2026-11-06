@@ -1,0 +1,8 @@
+[For "black"]
+[Kind "main"]
+[Start "flank-exchange 1...e6"]
+[Name "2.d4: the Queen's Gambit at once"]
+
+2. d4 { With pawns on c4 and d4, this is a Queen's Gambit in all but name. }
+2... d5 { This is the Queen's Gambit Declined exactly: the same position as 1.d4 d5 2.c4 e6. }
+3. Nc3 3... Nf6 *

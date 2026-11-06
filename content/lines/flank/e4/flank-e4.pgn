@@ -1,0 +1,19 @@
+[For "black"]
+[Kind "sideline"]
+[Start "flank-exchange 1...e6"]
+[Name "2.e4: the pawns meet at once"]
+
+2. e4 { White grabs the centre with two pawns side by side. }
+2... d5 { Hits both pawns straight away, before White can support them. [%cal Rd5c4,Rd5e4] }
+3. cxd5 { The most common move. }
+3... exd5 { Black takes back and now attacks e4. }
+4. exd5
+( 4. Qb3? { Looks strong: the queen hits d5 and b7. But it leaves e4 to be taken. }
+  4... dxe4 { Black takes the pawn. The danger is f7. }
+  5. Bc4 { Now the bishop and the queen both aim at f7, and Black has to find the one good defence. White scores 59% from here. [%cal Rc4f7,Rb3f7] }
+  5... Qe7 { Guards f7. Black is a clean pawn up and the engine gives Black more than a pawn, but it takes care: White still scores 56% from here. [%csl Gf7] } )
+4... Nf6 { Better than taking at once. 4...Qxd5 is the most common move, but 5.Nc3 gains a move on the queen and White scores 56%. After ...Nf6 White scores 48%. }
+5. Nc3 { Holds on to d5 for a moment. }
+5... Nxd5 { Black has the pawn back, and the knight sits in the centre. }
+6. Nxd5 { The most common move, but the engine marks it down: it brings Black's queen to a fine square. }
+6... Qxd5 { Unlike on move 4, no knight can reach c3 at once to hit the queen. White's d-pawn is on its own and Black's pieces come out quickly. The engine gives Black more than a pawn, and White scores only 40%. [%csl Gd5] } *

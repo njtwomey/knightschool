@@ -1,0 +1,9 @@
+[For "black"]
+[Kind "sideline"]
+[Start "flank-g3 2...d5"]
+[Name "3.Bg2: the same position by another order"]
+
+3. Bg2 { The bishop comes out first, and White keeps the swap on d5 for later. }
+3... Nf6 { Develops and guards d5 a second time. Taking on c4 is common here, but White scores 57% against it: the pawn is hard to keep and the g2 bishop gets a free diagonal. }
+4. cxd5 { Played in more than half of games. }
+4... exd5 { The position of the main 2.g3 line, one move order later. } *

@@ -11,3 +11,6 @@
 - id: black-d4
   name: Black against 1.d4
   openings: [qgd-black]
+- id: black-other
+  name: Black against other first moves
+  openings: [flank-black]

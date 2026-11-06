@@ -1,0 +1,19 @@
+[For "black"]
+[Kind "main"]
+[Start "flank-exchange 1...e6"]
+[Name "2.g3: the bishop on g2"]
+
+2. g3 { White will put the bishop on g2, where it looks down the long diagonal at d5 and b7. [%cal Rf1g2,Rg2d5] }
+2... d5 { The same move as ever. The pawn on d5 blocks the long diagonal before the bishop gets there. }
+3. cxd5 { The most common move: White clears the way for the bishop. }
+3... exd5 { The pawn stays on d5 and still blocks the diagonal, and the c8 bishop can now come out. }
+4. Bg2
+4... Nf6 { Develops and guards d5, which the g2 bishop is now hitting. [%cal Gf6d5] }
+5. Nc3 { The most common move here. 5.Nf3, 5.d4 and 5.e3 all get the same answer. }
+5... Be7 { The bishop steps out of the way so that Black can castle. It goes to the same square as in the Queen's Gambit Declined. 5...d4 is the engine's first choice and gains space, but ...Be7 keeps the plan the same in every line, and the position stays level. }
+6. Nf3
+6... O-O { Both kings will soon be safe. Black has an easy game: the pawn on d5 gives the pieces room, and White has not touched the centre. }
+7. O-O
+7... c6 { Puts a pawn behind d5, so that it is safe for good and the g2 bishop has nothing to aim at. It is the same move as in the Exchange Variation of the Queen's Gambit Declined. 7...d4 is sharper, and White scores only 41% against it, but ...c6 is the simple move. [%csl Gd5] }
+8. d4 { White plays d4 at last. }
+8... Bf5 { This is what taking back with the e-pawn was for: the bishop comes out on the diagonal that opened. The position is level and White scores 45% from here. [%cal Gf5b1] } *

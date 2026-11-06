@@ -1,0 +1,11 @@
+[For "black"]
+[Kind "sideline"]
+[Start "flank-exchange 1...e6"]
+[Name "2.Nf3: where 1.Nf3 comes in"]
+
+2. Nf3 { Develops and keeps White's plans hidden. }
+2... d5 { This is also the position after 1.Nf3 d5 2.c4 e6, so a game that starts with 1.Nf3 can arrive here. }
+3. cxd5 { The most common move here. }
+3... exd5 { The same capture as ever. 3...Qxd5 is legal here, but it brings the queen out early, and White scores 59% against it. }
+4. d4 { The Exchange structure again: Black has d5, White has d4, and the c-pawn and e-pawn have gone. }
+4... Nf6 { Develops, guards d5 and gets ready for ...Be7 and castling, as in the Queen's Gambit Declined. } *

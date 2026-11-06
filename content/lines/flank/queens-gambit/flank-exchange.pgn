@@ -1,0 +1,12 @@
+[For "black"]
+[Kind "main"]
+[Name "The Exchange: into the Queen's Gambit"]
+
+1. c4
+1... e6 { Black gets ready for ...d5 with a pawn behind it, the Queen's Gambit Declined set-up. 1...e5 is the most common reply at this level and just as good, but it leads to a different kind of game, and 1...e6 lets Black reuse what is already known. [%cal Ge6d5] }
+2. Nc3 { White's most common reply, played in about half of games. }
+2... d5 { Takes a share of the centre. If White takes on d5, a pawn takes back. }
+3. cxd5 { Played in about two games in three. }
+3... exd5 { The only sensible capture: the knight on c3 guards d5, so the queen cannot take. The pawn stays on d5 and the c8 bishop gets an open diagonal. [%cal Gc8h3] }
+4. d4 { White comes back to the centre, and this is the Exchange Variation of the Queen's Gambit Declined, by another order. From here Black plays as in that opening: ...Nf6, ...Be7, castle and ...c6. }
+4... Nf6 *

@@ -1,0 +1,155 @@
+name: English Opening
+side: black
+start: 1. c4 e6
+level: next
+style: [solid, classical]
+summary: >-
+  Against 1.c4 Black plays 1...e6 and ...d5, so that most games turn into the Queen's Gambit Declined and the rest use
+  the same few moves: ...Nf6, ...Be7, castle and ...c6.
+about:
+  idea: >-
+    Play the Queen's Gambit Declined set-up and let White choose. If White plays d4, the game is a Queen's Gambit
+    Declined, and the lines here stop as soon as it is, so that what you already know takes over. If White avoids d4,
+    Black has one simple plan: a pawn on d5, then ...Nf6, ...Be7, castle and ...c6, and the c8 bishop comes out at the
+    end. Against 1.Nf3, play 1...d5, then ...e6 and ...Nf6. The set-up is the same, and once White plays c4 you are in
+    these positions.
+  risks: >-
+    Nothing here wins by force, and the engine calls most of these positions level. Lines that transpose stop where the
+    Queen's Gambit Declined takes over, so this opening is short on its own and is best learned after that one. The move
+    2.e4 is the one line with a plan of its own, and 4.Qb3 there sets a real trap on f7.
+  suits: >-
+    Players who already know the Queen's Gambit Declined and do not want to learn a separate opening for the rarer first
+    moves. 1.c4 and 1.Nf3 are each played in under 3% of games at this level.
+  origin: >-
+    The English Opening takes its name from the English master Howard Staunton, who played 1.c4 in his 1843 match
+    against Saint-Amant.
+ideas: [centre-pawns, castle-early, f7-weakness]
+variations:
+  - id: into-queens-gambit
+    name: Back into the Queen's Gambit
+    intro: >-
+      In most games White plays d4 sooner or later, and then this is simply the Queen's Gambit Declined with the moves in
+      a different order. These lines show the way in and stop there, because the positions are the same ones. From
+      there, play on as in the Queen's Gambit Declined. Whether White takes on d5 or not, the answer is the same: take
+      back with the e-pawn and develop.
+    lines: [flank-exchange, flank-d4, flank-nc3-d4, flank-nf3]
+    plans:
+      - ...e6 and ...d5, whatever White plays on move two.
+      - If White takes on d5, take back with the e-pawn.
+      - Once White plays d4, carry on as in the Queen's Gambit Declined.
+  - id: without-d4
+    name: When White avoids d4
+    intro: >-
+      Some players never want d4. They put a bishop on g2, or play e3, and keep the centre pawns back. Black needs only
+      one plan for all of it: keep the pawn on d5, play ...Nf6, ...Be7 and castle, then put a pawn on c6 and bring out the
+      c8 bishop. These are the same moves as in the Exchange Variation of the Queen's Gambit Declined, and the positions
+      are level. There is one exception to learn: after 2.Nc3 d5 3.cxd5 exd5 4.g3, ...d4 hits the knight, and the most
+      common reply, 5.Ne4, loses it to ...f5.
+    lines: [flank-g3, flank-g3-bg2, flank-exchange-g3, flank-e3, flank-e3-first]
+    plans:
+      - Keep a pawn on d5 and put another on c6 behind it.
+      - ...Nf6, ...Be7 and castle, in that order.
+      - Then bring out the c8 bishop, on the diagonal that ...exd5 opened.
+      - After 4.g3 with the knight on c3 and the bishop not yet on g2, play ...d4. If the knight goes to e4, ...f5 traps it.
+    questions:
+      - id: flank-why-exd5
+        at: 1. c4 e6 2. g3 d5 3. cxd5 exd5
+        ask: Why does Black take back with the e-pawn?
+        answers: [[c8], [bishop], [diagonal], [centre], [d5]]
+        examples:
+          right:
+            - it opens the diagonal for the c8 bishop
+            - it keeps a pawn on d5
+            - the bishop on c8 can come out
+          wrong: [to open the a-file, to attack the knight, to castle]
+        explain: >-
+          Taking back with the e-pawn keeps a pawn on d5, where it blocks the g2 bishop, and it opens the diagonal for the
+          c8 bishop. The queen could take too, but she would be chased by Nc3.
+      - id: flank-why-c6
+        at: 1. c4 e6 2. g3 d5 3. cxd5 exd5 4. Bg2 Nf6 5. Nc3 Be7 6. Nf3 O-O 7. O-O c6
+        ask: What does ...c6 do against the bishop on g2?
+        answers: [[d5], [guard], [protect], [support], [diagonal]]
+        examples:
+          right:
+            - it guards d5
+            - it protects the pawn on d5 for good
+            - the diagonal stays closed
+          wrong: [it attacks the knight, it prepares to castle, it wins a pawn]
+        explain: >-
+          The g2 bishop's only target is d5. With a pawn on c6 behind it, d5 is safe for good, so the bishop has nothing to
+          aim at.
+  - id: white-plays-e4
+    name: When White plays e4
+    intro: >-
+      2.e4 puts two pawns side by side in the centre, and Black has to hit them at once with ...d5. This is the one line
+      with a plan of its own: open the centre, take back with the knight, and get the pawn back. It is level if White plays well.
+      The trap to know is 4.Qb3, which looks like a threat to d5 but gives up a pawn, and then f7 needs guarding.
+    lines: [flank-e4]
+    plans:
+      - Hit the two pawns with ...d5 at once.
+      - After 4.exd5, play ...Nf6 and take back with the knight, not the queen.
+      - Against 4.Qb3, take on e4, and meet Bc4 with ...Qe7.
+setup:
+  title: Meet 1.c4 with 1...e6
+  text: >-
+    1.c4 is the English Opening: White takes a grip on d5 from the side and leaves the centre pawns for later. 1...e6
+    gets ready for ...d5 with a pawn behind it, the set-up of the Queen's Gambit Declined. It is not the most common
+    reply, as 1...e5 is played in about 40% of games, but it is sound, and it means there is much less to learn. Against
+    1.Nf3, which has no moves of its own here, play 1...d5, then ...e6 and ...Nf6. Once White plays c4 you are in these
+    positions.
+steps:
+  flank-exchange:1:
+    title: Take back with the e-pawn
+    text: >-
+      2.Nc3 is White's most common move, and ...d5 is the reply to nearly everything. After 3.cxd5 the e-pawn takes back,
+      which keeps a pawn on d5 and frees the c8 bishop. Then 4.d4 turns the game into the Exchange Variation of the
+      Queen's Gambit Declined, and from there you play as in that opening.
+  flank-d4:1:
+    title: The Queen's Gambit by another name
+    text: >-
+      After 2.d4 d5 the position is the Queen's Gambit Declined, with no difference at all. 3.Nc3 Nf6 is the main line of
+      that opening, and 2.Nc3 d5 3.d4 reaches the same place.
+  flank-nf3:1:
+    title: Where 1.Nf3 comes in
+    text: >-
+      2.Nf3 d5 is the same position as 1.Nf3 d5 2.c4 e6, so this is how the two first moves meet. The rest is familiar:
+      take back on d5 with the e-pawn, and after d4 you are in the Exchange structure of the Queen's Gambit Declined.
+  flank-g3:1:
+    title: One plan against the bishop on g2
+    text: >-
+      White's bishop on g2 looks at d5, so that is where Black puts a pawn. ...d5, ...exd5 and ...Nf6 keep the pawn there
+      and guard it. ...Be7 gets ready to castle. The moves are the ones you already know, with no d4 from White.
+  flank-g3:2:
+    title: Put a pawn on c6, then free the bishop
+    text: >-
+      Once Black has castled, ...c6 makes d5 safe for good, and the g2 bishop has nothing to aim at. The last piece to
+      sort out is the c8 bishop, and ...Bf5 puts it on the diagonal that ...exd5 opened. This is the plan to remember
+      when White avoids d4.
+  flank-g3-bg2:1:
+    title: 3.Bg2 comes to the same thing
+    text: >-
+      If the bishop goes to g2 before the swap on d5, Black plays ...Nf6 now rather than later. After cxd5 exd5 the
+      position is the one you have just learned.
+  flank-exchange-g3:1:
+    title: Hit the knight with ...d4
+    text: >-
+      After the swap, 4.g3 gives Black a chance the usual plan would miss. ...d4 hits the knight, and if it goes to e4,
+      as it does in about half of games, ...f5 traps it and wins it. After the safer 5.Nb1, Black backs up the pawn with
+      ...c5 and develops with ...Nc6 and ...Nf6, with more room and a small edge.
+  flank-e3:1:
+    title: Against e3, the same plan again
+    text: >-
+      3.e3 is quiet, and it shuts in White's c1 bishop. Black develops as usual, and takes back on d5 with the e-pawn.
+      After ...Be7 and castling, ...c6 holds the centre, and the position is like the Exchange Variation, except that
+      White's bishop is behind the e3 pawn rather than out on g5.
+  flank-e3-first:1:
+    title: 2.e3 comes to the same thing
+    text: >-
+      After 2.e3 Black still plays ...d5, and still takes back with the pawn. 4.Nc3 Nf6 is the 3.e3 line by another
+      order. The one thing to remember is not to take with the queen, because Nc3 gains a move on her.
+  flank-e4:1:
+    title: Hit the centre, take back with the knight
+    text: >-
+      Against two pawns side by side, ...d5 hits them at once. After 4.exd5 the natural ...Qxd5 lets 5.Nc3 gain time,
+      so Black plays ...Nf6 first and takes back with the knight. When White swaps knights, the queen comes to d5 with
+      no knight left to chase her, and Black is better.

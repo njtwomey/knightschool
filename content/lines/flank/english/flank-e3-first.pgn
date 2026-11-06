@@ -1,0 +1,11 @@
+[For "black"]
+[Kind "sideline"]
+[Start "flank-exchange 1...e6"]
+[Name "2.e3: the same set-up"]
+
+2. e3 { A quiet move that keeps d4 for later. }
+2... d5 { Black's move does not change. }
+3. cxd5 { The most common move. }
+3... exd5 { Always the pawn. 3...Qxd5 is played in about one game in five, but 4.Nc3 gains a move on the queen and White scores 56% against it. }
+4. Nc3
+4... Nf6 { The position of the 3.e3 line, one move order later. } *

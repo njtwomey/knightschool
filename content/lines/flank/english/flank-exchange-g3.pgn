@@ -1,0 +1,17 @@
+[For "black"]
+[Kind "sideline"]
+[Start "flank-exchange 3...exd5"]
+[Name "4.g3: ...d4 and the trapped knight"]
+
+4. g3 { White swaps on d5 and still avoids d4. It looks like the 2.g3 line, but the bishop is not on g2 yet, and that makes a difference. }
+4... d4 { The one place where Black leaves the usual plan. The knight has to move, and its squares are poor, so the engine rates this well above ...Nf6. [%cal Gd5d4] }
+5. Nb1 { The safest retreat, though the knight is back where it started. 5.Nb5 is also common, and 5...a6 chases it to a3. }
+( 5. Ne4?? { The most common move, and it looks like the natural square. But White's own pawns on g3 and d2 take away the knight's retreat. }
+  5... f5 { The knight has nowhere to go. c3, c5, d6, f6 and g5 are all covered, and g3 and d2 are full. The check 6.Qa4+ does not save it. [%csl Re4] }
+  6. Nc3 dxc3
+  7. bxc3 Nf6 { Black has won a knight for a pawn. } )
+5... c5 { Backs up the pawn on d4, and Black has more room on the board. }
+6. Bg2
+6... Nc6 { Guards d4 again and develops. }
+7. Nf3
+7... Nf6 { Black has more space and is ahead in development, and the engine gives Black about half a pawn. ...Be7 and castling come next. } *
