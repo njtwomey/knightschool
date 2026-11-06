@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 5.O-O"]
+[Name "5...b5: the same position by another order"]
+
+5... b5 { Black pushes the bishop away before anything else. This is more common than 5...Be7. }
+6. Bb3 { Back to the diagonal that looks at f7. [%cal Gb3f7] }
+6... Be7
+7. Re1 { Guards e4. The game is back in the main line. [%cal Ge1e4] } *

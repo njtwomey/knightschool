@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-open 7.Bb3"]
+[Name "7...exd4: a second pawn"]
+
+7... exd4 { The most common reply here. Black takes a second pawn, and the e-file opens on the king. [%csl Ye8] }
+8. Re1 { Pins the knight on e4 to the king, as in the line with ...exd4 a move earlier. [%idea pin] }
+8... d5 { Holds the knight. }
+9. Nc3 { Hits the pinned knight a second time, and d5 is now the only thing holding it. [%cal Gc3e4] }
+9... Be6
+10. Nxe4 dxe4
+11. Rxe4 { White has one pawn back and will win d4 too. The bishop on e6 is pinned, and Black's king is still in the centre. The engine has White nearly a pawn ahead. [%cal Ge4e6] } *

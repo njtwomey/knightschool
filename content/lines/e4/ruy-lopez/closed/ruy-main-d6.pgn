@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 7.Bb3"]
+[Name "7...d6: the main line by another order"]
+
+7... d6 { Guards e5 before castling. With ...d6 played, the Marshall's ...d5 would cost Black a move. }
+8. c3 { With no Marshall to worry about, c3 can come at once. }
+8... O-O
+9. h3 { Stops ...Bg4. This is the main line again, with c3 and h3 played in the other order. [%cal Gh3g4] } *

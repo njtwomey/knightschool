@@ -1,0 +1,14 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-steinitz 6.Nc3"]
+[Name "6...Nf6: Black keeps the pieces on"]
+
+6... Nf6 { Black develops and hits e4. }
+7. O-O { Castles, and e4 is safe, because the c3 knight guards it. [%idea castle-early] }
+7... Be7
+8. Re1 { Adds a guard to e4, and the rook takes the e-file. [%cal Ge1e4] }
+8... O-O
+( 8... Ne5? { Offers to swap on d7, but it steps away from the knight on d4 and lets it reach f5. }
+  9. Bxd7+ Qxd7 10. Nf5 { The knight hits e7 and g7. [%cal Gf5e7,Gf5g7] }
+  10... O-O 11. Bg5 { Nothing has been won, but White's pieces all point at Black's king and the e7 bishop is under pressure, and the engine has White more than a pawn ahead. } )
+9. Bf1 { Steps back out of the swaps. White has more space, so keeping pieces on helps White, and the bishop can come to d3 or g2 later. } *

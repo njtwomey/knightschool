@@ -1,0 +1,12 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-steinitz 4.d4"]
+[Name "4...Bd7: the same game by another order"]
+
+4... Bd7 { The commonest reply to 4.d4: Black breaks the pin first and holds e5 for now. }
+5. Nc3 { Develops and guards e4. Many players take on e5 or push d5 here, but they give up the pressure, and they score less well. }
+5... exd4 { Black gives up the centre after all. }
+( 5... a6? { Looks like the normal question to the bishop, but it costs a pawn. }
+  6. Bxc6 Bxc6 7. dxe5 { The guard on e5 has gone, and if ...dxe5, the queens come off first. [%idea remove-the-guard] }
+  7... dxe5 8. Qxd8+ Rxd8 { The queens are off, and now Nxe5 takes the pawn with no reply. White is a clean pawn up, and it hits the bishop on c6 as well. } )
+6. Nxd4 { The same position as after 4...exd4 5.Nxd4 Bd7 6.Nc3. } *

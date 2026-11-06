@@ -1,0 +1,23 @@
+[For "white"]
+[Kind "main"]
+[Start "ruy-main 3.Bb5"]
+[Name "3...d6: the Old Steinitz"]
+
+3... d6 { The Steinitz Defence, the most common third move at this level. It guards e5 solidly, but it pins Black's own knight to the king, and that shuts in the f8 bishop. [%cal Gb5e8] [%idea pin] }
+4. d4 { Hits e5 at once, and this is why Black's set-up is passive. The engine's first choice, and players here score best with it. [%cal Gd4e5] [%idea centre-pawns] }
+4... exd4 { Gives up the centre, but it frees Black's game a little. }
+( 4... a6? { Normal in most Ruy Lopez positions, but here it drops a pawn. }
+  5. Bxc6+ { Swaps off the knight first. Pulling back with Ba4 would walk into the Noah's Ark Trap. }
+  5... bxc6 6. dxe5 { The guard has gone, so e5 can be taken. [%idea remove-the-guard] }
+  6... dxe5 7. Qxd8+ Kxd8 { Black has lost the right to castle, and Nxe5 comes next. White is a clean pawn up, and Black's queenside pawns are in pieces. } )
+5. Nxd4 { Takes back with a piece, and it stands well in the centre. }
+5... Bd7 { Breaks the pin, which also threatens to swap off White's strong knight. }
+6. Nc3 { Develops and guards e4. The engine prefers it to castling, and White keeps a good game whether Black swaps or not. }
+6... Nxd4 { The most common reply. Black swaps pieces to ease the cramp. }
+7. Bxd7+ { Takes the bishop first. Three players in four do this, and the engine clearly prefers it to taking with the queen at once. }
+7... Qxd7
+8. Qxd4 { The queen stands in the centre, hitting g7, and nothing can chase her easily. [%cal Gd4g7] }
+8... Nf6 { Develops. The most common move. }
+9. Bg5 { Develops, and hits the knight, so that the f8 bishop has to come to e7 to help. [%cal Gg5f6] }
+9... Be7
+10. O-O-O { The rook goes straight to the d-file, on the backward pawn on d6. Players score 65% from here. White has more space and the easier game, and the engine has White about a pawn ahead. [%csl Yd6] [%cal Gd1d6] } *

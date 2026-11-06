@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-berlin 6.Nxe5"]
+[Name "6...Be7: blocking the file first"]
+
+6... Be7 { Blocks the e-file, so now the bishop on b5 really is hit. }
+7. Bf1 { Pulls the bishop back and keeps all the pieces on. Taking on c6 is the most common move here, and players score only 41% with it, because Black's pieces come out quickly. }
+7... Nxe5
+8. Rxe5 { The same position as in the main Berlin line. } *

@@ -1,0 +1,17 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 3.Bb5"]
+[Name "3...Bc5: the Classical"]
+
+3... Bc5 { The Classical Defence. As in the Italian, the bishop takes the active diagonal. [%cal Rc5f2] }
+4. c3 { Gets ready for d4 with a hit on the bishop. This also takes d4 from Black's knight. [%cal Gc3d4] }
+4... Nf6 { Develops. After White castles, this is the 4.O-O Bc5 5.c3 position. }
+( 4... d6? { Guards e5, but it pins the knight to the king, and d4 comes with force. }
+  5. d4 exd4 6. cxd4 Bb6 7. d5 { The pinned knight can't move, and a pawn takes it next. White wins a piece. If Black checks on b4 a move earlier, Nc3 blocks it and White keeps a big centre. [%idea pin] } )
+( 4... Qf6? { The queen guards e5 and lines up on f3. Players who push d4 here score only 46%, because the next move is not obvious. }
+  5. d4 exd4 6. e5 { Hits the queen first, before taking back on d4. [%cal Ge5f6] }
+  6... Qg6 7. cxd4 { Hits the bishop as well. No material has changed, but White has the centre with a gain of time, and the engine has White about two pawns ahead. } )
+( 4... a6? { The usual question, but with a pawn on c3 it does not work here. }
+  5. Bxc6 dxc6 6. Nxe5 Qf6 { Hits the knight and f2. }
+  7. d4 { Blocks the bishop and guards the knight. White is a clean pawn up. If the queen goes to g5 or e7 instead, White castles first, and after ...Qxe5 the push d4 hits the queen and the bishop together, for an edge of about a pawn. [%cal Gd4c5] } )
+5. O-O { Castles. It is the same position as 3...Nf6 4.O-O Bc5 5.c3, so what comes next is already known. [%idea castle-early] } *

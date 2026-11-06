@@ -1,0 +1,15 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 8.h3"]
+[Name "8...d5: the Marshall idea anyway"]
+
+8... d5 { Black gives the pawn anyway, hoping for the same attack as in the Marshall. }
+9. exd5 { Take it. White has no reason to refuse. }
+9... Nxd5
+10. Nxe5 { White takes the pawn on e5 as well, and the knight stands in the centre, ready to swap itself off. }
+10... Nxe5
+11. Rxe5 { White is a clean pawn up. Black has open lines and two bishops to show for it, so the job now is to finish developing. }
+11... Nf6 { Keeps the knight near the king, and leaves the d-file open for the queen. }
+12. d4 { Takes the centre, shuts out the e7 bishop's route to c5, and frees the c1 bishop. [%cal Gc1g5] }
+12... c5
+13. c3 { Holds the d4 pawn. White keeps the extra pawn, and the engine gives White a small edge. } *

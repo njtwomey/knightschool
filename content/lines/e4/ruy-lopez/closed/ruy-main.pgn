@@ -1,0 +1,24 @@
+[For "white"]
+[Kind "main"]
+[Start "giuoco-main 2...Nc6"]
+[Name "The closed main line"]
+
+3. Bb5 { The Ruy Lopez. The bishop hits the knight on c6, and that knight is what guards e5. White is not threatening to take e5 yet, but the pressure stays on for the whole opening. [%cal Gb5c6,Yc6e5] [%csl Ye5] [%idea remove-the-guard] }
+3... a6 { The Morphy Defence, the most famous reply. Black asks the bishop to decide straight away. }
+4. Ba4 { Keeps the bishop on the same diagonal, so the pressure on c6 stays. Taking on c6 does not win e5 yet: after 4.Bxc6 dxc6 5.Nxe5 the queen comes to d4 and wins the pawn back. [%cal Ga4c6] }
+4... Nf6 { Develops and hits e4. [%cal Rf6e4] }
+5. O-O { White leaves e4 for a moment and gets the king safe. If Black takes the pawn, d4 opens the centre while Black's king is still on e8. [%idea castle-early] }
+5... Be7 { A quiet developing move that gets ready to castle. }
+6. Re1 { Now e4 is properly guarded, and the rook stands on the file that will open. It also makes a real threat: Bxc6 and Nxe5 would win a pawn, because ...Qd4 can no longer get it back. [%cal Ge1e4] [%idea remove-the-guard] }
+6... b5 { Ends that threat by driving the bishop away from the knight. [%cal Rb5a4] }
+7. Bb3 { The bishop has been pushed back, but on b3 it looks straight at f7, so the retreat costs nothing. [%cal Gb3f7] [%idea f7-weakness] }
+7... O-O { Black castles, the most common move here. }
+8. h3 { Stops ...Bg4, and it avoids the Marshall Attack. After the natural 8.c3, Black gives a pawn with 8...d5 for a strong attack; more than half the players here know it, and White scores only 43%. The engine rates 8.h3 about the same, and c3 can come next move. [%cal Gh3g4] }
+8... d6 { Guards e5 and frees the c8 bishop. }
+9. c3 { The plan. The pawn gets ready for d4, and it makes room for the bishop on c2. [%cal Gc3d4] [%idea centre-pawns] }
+9... Na5 { Hits the bishop, and clears the way for ...c5. [%cal Ra5b3] }
+10. Bc2 { This is why c3 came first. The bishop has a safe square, and on c2 it guards e4. [%cal Gc2e4] }
+10... c5 { Black fights for d4 and gains room on the queenside. [%cal Rc5d4] }
+11. d4 { The plan is complete: pawns on d4 and e4, with the pieces behind them. White keeps the tension, and Black has to keep watching e5. [%csl Gd4,Ge4,Ye5] }
+11... Qc7 { Adds a guard to e5. }
+12. Nbd2 { The last knight comes out. It goes on to f1 and then g3, towards Black's king, and White keeps the space. If Black takes on d4, the c-pawn takes back. [%cal Gd2f1,Gf1g3] } *

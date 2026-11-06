@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-b5 5.Bb3"]
+[Name "5...Bc5: the bishop comes out first"]
+
+5... Bc5 { The bishop takes the diagonal to f2. }
+6. O-O { Castles first. c3 can wait a move, and pushing it now would let Black play ...Nf6 with a position that asks White for sharp moves. [%idea castle-early] }
+6... Nf6 { This reaches the position after 5...Nf6 6.O-O Bc5, so White carries on with c3. }
+7. c3 *

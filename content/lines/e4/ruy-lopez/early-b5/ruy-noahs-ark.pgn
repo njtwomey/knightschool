@@ -1,0 +1,13 @@
+[For "white"]
+[Kind "danger"]
+[Start "ruy-b5-d6 5...d6"]
+[Name "The Noah's Ark Trap: if you push 6.d4"]
+
+6. d4 { Natural, and not a mistake in itself, but this is how the trap starts. c3 first avoids it altogether. }
+6... Nxd4 { Black takes the pawn. White scores only 43% from here, and the next move shows why. }
+7. Nxd4 exd4
+8. c3 { The right idea: offer a pawn to get the pieces out. Black takes, White takes back with the knight, and the game is level. }
+( 8. Qxd4?? { Takes back a pawn that looks free. More than eight players in ten do it, and they score 41%. }
+  8... c5 { The pawn hits the queen, and ...c4 comes next, with the a6, b5 and c5 pawns walling in the bishop on b3. [%csl Yb3] [%idea trapped-piece] }
+  9. Qc3 c4 { The bishop on b3 has no way out. It is lost for a pawn or two: this is the Noah's Ark Trap. If the queen goes to d5 instead, ...Be6 chases it and ...c4 still follows. } )
+8... dxc3 9. Nxc3 { White has given a pawn, but the knight is out, and the lead in development is worth it. The engine calls it level. } *

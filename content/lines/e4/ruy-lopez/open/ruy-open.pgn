@@ -1,0 +1,24 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 5.O-O"]
+[Name "5...Nxe4: the Open Ruy Lopez"]
+
+5... Nxe4 { The Open Defence. Black takes the pawn, and it is a real try: White has to show why it was safe to leave it. }
+6. d4 { Opens the centre while Black's king is still at home. e5 is hit, and the pin on c6 means it cannot simply be held. [%cal Gd4e5,Ga4e8] }
+6... b5 { Breaks the pin first, the main line. }
+( 6... exd4? { Grabs a second pawn and opens the e-file on Black's own king. [%csl Ye8,Ye4] }
+  7. Re1 { Pins the knight on e4 to the king. [%idea pin] }
+  7... d5 { Holds the knight. }
+  8. Nxd4 { The c6 knight is pinned as well, by the bishop on a4, and it is now hit. White is about to win back both pawns with the better game, and the engine has White about a pawn and a half ahead. [%cal Gd4c6] } )
+7. Bb3 { The usual retreat. [%cal Gb3f7] }
+7... d5 { Holds the knight on e4 in the centre. }
+( 7... Nxd4? { Looks as if it wins another pawn, but the knight only swaps itself off and opens lines for White. }
+  8. Nxd4 exd4 9. Qxd4 { The queen hits the knight on e4, and the bishop on b3 now looks at f7 with nothing in the way. [%cal Gd4e4,Gb3f7] }
+  9... Nc5 10. Bxf7+ Kxf7 { Next comes Qd5+, and Qxa8 wins the rook. White ends up with a rook and a pawn for a bishop. [%cal Gd4d5,Gd5a8] } )
+8. dxe5 { White wins the pawn back. Material is level, and the pawn on e5 takes f6 and d6 away from Black. [%cal Ge5f6,Ge5d6] }
+8... Be6 { Guards d5. }
+9. c3 { The usual move: it gives the bishop c2, and keeps Black's knights off d4 and b4. [%cal Gb3c2] }
+9... Bc5 { The most common move. Black's pieces stand well, and the knight on e4 is the piece to get rid of. }
+10. Nbd2 { Challenges the knight on e4 at once. [%cal Gd2e4] }
+10... O-O
+11. Bc2 { The bishop looks at the king and adds to the pressure on e4. The game is level, and White has the better pawn structure for the long term. [%cal Gc2e4] } *

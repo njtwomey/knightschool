@@ -1,0 +1,416 @@
+name: Ruy Lopez
+side: white
+start: 1. e4 e5 2. Nf3 Nc6 3. Bb5
+level: next
+style: [classical, positional]
+summary: >-
+  The Spanish Opening: the bishop hits the knight that guards e5. White castles, plays Re1, c3 and d4, and keeps the
+  pressure on the centre whatever Black replies.
+about:
+  idea: >-
+    The knight on c6 guards e5, so the bishop goes after the knight. White does not take on e5 in a hurry. The plan is
+    the same almost everywhere: castle, put a rook on e1, play c3 and push d4. When Black chases the bishop with ...a6 and
+    ...b5 it steps back to a4 and b3, where it looks at f7, and to c2 if it is hit again. When Black plays ...d6 early,
+    the knight on c6 is pinned to the king, and d4 hurts.
+  risks: >-
+    The Berlin and the Open Defence are sound, and against them White gets only a small edge. The closed main line is a
+    long game with little to calculate early on. Two things to know: the Marshall Attack, which is why White plays
+    8.h3 and not 8.c3, and the Noah's Ark Trap, which is why c3 comes before d4 when Black has ...a6, ...b5 and ...d6 in.
+  suits: >-
+    Players who know the Italian and want a second answer to 2...Nc6, and who like a slow squeeze more than a quick
+    attack. At this level Black's most natural moves often drop a pawn or a piece, so there are many chances to win
+    material without taking any risks.
+  origin: >-
+    Named after Ruy López de Segura, a Spanish priest, who wrote about it in his chess book of 1561. It has been one of
+    the main openings of top-level chess for more than a hundred and fifty years.
+ideas:
+  [remove-the-guard, centre-pawns, castle-early, f7-weakness, pin, fork, trapped-piece, discovered-attack, open-file]
+variations:
+  - id: closed
+    name: 'The Morphy Defence: the closed main line'
+    intro: >-
+      3...a6 is the most famous reply, and 4.Ba4 keeps the bishop on its diagonal. This is the Ruy Lopez that books are
+      written about. White castles, plays Re1 and c3, then d4, and Black holds e5 behind a wall of pawns. At this level
+      only a small part of the games reach it, but it shows the plan every other line borrows from.
+    lines: [ruy-main, ruy-marshall, ruy-main-d6]
+    plans:
+      - Castle, then Re1, which guards e4 and makes Bxc6 and Nxe5 a real threat.
+      - Play h3 before c3, to stay out of the Marshall Attack.
+      - Then c3 and d4. If the bishop on b3 is hit, it goes to c2.
+    questions:
+      - id: why-h3
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O
+        ask: Most players push 8.c3 here. What does 8.h3 keep out of the game?
+        answers: [[marshall], [d5], [gambit], [sacrifice]]
+        examples:
+          right:
+            - the Marshall Attack
+            - it avoids the d5 gambit
+            - Black's pawn sacrifice and attack
+          wrong: [it stops castling, it attacks the queen, it wins a pawn]
+        explain: >-
+          After 8.c3 Black can play 8...d5, the Marshall Attack: a pawn for a strong attack. More than half the players
+          here know it, and White scores 43%. After 8.h3 d6 9.c3 the game is back in the main line, and after 8.h3 d5
+          White takes the pawn and keeps it.
+      - id: why-c3
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O 8. h3 d6 9. c3 Na5
+        ask: The knight hits the bishop on b3. Where does the bishop go?
+        answers: [[c2]]
+        examples:
+          right: [Bc2, to c2, back to c2 where it guards e4]
+          wrong: [Ba2, Bd5, take the knight]
+        explain: >-
+          10.Bc2. This is one reason for c3: the bishop keeps a safe square, and from c2 it guards e4.
+  - id: modern
+    name: The Morphy Defence with ...Bc5
+    intro: >-
+      The set-up most players at this level really choose. The bishop goes to c5 and aims at f2. White's answer is a gift
+      to the plan: c3 and d4 hit the bishop with a pawn. Black nearly always takes on d4, which hands White the whole
+      centre, and then the e5 push drives the knight away.
+    lines: [ruy-modern, ruy-modern-d6, ruy-b5-bc5]
+    plans:
+      - Against ...Bc5, play c3 and d4 at once.
+      - If Black has no pawn on d6, push e5 and hit the f6 knight.
+      - With ...d6 played, play Nc3 and Bg5 instead.
+    questions:
+      - id: which-push
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O b5 6. Bb3 Bc5 7. c3 O-O 8. d4 exd4 9. cxd4 Bb6
+        ask: Black has given up the centre. Which pawn move drives the f6 knight away?
+        answers: [[e5]]
+        examples:
+          right: [e5, push e5, e5 hits the knight]
+          wrong: [d5, h3, Bg5]
+        explain: >-
+          10.e5 hits the knight, and it has to go back to e8 or to a poor square on the edge. With no pawn on d6, Black
+          can't take on e5.
+  - id: early-b5
+    name: 4...b5 and other orders
+    intro: >-
+      Most players at this level hit the bishop straight away with 4...b5. It changes little: the bishop goes to b3 and
+      White carries on. The one thing to remember is the order. When Black has played ...d6, c3 comes before d4, because
+      pushing d4 at once is how the Noah's Ark Trap begins.
+    lines: [ruy-main-b5, ruy-b5, ruy-b5-d6, ruy-noahs-ark]
+    plans:
+      - Bb3 answers ...b5 in every order.
+      - With ...d6 played, c3 first, then castle, then Re1.
+      - If Black grabs e4 with ...d6 played, Bd5 hits both knights.
+    questions:
+      - id: noahs-ark
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 b5 5. Bb3 d6 6. d4 Nxd4 7. Nxd4 exd4
+        ask: 8.Qxd4 wins the pawn back. Why is it a blunder?
+        answers: [[c5], [c4], [trap], [bishop, b3], [bishop, lost]]
+        examples:
+          right:
+            - c5 and then c4 traps the bishop on b3
+            - the bishop on b3 gets trapped by the pawns
+            - the bishop is lost
+          wrong: [the queen is pinned, Black takes the queen, nothing happens]
+        explain: >-
+          8...c5 hits the queen, and ...c4 comes next. The pawns on a6, b5 and c4 shut the bishop in, and it is lost for a
+          pawn or two. This is the Noah's Ark Trap, and players who take on d4 here score 41%.
+      - id: bd5-fork
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 b5 5. Bb3 d6 6. c3 Nf6 7. O-O Nxe4
+        ask: Black has taken e4. Which move wins a piece?
+        answers: [[Bd5], [d5]]
+        examples:
+          right: [Bd5, the bishop to d5, Bd5 hits both knights]
+          wrong: [Re1, d4, Bc2]
+        explain: >-
+          8.Bd5 hits the knight on e4 and the knight on c6, with the rook on a8 behind it. Black can't save everything, and
+          White comes out a knight up for a pawn.
+  - id: open
+    name: The Open Defence
+    intro: >-
+      Black takes the pawn on e4 and means it. White answers with d4, and the point is that Black's king is still in the
+      middle. White wins the pawn back on e5. If Black takes on d4 as well, Re1 pins the knight to the king.
+    lines: [ruy-open, ruy-open-exd4, ruy-open-b5]
+    plans:
+      - Answer ...Nxe4 with d4, and take back on e5.
+      - If Black takes on d4 as well, play Re1 and pin the knight.
+      - Then c3 and Nbd2, to challenge the knight on e4.
+    questions:
+      - id: open-re1
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Nxe4 6. d4 exd4
+        ask: Black is two pawns up. Which move turns the knight on e4 into a problem?
+        answers: [[Re1], [rook, e1], [pin]]
+        examples:
+          right: [Re1, the rook to e1, Re1 pins the knight to the king]
+          wrong: [Nxd4, Bb3, Qe2]
+        explain: >-
+          7.Re1 pins the knight to the king. After 7...d5 8.Nxd4 the knight on c6 is pinned as well, and White gets the
+          pawns back with a far better game.
+  - id: steinitz
+    name: The Steinitz Defence
+    intro: >-
+      3...d6 is the most common third move at this level. It holds e5, but it pins Black's own knight and shuts in the
+      f8 bishop. White hits e5 at once with d4 and plays against a cramped position. Black usually gives up the centre,
+      and White gets free development and a lasting edge in space.
+    lines: [ruy-steinitz, ruy-steinitz-bd7, ruy-steinitz-nf6]
+    plans:
+      - Push d4 at once, and take back on d4 with the knight.
+      - Nc3 comes next. Do not take on c6.
+      - Against ...a6, take on c6 first, then take on e5.
+    questions:
+      - id: why-bxc6
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. d4 a6
+        ask: Black has asked the bishop to move. Which move starts to win a pawn?
+        answers: [[Bxc6], [takes, c6], [take, c6]]
+        examples:
+          right: [Bxc6, take on c6, the bishop takes on c6]
+          wrong: [Ba4, Bc4, Be2]
+        explain: >-
+          5.Bxc6+ removes the guard of e5. After 5...bxc6 6.dxe5 dxe5 7.Qxd8+ Kxd8 8.Nxe5 White is a clean pawn up. Ba4 would
+          walk into the Noah's Ark Trap.
+  - id: berlin
+    name: The Berlin Defence
+    intro: >-
+      Black ignores the bishop and hits e4. White castles anyway, and if the knight takes, Re1 hits it. Then e5 comes off
+      and material is level. With 5...Nd6 it is sound and quiet, and White plays for a small edge. The natural-looking
+      replies are the trouble for Black: ...d5 and ...f5 both lose ground, ...Nxb5 loses the queen, and after 5...Nf6
+      6.Nxe5 Nxe5 the knight is pinned, and 7.d4 gives White a big edge that nearly everyone misses.
+    lines: [ruy-berlin, ruy-berlin-be7, ruy-berlin-nf6, ruy-berlin-d6]
+    plans:
+      - Castle, and answer ...Nxe4 with Re1.
+      - Take back on e5 with the knight, then the rook.
+      - Bf1 and d4 finish the job, with a small edge.
+      - After 5...Nf6 6.Nxe5 Nxe5, push d4 past the pin. Do not take with the rook.
+    questions:
+      - id: why-not-nxb5
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. Re1 Nd6 6. Nxe5 Nxb5
+        ask: Black has taken the bishop. Which move wins the queen?
+        answers: [[Nxc6], [takes, c6], [discovered]]
+        examples:
+          right: [Nxc6, the knight takes on c6, a discovered check from the rook]
+          wrong: [Rxe5, a4, Qe2]
+        explain: >-
+          7.Nxc6+ uncovers the rook on the e-file, so it is a discovered check, and the knight hits the queen as well.
+          After 7...Be7 8.Nxd8 White has won the queen for a bishop.
+  - id: classical
+    name: The Classical, ...Bc5 without ...a6
+    intro: >-
+      The same bishop on c5 comes from 3...Nf6 4.O-O Bc5 and from 3...Bc5 at once. The answer is the same as in the Morphy:
+      c3 and d4. With no ...a6 played, the bishop on b5 is still pinning, so ...d6 is a serious mistake here. White's one
+      danger is 5...Nxe4 6.Re1, which loses to ...Bxf2+.
+    lines: [ruy-bc5, ruy-bc5-nxe4, ruy-classical]
+    plans:
+      - Play c3 and d4, and hit the bishop.
+      - Answer ...Nxe4 with d4, never Re1.
+      - If Black plays ...d6, take on d4 and push d5 past the pinned knight.
+    questions:
+      - id: why-d5-pin
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Bc5 5. c3 d6 6. d4 exd4 7. cxd4 Bb6
+        ask: Which pawn move wins a piece here, and why can't the knight run?
+        answers: [[d5]]
+        examples:
+          right: [d5 because the knight is pinned, push d5, d5 wins the pinned knight]
+          wrong: [e5, a4, take on c6]
+        explain: >-
+          8.d5 hits the knight on c6. It can't move, because the bishop on b5 pins it to the king, so a pawn takes it next.
+      - id: not-re1
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Bc5 5. c3 Nxe4
+        ask: 6.Re1 is the usual way to hit this knight. Why is it a blunder here?
+        answers: [[Bxf2], [f2], [fork]]
+        examples:
+          right: [Bxf2+ wins the rook, the bishop takes f2 with check, the f2 pawn falls and the rook goes]
+          wrong: [the knight is safe, it loses a pawn, nothing happens]
+        explain: >-
+          6...Bxf2+ takes with check, and the king has to leave the rook on e1. 7.Kf1 Bxe1 8.Qxe1 leaves White a rook and a
+          pawn down for a bishop. Play 6.d4, which also shuts the bishop's diagonal.
+  - id: others
+    name: Bird's, the Cozio and the Exchange
+    intro: >-
+      Three smaller lines. Bird's Defence swaps knights and leaves Black a doubled pawn on d4, and White plays on the
+      e-file. The Cozio Defence blocks the f8 bishop for a while, and the plan does not change. The Exchange Variation is
+      a choice for White, not a reply to learn: half of all players take on c6 at move four, so it is here to show, but
+      it is not part of the plan.
+    lines: [ruy-bird, ruy-cozy, ruy-exchange]
+    plans:
+      - Against Bird's, castle, play Bc4 and use the e-file.
+      - Against the Cozio, the plan is unchanged.
+      - Against ...Qg5 in Bird's, move the bishop before d3.
+    questions:
+      - id: bird-qg5
+        at: 1. e4 e5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 exd4 5. O-O Qg5
+        ask: 6.d3 uncovers the c1 bishop on the queen. Why is it a blunder?
+        answers: [[Qxb5], [b5], [bishop]]
+        examples:
+          right: [Qxb5 takes the bishop, the bishop on b5 hangs, the queen takes on b5]
+          wrong: [the queen is pinned, it loses a pawn, nothing happens]
+        explain: >-
+          The queen is hitting the bishop on b5, and d3 leaves it hanging: 6...Qxb5. Players who do that score 32%. 6.Bc4
+          moves the bishop first, and then d3 comes with a gain of time.
+alternatives: [ruy-noahs-ark, ruy-exchange]
+setup:
+  title: How the Ruy Lopez starts
+  text: >-
+    After 1.e4 e5 2.Nf3 Nc6 the knight on f3 hits e5 and the knight on c6 guards it. The Italian points the bishop at f7.
+    The Ruy Lopez points it at the guard. 3.Bb5 does not threaten e5 yet, but the pressure stays, and it gives White a
+    plan that lasts well into the middlegame.
+steps:
+  ruy-main:1:
+    title: Castle, then Re1
+    text: >-
+      The bishop stays on its diagonal after 3...a6, and White castles even though e4 looks loose. Re1 guards the pawn and
+      makes a threat of its own, which ...b5 ends. The bishop goes to b3, where it looks at f7.
+  ruy-main:2:
+    title: h3, c3 and d4
+    text: >-
+      h3 stops ...Bg4 and steers round the Marshall Attack. Then comes the plan: c3 and d4. When ...Na5 hits the bishop it
+      goes to c2, and White ends with two pawns in the centre and a knight on its way to f1 and g3.
+  ruy-marshall:1:
+    title: The Marshall idea, a pawn down
+    text: >-
+      Black plays ...d5 anyway. White takes both pawns and swaps knights, then finishes developing with d4 and c3. With no
+      pawn on c3 at the moment of the sacrifice, Black has less of an attack, and White stays a pawn up.
+  ruy-main-d6:1:
+    title: 7...d6, the same position
+    text: >-
+      If Black plays ...d6 before castling, c3 can come at once, as ...d5 would now cost a move. After ...O-O and h3 the
+      game is back in the main line.
+  ruy-main-b5:1:
+    title: 5...b5, the same plan
+    text: >-
+      Black can chase the bishop before playing ...Be7. The moves are the same, and the bishop goes to b3. After ...Be7
+      and Re1 the position is the one you already know.
+  ruy-b5:1:
+    title: 4...b5 at once
+    text: >-
+      The most common fourth move. The bishop goes to b3 a little sooner than usual, and nothing else changes. After
+      ...Nf6 White castles, and the game goes into the lines you have already seen.
+  ruy-b5-d6:1:
+    title: c3 before d4
+    text: >-
+      Against ...d6 White plays c3 first, so that the pawn is ready to back up d4. Grabbing e4 now loses a knight to Bd5,
+      and that comes next as a follow-up. After ...Be7 and Re1 the game is in the closed main line.
+  ruy-modern:1:
+    title: c3 and d4 hit the bishop
+    text: >-
+      Black puts the bishop on c5, the most common set-up here. c3 and d4 hit it with a pawn, and when Black takes, the
+      c-pawn takes back and White has the whole centre. e5 then chases the f6 knight.
+  ruy-modern:2:
+    title: Black's pieces get in the way
+    text: >-
+      The knight goes home to e8. Bg5 comes out with a hit on the queen, and Nc3 finishes developing. No material has
+      changed, but Black's pieces can hardly move.
+  ruy-modern-d6:1:
+    title: With ...d6, develop and pin
+    text: >-
+      With ...d6 played, pushing e5 is no longer the point. White takes on d4 as before, then plays Nc3 and Bg5. The pin
+      on f6 and a knight coming to d5 give White a clear edge.
+  ruy-b5-bc5:1:
+    title: 5...Bc5, castle first
+    text: >-
+      The bishop comes out before the knight. White castles, and after ...Nf6 c3 brings the game into the line you have
+      just learned.
+  ruy-open:1:
+    title: Win the pawn back
+    text: >-
+      Black takes e4, and d4 is the reply. Black has to break the pin with ...b5, and ...d5 holds the knight in the centre.
+      Then dxe5 wins the pawn back. Taking on d4 instead runs into Re1 and a pin: that comes next as a follow-up.
+  ruy-open:2:
+    title: Challenge the knight
+    text: >-
+      c3 makes room for the bishop, and Nbd2 and Bc2 both go after the knight on e4. Material is level and the game is
+      even, but White has the easier pawn structure.
+  ruy-open-exd4:1:
+    title: 7...exd4 and the pin
+    text: >-
+      Black takes a second pawn, the most common choice here. Re1 pins the knight on e4 to the king, and Nc3 hits it again.
+      After the swap on e4 the rook stands on the open file, with the bishop on e6 pinned and d4 soon to fall.
+  ruy-open-b5:1:
+    title: 6...Nxe4, the same reply
+    text: >-
+      With ...b5 played first, Black can still take on e4. d4 is the answer, and the position is the one you know.
+  ruy-steinitz:1:
+    title: Hit e5 at once
+    text: >-
+      3...d6 pins Black's own knight and leaves the position cramped, so d4 comes straight away. Black takes, and the
+      knight takes back. Then ...Bd7 breaks the pin, Nc3 develops, and when the knights come off on d4 White takes the
+      bishop on d7 first. If Black plays 4...a6 instead, a pawn falls: that comes next as a follow-up.
+  ruy-steinitz:2:
+    title: Space and the d-file
+    text: >-
+      The queen takes back on d4 and stands in the centre. White develops with Bg5, castles long, and has more space and
+      a target on d6.
+  ruy-steinitz-bd7:1:
+    title: 4...Bd7, the same game
+    text: >-
+      Black breaks the pin before giving up the centre. Nc3 develops, and after ...exd4 and Nxd4 the game is back in the
+      line you know. 5...a6 here costs a pawn: that comes next as a follow-up.
+  ruy-steinitz-nf6:1:
+    title: Keep the pieces on
+    text: >-
+      Black develops and keeps the knights on. White castles, puts a rook on e1 and steps the bishop back to f1, because
+      the side with more space wants to keep pieces on the board. 8...Ne5 is a mistake: that comes next as a follow-up.
+  ruy-berlin:1:
+    title: Castle and hit the knight
+    text: >-
+      Black ignores the bishop and takes e4. White castles first and Re1 gains time on the knight, then the knight on f3
+      and the rook take back on e5. Taking the bishop on b5 costs Black the queen, and 4...a6 drops a pawn: both come next
+      as follow-ups.
+  ruy-berlin:2:
+    title: A small edge
+    text: >-
+      The bishop steps back to f1, d4 takes the centre, and the rook keeps the e-file. Material is level, and White has a
+      little more room.
+  ruy-berlin-be7:1:
+    title: 6...Be7, the same position
+    text: >-
+      This time the bishop on b5 really is hit, so it goes home to f1. Black swaps on e5, and the position is the one you
+      have just learned.
+  ruy-berlin-nf6:1:
+    title: 5...Nf6 and the pin on e5
+    text: >-
+      The knight goes back, and e5 falls. When Black takes on e5, that knight is pinned to the king, so d4 is far better
+      than taking with the rook, and a pawn takes the knight instead. White has the centre and a big lead. The natural
+      5...d5 and 5...f5 are worse still, and both come next as follow-ups.
+  ruy-berlin-d6:1:
+    title: 4...d6, into the Steinitz
+    text: >-
+      4...d6 pins the knight just as 3...d6 does, so d4 is the same answer. After ...exd4, Nxd4, ...Bd7 and Nc3 the game is a
+      Steinitz with the knight on f6.
+  ruy-bc5:1:
+    title: c3 and d4 again
+    text: >-
+      The bishop goes to c5, and c3 and d4 hit it. Black takes, the c-pawn takes back, and e5 hits the knight. 5...d6 and
+      5...a6 are both mistakes here, and they come next as follow-ups.
+  ruy-bc5:2:
+    title: Hit the d5 knight
+    text: >-
+      The knight lands on d5. Bg5 hits the queen, and Bc4 hits the knight, whose guard on e7 is pinned. Nothing has been
+      won yet, but White's pieces are far more active.
+  ruy-bc5-nxe4:1:
+    title: 5...Nxe4, and not Re1
+    text: >-
+      f2 is hit twice, so the usual Re1 loses at once to ...Bxf2+: that comes next as a follow-up. d4 shuts the bishop out
+      instead. White gives a pawn or two to keep Black's king in the centre, and the d-pawn runs up the board.
+  ruy-classical:1:
+    title: 3...Bc5 at once
+    text: >-
+      c3 is the answer here too, and after ...Nf6 and castling the game is in the line you know. Three tries are bad, and
+      they come next as follow-ups: 4...d6 and 4...Qf6, and 4...a6, which does not work with a pawn on c3.
+  ruy-bird:1:
+    title: Knights off, and the e-file
+    text: >-
+      Black swaps a pair of knights, and gets a doubled pawn on d4 that cramps White a little. White castles, and when
+      ...c6 hits the bishop it goes to c4. Careful with 5...Qg5: moving the d-pawn loses the bishop, and that comes next
+      as a follow-up.
+  ruy-bird:2:
+    title: Check, and the rook
+    text: >-
+      Black pushes ...d5, and the pawns come off. Bb5+ gets the bishop out with a gain of time, and Re1+ puts the rook on
+      the open file.
+  ruy-cozy:1:
+    title: The plan against the Cozio
+    text: >-
+      The knight goes to e7 to guard c6, and it shuts in the f8 bishop. White castles and the bishop goes back in the usual
+      way. The knight has to move again to g6, and that is White's chance to play c3.
+  ruy-cozy:2:
+    title: d4 and Re1
+    text: >-
+      Black gets the bishop out to e7 at last. White pushes d4, puts a rook on e1 and has the centre, with the same plan as
+      everywhere else.
+sources:
+  - title: Ruy Lopez Chess Opening Explained in 10 Minutes [TRAPS Included]
+    author: Remote Chess Academy (GM Igor Smirnov)
+    url: https://www.youtube.com/watch?v=xD0iTgHMQVQ

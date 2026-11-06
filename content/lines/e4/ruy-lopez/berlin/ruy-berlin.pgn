@@ -1,0 +1,25 @@
+[For "white"]
+[Kind "main"]
+[Start "ruy-main 3.Bb5"]
+[Name "3...Nf6: the Berlin"]
+
+3... Nf6 { The Berlin Defence. Black ignores the bishop and hits e4. }
+4. O-O { Leaves e4 for a moment and gets the king safe, as in the Morphy. If Black takes, the rook goes to e1 and comes back with a gain of time. [%idea castle-early] }
+4... Nxe4 { Black takes the pawn. }
+( 4... a6? { The usual question, but it comes too late. With White castled, taking on c6 now really wins e5. }
+  5. Bxc6 dxc6 6. Nxe5 { In the Exchange line ...Qd4 and ...Qxe4 would win the pawn back. Here, with White castled, Re1 would pin the queen on e4 to the king. }
+  6... Bc5 7. Nc3 { White guards e4 and is a clean pawn up. The engine has White about a pawn and a half ahead. } )
+5. Re1 { Hits the knight on the open file. It is the engine's first choice, and it needs less memory than 5.d4, which leads to a long endgame with the queens off. [%cal Ge1e4] }
+5... Nd6 { The best square: the knight hits the bishop as it goes. [%cal Rd6b5] }
+6. Nxe5 { White takes the pawn back. The bishop on b5 looks loose, but taking it opens the e-file on Black's king. }
+6... Nxe5 { The natural reply. }
+( 6... Nxb5?? { Wins a bishop, but it leaves the e-file open on Black's king. [%cal Ge1e8] }
+  7. Nxc6+ { The knight moves off the e-file, with discovered check from the rook, and it hits the queen. [%idea discovered-attack] }
+  7... Be7 8. Nxd8 { White has won the queen for a bishop. } )
+7. Rxe5+ { Takes the knight with check, and the material is level. [%cal Ge5e8] }
+7... Be7
+8. Bf1 { The bishop goes home, safe from the knight, and the rook on e5 has room to step back. }
+8... O-O
+9. d4 { Takes the centre and frees the c1 bishop. }
+9... Bf6 { Hits the rook. }
+10. Re1 { The rook keeps the e-file. White has a little more of the centre, and the engine gives White a small edge in a quiet game. } *

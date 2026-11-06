@@ -1,0 +1,16 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 3.Bb5"]
+[Name "3...Nge7: the Cozio Defence"]
+
+3... Nge7 { The Cozio Defence. The knight guards c6, so that taking there wins nothing, but it blocks the f8 bishop. [%csl Yf8] }
+4. O-O { Castles. The plan does not change. [%idea castle-early] }
+4... a6
+5. Ba4 { Stays on the diagonal. }
+5... b5 6. Bb3 { The bishop looks at f7. [%cal Gb3f7] }
+6... Ng6 { The knight has moved twice to free the bishop. }
+7. c3 { The plan. d4 comes next. The sharper 7.d4 also works, but it needs exact moves. [%cal Gc3d4] }
+7... Be7
+8. d4 { Takes the centre. [%idea centre-pawns] }
+8... O-O
+9. Re1 { Every move has come from the same plan: castle, c3, d4, Re1. White has the centre and more space. [%cal Ge1e4] } *

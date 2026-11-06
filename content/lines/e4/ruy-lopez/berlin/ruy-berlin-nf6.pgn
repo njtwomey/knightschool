@@ -1,0 +1,23 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-berlin 5.Re1"]
+[Name "5...Nf6: back to f6"]
+
+5... Nf6 { A natural retreat, but it leaves e5 hanging, and White gets the pawn back at once. }
+( 5... d5?? { Holds the knight with a pawn, and one player in five tries it. It leaves e5 and the knight both hanging on the e-file. [%csl Ye4,Ye5] }
+  6. d3 { Hits the knight, and it cannot hold on to e5 as well. [%cal Gd3e4] }
+  6... Nf6 7. Nxe5 { The pin on c6 means the knight can't take. }
+  7... Be6 8. Nxc6 { Takes the knight. }
+  8... Qd7 { Black has to deal with the knight, but it goes back to d4 with a whole extra piece for White. } )
+( 5... f5? { Holds the knight with a pawn, but it opens Black's king. [%csl Yg8] }
+  6. d3 { Sends the knight away. }
+  6... Nf6 7. Bxc6 bxc6 8. Nxe5 { Material is level, but Black's pawns are broken, the king is open and White has the e-file. The engine has White nearly two pawns ahead: the gain is positional. } )
+6. Nxe5 { Back comes the pawn, and the knight on e5 hits c6. }
+6... Nxe5 { More than eight players in ten take back. But the new knight on e5 stands on the e-file, pinned to the king by the rook. [%cal Ge1e8] [%csl Ye5] }
+7. d4 { Far stronger than taking with the rook. The pinned knight cannot move, so a pawn can take it next, and White gets the centre as well. Players who find this score 82%. [%idea pin] }
+( 7. Rxe5+? { The natural move, played nine times in ten. It lets Black out of the pin. }
+  7... Be7 { Black blocks the check and is ready to castle. Material is level and so is the game: White has let a big edge go. } )
+7... c6 { The most common reply. It hits the bishop, so that one of Black's pieces gains something from the pin. }
+8. dxe5 { Takes the knight first. The knights have been swapped and the pawns are level, but White's pawn on e5 takes f6 and d6 away from Black. [%cal Ge5f6,Ge5d6] }
+8... Nd5 { The knight finds a square in the centre. }
+9. Bc4 { Hits the knight and keeps the bishop. Nothing has been won on the board, but White has space and a lead in development, and the engine has White about three pawns ahead. [%cal Gc4d5] } *

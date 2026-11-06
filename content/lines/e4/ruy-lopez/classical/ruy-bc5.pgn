@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "main"]
+[Start "ruy-berlin 4.O-O"]
+[Name "4...Bc5: c3 and d4"]
+
+4... Bc5 { The most common reply to 4.O-O. The bishop takes the active diagonal, in the Classical style. [%cal Rc5f2] }
+5. c3 { The plan: d4 comes next, with a hit on the bishop. Players at this level score 60% with it. [%cal Gc3d4] }
+5... O-O
+( 5... d6? { Pins the knight on c6 to the king, and now d4 hurts. [%cal Gb5e8] }
+  6. d4 exd4 7. cxd4 Bb6 8. d5 { The c6 knight is pinned, so it can't move. A pawn takes it next: White wins a whole knight. [%cal Gd5c6] [%idea pin] } )
+( 5... a6? { Normal elsewhere. Here c3 has changed things, because that pawn covers d4. }
+  6. Bxc6 dxc6 7. Nxe5 { White is a clean pawn up. In the Exchange line ...Qd4 would win the pawn back, but with a pawn on c3 the queen can't come to d4. [%csl Gd4] } )
+6. d4 { The same push. It hits the bishop and e5. [%idea centre-pawns] }
+6... exd4 { Nine players in ten take. It gives up the centre. }
+7. cxd4 Bb6
+8. e5 { Hits the knight. With no pawn on d6 yet, it has only one good square. [%cal Ge5f6] }
+8... Nd5
+9. Bg5 { Comes out with a hit on the queen. [%cal Gg5d8] }
+9... Nce7 { Blocks with the other knight, and it shuts in Black's queen. }
+10. Bc4 { Hits the knight on d5. The knight on e7 that guards it is pinned to the queen. White has a big lead, and the engine has White about two pawns ahead, though no material has changed. [%cal Gc4d5] } *

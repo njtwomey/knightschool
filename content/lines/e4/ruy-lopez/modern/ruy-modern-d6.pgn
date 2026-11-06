@@ -1,0 +1,11 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-modern 7.c3"]
+[Name "...Bc5 and ...d6"]
+
+7... d6 { Keeps e5 firm. Now e5 will not chase the f6 knight so easily. }
+8. d4 { The same push, hitting the bishop. }
+8... exd4 9. cxd4 Bb6
+10. Nc3 { Develops and adds to the pressure on d5. With ...d6 played, there is no rush to push e5. [%cal Gc3d5] }
+10... O-O
+11. Bg5 { Pins the knight on f6 to the queen. Nd5 comes next, and White's pieces all point at f6. [%cal Gg5f6,Gc3d5] [%idea pin] } *

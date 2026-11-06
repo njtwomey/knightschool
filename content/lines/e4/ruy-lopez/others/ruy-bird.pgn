@@ -1,0 +1,19 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 3.Bb5"]
+[Name "3...Nd4: Bird's Defence"]
+
+3... Nd4 { Bird's Defence. Black moves the same knight again to swap off White's. }
+4. Nxd4 exd4 { Black now has a doubled pawn on d4, cramping White a little. }
+5. O-O { Castles, and the rook heads for e1. The game is about the e-file now. [%idea castle-early] }
+5... c6 { Hits the bishop. }
+( 5... Qg5? { Hits the bishop on b5 and g2 together. Be careful: 6.d3 loses the bishop to ...Qxb5, and players who do that score 32%. [%csl Yb5] }
+  6. Bc4 { Moves the bishop out of the way. Now d3 will uncover the c1 bishop on the queen. [%cal Gc1g5] }
+  6... Nf6 7. d3 { The c1 bishop now hits the queen. [%idea discovered-attack] }
+  7... Qh5 8. Qxh5 Nxh5 { The queens are off and nothing has been won, but White is well ahead in development, and the engine has White about a pawn and a half ahead: the gain is time and the centre. } )
+6. Bc4 { The active square, looking at f7. [%cal Gc4f7] }
+6... d5 { Gains time on the bishop. }
+7. exd5 cxd5
+8. Bb5+ { Gives check, so the bishop gets out of the way with tempo. }
+8... Bd7
+9. Re1+ { The e-file opens with check. White gets a rook on the open file first. The engine has White nearly a pawn ahead. [%cal Ge1e8] [%idea open-file] } *

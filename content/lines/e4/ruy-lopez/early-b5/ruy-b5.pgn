@@ -1,0 +1,9 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 4.Ba4"]
+[Name "4...b5: pushing the bishop at once"]
+
+4... b5 { The most common fourth move at this level. It drives the bishop off the pin before White has done anything. [%cal Rb5a4] }
+5. Bb3 { The bishop goes to the diagonal it wanted anyway, aiming at f7. [%cal Gb3f7] [%idea f7-weakness] }
+5... Nf6 { Develops and hits e4. }
+6. O-O { Castles, as usual. The position is the same as after 4...Nf6 5.O-O b5 6.Bb3. [%idea castle-early] } *

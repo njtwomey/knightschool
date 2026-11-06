@@ -1,0 +1,20 @@
+[For "white"]
+[Kind "main"]
+[Start "ruy-main-b5 6.Bb3"]
+[Name "...Bc5 and ...O-O: the e5 push"]
+
+6... Bc5 { The most popular set-up at this level: Black's bishop takes the active diagonal and aims at f2. [%cal Rc5f2] }
+7. c3 { The plan again. With d4 coming, the bishop on c5 will be hit by a pawn. [%cal Gc3d4] }
+7... O-O
+8. d4 { Hits the bishop and e5 at the same time. [%cal Gd4c5,Gd4e5] [%idea centre-pawns] }
+8... exd4 { Nine players in ten take, and it hands White the whole centre. }
+9. cxd4 { Two pawns side by side, and the bishop on c5 has to move. }
+9... Bb6
+( 9... Ba7? { Keeps the bishop on the diagonal, but it does nothing about e5. }
+  10. e5 Nh5 { The knight goes to the edge. }
+  11. Nc3 h6 12. g4 { The knight on h5 has nowhere to go, and it falls next move. White wins a knight. [%cal Gg4h5] [%idea trapped-piece] } )
+10. e5 { Now the knight is hit. It has lost f6 for good, and every square it can go to is a poor one. [%cal Ge5f6] }
+10... Ne8 { The usual reply. The knight goes home and blocks the rook. }
+11. Bg5 { Develops with a hit on the queen. [%cal Gg5d8] }
+11... Ne7 { Blocks the attack, with the knight from c6. }
+12. Nc3 { White's pieces are out and working, while Black's are stuck behind each other. The engine has White more than three pawns ahead, though no material has changed: the gain is space and time. } *

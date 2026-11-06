@@ -1,0 +1,21 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-bc5 5.c3"]
+[Name "5...Nxe4: d4 in reply"]
+
+5... Nxe4 { Takes the pawn, and it looks as though f2 is hit twice. [%cal Rc5f2,Re4f2] }
+6. d4 { Blocks the bishop's diagonal and hits it. White does not need the pawn back straight away. [%cal Gd4c5] }
+( 6. Re1?? { The usual reply to a knight on e4, and a very bad one here. Players who try it score 34%. [%csl Yf2] }
+  6... Bxf2+ { The bishop takes with check, and the king has to give up the rook. }
+  7. Kf1 Bxe1 8. Qxe1 { White has lost a rook and a pawn for a bishop. } )
+6... exd4
+7. cxd4 Bb6
+( 7... Bd6? { The bishop guards e5 and leaves the knight on e4 without a guard, and it blocks Black's d-pawn. }
+  8. Re1 { Pins the knight to the king. [%idea pin] }
+  8... f5 { Holds the knight with a pawn. }
+  9. Nbd2 O-O 10. Nxe4 fxe4 { White takes back with Rxe4 next. The pawns are level, but d5 and Bc4+ follow, Black's pieces are loose, and the engine has White more than five pawns ahead. } )
+8. d5 { The pawn hits the knight on c6 and takes the centre, and the knight has few squares. [%cal Gd5c6] }
+8... Ne7
+9. Qe2 { Hits the knight on e4, and now the e-file is open on Black's king. [%cal Ge2e4] }
+9... Nf6
+10. d6 { Gives the pawn to break up Black's game. White is a pawn or two down, but Black can't develop, and the engine has White better by about a pawn. [%cal Gd6e7] } *

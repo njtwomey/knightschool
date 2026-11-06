@@ -1,0 +1,18 @@
+[For "white"]
+[Kind "sideline"]
+[Start "ruy-main 3...a6"]
+[Name "The Exchange Variation: 4.Bxc6"]
+
+4. Bxc6 { Half of all players here choose this. White gives the bishop to spoil Black's pawns, but it takes the pressure off and hands Black the two bishops. It is a sound choice for a simple game. [%cal Gb5c6] }
+4... dxc6 { Takes towards the centre, so that the c8 bishop and queen have open lines. }
+5. O-O { Castles, and now Nxe5 will be a real threat. Taking on e5 at once is the common slip. [%idea castle-early] }
+( 5. Nxe5? { More than a third of players do this, and they score 46%. The pawn is not really won. }
+  5... Qd4 { Forks the knight and e4. [%cal Rd4e5,Rd4e4] }
+  6. Nf3 Qxe4+ 7. Qe2 Qxe2+ 8. Kxe2 { The pawns are level, but White's king has lost the right to castle, and Black has the two bishops. Black is a little better. } )
+5... Bd6 { Guards e5 and gets ready to castle, the most common reply. }
+6. d4 { Opens the game now, while White is ahead in development. }
+6... exd4
+7. Qxd4 { The queen stands well here, and Black has nothing to chase her with in a hurry. }
+7... f6 { Guards against e5, and gives Black's knight e7. }
+8. Be3 Ne7
+9. Nbd2 { Calm development. The game is level, and White's pawns on the kingside are worth more than Black's in the endgame. } *

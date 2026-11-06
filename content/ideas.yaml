@@ -84,3 +84,7 @@
   kind: tactic
   summary: A piece with no safe square left can be attacked and won.
   themes: [trappedPiece]
+- id: remove-the-guard
+  name: Remove the guard
+  kind: tactic
+  summary: Swap off or chase away the piece that guards something, and what it guarded falls.
